@@ -9,8 +9,8 @@ AS = $(TOOLCHAIN_PREFIX)as
 LINK = $(TOOLCHAIN_PREFIX)ld
 
 
-CFLAGS = 
-LDFLAGS = 
+CFLAGS = -mcpu=cortex-a7 -fpic -ffreestanding -std=gnu99 -O2 -Wall -Wextra
+LDFLAGS += -ffreestanding -O2 -nostdlib 
 
 SUFFIXED_OBJS = $(patsubst %.o,%$(OBJ_SUFFIX).o,$(OBJS))
 
@@ -24,8 +24,13 @@ SUFFIXED_OBJS = $(patsubst %.o,%$(OBJ_SUFFIX).o,$(OBJS))
 	@echo "$(notdir $(CURDIR)): AS $@"
 	$(AS) -o $@ $<
 
-$(PROGRAM): $(SUFFIXED_OBJS) 
+$(PROGRAM): $(SUFFIXED_OBJS) $(EXTRA_OBJS)
 	@echo "$(notdir $(CURDIR)): LINK $(PROGRAM)"
-	$(CC) -o $(PROGRAM) $(SUFFIXED_OBJS) $(LDFLAGS)
+	$(CC) -o $(PROGRAM) $(EXTRA_OBJS) $(SUFFIXED_OBJS) $(LDFLAGS)
 
 all: $(PROGRAM)
+
+
+clean:
+	@echo "$(notdir $(CURDIR)): CLEAN"
+	rm -f $(PROGRAM) $(LIBRARY) $(SUFFIXED_OBJS) $(EXTRA_OBJS) $(patsubst %.o,%.d,$(SUFFIXED_OBJS) $(EXTRA_OBJS)) $(EXTRA_CLEAN)
