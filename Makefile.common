@@ -1,0 +1,31 @@
+MAKEFILE_PATH := $(abspath $(lastword $(MAKEFILE_LIST)))
+SYNESTIA_BASE_DIR := $(patsubst %/,%,$(dir $(MAKEFILE_PATH)))
+
+TOOLCHAIN_PREFIX=arm-none-eabi-
+
+CXX = $(TOOLCHAIN_PREFIX)g++
+CC = $(TOOLCHAIN_PREFIX)gcc
+AS = $(TOOLCHAIN_PREFIX)as
+LINK = $(TOOLCHAIN_PREFIX)ld
+
+
+CFLAGS = 
+LDFLAGS = 
+
+SUFFIXED_OBJS = $(patsubst %.o,%$(OBJ_SUFFIX).o,$(OBJS))
+
+.SUFFIXES:
+
+%$(OBJ_SUFFIX).o: src/%.c
+	@echo "$(notdir $(CURDIR)): C $@"
+	$(CC) $(CFLAGS) -o $@ -c $<
+
+%.ao: %.S
+	@echo "$(notdir $(CURDIR)): AS $@"
+	$(AS) -o $@ $<
+
+$(PROGRAM): $(SUFFIXED_OBJS) 
+	@echo "$(notdir $(CURDIR)): LINK $(PROGRAM)"
+	$(CC) -o $(PROGRAM) $(SUFFIXED_OBJS) $(LDFLAGS)
+
+all: $(PROGRAM)
