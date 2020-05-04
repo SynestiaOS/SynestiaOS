@@ -13,3 +13,6 @@ sudo sh Scripts/Setup.sh
 
 ## for windows:
 
+
+# Project Management
+[JIRA](https://synestiaos.atlassian.net/)
