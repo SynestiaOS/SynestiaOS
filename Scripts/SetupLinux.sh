@@ -34,7 +34,7 @@ setUpArmGccToolChain(){
 }
 
 installQemuVirtualMachine(){
-    brew install qemu
+    sudo apt-get install qemu
 }
 
 # download arm gcc tool chain from develoepr.arm.com
