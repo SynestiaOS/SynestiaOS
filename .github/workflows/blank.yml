@@ -30,9 +30,9 @@ jobs:
     - name: Build ARM32
       run: |
         echo Build ARM32
-        make arch=arm
+        make ARCH=arm
   
     - name: Build ARM64
       run: |
         echo Build ARM64
-        make arch=arm64
+        make ARCH=arm64
