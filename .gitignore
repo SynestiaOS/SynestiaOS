@@ -1,1 +1,4 @@
 Tools/
+*.o
+*.ao
+Kernel/kernel
