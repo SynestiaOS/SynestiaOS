@@ -17,6 +17,12 @@ pipeline {
       }
     }
 
+    stage('Test-ARM32') {
+      steps {
+        echo 'Testing...'
+      }
+    }
+
     stage('Build-ARM64') {
       steps {
         echo 'Building ARM64...'
@@ -25,7 +31,7 @@ pipeline {
       }
     }
 
-    stage('Test') {
+    stage('Test-ARM64') {
       steps {
         echo 'Testing...'
       }

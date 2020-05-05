@@ -1,5 +1,7 @@
-OBJS = src/main.o
-OBJS += src/uart.o
+OBJS =  src/main.o \
+		src/uart.o
+
+
 EXTRA_OBJS = arch/$(ARCH)/boot.ao
 
 OBJ_SUFFIX = .kernel

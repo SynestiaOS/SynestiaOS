@@ -14,9 +14,9 @@ CC = $(TOOLCHAIN_PREFIX)gcc
 AS = $(TOOLCHAIN_PREFIX)as
 LINK = $(TOOLCHAIN_PREFIX)ld
 
-CFLAGS += -fpic -ffreestanding -std=gnu99 -O2 -Wall -Wextra -g -nostdlib -fno-builtin
+CFLAGS += -fpic -ffreestanding -std=gnu99 -Wall -Wextra -g -nostdlib -fno-builtin
 ASFLAGS += -c -g
-LDFLAGS += -ffreestanding -O2 -nostdlib 
+LDFLAGS += -ffreestanding -nostdlib 
 
 SUFFIXED_OBJS = $(patsubst %.o,%$(OBJ_SUFFIX).o,$(OBJS))
 
