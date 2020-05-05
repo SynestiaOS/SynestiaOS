@@ -28,11 +28,17 @@ jobs:
 
     # Runs a set of commands using the runners shell
     - name: Build ARM32
-      run: |
+    - uses: fiam/arm-none-eabi-gcc@v1
+      with:
+        release: '9-2019-q4'
+    - run: |
         echo Build ARM32
         make ARCH=arm
   
     - name: Build ARM64
-      run: |
+    - uses: fiam/arm-none-eabi-gcc@v1
+      with:
+        release: '9-2019-q4'
+    - run: |
         echo Build ARM64
         make ARCH=arm64
