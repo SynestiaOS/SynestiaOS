@@ -3,14 +3,13 @@
 
 # Prepare Environment
 ## for mac:
-run the script `Setup.sh` under folder `Scripts`
-
 ``` bash
-sudo sh Scripts/Setup.sh
+sudo sh Scripts/SetupMac.sh
 ```
-
 ## for linux:
-
+``` bash
+sudo bash Scripts/SetupLinux.sh
+```
 ## for windows:
 
 # Build, Run and Debug
