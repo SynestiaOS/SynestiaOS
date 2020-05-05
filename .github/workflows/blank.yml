@@ -29,12 +29,15 @@ jobs:
     - uses: fiam/arm-none-eabi-gcc@v1
       with:
         release: '9-2019-q4'
-    # Runs a set of commands using the runners shell
     - name: Build ARM32
       run: |
         echo Build ARM32
         make ARCH=arm
   
+    - uses: uraimo/run-on-arch-action@v1.0.9
+      with:
+        architecture: 'aarch64'
+        distribution: 'ubuntu18.04'
     - name: Build ARM64
       run: |
         echo Build ARM64
