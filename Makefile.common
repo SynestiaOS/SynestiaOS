@@ -1,36 +1,42 @@
-MAKEFILE_PATH := $(abspath $(lastword $(MAKEFILE_LIST)))
-SYNESTIA_BASE_DIR := $(patsubst %/,%,$(dir $(MAKEFILE_PATH)))
+#MAKEFILE_PATH := $(abspath $(lastword $(MAKEFILE_LIST)))
+#SYNESTIA_BASE_DIR := $(patsubst %/,%,$(dir $(MAKEFILE_PATH)))
 
-TOOLCHAIN_PREFIX=arm-none-eabi-
+ifeq ($(ARCH), arm)
+	TOOLCHAIN_PREFIX = arm-none-eabi-
+	PLATFORM = RASPI2
+else ifeq ($(ARCH), arm64)
+	TOOLCHAIN_PREFIX = aarch64-linux-gnu-
+	PLATFORM = RASPI3
+endif
 
 CXX = $(TOOLCHAIN_PREFIX)g++
 CC = $(TOOLCHAIN_PREFIX)gcc
 AS = $(TOOLCHAIN_PREFIX)as
 LINK = $(TOOLCHAIN_PREFIX)ld
 
-
-CFLAGS = -mcpu=cortex-a7 -fpic -ffreestanding -std=gnu99 -O2 -Wall -Wextra
+CFLAGS += -fpic -ffreestanding -std=gnu99 -O2 -Wall -Wextra -g -nostdlib -fno-builtin
+ASFLAGS += -c -g
 LDFLAGS += -ffreestanding -O2 -nostdlib 
 
 SUFFIXED_OBJS = $(patsubst %.o,%$(OBJ_SUFFIX).o,$(OBJS))
 
 .SUFFIXES:
 
-%$(OBJ_SUFFIX).o: src/%.c
-	@echo "$(notdir $(CURDIR)): C $@"
-	$(CC) $(CFLAGS) -o $@ -c $<
+%$(OBJ_SUFFIX).o: %.c
+	@echo "$(notdir $(CURDIR)): CC $@"
+	@$(CC) $(CFLAGS) -o $@ -c $<
 
-%.ao: %.S
+%.ao: %.s
 	@echo "$(notdir $(CURDIR)): AS $@"
-	$(AS) -o $@ $<
+	@$(AS) $(ASFLAGS) -o $@ $<
 
 $(PROGRAM): $(SUFFIXED_OBJS) $(EXTRA_OBJS)
 	@echo "$(notdir $(CURDIR)): LINK $(PROGRAM)"
-	$(CC) -o $(PROGRAM) $(EXTRA_OBJS) $(SUFFIXED_OBJS) $(LDFLAGS)
+	@$(CC) -o $(PROGRAM) $(EXTRA_OBJS) $(SUFFIXED_OBJS) $(LDFLAGS)
 
 all: $(PROGRAM)
 
-
 clean:
 	@echo "$(notdir $(CURDIR)): CLEAN"
-	rm -f $(PROGRAM) $(LIBRARY) $(SUFFIXED_OBJS) $(EXTRA_OBJS) $(patsubst %.o,%.d,$(SUFFIXED_OBJS) $(EXTRA_OBJS)) $(EXTRA_CLEAN)
+	@rm -f $(PROGRAM) $(LIBRARY) $(SUFFIXED_OBJS) $(EXTRA_OBJS) $(patsubst %.o,%.d,$(SUFFIXED_OBJS) $(EXTRA_OBJS)) $(EXTRA_CLEAN)
+	@find ./ -regextype posix-extended -regex ".*\.(ao)" | xargs rm -f

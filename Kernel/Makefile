@@ -1,13 +1,13 @@
-OBJS = \
-	init.o
+OBJS = src/main.o
+OBJS += src/uart.o
+EXTRA_OBJS = arch/$(ARCH)/boot.ao
 
 OBJ_SUFFIX = .kernel
 
-EXTRA_OBJS = Arch/CortexA7/Boot/boot.ao
-
 PROGRAM = kernel
 
-LDFLAGS += -T linker.ld
+CFLAGS += -Iinclude -D$(PLATFORM)
+LDFLAGS += -T arch/$(ARCH)/kernel.ld
 
 all: $(PROGRAM)
 
