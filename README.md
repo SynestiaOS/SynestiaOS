@@ -16,3 +16,6 @@ sudo sh Scripts/Setup.sh
 
 # Project Management
 [JIRA](https://synestiaos.atlassian.net/)
+
+# Pipeline
+[Jenkins](http://ci.synestiaos.org/)
