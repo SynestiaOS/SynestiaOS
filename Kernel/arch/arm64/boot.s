@@ -14,7 +14,7 @@ _start:
     ldr x1, =__bss_end
     bl clean_bss
 
-    bl main
+    bl kernel_main
 
 _halt_smp:
     wfi // wait for interrup coming

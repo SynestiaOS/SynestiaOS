@@ -1,5 +1,8 @@
 #include <uart.h>
-#include <gpio.h>
+
+#if defined(RASPI2) || defined(RASPI3) 
+#include <raspi3.h>
+#endif
 
 void uart_init(void)
 {

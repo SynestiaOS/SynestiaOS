@@ -1,16 +1,16 @@
-OBJS =  src/main.o \
-		src/uart.o
+OBJS =  src/io.o \
+		src/interrupt.o \
+		src/init.o
 
 
-EXTRA_OBJS = arch/$(ARCH)/boot.ao
+EXTRA_OBJS += arch/$(ARCH)/boot.ao \
+			../Board/RaspberryPi3/src/uart.board.o
 
 OBJ_SUFFIX = .kernel
 
 PROGRAM = kernel
 
-CFLAGS += -Iinclude -D$(PLATFORM)
+CFLAGS += -Iinclude
 LDFLAGS += -T arch/$(ARCH)/kernel.ld
-
-all: $(PROGRAM)
 
 include ../Makefile.common

@@ -1,5 +1,5 @@
 #include <stdint.h>
-#include <uart.h>
+#include <../../Board/RaspberryPi3/include/uart.h>
 
 void clean_bss(uint8_t *start, uint8_t *end)
 {
@@ -9,7 +9,7 @@ void clean_bss(uint8_t *start, uint8_t *end)
     }
 }
 
-void main(void)
+void kernel_main(void)
 {
     const char str[] = "hello world\n";
     uint32_t i;

@@ -1,7 +1,6 @@
-SUBDIRS += \
-	Kernel
-	# Applications \
-	# Libraries \
+SUBDIRS += Libraries/LibC \
+	Board/RaspberryPi3 \
+	Kernel 
 
 include Makefile.subdir
 

@@ -1,4 +1,4 @@
-OBJS = \
+OBJS = 
 
 OBJ_SUFFIX = .app
 

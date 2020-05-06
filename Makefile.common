@@ -1,5 +1,5 @@
-#MAKEFILE_PATH := $(abspath $(lastword $(MAKEFILE_LIST)))
-#SYNESTIA_BASE_DIR := $(patsubst %/,%,$(dir $(MAKEFILE_PATH)))
+MAKEFILE_PATH := $(abspath $(lastword $(MAKEFILE_LIST)))
+SYNESTIA_BASE_DIR := $(patsubst %/,%,$(dir $(MAKEFILE_PATH)))
 
 ifeq ($(ARCH), arm)
 	TOOLCHAIN_PREFIX = arm-none-eabi-
@@ -14,7 +14,7 @@ CC = $(TOOLCHAIN_PREFIX)gcc
 AS = $(TOOLCHAIN_PREFIX)as
 LINK = $(TOOLCHAIN_PREFIX)ld
 
-CFLAGS += -fpic -ffreestanding -std=gnu99 -Wall -Wextra -g -nostdlib -fno-builtin
+CFLAGS += -fpic -ffreestanding -std=gnu99 -Wall -Wextra -g -nostdlib -fno-builtin -D$(PLATFORM)
 ASFLAGS += -c -g
 LDFLAGS += -ffreestanding -nostdlib 
 
@@ -24,6 +24,7 @@ SUFFIXED_OBJS = $(patsubst %.o,%$(OBJ_SUFFIX).o,$(OBJS))
 
 %$(OBJ_SUFFIX).o: %.c
 	@echo "$(notdir $(CURDIR)): CC $@"
+	@echo "$(CC) $(CFLAGS) -o $@ -c $<"
 	@$(CC) $(CFLAGS) -o $@ -c $<
 
 %.ao: %.s
@@ -31,8 +32,17 @@ SUFFIXED_OBJS = $(patsubst %.o,%$(OBJ_SUFFIX).o,$(OBJS))
 	@$(AS) $(ASFLAGS) -o $@ $<
 
 $(PROGRAM): $(SUFFIXED_OBJS) $(EXTRA_OBJS)
+ifeq ($(PROGRAM), kernel)
 	@echo "$(notdir $(CURDIR)): LINK $(PROGRAM)"
+	@echo ""
+	@echo "EXTRA_OBJS: $(EXTRA_OBJS)"
+	@echo "SUFFIXED_OBJS: $(SUFFIXED_OBJS)"
+	@echo "LINK: $(LDFLAGS)"
+	@echo ""
 	@$(CC) -o $(PROGRAM) $(EXTRA_OBJS) $(SUFFIXED_OBJS) $(LDFLAGS)
+else
+	@echo "OK"
+endif
 
 all: $(PROGRAM)
 

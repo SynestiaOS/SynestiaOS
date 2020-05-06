@@ -1,7 +1,5 @@
-#ifdef  _GPIO_H_
-#define _GPIO_H_
-
-#include <common.h>
+#ifdef  __BOARD_RASPI3_GPIO_H__
+#define __BOARD_RASPI3_GPIO_H__
 
 #define GPFSEL0_OFFSET  0x00
 #define GPFSEL1_OFFSET  0x04
@@ -45,4 +43,4 @@
 #define GPIO_PUP_PDN_CNTRL_REG2_OFFSET   0xEC
 #define GPIO_PUP_PDN_CNTRL_REG3_OFFSET   0xF0
 
-#endif
+#endif // __BOARD_RASPI3_GPIO_H__
