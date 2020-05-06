@@ -12,6 +12,16 @@ sudo bash Scripts/SetupLinux.sh
 ```
 ## for windows:
 
+## for docker:
+under this project dir, run following command to build the image
+```
+docker build . -t os
+```
+and then, you can run following command to enter the container
+```
+docker run -it os bash
+```
+
 # Build, Run and Debug
 To build kernel:
 ```
@@ -20,8 +30,8 @@ make ARCH=arm64 #for raspi3 and arm64
 ```
 To run kernel:
 ```
-qemu-system-arm -M raspi2 -kernel Kernel/kernel -serial stdio      #for raspi2 and arm32
-qemu-system-aarch64 -M raspi3 -kernel Kernel/kernel -serial stdio  #for raspi3 and arm64
+qemu-system-arm -M raspi2 -kernel Kernel/kernel -nographic -serial mon:stdio      #for raspi2 and arm32
+qemu-system-aarch64 -M raspi3 -kernel Kernel/kernel -nographic -serial mon:stdio  #for raspi3 and arm64
 ```
 To clean workspace:
 ```
