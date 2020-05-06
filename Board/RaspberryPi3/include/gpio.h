@@ -1,4 +1,4 @@
-#ifdef  __BOARD_RASPI3_GPIO_H__
+#ifndef __BOARD_RASPI3_GPIO_H__
 #define __BOARD_RASPI3_GPIO_H__
 
 #define GPFSEL0_OFFSET  0x00
