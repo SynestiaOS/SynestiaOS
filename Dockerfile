@@ -3,7 +3,6 @@ FROM ubuntu:20.04
 COPY sources.list /etc/apt/sources.list
 
 WORKDIR /root/SynestiaOS
-COPY ./ .
 
 ARG DEBIAN_FRONTEND=noninteractive
 
