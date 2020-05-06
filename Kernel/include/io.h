@@ -15,5 +15,4 @@ uint16_t io_readw(void *addr);
 
 uint32_t io_readl(void *addr);
 
-
 #endif // __KERNEL_IO_H__
