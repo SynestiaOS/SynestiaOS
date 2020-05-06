@@ -1,6 +1,3 @@
-#ifndef __KERNEL_INTERRUPT_H__
-#define __KERNEL_INTERRUPT_H__
+#pragma once
 
 void interrupt_init();
-
-#endif // __KERNEL_INTERRUPT_H__
