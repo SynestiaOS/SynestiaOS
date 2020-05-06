@@ -20,7 +20,7 @@ pipeline {
     stage('Test-ARM32') {
       steps {
         echo 'Testing...'
-        bash 'ARCH=arm Tests/intergrate_test/hello_world_test.sh'
+        sh 'ARCH=arm Tests/intergrate_test/hello_world_test.sh'
       }
     }
 
@@ -35,7 +35,7 @@ pipeline {
     stage('Test-ARM64') {
       steps {
         echo 'Testing...'
-        bash 'ARCH=arm64 Tests/intergrate_test/hello_world_test.sh'
+        sh 'ARCH=arm64 Tests/intergrate_test/hello_world_test.sh'
       }
     }
 
