@@ -32,7 +32,7 @@ void Reset_Handler(void){
     
 }
 
-void undefined_instructio(void){
+void undefined_instruction(void){
 
 }
 
@@ -53,5 +53,5 @@ void irq(void){
 }
 
 void fiq(void){
-    
+
 }

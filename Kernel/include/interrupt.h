@@ -11,7 +11,7 @@ void disable_interrupt();
 
 
 void Reset_Handler(void);
-void undefined_instructio(void);
+void undefined_instruction(void);
 void software_interrupt(void);
 void prefetch_abort(void);
 void data_abort(void);
