@@ -1,5 +1,6 @@
 OBJS =  src/io.o \
 		src/interrupt.o \
+		src/exception.ao \
 		src/init.o
 
 
