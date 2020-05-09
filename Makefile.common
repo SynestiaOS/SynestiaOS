@@ -4,9 +4,11 @@ SYNESTIA_BASE_DIR := $(patsubst %/,%,$(dir $(MAKEFILE_PATH)))
 ifeq ($(ARCH), arm)
 	TOOLCHAIN_PREFIX = arm-none-eabi-
 	PLATFORM = RASPI2
+	CFLAGS += -O2 -mfpu=neon-vfpv4 -mfloat-abi=hard -march=armv7-a -mtune=cortex-a7
 else ifeq ($(ARCH), arm64)
 	TOOLCHAIN_PREFIX = aarch64-linux-gnu-
 	PLATFORM = RASPI3
+	CFLAGS += -O2 -mfpu=crypto-neon-fp-armv8 -mfloat-abi=hard -march=armv8-a+crc -mcpu=cortex-a53
 endif
 
 CXX = $(TOOLCHAIN_PREFIX)g++

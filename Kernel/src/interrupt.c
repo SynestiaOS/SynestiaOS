@@ -13,7 +13,7 @@ void enable_interrupt(){
 }
 
 void disable_interrupt(){
-
+    __asm__ __volatile__("cpsid i");
 }
 
 static rpi_irq_controller_t* rpiIRQController = (rpi_irq_controller_t*)RPI_INTERRUPT_CONTROLLER_BASE;
