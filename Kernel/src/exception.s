@@ -26,6 +26,7 @@ _interrupt_vector_addr:
 _fast_interrupt_vector_addr:
     .word fast_interrupt_vector
 
+.extern reset_vector
 reset:
     mov     r0, #0x8000 
     mov     r1, #0x0000  

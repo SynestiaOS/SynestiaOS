@@ -10,7 +10,7 @@ void clean_bss(uint8_t *start, uint8_t *end) {
 }
 
 void helloworld(){
-    const char str[] = "hello world\n";
+const char str[] = "hello world\n";
   uint32_t i;
   for (i = 0; i < sizeof(str); i++) {
     uart_putc(str[i]);
