@@ -1,9 +1,12 @@
 #pragma once
 
 #include <stdint.h>
+#include "raspi3.h"
 
 #define DEFAULT_UART_CLK (3 * 1000000)
 #define DEFAULT_BAUD 115200
+
+#define UART0_BASE (PERIPHERAL_BASE + UART0_OFFSET)
 
 #define UART_DR_OFFSET 0x00
 #define UART_RSRECR_OFFSET 0x04
