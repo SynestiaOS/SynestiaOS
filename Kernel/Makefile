@@ -2,12 +2,12 @@ OBJS =  src/io.o \
 		src/interrupt.o \
 		src/timer.o \
 		src/exception.ao \
-		src/stdlib.o \
 		src/init.o
 
 
 EXTRA_OBJS += arch/$(ARCH)/boot.ao \
-			../Board/RaspberryPi3/src/uart.board.o
+			../Board/RaspberryPi3/src/uart.board.o \
+			../Libraries/LibC/src/stdlib.library.o \
 
 OBJ_SUFFIX = .kernel
 

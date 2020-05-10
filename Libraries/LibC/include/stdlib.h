@@ -1,3 +1,5 @@
+#pragma once
+
 #include <stdint.h>
 #ifndef STDLIB_H
 #define STDLIB_H

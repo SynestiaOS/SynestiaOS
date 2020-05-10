@@ -1,7 +1,7 @@
-#include <stdlib.h>
-#include <stdint.h>
+#include "../../../Board/RaspberryPi3/include/uart.h"
 #include <stdarg.h>
-#include <../../Board/RaspberryPi3/include/uart.h>
+#include <stdint.h>
+#include <stdlib.h>
 
 void memcpy(void * dest, const void * src, int bytes) {
     char * d = dest;
@@ -72,13 +72,13 @@ int atoi(char * num) {
 
     // Find the end
     while (*num >= '0' && *num <= '9') {
-        num++;     
+        num++;
     }
 
     num--;
 
     while (num != start) {
-        digit = *num - '0'; 
+        digit = *num - '0';
         for (i = 0; i < power; i++) {
             digit *= 10;
         }

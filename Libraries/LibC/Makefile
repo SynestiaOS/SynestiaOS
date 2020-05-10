@@ -1,6 +1,10 @@
-OBJS +=
+OBJS += src/stdlib.o
 
-EXTRA_OBJS += 
+EXTRA_OBJS +=
+
+OBJ_SUFFIX = .library
+
+PROGRAM = library
 
 CFLAGS += -Iinclude
 
