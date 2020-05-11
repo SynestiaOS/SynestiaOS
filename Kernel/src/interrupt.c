@@ -5,20 +5,20 @@ void init_interrupt() {
     enable_interrupt();
 }
 
-uint32_t is_interrupt_enabled(){
+uint32_t is_interrupt_enabled() {
     uint32_t cpsr;
     __asm__ __volatile__("mrs %0, cpsr":"=r"(cpsr):);
     return ((cpsr >> 7) & 1) == 0;
 }
 
 void enable_interrupt() {
-    if(!is_interrupt_enabled()) {
+    if (!is_interrupt_enabled()) {
         __asm__ __volatile__("cpsie i");
     }
 }
 
 void disable_interrupt() {
-    if(is_interrupt_enabled()) {
+    if (is_interrupt_enabled()) {
         __asm__ __volatile__("cpsid i");
     }
 }
@@ -92,9 +92,7 @@ void register_interrupt_handler(uint32_t interrupt_no, void(*interrupt_handler_f
 }
 
 void __attribute__((interrupt("IRQ"))) interrupt_handler(void) {
-    // todo: check interrupt number pending status and do it's handler func
-    for (uint32_t interrupt_no = 0;interrupt_no < IRQ_NUMS;
-    interrupt_no++){
+    for (uint32_t interrupt_no = 0; interrupt_no < IRQ_NUMS; interrupt_no++) {
         if (IRQ_IS_PENDING(getIRQController(), interrupt_no) && irq_handlers[interrupt_no].registered == 1) {
             irq_handlers[interrupt_no].interrupt_clear_func();
 
