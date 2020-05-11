@@ -24,11 +24,11 @@ void print_splash() {
 }
 
 void kernel_main(void) {
-    init_bsp();
-
     print_splash();
 
     init_interrupt();
+
+    init_bsp();
 
     swi(1);
 

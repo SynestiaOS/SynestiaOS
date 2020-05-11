@@ -106,6 +106,7 @@ void register_interrupt_handler(uint32_t interrupt_no, void(*interrupt_handler_f
 }
 
 void __attribute__((interrupt("IRQ"))) interrupt_handler(void) {
+    uart_print("interrupt got\n\0");
     for (uint32_t interrupt_no = 0; interrupt_no < IRQ_NUMS; interrupt_no++) {
         if (IRQ_IS_PENDING(getIRQController(), interrupt_no) && irq_handlers[interrupt_no].registered == 1) {
             irq_handlers[interrupt_no].interrupt_clear_func();
