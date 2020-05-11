@@ -11,20 +11,23 @@ void clean_bss(uint8_t *start, uint8_t *end) {
 }
 
 void print_splash() {
-    const char str[] = "   _____                       _   _       \n"
+    const char* str = "   _____                       _   _       \n"
                        "  / ____|                     | | (_)      \n"
                        " | (___  _   _ _ __   ___  ___| |_ _  __ _ \n"
                        "  \\___ \\| | | | '_ \\ / _ \\/ __| __| |/ _` |\n"
                        "  ____) | |_| | | | |  __/\\__ \\ |_| | (_| |\n"
                        " |_____/ \\__, |_| |_|\\___||___/\\__|_|\\__,_|\n"
                        "          __/ |                            \n"
-                       "         |___/                          \n";
+                       "         |___/                          \n\0";
+
     print(str);
 }
 
 void kernel_main(void) {
     init_bsp();
+
     print_splash();
+
     init_interrupt();
 
 

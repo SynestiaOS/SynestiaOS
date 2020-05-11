@@ -3,26 +3,26 @@
 #include <stdint.h>
 #include <stdlib.h>
 
-void memcpy(void * dest, const void * src, int bytes) {
-    char * d = dest;
-    const char * s = src;
+void memcpy(void *dest, const void *src, int bytes) {
+    char *d = dest;
+    const char *s = src;
     while (bytes--) {
         *d++ = *s++;
     }
 }
 
-void bzero(void * dest, int bytes) {
+void bzero(void *dest, int bytes) {
     memset(dest, 0, bytes);
 }
 
-void memset(void * dest, uint8_t c, int bytes) {
-    uint8_t * d = dest;
+void memset(void *dest, uint8_t c, int bytes) {
+    uint8_t *d = dest;
     while (bytes--) {
         *d++ = c;
     }
 }
 
-char * itoa(int num, int base) {
+char *itoa(int num, int base) {
     static char intbuf[33];
     uint32_t j = 0, isneg = 0, i;
 
@@ -45,9 +45,9 @@ char * itoa(int num, int base) {
     if (base == 16) {
         intbuf[j++] = 'x';
         intbuf[j++] = '0';
-    } else if(base == 8) {
+    } else if (base == 8) {
         intbuf[j++] = '0';
-    } else if(base == 2) {
+    } else if (base == 2) {
         intbuf[j++] = 'b';
         intbuf[j++] = '0';
     }
@@ -66,9 +66,9 @@ char * itoa(int num, int base) {
     return intbuf;
 }
 
-int atoi(char * num) {
+int atoi(char *num) {
     int res = 0, power = 0, digit, i;
-    char * start = num;
+    char *start = num;
 
     // Find the end
     while (*num >= '0' && *num <= '9') {
@@ -94,19 +94,21 @@ void putc(char c) {
     uart_putc(c);
 }
 
-void puts(const char * str) {
+void puts(const char *str) {
     int i;
-    for (i = 0; str[i] != '\0'; i ++)
+    for (i = 0; str[i] != '\0'; i++) {
         putc(str[i]);
+    }
 }
 
-void print(const char * str){
-  for (; *str != '\0'; str++) {
-    putc(*str);
-  }
+void print(const char *str) {
+    while (*str) {
+        putc(*str);
+        str++;
+    }
 }
 
-void printf(const char * fmt, ...){
+void printf(const char *fmt, ...) {
     va_list args;
     va_start(args, fmt);
     for (; *fmt != '\0'; fmt++) {
@@ -116,13 +118,16 @@ void printf(const char * fmt, ...){
                     putc('%');
                     break;
                 case 'd':
-                    puts(itoa(va_arg(args, int), 10));
+                    puts(itoa(va_arg(args,
+                    int), 10));
                     break;
                 case 'x':
-                    puts(itoa(va_arg(args, int), 16));
+                    puts(itoa(va_arg(args,
+                    int), 16));
                     break;
                 case 's':
-                    puts(va_arg(args, char *));
+                    puts(va_arg(args,
+                    char *));
                     break;
             }
         } else putc(*fmt);
