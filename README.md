@@ -19,7 +19,7 @@ docker-compose run os make ARCH=arm
 ```
 
 # code formatting
-## under this project dir, run following command to format the code 
+under this project dir, run following command to format the code 
 ```
 docker-compose run os bash run-clang-foramt.sh
 ``` 
