@@ -1,0 +1,3 @@
+[submodule "SynestiaOS_Tests"]
+	path = Tests
+	url = https://github.com/SynestiaOS/SynestiaOS_Tests
