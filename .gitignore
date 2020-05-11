@@ -3,3 +3,4 @@ Tools/
 *.o
 *.ao
 Kernel/kernel
+Tests/

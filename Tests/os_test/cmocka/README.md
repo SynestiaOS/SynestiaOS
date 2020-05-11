@@ -1,1 +1,0 @@
-cmocka is copied from [here](https://gitlab.com/cmocka/cmocka)
