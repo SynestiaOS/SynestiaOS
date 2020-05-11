@@ -32,6 +32,12 @@ rpi_irq_controller_t* getIRQController(void);
 void init_interrupt();
 
 /**
+ * check interrupt status form cpsr register
+ * @return
+ */
+uint32_t is_interrupt_enabled();
+
+/**
  * enable interrupt with cpsie
  */
 void enable_interrupt();

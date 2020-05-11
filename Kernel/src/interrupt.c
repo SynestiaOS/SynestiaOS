@@ -5,12 +5,22 @@ void init_interrupt() {
     enable_interrupt();
 }
 
+uint32_t is_interrupt_enabled(){
+    uint32_t cpsr;
+    __asm__ __volatile__("mrs %0, cpsr":"=r"(cpsr):);
+    return ((cpsr >> 7) & 1) == 0;
+}
+
 void enable_interrupt() {
-    __asm__ __volatile__("cpsie i");
+    if(!is_interrupt_enabled()) {
+        __asm__ __volatile__("cpsie i");
+    }
 }
 
 void disable_interrupt() {
-    __asm__ __volatile__("cpsid i");
+    if(is_interrupt_enabled()) {
+        __asm__ __volatile__("cpsid i");
+    }
 }
 
 void swi(uint32_t num) {
