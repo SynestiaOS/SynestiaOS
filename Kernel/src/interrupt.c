@@ -1,7 +1,18 @@
 #include <interrupt.h>
 #include <../../Board/RaspberryPi3/include/uart.h>
 
+
+static rpi_irq_controller_t *rpiIRQController = (rpi_irq_controller_t *) RPI_INTERRUPT_CONTROLLER_BASE;
+
+rpi_irq_controller_t *getIRQController(void) {
+    return rpiIRQController;
+}
+
+
 void init_interrupt() {
+    getIRQController()->Disable_Basic_IRQs = 0xffffffff;
+    getIRQController()->Disable_IRQs_1 = 0xffffffff;
+    getIRQController()->Disable_IRQs_2 = 0xffffffff;
     enable_interrupt();
 }
 
@@ -26,13 +37,6 @@ void disable_interrupt() {
 void swi(uint32_t num) {
     __asm__ __volatile__("mov r0,%0"::"r" (num));
     __asm__ __volatile__("swi 0x0");
-}
-
-
-static rpi_irq_controller_t *rpiIRQController = (rpi_irq_controller_t *) RPI_INTERRUPT_CONTROLLER_BASE;
-
-rpi_irq_controller_t *getIRQController(void) {
-    return rpiIRQController;
 }
 
 
@@ -69,7 +73,9 @@ void unused_handler(void) {
 #define IRQ_IS_BASIC(x) ((x >= 64 ))
 #define IRQ_IS_GPU2(x) ((x >= 32 && x < 64 ))
 #define IRQ_IS_GPU1(x) ((x < 32 ))
-#define IRQ_IS_PENDING(regs, num) ((IRQ_IS_BASIC(num) && ((1 << (num-64)) & regs->IRQ_basic_pending)) || (IRQ_IS_GPU2(num) && ((1 << (num-32)) & regs->IRQ_pending_2)) || (IRQ_IS_GPU1(num) && ((1 << (num)) & regs->IRQ_pending_1)))
+#define IRQ_IS_PENDING(regs, num)  ((IRQ_IS_BASIC(num) && ((1 << (num-64)) & regs->IRQ_basic_pending)) || \
+                                    (IRQ_IS_GPU2(num)  && ((1 << (num-32)) & regs->IRQ_pending_2)) || \
+                                    (IRQ_IS_GPU1(num)  && ((1 << (num))    & regs->IRQ_pending_1)))
 
 typedef struct irq_handler {
     void (*interrupt_handler_func)(void);
@@ -82,13 +88,21 @@ typedef struct irq_handler {
 /**
  * map for interrupt number and it's handler func and clear func
  */
-#define IRQ_NUMS 64
+#define IRQ_NUMS 96
 irq_handler_t irq_handlers[IRQ_NUMS];
 
 void register_interrupt_handler(uint32_t interrupt_no, void(*interrupt_handler_func)(void), void(*interrupt_clear_func)(void)) {
     irq_handlers[interrupt_no].interrupt_handler_func = interrupt_handler_func;
     irq_handlers[interrupt_no].interrupt_clear_func = interrupt_clear_func;
     irq_handlers[interrupt_no].registered = 1;
+
+    if (IRQ_IS_BASIC(interrupt_no)) {
+        getIRQController()->Enable_Basic_IRQs |= (1 << (interrupt_no - 64));
+    } else if (IRQ_IS_GPU2(interrupt_no)) {
+        getIRQController()->Enable_IRQs_2 |= (1 << (interrupt_no - 32));
+    } else if (IRQ_IS_GPU1(interrupt_no)) {
+        getIRQController()->Enable_IRQs_1 |= (1 << (interrupt_no));
+    }
 }
 
 void __attribute__((interrupt("IRQ"))) interrupt_handler(void) {
