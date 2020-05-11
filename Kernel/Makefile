@@ -4,7 +4,7 @@ OBJS =  src/io.o \
 		src/init.o
 
 
-EXTRA_OBJS += arch/$(ARCH)/boot.ao \
+EXTRA_OBJS += Arch/$(ARCH)/boot.ao \
 			../Board/RaspberryPi3/src/uart.board.o \
 			../Board/RaspberryPi3/src/timer.board.o \
 			../Libraries/LibC/src/stdlib.library.o \
@@ -15,6 +15,6 @@ OBJ_SUFFIX = .kernel
 PROGRAM = kernel
 
 CFLAGS += -Iinclude
-LDFLAGS += -T arch/$(ARCH)/kernel.ld
+LDFLAGS += -T Arch/$(ARCH)/kernel.ld
 
 include ../Makefile.common
