@@ -13,16 +13,17 @@ sudo bash Scripts/SetupLinux.sh
 ## for windows:
 
 ## for docker:
-under this project dir, run following command to build the os
+under this project dir, run following command to build the image
 ```
-docker-compose run os make ARCH=arm
+docker build . -t os
 ```
 
 # code formatting
-under this project dir, run following command to format the code 
+and then, you can run following command to enter the container
 ```
-docker-compose run os bash run-clang-foramt.sh
-``` 
+docker run -it os bash
+```
+
 # Build, Run and Debug
 To build kernel:
 ```
