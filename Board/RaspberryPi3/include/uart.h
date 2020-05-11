@@ -1,4 +1,5 @@
-#pragma once
+#ifndef __BOARD_RASP3_UART_H__
+#define __BOARD_RASP3_UART_H__
 
 #include <stdint.h>
 
@@ -33,3 +34,5 @@ extern uint32_t io_readl(void *addr);
 
 void uart_init(void);
 void uart_putc(uint8_t ch);
+
+#endif // __BOARD_RASP3_UART_H__

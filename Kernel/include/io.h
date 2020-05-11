@@ -1,4 +1,5 @@
-#pragma once
+#ifndef __KERNEL_IO_H__
+#define __KERNEL_IO_H__
 
 #include <stdint.h>
 
@@ -13,3 +14,5 @@ uint8_t io_readb(void *addr);
 uint16_t io_readw(void *addr);
 
 uint32_t io_readl(void *addr);
+
+#endif // __KERNEL_IO_H__

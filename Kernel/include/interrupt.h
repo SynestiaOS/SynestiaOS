@@ -1,4 +1,6 @@
-#pragma once
+#ifndef __KERNEL_INTERRUPT_H__
+#define __KERNEL_INTERRUPT_H__
+
 #include <stdint.h>
 
 #define ARM_INTERRUPT_REGISTER_BASE 0x7E00B000
@@ -19,8 +21,12 @@ typedef struct {
 
 rpi_irq_controller_t* getIRQController(void);
 
-void interrupt_init();
+void init_interrupt();
 
 void enable_interrupt();
 
 void disable_interrupt();
+
+void swi(uint32_t num);
+
+#endif // __KERNEL_INTERRUPT_H__

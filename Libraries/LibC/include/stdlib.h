@@ -1,4 +1,5 @@
-#pragma once
+#ifndef __LIBRARY_LIBC_STDLIB_H__
+#define __LIBRARY_LIBC_STDLIB_H__
 
 #include <stdint.h>
 #ifndef STDLIB_H
@@ -27,3 +28,5 @@ void puts(const char * str);
 void print(const char * str);
 void printf(const char * fmt, ...);
 #endif
+
+#endif // __LIBRARY_LIBC_STDLIB_H__

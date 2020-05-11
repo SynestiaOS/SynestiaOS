@@ -18,7 +18,7 @@ LINK = $(TOOLCHAIN_PREFIX)ld
 
 CFLAGS += -fpic -ffreestanding -std=c11 -Wall -Wextra -g -nostdlib -fno-builtin -D$(PLATFORM)
 ASFLAGS += -c -g
-LDFLAGS += -ffreestanding -nostdlib 
+LDFLAGS +=
 
 SUFFIXED_OBJS = $(patsubst %.o,%$(OBJ_SUFFIX).o,$(OBJS))
 
@@ -40,10 +40,9 @@ ifeq ($(PROGRAM), kernel)
 	@echo "EXTRA_OBJS: $(EXTRA_OBJS)"
 	@echo "SUFFIXED_OBJS: $(SUFFIXED_OBJS)"
 	@echo "LINK: $(LDFLAGS)"
+	@echo "$(LINK) $(LDFLAGS) -o $(PROGRAM) $(EXTRA_OBJS) $(SUFFIXED_OBJS)"
 	@echo ""
-	@$(CC) -o $(PROGRAM) $(EXTRA_OBJS) $(SUFFIXED_OBJS) $(LDFLAGS)
-else
-	@echo "OK"
+	@$(LINK) $(LDFLAGS) -o $(PROGRAM) $(EXTRA_OBJS) $(SUFFIXED_OBJS)
 endif
 
 all: $(PROGRAM)

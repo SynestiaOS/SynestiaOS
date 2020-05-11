@@ -1,4 +1,5 @@
-OBJS +=  src/uart.o
+OBJS +=  src/uart.o \
+		src/synestia_os_hal.o
 
 CFLAGS += -Iinclude
 

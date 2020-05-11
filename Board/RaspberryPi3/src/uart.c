@@ -20,3 +20,4 @@ void uart_putc(uint8_t ch) {
     ;
   io_writel(ch, (void *)(UART0_BASE + UART_DR_OFFSET));
 }
+

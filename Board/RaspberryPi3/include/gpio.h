@@ -1,4 +1,5 @@
-#pragma once
+#ifndef __BOARD_RASP3_GPIO_H__
+#ifndef __BOARD_RASP3_GPIO_H__
 
 #define GPFSEL0_OFFSET 0x00
 #define GPFSEL1_OFFSET 0x04
@@ -41,3 +42,6 @@
 #define GPIO_PUP_PDN_CNTRL_REG1_OFFSET 0xE8
 #define GPIO_PUP_PDN_CNTRL_REG2_OFFSET 0xEC
 #define GPIO_PUP_PDN_CNTRL_REG3_OFFSET 0xF0
+
+
+#endif // __BOARD_RASP3_GPIO_H__
