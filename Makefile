@@ -1,6 +1,7 @@
 SUBDIRS += Libraries/LibC \
 	Board/RaspberryPi3 \
-	Kernel 
+	Kernel
+#	Tests/os_test
 
 include Makefile.subdir
 
