@@ -1,4 +1,5 @@
 #include <../../Board/RaspberryPi3/include/synestia_os_hal.h>
+#include <../../Libraries/LibC/include/stdlib.h>
 #include <interrupt.h>
 #include <stdint.h>
 
@@ -18,10 +19,7 @@ void print_splash() {
                        " |_____/ \\__, |_| |_|\\___||___/\\__|_|\\__,_|\n"
                        "          __/ |                            \n"
                        "         |___/                          \n";
-    uint32_t i;
-    for (i = 0; i < sizeof(str); i++) {
-        uart_putc(str[i]);
-    }
+    print(str);
 }
 
 void kernel_main(void) {

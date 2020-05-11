@@ -15,7 +15,7 @@ SECTIONS
 
     __rodata_start = .;
     .rodata :
-    {s
+    {
         *(.rodata)
     }
     . = ALIGN(4096);
