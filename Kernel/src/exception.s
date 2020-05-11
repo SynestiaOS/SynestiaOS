@@ -26,6 +26,7 @@ _interrupt_addr:
 _fast_interrupt_addr:
     .word fast_interrupt_handler
 
+
 reset_handler:
     push    {r4, r5, r6, r7, r8, r9}
     ldr     r0, =exception_vector_table
