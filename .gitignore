@@ -3,4 +3,6 @@ Tools/
 *.o
 *.ao
 Kernel/kernel
-Tests/
+Tests/integrate_test
+Tests/os_test
+Tests/tools
