@@ -1,12 +1,13 @@
 version: "3.7"
 
 services:
-  os:
+  dev:
     build:
       context: .
       dockerfile: Dockerfile
     ports:
       - "1234:1234"
+      - "2222:2222"
     networks:
       - os_share_network
     volumes:

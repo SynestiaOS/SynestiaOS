@@ -1,0 +1,5 @@
+Port 2222
+ListenAddress 0.0.0.0
+PermitRootLogin yes
+PasswordAuthentication yes
+Subsystem sftp /usr/lib/openssh/sftp-server

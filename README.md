@@ -13,26 +13,26 @@ sudo bash Scripts/SetupLinux.sh
 ## for windows:
 
 ## for docker:
-under this project dir, run following command to build the os
+under this project dir, run following command to setup dev environment
 ```
-docker-compose run os make ARCH=arm
+docker-compose up -d dev
 ```
 
 # code formatting
 under this project dir, run following command to format the code 
 ```
-docker-compose run os bash run-clang-foramt.sh
+docker-compose run dev bash run-clang-foramt.sh
 ``` 
 # Build, Run and Debug
-To build kernel:
+To build kernel, under the Build dir, run
 ```
-make ARCH=arm   #for raspi2 and arm32
-make ARCH=arm64 #for raspi3 and arm64
+cmake -DCMAKE_C_COMPILER=/usr/bin/arm-none-eabi-gcc -ARCH=arm ..
+make
 ```
-To run kernel:
+To run kernel, you can find the kernel image under Build/Kernel/Arch
 ```
-qemu-system-arm -M raspi2 -kernel Kernel/kernel -nographic -serial mon:stdio      #for raspi2 and arm32
-qemu-system-aarch64 -M raspi3 -kernel Kernel/kernel -nographic -serial mon:stdio  #for raspi3 and arm64
+qemu-system-arm -M raspi2 -kernel KernelImage -nographic -serial mon:stdio      #for raspi2 and arm32
+qemu-system-aarch64 -M raspi3 -kernel KernelImage -nographic -serial mon:stdio  #for raspi3 and arm64
 ```
 To clean workspace:
 ```
