@@ -6,7 +6,7 @@ ifeq ($(ARCH), arm)
 	TOOLCHAIN_PREFIX = arm-none-eabi-
 	PLATFORM = RASPI2
 	CFLAGS += -O2 -mfpu=neon-vfpv4 -mfloat-abi=hard -march=armv7-a -mtune=cortex-a7
-	SYNESTIA_BUILD_DIR +=RaspberryPi3/boot/
+	SYNESTIA_BUILD_DIR =$(SYNESTIA_BASE_DIR)/Build/RaspberryPi3/boot
 else ifeq ($(ARCH), arm64)
 	TOOLCHAIN_PREFIX = aarch64-linux-gnu-
 	PLATFORM = RASPI3
@@ -48,18 +48,13 @@ ifeq ($(PROGRAM), kernel)
 	@echo "LINK: $(LDFLAGS)"
 	@echo "$(LINK) $(LDFLAGS) -o $(PROGRAM) $(EXTRA_OBJS) $(SUFFIXED_OBJS)"
 	@$(LINK) $(LDFLAGS) -o $(PROGRAM) $(EXTRA_OBJS) $(SUFFIXED_OBJS)
-endif
-
-$(ARM7IMG):	$(PROGRAM)
-	@echo "?????"
-ifeq ($(ARM7IMG), kernel7.img)
 	@echo ""
 	@echo "$(notdir $(CURDIR)) IMG: $(ARM7IMG)"
-	@echo "@$(OBJCOPY) $(PROGRAM) -O binary $(SYNESTIA_BUILD_DIR)/$(ARM7IMG)"
+	@echo "$(OBJCOPY) $(PROGRAM) -O binary $(SYNESTIA_BUILD_DIR)/$(ARM7IMG)"
 	@$(OBJCOPY) $(PROGRAM) -O binary $(SYNESTIA_BUILD_DIR)/$(ARM7IMG)
 endif
 
-all: $(ARM7IMG)
+all: $(PROGRAM)
 
 clean:
 	@echo "$(notdir $(CURDIR)): CLEAN"
