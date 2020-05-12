@@ -41,7 +41,7 @@ make clean
 To debug kernel, arm32 for instance:
 openup terminal 1:
 ```
-qemu-system-arm -M raspi2 -kernel Kernel.img -s -S
+qemu-system-arm -M raspi2 -kernel Kernel.img -s -S -nographic
 ```
 openup terminal 2:
 ```
