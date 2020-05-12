@@ -1,7 +1,7 @@
 #include <timer.h>
 #include <stdlib.h>
 
-static timer_registers_t *timer_regs;
+static timer_registers_t *timer_regs = (timer_registers_t *) SYSTEM_TIMER_BASE;
 
 void timer_irq_handler(void) {
     print("timer interrupt triggered\n");
