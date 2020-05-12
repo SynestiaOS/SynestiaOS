@@ -12,6 +12,8 @@ services:
       - os_share_network
     volumes:
       - ../:/root/SynestiaOS
+    privileged: true
+
 
 networks:
   os_share_network:
