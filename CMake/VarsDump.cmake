@@ -2,18 +2,18 @@
 macro(dump_cmake_variables)
     get_cmake_property(variable_names VARIABLES)
 
-    string(APPEND cmake_variables_dump_seprator "\n")
+    string(APPEND cmake_variables_dump_separator "\n")
     foreach (index RANGE 100)
-        string(APPEND cmake_variables_dump_seprator "--")
+        string(APPEND cmake_variables_dump_separator "--")
     endforeach ()
-    string(APPEND cmake_variables_dump_seprator "\n")
+    string(APPEND cmake_variables_dump_separator "\n")
 
     string(TIMESTAMP current_time "this file was generated at local time: %Y-%m-%dT%H:%M:%S")
     string(TIMESTAMP vars_dump_file_timestamp "%Y-%m-%d-%H-%M-%S")
 
-    list(APPEND cmake_variables_list "${current_time}${cmake_variables_dump_seprator}")
+    list(APPEND cmake_variables_list "${current_time}${cmake_variables_dump_separator}")
     foreach (variable_name ${variable_names})
-        list(APPEND cmake_variables_list "${variable_name}=${${variable_name}}${cmake_variables_dump_seprator}")
+        list(APPEND cmake_variables_list "${variable_name}=${${variable_name}}${cmake_variables_dump_separator}")
     endforeach ()
 
     set(cmake_variables_dump_dir ${CMAKE_BINARY_DIR}/cmake_variables_dump)

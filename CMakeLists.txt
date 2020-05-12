@@ -1,14 +1,14 @@
 cmake_minimum_required(VERSION 3.12)
 
-# tricky way to skip cmake compiler check
+# skip cmake compiler check
 set(CMAKE_TRY_COMPILE_TARGET_TYPE "STATIC_LIBRARY")
 
 project(SynestiaOS C ASM)
 
 set(CMAKE_C_STANDARD 11)
 
+
 include(${SynestiaOS_SOURCE_DIR}/CMake/ArchDetector.cmake)
-#include(${SynestiaOS_SOURCE_DIR}/CMake/SetupCompiler.cmake)
 include(${SynestiaOS_SOURCE_DIR}/CMake/VarsDump.cmake)
 
 
@@ -25,10 +25,11 @@ else ()
 endif ()
 message("TOOLCHAIN_PREFIX is ${TOOLCHAIN_PREFIX}")
 message("PLATFORM is ${PLATFORM}")
-#string(APPEND CMAKE_C_FLAGS " -fpic -ffreestanding -std=gnu11 -Wall -Wextra -g -nostdlib -fno-builtin -D${PLATFORM}")
+
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fpic -ffreestanding -std=gnu11 -Wall -Wextra -g -nostdlib -fno-builtin -D${PLATFORM}")
 set(CMAKE_ASM_FLAGS "${CMAKE_C_FLAGS}")
 message("CMAKE_C_FLAGS is ${CMAKE_C_FLAGS}")
+message("CMAKE_ASM_FLAGS is ${CMAKE_ASM_FLAGS}")
 
 add_subdirectory(${SynestiaOS_SOURCE_DIR}/Board/RaspberryPi3)
 add_subdirectory(${SynestiaOS_SOURCE_DIR}/Kernel)
