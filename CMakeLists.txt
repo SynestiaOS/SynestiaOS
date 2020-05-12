@@ -6,6 +6,7 @@ set(CMAKE_TRY_COMPILE_TARGET_TYPE "STATIC_LIBRARY")
 project(SynestiaOS C ASM)
 
 set(CMAKE_C_STANDARD 11)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON) # compile commands can be used to help clang-tidy code analysis
 
 
 include(${SynestiaOS_SOURCE_DIR}/CMake/ArchDetector.cmake)
