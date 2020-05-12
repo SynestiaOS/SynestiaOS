@@ -11,7 +11,7 @@ services:
     networks:
       - os_share_network
     volumes:
-      - ./:/root/SynestiaOS
+      - ../:/root/SynestiaOS
 
 networks:
   os_share_network:
