@@ -17,7 +17,6 @@ macro(dump_cmake_variables)
     endforeach ()
 
     set(cmake_variables_dump_dir ${CMAKE_BINARY_DIR}/cmake_variables_dump)
-    # todo: SynestiaARCH here not working
     set(cmake_variables_dump_file ${cmake_variables_dump_dir}/cmake_variables_${vars_dump_file_timestamp}_${CMAKE_BUILD_TYPE}.txt)
     file(MAKE_DIRECTORY ${cmake_variables_dump_dir})
     file(WRITE ${cmake_variables_dump_file} ${cmake_variables_list})
