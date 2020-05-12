@@ -13,6 +13,7 @@ EXTRA_OBJS += Arch/$(ARCH)/boot.ao \
 OBJ_SUFFIX = .kernel
 
 PROGRAM = kernel
+ARM7IMG = kernel7.img
 
 CFLAGS += -Iinclude -I../Board/RaspberryPi3/include -I../Libraries/LibC/include
 LDFLAGS += -T Arch/$(ARCH)/kernel.ld
