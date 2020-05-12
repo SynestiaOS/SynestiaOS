@@ -6,6 +6,6 @@ OBJ_SUFFIX = .library
 
 PROGRAM = library
 
-CFLAGS += -Iinclude
+CFLAGS += -Iinclude -I../../Board/RaspberryPi3/include
 
 include ../../Makefile.common

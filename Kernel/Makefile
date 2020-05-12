@@ -14,7 +14,7 @@ OBJ_SUFFIX = .kernel
 
 PROGRAM = kernel
 
-CFLAGS += -Iinclude
+CFLAGS += -Iinclude -I../Board/RaspberryPi3/include -I../Libraries/LibC/include
 LDFLAGS += -T Arch/$(ARCH)/kernel.ld
 
 include ../Makefile.common

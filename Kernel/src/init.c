@@ -18,7 +18,7 @@ void print_splash() {
                       "  ____) | |_| | | | |  __/\\__ \\ |_| | (_| |\n"
                       " |_____/ \\__, |_| |_|\\___||___/\\__|_|\\__,_|\n"
                       "          __/ |                            \n"
-                      "         |___/                          \n\0";
+                      "         |___/                          \n";
 
     print(str);
 }
@@ -32,9 +32,9 @@ void kernel_main(void) {
 
     swi(1);
 
-    print("swi works\n\0");
+    print("swi works\n");
 
     swi(2);
 
-    print("swi works\n\0");
+    print("swi works\n");
 }

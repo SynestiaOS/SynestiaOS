@@ -15,15 +15,14 @@ void uart_init(void) {
     io_writel((1 << 0) | (1 << 8) | (1 << 9), (void *) (PERIPHERAL_BASE + UART0_OFFSET + UART_CR_OFFSET));
 }
 
-void uart_putc(uint8_t ch) {
+static void do_uart_putc(uint8_t ch) {
     while (io_readl((void *) (PERIPHERAL_BASE + UART0_OFFSET + UART_FR_OFFSET)) & (1 << 5));
     io_writel(ch, (void *) (PERIPHERAL_BASE + UART0_OFFSET + UART_DR_OFFSET));
 }
 
-void uart_print(const char *str) {
-    while (*str) {
-        uart_putc(*str);
-        str++;
+void uart_putc(uint8_t ch) {
+    if (ch == '\n') {
+        do_uart_putc('\r');
     }
+    do_uart_putc(ch);
 }
-

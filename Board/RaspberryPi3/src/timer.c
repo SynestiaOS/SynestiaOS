@@ -1,10 +1,10 @@
 #include <timer.h>
-#include <uart.h>
+#include <stdlib.h>
 
 static timer_registers_t *timer_regs;
 
 void timer_irq_handler(void) {
-    uart_print("timer interrupt triggered\n");
+    print("timer interrupt triggered\n");
     timer_set(300);
 }
 
