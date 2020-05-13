@@ -1,7 +1,7 @@
+#include <stdlib.h>
 #include <synestia_os_hal.h>
 #include <timer.h>
 #include <uart.h>
-#include <stdlib.h>
 
 void init_bsp(void) {
   print("[Device] uart_init...\n");
