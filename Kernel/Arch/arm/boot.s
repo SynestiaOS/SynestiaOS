@@ -34,10 +34,8 @@ _start:
     bic sp, r1, #0x7
 
     bic r0,     #0x1F
-    orr r0,     #0x10
+    orr r0,     #0x13
     msr cpsr_c, r0
-    ldr r1,=__sys_stack
-    bic sp, r1, #0x7
 
     bl kernel_main
 
