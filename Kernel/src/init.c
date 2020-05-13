@@ -30,6 +30,7 @@ void kernel_main(void) {
 
     init_bsp();
 
+    printf("test %d", 123);
     swi(1);
 
     print("swi works\n");

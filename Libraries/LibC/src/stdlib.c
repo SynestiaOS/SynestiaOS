@@ -24,7 +24,9 @@ void memset(void *dest, uint8_t c, int bytes) {
 
 char *itoa(int num, int base) {
     static char intbuf[33];
-    uint32_t j = 0, isneg = 0, i;
+    volatile int32_t j =0;
+    volatile int32_t isneg = 0;
+    volatile int32_t i = 0;
 
     if (num == 0) {
         intbuf[0] = '0';
