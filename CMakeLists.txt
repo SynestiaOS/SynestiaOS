@@ -1,9 +1,13 @@
-cmake_minimum_required(VERSION 3.12)
+cmake_minimum_required(VERSION 3.12 FATAL_ERROR)
 
 # skip cmake compiler check
 set(CMAKE_TRY_COMPILE_TARGET_TYPE "STATIC_LIBRARY")
 
-project(SynestiaOS C ASM)
+project(SynestiaOS LANGUAGES C ASM)
+
+if(${SynestiaOS_SOURCE_DIR} STREQUAL ${SynestiaOS_BINARY_DIR})
+    message(FATAL_ERROR "In-source builds not allowed. Please make a new directory (called a build directory) and run CMake from there.")
+endif()
 
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON) # compile commands can be used to help clang-tidy code analysis
@@ -36,4 +40,5 @@ add_subdirectory(${SynestiaOS_SOURCE_DIR}/Board/RaspberryPi3)
 add_subdirectory(${SynestiaOS_SOURCE_DIR}/Kernel)
 add_subdirectory(${SynestiaOS_SOURCE_DIR}/Libraries/LibC)
 
-#dump_cmake_variables()
+dump_cmake_variables()
+
