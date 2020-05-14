@@ -10,11 +10,12 @@ ARG DEBIAN_FRONTEND=noninteractive
 RUN apt update \
     && apt install --fix-missing -y build-essential binutils qemu-system-arm \
        gdb-multiarch gcc-arm-none-eabi gcc-aarch64-linux-gnu make cmake gcc \
-       clang-format-10 ssh rsync cmake-curses-gui \
+       clang-format-10 ssh rsync cmake-curses-gui less \
     && update-alternatives --install /usr/bin/clang-format clang-format /usr/bin/clang-format-10 100 \
     && apt clean \
     && rm -rf /var/cache/apt/archives \
     && mkdir /run/sshd \
-    && yes password | passwd root
+    && yes password | passwd root \
+    && echo 'set completion-ignore-case On' >> ~/.inputrc
 
 CMD ["/usr/sbin/sshd", "-D"]

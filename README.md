@@ -2,6 +2,16 @@
 ## An Open Source, standards-based software platform for IOT devices, including smartwatch, TVs and automotive infotainment platforms.
 
 # Prepare Environment
+## Clion
+[Clion](https://www.jetbrains.com/clion) is recommend to used as our development environment, add use docker to build the kernel.
+under this **Build** dir, run following command to setup dev environment
+```
+docker-compose up -d dev
+```
+within the docker container, we setup the ssh environment, and we can connect to the container through ssh.
+within Clion, Settings->Build,Execution,Deployment->Toolchain, click add a remote host, 
+and input the credentials, user: root, password: password. and it's done.
+
 ## for mac:
 ``` bash
 sudo sh Scripts/SetupMac.sh
