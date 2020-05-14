@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <synestia_os_hal.h>
 
-void clean_bss(uint8_t *start, uint8_t *end) {
+void clean_bss(uint8_t *start, const uint8_t *end) {
   uint32_t i;
   for (i = 0; start + i < end; i++) {
     *(start + i) = '\0';
@@ -30,7 +30,8 @@ void kernel_main(void) {
 
   init_bsp();
 
-  printf("test %d", 123);
+  printf("test %d\n", 123);
+
   swi(1);
 
   print("swi works\n");

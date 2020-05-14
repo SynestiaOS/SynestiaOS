@@ -20,74 +20,19 @@ void memset(void *dest, uint8_t c, int bytes) {
   }
 }
 
-char *itoa(int num, int base) {
-  static char intbuf[33];
-  volatile int32_t j = 0;
-  volatile int32_t isneg = 0;
-  volatile int32_t i = 0;
-
-  if (num == 0) {
-    intbuf[0] = '0';
-    intbuf[1] = '\0';
-    return intbuf;
+char *itoa(int number, int scale) {
+  if (number == 0) {
+    return "0\0";
   }
 
-  if (base == 10 && num < 0) {
-    isneg = 1;
-    num = -num;
+  static char buf[32] = {0};
+
+  int i = 30;
+  const char characters[] = "0123456789abcdef";
+  for (; number && i; --i, number /= scale) {
+    buf[i] = characters[number % scale];
   }
-
-  i = (uint32_t)num;
-
-  if (isneg)
-    intbuf[j++] = '-';
-
-  if (base == 16) {
-    intbuf[j++] = 'x';
-    intbuf[j++] = '0';
-  } else if (base == 8) {
-    intbuf[j++] = '0';
-  } else if (base == 2) {
-    intbuf[j++] = 'b';
-    intbuf[j++] = '0';
-  }
-
-  intbuf[j] = '\0';
-  j--;
-  i = 0;
-  while (i > j) {
-    isneg = intbuf[i];
-    intbuf[i] = intbuf[j];
-    intbuf[j] = isneg;
-    i++;
-    j--;
-  }
-
-  return intbuf;
-}
-
-int atoi(char *num) {
-  int res = 0, power = 0, digit, i;
-  char *start = num;
-
-  // Find the end
-  while (*num >= '0' && *num <= '9') {
-    num++;
-  }
-
-  num--;
-
-  while (num != start) {
-    digit = *num - '0';
-    for (i = 0; i < power; i++) {
-      digit *= 10;
-    }
-    res += digit;
-    power++;
-    num--;
-  }
-
-  return res;
+  return &buf[i + 1];
 }
 
 void putc(char c) { uart_putc(c); }
@@ -125,8 +70,9 @@ void printf(const char *fmt, ...) {
         puts(__builtin_va_arg(args, char *));
         break;
       }
-    } else
+    } else {
       putc(*fmt);
+    }
   }
   __builtin_va_end(args);
 }
