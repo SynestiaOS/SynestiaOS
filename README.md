@@ -26,7 +26,7 @@ docker-compose run dev bash run-clang-foramt.sh
 # Build, Run and Debug
 To build kernel, under the Build dir, run
 ```
-cmake -DCMAKE_C_COMPILER=/usr/bin/arm-none-eabi-gcc -ARCH=arm ..
+cmake -DCMAKE_C_COMPILER=/usr/bin/arm-none-eabi-gcc -DARCH=arm ..
 make
 ```
 To run kernel, you can find the kernel image under Build/Kernel/Arch
