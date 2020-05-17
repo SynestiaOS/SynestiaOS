@@ -34,10 +34,9 @@ under this project dir, run following command to format the code
 docker-compose run dev bash run-clang-foramt.sh
 ``` 
 # Build, Run and Debug
-To build kernel, under the Build dir, run
+within the docker container, under the Build dir, run following command to build kernel
 ```
-cmake -DCMAKE_C_COMPILER=/usr/bin/arm-none-eabi-gcc -DARCH=arm ..
-make
+cmake .. && make VERBOSE=1
 ```
 To run kernel, you can find the kernel image under Build/Kernel/Arch
 ```

@@ -18,4 +18,9 @@ RUN apt update \
     && yes password | passwd root \
     && echo 'set completion-ignore-case On' >> ~/.inputrc
 
+ENV CC=/usr/bin/arm-none-eabi-gcc
+ENV CXX=/usr/bin/arm-none-eabi-g++
+ENV AS=/usr/bin/arm-none-eabi-as
+ENV AR=/usr/bin/arm-none-eabi-ar
+
 CMD ["/usr/sbin/sshd", "-D"]
