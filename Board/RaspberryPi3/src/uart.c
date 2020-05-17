@@ -1,5 +1,5 @@
-#include <uart.h>
 #include <stdint.h>
+#include <uart.h>
 
 #if defined(RASPI2) || defined(RASPI3)
 #include <raspi3.h>

@@ -1,5 +1,5 @@
 #ifndef __BOARD_RASP3_GPIO_H__
-#ifndef __BOARD_RASP3_GPIO_H__
+#define __BOARD_RASP3_GPIO_H__
 
 #define GPFSEL0_OFFSET 0x00
 #define GPFSEL1_OFFSET 0x04

@@ -31,7 +31,7 @@ endif ()
 message("TOOLCHAIN_PREFIX is ${TOOLCHAIN_PREFIX}")
 message("PLATFORM is ${PLATFORM}")
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fpic -ffreestanding -std=gnu11 -Wall -Wextra -g -nostdlib -fno-builtin -D${PLATFORM}")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fpic -ffreestanding -std=gnu11 -Wall -Wextra -g -nostdlib -D${PLATFORM}")
 set(CMAKE_ASM_FLAGS "${CMAKE_C_FLAGS}")
 message("CMAKE_C_FLAGS is ${CMAKE_C_FLAGS}")
 message("CMAKE_ASM_FLAGS is ${CMAKE_ASM_FLAGS}")
