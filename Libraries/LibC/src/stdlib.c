@@ -20,20 +20,6 @@ void memset(void *dest, uint8_t c, int bytes) {
   }
 }
 
-char *itoa(int number, int scale) {
-  if (number == 0) {
-    return "0\0";
-  }
-
-  static char buf[32] = {0};
-
-  int i = 30;
-  const char characters[] = "0123456789abcdef";
-  for (; number && i; --i, number /= scale) {
-    buf[i] = characters[number % scale];
-  }
-  return &buf[i + 1];
-}
 
 void putc(char c) { uart_putc(c); }
 
@@ -49,30 +35,4 @@ void print(const char *str) {
     putc(*str);
     str++;
   }
-}
-
-void printf(const char *fmt, ...) {
-  __builtin_va_list args;
-  __builtin_va_start(args, fmt);
-  for (; *fmt != '\0'; fmt++) {
-    if (*fmt == '%') {
-      switch (*(++fmt)) {
-      case '%':
-        putc('%');
-        break;
-      case 'd':
-        puts(itoa(__builtin_va_arg(args, int), 10));
-        break;
-      case 'x':
-        puts(itoa(__builtin_va_arg(args, int), 16));
-        break;
-      case 's':
-        puts(__builtin_va_arg(args, char *));
-        break;
-      }
-    } else {
-      putc(*fmt);
-    }
-  }
-  __builtin_va_end(args);
 }
