@@ -6,3 +6,4 @@ Kernel/kernel
 Tests/integrate_test
 Tests/os_test
 Tests/tools
+/cmake-build-debug/
