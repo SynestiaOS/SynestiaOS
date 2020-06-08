@@ -1,5 +1,12 @@
-project(KernelArch)
+project(KernelArch C ASM)
 
-add_executable(Kernel.img ${KernelArch_SOURCE_DIR}/${SynestiaArch}/boot.s)
-set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -T ${KernelArch_SOURCE_DIR}/${SynestiaArch}/kernel.ld")
-target_link_libraries(Kernel.img PRIVATE Kernel LibC BoardRaspberryPi3)
+aux_source_directory(${KernelArch_SOURCE_DIR}/${SynestiaArch} KernelArchSrc)
+
+add_executable(${KernelName}
+        ${KernelArchSrc}
+        ${KernelArch_SOURCE_DIR}/${SynestiaArch}/boot.s
+        $<TARGET_OBJECTS:Kernel>
+        $<TARGET_OBJECTS:C>
+        $<TARGET_OBJECTS:BoardRaspberryPi3>)
+
+target_link_options(${KernelName} PRIVATE -T ${KernelArch_SOURCE_DIR}/${SynestiaArch}/kernel.ld)

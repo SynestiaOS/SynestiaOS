@@ -1,7 +1,9 @@
 cmake_minimum_required(VERSION 3.12 FATAL_ERROR)
 
 # skip cmake compiler check
-set(CMAKE_TRY_COMPILE_TARGET_TYPE "STATIC_LIBRARY")
+#set(CMAKE_TRY_COMPILE_TARGET_TYPE "STATIC_LIBRARY")
+set(CMAKE_C_COMPILER_WORKS TRUE)
+set(CMAKE_CXX_COMPILER_WORKS TRUE)
 
 project(SynestiaOS LANGUAGES C ASM)
 
@@ -15,6 +17,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON) # compile commands can be used to help cla
 
 include(${SynestiaOS_SOURCE_DIR}/CMake/ArchDetector.cmake)
 include(${SynestiaOS_SOURCE_DIR}/CMake/VarsDump.cmake)
+include(${SynestiaOS_SOURCE_DIR}/CMake/HeaderFiles.cmake)
 
 
 if (SynestiaArch STREQUAL arm)
@@ -35,6 +38,8 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fpic -ffreestanding -std=gnu11 -Wall -Wextr
 set(CMAKE_ASM_FLAGS "${CMAKE_C_FLAGS}")
 message("CMAKE_C_FLAGS is ${CMAKE_C_FLAGS}")
 message("CMAKE_ASM_FLAGS is ${CMAKE_ASM_FLAGS}")
+
+set(KernelName Kernel.img)
 
 add_subdirectory(${SynestiaOS_SOURCE_DIR}/Board/RaspberryPi3)
 add_subdirectory(${SynestiaOS_SOURCE_DIR}/Kernel)

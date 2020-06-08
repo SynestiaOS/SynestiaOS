@@ -1,8 +1,14 @@
-project(Kernel)
+project(Kernel C ASM)
+
 
 aux_source_directory(${Kernel_SOURCE_DIR}/src KernelSrc)
-add_library(Kernel STATIC ${KernelSrc} ${Kernel_SOURCE_DIR}/src/exception.s)
-target_include_directories(Kernel PUBLIC ${Kernel_SOURCE_DIR}/include)
-target_link_libraries(Kernel PRIVATE BoardRaspberryPi3 LibC)
+add_library(${PROJECT_NAME}
+        OBJECT
+        ${KernelSrc}
+        ${Kernel_SOURCE_DIR}/src/exception.s)
+
+target_include_kernel_header_files(${PROJECT_NAME})
+target_include_libc_header_files(${PROJECT_NAME})
+target_include_raspberry_pi3_header_files(${PROJECT_NAME})
 
 add_subdirectory(${Kernel_SOURCE_DIR}/Arch)

@@ -41,7 +41,7 @@ cmake .. && make VERBOSE=1
 if you are using mac, specify the cross compile toolchain in CMake/ToolchainArmMac.cmake, 
 and specify the toolchain file location
 ```
-cmake -DCMAKE_TOOLCHAIN_FILE=${PATH_TO_THIS_PROJECT}/SynestiaOS/cmake/ToolchainArmMac.cmake .. && make VERBOSE=1
+cmake -DCMAKE_TOOLCHAIN_FILE=${PATH_TO_THIS_PROJECT}/SynestiaOS/CMake/ToolchainArmMac.cmake .. && make VERBOSE=1
 ```
 To run kernel, you can find the kernel image under Build/Kernel/Arch
 ```

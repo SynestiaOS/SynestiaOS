@@ -1,6 +1,9 @@
-PROJECT(LibC)
+PROJECT(C C ASM)
 
-aux_source_directory(${LibC_SOURCE_DIR}/src LibCSrc)
-add_library(LibC STATIC ${LibCSrc})
-target_include_directories(LibC PUBLIC ${LibC_SOURCE_DIR}/include)
-target_link_libraries(LibC PRIVATE BoardRaspberryPi3 gcc) # link gcc to use __aeabi_idivmod
+aux_source_directory(${C_SOURCE_DIR}/src LibCSrc)
+
+add_library(${PROJECT_NAME}
+        OBJECT
+        ${LibCSrc})
+target_include_libc_header_files(${PROJECT_NAME})
+target_include_raspberry_pi3_header_files(${PROJECT_NAME})
