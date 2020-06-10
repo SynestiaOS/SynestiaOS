@@ -1,4 +1,5 @@
-#!bin/sh
+#!/bin/sh
+
 set -eu 
 before(){
     brew tap discoteq/discoteq
