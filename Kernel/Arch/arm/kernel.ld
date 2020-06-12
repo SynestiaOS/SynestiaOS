@@ -51,4 +51,5 @@ SECTIONS
     __sys_stack = .;
 
     __end_stack = .;
+    heap_begin = .;
 }

@@ -13,7 +13,6 @@
 typedef struct HeapArea {
     uint32_t        size;
     List            list;
-    void            *ptr;
 } HeapArea __attribute__((packed));
 
 extern struct HeapArea *heap_begin;

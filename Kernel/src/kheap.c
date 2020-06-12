@@ -18,13 +18,12 @@ void heap_set_free_callback(heap_free_func callback) {
     heapFreeFunc = callback;
 }
 
-
 void heap_init() {
     freeList = heap_begin;
-    freeList->size = 0;
+    freeList->size = (0xFFFFFFFF - (uint32_t) (char *) heap_begin - sizeof(HeapArea)); // all memory
     freeList->list.prev = nullptr;
     freeList->list.next = nullptr;
-    freeList->ptr = nullptr;
+
     usingList = nullptr;
 }
 
@@ -33,8 +32,21 @@ void *heap_alloc(uint32_t size) {
 
     List *begin = freeList->list.next;
     while (begin != nullptr) {
+        // if the size of the free block can contain the request size and a rest HeapArea, then just use it, and split a new block
+        if (getNode(begin, HeapArea, list)->size - size >= sizeof(HeapArea)) {
+            // 1. split a rest free HeapArea
+
+            // 2. link this to using list
+
+            // 3. link this rest free HeapArea to free list
+
+            // 4. return the ptr of the using block
+            break;
+        }
         begin = begin->next;
+        // no free block found ,let's fucking build a new
     }
+
 
 }
 
