@@ -30,10 +30,10 @@ void heap_init() {
 void *heap_alloc(uint32_t size) {
     uint32_t allocSize = size + sizeof(HeapArea);
 
-    List *begin = freeList->list.next;
+    HeapArea *begin = freeList;
     while (begin != nullptr) {
         // if the size of the free block can contain the request size and a rest HeapArea, then just use it, and split a new block
-        if (getNode(begin, HeapArea, list)->size - size >= sizeof(HeapArea)) {
+        if (begin->size >= allocSize) {
             // 1. split a rest free HeapArea
 
             // 2. link this to using list
@@ -43,7 +43,7 @@ void *heap_alloc(uint32_t size) {
             // 4. return the ptr of the using block
             break;
         }
-        begin = begin->next;
+        begin = getNode(begin->list.next,HeapArea ,list);
         // no free block found ,let's fucking build a new
     }
 
