@@ -100,14 +100,14 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/xingfeng.yang/project/SynestiaOS/Build/CMakeFiles /Users/xingfeng.yang/project/SynestiaOS/Build/CMakeFiles/progress.marks
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 all
+	cd /Users/xingfeng.yang/project/SynestiaOS/Build && $(CMAKE_COMMAND) -E cmake_progress_start /Users/xingfeng.yang/project/SynestiaOS/Build/CMakeFiles /Users/xingfeng.yang/project/SynestiaOS/Build/Kernel/Arch/CMakeFiles/progress.marks
+	cd /Users/xingfeng.yang/project/SynestiaOS/Build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 Kernel/Arch/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /Users/xingfeng.yang/project/SynestiaOS/Build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 clean
+	cd /Users/xingfeng.yang/project/SynestiaOS/Build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 Kernel/Arch/clean
 .PHONY : clean
 
 # The main clean target
@@ -117,70 +117,42 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 preinstall
+	cd /Users/xingfeng.yang/project/SynestiaOS/Build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 Kernel/Arch/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 preinstall
+	cd /Users/xingfeng.yang/project/SynestiaOS/Build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 Kernel/Arch/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	$(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /Users/xingfeng.yang/project/SynestiaOS/Build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
-#=============================================================================
-# Target rules for targets named BoardRaspberryPi3
+# Convenience name for target.
+Kernel/Arch/CMakeFiles/Kernel.img.dir/rule:
+	cd /Users/xingfeng.yang/project/SynestiaOS/Build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 Kernel/Arch/CMakeFiles/Kernel.img.dir/rule
+.PHONY : Kernel/Arch/CMakeFiles/Kernel.img.dir/rule
 
-# Build rule for target.
-BoardRaspberryPi3: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 BoardRaspberryPi3
-.PHONY : BoardRaspberryPi3
+# Convenience name for target.
+Kernel.img: Kernel/Arch/CMakeFiles/Kernel.img.dir/rule
 
-# fast build rule for target.
-BoardRaspberryPi3/fast:
-	$(MAKE) $(MAKESILENT) -f Board/RaspberryPi3/CMakeFiles/BoardRaspberryPi3.dir/build.make Board/RaspberryPi3/CMakeFiles/BoardRaspberryPi3.dir/build
-.PHONY : BoardRaspberryPi3/fast
-
-#=============================================================================
-# Target rules for targets named Kernel
-
-# Build rule for target.
-Kernel: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 Kernel
-.PHONY : Kernel
-
-# fast build rule for target.
-Kernel/fast:
-	$(MAKE) $(MAKESILENT) -f Kernel/CMakeFiles/Kernel.dir/build.make Kernel/CMakeFiles/Kernel.dir/build
-.PHONY : Kernel/fast
-
-#=============================================================================
-# Target rules for targets named Kernel.img
-
-# Build rule for target.
-Kernel.img: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 Kernel.img
 .PHONY : Kernel.img
 
 # fast build rule for target.
 Kernel.img/fast:
-	$(MAKE) $(MAKESILENT) -f Kernel/Arch/CMakeFiles/Kernel.img.dir/build.make Kernel/Arch/CMakeFiles/Kernel.img.dir/build
+	cd /Users/xingfeng.yang/project/SynestiaOS/Build && $(MAKE) $(MAKESILENT) -f Kernel/Arch/CMakeFiles/Kernel.img.dir/build.make Kernel/Arch/CMakeFiles/Kernel.img.dir/build
 .PHONY : Kernel.img/fast
 
-#=============================================================================
-# Target rules for targets named C
+arm/boot.o: arm/boot.s.o
 
-# Build rule for target.
-C : cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 C
-.PHONY : C
+.PHONY : arm/boot.o
 
-# fast build rule for target.
-C/fast:
-	$(MAKE) $(MAKESILENT) -f Libraries/LibC/CMakeFiles/C.dir/build.make Libraries/LibC/CMakeFiles/C.dir/build
-.PHONY : C/fast
+# target to build an object file
+arm/boot.s.o:
+	cd /Users/xingfeng.yang/project/SynestiaOS/Build && $(MAKE) $(MAKESILENT) -f Kernel/Arch/CMakeFiles/Kernel.img.dir/build.make Kernel/Arch/CMakeFiles/Kernel.img.dir/arm/boot.s.o
+.PHONY : arm/boot.s.o
 
 # Help Target
 help:
@@ -190,10 +162,8 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
-	@echo "... BoardRaspberryPi3"
-	@echo "... C"
-	@echo "... Kernel"
 	@echo "... Kernel.img"
+	@echo "... arm/boot.o"
 .PHONY : help
 
 
@@ -205,6 +175,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	$(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /Users/xingfeng.yang/project/SynestiaOS/Build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

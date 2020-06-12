@@ -7,3 +7,12 @@ Tests/integrate_test
 Tests/os_test
 Tests/tools
 /cmake-build-debug/
+Build/Board/
+Build/Libraries/
+Build/Kernel/
+Build/CMakeFiles/
+Build/CMakeCache.txt
+Build/cmake_install.cmake
+Build/compile_commands.json
+Build/Makefile
+Build/cmake_variables_dump/
