@@ -5,13 +5,15 @@
 #ifndef __KERNEL_KHEAP_H__
 #define __KERNEL_KHEAP_H__
 #include <stdint.h>
+#include <list.h>
 
 #define nullptr (void*)0
 
+// Do not fucking change the property order of this struct.
 typedef struct HeapArea {
-    uint32_t size;
-    struct HeapArea *prev;
-    struct HeapArea *next;
+    uint32_t        size;
+    List            list;
+    void            *ptr;
 } HeapArea __attribute__((packed));
 
 extern struct HeapArea *heap_begin;
@@ -21,6 +23,8 @@ extern struct HeapArea *heap_end;
 typedef void (*heap_alloc_func)(void *ptr, uint32_t size);
 typedef void (*heap_free_func)(void *ptr);
 
+
+void heap_init();
 void heap_set_alloc_callback(heap_alloc_func callback);
 void heap_set_free_callback(heap_free_func callback);
 
