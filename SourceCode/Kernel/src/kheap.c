@@ -44,7 +44,7 @@ void *heap_alloc(uint32_t size) {
             break;
         }
         begin = getNode(begin->list.next,HeapArea ,list);
-        // no free block found ,let's fucking build a new
+        // no free block found ,it's means we must do some memory defragmentation
     }
 
 
