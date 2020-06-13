@@ -10,3 +10,7 @@ add_executable(${KernelName}
         $<TARGET_OBJECTS:BoardRaspberryPi3>)
 
 target_link_options(${KernelName} PRIVATE -T ${KernelArch_SOURCE_DIR}/${SynestiaArch}/kernel.ld)
+
+add_custom_command(TARGET ${KernelName} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E echo making Kernel7.img, wait a moment
+        COMMAND ${CMAKE_OBJCOPY} ${KernelName} -O binary Kernel7.img)
