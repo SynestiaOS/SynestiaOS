@@ -44,9 +44,7 @@ message("CMAKE_ASM_FLAGS is ${CMAKE_ASM_FLAGS}")
 message("CMAKE_OBJCOPY is ${CMAKE_OBJCOPY}")
 
 
-add_subdirectory(${SYNESTIAOS_SOURCE_CODE_DIR}/Board/RaspberryPi3)
-add_subdirectory(${SYNESTIAOS_SOURCE_CODE_DIR}/Kernel)
-add_subdirectory(${SYNESTIAOS_SOURCE_CODE_DIR}/Libraries/LibC)
+add_subdirectory(${SynestiaOS_SOURCE_DIR}/SourceCode)
 
 dump_cmake_variables()
 
