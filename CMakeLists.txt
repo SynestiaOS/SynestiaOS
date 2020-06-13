@@ -14,6 +14,8 @@ endif()
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON) # compile commands can be used to help clang-tidy code analysis
 
+set(SYNESTIAOS_SOURCE_CODE_DIR ${SynestiaOS_SOURCE_DIR}/SourceCode)
+set(KernelName Kernel.img)
 
 include(${SynestiaOS_SOURCE_DIR}/CMake/ArchDetector.cmake)
 include(${SynestiaOS_SOURCE_DIR}/CMake/VarsDump.cmake)
@@ -41,11 +43,10 @@ message("CMAKE_C_FLAGS is ${CMAKE_C_FLAGS}")
 message("CMAKE_ASM_FLAGS is ${CMAKE_ASM_FLAGS}")
 message("CMAKE_OBJCOPY is ${CMAKE_OBJCOPY}")
 
-set(KernelName Kernel.img)
 
-add_subdirectory(${SynestiaOS_SOURCE_DIR}/Board/RaspberryPi3)
-add_subdirectory(${SynestiaOS_SOURCE_DIR}/Kernel)
-add_subdirectory(${SynestiaOS_SOURCE_DIR}/Libraries/LibC)
+add_subdirectory(${SYNESTIAOS_SOURCE_CODE_DIR}/Board/RaspberryPi3)
+add_subdirectory(${SYNESTIAOS_SOURCE_CODE_DIR}/Kernel)
+add_subdirectory(${SYNESTIAOS_SOURCE_CODE_DIR}/Libraries/LibC)
 
 dump_cmake_variables()
 
