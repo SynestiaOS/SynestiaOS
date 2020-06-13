@@ -7,10 +7,11 @@
             ],
             "defines": [],
             "macFrameworkPath": [],
-            "compilerPath": "/Users/xingfeng.yang/project/SynestiaOS/Tools/gcc-arm-none-eabi-9-2019-q4-major/bin/arm-none-eabi-gcc",
-            "cStandard": "gnu99",
+            "compilerPath": "~/gcc-arm-none-eabi-9-2020-q2-update/bin/arm-none-eabi-gcc",
+            "cStandard": "gnu11",
             "cppStandard": "c++17",
-            "intelliSenseMode": "gcc-arm"
+            "intelliSenseMode": "gcc-arm",
+            "compileCommands": "${workspaceFolder}/cmake-build-debug/compile_commands.json"
         }
     ],
     "version": 4

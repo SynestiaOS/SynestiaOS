@@ -14,6 +14,8 @@ endif()
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON) # compile commands can be used to help clang-tidy code analysis
 
+set(SYNESTIAOS_SOURCE_CODE_DIR ${SynestiaOS_SOURCE_DIR}/SourceCode)
+set(KernelName Kernel.img)
 
 include(${SynestiaOS_SOURCE_DIR}/CMake/ArchDetector.cmake)
 include(${SynestiaOS_SOURCE_DIR}/CMake/VarsDump.cmake)
@@ -23,11 +25,11 @@ include(${SynestiaOS_SOURCE_DIR}/CMake/HeaderFiles.cmake)
 if (SynestiaArch STREQUAL arm)
     set(TOOLCHAIN_PREFIX arm-none-eabi-)
     set(PLATFORM RASPI2)
-    set(CMAKE_C_FLAGS "-O2 -mfpu=neon-vfpv4 -mfloat-abi=hard -march=armv7-a -mtune=cortex-a7")
+    set(CMAKE_C_FLAGS "-O0 -mfpu=neon-vfpv4 -mfloat-abi=hard -march=armv7-a -mtune=cortex-a7")
 elseif (SynestiaArch STREQUAL arm64)
     set(TOOLCHAIN_PREFIX aarch64-linux-gnu-)
     set(PLATFORM RASPI3)
-    set(CMAKE_C_FLAGS "-O2 -mfpu=crypto-neon-fp-armv8 -mfloat-abi=hard -march=armv8-a+crc -mcpu=cortex-a53")
+    set(CMAKE_C_FLAGS "-O0 -mfpu=crypto-neon-fp-armv8 -mfloat-abi=hard -march=armv8-a+crc -mcpu=cortex-a53")
 else ()
     message(FATAL_ERROR "unexpected ARCH ${SynestiaArch}")
 endif ()
@@ -36,14 +38,13 @@ message("PLATFORM is ${PLATFORM}")
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fpic -ffreestanding -std=gnu11 -Wall -Wextra -g -nostdlib -D${PLATFORM}")
 set(CMAKE_ASM_FLAGS "${CMAKE_C_FLAGS}")
+set(CMAKE_OBJCOPY ${TOOLCHAIN_PREFIX}objcopy)
 message("CMAKE_C_FLAGS is ${CMAKE_C_FLAGS}")
 message("CMAKE_ASM_FLAGS is ${CMAKE_ASM_FLAGS}")
+message("CMAKE_OBJCOPY is ${CMAKE_OBJCOPY}")
 
-set(KernelName Kernel.img)
 
-add_subdirectory(${SynestiaOS_SOURCE_DIR}/Board/RaspberryPi3)
-add_subdirectory(${SynestiaOS_SOURCE_DIR}/Kernel)
-add_subdirectory(${SynestiaOS_SOURCE_DIR}/Libraries/LibC)
+add_subdirectory(${SynestiaOS_SOURCE_DIR}/SourceCode)
 
 dump_cmake_variables()
 
