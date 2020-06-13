@@ -9,7 +9,6 @@
 
 #define nullptr (void*)0
 
-// Do not fucking change the property order of this struct.
 typedef struct HeapArea {
     uint32_t        size;
     List            list;
