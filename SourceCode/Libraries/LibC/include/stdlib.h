@@ -6,6 +6,8 @@
 #define MIN(x, y) (((x) < (y) ? (x) : (y)))
 #define MAX(x, y) (((x) < (y) ? (y) : (x)))
 
+#define DEFAULT_STRING_LEN 256
+
 void memcpy(void *dest, const void *src, uint32_t bytes);
 
 void bzero(void *dest, uint32_t bytes);

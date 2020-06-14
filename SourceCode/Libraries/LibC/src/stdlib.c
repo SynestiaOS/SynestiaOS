@@ -104,47 +104,94 @@ int printf(const char *format, ...) {
 
     uint32_t num = getArgsNumFromFormatString(format);
 
-    int i;
+    char result[DEFAULT_STRING_LEN];
     va_start(valist, num);
     char * tmp = format;
+    uint32_t index = 0;
     while (*tmp) {
         if (*tmp == '%') {
             if (getOffsetFromString(tmp, 1) == 'd') {
                 int value = va_arg(valist, int);
 
+
+
+                tmp+=1;
+                continue;
             }
             if (getOffsetFromString(tmp, 1) == 'u') {
+
+                tmp+=1;
+                continue;
             }
             if (getOffsetFromString(tmp, 1) == 's') {
+
+                tmp+=1;
+                continue;
             }
             if (getOffsetFromString(tmp, 1) == 'f') {
+
+                tmp+=1;
+                continue;
             }
             if (getOffsetFromString(tmp, 1) == 'e') {
+
+                tmp+=1;
+                continue;
             }
             if (getOffsetFromString(tmp, 1) == 'x') {
+
+                tmp+=1;
+                continue;
             }
             if (getOffsetFromString(tmp, 1) == 'o') {
+
+                tmp+=1;
+                continue;
             }
             if (getOffsetFromString(tmp, 1) == 'g') {
+
+                tmp+=1;
+                continue;
             }
             if (getOffsetFromString(tmp, 1) == 'p') {
+
+                tmp+=1;
+                continue;
             }
             if (getOffsetFromString(tmp, 1) == 'l') {
                 if (getOffsetFromString(tmp, 2) == 'u') {
+
+                    tmp+=2;
+                    continue;
                 }
                 if (getOffsetFromString(tmp, 2) == 'x') {
+
+                    tmp+=2;
+                    continue;
                 }
                 if (getOffsetFromString(tmp, 2) == 'l') {
                     if (getOffsetFromString(tmp, 3) == 'u') {
+
+                        tmp+=3;
+                        continue;
                     }
                     if (getOffsetFromString(tmp, 3) == 'x') {
+
+                        tmp+=3;
+                        continue;
                     }
                 }
             }
+        }else{
+            result[index] = *tmp;
+            index++;
         }
         tmp++;
     }
     va_end(valist);
+
+
+    print(result);
 
     return 0;
 }
