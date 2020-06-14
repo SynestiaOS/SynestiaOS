@@ -7,8 +7,8 @@
 static heap_alloc_func heapAllocFunc;
 static heap_free_func heapFreeFunc;
 
-static HeapArea *usingList;
-static HeapArea *freeList;
+static HeapArea *usingListHead;
+static HeapArea *freeListHead;
 
 void heap_set_alloc_callback(heap_alloc_func callback) {
     heapAllocFunc = callback;
@@ -19,32 +19,63 @@ void heap_set_free_callback(heap_free_func callback) {
 }
 
 void heap_init() {
-    freeList = heap_begin;
-    freeList->size = (0xFFFFFFFF - (uint32_t) (char *) heap_begin - sizeof(HeapArea)); // all memory
-    freeList->list.prev = nullptr;
-    freeList->list.next = nullptr;
+    freeListHead = heap_begin;
+    freeListHead->size = 0;
+    freeListHead->list.prev = nullptr;
 
-    usingList = nullptr;
+    HeapArea *freeArea = heap_begin+sizeof(HeapArea);
+    freeArea->size = (0xFFFFFFFF - (uint32_t) (char *) heap_begin - 2*sizeof(HeapArea)); // all memory
+    freeListHead->list.next = &freeArea->list;
+    freeArea->list.next = nullptr;
+    freeArea->list.prev = &freeListHead->list;
+
+    usingListHead = nullptr;
 }
 
 void *heap_alloc(uint32_t size) {
     uint32_t allocSize = size + sizeof(HeapArea);
 
-    HeapArea *begin = freeList;
-    while (begin != nullptr) {
+    HeapArea *currentFreeArea = freeListHead;
+    while (currentFreeArea != nullptr) {
         // if the size of the free block can contain the request size and a rest HeapArea, then just use it, and split a new block
-        if (begin->size >= allocSize) {
+        if (currentFreeArea->size >= allocSize) {
             // 1. split a rest free HeapArea
+            uint32_t newFreeHeapAreaAddress = (uint32_t)(void*)currentFreeArea + sizeof(HeapArea)+size;
+            uint32_t restSize = currentFreeArea->size - allocSize;
 
-            // 2. link this to using list
+            HeapArea *newFreeArea = newFreeHeapAreaAddress;
+            newFreeArea->size = restSize;
 
-            // 3. link this rest free HeapArea to free list
+
+            // 2.link new free heap area to free list
+            newFreeArea->list.prev = currentFreeArea->list.prev;
+            newFreeArea->list.next = currentFreeArea->list.next;
+            currentFreeArea->list.prev->next = &newFreeArea->list;
+            if(currentFreeArea->list.next!=nullptr){
+                currentFreeArea->list.next->prev = &newFreeArea->list;
+            }
+
+            // 3. link this to using list
+            currentFreeArea->list.prev = nullptr;
+            currentFreeArea->list.next = nullptr;
+            currentFreeArea->size = size;
+            HeapArea *usingArea = usingListHead;
+            if(usingArea==nullptr){
+                usingListHead = currentFreeArea;
+            }else{
+                while(usingArea->list.next!=nullptr){
+                    usingArea = getNode(usingArea->list.next,HeapArea,list);
+                }
+                usingArea->list.next = &currentFreeArea->list;
+                currentFreeArea->list.prev = &usingArea->list;
+            }
 
             // 4. return the ptr of the using block
-            break;
+            return (void *)currentFreeArea+sizeof(HeapArea);
         }
-        begin = getNode(begin->list.next,HeapArea ,list);
+        currentFreeArea = getNode(currentFreeArea->list.next,HeapArea ,list);
         // no free block found ,it's means we must do some memory defragmentation
+        // todo: defragmentation
     }
 
 
