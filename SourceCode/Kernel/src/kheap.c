@@ -3,6 +3,7 @@
 //
 
 #include <kheap.h>
+#include <stdlib.h>
 
 static heap_alloc_func heapAllocFunc;
 static heap_free_func heapFreeFunc;
@@ -88,7 +89,16 @@ void *heap_calloc(uint32_t num, uint32_t size) {
 }
 
 void *heap_realloc(void *ptr, uint32_t size) {
-    //todo : a bit complex
+    // 1. alloc new heap area
+    void * newHeapArea  = heap_alloc(size);
+
+    // 2. copy the data from old heap area to new heap area
+    HeapArea  *oldHeapArea = ptr-sizeof(HeapArea);
+    uint32_t dataSize = oldHeapArea->size;
+    memcpy(newHeapArea,ptr,dataSize);
+
+    // 3. free old heap area
+    heap_free(ptr);
 }
 
 void heap_free(void *ptr) {

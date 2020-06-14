@@ -3,7 +3,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 
-void memcpy(void *dest, const void *src, int bytes) {
+void memcpy(void *dest, const void *src, uint32_t bytes) {
   char *d = dest;
   const char *s = src;
   while (bytes--) {
@@ -11,9 +11,9 @@ void memcpy(void *dest, const void *src, int bytes) {
   }
 }
 
-void bzero(void *dest, int bytes) { memset(dest, 0, bytes); }
+void bzero(void *dest, uint32_t bytes) { memset(dest, 0, bytes); }
 
-void memset(void *dest, uint8_t c, int bytes) {
+void memset(void *dest, uint8_t c, uint32_t bytes) {
   uint8_t *d = dest;
   while (bytes--) {
     *d++ = c;

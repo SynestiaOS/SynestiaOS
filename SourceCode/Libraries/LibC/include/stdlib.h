@@ -6,10 +6,10 @@
 #define MIN(x, y) (((x) < (y) ? (x) : (y)))
 #define MAX(x, y) (((x) < (y) ? (y) : (x)))
 
-void memcpy(void *dest, const void *src, int bytes);
+void memcpy(void *dest, const void *src, uint32_t bytes);
 
-void bzero(void *dest, int bytes);
-void memset(void *dest, uint8_t c, int bytes);
+void bzero(void *dest, uint32_t bytes);
+void memset(void *dest, uint8_t c, uint32_t bytes);
 
 
 void putc(char c);
