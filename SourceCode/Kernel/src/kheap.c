@@ -79,9 +79,9 @@ void *heap_alloc(uint32_t size) {
         currentFreeArea = getNode(currentFreeArea->list.next,HeapArea ,list);
         // no free block found ,it's means we must do some memory defragmentation
         // todo: defragmentation
+        return nullptr;
     }
-
-
+    return nullptr;
 }
 
 void *heap_calloc(uint32_t num, uint32_t size) {
@@ -99,6 +99,7 @@ void *heap_realloc(void *ptr, uint32_t size) {
 
     // 3. free old heap area
     heap_free(ptr);
+    return newHeapArea+sizeof(HeapArea);
 }
 
 void heap_free(void *ptr) {
