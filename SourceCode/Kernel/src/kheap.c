@@ -90,5 +90,24 @@ void *heap_realloc(void *ptr, uint32_t size) {
 }
 
 void heap_free(void *ptr) {
+    // 1. get HeapArea address
+    uint32_t  address = ptr-sizeof(HeapArea);
+    HeapArea *currentArea = address;
 
+    // 2. unlink from using list
+    if(currentArea->list.prev!=nullptr) {
+        currentArea->list.prev->next = currentArea->list.next;
+    }
+    if(currentArea->list.next!=nullptr){
+        currentArea->list.next->prev = currentArea->list.prev;
+    }
+
+    // 3. link this to free list
+    HeapArea *freeArea = freeListHead;
+    while (freeArea->list.next != nullptr) {
+        freeArea = getNode(freeArea->list.next,HeapArea ,list);
+    }
+    currentArea->list.prev = &freeArea->list;
+    currentArea->list.next = freeArea->list.next;
+    freeArea->list.next = &currentArea->list;
 }
