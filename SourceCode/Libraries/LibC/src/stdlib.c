@@ -98,6 +98,11 @@ uint32_t getArgsNumFromFormatString(const char *formatStr) {
 }
 
 
+char *itoa(int value){
+
+
+}
+
 int printf(const char *format, ...) {
 
     va_list valist;
@@ -106,14 +111,19 @@ int printf(const char *format, ...) {
 
     char result[DEFAULT_STRING_LEN];
     va_start(valist, num);
+
     char * tmp = format;
     uint32_t index = 0;
     while (*tmp) {
         if (*tmp == '%') {
             if (getOffsetFromString(tmp, 1) == 'd') {
+                // 1. get argument from args
                 int value = va_arg(valist, int);
 
+                // 2. covert int to string
+                char* intStr = itoa(value);
 
+                // 3. append string to result
 
                 tmp+=1;
                 continue;
