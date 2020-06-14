@@ -11,6 +11,14 @@ static heap_free_func heapFreeFunc;
 static HeapArea *usingListHead;
 static HeapArea *freeListHead;
 
+void default_heap_alloc_func(void *ptr, uint32_t size){
+    printf("[Heap] alloc %d bytes\n",size);
+}
+
+void default_heap_free_func(void *ptr){
+    printf("[Heap] free at %d\n",*(int*)ptr);
+}
+
 void heap_set_alloc_callback(heap_alloc_func callback) {
     heapAllocFunc = callback;
 }
@@ -20,12 +28,13 @@ void heap_set_free_callback(heap_free_func callback) {
 }
 
 void heap_init() {
-    freeListHead = heap_begin;
+    int heap_address = &__heap_begin;
+    freeListHead = (HeapArea*)heap_address;
     freeListHead->size = 0;
     freeListHead->list.prev = nullptr;
 
-    HeapArea *freeArea = heap_begin+sizeof(HeapArea);
-    freeArea->size = (0xFFFFFFFF - (uint32_t) (char *) heap_begin - 2*sizeof(HeapArea)); // all memory
+    HeapArea *freeArea = heap_address+sizeof(HeapArea);
+    freeArea->size = (0xFFFFFFFF - (uint32_t) (char *) heap_address - 2*sizeof(HeapArea)); // all memory
     freeListHead->list.next = &freeArea->list;
     freeArea->list.next = nullptr;
     freeArea->list.prev = &freeListHead->list;
@@ -73,13 +82,15 @@ void *heap_alloc(uint32_t size) {
 
             // 4. return the ptr of the using block
             void *ptr = (void *)currentFreeArea+sizeof(HeapArea);
+            if(heapFreeFunc==nullptr){
+                default_heap_alloc_func(ptr,size);
+            }
             heapAllocFunc(ptr,size);
             return ptr;
         }
         currentFreeArea = getNode(currentFreeArea->list.next,HeapArea ,list);
         // no free block found ,it's means we must do some memory defragmentation
         // todo: defragmentation
-        return nullptr;
     }
     return nullptr;
 }
@@ -123,6 +134,8 @@ void heap_free(void *ptr) {
     currentArea->list.prev = &freeArea->list;
     currentArea->list.next = freeArea->list.next;
     freeArea->list.next = &currentArea->list;
-
+    if(heapFreeFunc==nullptr){
+        default_heap_free_func(ptr);
+    }
     heapFreeFunc(ptr);
 }

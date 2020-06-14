@@ -132,6 +132,9 @@ int printf(const char *format, ...) {
     uint32_t num = getArgsNumFromFormatString(format);
 
     char result[DEFAULT_STRING_LEN];
+    for(int i = 0;i<DEFAULT_STRING_LEN;i++){
+        result[i]='\0';
+    }
     char *resultPtr = &result;
     va_start(valist, num);
 
