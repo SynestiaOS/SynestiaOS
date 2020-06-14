@@ -24,15 +24,6 @@ void print_splash() {
     print(str);
 }
 
-void test_heap_alloc_func(void *ptr, uint32_t size){
-    printf("[Heap] alloc %d bytes\n",size);
-}
-
-void test_heap_free_func(void *ptr){
-    printf("[Heap] free \n");
-}
-
-
 void kernel_main(void) {
     print_splash();
 
@@ -57,8 +48,6 @@ void kernel_main(void) {
      * heap test
      */
     heap_init();
-    heap_set_alloc_callback(test_heap_alloc_func);
-    heap_set_free_callback(test_heap_free_func);
     int *testInt = (int *) heap_alloc(sizeof(int) * 2);
     testInt[0] = 1;
     testInt[1] = 2;
