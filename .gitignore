@@ -16,3 +16,4 @@ Build/cmake_install.cmake
 Build/compile_commands.json
 Build/Makefile
 Build/cmake_variables_dump/
+Build/SourceCode/

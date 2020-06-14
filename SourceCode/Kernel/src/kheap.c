@@ -84,11 +84,11 @@ void *heap_alloc(uint32_t size) {
 }
 
 void *heap_calloc(uint32_t num, uint32_t size) {
-
+    return heap_alloc(num*size);
 }
 
 void *heap_realloc(void *ptr, uint32_t size) {
-
+    //todo : a bit complex
 }
 
 void heap_free(void *ptr) {
