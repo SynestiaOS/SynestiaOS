@@ -71,7 +71,9 @@ void *heap_alloc(uint32_t size) {
             }
 
             // 4. return the ptr of the using block
-            return (void *)currentFreeArea+sizeof(HeapArea);
+            void *ptr = (void *)currentFreeArea+sizeof(HeapArea);
+            heapAllocFunc(ptr,size);
+            return ptr;
         }
         currentFreeArea = getNode(currentFreeArea->list.next,HeapArea ,list);
         // no free block found ,it's means we must do some memory defragmentation
@@ -110,4 +112,6 @@ void heap_free(void *ptr) {
     currentArea->list.prev = &freeArea->list;
     currentArea->list.next = freeArea->list.next;
     freeArea->list.next = &currentArea->list;
+
+    heapFreeFunc(ptr);
 }
