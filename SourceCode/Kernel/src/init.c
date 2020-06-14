@@ -37,4 +37,6 @@ void kernel_main(void) {
   swi(2);
 
   print("swi works\n");
+
+  printf("test:%d\n",12);
 }

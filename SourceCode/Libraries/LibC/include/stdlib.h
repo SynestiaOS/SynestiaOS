@@ -3,19 +3,11 @@
 
 #include <stdint.h>
 
-#define MIN(x, y) (((x) < (y) ? (x) : (y)))
-#define MAX(x, y) (((x) < (y) ? (y) : (x)))
-
 #define DEFAULT_STRING_LEN 256
 
 void memcpy(void *dest, const void *src, uint32_t bytes);
 
-void bzero(void *dest, uint32_t bytes);
-void memset(void *dest, uint8_t c, uint32_t bytes);
-
-
 void putc(char c);
-void puts(const char *str);
 void print(const char *str);
 
 int printf(const char * format, ...);

@@ -11,6 +11,8 @@ add_executable(${KernelName}
 
 target_link_options(${KernelName} PRIVATE -T ${KernelArch_SOURCE_DIR}/${SynestiaArch}/kernel.ld)
 
+target_link_libraries(${KernelName} gcc)
+
 add_custom_command(TARGET ${KernelName} POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E echo making Kernel7.img, wait a moment
         COMMAND ${CMAKE_OBJCOPY} ${KernelName} -O binary Kernel7.img)
