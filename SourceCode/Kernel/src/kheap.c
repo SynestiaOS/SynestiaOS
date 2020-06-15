@@ -140,5 +140,8 @@ void heap_free(void *ptr) {
         default_heap_free_func(ptr);
         return;
     }
+
+    // todo: do some merge stuff, between two adjacent free heap area
+
     heapFreeFunc(ptr);
 }
