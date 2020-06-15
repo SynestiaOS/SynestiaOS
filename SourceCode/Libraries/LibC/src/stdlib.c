@@ -145,7 +145,7 @@ int printf(const char *format, ...) {
                 // 1. get argument from args
                 int value = va_arg(valist, int);
 
-                // 2. covert int to string
+                // 2. covert int to string and append at tail
                 char int32s[10];
                 char *intStr = itoa(value, &int32s, 10);
                 while (*intStr) {
@@ -153,8 +153,6 @@ int printf(const char *format, ...) {
                     intStr++;
                     resultPtr++;
                 }
-
-                // 3. append string to result
 
                 tmp += 2;
                 continue;

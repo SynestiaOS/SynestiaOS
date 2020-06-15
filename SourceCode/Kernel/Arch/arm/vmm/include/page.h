@@ -2,7 +2,26 @@
 // Created by XingfengYang on 2020/6/15.
 //
 
-#ifndef SYNESTIAOS_PAGE_H
-#define SYNESTIAOS_PAGE_H
+#ifndef __KERNEL_PAGE_H__
+#define __KERNEL_PAGE_H__
 
-#endif //SYNESTIAOS_PAGE_H
+#include <stdint.h>
+
+typedef struct PageTableEntry {
+    uint32_t physisAddress;
+} PAE;
+
+typedef struct Level3PageTable {
+    PAE pae[512];
+} L3PT;
+
+typedef struct Level2PageTable {
+    L3PT pae[512];
+} L2PT;
+
+typedef struct Level1PageTable {
+    L2PT l2Pt[4];
+} L1PT;
+
+
+#endif // __KERNEL_PAGE_H__
