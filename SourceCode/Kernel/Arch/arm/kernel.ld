@@ -2,7 +2,7 @@ ENTRY(__text_start)
 
 SECTIONS
 {
-    . = 0x18000000;
+    . = 0x18008000;
     __text_start = .;
     .text :
     {
