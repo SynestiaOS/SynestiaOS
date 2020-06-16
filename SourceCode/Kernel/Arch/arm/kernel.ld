@@ -57,4 +57,8 @@ SECTIONS
 
     __end_stack = .;
     __heap_begin = .;
+
+    .usercode 0x02000000 : {
+        *(.usercode*)
+    }
 }
