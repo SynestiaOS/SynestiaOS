@@ -29,9 +29,13 @@
 #define GB 1024*MB
 
 typedef struct PageTableEntry {
-    uint32_t base_addr;
-    uint32_t offset;
-} PAE;
+    uint32_t page_base_address:22;
+    uint32_t implementation_define:1;
+    uint32_t domain:4;
+    uint32_t SBZ:1;
+    uint32_t NS:1;
+    uint32_t PXN:1;
+} PAE __attribute__((packed));
 
 typedef struct Level3PageTable {
     PAE pae[512];
