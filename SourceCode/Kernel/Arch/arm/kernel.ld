@@ -9,7 +9,7 @@ MEMORY
 
 SECTIONS
 {
-    . = 0x8000;
+    . = 0x18000000;
     __text_start = .;
     .text :
     {
@@ -59,7 +59,7 @@ SECTIONS
 
     __end_stack = .;
 
-    __PAGE_TABLE = .
+    __PAGE_TABLE = .;
     . = 0x400000 + __PAGE_TABLE;
 
     __heap_begin = .;
