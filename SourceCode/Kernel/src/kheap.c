@@ -148,8 +148,10 @@ void heap_free(void *ptr) {
         HeapArea *secondFreeArea = firstFreeArea;
         while (secondFreeArea->list.next != nullptr) {
             secondFreeArea = getNode(secondFreeArea->list.next, HeapArea, list);
+
             // check is adjacent free heap area
             if(firstFreeArea+sizeof(HeapArea)+firstFreeArea->size == secondFreeArea){
+
                 // resize the first heap area
                 firstFreeArea->size = firstFreeArea->size+sizeof(HeapArea)+secondFreeArea->size;
                 firstFreeArea->list.next = secondFreeArea->list.next;
@@ -165,23 +167,3 @@ void heap_free(void *ptr) {
 
     heapFreeFunc(ptr);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
