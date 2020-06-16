@@ -1,8 +1,10 @@
 ENTRY(__text_start)
 
+__SIZE__ = 0x02000000;
+
 MEMORY
 {
-    ram : ORIGIN = 0x0000, LENGTH = 0x02000000
+    ram : ORIGIN = 0x0000, LENGTH = __SIZE__
 }
 
 SECTIONS
@@ -58,7 +60,7 @@ SECTIONS
     __end_stack = .;
     __heap_begin = .;
 
-    .usercode 0x02000000 : {
+    .usercode __SIZE__ : {
         *(.usercode*)
     }
 }
