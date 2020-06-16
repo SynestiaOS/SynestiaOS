@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <synestia_os_hal.h>
 #include <kheap.h>
+#include <vmm.h>
 
 void clean_bss(uint8_t *start, const uint8_t *end) {
     uint32_t i;
@@ -31,7 +32,7 @@ void kernel_main(void) {
 
     init_bsp();
 
-
+    init_vmm();
 
     /**
      * swi test
