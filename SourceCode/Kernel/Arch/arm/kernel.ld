@@ -58,6 +58,10 @@ SECTIONS
     __sys_stack = .;
 
     __end_stack = .;
+
+    __PAGE_TABLE = .
+    . = 0x400000 + __PAGE_TABLE;
+
     __heap_begin = .;
 
     .usercode __SIZE__ : {

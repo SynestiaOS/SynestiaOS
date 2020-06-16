@@ -11,4 +11,7 @@ void init_vmm();
 void enable_vm();
 
 
+extern int __PAGE_TABLE;
+
+
 #endif //__KERNEL_VMM_H__
