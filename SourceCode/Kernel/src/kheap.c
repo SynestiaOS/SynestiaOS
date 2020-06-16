@@ -141,7 +141,47 @@ void heap_free(void *ptr) {
         return;
     }
 
-    // todo: do some merge stuff, between two adjacent free heap area
+    // do some merge stuff, between two adjacent free heap area
+    HeapArea *firstFreeArea = freeListHead;
+    while (firstFreeArea->list.next != nullptr) {
+        firstFreeArea = getNode(firstFreeArea->list.next, HeapArea, list);
+        HeapArea *secondFreeArea = firstFreeArea;
+        while (secondFreeArea->list.next != nullptr) {
+            secondFreeArea = getNode(secondFreeArea->list.next, HeapArea, list);
+            // check is adjacent free heap area
+            if(firstFreeArea+sizeof(HeapArea)+firstFreeArea->size == secondFreeArea){
+                // resize the first heap area
+                firstFreeArea->size = firstFreeArea->size+sizeof(HeapArea)+secondFreeArea->size;
+                firstFreeArea->list.next = secondFreeArea->list.next;
+                secondFreeArea->list.next->prev->next = &firstFreeArea->list;
+
+                // delink the second heap area
+                secondFreeArea->list.prev = nullptr;
+                secondFreeArea->list.next = nullptr;
+                secondFreeArea->size = 0;
+            }
+        }
+    }
 
     heapFreeFunc(ptr);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
