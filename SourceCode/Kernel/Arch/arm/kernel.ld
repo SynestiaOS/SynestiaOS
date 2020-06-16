@@ -1,12 +1,5 @@
 ENTRY(__text_start)
 
-__SIZE__ = 0x02000000;
-
-MEMORY
-{
-    ram : ORIGIN = 0x0000, LENGTH = __SIZE__
-}
-
 SECTIONS
 {
     . = 0x18000000;
@@ -16,7 +9,7 @@ SECTIONS
         KEEP(*(.interrupt_vector_table))
         KEEP(*(.text.boot))
         *(.text)
-    } > ram
+    }
     . = ALIGN(4096);
     __text_end = .;
 
@@ -24,7 +17,7 @@ SECTIONS
     .rodata :
     {
         *(.rodata)
-    } > ram
+    }
     . = ALIGN(4096);
     __rodata_end = .;
 
@@ -32,7 +25,7 @@ SECTIONS
     .data :
     {
         *(.data)
-    } > ram
+    }
     . = ALIGN(4096);
     __data_end = .;
 
@@ -41,7 +34,7 @@ SECTIONS
     {
         bss = .;
         *(.bss)
-    } > ram
+    }
     . = ALIGN(4096);
     __bss_end = .;
 
@@ -63,8 +56,4 @@ SECTIONS
     . = 0x400000 + __PAGE_TABLE;
 
     __heap_begin = .;
-
-    .usercode __SIZE__ : {
-        *(.usercode*)
-    }
 }
