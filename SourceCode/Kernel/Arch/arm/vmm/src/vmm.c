@@ -9,7 +9,7 @@
 #define KERNEL_PHYSICAL_START 3*128*MB
 #define PAGE_SIZE 4*KB
 
-#define PAGE_TABLE_SIZE 4*MB
+#define PAGE_TABLE_SIZE 4*MB+8*KB+16*B
 
 L1PT *l1Pt;
 
