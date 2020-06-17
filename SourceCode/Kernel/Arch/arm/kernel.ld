@@ -53,7 +53,7 @@ SECTIONS
     __end_stack = .;
 
     __PAGE_TABLE = .;
-    . = 0x400000 + __PAGE_TABLE;
+    . = 0x402000 + __PAGE_TABLE;
 
     __heap_begin = .;
 }
