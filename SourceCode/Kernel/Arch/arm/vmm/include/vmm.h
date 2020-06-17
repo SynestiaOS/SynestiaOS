@@ -6,9 +6,9 @@
 #define __KERNEL_VMM_H__
 
 
-void init_vmm();
+void vmm_init();
 
-void enable_vm();
+void vmm_enable();
 
 
 extern int __PAGE_TABLE;

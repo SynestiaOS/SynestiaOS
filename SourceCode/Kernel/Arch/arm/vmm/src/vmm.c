@@ -13,6 +13,28 @@
 
 L1PT *l1Pt;
 
+#define PHYSICAL_PAGE_NUMBERS 1<<20
+
+PhysicalPage physicalPages[PHYSICAL_PAGE_NUMBERS];
+
+uint32_t vmm_alloc_page(){
+    for(uint32_t i = 0;i<PHYSICAL_PAGE_NUMBERS;i++){
+        if(physicalPages[i].ref_count==0){
+            physicalPages[i].ref_count+=1;
+            return i;
+        }
+    }
+}
+
+uint32_t vmm_free_page(uint32_t page){
+    for(uint32_t i = 0;i<PHYSICAL_PAGE_NUMBERS;i++){
+        if(physicalPages[i].ref_count>0){
+            physicalPages[i].ref_count-=1;
+            return i;
+        }
+    }
+}
+
 void map_kernel_mm() {
     int pageTablePhysicalAddress = &__PAGE_TABLE;
     l1Pt = (L1PT *) pageTablePhysicalAddress;
@@ -29,25 +51,24 @@ void map_kernel_mm() {
     }
 
     // map 64 * 512 page table entry
-    uint32_t index = 0;
     for (uint32_t i = 0; i < 64; i++) {
         l2Pt->l2Pte = (L1PTE *) l1Pt->l1Pte[0].level2Address + i * sizeof(L2PTE);
         PTE* pte = (PTE*)l2Pt->l2Pte[i].pageTableAddress;
 
         for(uint32_t j = 0;j<512;j++){
-            pte[j].page_base_address = ((KERNEL_PHYSICAL_START + index * PAGE_SIZE) & 0xFFFFF000) >> 12;
+            uint32_t physicalPageNumber = vmm_alloc_page();
+            pte[j].page_base_address = ((KERNEL_PHYSICAL_START + physicalPageNumber * PAGE_SIZE) & 0xFFFFF000) >> 12;
             // todo: other page table entry option bits
-            index++;
         }
     }
 
 }
 
-void init_vmm() {
+void vmm_init() {
     map_kernel_mm();
 }
 
-void enable_vm() {
+void vmm_enable() {
 
 }
 

@@ -32,7 +32,7 @@ void kernel_main(void) {
 
     init_bsp();
 
-    init_vmm();
+    vmm_init();
 
     /**
      * swi test

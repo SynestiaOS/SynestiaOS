@@ -62,4 +62,13 @@ typedef struct PageTable {
     PTE *pte;
 } PT;
 
+typedef struct PhysicalPage {
+    uint32_t ref_count:8;
+    uint32_t reserved:24;
+} PhysicalPage __attribute__((packed));
+
+uint32_t vmm_alloc_page();
+
+uint32_t vmm_free_page(uint32_t page);
+
 #endif // __KERNEL_PAGE_H__
