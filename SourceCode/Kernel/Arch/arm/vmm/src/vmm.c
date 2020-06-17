@@ -66,6 +66,8 @@ void map_kernel_mm() {
 
 void vmm_init() {
     map_kernel_mm();
+
+    vmm_enable();
 }
 
 void vmm_enable() {
