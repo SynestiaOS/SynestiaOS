@@ -52,7 +52,7 @@ void map_kernel_mm() {
 
     // map 64 * 512 page table entry
     for (uint32_t i = 0; i < 64; i++) {
-        l2Pt->l2Pte = (L1PTE *) (l1Pt->l1Pte[0].level2Address + i * sizeof(L2PTE));
+        l2Pt->l2Pte = (L2PTE *) (l1Pt->l1Pte[0].level2Address + i * sizeof(L2PTE));
         PTE* pte = (PTE*)l2Pt->l2Pte[i].pageTableAddress;
 
         for(uint32_t j = 0;j<512;j++){
