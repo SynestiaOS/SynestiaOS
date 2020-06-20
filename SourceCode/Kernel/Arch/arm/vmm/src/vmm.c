@@ -36,7 +36,7 @@ uint32_t vmm_free_page(uint32_t page){
 }
 
 void map_kernel_mm() {
-    int pageTablePhysicalAddress = &__PAGE_TABLE;
+    uint32_t pageTablePhysicalAddress = &__PAGE_TABLE;
     l1Pt = (L1PT *) pageTablePhysicalAddress;
 
     // map the first level 1 entry
@@ -46,13 +46,13 @@ void map_kernel_mm() {
     // map 512 level 2 entry
     L2PT *l2Pt = (L2PT *) l1Pt->l1Pte[0].level2Address;
     for (uint32_t i = 0; i < 512; i++) {
-        l2Pt->l2Pte = (L1PTE *) l1Pt->l1Pte[0].level2Address + i * sizeof(L2PTE);
+        l2Pt->l2Pte = (L2PTE *) (l1Pt->l1Pte[0].level2Address + i * sizeof(L2PTE));
         l2Pt->l2Pte[i].pageTableAddress = l1Pt->l1Pte[0].level2Address + 512 * sizeof(L2PTE) + i * 512 * sizeof(PTE);
     }
 
     // map 64 * 512 page table entry
     for (uint32_t i = 0; i < 64; i++) {
-        l2Pt->l2Pte = (L1PTE *) l1Pt->l1Pte[0].level2Address + i * sizeof(L2PTE);
+        l2Pt->l2Pte = (L1PTE *) (l1Pt->l1Pte[0].level2Address + i * sizeof(L2PTE));
         PTE* pte = (PTE*)l2Pt->l2Pte[i].pageTableAddress;
 
         for(uint32_t j = 0;j<512;j++){
