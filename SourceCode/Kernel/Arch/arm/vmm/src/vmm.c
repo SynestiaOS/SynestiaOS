@@ -37,6 +37,11 @@ uint32_t vmm_free_page(uint32_t page){
 
 void map_kernel_mm() {
     uint32_t pageTablePhysicalAddress = &__PAGE_TABLE;
+
+    for(uint32_t i = 0;i<PAGE_TABLE_SIZE/4;i++){
+        *(uint32_t*)(pageTablePhysicalAddress+i) = 0;
+    }
+
     l1Pt = (L1PT *) pageTablePhysicalAddress;
 
     // map the first level 1 entry
@@ -61,7 +66,6 @@ void map_kernel_mm() {
             // todo: other page table entry option bits
         }
     }
-
 }
 
 void vmm_init() {
