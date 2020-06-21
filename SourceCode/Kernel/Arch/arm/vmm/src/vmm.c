@@ -45,7 +45,7 @@ void map_kernel_mm() {
     L2PT *l2Pt = (L2PT *) (l1Pt->l2Pt);
     for (uint32_t i = 0; i < 512; i++) {
         l2Pt->pt = (PT *) (l2Pt + (512 - i) * sizeof(uint32_t) + i * 512 * sizeof(PTE));
-        l2Pt->pt += sizeof(uint32_t);
+        l2Pt += sizeof(uint32_t);
     }
 
     // map 64 * 512 page table entry
@@ -57,7 +57,7 @@ void map_kernel_mm() {
             pte[j].page_base_address = ((KERNEL_PHYSICAL_START + physicalPageNumber * PAGE_SIZE) & 0xFFFFF000) >> 12;
             // todo: other page table entry option bits
         }
-        l2Pt->pt++;
+        l2Pt += sizeof(uint32_t);
     }
 }
 
