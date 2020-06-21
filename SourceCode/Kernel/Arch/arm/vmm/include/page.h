@@ -28,15 +28,6 @@
 #define MB 1024*KB
 #define GB 1024*MB
 
-
-typedef struct Level1PageTableEntry {
-    uint32_t level2Address;
-} L1PTE __attribute__((packed));
-
-typedef struct Level2PageTableEntry {
-    uint32_t pageTableAddress;
-} L2PTE __attribute__((packed));
-
 typedef struct PageTableEntry {
     uint32_t page_base_address: 22;
     uint32_t implementation_define: 1;
@@ -47,20 +38,21 @@ typedef struct PageTableEntry {
 } PTE __attribute__((packed));
 
 
-typedef struct Level1PageTable {
-    // 4
-    L1PTE *l1Pte;
-} L1PT;
-
-typedef struct Level2PageTable {
-    // 512
-    L2PTE *l2Pte;
-} L2PT;
-
 typedef struct PageTable {
     // 512
     PTE *pte;
 } PT;
+
+typedef struct Level2PageTable {
+    // 512
+    PT *pt;
+} L2PT;
+
+typedef struct Level1PageTable {
+    // 4
+    L2PT *l2Pt;
+} L1PT;
+
 
 typedef struct PhysicalPage {
     uint32_t ref_count:8;
