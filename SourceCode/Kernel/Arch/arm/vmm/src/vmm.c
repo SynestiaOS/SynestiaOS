@@ -3,6 +3,7 @@
 //
 
 #include <page.h>
+#include <cache.h>
 #include <vmm.h>
 
 
@@ -12,6 +13,8 @@
 #define PAGE_TABLE_SIZE 4*MB+8*KB+16*B
 
 #define PHYSICAL_PAGE_NUMBERS 1<<20
+
+L1PT *l1Pt;
 
 PhysicalPage physicalPages[PHYSICAL_PAGE_NUMBERS];
 
@@ -36,7 +39,7 @@ uint32_t vmm_free_page(uint32_t page) {
 void map_kernel_mm() {
     uint32_t pageTablePhysicalAddress = (uint32_t) &__PAGE_TABLE;
 
-    L1PT *l1Pt = (L1PT *) pageTablePhysicalAddress;
+    l1Pt = (L1PT *) pageTablePhysicalAddress;
 
     // map the first level 1 entry
     l1Pt->l2Pt = (L2PT *) l1Pt + 4 * sizeof(uint32_t);
@@ -68,10 +71,13 @@ void vmm_init() {
     vmm_enable();
 }
 
+
 void vmm_enable() {
     // 1. write ttbr0
+    write_ttbr0((uint32_t) l1Pt);
 
     // 2. write ttbcr, enable LPAE and use ttbr0 for all address
+
 
     // 3. write dacr
 }
