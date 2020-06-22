@@ -54,10 +54,9 @@ void map_kernel_mm() {
     // map 64 * 512 page table entry
     l2Pt = l1Pt->l2Pt;
     for (uint32_t i = 0; i < 64; i++) {
-        PTE *pte = (PTE *) l2Pt->pt;
         for (uint32_t j = 0; j < 512; j++) {
             uint32_t physicalPageNumber = vmm_alloc_page();
-            pte[j].page_base_address = ((KERNEL_PHYSICAL_START + physicalPageNumber * PAGE_SIZE) & 0xFFFFF000) >> 12;
+            l2Pt->pt->pte[j].page_base_address = ((KERNEL_PHYSICAL_START + physicalPageNumber * PAGE_SIZE) & 0xFFFFF000) >> 12;
             // todo: other page table entry option bits
         }
         l2Pt += sizeof(uint32_t);
@@ -73,12 +72,13 @@ void vmm_init() {
 
 
 void vmm_enable() {
-    // 1. write ttbr0
+    write_ttbcr(CONFIG_ARM_LPAE << 31 | 0 << 16 | 0 << 0);
+
     write_ttbr0((uint32_t) l1Pt);
 
-    // 2. write ttbcr, enable LPAE and use ttbr0 for all address
+    write_dacr(0x5);
 
+    mmu_enable();
 
-    // 3. write dacr
 }
 

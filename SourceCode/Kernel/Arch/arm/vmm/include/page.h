@@ -40,7 +40,7 @@ typedef struct PageTableEntry {
 
 typedef struct PageTable {
     // 512
-    PTE *pte;
+    PTE pte[512];
 } PT;
 
 typedef struct Level2PageTable {
