@@ -61,8 +61,8 @@ void map_kernel_pt(uint64_t ptPhysicalAddress) {
             kernelVMML1PT->pte[index].avail = 1;
             kernelVMML1PT->pte[index].table = 1;
             kernelVMMPT->pte[index].base = ((KERNEL_PHYSICAL_START + physicalPageNumber * PAGE_SIZE) & 0xFFFFF000) >> 12;
-            index++;
             // todo: other page table entry option bits
+            index++;
         }
     }
 }
