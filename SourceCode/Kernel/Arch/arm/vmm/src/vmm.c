@@ -5,7 +5,7 @@
 #include <page.h>
 #include <cache.h>
 #include <vmm.h>
-
+#include "../../../../../Libraries/LibC/include/stdlib.h"
 
 #define KERNEL_PHYSICAL_START 0
 #define PAGE_SIZE 4*KB
@@ -69,8 +69,11 @@ void map_kernel_mm() {
     uint64_t ptPhysicalAddress = (pageTablePhysicalAddress + 4 * sizeof(PTE) + KERNEL_PTE_NUMBER * sizeof(PTE));
 
     map_kernel_l1pt(l1ptPhysicalAddress, l2ptPhysicalAddress);
+    printf("[vmm]: level 1 page table done\n");
     map_kernel_l2pt(l2ptPhysicalAddress, ptPhysicalAddress);
+    printf("[vmm]: level 2 page table done\n");
     map_kernel_pt(ptPhysicalAddress);
+    printf("[vmm]: page table done\n");
 }
 
 void vmm_init() {
@@ -89,5 +92,6 @@ void vmm_enable() {
 
     mmu_enable();
 
+    printf("[vmm]: vmm enabled\n");
 }
 
