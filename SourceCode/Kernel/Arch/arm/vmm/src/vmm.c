@@ -5,7 +5,7 @@
 #include <page.h>
 #include <cache.h>
 #include <vmm.h>
-#include "../../../../../Libraries/LibC/include/stdlib.h"
+#include <stdlib.h>
 
 #define KERNEL_PHYSICAL_START 0
 #define PAGE_SIZE 4*KB
