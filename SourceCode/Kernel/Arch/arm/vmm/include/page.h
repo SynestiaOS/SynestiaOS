@@ -7,21 +7,10 @@
 
 #include <stdint.h>
 
+#define KERNEL_L1PT_NUMBER 4
+#define KERNEL_L2PT_NUMBER 64
+#define KERNEL_PTE_NUMBER 512
 
-/**
- * in this arm arch, we use two level page table
- *
- * first level is from bit 20 to bit 31, contains 4094 items;
- * each item can be：
- *  1. invalid
- *  2. a pointer to second level page table
- *  3. 1Mb section
- *  4. 16Mb super section.
- *  5. reserved for LPAE(Large Physical Address Extension)
- *
- *  every page table entry have different struct , you can see from arm official documents
- *
- */
 
 #define B 1
 #define KB 1024*B
@@ -29,34 +18,53 @@
 #define GB 1024*MB
 
 typedef struct PageTableEntry {
-    uint64_t page_base_address: 22;
-    uint64_t implementation_define: 1;
-    uint64_t domain: 4;
-    uint64_t SBZ: 1;
-    uint64_t NS: 1;
-    uint64_t PXN: 1;
+    /* These are used in all kinds of entry. */
+    unsigned long valid: 1;      /* Valid mapping */
+    unsigned long table: 1;      /* == 1 in 4k map entries too */
+
+    /* These ten bits are only used in Block entries and are ignored in Table entries. */
+    unsigned long ai: 3;         /* Attribute Index */
+    unsigned long ns: 1;         /* Not-Secure */
+    unsigned long user: 1;       /* User-visible */
+    unsigned long ro: 1;         /* Read-Only */
+    unsigned long sh: 2;         /* Shareability */
+    unsigned long af: 1;         /* Access Flag */
+    unsigned long ng: 1;         /* Not-Global */
+
+    /* The base address must be appropriately aligned for Block entries */
+    unsigned long base: 28;      /* Base address of block or next table */
+    unsigned long sbz: 12;       /* Must be zero */
+
+    /* These seven bits are only used in Block entries and are ignored in Table entries. */
+    unsigned long hint: 1;       /* In a block of 16 contiguous entries */
+    unsigned long pxn: 1;        /* Privileged-XN */
+    unsigned long xn: 1;         /* eXecute-Never */
+    unsigned long avail: 4;      /* Ignored by hardware */
+
+    /* These 5 bits are only used in Table entries and are ignored in Block entries */
+    unsigned long pxnt: 1;       /* Privileged-XN */
+    unsigned long xnt: 1;        /* eXecute-Never */
+    unsigned long apt: 2;        /* Access Permissions */
+    unsigned long nst: 1;        /* Not-Secure */
 } PTE __attribute__((packed));
 
 
 typedef struct PageTable {
-    // 512
-    PTE pte[512];
+    PTE pte[KERNEL_PTE_NUMBER * KERNEL_PTE_NUMBER];
 } PT;
 
 typedef struct Level2PageTable {
-    // 512
-    PT *pt;
+    PTE pte[KERNEL_PTE_NUMBER];
 } L2PT;
 
 typedef struct Level1PageTable {
-    // 4
-    L2PT *l2Pt;
+    PTE pte[KERNEL_L1PT_NUMBER];
 } L1PT;
 
 
 typedef struct PhysicalPage {
-    uint64_t ref_count:8;
-    uint64_t reserved:24;
+    uint64_t ref_count: 8;
+    uint64_t reserved: 24;
 } PhysicalPage __attribute__((packed));
 
 uint64_t vmm_alloc_page();
