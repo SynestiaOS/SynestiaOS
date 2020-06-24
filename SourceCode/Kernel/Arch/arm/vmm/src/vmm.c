@@ -40,7 +40,7 @@ void map_kernel_l1pt(uint64_t l1ptPhysicalAddress, uint64_t l2ptPhysicalAddress)
     kernelVMML1PT = (L1PT *) l1ptPhysicalAddress;
     kernelVMML1PT->pte[0].valid = 1;
     kernelVMML1PT->pte[0].table = 1;
-    kernelVMML1PT->pte[0].base = l2ptPhysicalAddress;
+    kernelVMML1PT->pte[0].base = l2ptPhysicalAddress >> 12;
 }
 
 void map_kernel_l2pt(uint64_t l2ptPhysicalAddress, uint64_t ptPhysicalAddress) {
@@ -48,7 +48,7 @@ void map_kernel_l2pt(uint64_t l2ptPhysicalAddress, uint64_t ptPhysicalAddress) {
     for (uint32_t i = 0; i < KERNEL_PTE_NUMBER; i++) {
         kernelVMML2PT->pte[i].valid = 1;
         kernelVMML2PT->pte[i].table = 1;
-        kernelVMML2PT->pte[i].base = (uint64_t) (ptPhysicalAddress + i * KERNEL_PTE_NUMBER * sizeof(PTE));
+        kernelVMML2PT->pte[i].base = (uint64_t) (ptPhysicalAddress + i * KERNEL_PTE_NUMBER * sizeof(PTE)) >> 12;
     }
 }
 
@@ -70,9 +70,11 @@ void map_kernel_pt(uint64_t ptPhysicalAddress) {
 void map_kernel_mm() {
 
     uint64_t pageTablePhysicalAddress = (uint64_t) &__PAGE_TABLE;
+
     uint64_t l1ptPhysicalAddress = pageTablePhysicalAddress;
     uint64_t l2ptPhysicalAddress = pageTablePhysicalAddress + 4 * sizeof(PTE);
     uint64_t ptPhysicalAddress = (pageTablePhysicalAddress + 4 * sizeof(PTE) + KERNEL_PTE_NUMBER * sizeof(PTE));
+
 
     map_kernel_l1pt(l1ptPhysicalAddress, l2ptPhysicalAddress);
     printf("[vmm]: level 1 page table done\n");
@@ -83,6 +85,7 @@ void map_kernel_mm() {
 }
 
 void vmm_init() {
+
     map_kernel_mm();
 
     vmm_enable();
