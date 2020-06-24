@@ -38,12 +38,16 @@ uint64_t vmm_free_page(uint64_t pageIndex) {
 
 void map_kernel_l1pt(uint64_t l1ptPhysicalAddress, uint64_t l2ptPhysicalAddress) {
     kernelVMML1PT = (L1PT *) l1ptPhysicalAddress;
+    kernelVMML1PT->pte[0].avail = 1;
+    kernelVMML1PT->pte[0].table = 1;
     kernelVMML1PT->pte[0].base = l2ptPhysicalAddress;
 }
 
 void map_kernel_l2pt(uint64_t l2ptPhysicalAddress, uint64_t ptPhysicalAddress) {
     kernelVMML2PT = (L2PT *) l2ptPhysicalAddress;
     for (uint32_t i = 0; i < KERNEL_PTE_NUMBER; i++) {
+        kernelVMML1PT->pte[0].avail = 1;
+        kernelVMML1PT->pte[0].table = 1;
         kernelVMML2PT->pte[i].base = (uint64_t) (ptPhysicalAddress + i * KERNEL_PTE_NUMBER * sizeof(PTE));
     }
 }
@@ -54,6 +58,8 @@ void map_kernel_pt(uint64_t ptPhysicalAddress) {
     for (uint32_t i = 0; i < KERNEL_L2PT_NUMBER; i++) {
         for (uint32_t j = 0; j < KERNEL_PTE_NUMBER; j++) {
             uint64_t physicalPageNumber = vmm_alloc_page();
+            kernelVMML1PT->pte[0].avail = 1;
+            kernelVMML1PT->pte[0].table = 1;
             kernelVMMPT->pte[index].base = ((KERNEL_PHYSICAL_START + physicalPageNumber * PAGE_SIZE) & 0xFFFFF000) >> 12;
             index++;
             // todo: other page table entry option bits
