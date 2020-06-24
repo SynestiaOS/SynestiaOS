@@ -91,13 +91,15 @@ void vmm_init() {
 
 void vmm_enable() {
     write_ttbcr(CONFIG_ARM_LPAE << 31 | 0 << 16 | 0 << 0);
+    printf("[vmm]: ttbcr writed\n");
 
     write_ttbr0((uint32_t) kernelVMML1PT);
+    printf("[vmm]: ttbr0 writed\n");
 
     write_dacr(0x5);
+    printf("[vmm]: dacr writed\n");
 
     mmu_enable();
-
     printf("[vmm]: vmm enabled\n");
 }
 
