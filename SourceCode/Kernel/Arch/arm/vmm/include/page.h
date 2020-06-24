@@ -29,12 +29,12 @@
 #define GB 1024*MB
 
 typedef struct PageTableEntry {
-    uint32_t page_base_address: 22;
-    uint32_t implementation_define: 1;
-    uint32_t domain: 4;
-    uint32_t SBZ: 1;
-    uint32_t NS: 1;
-    uint32_t PXN: 1;
+    uint64_t page_base_address: 22;
+    uint64_t implementation_define: 1;
+    uint64_t domain: 4;
+    uint64_t SBZ: 1;
+    uint64_t NS: 1;
+    uint64_t PXN: 1;
 } PTE __attribute__((packed));
 
 
@@ -55,12 +55,12 @@ typedef struct Level1PageTable {
 
 
 typedef struct PhysicalPage {
-    uint32_t ref_count:8;
-    uint32_t reserved:24;
+    uint64_t ref_count:8;
+    uint64_t reserved:24;
 } PhysicalPage __attribute__((packed));
 
-uint32_t vmm_alloc_page();
+uint64_t vmm_alloc_page();
 
-uint32_t vmm_free_page(uint32_t page);
+uint64_t vmm_free_page(uint64_t page);
 
 #endif // __KERNEL_PAGE_H__

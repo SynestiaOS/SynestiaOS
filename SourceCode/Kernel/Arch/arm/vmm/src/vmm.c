@@ -18,8 +18,8 @@ L1PT *l1Pt;
 
 PhysicalPage physicalPages[PHYSICAL_PAGE_NUMBERS];
 
-uint32_t vmm_alloc_page() {
-    for (uint32_t i = 0; i < PHYSICAL_PAGE_NUMBERS; i++) {
+uint64_t vmm_alloc_page() {
+    for (uint64_t i = 0; i < PHYSICAL_PAGE_NUMBERS; i++) {
         if (physicalPages[i].ref_count == 0) {
             physicalPages[i].ref_count += 1;
             return i;
@@ -27,8 +27,8 @@ uint32_t vmm_alloc_page() {
     }
 }
 
-uint32_t vmm_free_page(uint32_t page) {
-    for (uint32_t i = 0; i < PHYSICAL_PAGE_NUMBERS; i++) {
+uint64_t vmm_free_page(uint64_t page) {
+    for (uint64_t i = 0; i < PHYSICAL_PAGE_NUMBERS; i++) {
         if (physicalPages[i].ref_count > 0) {
             physicalPages[i].ref_count -= 1;
             return i;
@@ -37,29 +37,29 @@ uint32_t vmm_free_page(uint32_t page) {
 }
 
 void map_kernel_mm() {
-    uint32_t pageTablePhysicalAddress = (uint32_t) &__PAGE_TABLE;
+    uint64_t pageTablePhysicalAddress = (uint64_t) &__PAGE_TABLE;
 
     l1Pt = (L1PT *) pageTablePhysicalAddress;
 
     // map the first level 1 entry
-    l1Pt->l2Pt = (L2PT *) l1Pt + 4 * sizeof(uint32_t);
+    l1Pt->l2Pt = (L2PT *) l1Pt + 4 * sizeof(uint64_t);
 
     // map 512 level 2 entry
     L2PT *l2Pt = l1Pt->l2Pt;
-    for (uint32_t i = 0; i < 512; i++) {
-        l2Pt->pt = (PT *) (l2Pt + (512 - i) * sizeof(uint32_t) + i * 512 * sizeof(PTE));
-        l2Pt += sizeof(uint32_t);
+    for (uint64_t i = 0; i < 512; i++) {
+        l2Pt->pt = (PT *) (l2Pt + (512 - i) * sizeof(uint64_t) + i * 512 * sizeof(PTE));
+        l2Pt += sizeof(uint64_t);
     }
 
     // map 64 * 512 page table entry
     l2Pt = l1Pt->l2Pt;
-    for (uint32_t i = 0; i < 64; i++) {
-        for (uint32_t j = 0; j < 512; j++) {
-            uint32_t physicalPageNumber = vmm_alloc_page();
+    for (uint64_t i = 0; i < 64; i++) {
+        for (uint64_t j = 0; j < 512; j++) {
+            uint64_t physicalPageNumber = vmm_alloc_page();
             l2Pt->pt->pte[j].page_base_address = ((KERNEL_PHYSICAL_START + physicalPageNumber * PAGE_SIZE) & 0xFFFFF000) >> 12;
             // todo: other page table entry option bits
         }
-        l2Pt += sizeof(uint32_t);
+        l2Pt += sizeof(uint64_t);
     }
 }
 
