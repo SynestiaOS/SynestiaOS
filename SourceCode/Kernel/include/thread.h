@@ -7,14 +7,13 @@
 
 #include <stdint.h>
 #include <list.h>
+#include <kstack.h>
 
 
 typedef uint8_t CpuNum;
 typedef uint8_t CpuMask;
 #define INVALID_CPU 255
 #define THREAD_NAME_LENGTH 32
-
-typedef uint32_t VirtualAddress;
 
 typedef enum ThreadStatus {
     THREAD_INITIAL = 0,
@@ -26,13 +25,6 @@ typedef enum ThreadStatus {
     THREAD_SUSPENDED,
     THREAD_DEATH,
 } ThreadStatus;
-
-typedef struct KernelStack {
-    VirtualAddress base;
-    uint32_t size;
-    VirtualAddress top;
-    void *virtualMemoryAddress;
-} __attribute__((packed)) KernelStack;
 
 typedef struct ThreadStartRoutine {
 
