@@ -55,7 +55,7 @@ typedef struct Thread {
     void *arg;
     uint32_t returnCode;
 
-} Thread __attribute__((packed));
+} __attribute__((packed)) Thread;
 
 
 Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uint32_t priority);
