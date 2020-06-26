@@ -46,7 +46,7 @@ typedef struct PageTableEntry {
     uint64_t xnt: 1;        /* eXecute-Never */
     uint64_t apt: 2;        /* Access Permissions */
     uint64_t nst: 1;        /* Not-Secure */
-} PTE __attribute__((packed));
+} __attribute__((packed)) PTE;
 
 
 typedef struct PageTable {
@@ -65,7 +65,7 @@ typedef struct Level1PageTable {
 typedef struct PhysicalPage {
     uint64_t ref_count: 8;
     uint64_t reserved: 24;
-} PhysicalPage __attribute__((packed));
+} __attribute__((packed)) PhysicalPage;
 
 uint64_t vmm_alloc_page();
 
