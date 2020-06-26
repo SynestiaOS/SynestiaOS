@@ -8,9 +8,13 @@
 #include <stdint.h>
 #include <list.h>
 
+
 typedef uint8_t CpuNum;
 typedef uint8_t CpuMask;
 #define INVALID_CPU 255
+#define THREAD_NAME_LENGTH 32
+
+typedef uint32_t VirtualAddress;
 
 typedef enum ThreadStatus {
     THREAD_INITIAL = 0,
@@ -24,7 +28,10 @@ typedef enum ThreadStatus {
 } ThreadStatus;
 
 typedef struct KernelStack {
-
+    VirtualAddress base;
+    uint32_t size;
+    VirtualAddress top;
+    void *virtualMemoryAddress;
 } KernelStack __attribute__((packed));
 
 typedef struct ThreadStartRoutine {
@@ -36,6 +43,7 @@ typedef struct VMMAssociatedSpace {
 } VMMAssociatedSpace __attribute__((packed));
 
 typedef struct Thread {
+    uint32_t magic;
     uint64_t pid;
     List threadList;
     ThreadStatus threadStatus;
@@ -53,6 +61,8 @@ typedef struct Thread {
     CpuNum currCpu;
     CpuMask cpuAffinity;
     void *arg;
+
+    char name[THREAD_NAME_LENGTH];
     uint32_t returnCode;
 
 } __attribute__((packed)) Thread;
