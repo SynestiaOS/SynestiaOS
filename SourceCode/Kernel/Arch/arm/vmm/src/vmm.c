@@ -6,6 +6,7 @@
 #include <cache.h>
 #include <vmm.h>
 #include <stdlib.h>
+#include <type.h>
 
 #define KERNEL_PHYSICAL_START 0
 #define PAGE_SIZE 4*KB

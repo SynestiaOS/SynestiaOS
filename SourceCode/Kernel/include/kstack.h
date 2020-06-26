@@ -2,8 +2,8 @@
 // Created by XingfengYang on 2020/6/26.
 //
 
-#ifndef __KERNEL_KHEAP_H__
-#define __KERNEL_KHEAP_H__
+#ifndef __KERNEL_KSTACK_H__
+#define __KERNEL_KSTACK_H__
 
 #include <stdint.h>
 
@@ -21,4 +21,4 @@ uint32_t vmm_allocate_kernel_stack(KernelStack *stack);
 
 uint32_t vmm_free_kernel_stack(KernelStack *stack);
 
-#endif //__KERNEL_KHEAP_H__
+#endif //__KERNEL_KSTACK_H__

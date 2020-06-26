@@ -13,6 +13,7 @@ add_executable(${KernelName}
 
 
 target_include_vmm_header_files(${KernelName})
+target_include_kernel_header_files(${KernelName})
 target_include_libc_header_files(${KernelName})
 
 target_link_options(${KernelName} PRIVATE -T ${KernelArch_SOURCE_DIR}/${SynestiaArch}/kernel.ld)

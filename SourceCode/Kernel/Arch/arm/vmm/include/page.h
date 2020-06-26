@@ -11,12 +11,6 @@
 #define KERNEL_L2PT_NUMBER 64
 #define KERNEL_PTE_NUMBER 512
 
-
-#define B 1
-#define KB 1024*B
-#define MB 1024*KB
-#define GB 1024*MB
-
 typedef struct PageTableEntry {
     /* These are used in all kinds of entry. */
     uint64_t valid: 1;      /* Valid mapping */
