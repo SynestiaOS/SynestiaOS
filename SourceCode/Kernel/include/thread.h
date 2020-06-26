@@ -32,15 +32,15 @@ typedef struct KernelStack {
     uint32_t size;
     VirtualAddress top;
     void *virtualMemoryAddress;
-} KernelStack __attribute__((packed));
+} __attribute__((packed)) KernelStack;
 
 typedef struct ThreadStartRoutine {
 
-} ThreadStartRoutine __attribute__((packed));
+} __attribute__((packed)) ThreadStartRoutine;
 
 typedef struct VMMAssociatedSpace {
 
-} VMMAssociatedSpace __attribute__((packed));
+} __attribute__((packed)) VMMAssociatedSpace;
 
 typedef struct Thread {
     uint32_t magic;
