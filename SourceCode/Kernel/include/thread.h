@@ -47,6 +47,7 @@ typedef struct Thread {
     List waitQueue;
 
     uint32_t priority;
+    bool interruptable;
 
     CpuNum lastCpu;
     CpuNum currCpu;

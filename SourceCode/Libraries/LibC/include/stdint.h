@@ -11,4 +11,6 @@ typedef signed short int16_t;
 typedef signed long int32_t;
 typedef signed long long int64_t;
 
+typedef _Bool bool;
+
 #endif // __LIBRARY_LIBC_STDINT_H__
