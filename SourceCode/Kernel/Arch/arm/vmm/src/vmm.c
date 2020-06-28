@@ -72,8 +72,8 @@ void map_kernel_mm() {
     uint64_t pageTablePhysicalAddress = (uint64_t) &__PAGE_TABLE;
 
     uint64_t l1ptPhysicalAddress = pageTablePhysicalAddress;
-    uint64_t l2ptPhysicalAddress = pageTablePhysicalAddress + 4 * sizeof(PTE);
-    uint64_t ptPhysicalAddress = (pageTablePhysicalAddress + 4 * sizeof(PTE) + KERNEL_PTE_NUMBER * sizeof(PTE));
+    uint64_t l2ptPhysicalAddress = pageTablePhysicalAddress + 4 * KB;
+    uint64_t ptPhysicalAddress = (pageTablePhysicalAddress + 4 * KB + KERNEL_PTE_NUMBER * sizeof(PTE));
 
     map_kernel_l1pt(l1ptPhysicalAddress, l2ptPhysicalAddress);
     printf("[vmm]: level 1 page table done\n");
