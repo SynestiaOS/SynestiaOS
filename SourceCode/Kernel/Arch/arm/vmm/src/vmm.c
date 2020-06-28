@@ -22,6 +22,7 @@ PT *kernelVMMPT;
 PhysicalPage physicalPages[PHYSICAL_PAGE_NUMBERS];
 
 uint64_t vmm_alloc_page() {
+    // todo : optimize with binary tree
     for (uint32_t i = 0; i < PHYSICAL_PAGE_NUMBERS; i++) {
         if (physicalPages[i].ref_count == 0) {
             physicalPages[i].ref_count += 1;
