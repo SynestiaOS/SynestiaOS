@@ -62,7 +62,7 @@ void map_kernel_pt(uint64_t ptPhysicalAddress) {
             uint64_t physicalPageNumber = vmm_alloc_page();
             kernelVMMPT->pte[index].valid = 1;
             kernelVMMPT->pte[index].table = 1;
-            kernelVMMPT->pte[index].base = ((KERNEL_PHYSICAL_START + physicalPageNumber * PAGE_SIZE) & 0xFFFFF000) >> 12;
+            kernelVMMPT->pte[index].base = ((KERNEL_PHYSICAL_START + physicalPageNumber * PAGE_SIZE) & 0x000FFFFF000) >> 12;
             // todo: other page table entry option bits
             index++;
         }

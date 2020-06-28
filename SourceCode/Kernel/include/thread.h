@@ -26,9 +26,7 @@ typedef enum ThreadStatus {
     THREAD_DEATH,
 } ThreadStatus;
 
-typedef struct ThreadStartRoutine {
-
-} __attribute__((packed)) ThreadStartRoutine;
+typedef uint32_t (*ThreadStartRoutine)(void *arg);
 
 typedef struct VMMAssociatedSpace {
 
@@ -61,6 +59,8 @@ typedef struct Thread {
 
 
 Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uint32_t priority);
+
+Thread* thread_create_idle_thread(uint32_t cpuNum);
 
 void init_thread_struct(Thread *thread, const char *name);
 

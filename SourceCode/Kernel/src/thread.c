@@ -3,3 +3,8 @@
 //
 
 #include <thread.h>
+
+
+Thread *thread_create_idle_thread(uint32_t cpuNum) {
+
+}
