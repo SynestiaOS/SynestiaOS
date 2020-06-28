@@ -14,7 +14,7 @@ typedef struct HeapArea {
     List            list;
 } HeapArea __attribute__((packed));
 
-extern int __heap_begin;
+extern uint32_t __heap_begin;
 
 typedef void (*heap_alloc_func)(void *ptr, uint32_t size);
 typedef void (*heap_free_func)(void *ptr);

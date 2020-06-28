@@ -29,7 +29,7 @@ void heap_set_free_callback(heap_free_func callback) {
 }
 
 void heap_init() {
-    int heap_address = &__heap_begin;
+    uint32_t heap_address = &__heap_begin;
     freeListHead = (HeapArea *) heap_address;
     freeListHead->size = 0;
     freeListHead->list.prev = nullptr;

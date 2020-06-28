@@ -5,6 +5,8 @@
 
 uint32_t vmm_allocate_kernel_stack(KernelStack *stack){
     // todo : allocate kernel stack
+
+    // 1. allocate stack memory block from virtual memory (heap), and align.
     return 0;
 }
 
