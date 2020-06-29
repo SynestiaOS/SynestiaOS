@@ -7,10 +7,11 @@
 #include <kheap.h>
 #include <stdlib.h>
 
+
+
 Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uint32_t priority) {
 
 }
-
 
 uint32_t *idle_thread_routine(void *arg) {
     asm volatile("wfi");
@@ -35,8 +36,7 @@ Thread *thread_create_idle_thread(uint32_t cpuNum) {
         idleThread->pid = 0;
         strcpy(idleThread->name, "idle");
 
-        // todo : other properties
-
+        // todo : other properties, like list
         return idleThread;
     }
     return nullptr;
