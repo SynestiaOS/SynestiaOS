@@ -87,6 +87,12 @@ void map_kernel_mm() {
 void vmm_init() {
     map_kernel_mm();
 
+    /**
+     * if lpaeSupport = 5, means LPAE is supported
+     */
+    uint32_t lpaeSupport = (read_mmfr0() & 0xF);
+    printf("[LPAE]: mmfr0: %d\n", lpaeSupport);
+
     vmm_enable();
 }
 

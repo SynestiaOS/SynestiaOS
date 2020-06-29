@@ -7,6 +7,16 @@
 
 #define CONFIG_ARM_LPAE 1
 
+
+/**
+ * read memory model feature register 0 (MMFR0)
+ **/
+static inline uint32_t read_mmfr0(void) {
+    uint32_t mmfr;
+    asm volatile ("mrc p15, 0, %0, c0, c1, 4" : "=r" (mmfr));
+    return mmfr;
+}
+
 /**
  * write translation table base register 0 (TTBR0)
  * @param val
@@ -40,7 +50,7 @@ static inline void mmu_enable() {
     asm volatile("mcr p15, 0, r12, c1, c0, 0");
 }
 
-static inline  void mmu_disable() {
+static inline void mmu_disable() {
     asm volatile("mrc p15, 0, r12, c1, c0, 0");
     asm volatile("bic r12, r12, #0x1");
     asm volatile("mcr p15, 0, r12, c1, c0, 0");
