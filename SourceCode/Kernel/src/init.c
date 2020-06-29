@@ -1,5 +1,4 @@
 #include <interrupt.h>
-#include <stdint.h>
 #include <stdlib.h>
 #include <synestia_os_hal.h>
 #include <kheap.h>

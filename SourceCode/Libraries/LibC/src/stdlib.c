@@ -13,6 +13,13 @@ void memclean(uint8_t *start, const uint8_t *end) {
     }
 }
 
+
+char *strcpy(char *des, char *source) {
+    char *r = des;
+    while ((*r++ = *source++) != '\0');
+    return des;
+}
+
 void memcpy(void *dest, const void *src, uint32_t bytes) {
     char *d = dest;
     const char *s = src;
@@ -139,8 +146,8 @@ int printf(const char *format, ...) {
     uint32_t num = getArgsNumFromFormatString(format);
 
     char result[DEFAULT_STRING_LEN];
-    for(int i = 0;i<DEFAULT_STRING_LEN;i++){
-        result[i]='\0';
+    for (int i = 0; i < DEFAULT_STRING_LEN; i++) {
+        result[i] = '\0';
     }
     char *resultPtr = &result;
     va_start(valist, num);
