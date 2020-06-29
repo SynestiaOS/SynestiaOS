@@ -12,5 +12,8 @@ KernelStatus vmm_allocate_kernel_stack(KernelStack *stack) {
 }
 
 KernelStatus vmm_free_kernel_stack(KernelStack *stack) {
+    stack->size = 0;
+    stack->base = 0;
+    stack->top = 0;
     return kernel_heap_free(stack);
 }
