@@ -5,8 +5,8 @@
 #include <kqueue.h>
 
 
-KernelStatus kqueue_enqueue(List *queue, List *node) {
-    List *last = queue;
+KernelStatus kqueue_enqueue(KQueue *queue, KQueue *node) {
+    KQueue *last = queue;
     while (last->next != nullptr) {
         last = last->next;
     }
@@ -17,8 +17,8 @@ KernelStatus kqueue_enqueue(List *queue, List *node) {
     return OK;
 }
 
-List *kqueue_dequeue(List *queue) {
-    List *first = queue;
+KQueue *kqueue_dequeue(KQueue *queue) {
+    KQueue *first = queue;
     while (first->prev != nullptr) {
         first = first->prev;
     }
@@ -28,8 +28,8 @@ List *kqueue_dequeue(List *queue) {
     return first;
 }
 
-uint32_t kqueue_size(List *queue) {
-    List *first = queue;
+uint32_t kqueue_size(KQueue *queue) {
+    KQueue *first = queue;
     while (first->prev != nullptr) {
         first = first->prev;
     }

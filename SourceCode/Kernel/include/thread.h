@@ -8,6 +8,7 @@
 #include <stdint.h>
 #include <list.h>
 #include <kstack.h>
+#include "kqueue.h"
 
 typedef uint8_t CpuNum;
 typedef uint8_t CpuMask;
@@ -73,8 +74,8 @@ typedef struct Thread {
 
     ThreadStatus threadStatus;
     List threadList;
-    List readyList;
-    List waitQueue;
+    KQueue readyQueue;
+    KQueue waitQueue;
 
     uint32_t priority;
     bool interruptable;
