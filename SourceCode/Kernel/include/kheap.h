@@ -20,13 +20,13 @@ typedef void (*heap_alloc_func)(void *ptr, uint32_t size);
 typedef void (*heap_free_func)(void *ptr);
 
 
-void heap_init();
-void heap_set_alloc_callback(heap_alloc_func callback);
-void heap_set_free_callback(heap_free_func callback);
+void kernel_heap_init();
+void kernel_heap_set_alloc_callback(heap_alloc_func callback);
+void kernel_heap_set_free_callback(heap_free_func callback);
 
-void* heap_alloc(uint32_t size);
-void* heap_calloc(uint32_t num, uint32_t size);
-void* heap_realloc(void* ptr, uint32_t size);
-void  heap_free(void *ptr);
+void* kernel_heap_alloc(uint32_t size);
+void* kernel_heap_calloc(uint32_t num, uint32_t size);
+void* kernel_heap_realloc(void* ptr, uint32_t size);
+void  kernel_heap_free(void *ptr);
 
 #endif //__KERNEL_KHEAP_H__

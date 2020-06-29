@@ -48,7 +48,7 @@ void kernel_main(void) {
     /**
      * heap test
      */
-    heap_init();
+    kernel_heap_init();
     int *testInt = (int *) heap_alloc(sizeof(int) * 2);
     testInt[0] = 1;
     testInt[1] = 2;
@@ -56,5 +56,5 @@ void kernel_main(void) {
     printf("test 1:%d\n", testInt[0]);
     printf("test 2:%d\n", testInt[1]);
 
-    heap_free(testInt);
+    kernel_heap_free(testInt);
 }

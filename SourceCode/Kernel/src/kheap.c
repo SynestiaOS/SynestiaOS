@@ -20,15 +20,15 @@ void default_heap_free_func(void *ptr) {
     printf("[Heap] free %d bytes at %d\n", heap->size, (uint32_t) ptr);
 }
 
-void heap_set_alloc_callback(heap_alloc_func callback) {
+void kernel_heap_set_alloc_callback(heap_alloc_func callback) {
     heapAllocFunc = callback;
 }
 
-void heap_set_free_callback(heap_free_func callback) {
+void kernel_heap_set_free_callback(heap_free_func callback) {
     heapFreeFunc = callback;
 }
 
-void heap_init() {
+void kernel_heap_init() {
     uint32_t heap_address = &__heap_begin;
     freeListHead = (HeapArea *) heap_address;
     freeListHead->size = 0;
@@ -43,7 +43,7 @@ void heap_init() {
     usingListHead = nullptr;
 }
 
-void *heap_alloc(uint32_t size) {
+void *kernel_heap_alloc(uint32_t size) {
     uint32_t allocSize = size + sizeof(HeapArea);
 
     HeapArea *currentFreeArea = freeListHead;
@@ -97,11 +97,11 @@ void *heap_alloc(uint32_t size) {
     return nullptr;
 }
 
-void *heap_calloc(uint32_t num, uint32_t size) {
-    return heap_alloc(num * size);
+void *kernel_heap_calloc(uint32_t num, uint32_t size) {
+    return kernel_heap_alloc(num * size);
 }
 
-void *heap_realloc(void *ptr, uint32_t size) {
+void *kernel_heap_realloc(void *ptr, uint32_t size) {
     // 1. alloc new heap area
     void *newHeapArea = heap_alloc(size);
 
@@ -111,11 +111,11 @@ void *heap_realloc(void *ptr, uint32_t size) {
     memcpy(newHeapArea, ptr, dataSize);
 
     // 3. free old heap area
-    heap_free(ptr);
+    kernel_heap_free(ptr);
     return newHeapArea + sizeof(HeapArea);
 }
 
-void heap_free(void *ptr) {
+void kernel_heap_free(void *ptr) {
     // 1. get HeapArea address
     uint32_t address = ptr - sizeof(HeapArea);
     HeapArea *currentArea = address;

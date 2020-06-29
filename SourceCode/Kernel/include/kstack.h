@@ -8,6 +8,8 @@
 #include <stdint.h>
 #include "type.h"
 
+#define DEFAULT_KERNEL_STACK_SIZE 32*KB
+
 typedef uint32_t VirtualAddress;
 
 typedef struct KernelStack {
