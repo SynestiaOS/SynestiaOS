@@ -13,6 +13,8 @@ KernelStatus kqueue_enqueue(List *queue, List *node) {
     last->next = node;
     node->prev = last;
     node->next = nullptr;
+
+    return OK;
 }
 
 List *kqueue_dequeue(List *queue) {
@@ -24,4 +26,19 @@ List *kqueue_dequeue(List *queue) {
     first->next = nullptr;
     first->prev = nullptr;
     return first;
+}
+
+uint32_t kqueue_size(List *queue) {
+    List *first = queue;
+    while (first->prev != nullptr) {
+        first = first->prev;
+    }
+
+    uint32_t size = 0;
+    while (first->next != nullptr) {
+        first = first->next;
+        size++;
+    }
+
+    return size;
 }
