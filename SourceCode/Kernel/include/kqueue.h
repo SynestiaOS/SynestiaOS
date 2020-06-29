@@ -4,8 +4,8 @@
 #include <list.h>
 #include "type.h"
 
-KernelStatus kqueue_enqueue(List queue, List node);
+KernelStatus kqueue_enqueue(List *queue, List *node);
 
-List kqueue_dequeue(List queue);
+List *kqueue_dequeue(List *queue);
 
 #endif // __KERNEL_RINGBUFFER_H__

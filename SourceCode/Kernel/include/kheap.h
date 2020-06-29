@@ -8,8 +8,6 @@
 #include <list.h>
 #include "type.h"
 
-#define nullptr (void*)0
-
 typedef struct HeapArea {
     uint32_t        size;
     List            list;

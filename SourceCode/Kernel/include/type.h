@@ -11,6 +11,9 @@
 #define GB 1024*MB
 
 
+#define nullptr (void*)0
+
+
 typedef enum kernel_status {
     OK = 0,
     ERROR,
