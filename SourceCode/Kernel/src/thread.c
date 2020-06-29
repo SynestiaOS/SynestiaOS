@@ -13,7 +13,7 @@ Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uin
 
 
 uint32_t *idle_thread_routine(void *arg) {
-
+    asm volatile("wfi");
 }
 
 Thread *thread_create_idle_thread(uint32_t cpuNum) {
