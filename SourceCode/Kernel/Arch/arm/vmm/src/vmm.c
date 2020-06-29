@@ -14,6 +14,7 @@
 #define PAGE_TABLE_SIZE 2*4*MB+8*KB+16*B
 
 #define PHYSICAL_PAGE_NUMBERS (1<<20)
+#define VA_OFFSET 12
 
 L1PT *kernelVMML1PT;
 L2PT *kernelVMML2PT;
@@ -52,7 +53,7 @@ void map_kernel_l1pt(uint64_t l1ptPhysicalAddress, uint64_t l2ptPhysicalAddress)
     kernelVMML1PT = (L1PT *) l1ptPhysicalAddress;
     kernelVMML1PT->pte[0].valid = 1;
     kernelVMML1PT->pte[0].table = 1;
-    kernelVMML1PT->pte[0].base = l2ptPhysicalAddress >> 12;
+    kernelVMML1PT->pte[0].base = (uint32_t) l2ptPhysicalAddress >> VA_OFFSET;
 }
 
 void map_kernel_l2pt(uint64_t l2ptPhysicalAddress, uint64_t ptPhysicalAddress) {
@@ -60,7 +61,7 @@ void map_kernel_l2pt(uint64_t l2ptPhysicalAddress, uint64_t ptPhysicalAddress) {
     for (uint32_t i = 0; i < KERNEL_PTE_NUMBER; i++) {
         kernelVMML2PT->pte[i].valid = 1;
         kernelVMML2PT->pte[i].table = 1;
-        kernelVMML2PT->pte[i].base = (uint64_t) (ptPhysicalAddress + i * KERNEL_PTE_NUMBER * sizeof(PTE)) >> 12;
+        kernelVMML2PT->pte[i].base = (uint64_t) (ptPhysicalAddress + i * KERNEL_PTE_NUMBER * sizeof(PTE)) >> VA_OFFSET;
     }
 }
 
@@ -72,7 +73,7 @@ void map_kernel_pt(uint64_t ptPhysicalAddress) {
             uint64_t physicalPageNumber = vmm_alloc_page();
             kernelVMMPT->pte[index].valid = 1;
             kernelVMMPT->pte[index].table = 1;
-            kernelVMMPT->pte[index].base = ((KERNEL_PHYSICAL_START + physicalPageNumber * PAGE_SIZE) & 0x000FFFFF000) >> 12;
+            kernelVMMPT->pte[index].base = ((KERNEL_PHYSICAL_START + physicalPageNumber * PAGE_SIZE) & 0x000FFFFF000) >> VA_OFFSET;
             // todo: other page table entry option bits
             index++;
         }
