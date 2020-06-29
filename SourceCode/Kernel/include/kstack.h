@@ -20,8 +20,8 @@ typedef struct KernelStack {
 } __attribute__((packed)) KernelStack;
 
 
-KernelStatus vmm_allocate_kernel_stack(KernelStack *stack);
+KernelStatus kstack_allocate(KernelStack *stack);
 
-KernelStatus vmm_free_kernel_stack(KernelStack *stack);
+KernelStatus kstack_free(KernelStack *stack);
 
 #endif //__KERNEL_KSTACK_H__

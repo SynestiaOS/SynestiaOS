@@ -19,12 +19,12 @@ uint32_t *idle_thread_routine(void *arg) {
 Thread *thread_create_idle_thread(uint32_t cpuNum) {
     KernelStack *kernelStack = nullptr;
     // 1. allocate stack memory from kernel heap for idle task
-    KernelStatus kernelStackAllocateState = vmm_allocate_kernel_stack(kernelStack);
+    KernelStatus kernelStackAllocateState = kstack_allocate(kernelStack);
     if (kernelStack != nullptr && kernelStackAllocateState != ERROR) {
         // 1. init kernel stack
 
         // 2. idle thread
-        Thread *idleThread = (Thread *) kernel_heap_alloc(sizeof(Thread));
+        Thread *idleThread = (Thread *) kheap_alloc(sizeof(Thread));
         idleThread->magic = THREAD_MAGIC;
         idleThread->threadStatus = THREAD_READY;
         idleThread->stack = kernelStack;
