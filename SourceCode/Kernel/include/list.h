@@ -7,7 +7,7 @@
 
 #define getNode(ptr, type, member)((type *)((char *)(ptr) - (char *)(&(((type *)0)->member))))
 
-typedef struct List{
+typedef struct List {
     struct List *prev;
     struct List *next;
 } List __attribute__((packed));
