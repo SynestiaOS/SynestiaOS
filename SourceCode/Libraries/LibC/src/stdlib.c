@@ -6,6 +6,13 @@
 #include <stdarg.h>
 #include <stdbool.h>
 
+void memclean(uint8_t *start, const uint8_t *end) {
+    uint32_t i;
+    for (i = 0; start + i < end; i++) {
+        *(start + i) = '\0';
+    }
+}
+
 void memcpy(void *dest, const void *src, uint32_t bytes) {
     char *d = dest;
     const char *s = src;

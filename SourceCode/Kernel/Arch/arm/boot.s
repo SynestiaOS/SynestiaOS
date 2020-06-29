@@ -11,7 +11,7 @@ _start:
 
     ldr r0, =__bss_start
     ldr r1, =__bss_end
-    bl clean_bss
+    bl memclean
 
     mrs r0, cpsr
 

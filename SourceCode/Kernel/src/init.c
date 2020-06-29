@@ -5,13 +5,6 @@
 #include <kheap.h>
 #include <vmm.h>
 
-void clean_bss(uint8_t *start, const uint8_t *end) {
-    uint32_t i;
-    for (i = 0; start + i < end; i++) {
-        *(start + i) = '\0';
-    }
-}
-
 void print_splash() {
     const char *str = "   _____                       _   _       \n"
                       "  / ____|                     | | (_)      \n"
