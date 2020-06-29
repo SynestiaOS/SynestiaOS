@@ -24,24 +24,25 @@ typedef uint8_t CpuMask;
 #define DEFAULT_PRIORITY (NUM_PRIORITIES / 2)
 #define HIGH_PRIORITY ((NUM_PRIORITIES / 4) * 3)
 
-
-#define INVALID_CPU 255
-#define CPU_0 0
-#define CPU_1 1
-#define CPU_2 2
-#define CPU_3 3
-#define CPU_4 4
-#define CPU_5 5
-#define CPU_6 6
-#define CPU_7 7
-#define CPU_8 8
-#define CPU_9 9
-#define CPU_10 10
-#define CPU_11 11
-#define CPU_12 12
-#define CPU_13 13
-#define CPU_14 14
-#define CPU_15 15
+typedef enum CPU {
+    CPU_0 = 0,
+    CPU_1,
+    CPU_2,
+    CPU_3,
+    CPU_4,
+    CPU_5,
+    CPU_6,
+    CPU_7,
+    CPU_8,
+    CPU_9,
+    CPU_10,
+    CPU_11,
+    CPU_12,
+    CPU_13,
+    CPU_14,
+    CPU_15,
+    INVALID_CPU = 255,
+} CPU;
 
 typedef enum ThreadStatus {
     THREAD_INITIAL = 0,
