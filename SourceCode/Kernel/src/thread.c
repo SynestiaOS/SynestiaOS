@@ -19,14 +19,17 @@ Thread *thread_create_idle_thread(uint32_t cpuNum) {
     }
 }
 
-void init_thread_struct(Thread *thread, const char *name) {
-
+KernelStatus init_thread_struct(Thread *thread, const char *name) {
+    // todo
+    return OK;
 }
 
-void thread_exit(uint32_t returnCode) {
-
+KernelStatus thread_exit(uint32_t returnCode) {
+    // todo
+    return OK;
 }
 
-void thread_kill(Thread *thread) {
-
+KernelStatus thread_kill(Thread *thread) {
+    // todo
+    return OK;
 }

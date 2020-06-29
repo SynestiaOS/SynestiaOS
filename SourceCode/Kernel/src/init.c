@@ -48,13 +48,19 @@ void kernel_main(void) {
     /**
      * heap test
      */
-    kernel_heap_init();
-    int *testInt = (int *) heap_alloc(sizeof(int) * 2);
+    KernelStatus kernelHeapInitStatus = kernel_heap_init();
+    if (kernelHeapInitStatus != OK) {
+        printf("[heap] kernel heap init failed.\n");
+    }
+    int *testInt = (int *) kernel_heap_alloc(sizeof(int) * 2);
     testInt[0] = 1;
     testInt[1] = 2;
 
     printf("test 1:%d\n", testInt[0]);
     printf("test 2:%d\n", testInt[1]);
 
-    kernel_heap_free(testInt);
+    KernelStatus kernelHeapFreeStatus = kernel_heap_free(testInt);
+    if (kernelHeapFreeStatus != OK) {
+        printf("[heap] kernel heap free failed.\n");
+    }
 }

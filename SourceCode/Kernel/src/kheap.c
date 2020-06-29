@@ -28,7 +28,7 @@ void kernel_heap_set_free_callback(heap_free_func callback) {
     heapFreeFunc = callback;
 }
 
-void kernel_heap_init() {
+KernelStatus kernel_heap_init() {
     uint32_t heap_address = &__heap_begin;
     freeListHead = (HeapArea *) heap_address;
     freeListHead->size = 0;
@@ -41,6 +41,8 @@ void kernel_heap_init() {
     freeArea->list.prev = &freeListHead->list;
 
     usingListHead = nullptr;
+
+    return OK;
 }
 
 void *kernel_heap_alloc(uint32_t size) {
@@ -103,7 +105,7 @@ void *kernel_heap_calloc(uint32_t num, uint32_t size) {
 
 void *kernel_heap_realloc(void *ptr, uint32_t size) {
     // 1. alloc new heap area
-    void *newHeapArea = heap_alloc(size);
+    void *newHeapArea = kernel_heap_alloc(size);
 
     // 2. copy the data from old heap area to new heap area
     HeapArea *oldHeapArea = ptr - sizeof(HeapArea);
@@ -115,7 +117,7 @@ void *kernel_heap_realloc(void *ptr, uint32_t size) {
     return newHeapArea + sizeof(HeapArea);
 }
 
-void kernel_heap_free(void *ptr) {
+KernelStatus kernel_heap_free(void *ptr) {
     // 1. get HeapArea address
     uint32_t address = ptr - sizeof(HeapArea);
     HeapArea *currentArea = address;
@@ -138,7 +140,7 @@ void kernel_heap_free(void *ptr) {
     freeArea->list.next = &currentArea->list;
     if (heapFreeFunc == nullptr) {
         default_heap_free_func(ptr);
-        return;
+        return OK;
     }
 
     // do some merge stuff, between two adjacent free heap area
@@ -166,4 +168,5 @@ void kernel_heap_free(void *ptr) {
     }
 
     heapFreeFunc(ptr);
+    return OK;
 }

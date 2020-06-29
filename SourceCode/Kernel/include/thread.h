@@ -62,10 +62,10 @@ Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uin
 
 Thread* thread_create_idle_thread(uint32_t cpuNum);
 
-void init_thread_struct(Thread *thread, const char *name);
+KernelStatus init_thread_struct(Thread *thread, const char *name);
 
-void thread_exit(uint32_t returnCode);
+KernelStatus thread_exit(uint32_t returnCode);
 
-void thread_kill(Thread *thread);
+KernelStatus thread_kill(Thread *thread);
 
 #endif //__KERNEL_THREAD_H__
