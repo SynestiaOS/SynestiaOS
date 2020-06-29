@@ -3,3 +3,28 @@
 //
 
 #include <sched.h>
+#include <kqueue.h>
+
+KQueue *waitQueue;
+KQueue *readyQueue;
+
+
+KernelStatus schd_init_thread(Thread *thread, uint32_t priority) {
+    // todo:
+    return OK;
+}
+
+KernelStatus schd_block(void) {
+    // todo:
+    return OK;
+}
+
+KernelStatus schd_yield(void) {
+    // todo:
+    return OK;
+}
+
+KernelStatus schd_preempt(void) {
+    // todo:
+    return OK;
+}
