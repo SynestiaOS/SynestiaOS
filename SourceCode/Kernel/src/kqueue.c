@@ -6,9 +6,9 @@
 
 
 KernelStatus kqueue_enqueue(List *queue, List *node) {
-    List *last;
-    while (queue->next != nullptr) {
-        last = queue->next;
+    List *last = queue;
+    while (last->next != nullptr) {
+        last = last->next;
     }
     last->next = node;
     node->prev = last;
@@ -16,9 +16,9 @@ KernelStatus kqueue_enqueue(List *queue, List *node) {
 }
 
 List *kqueue_dequeue(List *queue) {
-    List *first;
-    while (queue->prev != nullptr) {
-        first = queue->prev;
+    List *first = queue;
+    while (first->prev != nullptr) {
+        first = first->prev;
     }
     first->next->prev = nullptr;
     first->next = nullptr;
