@@ -31,7 +31,7 @@ Thread *thread_create_idle_thread(uint32_t cpuNum) {
         idleThread->priority = IDLE_PRIORITY;
         idleThread->currCpu = INVALID_CPU;
         idleThread->lastCpu = INVALID_CPU;
-        idleThread->entry = idle_thread_routine;
+        idleThread->entry = (ThreadStartRoutine) idle_thread_routine;
         idleThread->pid = 0;
         strcpy(idleThread->name, "idle");
 
