@@ -11,8 +11,6 @@
 #define KERNEL_PHYSICAL_START 0
 #define PAGE_SIZE 4*KB
 
-#define PAGE_TABLE_SIZE 2*4*MB+8*KB+16*B
-
 #define PHYSICAL_PAGE_NUMBERS (1<<20)
 #define VA_OFFSET 12
 
