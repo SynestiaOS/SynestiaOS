@@ -10,6 +10,9 @@
 #define MB 1024*KB
 #define GB 1024*MB
 
+#define BITS_IN_UINT32 32
+#define MAX_UINT_32 0xFFFFFFFF
+
 
 #define nullptr (void*)0
 
