@@ -62,13 +62,18 @@ typedef struct VMMAssociatedSpace {
 typedef struct Thread {
     uint32_t magic;
     uint64_t pid;
-    List threadList;
-    ThreadStatus threadStatus;
+    char name[THREAD_NAME_LENGTH];
+
     KernelStack *stack;
     ThreadStartRoutine entry;
     VMMAssociatedSpace vmmSpace;
+
     uint32_t flags;
     uint32_t signals;
+
+    ThreadStatus threadStatus;
+    List threadList;
+    List readyList;
     List waitQueue;
 
     uint32_t priority;
@@ -79,7 +84,6 @@ typedef struct Thread {
     CpuMask cpuAffinity;
     void *arg;
 
-    char name[THREAD_NAME_LENGTH];
     uint32_t returnCode;
 
 } __attribute__((packed)) Thread;
