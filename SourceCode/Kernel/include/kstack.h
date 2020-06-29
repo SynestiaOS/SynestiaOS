@@ -6,6 +6,7 @@
 #define __KERNEL_KSTACK_H__
 
 #include <stdint.h>
+#include "type.h"
 
 typedef uint32_t VirtualAddress;
 
@@ -17,8 +18,8 @@ typedef struct KernelStack {
 } __attribute__((packed)) KernelStack;
 
 
-uint32_t vmm_allocate_kernel_stack(KernelStack *stack);
+KernelStatus vmm_allocate_kernel_stack(KernelStack *stack);
 
-uint32_t vmm_free_kernel_stack(KernelStack *stack);
+KernelStatus vmm_free_kernel_stack(KernelStack *stack);
 
 #endif //__KERNEL_KSTACK_H__

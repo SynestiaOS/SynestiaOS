@@ -13,8 +13,8 @@ Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uin
 
 Thread *thread_create_idle_thread(uint32_t cpuNum) {
     KernelStack *kernelStack = nullptr;
-    uint32_t kernelStackAllocateState = vmm_allocate_kernel_stack(kernelStack);
-    if (kernelStack != nullptr && kernelStackAllocateState > 0) {
+    KernelStatus kernelStackAllocateState = vmm_allocate_kernel_stack(kernelStack);
+    if (kernelStack != nullptr && kernelStackAllocateState != ERROR) {
         // todo: init kernel stack
     }
 }

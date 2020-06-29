@@ -10,4 +10,10 @@
 #define MB 1024*KB
 #define GB 1024*MB
 
+
+typedef enum kernel_status {
+    OK = 0,
+    ERROR,
+} KernelStatus;
+
 #endif //__KERNEL_TYPE_H__
