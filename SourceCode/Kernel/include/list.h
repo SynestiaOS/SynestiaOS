@@ -7,9 +7,9 @@
 
 #define getNode(ptr, type, member)((type *)((char *)(ptr) - (char *)(&(((type *)0)->member))))
 
-typedef struct List {
-    struct List *prev;
-    struct List *next;
-} List __attribute__((packed));
+typedef struct ListNode {
+    struct ListNode *prev;
+    struct ListNode *next;
+}  __attribute__((packed)) ListNode;
 
 #endif //__KERNEL_LIST_H__

@@ -74,7 +74,7 @@ typedef struct Thread {
     uint32_t signals;
 
     ThreadStatus threadStatus;
-    List threadList;
+    ListNode threadList;
 
     uint32_t priority;
     bool interruptable;

@@ -11,8 +11,8 @@
 
 typedef struct HeapArea {
     uint32_t size;
-    List list;
-} HeapArea __attribute__((packed));
+    ListNode list;
+}  __attribute__((packed)) HeapArea;
 
 extern uint32_t __heap_begin;
 

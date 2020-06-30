@@ -5,7 +5,7 @@
 #include <stdint.h>
 #include <type.h>
 
-typedef List KQueue;
+typedef ListNode KQueue;
 
 KernelStatus kqueue_enqueue(KQueue *queue, KQueue *node);
 
