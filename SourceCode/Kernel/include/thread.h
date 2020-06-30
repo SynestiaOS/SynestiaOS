@@ -75,8 +75,6 @@ typedef struct Thread {
 
     ThreadStatus threadStatus;
     List threadList;
-    KQueue readyQueue;
-    KQueue waitQueue;
 
     uint32_t priority;
     bool interruptable;

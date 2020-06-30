@@ -17,5 +17,4 @@ KernelStatus schd_yield(void);
 
 KernelStatus schd_preempt(void);
 
-
 #endif //__KERNEL_SCHED_H__

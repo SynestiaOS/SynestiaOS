@@ -5,10 +5,6 @@
 #include <sched.h>
 #include <kqueue.h>
 
-KQueue *waitQueue;
-KQueue *readyQueue;
-
-
 KernelStatus schd_init_thread(Thread *thread, uint32_t priority) {
     // todo:
     return OK;
