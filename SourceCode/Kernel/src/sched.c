@@ -4,6 +4,22 @@
 
 #include <sched.h>
 #include <kqueue.h>
+#include <precpu.h>
+
+KernelStatus schd_init() {
+
+    // 1. create PreCpus
+    if (percpu_create(CPU_4) != ERROR) {
+        // 2. init PerCpu
+        for (uint32_t i = 0; i < CPU_4; i++) {
+            PreCpu *preCpu = precpu_get(i);
+            preCpu->cpuNum = i;
+            preCpu->status.idleTime = 0;
+            preCpu->idleThread = thread_create_idle_thread(i);
+        }
+    }
+    return OK;
+}
 
 KernelStatus schd_init_thread(Thread *thread, uint32_t priority) {
     // todo:

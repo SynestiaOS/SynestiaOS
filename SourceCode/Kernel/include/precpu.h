@@ -8,8 +8,8 @@
 #include "kqueue.h"
 #include "thread.h"
 
-typedef enum CpuStatus {
-    HALT
+typedef struct CpuStatus {
+    uint32_t idleTime;
 } CpuStatus;
 
 
@@ -23,5 +23,10 @@ typedef struct PreCpu {
 
     CpuStatus status;
 } __attribute__((packed)) PreCpu;
+
+
+KernelStatus percpu_create(uint32_t cpuNum);
+
+PreCpu *precpu_get(CpuNum cpuNum);
 
 #endif //__KERNEL_PRECPU_H__

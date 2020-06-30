@@ -9,6 +9,8 @@
 #include <stdint.h>
 #include <thread.h>
 
+KernelStatus schd_init();
+
 KernelStatus schd_init_thread(Thread *thread, uint32_t priority);
 
 KernelStatus schd_block(void);
