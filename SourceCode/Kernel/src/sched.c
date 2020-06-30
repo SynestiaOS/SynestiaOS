@@ -4,7 +4,7 @@
 
 #include <sched.h>
 #include <kqueue.h>
-#include <precpu.h>
+#include <percpu.h>
 
 KernelStatus schd_init() {
 
@@ -12,7 +12,7 @@ KernelStatus schd_init() {
     if (percpu_create(CPU_4) != ERROR) {
         // 2. init PerCpu
         for (uint32_t i = 0; i < CPU_4; i++) {
-            PreCpu *preCpu = precpu_get(i);
+            PerCpu *preCpu = percpu_get(i);
             preCpu->cpuNum = i;
             preCpu->status.idleTime = 0;
             preCpu->idleThread = thread_create_idle_thread(i);
@@ -37,6 +37,11 @@ KernelStatus schd_yield(void) {
 }
 
 KernelStatus schd_preempt(void) {
+    // todo:
+    return OK;
+}
+
+KernelStatus sche_insert_into_percpu_rq(CpuNum cpuNum, Thread *thread) {
     // todo:
     return OK;
 }

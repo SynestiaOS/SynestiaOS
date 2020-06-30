@@ -13,7 +13,7 @@ typedef struct CpuStatus {
 } CpuStatus;
 
 
-typedef struct PreCpu {
+typedef struct PerCpu {
     CpuNum cpuNum;
 
     KQueue *readyQueue;
@@ -22,11 +22,11 @@ typedef struct PreCpu {
     Thread *idleThread;
 
     CpuStatus status;
-} __attribute__((packed)) PreCpu;
+} __attribute__((packed)) PerCpu;
 
 
 KernelStatus percpu_create(uint32_t cpuNum);
 
-PreCpu *precpu_get(CpuNum cpuNum);
+PerCpu *percpu_get(CpuNum cpuNum);
 
 #endif //__KERNEL_PRECPU_H__
