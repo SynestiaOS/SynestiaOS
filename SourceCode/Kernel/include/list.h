@@ -15,7 +15,7 @@ typedef struct ListNode {
     struct ListNode *next;
 }  __attribute__((packed)) ListNode;
 
-KernelStatus klist_append(ListNode *list, ListNode *node);
+KernelStatus klist_insert(ListNode *list, ListNode *node);
 
 ListNode *klist_remove_node(ListNode *node);
 

@@ -35,16 +35,5 @@ KQueue *kqueue_dequeue(KQueue *queue) {
 }
 
 uint32_t kqueue_size(KQueue *queue) {
-    KQueue *first = queue;
-    while (first->prev != nullptr) {
-        first = first->prev;
-    }
-
-    uint32_t size = 0;
-    while (first->next != nullptr) {
-        first = first->next;
-        size++;
-    }
-
-    return size;
+    return klist_size(queue);
 }
