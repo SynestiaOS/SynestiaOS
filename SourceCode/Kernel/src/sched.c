@@ -7,7 +7,7 @@
 #include <percpu.h>
 #include <rbtree.h>
 
-TreeNode *cfsTreeRoot;
+RBNode *cfsTreeRoot;
 
 KernelStatus schd_init() {
 
