@@ -25,6 +25,7 @@ KernelStatus schd_init() {
 }
 
 KernelStatus schd_init_thread(Thread *thread, uint32_t priority) {
+    thread->priority = priority;
     // todo:
     return OK;
 }

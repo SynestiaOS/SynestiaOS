@@ -42,8 +42,22 @@ Thread *thread_create_idle_thread(uint32_t cpuNum) {
 }
 
 KernelStatus init_thread_struct(Thread *thread, const char *name) {
-    // todo
-    return OK;
+    KernelStack *kernelStack = nullptr;
+    // 1. allocate stack memory from kernel heap for idle task
+    KernelStatus kernelStackAllocateState = kstack_allocate(kernelStack);
+    if (kernelStack != nullptr && kernelStackAllocateState != ERROR) {
+        thread->magic = THREAD_MAGIC;
+        thread->threadStatus = THREAD_READY;
+        thread->stack = kernelStack;
+        thread->priority = IDLE_PRIORITY;
+        thread->currCpu = INVALID_CPU;
+        thread->lastCpu = INVALID_CPU;
+        thread->entry = (ThreadStartRoutine) idle_thread_routine;
+        thread->pid = 0;
+        strcpy(thread->name, name);
+        return OK;
+    }
+    return ERROR;
 }
 
 KernelStatus thread_exit(uint32_t returnCode) {

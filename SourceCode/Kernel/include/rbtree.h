@@ -54,5 +54,4 @@ RBNode *rbtree_get_min(RBNode *root);
     }   \
 }
 
-
 #endif //__KERNEL_RBTREE_H__

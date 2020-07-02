@@ -19,6 +19,7 @@ typedef struct PerCpu {
     KQueue *readyThreadQueue;
     KQueue *waitThreadQueue;
 
+    Thread *currentThread;
     Thread *idleThread;
 
     CpuStatus status;
