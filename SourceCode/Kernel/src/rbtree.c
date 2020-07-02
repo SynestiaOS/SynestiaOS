@@ -4,7 +4,6 @@
 
 #include <rbtree.h>
 #include <kheap.h>
-#include <thread.h>
 
 
 void *rbtree_create(RBNode *root) {
@@ -12,6 +11,10 @@ void *rbtree_create(RBNode *root) {
     root->color = BLACK;
     root->left = nullptr;
     root->right = nullptr;
+}
+
+void rbtree_balance(RBNode *root, RBNode *node) {
+
 }
 
 void rbtree_erase(RBNode *root, RBNode *node) {
