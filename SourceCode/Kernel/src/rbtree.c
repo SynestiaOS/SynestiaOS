@@ -18,6 +18,10 @@ void rbtree_erase(RBNode *root, RBNode *node) {
 
 }
 
+void rbtree_recolor(RBNode *root, RBNode *node) {
+
+}
+
 void rbtree_rotate_left(RBNode *root, RBNode *node) {
 
 }
