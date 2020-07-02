@@ -28,11 +28,13 @@ void memcpy(void *dest, const void *src, uint32_t bytes) {
     }
 }
 
-void putc(char c) { uart_putc(c); }
+void put_char(char c) {
+    uart_put_char(c);
+}
 
 void print(const char *str) {
     while (*str) {
-        putc(*str);
+        put_char(*str);
         str++;
     }
 }

@@ -11,7 +11,7 @@ char *strcpy(char *des, char *source);
 
 void memcpy(void *dest, const void *src, uint32_t bytes);
 
-void putc(char c);
+void put_char(char c);
 
 void print(const char *str);
 

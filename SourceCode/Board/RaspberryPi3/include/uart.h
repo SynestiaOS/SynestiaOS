@@ -33,6 +33,6 @@ extern uint16_t io_readw(void *addr);
 extern uint32_t io_readl(void *addr);
 
 void uart_init(void);
-void uart_putc(uint8_t ch);
+void uart_put_char(uint8_t ch);
 
 #endif // __BOARD_RASP3_UART_H__
