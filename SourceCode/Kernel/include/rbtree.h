@@ -5,22 +5,26 @@
 #ifndef __KERNEL_RBTREE_H__
 #define __KERNEL_RBTREE_H__
 
+#include <stdint.h>
+
 typedef enum NodeColor {
     RED,
     BLACK,
 } __attribute__((packed)) NodeColor;
 
-typedef struct TreeNode {
+typedef struct RBTreeNode {
     struct TreeNode *left;
     struct TreeNode *right;
-    void *value;
-}  __attribute__((packed)) TreeNode;
+    NodeColor color;
+}  __attribute__((packed)) RBTreeNode;
 
 
-void *rbtree_create(TreeNode* root);
+void *rbtree_create(RBTreeNode *root);
 
-void rbtree_inster(TreeNode *root, TreeNode *node);
+void rbtree_instert(RBTreeNode *root, RBTreeNode *node);
 
-TreeNode *rbtree_get_min(TreeNode *root);
+void rbtree_erase(RBTreeNode *root, RBTreeNode *node);
+
+RBTreeNode *rbtree_get_min(RBTreeNode *root);
 
 #endif //__KERNEL_RBTREE_H__

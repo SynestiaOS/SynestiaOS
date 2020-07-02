@@ -3,16 +3,24 @@
 //
 
 #include <rbtree.h>
+#include <kheap.h>
 
 
-void *rbtree_create(TreeNode *root) {
+void *rbtree_create(RBTreeNode *root) {
+    root = kheap_alloc(sizeof(RBTreeNode));
+    root->color = BLACK;
+    root->left = nullptr;
+    root->right = nullptr;
+}
+
+void rbtree_instert(RBTreeNode *root, RBTreeNode *node) {
 
 }
 
-void rbtree_inster(TreeNode *root, TreeNode *node) {
+void rbtree_erase(RBTreeNode *root, RBTreeNode *node){
 
 }
 
-TreeNode *rbtree_get_min(TreeNode *root) {
+RBTreeNode *rbtree_get_min(RBTreeNode *root) {
 
 }
