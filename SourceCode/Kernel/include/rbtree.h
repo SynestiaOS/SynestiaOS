@@ -17,7 +17,7 @@ typedef struct TreeNode {
 }  __attribute__((packed)) TreeNode;
 
 
-TreeNode *rbtree_create();
+void *rbtree_create(TreeNode* root);
 
 void rbtree_inster(TreeNode *root, TreeNode *node);
 

@@ -5,6 +5,9 @@
 #include <sched.h>
 #include <kqueue.h>
 #include <percpu.h>
+#include <rbtree.h>
+
+TreeNode *cfsTreeRoot;
 
 KernelStatus schd_init() {
 

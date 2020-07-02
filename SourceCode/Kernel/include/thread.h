@@ -76,6 +76,7 @@ typedef struct Thread {
     ThreadStatus threadStatus;
     ListNode threadList;
 
+    uint32_t runtimeNs;
     uint32_t priority;
     bool interruptable;
 
