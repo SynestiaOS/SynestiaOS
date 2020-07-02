@@ -12,7 +12,7 @@ _start:
 
     ldr x0, =__bss_start
     ldr x1, =__bss_end
-    bl memclean
+    bl  memclean
 
     mrs r0, cpsr
 
@@ -38,7 +38,7 @@ _start:
     orr r0,     #0x13
     msr cpsr_c, r0
 
-    bl kernel_main
+    bl  kernel_main
 
 _halt_smp:
     wfi // wait for interrup coming
