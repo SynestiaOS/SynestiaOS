@@ -6,11 +6,8 @@
 #define __KERNEL_RBTREE_H__
 
 #include <stdint.h>
-
-/**
- * get node's member value by rbnode
- */
-#define getNodeValue(ptr, type, member, valueMember)(uint32_t)(((type *)((char *)(ptr) - (char *)(&(((type *)0)->member))))->valueMember)
+#include <list.h>
+#include <type.h>
 
 typedef enum NodeColor {
     RED,
@@ -25,15 +22,23 @@ typedef struct RBNode {
 
 void *rbtree_create(RBNode *root);
 
-void rbtree_instert(RBNode *root, RBNode *node);
-
-void rbtree_insert_with_val(RBNode *root, RBNode *node, uint32_t parentValue, uint32_t nodeValue);
-
-#define rbtreeInsert(root, node, type, member, valueMember) {   \
-    uint32_t parentValue = getNodeValue(root,type,rbTree,runtimeNs);    \
-    uint32_t nodeValue = getNodeValue(node,type,rbTree,runtimeNs);    \
-    rbtree_insert_with_val(root,node,parentValue,nodeValue);   \
-    }
+#define  RBTreeInsert(root, node, type, member, valueMember) {  \
+    uint32_t parentValue = getNode(root, type, member)->valueMember;    \
+    uint32_t nodeValue = getNode(node, type, member)->valueMember;  \
+    if (nodeValue >= parentValue) { \
+        if (root->right != nullptr) {   \
+            RBTreeInsert(root->right, node, type, member, valueMember); \
+        } else {    \
+            root->right = node; \
+        }   \
+    } else {    \
+        if (root->left != nullptr) {    \
+            RBTreeInsert(root->left, node, type, member, valueMember);  \
+        }else{  \
+            root->left = node;  \
+        }   \
+    }   \
+}
 
 void rbtree_erase(RBNode *root, RBNode *node);
 
