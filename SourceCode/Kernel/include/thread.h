@@ -76,6 +76,7 @@ typedef struct Thread {
 
     ThreadStatus threadStatus;
     ListNode threadList;
+    KQueue threadReadyQueue;
     RBNode rbTree;
 
     uint32_t runtimeNs;

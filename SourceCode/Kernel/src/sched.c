@@ -46,6 +46,7 @@ KernelStatus schd_preempt(void) {
 }
 
 KernelStatus sche_insert_into_percpu_rq(CpuNum cpuNum, Thread *thread) {
-    // todo:
+    PerCpu *preCpu = percpu_get(cpuNum);
+    kqueue_enqueue(&preCpu->readyThreadQueue, &thread->threadReadyQueue);
     return OK;
 }

@@ -16,8 +16,8 @@ typedef struct CpuStatus {
 typedef struct PerCpu {
     CpuNum cpuNum;
 
-    KQueue *readyThreadQueue;
-    KQueue *waitThreadQueue;
+    KQueue readyThreadQueue;
+    KQueue waitThreadQueue;
 
     Thread *currentThread;
     Thread *idleThread;

@@ -7,6 +7,12 @@
 
 KernelStatus kqueue_enqueue(KQueue *queue, KQueue *node) {
     KQueue *last = queue;
+    if (last == nullptr) {
+        queue = node;
+        node->prev = nullptr;
+        node->next = nullptr;
+
+    }
     while (last->next != nullptr) {
         last = last->next;
     }
