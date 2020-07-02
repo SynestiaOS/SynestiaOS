@@ -12,7 +12,31 @@ _start:
 
     ldr x0, =__bss_start
     ldr x1, =__bss_end
-    bl clean_bss
+    bl memclean
+
+    mrs r0, cpsr
+
+    bic r0,     #0x1F
+    orr r0,     #0x13
+    msr cpsr_c, r0
+    ldr r1,=__svc_stack
+    bic sp, r1, #0x7
+
+    bic r0,     #0x1F
+    orr r0,     #0x12
+    msr cpsr_c, r0
+    ldr r1,=__irq_stack
+    bic sp, r1, #0x7
+
+    bic r0,     #0x1F
+    orr r0,     #0x11
+    msr cpsr_c, r0
+    ldr r1,=__fiq_stack
+    bic sp, r1, #0x7
+
+    bic r0,     #0x1F
+    orr r0,     #0x13
+    msr cpsr_c, r0
 
     bl kernel_main
 
