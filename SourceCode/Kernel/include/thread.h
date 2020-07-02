@@ -9,6 +9,7 @@
 #include <list.h>
 #include <kstack.h>
 #include "kqueue.h"
+#include "rbtree.h"
 
 typedef uint8_t CpuNum;
 typedef uint8_t CpuMask;
@@ -75,6 +76,7 @@ typedef struct Thread {
 
     ThreadStatus threadStatus;
     ListNode threadList;
+    RBNode rbTree;
 
     uint32_t runtimeNs;
     uint32_t priority;
