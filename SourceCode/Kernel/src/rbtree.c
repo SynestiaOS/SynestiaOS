@@ -5,7 +5,6 @@
 #include <rbtree.h>
 #include <kheap.h>
 
-
 void *rbtree_create(RBNode *root) {
     root = kheap_alloc(sizeof(RBNode));
     root->color = BLACK;

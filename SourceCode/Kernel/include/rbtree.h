@@ -15,8 +15,8 @@ typedef enum NodeColor {
 } __attribute__((packed)) NodeColor;
 
 typedef struct RBNode {
-    struct TreeNode *left;
-    struct TreeNode *right;
+    struct RBNode *left;
+    struct RBNode *right;
     NodeColor color;
 }  __attribute__((packed)) RBNode;
 
@@ -33,25 +33,5 @@ void rbtree_rotate_left(RBNode *root, RBNode *node);
 void rbtree_rotate_right(RBNode *root, RBNode *node);
 
 RBNode *rbtree_get_min(RBNode *root);
-
-#define  RBTreeInsert(root, node, type, member, valueMember) {  \
-    uint32_t parentValue = getNode(root, type, member)->valueMember;    \
-    uint32_t nodeValue = getNode(node, type, member)->valueMember;  \
-    if (nodeValue >= parentValue) { \
-        if (root->right != nullptr) {   \
-            RBTreeInsert(root->right, node, type, member, valueMember); \
-        } else {    \
-            root->right = node; \
-            rbtree_balance(root,node);  \
-        }   \
-    } else {    \
-        if (root->left != nullptr) {    \
-            RBTreeInsert(root->left, node, type, member, valueMember);  \
-        }else{  \
-            root->left = node;  \
-            rbtree_balance(root,node);  \
-        }   \
-    }   \
-}
 
 #endif //__KERNEL_RBTREE_H__

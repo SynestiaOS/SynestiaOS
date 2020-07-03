@@ -60,6 +60,7 @@ void *kheap_alloc(uint32_t size) {
             newFreeArea->size = restSize;
 
 
+
             // 2.link new free heap area to free list
             newFreeArea->list.prev = currentFreeArea->list.prev;
             newFreeArea->list.next = currentFreeArea->list.next;

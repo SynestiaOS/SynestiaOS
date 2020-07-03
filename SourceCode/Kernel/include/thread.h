@@ -8,8 +8,8 @@
 #include <stdint.h>
 #include <list.h>
 #include <kstack.h>
-#include "kqueue.h"
-#include "rbtree.h"
+#include <kqueue.h>
+#include <rbtree.h>
 
 typedef uint8_t CpuNum;
 typedef uint8_t CpuMask;
@@ -77,9 +77,12 @@ typedef struct Thread {
     ThreadStatus threadStatus;
     ListNode threadList;
     KQueue threadReadyQueue;
-    RBNode rbTree;
+
+    RBNode *rbTree;
 
     uint32_t runtimeNs;
+    uint32_t runtimVirtualNs;
+
     uint32_t priority;
     bool interruptable;
 
@@ -96,6 +99,18 @@ typedef struct Thread {
 Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uint32_t priority);
 
 Thread *thread_create_idle_thread(uint32_t cpuNum);
+
+KernelStatus thread_suspend(Thread *thread);
+
+KernelStatus thread_resume(Thread *thread);
+
+KernelStatus thread_reschedule(void);
+
+KernelStatus thread_sleep(uint32_t deadline);
+
+KernelStatus thread_detach(Thread *thread);
+
+KernelStatus thread_join(Thread *thread, int *retcode, uint32_t deadline);
 
 KernelStatus init_thread_struct(Thread *thread, const char *name);
 

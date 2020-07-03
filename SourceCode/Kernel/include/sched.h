@@ -19,6 +19,8 @@ KernelStatus schd_yield(void);
 
 KernelStatus schd_preempt(void);
 
+KernelStatus sched_reschedule(void);
+
 KernelStatus sche_insert_into_percpu_rq(CpuNum cpuNum, Thread *thread);
 
 #endif //__KERNEL_SCHED_H__

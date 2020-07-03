@@ -17,7 +17,9 @@ void print_splash() {
     print(str);
 }
 
+
 void kernel_main(void) {
+
     print_splash();
 
     init_interrupt();

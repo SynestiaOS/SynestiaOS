@@ -5,9 +5,6 @@
 #include <sched.h>
 #include <kqueue.h>
 #include <percpu.h>
-#include <rbtree.h>
-
-RBNode *cfsTreeRoot;
 
 KernelStatus schd_init() {
 
@@ -41,6 +38,11 @@ KernelStatus schd_yield(void) {
 }
 
 KernelStatus schd_preempt(void) {
+    // todo:
+    return OK;
+}
+
+KernelStatus sched_reschedule(void) {
     // todo:
     return OK;
 }
