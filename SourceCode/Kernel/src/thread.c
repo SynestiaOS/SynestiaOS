@@ -7,27 +7,27 @@
 #include <kheap.h>
 #include <stdlib.h>
 
-Thread *idleThread;
+Thread *initThread;
 
-#define  RBTreeInsert(root, node, type, member, valueMember)   \
-    uint32_t parentValue = getNode(root, type, member)->valueMember;    \
-    uint32_t nodeValue = getNode(node, type, member)->valueMember;  \
-    if (nodeValue >= parentValue) { \
-        if (root->right != nullptr) {   \
-            RBTreeInsert(root->right, node, type, member, valueMember); \
-        } else {    \
-            root->right = node; \
-            rbtree_balance(root,node);  \
-        }   \
-    } else {    \
-        if (root->left != nullptr) {    \
-            RBTreeInsert(root->left, node, type, member, valueMember);  \
-        }else{  \
-            root->left = node;  \
-            rbtree_balance(root,node);  \
-        }   \
+void thread_insert_to_rb_tree(RBNode *root, RBNode *node) {
+    uint32_t parentValue = getNode(root, Thread, rbTree)->runtimVirtualNs;
+    uint32_t nodeValue = getNode(node, Thread, rbTree)->runtimVirtualNs;
+    if (nodeValue >= parentValue) {
+        if (root->right != nullptr) {
+            thread_insert_to_rb_tree(root->right, node);
+        } else {
+            root->right = node;
+            rbtree_balance(root, node);
+        }
+    } else {
+        if (root->left != nullptr) {
+            thread_insert_to_rb_tree(root->left, node);
+        } else {
+            root->left = node;
+            rbtree_balance(root, node);
+        }
     }
-
+}
 
 Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uint32_t priority) {
     KernelStack *kernelStack = nullptr;
@@ -50,7 +50,7 @@ Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uin
         thread->arg = arg;
         // todo : other properties, like list
 
-        RBTreeInsert(idleThread->rbTree, thread->rbTree, Thread, rbTree, runtimVirtualNs)
+        thread_insert_to_rb_tree(initThread->rbTree, thread->rbTree);
         return thread;
     }
     return nullptr;
@@ -86,7 +86,6 @@ Thread *thread_create_idle_thread(uint32_t cpuNum) {
     }
     return nullptr;
 }
-
 
 KernelStatus thread_reschedule(void) {
     // todo
