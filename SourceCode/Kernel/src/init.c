@@ -1,3 +1,4 @@
+#include <init.h>
 #include <interrupt.h>
 #include <stdlib.h>
 #include <synestia_os_hal.h>
@@ -18,7 +19,7 @@ void print_splash() {
 }
 
 
-void kernel_main(void) {
+void kernel_main1(void) {
 
     print_splash();
 

@@ -17,4 +17,18 @@ void print(const char *str);
 
 int printf(const char *format, ...);
 
+
+int exit(int code);
+
+
+
+
+int isprint( int ch );
+
+typedef uint32_t size_t;
+#define __SIZE_TYPE__ size_t
+
+#define NULL 0
+
+
 #endif // __LIBRARY_LIBC_STDLIB_H__
