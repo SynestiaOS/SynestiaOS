@@ -26,7 +26,7 @@ KernelStatus schd_init_thread(Thread *thread, uint32_t priority) {
     // todo:
     return OK;
 }
-
+ 
 KernelStatus schd_block(void) {
     // todo:
     return OK;
@@ -42,7 +42,12 @@ KernelStatus schd_preempt(void) {
     return OK;
 }
 
-KernelStatus sched_reschedule(void) {
+KernelStatus schd_switch_to(Thread *thread){
+    // todo:
+    return OK;
+}
+
+KernelStatus schd_reschedule(void) {
     // todo:
     return OK;
 }
