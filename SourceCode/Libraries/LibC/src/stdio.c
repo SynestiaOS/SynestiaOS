@@ -6,13 +6,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int fprintf(FILE* file, const char *format, ...) {
-  va_list valist;
-
-  printf( "xxx");
+int fprintf(FILE *file, const char *format, ...) {
   return 0;
 }
 
-int fflush(FILE *file) {
-  return 0;
-}
+int fflush(FILE *file) { return 0; }

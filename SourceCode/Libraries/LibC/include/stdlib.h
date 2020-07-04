@@ -17,18 +17,20 @@ void print(const char *str);
 
 int printf(const char *format, ...);
 
+#ifndef EXIT_FAILURE
+#define EXIT_FAILURE 1
+#endif
 
-int exit(int code);
+#ifndef EXIT_SUCCESS
+#define EXIT_SUCCESS 0
+#endif
 
+void exit(int exit_code);
 
+void abort();
 
-
-int isprint( int ch );
-
-typedef uint32_t size_t;
-#define __SIZE_TYPE__ size_t
-
-#define NULL 0
-
+#ifndef NULL
+#define NULL (void *)0
+#endif
 
 #endif // __LIBRARY_LIBC_STDLIB_H__

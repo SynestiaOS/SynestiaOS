@@ -244,14 +244,13 @@ int printf(const char *format, ...) {
   return 0;
 }
 
-
-
-void *memset(void *ptr, int x, uint32_t size) {
-  return ptr;
+void *memset(void *dest, int ch, size_t count) {
+  // todo: to be done
+  return dest;
 }
 
-
-
-int exit(int code) {
-  return 0;
+void exit(int exit_code) {
+  // todo: to be done
 }
+
+void abort() {}

@@ -3,7 +3,6 @@
 //
 
 #include <ctype.h>
-#include <stdlib.h>
 
 const char *__all_printable_characters__ = "0123456789"
                                            "abcdefghijklmnopqrstuvwxyz"
@@ -11,10 +10,10 @@ const char *__all_printable_characters__ = "0123456789"
                                            "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~"
                                            " ";
 
-int isprint(int ch) {
-  while (*__all_printable_characters__ != '\0') {
-    printf("not 0\n");
-    if (*__all_printable_characters__++ == ch) {
+int isprint(int character) {
+  const char *ptr = __all_printable_characters__;
+  while (*ptr != '\0') {
+    if (*ptr++ == character) {
       return 1;
     }
   }

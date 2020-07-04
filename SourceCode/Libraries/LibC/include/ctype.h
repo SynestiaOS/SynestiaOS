@@ -4,4 +4,4 @@
 
 #pragma once
 
-int isprint(int ch);
+int isprint(int character);
