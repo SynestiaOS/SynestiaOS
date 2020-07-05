@@ -7,12 +7,14 @@ WORKDIR /root/SynestiaOS
 
 ARG DEBIAN_FRONTEND=noninteractive
 
-RUN apt update \
-    && apt install --fix-missing -y build-essential binutils qemu-system-arm \
+RUN apt-get update \
+    && apt-get install --fix-missing -y build-essential binutils qemu-system-arm \
        gdb-multiarch gcc-arm-none-eabi gcc-aarch64-linux-gnu make cmake gcc \
+       gcc-riscv64-linux-gnu \
        clang-format-10 ssh rsync cmake-curses-gui less \
     && update-alternatives --install /usr/bin/clang-format clang-format /usr/bin/clang-format-10 100 \
-    && apt clean \
+    && apt-get clean \
+    && apt-get autoremove \
     && rm -rf /var/cache/apt/archives \
     && mkdir /run/sshd \
     && yes password | passwd root \
