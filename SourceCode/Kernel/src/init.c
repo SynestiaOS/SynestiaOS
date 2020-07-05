@@ -38,6 +38,7 @@ void kernel_main(void) {
      * printf test
      */
     printf("test:%d\n", 12);
+    printf("test:%s\n", "lalala");
 
     /**
      * heap test

@@ -179,7 +179,13 @@ int printf(const char *format, ...) {
                 continue;
             }
             if (getOffsetFromString(tmp, 1) == 's') {
-
+                // 1. get argument from args
+                char *value = va_arg(valist, char*);
+                while (*value) {
+                    *resultPtr = *value;
+                    value++;
+                    resultPtr++;
+                }
                 tmp += 2;
                 continue;
             }
