@@ -9,6 +9,11 @@ under this **Docker** dir, run following command to setup dev environment
 docker-compose up -d dev-prebuilt
 ```
 within the docker container, we setup the ssh environment, and we can connect to the container through ssh.
+```
+docker-compose exec dev-prebuilt /bin/bash
+#> cd Build
+#> cmake .. && make
+```
 within Clion, Settings->Build,Execution,Deployment->Toolchain, click add a remote host, 
 and input the credentials, user: root, password: password. and it's done.
 
