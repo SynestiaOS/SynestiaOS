@@ -9,9 +9,8 @@
 #include <stdlib.h>
 
 #define TEST_SUIT(text, func)                                   \
-    printf("\033[32m[TEST] %s Running...\033[0m\n",text);       \
-    func();                                                     \
-    printf("\033[32m[TEST] %s Done.\033[0m\n",text);
+    printf("\n\033[32m[TEST] %s:\033[0m\n",text);       \
+    func();
 
 #define ASSERT_EQ(left, right){ assert(left==right); }
 #define ASSERT_NEQ(left, right){ assert(left!=right); }

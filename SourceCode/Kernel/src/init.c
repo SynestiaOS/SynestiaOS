@@ -19,14 +19,19 @@ void print_splash() {
 }
 
 
-void should_equal() {
+void should_not_equal() {
     ASSERT_EQ(1, 2)
+}
+
+void should_equal() {
+    ASSERT_EQ(1, 1)
 }
 
 void kernel_main(void) {
 
     print_splash();
 
+    TEST_SUIT("should_not_equal", should_not_equal)
     TEST_SUIT("should_equal", should_equal)
 
     init_interrupt();
