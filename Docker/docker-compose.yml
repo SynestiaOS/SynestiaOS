@@ -13,6 +13,17 @@ services:
     volumes:
       - ../:/root/SynestiaOS
     privileged: true
+  dev-prebuilt:
+    image: synestiaos/synestiaos:devel
+    ports:
+      - "1234:1234"
+      - "2222:2222"
+    networks:
+      - os_share_network
+    volumes:
+      - ../:/root/SynestiaOS
+    privileged: true
+
 
 
 networks:

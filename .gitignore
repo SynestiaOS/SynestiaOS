@@ -7,6 +7,7 @@ Tests/integrate_test
 Tests/os_test
 Tests/tools
 /cmake-build-debug/
+Build/
 Build/Board/
 Build/Libraries/
 Build/Kernel/

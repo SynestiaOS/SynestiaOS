@@ -3,10 +3,10 @@
 
 # Prepare Environment
 ## Clion
-[Clion](https://www.jetbrains.com/clion) is recommend to used as our development environment, add use docker to build the kernel.
-under this **Build** dir, run following command to setup dev environment
+[Clion](https://www.jetbrains.com/clion) is recommend to used as our development environment, and use docker to build the kernel.
+under this **Docker** dir, run following command to setup dev environment
 ```
-docker-compose up -d dev
+docker-compose up -d dev-prebuilt
 ```
 within the docker container, we setup the ssh environment, and we can connect to the container through ssh.
 within Clion, Settings->Build,Execution,Deployment->Toolchain, click add a remote host, 
@@ -21,13 +21,13 @@ sudo bash Scripts/SetupLinux.sh
 ## for docker:
 under this project dir, run following command to setup dev environment
 ```
-docker-compose up -d dev
+docker-compose up -d dev-prebuilt
 ```
 
 # code formatting
 under this project dir, run following command to format the code 
 ```
-docker-compose run dev bash run-clang-foramt.sh
+docker-compose run dev-prebuilt bash run-clang-foramt.sh
 ``` 
 # Build, Run and Debug
 within the docker container, under the Build dir, run following command to build kernel
