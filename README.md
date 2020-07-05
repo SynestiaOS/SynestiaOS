@@ -39,10 +39,10 @@ and specify the toolchain file location
 ```
 cmake -DCMAKE_TOOLCHAIN_FILE=${PATH_TO_THIS_PROJECT}/SynestiaOS/CMake/ToolchainArmMac.cmake .. && make VERBOSE=1
 ```
-To run kernel, you can find the kernel image under Build/Kernel/Arch
+To run kernel, you can find the kernel image under Build/
 ```
-qemu-system-arm -M raspi2 -kernel Kernel.img -nographic -serial mon:stdio      #for raspi2 and arm32
-qemu-system-aarch64 -M raspi3 -kernel Kernel.img -nographic -serial mon:stdio  #for raspi3 and arm64
+qemu-system-arm -M raspi2 -kernel bin/Kernel.img -nographic -serial mon:stdio      #for raspi2 and arm32
+qemu-system-aarch64 -M raspi3 -kernel bin/Kernel.img -nographic -serial mon:stdio  #for raspi3 and arm64
 ```
 To clean workspace:
 ```
