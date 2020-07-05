@@ -27,11 +27,11 @@ void kernel_main(void) {
 
     print_splash();
 
+    TEST_SUIT("should_equal", should_equal)
+
     init_interrupt();
 
     init_bsp();
-
-    TEST_SUIT("should_equal", should_equal)
 
     vmm_init();
 
