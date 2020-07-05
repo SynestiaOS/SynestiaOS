@@ -7,7 +7,10 @@
 
 #include <assert.h>
 
-#define TEST_SUIT(text, func)                                   \
+uint32_t __test_all_asserts = 0;
+uint32_t __test_failed_asserts = 0;
+
+#define TEST_SUIT(text, func)                           \
     printf("\n\033[32m[TEST] %s:\033[0m\n",text);       \
     func();
 
