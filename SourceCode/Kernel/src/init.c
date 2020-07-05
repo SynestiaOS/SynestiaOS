@@ -3,7 +3,7 @@
 #include <synestia_os_hal.h>
 #include <kheap.h>
 #include <vmm.h>
-#include <tests_lib.h>
+#include <tests.h>
 
 void print_splash() {
     const char *str = "   _____                       _   _       \n"
@@ -18,21 +18,11 @@ void print_splash() {
     print(str);
 }
 
-
-void should_not_equal() {
-    ASSERT_EQ(1, 2)
-}
-
-void should_equal() {
-    ASSERT_EQ(1, 1)
-}
-
 void kernel_main(void) {
 
-    print_splash();
+    __run_tests();
 
-    TEST_SUIT("should_not_equal", should_not_equal)
-    TEST_SUIT("should_equal", should_equal)
+    print_splash();
 
     init_interrupt();
 

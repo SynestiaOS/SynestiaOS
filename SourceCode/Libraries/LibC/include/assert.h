@@ -5,6 +5,8 @@
 #ifndef __LIBRARY_LIBC_ASSERT_H__
 #define __LIBRARY_LIBC_ASSERT_H__
 
+#include <stdlib.h>
+
 void __assert_func_failed(const char *file, int line, const char *func, const char *failedexpr) {
     printf("    └──\033[31mAssertion \"%s\" false \033[0m\n", failedexpr);
     printf("        ├──\033[31mFile: %s, Line: %d \033[0m\n", file, line);

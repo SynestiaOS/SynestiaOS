@@ -9,7 +9,8 @@ add_executable(${KernelName}
         ${KernelArch_SOURCE_DIR}/${SynestiaArch}/boot.s
         $<TARGET_OBJECTS:Kernel>
         $<TARGET_OBJECTS:C>
-        $<TARGET_OBJECTS:BoardRaspberryPi3>)
+        $<TARGET_OBJECTS:BoardRaspberryPi3>
+        $<TARGET_OBJECTS:Tests>)
 
 
 target_include_vmm_header_files(${KernelName})

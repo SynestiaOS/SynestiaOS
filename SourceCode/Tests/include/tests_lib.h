@@ -6,7 +6,6 @@
 #define __KERNEL_TEST_H__
 
 #include <assert.h>
-#include <stdlib.h>
 
 #define TEST_SUIT(text, func)                                   \
     printf("\n\033[32m[TEST] %s:\033[0m\n",text);       \
