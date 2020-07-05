@@ -12,10 +12,6 @@ within the docker container, we setup the ssh environment, and we can connect to
 within Clion, Settings->Build,Execution,Deployment->Toolchain, click add a remote host, 
 and input the credentials, user: root, password: password. and it's done.
 
-## for mac:
-``` bash
-sudo sh Scripts/SetupMac.sh
-```
 ## for linux:
 ``` bash
 sudo bash Scripts/SetupLinux.sh
