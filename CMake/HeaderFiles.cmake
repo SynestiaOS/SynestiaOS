@@ -13,3 +13,8 @@ endfunction()
 function(target_include_vmm_header_files Target)
     target_include_directories(${Target} PRIVATE ${SYNESTIAOS_SOURCE_CODE_DIR}/Kernel/Arch/${SynestiaArch}/vmm/include)
 endfunction()
+
+
+function(target_include_tests_header_files Target)
+    target_include_directories(${Target} PRIVATE ${SYNESTIAOS_SOURCE_CODE_DIR}/Tests/include)
+endfunction()
