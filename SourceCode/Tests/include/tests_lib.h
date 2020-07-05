@@ -17,5 +17,6 @@
 #define ASSERT_NEQ(left, right){ assert(left!=right); }
 #define ASSERT_TRUE(value){ assert(value); }
 #define ASSERT_FALSE(value){ assert(!value); }
+#define ASSERT_EQ_FLOAT(left, right, sill) {assert(abs(left-right)< sill);}
 
 #endif //__KERNEL_TEST_H__
