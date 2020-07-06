@@ -23,6 +23,7 @@ static inline uint32_t read_mmfr0(void) {
  */
 static inline void write_ttbr0(uint32_t val) {
     asm volatile("mcr p15, 0, %0, c2, c0, 0" : : "r" (val) : "memory");
+    asm volatile("dmb");
 }
 
 /**
@@ -48,12 +49,14 @@ static inline void mmu_enable() {
     asm volatile("mrc p15, 0, r12, c1, c0, 0");
     asm volatile("orr r12, r12, #0x1");
     asm volatile("mcr p15, 0, r12, c1, c0, 0");
+    asm volatile("dsb");
 }
 
 static inline void mmu_disable() {
     asm volatile("mrc p15, 0, r12, c1, c0, 0");
     asm volatile("bic r12, r12, #0x1");
     asm volatile("mcr p15, 0, r12, c1, c0, 0");
+    asm volatile("dsb");
 }
 
 /**
