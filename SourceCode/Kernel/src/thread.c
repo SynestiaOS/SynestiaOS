@@ -66,7 +66,6 @@ Thread *thread_create_idle_thread(uint32_t cpuNum) {
     KernelStatus kernelStackAllocateState = kstack_allocate(kernelStack);
     if (kernelStack != nullptr && kernelStackAllocateState != ERROR) {
         // 1. init kernel stack
-        kernelStack.
 
         // 2. idle thread
         Thread *idleThread = (Thread *) kheap_alloc(sizeof(Thread));
