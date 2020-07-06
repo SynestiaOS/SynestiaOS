@@ -10,6 +10,6 @@ void should_klist_insert();
 
 void should_klist_remove_node();
 
-void should_return_klist_size();
+void should_klist_return_size();
 
 #endif //__KERNEL_KLIST_TEST_H__

@@ -18,7 +18,7 @@ void should_klist_remove_node() {
     ASSERT_TRUE(false)
 }
 
-void should_return_klist_size() {
+void should_klist_return_size() {
     //todo:
     ASSERT_TRUE(false)
 }
