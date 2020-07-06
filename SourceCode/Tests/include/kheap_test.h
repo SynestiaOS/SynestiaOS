@@ -5,4 +5,19 @@
 #ifndef __KERNEL_KHEAP_TEST_H__
 #define __KERNEL_KHEAP_TEST_H__
 
+
+void should_kheap_init();
+
+void should_kheap_set_alloc_callback();
+
+void should_kheap_set_free_callback();
+
+void should_kheap_alloc();
+
+void should_kheap_calloc();
+
+void should_kheap_realloc();
+
+void should_kheap_free();
+
 #endif //__KERNEL_KHEAP_TEST_H__
