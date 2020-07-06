@@ -9,7 +9,6 @@
 
 
 void __run_tests() {
-
     TEST_SUIT("should_klist_insert", should_klist_insert)
     TEST_SUIT("should_klist_remove_node", should_klist_remove_node)
     TEST_SUIT("should_klist_return_size", should_klist_return_size)
