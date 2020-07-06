@@ -21,7 +21,9 @@ void print_splash() {
 
 void kernel_main(void) {
 
-//    __run_tests();
+    __run_tests();
+
+    vmm_init();
 
     print_splash();
 
@@ -29,7 +31,6 @@ void kernel_main(void) {
 
     init_bsp();
 
-    vmm_init();
 
     schd_init();
 
