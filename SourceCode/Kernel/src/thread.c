@@ -35,6 +35,21 @@ Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uin
     KernelStatus kernelStackAllocateState = kstack_allocate(kernelStack);
     if (kernelStack != nullptr && kernelStackAllocateState != ERROR) {
         // 1. init kernel stack
+        kstack_push(kernelStack, 0x14141414);   // R14
+        kstack_push(kernelStack, 0x13131313);   // R13
+        kstack_push(kernelStack, 0x12121212);   // R12
+        kstack_push(kernelStack, 0x11111111);   // R11
+        kstack_push(kernelStack, 0x10101010);   // R10
+        kstack_push(kernelStack, 0x09090909);   // R09
+        kstack_push(kernelStack, 0x08080808);   // R08
+        kstack_push(kernelStack, 0x07070707);   // R07
+        kstack_push(kernelStack, 0x06060606);   // R06
+        kstack_push(kernelStack, 0x05050505);   // R05
+        kstack_push(kernelStack, 0x04040404);   // R04
+        kstack_push(kernelStack, 0x03030303);   // R03
+        kstack_push(kernelStack, 0x02020202);   // R02
+        kstack_push(kernelStack, 0x01010101);   // R01
+
         Thread *thread = (Thread *) kheap_alloc(sizeof(Thread));
         thread->magic = THREAD_MAGIC;
         thread->threadStatus = THREAD_INITIAL;
