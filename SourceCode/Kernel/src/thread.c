@@ -36,7 +36,7 @@ Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uin
     if (kernelStack != nullptr && kernelStackAllocateState != ERROR) {
         // 1. init kernel stack
         kstack_push(kernelStack, 0x14141414);   // R14
-        kstack_push(kernelStack, 0x13131313);   // R13
+        kstack_push(kernelStack, kernelStack->virtualMemoryAddress);   // R13
         kstack_push(kernelStack, 0x12121212);   // R12
         kstack_push(kernelStack, 0x11111111);   // R11
         kstack_push(kernelStack, 0x10101010);   // R10
