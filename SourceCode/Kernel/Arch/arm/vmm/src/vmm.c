@@ -63,7 +63,7 @@ void map_kernel_l2pt(uint64_t l2ptPhysicalAddress, uint64_t ptPhysicalAddress) {
         kernelVMML2PT->pte[i].af = 1;
         kernelVMML2PT->pte[i].base = (uint64_t) (ptPhysicalAddress + i * KERNEL_PTE_NUMBER * sizeof(PTE)) >> VA_OFFSET;
     }
-    // Peripheral
+    // Peripheral 16MB
     for (uint32_t i = 0; i < 8; i++) {
         kernelVMML2PT->pte[504 + i].valid = 1;
         kernelVMML2PT->pte[504 + i].table = 0;
