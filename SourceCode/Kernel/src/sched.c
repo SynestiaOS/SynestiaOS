@@ -46,7 +46,11 @@ KernelStatus schd_preempt(void) {
 }
 
 KernelStatus schd_switch_to(Thread *thread) {
-    printf("[SC] switch to:%s.\n", thread->name);
+    if (thread == nullptr) {
+        printf("[SC] cant switch to nullptr thread.\n");
+        return ERROR;
+    }
+    printf("[SC] switch to: %s.\n", thread->name);
     // todo:
     return OK;
 }
