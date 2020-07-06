@@ -4,7 +4,6 @@
 #include <kstack_test.h>
 #include <kstack.h>
 #include <tests_lib.h>
-#include <stdbool.h>
 
 void should_kstack_create() {
     KernelStack *stack = nullptr;
@@ -18,6 +17,8 @@ void should_kstack_create() {
 
     VirtualAddress top = stack->base;
     ASSERT_EQ(stack->top, top)
+
+    ASSERT_EQ(kstack_free(stack), OK)
 }
 
 void should_kstack_push_value() {
@@ -38,6 +39,8 @@ void should_kstack_push_value() {
     ASSERT_EQ(kstack_peek(stack), 32)
     ASSERT_EQ(stack->size, 1)
     ASSERT_EQ(stack->top, stack->base + sizeof(uint32_t))
+
+    ASSERT_EQ(kstack_free(stack), OK)
 }
 
 void should_kstack_pop_value() {
@@ -62,6 +65,8 @@ void should_kstack_pop_value() {
     ASSERT_EQ(kstack_pop(stack), 32)
     ASSERT_EQ(stack->size, 0)
     ASSERT_EQ(stack->top, stack->base)
+
+    ASSERT_EQ(kstack_free(stack), OK)
 }
 
 void should_kstack_peek_value() {
@@ -82,6 +87,8 @@ void should_kstack_peek_value() {
     ASSERT_EQ(kstack_peek(stack), 32)
     ASSERT_EQ(stack->size, 1)
     ASSERT_EQ(stack->top, stack->base + sizeof(uint32_t))
+
+    ASSERT_EQ(kstack_free(stack), OK)
 }
 
 void should_kstack_return_true_when_empty() {
@@ -98,6 +105,8 @@ void should_kstack_return_true_when_empty() {
     ASSERT_EQ(stack->top, top)
 
     ASSERT_TRUE(kstack_is_empty(stack))
+
+    ASSERT_EQ(kstack_free(stack), OK)
 }
 
 void should_kstack_return_true_when_full() {
@@ -120,4 +129,6 @@ void should_kstack_return_true_when_full() {
     ASSERT_EQ(stack->size, DEFAULT_KERNEL_STACK_SIZE / 4)
 
     ASSERT_TRUE(kstack_is_full(stack))
+
+    ASSERT_EQ(kstack_free(stack), OK)
 }
