@@ -9,9 +9,9 @@ KernelStatus kstack_allocate(KernelStack *stack) {
     // 1. allocate stack memory block from virtual memory (heap), and align.
     void *addrOfHeap = kheap_alloc(DEFAULT_KERNEL_STACK_SIZE + sizeof(KernelStack));
     stack = (KernelStack *) addrOfHeap;
-    stack->size = DEFAULT_KERNEL_STACK_SIZE;
+    stack->size = 0;
     stack->base = (VirtualAddress) (addrOfHeap + sizeof(KernelStack));
-    stack->top = stack->base + stack->size;
+    stack->top = stack->base;
     return OK;
 }
 
@@ -23,31 +23,37 @@ KernelStatus kstack_free(KernelStack *stack) {
 }
 
 KernelStatus kstack_push(KernelStack *stack, uint32_t data) {
-    // todo:
+    if (kstack_is_full(stack)) {
+        return ERROR;
+    }
+    stack->top = stack->top + sizeof(uint32_t);
+    *(uint32_t *) (stack->top) = data;
     return OK;
 }
 
 uint32_t kstack_pop(KernelStack *stack) {
-    // todo:
-    return 0;
+    if (kstack_is_empty(stack)) {
+        return ERROR;
+    }
+    uint32_t val = *(uint32_t *) (stack->top);
+    stack->top = stack->top - sizeof(uint32_t);
+    return val;
 }
 
 uint32_t kstack_peek(KernelStack *stack) {
-    // todo:
-    return 0;
+    return *(uint32_t *) (stack->top);
 }
 
 bool kstack_is_empty(KernelStack *stack) {
-    // todo:
-    return true;
+    return stack->top == stack->base;
 }
 
 bool kstack_is_full(KernelStack *stack) {
-    // todo:
-    return true;
+    return stack->top == stack->base + DEFAULT_KERNEL_STACK_SIZE;
 }
 
 KernelStatus kstack_clear(KernelStack *stack) {
-    // todo:
+    stack->size = 0;
+    stack->top = stack->base;
     return OK;
 }
