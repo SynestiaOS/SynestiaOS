@@ -24,4 +24,16 @@ KernelStatus kstack_allocate(KernelStack *stack);
 
 KernelStatus kstack_free(KernelStack *stack);
 
+KernelStatus kstack_push(KernelStack *stack, uint32_t data);
+
+uint32_t kstack_pop(KernelStack *stack);
+
+uint32_t kstack_peek(KernelStack *stack);
+
+bool kstack_is_empty(KernelStack *stack);
+
+bool kstack_is_full(KernelStack *stack);
+
+KernelStatus kstack_clear(KernelStack *stack);
+
 #endif //__KERNEL_KSTACK_H__
