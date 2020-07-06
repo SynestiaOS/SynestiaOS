@@ -9,6 +9,7 @@ KernelStatus kstack_allocate(KernelStack *stack) {
     // 1. allocate stack memory block from virtual memory (heap), and align.
     void *addrOfHeap = kheap_alloc(DEFAULT_KERNEL_STACK_SIZE + sizeof(KernelStack));
     stack = (KernelStack *) addrOfHeap;
+    stack->virtualMemoryAddress = addrOfHeap;
     stack->size = 0;
     stack->base = (VirtualAddress) (addrOfHeap + sizeof(KernelStack));
     stack->top = stack->base;
@@ -28,6 +29,7 @@ KernelStatus kstack_push(KernelStack *stack, uint32_t data) {
     }
     stack->top = stack->top + sizeof(uint32_t);
     *(uint32_t *) (stack->top) = data;
+    stack->size += 1;
     return OK;
 }
 
@@ -37,6 +39,7 @@ uint32_t kstack_pop(KernelStack *stack) {
     }
     uint32_t val = *(uint32_t *) (stack->top);
     stack->top = stack->top - sizeof(uint32_t);
+    stack->size -= 1;
     return val;
 }
 
