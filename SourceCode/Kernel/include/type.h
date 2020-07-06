@@ -17,7 +17,7 @@
 #define nullptr (void*)0
 
 
-typedef enum kernel_status {
+typedef enum KernelStatus {
     OK = 0,
     ERROR,
 } KernelStatus;

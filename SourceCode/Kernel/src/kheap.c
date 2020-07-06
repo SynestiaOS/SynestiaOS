@@ -11,6 +11,8 @@ static heap_free_func heapFreeFunc = nullptr;
 static HeapArea *usingListHead;
 static HeapArea *freeListHead;
 
+#define ALL_PHYSICAL_MEM_SIZE 0xFFFFFFFF
+
 void default_heap_alloc_func(void *ptr, uint32_t size) {
     printf("[Heap] alloc %d bytes at %d\n", size, (uint32_t) ptr);
 }
@@ -29,13 +31,13 @@ void kheap_set_free_callback(heap_free_func callback) {
 }
 
 KernelStatus kheap_init() {
-    uint32_t heap_address = &__heap_begin;
+    uint32_t heap_address = (uint32_t) &__heap_begin;
     freeListHead = (HeapArea *) heap_address;
     freeListHead->size = 0;
     freeListHead->list.prev = nullptr;
 
-    HeapArea *freeArea = heap_address + sizeof(HeapArea);
-    freeArea->size = (0xFFFFFFFF - (uint32_t) (char *) heap_address - 2 * sizeof(HeapArea)); // all memory
+    HeapArea *freeArea = (HeapArea *) (heap_address + sizeof(HeapArea));
+    freeArea->size = (ALL_PHYSICAL_MEM_SIZE - (uint32_t) (char *) heap_address - 2 * sizeof(HeapArea)); // all memory
     freeListHead->list.next = &freeArea->list;
     freeArea->list.next = nullptr;
     freeArea->list.prev = &freeListHead->list;
@@ -56,7 +58,7 @@ void *kheap_alloc(uint32_t size) {
             uint32_t newFreeHeapAreaAddress = (uint32_t) (void *) currentFreeArea + sizeof(HeapArea) + size;
             uint32_t restSize = currentFreeArea->size - allocSize;
 
-            HeapArea *newFreeArea = newFreeHeapAreaAddress;
+            HeapArea *newFreeArea = (HeapArea *) newFreeHeapAreaAddress;
             newFreeArea->size = restSize;
 
 
@@ -119,8 +121,8 @@ void *kernel_heap_realloc(void *ptr, uint32_t size) {
 
 KernelStatus kheap_free(void *ptr) {
     // 1. get HeapArea address
-    uint32_t address = ptr - sizeof(HeapArea);
-    HeapArea *currentArea = address;
+    uint32_t address = (uint32_t) (ptr - sizeof(HeapArea));
+    HeapArea *currentArea = (HeapArea *) address;
 
     // 2. unlink from using list
     if (currentArea->list.prev != nullptr) {

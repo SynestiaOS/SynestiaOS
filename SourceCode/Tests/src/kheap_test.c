@@ -5,11 +5,13 @@
 #include <kheap_test.h>
 #include <tests_lib.h>
 #include <stdbool.h>
+#include <kheap.h>
 
 
 void should_kheap_init() {
-    //todo:
-    ASSERT_TRUE(false)
+    KernelStatus heapInitStatus = kheap_init();
+
+    ASSERT_EQ(heapInitStatus,OK)
 }
 
 void should_kheap_set_alloc_callback() {
