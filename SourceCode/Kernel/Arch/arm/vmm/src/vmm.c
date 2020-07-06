@@ -51,6 +51,7 @@ void map_kernel_l1pt(uint64_t l1ptPhysicalAddress, uint64_t l2ptPhysicalAddress)
     kernelVMML1PT = (L1PT *) l1ptPhysicalAddress;
     kernelVMML1PT->pte[0].valid = 1;
     kernelVMML1PT->pte[0].table = 1;
+    kernelVMML1PT->pte[0].af = 1;
     kernelVMML1PT->pte[0].base = (uint32_t) l2ptPhysicalAddress >> VA_OFFSET;
 }
 
@@ -59,6 +60,7 @@ void map_kernel_l2pt(uint64_t l2ptPhysicalAddress, uint64_t ptPhysicalAddress) {
     for (uint32_t i = 0; i < KERNEL_PTE_NUMBER; i++) {
         kernelVMML2PT->pte[i].valid = 1;
         kernelVMML2PT->pte[i].table = 1;
+        kernelVMML2PT->pte[i].af = 1;
         kernelVMML2PT->pte[i].base = (uint64_t) (ptPhysicalAddress + i * KERNEL_PTE_NUMBER * sizeof(PTE)) >> VA_OFFSET;
     }
 }
@@ -71,6 +73,7 @@ void map_kernel_pt(uint64_t ptPhysicalAddress) {
             uint64_t physicalPageNumber = vmm_alloc_page();
             kernelVMMPT->pte[index].valid = 1;
             kernelVMMPT->pte[index].table = 1;
+            kernelVMMPT->pte[index].af = 1;
             kernelVMMPT->pte[index].base = ((KERNEL_PHYSICAL_START + physicalPageNumber * PAGE_SIZE) & 0x000FFFFF000) >> VA_OFFSET;
             // todo: other page table entry option bits
             index++;
@@ -107,13 +110,13 @@ void vmm_init() {
 
 
 void vmm_enable() {
-    write_ttbcr(CONFIG_ARM_LPAE << 31 | 0 << 16 | 0 << 0);
+    write_ttbcr(CONFIG_ARM_LPAE << 31);
     printf("[vmm]: ttbcr writed\n");
 
     write_ttbr0((uint32_t) kernelVMML1PT);
     printf("[vmm]: ttbr0 writed\n");
 
-    write_dacr(0x5);
+    write_dacr(0x55555555);
     printf("[vmm]: dacr writed\n");
 
     mmu_enable();
