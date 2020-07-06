@@ -35,6 +35,7 @@ Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uin
     KernelStatus kernelStackAllocateState = kstack_allocate(kernelStack);
     if (kernelStack != nullptr && kernelStackAllocateState != ERROR) {
         // 1. init kernel stack
+        kstack_clear(kernelStack);
         kstack_push(kernelStack, 0x14141414);   // R14
         kstack_push(kernelStack, kernelStack->virtualMemoryAddress);   // R13
         kstack_push(kernelStack, 0x12121212);   // R12
@@ -81,6 +82,7 @@ Thread *thread_create_idle_thread(uint32_t cpuNum) {
     KernelStatus kernelStackAllocateState = kstack_allocate(kernelStack);
     if (kernelStack != nullptr && kernelStackAllocateState != ERROR) {
         // 1. init kernel stack
+        kstack_clear(kernelStack);
         kstack_push(kernelStack, 0x14141414);   // R14
         kstack_push(kernelStack, kernelStack->virtualMemoryAddress);   // R13
         kstack_push(kernelStack, 0x12121212);   // R12
@@ -142,6 +144,7 @@ KernelStatus init_thread_struct(Thread *thread, const char *name) {
     KernelStatus kernelStackAllocateState = kstack_allocate(kernelStack);
     if (kernelStack != nullptr && kernelStackAllocateState != ERROR) {
         // 1. init kernel stack
+        kstack_clear(kernelStack);
         kstack_push(kernelStack, 0x14141414);   // R14
         kstack_push(kernelStack, kernelStack->virtualMemoryAddress);   // R13
         kstack_push(kernelStack, 0x12121212);   // R12
