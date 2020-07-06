@@ -97,6 +97,7 @@ void map_kernel_mm() {
 }
 
 void vmm_init() {
+    mmu_disable();
     map_kernel_mm();
 
     /**
@@ -107,7 +108,6 @@ void vmm_init() {
 
     vmm_enable();
 }
-
 
 void vmm_enable() {
     write_ttbcr(CONFIG_ARM_LPAE << 31);

@@ -51,6 +51,7 @@ SECTIONS
     __sys_stack = .;
 
     __end_stack = .;
+    . = ALIGN(4096);
 
     __PAGE_TABLE = .;
     . = 0x805000 + __PAGE_TABLE;

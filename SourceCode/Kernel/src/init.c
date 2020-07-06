@@ -21,7 +21,7 @@ void print_splash() {
 
 void kernel_main(void) {
 
-    __run_tests();
+//    __run_tests();
 
     print_splash();
 
@@ -29,11 +29,11 @@ void kernel_main(void) {
 
     init_bsp();
 
-    schd_init();
-    
-    schd_switch_to(thread_create_idle_thread(0));
-
     vmm_init();
+
+    schd_init();
+
+    schd_switch_to(thread_create_idle_thread(0));
 
     /**
      * swi test
