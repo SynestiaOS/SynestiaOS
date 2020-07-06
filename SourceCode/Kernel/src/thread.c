@@ -113,8 +113,11 @@ Thread *thread_create_idle_thread(uint32_t cpuNum) {
         strcpy(idleThread->name, "idle");
 
         // todo : other properties, like list
+
+        printf("[Thread] Idle thread created.\n");
         return idleThread;
     }
+    printf("[Thread] Idle thread create failed.\n");
     return nullptr;
 }
 

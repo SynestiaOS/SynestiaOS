@@ -5,6 +5,7 @@
 #include <sched.h>
 #include <kqueue.h>
 #include <percpu.h>
+#include <stdlib.h>
 
 KernelStatus schd_init() {
 
@@ -18,6 +19,8 @@ KernelStatus schd_init() {
             preCpu->idleThread = thread_create_idle_thread(i);
         }
     }
+
+    printf("[Schd] Schd inited.\n");
     return OK;
 }
 
@@ -42,8 +45,8 @@ KernelStatus schd_preempt(void) {
     return OK;
 }
 
-KernelStatus schd_switch_to(Thread *thread){
-
+KernelStatus schd_switch_to(Thread *thread) {
+    printf("[SC] switch to:%s.\n", thread->name);
     // todo:
     return OK;
 }

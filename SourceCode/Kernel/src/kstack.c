@@ -4,10 +4,15 @@
 #include <kstack.h>
 #include <kheap.h>
 #include <stdbool.h>
+#include <stdlib.h>
 
 KernelStatus kstack_allocate(KernelStack *stack) {
     // 1. allocate stack memory block from virtual memory (heap), and align.
     void *addrOfHeap = kheap_alloc(DEFAULT_KERNEL_STACK_SIZE + sizeof(KernelStack));
+    if (addrOfHeap == nullptr) {
+        printf("[KStack] kStack allocate failed.\n");
+        return ERROR;
+    }
     stack = (KernelStack *) addrOfHeap;
     stack->virtualMemoryAddress = addrOfHeap + sizeof(KernelStack) + DEFAULT_KERNEL_STACK_SIZE;
     stack->size = 0;

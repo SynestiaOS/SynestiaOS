@@ -4,6 +4,7 @@
 #include <kheap.h>
 #include <vmm.h>
 #include <tests.h>
+#include <sched.h>
 
 void print_splash() {
     const char *str = "   _____                       _   _       \n"
@@ -27,6 +28,10 @@ void kernel_main(void) {
     init_interrupt();
 
     init_bsp();
+
+    schd_init();
+    
+    schd_switch_to(thread_create_idle_thread(0));
 
     vmm_init();
 
