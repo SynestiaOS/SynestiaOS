@@ -12,7 +12,7 @@ void should_kstack_create() {
 
     ASSERT_EQ(stack->size, 0)
 
-    VirtualAddress base = (VirtualAddress) ((void *) stack + sizeof(KernelStack));
+    VirtualAddress base = (VirtualAddress) ((void *) stack + sizeof(KernelStack) + DEFAULT_KERNEL_STACK_SIZE);
     ASSERT_EQ(stack->base, base)
 
     VirtualAddress top = stack->base;
@@ -28,7 +28,7 @@ void should_kstack_push_value() {
 
     ASSERT_EQ(stack->size, 0)
 
-    VirtualAddress base = (VirtualAddress) ((void *) stack + sizeof(KernelStack));
+    VirtualAddress base = (VirtualAddress) ((void *) stack + sizeof(KernelStack) + DEFAULT_KERNEL_STACK_SIZE);
     ASSERT_EQ(stack->base, base)
 
     VirtualAddress top = stack->base;
@@ -38,7 +38,7 @@ void should_kstack_push_value() {
     ASSERT_EQ(pushStatus, OK)
     ASSERT_EQ(kstack_peek(stack), 32)
     ASSERT_EQ(stack->size, 1)
-    ASSERT_EQ(stack->top, stack->base + sizeof(uint32_t))
+    ASSERT_EQ(stack->top, stack->base - sizeof(uint32_t))
 
     ASSERT_EQ(kstack_free(stack), OK)
 }
@@ -50,7 +50,7 @@ void should_kstack_pop_value() {
 
     ASSERT_EQ(stack->size, 0)
 
-    VirtualAddress base = (VirtualAddress) ((void *) stack + sizeof(KernelStack));
+    VirtualAddress base = (VirtualAddress) ((void *) stack + sizeof(KernelStack) + DEFAULT_KERNEL_STACK_SIZE);
     ASSERT_EQ(stack->base, base)
 
     VirtualAddress top = stack->base;
@@ -60,7 +60,7 @@ void should_kstack_pop_value() {
     ASSERT_EQ(pushStatus, OK)
     ASSERT_EQ(kstack_peek(stack), 32)
     ASSERT_EQ(stack->size, 1)
-    ASSERT_EQ(stack->top, stack->base + sizeof(uint32_t))
+    ASSERT_EQ(stack->top, stack->base - sizeof(uint32_t))
 
     ASSERT_EQ(kstack_pop(stack), 32)
     ASSERT_EQ(stack->size, 0)
@@ -76,7 +76,7 @@ void should_kstack_peek_value() {
 
     ASSERT_EQ(stack->size, 0)
 
-    VirtualAddress base = (VirtualAddress) ((void *) stack + sizeof(KernelStack));
+    VirtualAddress base = (VirtualAddress) ((void *) stack + sizeof(KernelStack) + DEFAULT_KERNEL_STACK_SIZE);
     ASSERT_EQ(stack->base, base)
 
     VirtualAddress top = stack->base;
@@ -86,7 +86,7 @@ void should_kstack_peek_value() {
     ASSERT_EQ(pushStatus, OK)
     ASSERT_EQ(kstack_peek(stack), 32)
     ASSERT_EQ(stack->size, 1)
-    ASSERT_EQ(stack->top, stack->base + sizeof(uint32_t))
+    ASSERT_EQ(stack->top, stack->base - sizeof(uint32_t))
 
     ASSERT_EQ(kstack_free(stack), OK)
 }
@@ -98,7 +98,7 @@ void should_kstack_return_true_when_empty() {
 
     ASSERT_EQ(stack->size, 0)
 
-    VirtualAddress base = (VirtualAddress) ((void *) stack + sizeof(KernelStack));
+    VirtualAddress base = (VirtualAddress) ((void *) stack + sizeof(KernelStack) + DEFAULT_KERNEL_STACK_SIZE);
     ASSERT_EQ(stack->base, base)
 
     VirtualAddress top = stack->base;
@@ -116,7 +116,7 @@ void should_kstack_return_true_when_full() {
 
     ASSERT_EQ(stack->size, 0)
 
-    VirtualAddress base = (VirtualAddress) ((void *) stack + sizeof(KernelStack));
+    VirtualAddress base = (VirtualAddress) ((void *) stack + sizeof(KernelStack) + DEFAULT_KERNEL_STACK_SIZE);
     ASSERT_EQ(stack->base, base)
 
     VirtualAddress top = stack->base;
