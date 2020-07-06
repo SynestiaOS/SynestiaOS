@@ -30,6 +30,8 @@ void __assert_func_success(const char *file, int line, const char *func, const c
     )
 
 #define TEST_SUIT(text, func)                           \
+    __test_all_asserts = 0;                             \
+    __test_failed_asserts = 0;                          \
     printf("\n\033[32m[TEST] %s:\033[0m\n",text);       \
     func();
 
