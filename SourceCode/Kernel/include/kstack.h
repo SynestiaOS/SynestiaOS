@@ -13,8 +13,8 @@
 typedef uint32_t VirtualAddress;
 
 typedef struct KernelStack {
-    VirtualAddress base;
     uint32_t size;
+    VirtualAddress base;
     VirtualAddress top;
     void *virtualMemoryAddress;
 } __attribute__((packed)) KernelStack;

@@ -7,8 +7,11 @@
 
 KernelStatus kstack_allocate(KernelStack *stack) {
     // 1. allocate stack memory block from virtual memory (heap), and align.
-    stack = (KernelStack *) kheap_alloc(DEFAULT_KERNEL_STACK_SIZE + sizeof(KernelStack));
+    void *addrOfHeap = kheap_alloc(DEFAULT_KERNEL_STACK_SIZE + sizeof(KernelStack));
+    stack = (KernelStack *) addrOfHeap;
     stack->size = DEFAULT_KERNEL_STACK_SIZE;
+    stack->base = (VirtualAddress) (addrOfHeap + sizeof(KernelStack));
+    stack->top = stack->base + stack->size;
     return OK;
 }
 
