@@ -4,23 +4,16 @@
 #include <tests_lib.h>
 #include <tests.h>
 #include <kstack_test.h>
+#include <kheap_test.h>
+#include <klist_test.h>
 
-
-void should_kheap_init();
-
-void should_kheap_set_alloc_callback();
-
-void should_kheap_set_free_callback();
-
-void should_kheap_alloc();
-
-void should_kheap_calloc();
-
-void should_kheap_realloc();
-
-void should_kheap_free();
 
 void __run_tests() {
+
+    TEST_SUIT("should_klist_insert", should_klist_insert)
+    TEST_SUIT("should_klist_remove_node", should_klist_remove_node)
+    TEST_SUIT("should_return_klist_size", should_return_klist_size)
+
     TEST_SUIT("should_kstack_create", should_kstack_create)
     TEST_SUIT("should_kstack_push_value", should_kstack_push_value)
     TEST_SUIT("should_kstack_pop_value", should_kstack_pop_value)
