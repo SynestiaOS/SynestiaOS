@@ -7,6 +7,7 @@
 #include <sched.h>
 #include <gpu.h>
 #include <gfx2d.h>
+#include <gui_button.h>
 
 void print_splash() {
     const char *str = "   _____                       _   _       \n"
@@ -57,13 +58,19 @@ void draw_chess_board() {
     }
 
     gfx_fill_triangle(0, 0, 0, 150, 150, 0, 0x00FF00FF);
-    gfx_draw_ascii(20, 20, 'C', 0x0000FF00);
-    gfx_draw_ascii(30, 20, 'h', 0x0000FF00);
-    gfx_draw_ascii(40, 20, 'e', 0x0000FF00);
-    gfx_draw_ascii(50, 20, 's', 0x0000FF00);
-    gfx_draw_ascii(60, 20, 's', 0x0000FF00);
-
     gfx_fill_triangle(1024 - 150, 0, 1024, 0, 1024, 150, 0x00FF00FF);
+
+    GUIButton guiStartButton;
+    gui_button(&guiStartButton, 934, 10, "Re Boot");
+    gui_draw_button(&guiStartButton);
+
+    GUIButton guiShutDownButton;
+    gui_button(&guiShutDownButton, 934, 30, "Shut Down");
+    gui_draw_button(&guiShutDownButton);
+
+    GUIButton synestiaOSButton;
+    gui_button(&synestiaOSButton, 10, 10, "[SynestiaOS]");
+    gui_draw_button(&synestiaOSButton);
 }
 
 void kernel_main(void) {
