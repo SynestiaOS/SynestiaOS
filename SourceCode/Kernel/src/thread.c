@@ -82,7 +82,7 @@ Thread *thread_create_idle_thread(uint32_t cpuNum) {
     if (kernelStack != nullptr && kernelStack != nullptr) {
         // 1. init kernel stack
         kstack_clear(kernelStack);
-        kstack_push(kernelStack, 0x14141414);   // R14
+        kstack_push(kernelStack, idle_thread_routine);   // R14
         kstack_push(kernelStack, kernelStack->virtualMemoryAddress);   // R13
         kstack_push(kernelStack, 0x12121212);   // R12
         kstack_push(kernelStack, 0x11111111);   // R11
@@ -147,6 +147,7 @@ KernelStatus init_thread_struct(Thread *thread, const char *name) {
     if (kernelStack != nullptr && kernelStack != nullptr) {
         // 1. init kernel stack
         kstack_clear(kernelStack);
+        kstack_push(kernelStack, 0x15151515);
         kstack_push(kernelStack, 0x14141414);   // R14
         kstack_push(kernelStack, kernelStack->virtualMemoryAddress);   // R13
         kstack_push(kernelStack, 0x12121212);   // R12

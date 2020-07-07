@@ -28,20 +28,14 @@ void kernel_main(void) {
 
     kheap_init(); // this is just for test
     __run_tests();
-    kheap_init(); // reset heap area after test
+
+    kheap_init();
 
     gpu_init();
-
-    gpu_putc('H');
-    gpu_putc('H');
-    gpu_putc('H');
-    gpu_putc('H');
-    gpu_putc('H');
 
     init_interrupt();
 
     init_bsp();
-
 
     schd_init();
 

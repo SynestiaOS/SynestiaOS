@@ -6,6 +6,9 @@
 #include <kqueue.h>
 #include <percpu.h>
 #include <stdlib.h>
+#include <interrupt.h>
+
+Thread *currentThread = nullptr;
 
 KernelStatus schd_init() {
 
@@ -51,7 +54,24 @@ KernelStatus schd_switch_to(Thread *thread) {
         return ERROR;
     }
     printf("[SC] switch to: %s.\n", thread->name);
-    // todo:
+
+//    void *sp;
+    disable_interrupt();
+
+//    cpu_switch_to(currentThread, thread);
+
+//    if (currentThread != nullptr) {
+//        currentThread->stack = sp;
+//    }
+//    sp = thread->stack;
+//
+//
+//    currentThread = thread;
+//    currentThread->threadStatus = THREAD_READY;
+//    currentThread->threadStatus = THREAD_RUNNING;
+
+    enable_interrupt();
+
     return OK;
 }
 

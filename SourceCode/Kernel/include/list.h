@@ -8,6 +8,7 @@
 #include <stdint.h>
 #include <type.h>
 
+#define offsetOf(type, member) (char *)(&(((type *)0)->member))
 #define getNode(ptr, type, member)((type *)((char *)(ptr) - (char *)(&(((type *)0)->member))))
 
 typedef struct ListNode {

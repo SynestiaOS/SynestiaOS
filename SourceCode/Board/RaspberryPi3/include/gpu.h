@@ -18,7 +18,7 @@ typedef struct pixel {
 
 void gpu_init(void);
 
-void write_pixel(uint32_t x, uint32_t y, const pixel_t *pixel);
+void gpu_write_pixel(uint32_t x, uint32_t y, const pixel_t *pixel);
 
 void gpu_putc(char c);
 

@@ -10,20 +10,24 @@
 #define COLORDEPTH 24
 #define BYTES_PER_PIXEL COLORDEPTH/8
 
-typedef struct framebuffer_info {
-    uint32_t width;
+typedef struct {
+    uint32_t magic;
+    uint32_t version;
+    uint32_t headersize;
+    uint32_t flags;
+    uint32_t numglyph;
+    uint32_t bytesperglyph;
     uint32_t height;
-    uint32_t pitch;
-    void *buf;
-    uint32_t buf_size;
-    uint32_t chars_width;
-    uint32_t chars_height;
-    uint32_t chars_x;
-    uint32_t chars_y;
-} framebuffer_info_t;
+    uint32_t width;
+    unsigned char glyphs;
+} __attribute__((packed)) psf_t;
 
-framebuffer_info_t fbinfo;
+extern volatile unsigned char _binary_src_font_font_psf_start;
 
 int framebuffer_init(void);
+
+void framebuffer_draw_pixel(uint32_t x, uint32_t y, char r, char g, char b);
+
+void framebuffer_clear(uint32_t color);
 
 #endif //__BOARD_RASP3_FRAMEBUFFER_H__

@@ -4,126 +4,81 @@
 
 #include <mailbox.h>
 #include <stdlib.h>
-#include <kheap.h>
+#include <stdbool.h>
 
-mail_message_t mailbox_read(int channel) {
-    mail_status_t stat;
-    mail_message_t res;
+volatile uint32_t  __attribute__((aligned(16))) mailbox[36];
 
-    // Make sure that the message is from the right channel
-    do {
-        // Make sure there is mail to recieve
-        do {
-            stat = *MAIL0_STATUS;
-        } while (stat.empty);
+#define VIDEOCORE_MBOX  PERIPHERAL_BASE + MAILBOX_OFFSET
+#define MBOX_READ       ((volatile uint32_t*)(VIDEOCORE_MBOX+0x0))
+#define MBOX_POLL       ((volatile uint32_t*)(VIDEOCORE_MBOX+0x10))
+#define MBOX_SENDER     ((volatile uint32_t*)(VIDEOCORE_MBOX+0x14))
+#define MBOX_STATUS     ((volatile uint32_t*)(VIDEOCORE_MBOX+0x18))
+#define MBOX_CONFIG     ((volatile uint32_t*)(VIDEOCORE_MBOX+0x1C))
+#define MBOX_WRITE      ((volatile uint32_t*)(VIDEOCORE_MBOX+0x20))
+#define MBOX_RESPONSE   0x80000000
+#define MBOX_FULL       0x80000000
+#define MBOX_EMPTY      0x40000000
 
-        // Get the message
-        res = *MAIL0_READ;
-    } while (res.channel != channel);
+struct __attribute__((__packed__, aligned(4))) mbox_registers {
+    const volatile uint32_t read_0; // 0x00         Read data from VC to ARM
+    uint32_t unused[3];             // 0x04-0x0F
+    volatile uint32_t peek_0;       // 0x10
+    volatile uint32_t sender_0;     // 0x14
+    volatile uint32_t status_0;     // 0x18         Status of VC to ARM
+    volatile uint32_t config0;      // 0x1C
+    volatile uint32_t write_1;      // 0x20         Write data from ARM to VC
+    uint32_t unused_2[3];           // 0x24-0x2F
+    volatile uint32_t peek_1;       // 0x30
+    volatile uint32_t sender_1;     // 0x34
+    volatile uint32_t status_1;     // 0x38         Status of ARM to VC
+    volatile uint32_t config_1;     // 0x3C
+};
 
-    return res;
-}
+_Static_assert((sizeof(struct mbox_registers) == 0x40), "Structure MailBoxRegisters should be 0x40 bytes in size");
 
-void mailbox_send(mail_message_t msg, int channel) {
-    mail_status_t stat;
-    msg.channel = channel;
-
-
-    // Make sure you can send mail
-    do {
-        stat = *MAIL0_STATUS;
-    } while (stat.full);
-
-    // send the message
-    *MAIL0_WRITE = msg;
-}
+#define MAILBOX_FOR_READ_WRITES ((volatile __attribute__((aligned(4))) struct mbox_registers*)(uint32_t *)(PERIPHERAL_BASE + 0xB880))
 
 /**
- * returns the max of the size of the request and result buffer for each tag
+ * Make a mailbox call. Returns 0 on failure, non-zero on success
  */
-static uint32_t get_value_buffer_len(property_message_tag_t *tag) {
-    switch (tag->proptag) {
-        case FB_ALLOCATE_BUFFER:
-        case FB_GET_PHYSICAL_DIMENSIONS:
-        case FB_SET_PHYSICAL_DIMENSIONS:
-        case FB_GET_VIRTUAL_DIMENSIONS:
-        case FB_SET_VIRTUAL_DIMENSIONS:
-            return 8;
-        case FB_GET_BITS_PER_PIXEL:
-        case FB_SET_BITS_PER_PIXEL:
-        case FB_GET_BYTES_PER_ROW:
-            return 4;
-        case FB_RELESE_BUFFER:
-        default:
-            return 0;
+int32_t mailbox_call(uint8_t ch) {
+    uint32_t r;
+    /* wait until we can write to the mailbox */
+    do { asm volatile("nop"); } while (*MBOX_STATUS & MBOX_FULL);
+    /* write the address of our message to the mailbox with channel identifier */
+    *MBOX_WRITE = (((uint32_t) ((uint64_t) &mailbox) & ~0xF) | (ch & 0xF));
+    /* now wait for the response */
+    while (1) {
+        /* is there a response? */
+        do { asm volatile("nop"); } while (*MBOX_STATUS & MBOX_EMPTY);
+        r = *MBOX_READ;
+        /* is it a response to our message? */
+        if ((unsigned char) (r & 0xF) == ch && (r & ~0xF) == (uint32_t) ((uint64_t) &mailbox))
+            /* is it a valid successful response? */
+            return mailbox[1] == MBOX_RESPONSE;
     }
+    return 0;
 }
 
-int send_messages(property_message_tag_t *tags) {
-    property_message_buffer_t *msg;
-    mail_message_t mail;
-    uint32_t bufsize = 0;
-    uint32_t i = 0;
-    uint32_t len = 0;
-    uint32_t bufpos = 0;
+bool mailbox_tag_write(uint32_t message) {
+    uint32_t value;    // Temporary read value
+    message &= ~(0xF); // Make sure 4 low channel bits are clear
+    message |= 0x8; // OR the channel bits to the value
+    do {
+        value = MAILBOX_FOR_READ_WRITES->status_1; // Read mailbox1 status from GPU
+    } while ((value & MAIL_FULL) != 0); // Make sure arm mailbox is not full
+    MAILBOX_FOR_READ_WRITES->write_1 = message; // Write value to mailbox
+    return true; // Write success
+}
 
-    // Calculate the sizes of each tag
-    for (i = 0; tags[i].proptag != NULL_TAG; i++) {
-        bufsize += get_value_buffer_len(&tags[i]) + 3 * sizeof(uint32_t);
-    }
-
-    // Add the buffer size, buffer request/response code and buffer end tag sizes
-    bufsize += 3 * sizeof(uint32_t);
-
-    // buffer size must be 16 byte aligned
-    bufsize += (bufsize % 16) ? 16 - (bufsize % 16) : 0;
-
-    msg = kheap_alloc(bufsize);
-    if (!msg) {
-        return -1;
-    }
-
-    msg->size = bufsize;
-    msg->req_res_code = REQUEST;
-
-    // Copy the messages into the buffer
-    for (i = 0, bufpos = 0; tags[i].proptag != NULL_TAG; i++) {
-        len = get_value_buffer_len(&tags[i]);
-        msg->tags[bufpos++] = tags[i].proptag;
-        msg->tags[bufpos++] = len;
-        msg->tags[bufpos++] = 0;
-        memcpy(msg->tags + bufpos, &tags[i].value_buffer, len);
-        bufpos += len / 4;
-    }
-
-    msg->tags[bufpos] = 0;
-
-    // Send the message
-    mail.data = ((uint32_t) msg) >> 4;
-
-    mailbox_send(mail, PROPERTY_CHANNEL);
-    mail = mailbox_read(PROPERTY_CHANNEL);
-
-
-    if (msg->req_res_code == REQUEST) {
-        kheap_free(msg);
-        return 1;
-    }
-    // Check the response code
-    if (msg->req_res_code == RESPONSE_ERROR) {
-        kheap_free(msg);
-        return 2;
-    }
-
-
-    // Copy the tags back into the array
-    for (i = 0, bufpos = 0; tags[i].proptag != NULL_TAG; i++) {
-        len = get_value_buffer_len(&tags[i]);
-        bufpos += 3; //skip over the tag bookkepping info
-        memcpy(&tags[i].value_buffer, msg->tags + bufpos, len);
-        bufpos += len / 4;
-    }
-
-    kheap_free(msg);
-    return 0;
+uint32_t mailbox_tag_read() {
+    uint32_t value;    // Temporary read value
+    do {
+        do {
+            value = MAILBOX_FOR_READ_WRITES->status_0; // Read mailbox0 status
+        } while ((value & MAIL_EMPTY) != 0); // Wait for data in mailbox
+        value = MAILBOX_FOR_READ_WRITES->read_0; // Read the mailbox
+    } while ((value & 0xF) != 0x8); // We have response back
+    value &= ~(0xF); // Lower 4 low channel bits are not part of message
+    return value; // Return the value
 }

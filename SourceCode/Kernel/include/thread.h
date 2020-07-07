@@ -56,6 +56,20 @@ typedef enum ThreadStatus {
     THREAD_DEATH,
 } ThreadStatus;
 
+typedef struct CpuContextSave {
+    uint32_t r4;
+    uint32_t r5;
+    uint32_t r6;
+    uint32_t r7;
+    uint32_t r8;
+    uint32_t r9;
+    uint32_t sl;
+    uint32_t fp;
+    uint32_t sp;
+    uint32_t pc;
+    uint32_t extra[2];
+} __attribute__((packed)) CpuContextSave;
+
 typedef uint32_t (*ThreadStartRoutine)(void *arg);
 
 typedef struct VMMAssociatedSpace {
@@ -64,9 +78,10 @@ typedef struct VMMAssociatedSpace {
 
 typedef struct Thread {
     uint32_t magic;
+    CpuContextSave cpuContextSave;
+
     uint64_t pid;
     char name[THREAD_NAME_LENGTH];
-
     KernelStack *stack;
     ThreadStartRoutine entry;
     VMMAssociatedSpace vmmSpace;

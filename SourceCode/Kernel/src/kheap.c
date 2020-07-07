@@ -14,12 +14,12 @@ HeapArea *freeListHead;
 #define ALL_PHYSICAL_MEM_SIZE 0xFFFFFFFF
 
 void default_heap_alloc_func(void *ptr, uint32_t size) {
-    printf("[Heap] alloc %d bytes at %d\n", size, (uint32_t) ptr);
+    printf("[Heap] alloc %d bytes at %d.\n", size, (uint32_t) ptr);
 }
 
 void default_heap_free_func(void *ptr) {
     HeapArea *heap = (HeapArea *) (ptr - sizeof(HeapArea));
-    printf("[Heap] free %d bytes at %d\n", heap->size, (uint32_t) ptr);
+    printf("[Heap] free %d bytes at %d.\n", heap->size, (uint32_t) ptr);
 }
 
 void kheap_set_alloc_callback(heap_alloc_func callback) {
@@ -31,6 +31,9 @@ void kheap_set_free_callback(heap_free_func callback) {
 }
 
 KernelStatus kheap_init() {
+    kheap_set_alloc_callback(default_heap_alloc_func);
+    kheap_set_free_callback(default_heap_free_func);
+
     uint32_t heap_address = (uint32_t) &__HEAP_BEGIN;
     freeListHead = (HeapArea *) heap_address;
     freeListHead->size = 0;
