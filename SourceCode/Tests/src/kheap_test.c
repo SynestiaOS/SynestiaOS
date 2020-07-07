@@ -13,43 +13,6 @@ void should_kheap_init() {
     ASSERT_EQ(heapInitStatus, OK)
 }
 
-static uint32_t test_heap_alloc_size = 0;
-static uint32_t test_heap_free_size = 0;
-
-void test_heap_alloc_func(void *ptr, uint32_t size) {
-    test_heap_alloc_size += size;
-}
-
-void test_heap_free_func(void *ptr) {
-    HeapArea *heap = (HeapArea *) (ptr - sizeof(HeapArea));
-    test_heap_free_size += heap->size;
-}
-
-void should_kheap_set_alloc_callback() {
-    KernelStatus heapInitStatus = kheap_init();
-    ASSERT_EQ(heapInitStatus, OK)
-
-    test_heap_alloc_size = 0;
-    kheap_set_alloc_callback(test_heap_alloc_func);
-    void *pVoid = kheap_alloc(5);
-    ASSERT_NEQ(pVoid, nullptr)
-
-    // todo: it's incorrect
-    // ASSERT_EQ(test_heap_alloc_size, 5)
-}
-
-void should_kheap_set_free_callback() {
-    KernelStatus heapInitStatus = kheap_init();
-    ASSERT_EQ(heapInitStatus, OK)
-
-    test_heap_free_size = 0;
-    kheap_set_free_callback(test_heap_free_func);
-    kheap_free(kheap_alloc(2));
-
-    // todo: it's incorrect
-    // ASSERT_EQ(test_heap_free_size, 2)
-}
-
 void should_kheap_alloc() {
     KernelStatus heapInitStatus = kheap_init();
     ASSERT_EQ(heapInitStatus, OK)

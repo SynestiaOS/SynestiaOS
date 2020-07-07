@@ -10,6 +10,7 @@
 
 void __run_tests() {
     TEST_SUIT("should_klist_insert", should_klist_insert)
+    TEST_SUIT("should_klist_append", should_klist_append)
     TEST_SUIT("should_klist_remove_node", should_klist_remove_node)
     TEST_SUIT("should_klist_return_size", should_klist_return_size)
 
@@ -21,8 +22,6 @@ void __run_tests() {
     TEST_SUIT("should_kstack_return_true_when_full", should_kstack_return_true_when_full)
 
     TEST_SUIT("should_kheap_init", should_kheap_init)
-    TEST_SUIT("should_kheap_set_alloc_callback", should_kheap_set_alloc_callback)
-    TEST_SUIT("should_kheap_set_free_callback", should_kheap_set_free_callback)
     TEST_SUIT("should_kheap_alloc", should_kheap_alloc)
     TEST_SUIT("should_kheap_calloc", should_kheap_calloc)
     TEST_SUIT("should_kheap_realloc", should_kheap_realloc)

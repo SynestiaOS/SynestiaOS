@@ -30,13 +30,13 @@ void kernel_main(void) {
     __run_tests();
     kheap_init(); // reset heap area after test
 
-//    gpu_init();
+    gpu_init();
 
-//    gpu_putc('H');
-//    gpu_putc('H');
-//    gpu_putc('H');
-//    gpu_putc('H');
-//    gpu_putc('H');
+    gpu_putc('H');
+    gpu_putc('H');
+    gpu_putc('H');
+    gpu_putc('H');
+    gpu_putc('H');
 
     init_interrupt();
 
@@ -76,8 +76,5 @@ void kernel_main(void) {
     KernelStatus kernelHeapFreeStatus = kheap_free(testInt);
     if (kernelHeapFreeStatus != OK) {
         printf("[heap] kernel heap free failed.\n");
-    }
-    while (1) {
-        printf("[Kernel] started. \n", testInt[1]);
     }
 }

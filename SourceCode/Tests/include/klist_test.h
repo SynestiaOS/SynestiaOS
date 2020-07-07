@@ -8,6 +8,8 @@
 
 void should_klist_insert();
 
+void should_klist_append();
+
 void should_klist_remove_node();
 
 void should_klist_return_size();

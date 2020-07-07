@@ -129,11 +129,13 @@ KernelStatus kheap_free(void *ptr) {
     uint32_t address = (uint32_t) (ptr - sizeof(HeapArea));
     HeapArea *currentArea = (HeapArea *) address;
 
+
     // 2. unlink from using list
     if (currentArea->list.prev != nullptr) {
         currentArea->list.prev->next = currentArea->list.next;
     }
-    if (currentArea->list.next != nullptr) {
+
+    if (currentArea->list.next != nullptr && currentArea->list.prev != nullptr) {
         currentArea->list.next->prev = currentArea->list.prev;
     }
 

@@ -8,10 +8,6 @@
 
 void should_kheap_init();
 
-void should_kheap_set_alloc_callback();
-
-void should_kheap_set_free_callback();
-
 void should_kheap_alloc();
 
 void should_kheap_calloc();

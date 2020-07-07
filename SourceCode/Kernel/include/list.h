@@ -17,6 +17,8 @@ typedef struct ListNode {
 
 KernelStatus klist_insert(ListNode *list, ListNode *node);
 
+KernelStatus klist_append(ListNode *list, ListNode *node);
+
 ListNode *klist_remove_node(ListNode *node);
 
 uint32_t klist_size(ListNode *node);

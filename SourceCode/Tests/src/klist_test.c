@@ -23,6 +23,31 @@ void should_klist_insert() {
     ASSERT_EQ(newNode.prev, &list)
 }
 
+void should_klist_append() {
+    ListNode list;
+    list.prev = nullptr;
+    list.next = nullptr;
+
+    ListNode newNode;
+    newNode.prev = nullptr;
+    newNode.next = nullptr;
+
+    klist_insert(&list, &newNode);
+
+    ASSERT_EQ(list.next, &newNode)
+    ASSERT_EQ(newNode.prev, &list)
+
+    ListNode newNode2;
+    newNode2.prev = nullptr;
+    newNode2.next = nullptr;
+    klist_append(&list, &newNode2);
+
+    ASSERT_EQ(list.next, &newNode)
+    ASSERT_EQ(newNode.prev, &list)
+    ASSERT_EQ(newNode.next, &newNode2)
+    ASSERT_EQ(newNode2.prev, &newNode)
+}
+
 void should_klist_remove_node() {
     ListNode list;
     list.prev = nullptr;
