@@ -32,9 +32,9 @@ void gui_window(GUIWindow *window, uint32_t x, uint32_t y, const char *title) {
 
     Color colorFore;
     colorFore.a = 0x00;
-    colorFore.r = 0x00;
-    colorFore.g = 0x00;
-    colorFore.b = 0x00;
+    colorFore.r = 0xFF;
+    colorFore.g = 0xFF;
+    colorFore.b = 0xFF;
     window->conponent.foreground = colorFore;
 }
 
@@ -72,6 +72,27 @@ void gui_draw_window(GUIWindow *window) {
     }
 
     // 4. draw header button
+    gfx_fill_rect(
+            window->conponent.position.x + window->conponent.size.width - 24 * 3,
+            window->conponent.position.y + 4,
+            window->conponent.position.x + window->conponent.size.width - 24 * 3 + 16,
+            window->conponent.position.y + 4 + 16,
+            0x00FFFFFF
+    );
+    gfx_fill_rect(
+            window->conponent.position.x + window->conponent.size.width - 24 * 2,
+            window->conponent.position.y + 4,
+            window->conponent.position.x + window->conponent.size.width - 24 * 2 + 16,
+            window->conponent.position.y + 4 + 16,
+            0x00FFFFFF
+    );
+    gfx_fill_rect(
+            window->conponent.position.x + window->conponent.size.width - 24 * 1,
+            window->conponent.position.y + 4,
+            window->conponent.position.x + window->conponent.size.width - 24 * 1 + 16,
+            window->conponent.position.y + 4 + 16,
+            0x00FFFFFF
+    );
 
     // 5. draw border
     gfx_draw_rect(
