@@ -41,7 +41,7 @@ void draw_gui() {
     gui_draw_window(&window);
 }
 
-void kernel_main(void) {
+void kernel_main1(void) {
 
     print_splash();
 
