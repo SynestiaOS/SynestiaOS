@@ -26,16 +26,16 @@ void draw_chess_board() {
     gfx_fill(0, 0, 1024, 768, 0x00A86E3A);
 
     // top
-    gfx_fill(0, 0, 1024, 30, 0x00FFFFFF);
+    gfx_fill(0, 0, 1024, 30, 0x00FFFF00);
 
     // bottom
-    gfx_fill(0, 738, 1024, 768, 0x00FFFFFF);
+    gfx_fill(0, 738, 1024, 768, 0x00FFFF00);
 
     // left
-    gfx_fill(0, 0, 30, 768, 0x00FFFFFF);
+    gfx_fill(0, 0, 30, 768, 0x00FFFF00);
 
     // right
-    gfx_fill(994, 0, 1024, 768, 0x00FFFFFF);
+    gfx_fill(994, 0, 1024, 768, 0x00FFFF00);
 
     for (int i = 64; i < 1024; i += 64) {
         gfx_draw_line(i, 0, i, 768, 0x00FFFFFF);
@@ -55,6 +55,10 @@ void draw_chess_board() {
             }
         }
     }
+
+    gfx_fill_triangle(0, 0, 0, 150, 150, 0, 0x00FF00FF);
+
+    gfx_fill_triangle(1024 - 150, 0, 1024, 0, 1024, 150, 0x00FF00FF);
 }
 
 void kernel_main(void) {
@@ -71,9 +75,6 @@ void kernel_main(void) {
     gpu_init();
 
     draw_chess_board();
-
-//    gfx_draw_triangle(0, 0, 0, 300, 300, 0, 0x00FF00FF);
-    gfx_fill_triangle(0, 0, 0, 300, 300, 0, 0x00FF00FF);
 
     init_interrupt();
 

@@ -295,7 +295,8 @@ void gfx_fill_triangle(int x1, int y1, int x2, int y2, int x3, int y3, uint32_t 
             }
             if (changed1) {
                 break;
-            } else t1x += signx1;
+            }
+            t1x += signx1;
             if (i < dx1) {
                 i++;
             }
@@ -308,11 +309,14 @@ void gfx_fill_triangle(int x1, int y1, int x2, int y2, int x3, int y3, uint32_t 
                 e2 -= dx2;
                 if (changed2) {
                     t2xp = signx2;
-                } else goto next4;
+                } else {
+                    goto next4;
+                }
             }
             if (changed2) {
                 break;
-            } else t2x += signx2;
+            }
+            t2x += signx2;
         }
         next4:
 
