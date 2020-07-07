@@ -4,6 +4,7 @@
 
 #include <gfx2d.h>
 #include <stdbool.h>
+#include <font8bits.h>
 
 void gpu_write_pixel_color(uint32_t x, uint32_t y, uint32_t c);
 
@@ -376,7 +377,7 @@ void gfx_fill_circle(int xc, int yc, int r, uint32_t c) {
     int x = 0;
     int y = r;
     int p = 3 - 2 * r;
-    if (!r) { return; };
+    if (!r) { return; }
 
     while (y >= x) {
         // Modified to draw scan-lines instead of edges
@@ -392,3 +393,14 @@ void gfx_fill_circle(int xc, int yc, int r, uint32_t c) {
     }
 }
 
+
+void gfx_draw_ascii(int x, int y, uint8_t ch, uint32_t color) {
+    uint8_t *bitmap = font_8_bits(ch);
+    for (uint32_t i = 0; i < 8; i++) {
+        for (uint32_t j = 0; j < 8; j++) {
+            if ((bitmap[i] & (0x1 << j)) > 0) {
+                gpu_write_pixel_color(x + j, y + i, color);
+            }
+        }
+    }
+}

@@ -12,9 +12,13 @@ void gfx_fill(int x1, int y1, int x2, int y2, uint32_t c);
 void gfx_draw_line(int x1, int y1, int x2, int y2, uint32_t c);
 
 void gfx_draw_triangle(int x1, int y1, int x2, int y2, int x3, int y3, uint32_t c);
+
 void gfx_fill_triangle(int x1, int y1, int x2, int y2, int x3, int y3, uint32_t c);
 
 void gfx_draw_circle(int xc, int yc, int r, uint32_t c);
+
 void gfx_fill_circle(int xc, int yc, int r, uint32_t c);
+
+void gfx_draw_ascii(int x, int y, uint8_t ch, uint32_t color);
 
 #endif //__LIBRARY_LIBGFX_GL2D_H__

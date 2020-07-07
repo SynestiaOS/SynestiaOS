@@ -57,6 +57,11 @@ void draw_chess_board() {
     }
 
     gfx_fill_triangle(0, 0, 0, 150, 150, 0, 0x00FF00FF);
+    gfx_draw_ascii(20, 20, 'C', 0x0000FF00);
+    gfx_draw_ascii(30, 20, 'h', 0x0000FF00);
+    gfx_draw_ascii(40, 20, 'e', 0x0000FF00);
+    gfx_draw_ascii(50, 20, 's', 0x0000FF00);
+    gfx_draw_ascii(60, 20, 's', 0x0000FF00);
 
     gfx_fill_triangle(1024 - 150, 0, 1024, 0, 1024, 150, 0x00FF00FF);
 }
