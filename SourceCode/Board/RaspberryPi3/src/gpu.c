@@ -144,7 +144,11 @@ const uint8_t *font(int c) {
 
 
 void gpu_write_pixel(uint32_t x, uint32_t y, const pixel_t *pix) {
-    framebuffer_draw_pixel(x, y, 0xFF, 0xFF, 0xFF);
+    framebuffer_draw_pixel(x, y, pix->red, pix->green, pix->blue);
+}
+
+void gpu_write_pixel_color(uint32_t x, uint32_t y, uint32_t c) {
+    framebuffer_draw_pixel(x, y, (c >> 16) & 0xFF, (c >> 8) & 0xFF, c & 0xFF);
 }
 
 void gpu_putc(char c) {

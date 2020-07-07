@@ -9,6 +9,7 @@ add_executable(${KernelName}
         ${KernelArch_SOURCE_DIR}/${SynestiaArch}/boot.s
         $<TARGET_OBJECTS:Kernel>
         $<TARGET_OBJECTS:C>
+        $<TARGET_OBJECTS:Gfx>
         $<TARGET_OBJECTS:BoardRaspberryPi3>
         $<TARGET_OBJECTS:Tests>)
 

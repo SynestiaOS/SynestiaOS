@@ -6,6 +6,7 @@
 #include <tests.h>
 #include <sched.h>
 #include <gpu.h>
+#include <gfx2d.h>
 
 void print_splash() {
     const char *str = "   _____                       _   _       \n"
@@ -32,6 +33,18 @@ void kernel_main(void) {
     kheap_init();
 
     gpu_init();
+
+    gfx_draw_line(0, 0, 100, 100, 0x00FF0000);
+
+    gfx_draw_circle(100, 100, 30, 0x0000FF00);
+
+    gfx_draw_triangle(200, 200, 280, 200, 200, 280, 0x000000FF);
+
+    gfx_fill_triangle(500, 400, 600, 500, 500, 400, 0x00FFFF00);
+
+    gfx_fill(300, 0, 400, 100, 0x00FF00FF);
+
+    gfx_fill_circle(500, 200, 60, 0x0000FFFF);
 
     init_interrupt();
 
