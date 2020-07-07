@@ -72,7 +72,7 @@ void draw_chess_board() {
     gui_draw_button(&synestiaOSButton);
 }
 
-void kernel_main1(void) {
+void kernel_main(void) {
 
     print_splash();
 
