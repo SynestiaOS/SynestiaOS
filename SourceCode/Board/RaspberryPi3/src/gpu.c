@@ -148,10 +148,20 @@ void gpu_write_pixel(uint32_t x, uint32_t y, const pixel_t *pix) {
 }
 
 void gpu_putc(char c) {
+    uint8_t *bitmap = font(c);
+    for (uint32_t i = 0; i < 8; i++) {
+        for (uint32_t j = 0; j < 8; j++) {
+            if ((bitmap[i] & (0x1 << j)) > 0) {
+                framebuffer_draw_pixel(i, j, 0xFF, 00, 00);
+            }
+        }
+    }
 }
 
 void gpu_init(void) {
     framebuffer_init();
     printf("[Framebuffer] Inited: 1024x768x32\n");
     framebuffer_clear(0x000000);
+
+    gpu_putc('X');
 }

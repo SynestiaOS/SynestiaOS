@@ -1,6 +1,6 @@
 PROJECT(Gfx C ASM)
 
-aux_source_directory(${C_SOURCE_DIR}/src LibGfxSrc)
+aux_source_directory(${Gfx_SOURCE_DIR}/src LibGfxSrc)
 
 add_library(${PROJECT_NAME}
         OBJECT
