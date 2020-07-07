@@ -22,9 +22,13 @@ void print_splash() {
 
 void kernel_main(void) {
 
-    __run_tests();
+    print_splash();
 
     vmm_init();
+
+    kheap_init();
+
+    __run_tests();
 
     gpu_init();
 
@@ -33,9 +37,6 @@ void kernel_main(void) {
     gpu_putc('H');
     gpu_putc('H');
     gpu_putc('H');
-
-
-    print_splash();
 
     init_interrupt();
 

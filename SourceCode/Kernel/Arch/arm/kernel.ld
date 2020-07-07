@@ -56,5 +56,5 @@ SECTIONS
     __PAGE_TABLE = .;
     . = 0x805000 + __PAGE_TABLE;
 
-    __heap_begin = .;
+    __HEAP_BEGIN = .;
 }

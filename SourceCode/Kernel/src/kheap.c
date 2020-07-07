@@ -8,8 +8,8 @@
 static heap_alloc_func heapAllocFunc = nullptr;
 static heap_free_func heapFreeFunc = nullptr;
 
-static HeapArea *usingListHead;
-static HeapArea *freeListHead;
+HeapArea *usingListHead;
+HeapArea *freeListHead;
 
 #define ALL_PHYSICAL_MEM_SIZE 0xFFFFFFFF
 
@@ -31,7 +31,7 @@ void kheap_set_free_callback(heap_free_func callback) {
 }
 
 KernelStatus kheap_init() {
-    uint32_t heap_address = (uint32_t) &__heap_begin;
+    uint32_t heap_address = (uint32_t) &__HEAP_BEGIN;
     freeListHead = (HeapArea *) heap_address;
     freeListHead->size = 0;
     freeListHead->list.prev = nullptr;
@@ -49,6 +49,11 @@ KernelStatus kheap_init() {
 
 void *kheap_alloc(uint32_t size) {
     uint32_t allocSize = size + sizeof(HeapArea);
+
+    if (freeListHead == nullptr) {
+        printf("[KHeap] failed to get freeListHead.\n");
+        return nullptr;
+    }
 
     HeapArea *currentFreeArea = freeListHead;
     while (currentFreeArea != nullptr) {
