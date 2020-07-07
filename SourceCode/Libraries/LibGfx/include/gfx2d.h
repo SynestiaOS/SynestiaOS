@@ -7,7 +7,9 @@
 #ifndef __LIBRARY_LIBGFX_GL2D_H__
 #define __LIBRARY_LIBGFX_GL2D_H__
 
-void gfx_fill(int x1, int y1, int x2, int y2, uint32_t c);
+void gfx_draw_rect(int x1, int y1, int x2, int y2, uint32_t c);
+
+void gfx_fill_rect(int x1, int y1, int x2, int y2, uint32_t c);
 
 void gfx_draw_line(int x1, int y1, int x2, int y2, uint32_t c);
 

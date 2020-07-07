@@ -8,7 +8,15 @@
 
 void gpu_write_pixel_color(uint32_t x, uint32_t y, uint32_t c);
 
-void gfx_fill(int x1, int y1, int x2, int y2, uint32_t c) {
+
+void gfx_draw_rect(int x1, int y1, int x2, int y2, uint32_t c) {
+    gfx_draw_line(x1, y1, x1, y2, c);
+    gfx_draw_line(x1, y1, x2, y1, c);
+    gfx_draw_line(x2, y1, x2, y2, c);
+    gfx_draw_line(x1, y2, x2, y2, c);
+}
+
+void gfx_fill_rect(int x1, int y1, int x2, int y2, uint32_t c) {
     for (int x = x1; x < x2; x++) {
         for (int y = y1; y < y2; y++) {
             gpu_write_pixel_color(x, y, c);

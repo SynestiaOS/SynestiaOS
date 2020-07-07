@@ -8,6 +8,7 @@
 #include <gpu.h>
 #include <gfx2d.h>
 #include <gui_button.h>
+#include <gui_window.h>
 
 void print_splash() {
     const char *str = "   _____                       _   _       \n"
@@ -22,55 +23,22 @@ void print_splash() {
     print(str);
 }
 
-void draw_chess_board() {
-
-    gfx_fill(0, 0, 1024, 768, 0x00A86E3A);
-
-    // top
-    gfx_fill(0, 0, 1024, 30, 0x00FFFF00);
-
-    // bottom
-    gfx_fill(0, 738, 1024, 768, 0x00FFFF00);
-
-    // left
-    gfx_fill(0, 0, 30, 768, 0x00FFFF00);
-
-    // right
-    gfx_fill(994, 0, 1024, 768, 0x00FFFF00);
-
-    for (int i = 64; i < 1024; i += 64) {
-        gfx_draw_line(i, 0, i, 768, 0x00FFFFFF);
-    }
-
-    for (int i = 64; i < 748; i += 64) {
-        gfx_draw_line(0, i, 1024, i, 0x00FFFFFF);
-    }
-
-
-    for (int i = 64; i < 1024 - 64; i += 64) {
-        for (int j = 64; j < 768 - 64; j += 64) {
-            if ((i * j) % 3 == 0) {
-                gfx_fill_circle(i, j, 26, 0x00FF0000);
-            } else {
-                gfx_fill_circle(i, j, 26, 0x000000FF);
-            }
-        }
-    }
-
-    gfx_fill_triangle(0, 0, 0, 150, 150, 0, 0x00FF00FF);
-    gfx_fill_triangle(1024 - 150, 0, 1024, 0, 1024, 150, 0x00FF00FF);
-
+void draw_gui() {
     GUIButton guiStartButton;
-    gui_button(&guiStartButton, 934, 10, "Re Boot");
+    gui_button(&guiStartButton, 150, 10, "Re Boot");
     gui_draw_button(&guiStartButton);
 
     GUIButton guiShutDownButton;
-    gui_button(&guiShutDownButton, 934, 30, "Shut Down");
+    gui_button(&guiShutDownButton, 300, 10, "Shut Down");
     gui_draw_button(&guiShutDownButton);
 
     GUIButton synestiaOSButton;
     gui_button(&synestiaOSButton, 10, 10, "[SynestiaOS]");
     gui_draw_button(&synestiaOSButton);
+
+    GUIWindow window;
+    gui_window(&window, 100, 100, "SynestiaOS");
+    gui_draw_window(&window);
 }
 
 void kernel_main(void) {
@@ -86,7 +54,7 @@ void kernel_main(void) {
 
     gpu_init();
 
-    draw_chess_board();
+    draw_gui();
 
     init_interrupt();
 
