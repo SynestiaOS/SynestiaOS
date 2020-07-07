@@ -48,7 +48,7 @@ uint32_t klist_size(ListNode *node) {
         first = first->prev;
     }
 
-    uint32_t size = 0;
+    uint32_t size = 1;
     while (first->next != nullptr) {
         first = first->next;
         size++;
