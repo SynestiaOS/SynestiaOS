@@ -3,7 +3,6 @@
 //
 
 #include <gfx2d.h>
-#include <stdbool.h>
 
 void gpu_write_pixel_color(uint32_t x, uint32_t y, uint32_t c);
 
