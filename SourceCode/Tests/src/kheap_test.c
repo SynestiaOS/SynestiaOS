@@ -22,7 +22,7 @@ void test_heap_alloc_func(void *ptr, uint32_t size) {
 
 void test_heap_free_func(void *ptr) {
     HeapArea *heap = (HeapArea *) (ptr - sizeof(HeapArea));
-    test_heap_alloc_size -= heap->size;
+    test_heap_free_size += heap->size;
 }
 
 void should_kheap_set_alloc_callback() {
