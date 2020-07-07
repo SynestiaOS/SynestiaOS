@@ -72,6 +72,9 @@ void kernel_main(void) {
 
     draw_chess_board();
 
+//    gfx_draw_triangle(0, 0, 0, 300, 300, 0, 0x00FF00FF);
+    gfx_fill_triangle(0, 0, 0, 300, 300, 0, 0x00FF00FF);
+
     init_interrupt();
 
     init_bsp();
