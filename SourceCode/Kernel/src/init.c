@@ -1,13 +1,12 @@
+#include <gfx2d.h>
+#include <gpu.h>
+#include <gui_button.h>
 #include <interrupt.h>
+#include <kheap.h>
+#include <sched.h>
 #include <stdlib.h>
 #include <synestia_os_hal.h>
-#include <kheap.h>
 #include <vmm.h>
-#include <tests.h>
-#include <sched.h>
-#include <gpu.h>
-#include <gfx2d.h>
-#include <gui_button.h>
 
 void print_splash() {
     const char *str = "   _____                       _   _       \n"
@@ -73,14 +72,11 @@ void draw_chess_board() {
     gui_draw_button(&synestiaOSButton);
 }
 
-void kernel_main(void) {
+void kernel_main1(void) {
 
     print_splash();
 
     vmm_init();
-
-    kheap_init(); // this is just for test
-    __run_tests();
 
     kheap_init();
 

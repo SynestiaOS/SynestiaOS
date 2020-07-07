@@ -1,14 +1,19 @@
 //
 // Created by XingfengYang on 2020/7/5.
 //
+
 #include <tests_lib.h>
-#include <tests.h>
-#include <kstack_test.h>
+
 #include <kheap_test.h>
 #include <klist_test.h>
+#include <kstack_test.h>
 
 
-void __run_tests() {
+// todo: redefinition of kernel_main, consider a way to avoid the redefinition of this function
+// if you want to run tests, rename init.c/kernel_main to kernel_main_x
+void kernel_main() {
+    kheap_init();
+
     TEST_SUIT("should_klist_insert", should_klist_insert)
     TEST_SUIT("should_klist_append", should_klist_append)
     TEST_SUIT("should_klist_remove_node", should_klist_remove_node)

@@ -35,10 +35,10 @@ void __assert_func_success(const char *file, int line, const char *func, const c
     printf("\n\033[32m[TEST] %s:\033[0m\n",text);       \
     func();
 
-#define ASSERT_EQ(left, right){ assert(left==right); }
-#define ASSERT_NEQ(left, right){ assert(left!=right); }
-#define ASSERT_TRUE(value){ assert(value); }
-#define ASSERT_FALSE(value){ assert(!value); }
-#define ASSERT_EQ_FLOAT(left, right, sill) {assert(abs(left-right)< sill);}
+#define ASSERT_EQ(left, right) do{ assert(left==right); }while(0)
+#define ASSERT_NEQ(left, right) do{ assert(left!=right); }while(0)
+#define ASSERT_TRUE(value) do{ assert(value); }while(0)
+#define ASSERT_FALSE(value) do{ assert(!value); }while(0)
+#define ASSERT_EQ_FLOAT(left, right, sill) do{assert(abs(left-right)< sill);}while(0)
 
 #endif //__KERNEL_TEST_H__
