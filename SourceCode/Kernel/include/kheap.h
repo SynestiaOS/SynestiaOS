@@ -6,8 +6,8 @@
 #define __KERNEL_KHEAP_H__
 
 #include <stdint.h>
+#include <type.h>
 #include <list.h>
-#include "type.h"
 
 typedef struct HeapArea {
     uint32_t size;

@@ -5,6 +5,7 @@
 #include <vmm.h>
 #include <tests.h>
 #include <sched.h>
+#include <gpu.h>
 
 void print_splash() {
     const char *str = "   _____                       _   _       \n"
@@ -24,6 +25,15 @@ void kernel_main(void) {
     __run_tests();
 
     vmm_init();
+
+    gpu_init();
+
+    gpu_putc('H');
+    gpu_putc('H');
+    gpu_putc('H');
+    gpu_putc('H');
+    gpu_putc('H');
+
 
     print_splash();
 

@@ -13,6 +13,14 @@ void memclean(uint8_t *start, const uint8_t *end) {
     }
 }
 
+void bzero(void *s1, uint32_t n) {
+    register char *t = s1;
+
+    while (n != 0) {
+        *t++ = 0;
+        n--;
+    }
+}
 
 char *strcpy(char *des, char *source) {
     char *r = des;
