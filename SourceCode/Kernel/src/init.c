@@ -6,7 +6,6 @@
 #include <tests.h>
 #include <sched.h>
 #include <gpu.h>
-#include <gfx2d.h>
 #include <gui_button.h>
 #include <gui_window.h>
 
@@ -41,7 +40,7 @@ void draw_gui() {
     gui_draw_window(&window);
 }
 
-void kernel_main1(void) {
+void kernel_main(void) {
 
     print_splash();
 
