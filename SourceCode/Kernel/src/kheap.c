@@ -110,7 +110,7 @@ void *kheap_calloc(uint32_t num, uint32_t size) {
     return kheap_alloc(num * size);
 }
 
-void *kernel_heap_realloc(void *ptr, uint32_t size) {
+void *kheap_realloc(void *ptr, uint32_t size) {
     // 1. alloc new heap area
     void *newHeapArea = kheap_alloc(size);
 

@@ -14,13 +14,13 @@ typedef uint32_t VirtualAddress;
 
 typedef struct KernelStack {
     uint32_t size;
-    uint64_t base;
+    VirtualAddress base;
     VirtualAddress top;
-    void *virtualMemoryAddress;
+    VirtualAddress *virtualMemoryAddress;
 } __attribute__((packed)) KernelStack;
 
 
-KernelStatus kstack_allocate(KernelStack *stack);
+KernelStack *kstack_allocate();
 
 KernelStatus kstack_free(KernelStack *stack);
 

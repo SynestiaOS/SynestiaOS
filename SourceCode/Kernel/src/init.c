@@ -26,9 +26,9 @@ void kernel_main(void) {
 
     vmm_init();
 
-    kheap_init();
-
+    kheap_init(); // this is just for test
     __run_tests();
+    kheap_init(); // reset heap area after test
 
     gpu_init();
 

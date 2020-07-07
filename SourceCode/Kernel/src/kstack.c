@@ -6,19 +6,18 @@
 #include <stdbool.h>
 #include <stdlib.h>
 
-KernelStatus kstack_allocate(KernelStack *stack) {
+KernelStack *kstack_allocate() {
     // 1. allocate stack memory block from virtual memory (heap), and align.
-    void *addrOfHeap = kheap_alloc(DEFAULT_KERNEL_STACK_SIZE + sizeof(KernelStack));
-    if (addrOfHeap == nullptr) {
+    KernelStack *stack = (KernelStack *) kheap_alloc(DEFAULT_KERNEL_STACK_SIZE + sizeof(KernelStack));
+    if (stack == nullptr) {
         printf("[KStack] kStack allocate failed.\n");
-        return ERROR;
+        return nullptr;
     }
-    stack = (KernelStack *) addrOfHeap;
-    stack->virtualMemoryAddress = addrOfHeap + sizeof(KernelStack) + DEFAULT_KERNEL_STACK_SIZE;
+    stack->virtualMemoryAddress = (void *) (uint64_t) (stack + sizeof(KernelStack) + DEFAULT_KERNEL_STACK_SIZE);
     stack->size = 0;
     stack->base = stack->virtualMemoryAddress;
     stack->top = stack->base;
-    return OK;
+    return stack;
 }
 
 KernelStatus kstack_free(KernelStack *stack) {

@@ -30,10 +30,9 @@ void thread_insert_to_rb_tree(RBNode *root, RBNode *node) {
 }
 
 Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uint32_t priority) {
-    KernelStack *kernelStack = nullptr;
     // 1. allocate stack memory from kernel heap for idle task
-    KernelStatus kernelStackAllocateState = kstack_allocate(kernelStack);
-    if (kernelStack != nullptr && kernelStackAllocateState != ERROR) {
+    KernelStack *kernelStack = kstack_allocate(kernelStack);
+    if (kernelStack != nullptr && kernelStack != nullptr) {
         // 1. init kernel stack
         kstack_clear(kernelStack);
         kstack_push(kernelStack, 0x14141414);   // R14
@@ -77,10 +76,10 @@ uint32_t *idle_thread_routine(void *arg) {
 }
 
 Thread *thread_create_idle_thread(uint32_t cpuNum) {
-    KernelStack *kernelStack = nullptr;
+
     // 1. allocate stack memory from kernel heap for idle task
-    KernelStatus kernelStackAllocateState = kstack_allocate(kernelStack);
-    if (kernelStack != nullptr && kernelStackAllocateState != ERROR) {
+    KernelStack *kernelStack = kstack_allocate(kernelStack);
+    if (kernelStack != nullptr && kernelStack != nullptr) {
         // 1. init kernel stack
         kstack_clear(kernelStack);
         kstack_push(kernelStack, 0x14141414);   // R14
@@ -142,10 +141,10 @@ KernelStatus thread_join(Thread *thread, int *retcode, uint32_t deadline) {
 }
 
 KernelStatus init_thread_struct(Thread *thread, const char *name) {
-    KernelStack *kernelStack = nullptr;
+
     // 1. allocate stack memory from kernel heap for idle task
-    KernelStatus kernelStackAllocateState = kstack_allocate(kernelStack);
-    if (kernelStack != nullptr && kernelStackAllocateState != ERROR) {
+    KernelStack *kernelStack = kstack_allocate(kernelStack);
+    if (kernelStack != nullptr && kernelStack != nullptr) {
         // 1. init kernel stack
         kstack_clear(kernelStack);
         kstack_push(kernelStack, 0x14141414);   // R14
