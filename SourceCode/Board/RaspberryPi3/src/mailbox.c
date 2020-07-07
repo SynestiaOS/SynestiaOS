@@ -62,7 +62,10 @@ static uint32_t get_value_buffer_len(property_message_tag_t *tag) {
 int send_messages(property_message_tag_t *tags) {
     property_message_buffer_t *msg;
     mail_message_t mail;
-    uint32_t bufsize = 0, i, len, bufpos;
+    uint32_t bufsize = 0;
+    uint32_t i = 0;
+    uint32_t len = 0;
+    uint32_t bufpos = 0;
 
     // Calculate the sizes of each tag
     for (i = 0; tags[i].proptag != NULL_TAG; i++) {
@@ -76,8 +79,9 @@ int send_messages(property_message_tag_t *tags) {
     bufsize += (bufsize % 16) ? 16 - (bufsize % 16) : 0;
 
     msg = kheap_alloc(bufsize);
-    if (!msg)
+    if (!msg) {
         return -1;
+    }
 
     msg->size = bufsize;
     msg->req_res_code = REQUEST;
