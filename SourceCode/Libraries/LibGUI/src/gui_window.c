@@ -79,6 +79,8 @@ void gui_draw_window(GUIWindow *window) {
             window->conponent.position.y + 4 + 16,
             0x00FFFFFF
     );
+    gfx_draw_ascii(window->conponent.position.x + window->conponent.size.width - 24 * 3 + 4,
+                   window->conponent.position.y + 4 + 4, '_', 0x0078D4);
     gfx_fill_rect(
             window->conponent.position.x + window->conponent.size.width - 24 * 2,
             window->conponent.position.y + 4,
@@ -86,6 +88,9 @@ void gui_draw_window(GUIWindow *window) {
             window->conponent.position.y + 4 + 16,
             0x00FFFFFF
     );
+    gfx_draw_ascii(window->conponent.position.x + window->conponent.size.width - 24 * 2 + 4,
+                   window->conponent.position.y + 4 + 4, 'o', 0x0078D4);
+
     gfx_fill_rect(
             window->conponent.position.x + window->conponent.size.width - 24 * 1,
             window->conponent.position.y + 4,
@@ -93,6 +98,8 @@ void gui_draw_window(GUIWindow *window) {
             window->conponent.position.y + 4 + 16,
             0x00FFFFFF
     );
+    gfx_draw_ascii(window->conponent.position.x + window->conponent.size.width - 24 * 1 + 4,
+                   window->conponent.position.y + 4 + 4, 'x', 0x0078D4);
 
     // 5. draw border
     gfx_draw_rect(
