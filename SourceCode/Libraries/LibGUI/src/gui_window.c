@@ -41,7 +41,6 @@ void gui_window_create(GUIWindow *window) {
 }
 
 void gui_window_init(GUIWindow *window, uint32_t x, uint32_t y, const char *title) {
-
     window->component.position.x = x;
     window->component.position.y = y;
 
@@ -111,7 +110,7 @@ void gui_window_draw(GUIWindow *window) {
     }
 
     // 4. draw header window
-    gfx2d_fill_rect(
+    gfx2d_draw_rect(
             window->component.position.x + window->component.size.width - 24 * 3,
             window->component.position.y + 4,
             window->component.position.x + window->component.size.width - 24 * 3 + 16,
@@ -119,8 +118,8 @@ void gui_window_draw(GUIWindow *window) {
             0x00FFFFFF
     );
     gfx2d_draw_ascii(window->component.position.x + window->component.size.width - 24 * 3 + 4,
-                     window->component.position.y + 4 + 4, '_', FLUENT_PRIMARY_COLOR);
-    gfx2d_fill_rect(
+                     window->component.position.y + 4 + 4, '_', 0xFFFFFF);
+    gfx2d_draw_rect(
             window->component.position.x + window->component.size.width - 24 * 2,
             window->component.position.y + 4,
             window->component.position.x + window->component.size.width - 24 * 2 + 16,
@@ -128,9 +127,9 @@ void gui_window_draw(GUIWindow *window) {
             0x00FFFFFF
     );
     gfx2d_draw_ascii(window->component.position.x + window->component.size.width - 24 * 2 + 4,
-                     window->component.position.y + 4 + 4, 'o', FLUENT_PRIMARY_COLOR);
+                     window->component.position.y + 4 + 4, '#', 0xFFFFFF);
 
-    gfx2d_fill_rect(
+    gfx2d_draw_rect(
             window->component.position.x + window->component.size.width - 24 * 1,
             window->component.position.y + 4,
             window->component.position.x + window->component.size.width - 24 * 1 + 16,
@@ -138,7 +137,7 @@ void gui_window_draw(GUIWindow *window) {
             0x00FFFFFF
     );
     gfx2d_draw_ascii(window->component.position.x + window->component.size.width - 24 * 1 + 4,
-                     window->component.position.y + 4 + 4, 'x', FLUENT_PRIMARY_COLOR);
+                     window->component.position.y + 4 + 4, 'x', 0xFFFFFF);
 
     // 5. draw border
     gfx2d_draw_rect(
