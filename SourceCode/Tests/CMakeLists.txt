@@ -42,6 +42,6 @@ target_include_raspberry_pi3_header_files(${PROJECT_NAME})
 target_include_kernel_header_files(${PROJECT_NAME})
 target_include_vmm_header_files(${PROJECT_NAME})
 
-target_link_options(${PROJECT_NAME} PRIVATE -T ${TestsTempDir}/Arch/${SynestiaArch}/kernel.ld)
+target_link_options(${PROJECT_NAME} PRIVATE -T ${TestsKernelArchTempDir}/kernel.ld)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE gcc)
