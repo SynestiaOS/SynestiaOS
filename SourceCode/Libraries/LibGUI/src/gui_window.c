@@ -80,7 +80,7 @@ void gui_window_add_children(GUIWindow *window, GUIComponent *component) {
     if (window->children == nullptr) {
         window->children = component;
     } else {
-        klist_append(window->children, component);
+        klist_append(&(window->children->node), &(component->node));
     }
 }
 
