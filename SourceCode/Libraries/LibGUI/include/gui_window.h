@@ -9,7 +9,7 @@
 
 
 typedef struct GUIWindow {
-    struct GUIComponent conponent;
+    struct GUIComponent component;
     char *title;
     // todo: childrrens
 } GUIWindow;

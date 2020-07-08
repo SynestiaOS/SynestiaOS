@@ -8,7 +8,7 @@
 #include <gui_component.h>
 
 typedef struct GUIButton {
-    struct GUIComponent conponent;
+    struct GUIComponent component;
     char *text;
 } GUIButton;
 
