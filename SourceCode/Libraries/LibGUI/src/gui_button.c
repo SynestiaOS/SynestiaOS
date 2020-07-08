@@ -5,6 +5,8 @@
 #include <gfx2d.h>
 
 void gui_create_button(GUIButton *button) {
+    button->component.type = BUTTON;
+
     button->component.position.x = 0;
     button->component.position.y = 0;
 
@@ -38,10 +40,10 @@ void gui_init_button(GUIButton *button, uint32_t x, uint32_t y, const char *text
     button->component.position.y = y;
 
     button->fontSize = (button->fontSize == 0 ? DEFAULT_FONT_SIZE : button->fontSize);
-    button->component.padding.top = (button->component.padding.top == 0 ? DEFAULT_pADDING : button->component.padding.top);
-    button->component.padding.bottom = (button->component.padding.bottom == 0 ? DEFAULT_pADDING : button->component.padding.bottom);
-    button->component.padding.left = (button->component.padding.left == 0 ? DEFAULT_pADDING : button->component.padding.left);
-    button->component.padding.right = (button->component.padding.right == 0 ? DEFAULT_pADDING : button->component.padding.right);
+    button->component.padding.top = (button->component.padding.top == 0 ? DEFAULT_PADDING : button->component.padding.top);
+    button->component.padding.bottom = (button->component.padding.bottom == 0 ? DEFAULT_PADDING : button->component.padding.bottom);
+    button->component.padding.left = (button->component.padding.left == 0 ? DEFAULT_PADDING : button->component.padding.left);
+    button->component.padding.right = (button->component.padding.right == 0 ? DEFAULT_PADDING : button->component.padding.right);
 
     button->component.margin.top = (button->component.margin.top == 0 ? DEFAULT_MARGIN : button->component.margin.top);
     button->component.margin.bottom = (button->component.margin.bottom == 0 ? DEFAULT_MARGIN : button->component.margin.bottom);
@@ -68,25 +70,6 @@ void gui_init_button(GUIButton *button, uint32_t x, uint32_t y, const char *text
             uint32_t lines = length / lineFonts;
             button->component.size.height = lines * button->fontSize + button->component.padding.top + button->component.padding.bottom;
         }
-    }
-    if (button->component.background.a == 0x00 &&
-        button->component.background.r == 0x00 &&
-        button->component.background.g == 0x78 &&
-        button->component.background.b == 0xD4) {
-        button->component.background.a = 0x00;
-        button->component.background.r = 0x00;
-        button->component.background.g = 0x78;
-        button->component.background.b = 0xD4;
-    }
-
-    if (button->component.foreground.a == 0x00 &&
-        button->component.foreground.r == 0xFF &&
-        button->component.foreground.g == 0xFF &&
-        button->component.foreground.b == 0xFF) {
-        button->component.foreground.a = 0x00;
-        button->component.foreground.r = 0xFF;
-        button->component.foreground.g = 0xFF;
-        button->component.foreground.b = 0xFF;
     }
 }
 

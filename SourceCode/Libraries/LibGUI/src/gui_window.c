@@ -5,14 +5,54 @@
 #include <gui_window.h>
 #include <gfx2d.h>
 
-void gui_window(GUIWindow *window, uint32_t x, uint32_t y, const char *title) {
-    Position position;
-    position.x = x;
-    position.y = y;
-    window->component.position = position;
+void gui_create_window(GUIWindow *window) {
+    window->component.type = WINDOW;
+
+    window->component.position.x = 0;
+    window->component.position.y = 0;
+
+    window->component.size.height = 0;
+    window->component.size.width = 0;
+
+    window->component.padding.top = 0;
+    window->component.padding.bottom = 0;
+    window->component.padding.left = 0;
+    window->component.padding.right = 0;
+
+    window->component.margin.top = 0;
+    window->component.margin.bottom = 0;
+    window->component.margin.left = 0;
+    window->component.margin.right = 0;
+
+    window->component.background.a = 0x00;
+    window->component.background.r = 0xFF;
+    window->component.background.g = 0xFF;
+    window->component.background.b = 0xFF;
+
+    window->component.foreground.a = 0x00;
+    window->component.foreground.r = 0x00;
+    window->component.foreground.g = 0x00;
+    window->component.foreground.b = 0x00;
+
+    window->title = "";
+}
+
+void gui_init_window(GUIWindow *window, uint32_t x, uint32_t y, const char *title) {
+
+    window->component.position.x = x;
+    window->component.position.y = y;
+
+    window->component.padding.top = (window->component.padding.top == 0 ? DEFAULT_PADDING : window->component.padding.top);
+    window->component.padding.bottom = (window->component.padding.bottom == 0 ? DEFAULT_PADDING : window->component.padding.bottom);
+    window->component.padding.left = (window->component.padding.left == 0 ? DEFAULT_PADDING : window->component.padding.left);
+    window->component.padding.right = (window->component.padding.right == 0 ? DEFAULT_PADDING : window->component.padding.right);
+
+    window->component.margin.top = (window->component.margin.top == 0 ? DEFAULT_MARGIN : window->component.margin.top);
+    window->component.margin.bottom = (window->component.margin.bottom == 0 ? DEFAULT_MARGIN : window->component.margin.bottom);
+    window->component.margin.left = (window->component.margin.left == 0 ? DEFAULT_MARGIN : window->component.margin.left);
+    window->component.margin.right = (window->component.margin.right == 0 ? DEFAULT_MARGIN : window->component.margin.right);
 
     window->title = title;
-    window->component.size.height = 200;
 
     char *tmp = title;
     uint32_t length = 0;
@@ -20,21 +60,14 @@ void gui_window(GUIWindow *window, uint32_t x, uint32_t y, const char *title) {
         length++;
         tmp++;
     }
-    window->component.size.width = 300;
-    Color colorBg;
-    colorBg.a = 0x00;
-    colorBg.r = 0xFF;
-    colorBg.g = 0xFF;
-    colorBg.b = 0xFF;
-    window->component.background = colorBg;
 
+    if (window->component.size.width == 0) {
+        window->component.size.width = DEFAULT_WINDOW_WIDTH;
 
-    Color colorFore;
-    colorFore.a = 0x00;
-    colorFore.r = 0xFF;
-    colorFore.g = 0xFF;
-    colorFore.b = 0xFF;
-    window->component.foreground = colorFore;
+    }
+    if (window->component.size.height == 0) {
+        window->component.size.height = DEFAULT_WINDOW_HEIGHT;
+    }
 }
 
 void gui_draw_window(GUIWindow *window) {
@@ -43,7 +76,7 @@ void gui_draw_window(GUIWindow *window) {
             window->component.position.x,
             window->component.position.y,
             window->component.position.x + window->component.size.width,
-            window->component.position.y + window->component.size.height + 24,
+            window->component.position.y + window->component.size.height + DEFAULT_WINDOW_HEADER_HEIGHT,
             window->component.background.r << 16 | window->component.background.g << 8 | window->component.background.b
     );
 
@@ -52,7 +85,7 @@ void gui_draw_window(GUIWindow *window) {
             window->component.position.x,
             window->component.position.y,
             window->component.position.x + window->component.size.width,
-            window->component.position.y + 24,
+            window->component.position.y + DEFAULT_WINDOW_HEADER_HEIGHT,
             FLUENT_PRIMARY_COLOR
     );
 
@@ -61,8 +94,8 @@ void gui_draw_window(GUIWindow *window) {
     uint32_t xOffset = 0;
     while (*tmp) {
         gfx2d_draw_ascii(
-                window->component.position.x + xOffset * 8 + 8,
-                window->component.position.y + 8,
+                window->component.position.x + xOffset * DEFAULT_FONT_SIZE + DEFAULT_PADDING,
+                window->component.position.y + DEFAULT_PADDING,
                 *tmp,
                 window->component.foreground.r << 16 | window->component.foreground.g << 8 | window->component.foreground.b
         );
@@ -70,7 +103,7 @@ void gui_draw_window(GUIWindow *window) {
         tmp++;
     }
 
-    // 4. draw header button
+    // 4. draw header window
     gfx2d_fill_rect(
             window->component.position.x + window->component.size.width - 24 * 3,
             window->component.position.y + 4,
@@ -79,7 +112,7 @@ void gui_draw_window(GUIWindow *window) {
             0x00FFFFFF
     );
     gfx2d_draw_ascii(window->component.position.x + window->component.size.width - 24 * 3 + 4,
-                   window->component.position.y + 4 + 4, '_', FLUENT_PRIMARY_COLOR);
+                     window->component.position.y + 4 + 4, '_', FLUENT_PRIMARY_COLOR);
     gfx2d_fill_rect(
             window->component.position.x + window->component.size.width - 24 * 2,
             window->component.position.y + 4,
@@ -88,7 +121,7 @@ void gui_draw_window(GUIWindow *window) {
             0x00FFFFFF
     );
     gfx2d_draw_ascii(window->component.position.x + window->component.size.width - 24 * 2 + 4,
-                   window->component.position.y + 4 + 4, 'o', FLUENT_PRIMARY_COLOR);
+                     window->component.position.y + 4 + 4, 'o', FLUENT_PRIMARY_COLOR);
 
     gfx2d_fill_rect(
             window->component.position.x + window->component.size.width - 24 * 1,
@@ -98,18 +131,20 @@ void gui_draw_window(GUIWindow *window) {
             0x00FFFFFF
     );
     gfx2d_draw_ascii(window->component.position.x + window->component.size.width - 24 * 1 + 4,
-                   window->component.position.y + 4 + 4, 'x', FLUENT_PRIMARY_COLOR);
+                     window->component.position.y + 4 + 4, 'x', FLUENT_PRIMARY_COLOR);
 
     // 5. draw border
     gfx2d_draw_rect(
             window->component.position.x,
             window->component.position.y,
             window->component.position.x + window->component.size.width,
-            window->component.position.y + window->component.size.height + 24,
+            window->component.position.y + window->component.size.height + DEFAULT_WINDOW_HEADER_HEIGHT,
             FLUENT_PRIMARY_COLOR
     );
 
-    // 6. register click event
+    // 6. draw children
+
+    // 7. register click event
 
     // 7. register drag event
 }

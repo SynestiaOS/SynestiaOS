@@ -41,30 +41,33 @@ void draw_gui() {
     bar.component.background.r = 0x00;
     bar.component.background.g = 0x78;
     bar.component.background.b = 0xD4;
-    gui_label(&bar, 32 + synestiaOSButton.component.size.width, 0, "");
+    gui_init_label(&bar, 32 + synestiaOSButton.component.size.width, 0, "");
     gui_draw_label(&bar);
 
     GUILabel synestiaOSLabel;
     gui_create_label(&synestiaOSLabel);
     synestiaOSLabel.component.size.width = 100;
-    gui_label(&synestiaOSLabel, 10, 40, "Welcome to Synestia Operation System.");
+    gui_init_label(&synestiaOSLabel, 10, 40, "Welcome to Synestia Operation System.");
     gui_draw_label(&synestiaOSLabel);
 
     GUILabel synestiaOSLabel2;
     gui_create_label(&synestiaOSLabel2);
-    gui_label(&synestiaOSLabel2, 200, 40, "Welcome to Synestia Operation System.");
+    gui_init_label(&synestiaOSLabel2, 200, 40, "Welcome to Synestia Operation System.");
     gui_draw_label(&synestiaOSLabel2);
 
     GUIWindow window;
-    gui_window(&window, 100, 100, "SynestiaOS");
+    gui_create_window(&window);
+    gui_init_window(&window, 100, 100, "SynestiaOS");
     gui_draw_window(&window);
 
     GUIWindow window1;
-    gui_window(&window1, 150, 150, "SynestiaOS 1");
+    gui_create_window(&window1);
+    gui_init_window(&window1, 150, 150, "SynestiaOS 1");
     gui_draw_window(&window1);
 
     GUIWindow window2;
-    gui_window(&window2, 200, 200, "SynestiaOS 2");
+    gui_create_window(&window2);
+    gui_init_window(&window2, 200, 200, "SynestiaOS 2");
     gui_draw_window(&window2);
 }
 

@@ -7,6 +7,8 @@
 
 
 void gui_create_label(GUILabel *label) {
+    label->component.type = LABEL;
+
     label->component.position.x = 0;
     label->component.position.y = 0;
 
@@ -36,15 +38,15 @@ void gui_create_label(GUILabel *label) {
     label->component.foreground.b = 0x00;
 }
 
-void gui_label(GUILabel *label, uint32_t x, uint32_t y, const char *text) {
+void gui_init_label(GUILabel *label, uint32_t x, uint32_t y, const char *text) {
     label->component.position.x = x;
     label->component.position.y = y;
 
     label->fontSize = (label->fontSize == 0 ? DEFAULT_FONT_SIZE : label->fontSize);
-    label->component.padding.top = (label->component.padding.top == 0 ? DEFAULT_pADDING : label->component.padding.top);
-    label->component.padding.bottom = (label->component.padding.bottom == 0 ? DEFAULT_pADDING : label->component.padding.bottom);
-    label->component.padding.left = (label->component.padding.left == 0 ? DEFAULT_pADDING : label->component.padding.left);
-    label->component.padding.right = (label->component.padding.right == 0 ? DEFAULT_pADDING : label->component.padding.right);
+    label->component.padding.top = (label->component.padding.top == 0 ? DEFAULT_PADDING : label->component.padding.top);
+    label->component.padding.bottom = (label->component.padding.bottom == 0 ? DEFAULT_PADDING : label->component.padding.bottom);
+    label->component.padding.left = (label->component.padding.left == 0 ? DEFAULT_PADDING : label->component.padding.left);
+    label->component.padding.right = (label->component.padding.right == 0 ? DEFAULT_PADDING : label->component.padding.right);
 
     label->component.margin.top = (label->component.margin.top == 0 ? DEFAULT_MARGIN : label->component.margin.top);
     label->component.margin.bottom = (label->component.margin.bottom == 0 ? DEFAULT_MARGIN : label->component.margin.bottom);
@@ -71,28 +73,6 @@ void gui_label(GUILabel *label, uint32_t x, uint32_t y, const char *text) {
             uint32_t lines = length / lineFonts;
             label->component.size.height = lines * label->fontSize + label->component.padding.top + label->component.padding.bottom;
         }
-    }
-
-    if (label->component.background.a == 0x00 &&
-        label->component.background.r == 0xFF &&
-        label->component.background.g == 0xFF &&
-        label->component.background.b == 0xFF) {
-
-        label->component.background.a = 0x00;
-        label->component.background.r = 0xFF;
-        label->component.background.g = 0xFF;
-        label->component.background.b = 0xFF;
-    }
-
-    if (label->component.foreground.a == 0x00 &&
-        label->component.foreground.r == 0x00 &&
-        label->component.foreground.g == 0x00 &&
-        label->component.foreground.b == 0x00) {
-
-        label->component.foreground.a = 0x00;
-        label->component.foreground.r = 0x00;
-        label->component.foreground.g = 0x00;
-        label->component.foreground.b = 0x00;
     }
 }
 

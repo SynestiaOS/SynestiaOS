@@ -16,7 +16,7 @@ typedef struct GUILabel {
 
 void gui_create_label(GUILabel *label);
 
-void gui_label(GUILabel *label, uint32_t x, uint32_t y, const char *text);
+void gui_init_label(GUILabel *label, uint32_t x, uint32_t y, const char *text);
 
 void gui_draw_label(GUILabel *label);
 

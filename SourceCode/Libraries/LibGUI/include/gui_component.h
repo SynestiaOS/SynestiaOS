@@ -8,8 +8,10 @@
 #include <stdint.h>
 
 #define DEFAULT_FONT_SIZE 8
-#define DEFAULT_pADDING 8
+#define DEFAULT_PADDING 8
 #define DEFAULT_MARGIN 0
+
+#define DEFAULT_WINDOW_HEADER_HEIGHT  DEFAULT_FONT_SIZE+2*DEFAULT_PADDING
 
 typedef struct Position {
     uint32_t x;
@@ -43,7 +45,16 @@ typedef struct Color {
     uint8_t b;
 } Color;
 
+typedef enum ComponentType {
+    BUTTON,
+    LABEL,
+    WINDOW,
+    PANEL,
+    CONTAINER,
+} ComponentType;
+
 typedef struct GUIComponent {
+    ComponentType type;
     Position position;
     Size size;
     Color background;
