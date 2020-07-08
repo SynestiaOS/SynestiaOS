@@ -170,7 +170,7 @@ int printf(const char *format, ...) {
                 int value = va_arg(valist, int);
 
                 // 2. covert int to string and append at tail
-                char int32s[10];
+                char int32s[10] = {'\0'};
                 char *intStr = itoa(value, &int32s, 10);
                 while (*intStr) {
                     *resultPtr = *intStr;
