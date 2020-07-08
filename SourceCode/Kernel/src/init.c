@@ -38,6 +38,14 @@ void draw_gui() {
     GUIWindow window;
     gui_window(&window, 100, 100, "SynestiaOS");
     gui_draw_window(&window);
+
+    GUIWindow window1;
+    gui_window(&window1, 150, 150, "SynestiaOS 1");
+    gui_draw_window(&window1);
+
+    GUIWindow window2;
+    gui_window(&window2, 200, 200, "SynestiaOS 2");
+    gui_draw_window(&window2);
 }
 
 void kernel_main(void) {
