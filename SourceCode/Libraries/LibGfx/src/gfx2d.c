@@ -412,3 +412,16 @@ void gfx2d_draw_ascii(int x, int y, uint8_t ch, uint32_t color) {
         }
     }
 }
+
+void gfx2d_draw_logo(int x, int y, uint32_t c) {
+    uint32_t *bitmap = logo_32_bits();
+    for (uint32_t i = 0; i < 32; i++) {
+        for (uint32_t j = 0; j < 32; j++) {
+            if ((bitmap[i] & (0x1 << j)) > 0) {
+                gpu_write_pixel_color(x + j, y + i, c);
+            } else {
+                gpu_write_pixel_color(x + j, y + i, FLUENT_PRIMARY_COLOR);
+            }
+        }
+    }
+}

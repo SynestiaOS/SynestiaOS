@@ -5,11 +5,52 @@
 #include <gui_label.h>
 #include <gfx2d.h>
 
+
+void gui_create_label(GUILabel *label) {
+    label->component.position.x = 0;
+    label->component.position.y = 0;
+
+    label->component.size.height = 0;
+    label->component.size.width = 0;
+
+    label->fontSize = 0;
+    label->component.padding.top = 0;
+    label->component.padding.bottom = 0;
+    label->component.padding.left = 0;
+    label->component.padding.right = 0;
+
+    label->component.margin.top = 0;
+    label->component.margin.bottom = 0;
+    label->component.margin.left = 0;
+    label->component.margin.right = 0;
+    label->text = "";
+
+    label->component.background.a = 0x00;
+    label->component.background.r = 0xFF;
+    label->component.background.g = 0xFF;
+    label->component.background.b = 0xFF;
+
+    label->component.foreground.a = 0x00;
+    label->component.foreground.r = 0x00;
+    label->component.foreground.g = 0x00;
+    label->component.foreground.b = 0x00;
+}
+
 void gui_label(GUILabel *label, uint32_t x, uint32_t y, const char *text) {
-    Position position;
-    position.x = x;
-    position.y = y;
-    label->component.position = position;
+    label->component.position.x = x;
+    label->component.position.y = y;
+
+    label->fontSize = (label->fontSize == 0 ? DEFAULT_FONT_SIZE : label->fontSize);
+    label->component.padding.top = (label->component.padding.top == 0 ? DEFAULT_pADDING : label->component.padding.top);
+    label->component.padding.bottom = (label->component.padding.bottom == 0 ? DEFAULT_pADDING : label->component.padding.bottom);
+    label->component.padding.left = (label->component.padding.left == 0 ? DEFAULT_pADDING : label->component.padding.left);
+    label->component.padding.right = (label->component.padding.right == 0 ? DEFAULT_pADDING : label->component.padding.right);
+
+    label->component.margin.top = (label->component.margin.top == 0 ? DEFAULT_MARGIN : label->component.margin.top);
+    label->component.margin.bottom = (label->component.margin.bottom == 0 ? DEFAULT_MARGIN : label->component.margin.bottom);
+    label->component.margin.left = (label->component.margin.left == 0 ? DEFAULT_MARGIN : label->component.margin.left);
+    label->component.margin.right = (label->component.margin.right == 0 ? DEFAULT_MARGIN : label->component.margin.right);
+
     label->text = text;
 
     char *tmp = text;
@@ -18,35 +59,48 @@ void gui_label(GUILabel *label, uint32_t x, uint32_t y, const char *text) {
         length++;
         tmp++;
     }
+
     if (label->component.size.width == 0) {
-        label->component.size.width = length * 8 + 16;
-        label->component.size.height = 24;
+        label->component.size.width = length * label->fontSize + label->component.padding.left + label->component.padding.right;
+        if (label->component.size.height == 0) {
+            label->component.size.height = label->fontSize + label->component.padding.top + label->component.padding.bottom;
+        }
     } else {
-        uint32_t lineFonts = (label->component.size.width - 16) / 8;
-        uint32_t lines = length / lineFonts;
-        label->component.size.height = lines * 24;
+        if (label->component.size.height == 0) {
+            uint32_t lineFonts = (label->component.size.width - label->component.padding.left - label->component.padding.right) / label->fontSize;
+            uint32_t lines = length / lineFonts;
+            label->component.size.height = lines * label->fontSize + label->component.padding.top + label->component.padding.bottom;
+        }
     }
 
-    Color colorBg;
-    colorBg.a = 0x00;
-    colorBg.r = 0xFF;
-    colorBg.g = 0xFF;
-    colorBg.b = 0xFF;
-    label->component.background = colorBg;
+    if (label->component.background.a == 0x00 &&
+        label->component.background.r == 0xFF &&
+        label->component.background.g == 0xFF &&
+        label->component.background.b == 0xFF) {
 
+        label->component.background.a = 0x00;
+        label->component.background.r = 0xFF;
+        label->component.background.g = 0xFF;
+        label->component.background.b = 0xFF;
+    }
 
-    Color colorFore;
-    colorFore.a = 0x00;
-    colorFore.r = 0x00;
-    colorFore.g = 0x00;
-    colorFore.b = 0x00;
-    label->component.foreground = colorFore;
+    if (label->component.foreground.a == 0x00 &&
+        label->component.foreground.r == 0x00 &&
+        label->component.foreground.g == 0x00 &&
+        label->component.foreground.b == 0x00) {
+
+        label->component.foreground.a = 0x00;
+        label->component.foreground.r = 0x00;
+        label->component.foreground.g = 0x00;
+        label->component.foreground.b = 0x00;
+    }
 }
 
 void gui_draw_label(GUILabel *label) {
+    // 1. draw_background
     gfx2d_fill_rect(
-            label->component.position.x,
-            label->component.position.y,
+            label->component.position.x + label->component.margin.left,
+            label->component.position.y + label->component.margin.top,
             label->component.position.x + label->component.size.width,
             label->component.position.y + label->component.size.height,
             label->component.background.r << 16 | label->component.background.g << 8 | label->component.background.b
@@ -60,15 +114,15 @@ void gui_draw_label(GUILabel *label) {
         length++;
         tmp++;
     }
-    uint32_t lineFonts = (label->component.size.width - 16) / 8;
+    uint32_t lineFonts = (label->component.size.width - label->component.padding.left - label->component.padding.right) / label->fontSize;
 
     tmp = label->text;
     uint32_t column = 0;
     uint32_t row = 0;
     while (*tmp) {
         gfx2d_draw_ascii(
-                label->component.position.x + xOffset * 8 + 8,
-                label->component.position.y + row * 8 + 8,
+                label->component.position.x + xOffset * label->fontSize + label->component.padding.left,
+                label->component.position.y + row * label->fontSize + label->component.padding.top,
                 *tmp,
                 label->component.foreground.r << 16 | label->component.foreground.g << 8 | label->component.foreground.b
         );
@@ -82,6 +136,4 @@ void gui_draw_label(GUILabel *label) {
         xOffset++;
         tmp++;
     }
-
-    // 3. register click event
 }

@@ -9,6 +9,7 @@
 #include <gui_button.h>
 #include <gui_window.h>
 #include <gui_label.h>
+#include <gfx2d.h>
 
 void print_splash() {
     const char *str = "   _____                       _   _       \n"
@@ -24,16 +25,33 @@ void print_splash() {
 }
 
 void draw_gui() {
+    gfx2d_draw_logo(0, 0, 0xFFFFFF);
+
     GUIButton synestiaOSButton;
-    gui_button(&synestiaOSButton, 10, 10, "SynestiaOS Button");
+    gui_create_button(&synestiaOSButton);
+    synestiaOSButton.component.size.height = 32;
+    synestiaOSButton.component.padding.top = 12;
+    gui_init_button(&synestiaOSButton, 32, 0, "SynestiaOS");
     gui_draw_button(&synestiaOSButton);
 
+    GUILabel bar;
+    gui_create_label(&bar);
+    bar.component.size.width = 1024 - 32 - synestiaOSButton.component.size.width;
+    bar.component.size.height = 32;
+    bar.component.background.r = 0x00;
+    bar.component.background.g = 0x78;
+    bar.component.background.b = 0xD4;
+    gui_label(&bar, 32 + synestiaOSButton.component.size.width, 0, "");
+    gui_draw_label(&bar);
+
     GUILabel synestiaOSLabel;
+    gui_create_label(&synestiaOSLabel);
     synestiaOSLabel.component.size.width = 100;
     gui_label(&synestiaOSLabel, 10, 40, "Welcome to Synestia Operation System.");
     gui_draw_label(&synestiaOSLabel);
 
     GUILabel synestiaOSLabel2;
+    gui_create_label(&synestiaOSLabel2);
     gui_label(&synestiaOSLabel2, 200, 40, "Welcome to Synestia Operation System.");
     gui_draw_label(&synestiaOSLabel2);
 

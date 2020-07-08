@@ -10,9 +10,13 @@
 typedef struct GUIButton {
     struct GUIComponent component;
     char *text;
+    uint32_t fontSize;
 } GUIButton;
 
-void gui_button(GUIButton *button, uint32_t x, uint32_t y, const char *text);
+
+void gui_create_button(GUIButton *button);
+
+void gui_init_button(GUIButton *button, uint32_t x, uint32_t y, const char *text);
 
 void gui_draw_button(GUIButton *button);
 

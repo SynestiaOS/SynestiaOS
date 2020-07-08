@@ -5,9 +5,6 @@
 #include <gui_window.h>
 #include <gfx2d.h>
 
-#define FLUENT_PRIMARY_COLOR 0x0078D4
-
-
 void gui_window(GUIWindow *window, uint32_t x, uint32_t y, const char *title) {
     Position position;
     position.x = x;

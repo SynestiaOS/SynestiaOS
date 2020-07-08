@@ -11,7 +11,10 @@
 typedef struct GUILabel {
     struct GUIComponent component;
     char *text;
+    uint32_t fontSize;
 } GUILabel;
+
+void gui_create_label(GUILabel *label);
 
 void gui_label(GUILabel *label, uint32_t x, uint32_t y, const char *text);
 
