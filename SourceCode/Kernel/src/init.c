@@ -8,6 +8,7 @@
 #include <gpu.h>
 #include <gui_button.h>
 #include <gui_window.h>
+#include <gui_label.h>
 
 void print_splash() {
     const char *str = "   _____                       _   _       \n"
@@ -23,17 +24,18 @@ void print_splash() {
 }
 
 void draw_gui() {
-    GUIButton guiStartButton;
-    gui_button(&guiStartButton, 150, 10, "Re Boot");
-    gui_draw_button(&guiStartButton);
-
-    GUIButton guiShutDownButton;
-    gui_button(&guiShutDownButton, 300, 10, "Shut Down");
-    gui_draw_button(&guiShutDownButton);
-
     GUIButton synestiaOSButton;
-    gui_button(&synestiaOSButton, 10, 10, "[SynestiaOS]");
+    gui_button(&synestiaOSButton, 10, 10, "SynestiaOS Button");
     gui_draw_button(&synestiaOSButton);
+
+    GUILabel synestiaOSLabel;
+    synestiaOSLabel.component.size.width = 100;
+    gui_label(&synestiaOSLabel, 10, 40, "Welcome to Synestia Operation System.");
+    gui_draw_label(&synestiaOSLabel);
+
+    GUILabel synestiaOSLabel2;
+    gui_label(&synestiaOSLabel2, 200, 40, "Welcome to Synestia Operation System.");
+    gui_draw_label(&synestiaOSLabel2);
 
     GUIWindow window;
     gui_window(&window, 100, 100, "SynestiaOS");
