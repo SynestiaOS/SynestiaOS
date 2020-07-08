@@ -14,10 +14,10 @@ typedef struct GUIButton {
 } GUIButton;
 
 
-void gui_create_button(GUIButton *button);
+void gui_button_create(GUIButton *button);
 
-void gui_init_button(GUIButton *button, uint32_t x, uint32_t y, const char *text);
+void gui_button_init(GUIButton *button, uint32_t x, uint32_t y, const char *text);
 
-void gui_draw_button(GUIButton *button);
+void gui_button_draw(GUIButton *button);
 
 #endif //__LIBRARY_LIBGUI_BUTTON_H__

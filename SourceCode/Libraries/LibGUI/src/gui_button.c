@@ -4,8 +4,10 @@
 #include <gui_button.h>
 #include <gfx2d.h>
 
-void gui_create_button(GUIButton *button) {
+void gui_button_create(GUIButton *button) {
     button->component.type = BUTTON;
+    button->component.node.next = nullptr;
+    button->component.node.prev = nullptr;
 
     button->component.position.x = 0;
     button->component.position.y = 0;
@@ -35,7 +37,7 @@ void gui_create_button(GUIButton *button) {
     button->component.foreground.b = 0xFF;
 }
 
-void gui_init_button(GUIButton *button, uint32_t x, uint32_t y, const char *text) {
+void gui_button_init(GUIButton *button, uint32_t x, uint32_t y, const char *text) {
     button->component.position.x = x;
     button->component.position.y = y;
 
@@ -73,7 +75,7 @@ void gui_init_button(GUIButton *button, uint32_t x, uint32_t y, const char *text
     }
 }
 
-void gui_draw_button(GUIButton *button) {
+void gui_button_draw(GUIButton *button) {
     // 1. draw_background
     gfx2d_fill_rect(
             button->component.position.x + button->component.margin.left,

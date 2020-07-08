@@ -6,8 +6,10 @@
 #include <gfx2d.h>
 
 
-void gui_create_label(GUILabel *label) {
+void gui_label_create(GUILabel *label) {
     label->component.type = LABEL;
+    label->component.node.next = nullptr;
+    label->component.node.prev = nullptr;
 
     label->component.position.x = 0;
     label->component.position.y = 0;
@@ -38,7 +40,7 @@ void gui_create_label(GUILabel *label) {
     label->component.foreground.b = 0x00;
 }
 
-void gui_init_label(GUILabel *label, uint32_t x, uint32_t y, const char *text) {
+void gui_label_init(GUILabel *label, uint32_t x, uint32_t y, const char *text) {
     label->component.position.x = x;
     label->component.position.y = y;
 
@@ -76,7 +78,7 @@ void gui_init_label(GUILabel *label, uint32_t x, uint32_t y, const char *text) {
     }
 }
 
-void gui_draw_label(GUILabel *label) {
+void gui_label_draw(GUILabel *label) {
     // 1. draw_background
     gfx2d_fill_rect(
             label->component.position.x + label->component.margin.left,

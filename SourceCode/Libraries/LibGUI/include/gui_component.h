@@ -6,6 +6,7 @@
 #define __LIBRARY_LIBGUI_COMPONENT_H__
 
 #include <stdint.h>
+#include <list.h>
 
 #define DEFAULT_FONT_SIZE 8
 #define DEFAULT_PADDING 8
@@ -55,6 +56,7 @@ typedef enum ComponentType {
 
 typedef struct GUIComponent {
     ComponentType type;
+    ListNode node;
     Position position;
     Size size;
     Color background;

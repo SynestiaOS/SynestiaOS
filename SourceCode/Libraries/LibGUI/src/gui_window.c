@@ -5,8 +5,11 @@
 #include <gui_window.h>
 #include <gfx2d.h>
 
-void gui_create_window(GUIWindow *window) {
+void gui_window_create(GUIWindow *window) {
     window->component.type = WINDOW;
+    window->component.node.next = nullptr;
+    window->component.node.prev = nullptr;
+    window->children = nullptr;
 
     window->component.position.x = 0;
     window->component.position.y = 0;
@@ -37,7 +40,7 @@ void gui_create_window(GUIWindow *window) {
     window->title = "";
 }
 
-void gui_init_window(GUIWindow *window, uint32_t x, uint32_t y, const char *title) {
+void gui_window_init(GUIWindow *window, uint32_t x, uint32_t y, const char *title) {
 
     window->component.position.x = x;
     window->component.position.y = y;
@@ -70,7 +73,11 @@ void gui_init_window(GUIWindow *window, uint32_t x, uint32_t y, const char *titl
     }
 }
 
-void gui_draw_window(GUIWindow *window) {
+void gui_window_add_component(CUIComponent *component){
+
+}
+
+void gui_window_draw(GUIWindow *window) {
     // 1. draw_background
     gfx2d_fill_rect(
             window->component.position.x,
@@ -105,7 +112,7 @@ void gui_draw_window(GUIWindow *window) {
 
     // 4. draw header window
     gfx2d_fill_rect(
-            window->component.position.x + window->component.size.width - 24 * 3,
+            window->component.position.x + window->component.size.width - DEFAULT_WINDOW_HEADER_HEIGHT * 3,
             window->component.position.y + 4,
             window->component.position.x + window->component.size.width - 24 * 3 + 16,
             window->component.position.y + 4 + 16,

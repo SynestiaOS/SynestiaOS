@@ -28,47 +28,47 @@ void draw_gui() {
     gfx2d_draw_logo(0, 0, 0xFFFFFF);
 
     GUIButton synestiaOSButton;
-    gui_create_button(&synestiaOSButton);
+    gui_button_create(&synestiaOSButton);
     synestiaOSButton.component.size.height = 32;
     synestiaOSButton.component.padding.top = 12;
-    gui_init_button(&synestiaOSButton, 32, 0, "SynestiaOS");
-    gui_draw_button(&synestiaOSButton);
+    gui_button_init(&synestiaOSButton, 32, 0, "SynestiaOS");
+    gui_button_draw(&synestiaOSButton);
 
     GUILabel bar;
-    gui_create_label(&bar);
+    gui_label_create(&bar);
     bar.component.size.width = 1024 - 32 - synestiaOSButton.component.size.width;
     bar.component.size.height = 32;
     bar.component.background.r = 0x00;
     bar.component.background.g = 0x78;
     bar.component.background.b = 0xD4;
-    gui_init_label(&bar, 32 + synestiaOSButton.component.size.width, 0, "");
-    gui_draw_label(&bar);
+    gui_label_init(&bar, 32 + synestiaOSButton.component.size.width, 0, "");
+    gui_label_draw(&bar);
 
     GUILabel synestiaOSLabel;
-    gui_create_label(&synestiaOSLabel);
+    gui_label_create(&synestiaOSLabel);
     synestiaOSLabel.component.size.width = 100;
-    gui_init_label(&synestiaOSLabel, 10, 40, "Welcome to Synestia Operation System.");
-    gui_draw_label(&synestiaOSLabel);
+    gui_label_init(&synestiaOSLabel, 10, 40, "Welcome to Synestia Operation System.");
+    gui_label_draw(&synestiaOSLabel);
 
     GUILabel synestiaOSLabel2;
-    gui_create_label(&synestiaOSLabel2);
-    gui_init_label(&synestiaOSLabel2, 200, 40, "Welcome to Synestia Operation System.");
-    gui_draw_label(&synestiaOSLabel2);
+    gui_label_create(&synestiaOSLabel2);
+    gui_label_init(&synestiaOSLabel2, 200, 40, "Welcome to Synestia Operation System.");
+    gui_label_draw(&synestiaOSLabel2);
 
     GUIWindow window;
-    gui_create_window(&window);
-    gui_init_window(&window, 100, 100, "SynestiaOS");
-    gui_draw_window(&window);
+    gui_window_create(&window);
+    gui_window_init(&window, 100, 100, "SynestiaOS");
+    gui_window_draw(&window);
 
     GUIWindow window1;
-    gui_create_window(&window1);
-    gui_init_window(&window1, 150, 150, "SynestiaOS 1");
-    gui_draw_window(&window1);
+    gui_window_create(&window1);
+    gui_window_init(&window1, 150, 150, "SynestiaOS 1");
+    gui_window_draw(&window1);
 
     GUIWindow window2;
-    gui_create_window(&window2);
-    gui_init_window(&window2, 200, 200, "SynestiaOS 2");
-    gui_draw_window(&window2);
+    gui_window_create(&window2);
+    gui_window_init(&window2, 200, 200, "SynestiaOS 2");
+    gui_window_draw(&window2);
 }
 
 void kernel_main(void) {

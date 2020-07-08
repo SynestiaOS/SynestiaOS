@@ -14,11 +14,11 @@ typedef struct GUILabel {
     uint32_t fontSize;
 } GUILabel;
 
-void gui_create_label(GUILabel *label);
+void gui_label_create(GUILabel *label);
 
-void gui_init_label(GUILabel *label, uint32_t x, uint32_t y, const char *text);
+void gui_label_init(GUILabel *label, uint32_t x, uint32_t y, const char *text);
 
-void gui_draw_label(GUILabel *label);
+void gui_label_draw(GUILabel *label);
 
 
 #endif //__LIBRARY_LIBGUI_LABEL_H__

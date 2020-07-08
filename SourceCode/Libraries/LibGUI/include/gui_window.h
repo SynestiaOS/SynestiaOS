@@ -13,13 +13,15 @@
 typedef struct GUIWindow {
     struct GUIComponent component;
     char *title;
-    // todo: children
+    CUIComponent *children;
 } GUIWindow;
 
-void gui_create_window(GUIWindow *window);
+void gui_window_create(GUIWindow *window);
 
-void gui_init_window(GUIWindow *window, uint32_t x, uint32_t y, const char *title);
+void gui_window_init(GUIWindow *window, uint32_t x, uint32_t y, const char *title);
 
-void gui_draw_window(GUIWindow *window);
+void gui_window_add_component(CUIComponent *component);
+
+void gui_window_draw(GUIWindow *window);
 
 #endif //__LIBRARY_LIBGUI_WINDOW_H__
