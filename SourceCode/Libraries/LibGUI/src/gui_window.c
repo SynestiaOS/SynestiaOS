@@ -157,7 +157,7 @@ void gui_window_draw(GUIWindow *window) {
     );
 
     // 6. draw children
-//    gui_window_draw_children(window);
+    gui_window_draw_children(window);
 
 
     // 7. register click event
@@ -167,24 +167,26 @@ void gui_window_draw(GUIWindow *window) {
 
 void gui_window_draw_children(GUIWindow *window) {
     GUIComponent *component = window->children;
-    while (component->node.next != nullptr) {
-        switch (component->type) {
-            case BUTTON: {
-                GUIButton *button = getNode(component, GUIButton, component);
-                gui_button_draw(button);
-                break;
+    if (component != nullptr) {
+        while (component->node.next != nullptr) {
+            switch (component->type) {
+                case BUTTON: {
+                    GUIButton *button = getNode(component, GUIButton, component);
+                    gui_button_draw(button);
+                    break;
+                }
+
+                case LABEL: {
+                    GUILabel *label = getNode(component, GUILabel, component);
+                    gui_label_draw(label);
+                    break;
+                }
+
+                default:
+                    break;
             }
 
-            case LABEL: {
-                GUILabel *label = getNode(component, GUILabel, component);
-                gui_label_draw(label);
-                break;
-            }
-
-            default:
-                break;
+            component = getNode(component->node.next, GUIComponent, node);
         }
-
-        component = getNode(component->node.next, GUIComponent, node);
     }
 }
