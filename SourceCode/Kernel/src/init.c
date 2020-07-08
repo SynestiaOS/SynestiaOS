@@ -3,7 +3,6 @@
 #include <synestia_os_hal.h>
 #include <kheap.h>
 #include <vmm.h>
-#include <tests.h>
 #include <sched.h>
 #include <gpu.h>
 #include <gui_button.h>
@@ -90,9 +89,6 @@ void kernel_main(void) {
     print_splash();
 
     vmm_init();
-
-    kheap_init(); // this is just for test
-    __run_tests();
 
     kheap_init();
 
