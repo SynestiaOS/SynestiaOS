@@ -1,12 +1,15 @@
-#include <gfx2d.h>
-#include <gpu.h>
-#include <gui_button.h>
 #include <interrupt.h>
-#include <kheap.h>
-#include <sched.h>
 #include <stdlib.h>
 #include <synestia_os_hal.h>
+#include <kheap.h>
 #include <vmm.h>
+#include <tests.h>
+#include <sched.h>
+#include <gpu.h>
+#include <gui_button.h>
+#include <gui_window.h>
+#include <gui_label.h>
+#include <gfx2d.h>
 
 void print_splash() {
     const char *str = "   _____                       _   _       \n"
@@ -21,55 +24,65 @@ void print_splash() {
     print(str);
 }
 
-void draw_chess_board() {
-
-    gfx_fill(0, 0, 1024, 768, 0x00A86E3A);
-
-    // top
-    gfx_fill(0, 0, 1024, 30, 0x00FFFF00);
-
-    // bottom
-    gfx_fill(0, 738, 1024, 768, 0x00FFFF00);
-
-    // left
-    gfx_fill(0, 0, 30, 768, 0x00FFFF00);
-
-    // right
-    gfx_fill(994, 0, 1024, 768, 0x00FFFF00);
-
-    for (int i = 64; i < 1024; i += 64) {
-        gfx_draw_line(i, 0, i, 768, 0x00FFFFFF);
-    }
-
-    for (int i = 64; i < 748; i += 64) {
-        gfx_draw_line(0, i, 1024, i, 0x00FFFFFF);
-    }
-
-
-    for (int i = 64; i < 1024 - 64; i += 64) {
-        for (int j = 64; j < 768 - 64; j += 64) {
-            if ((i * j) % 3 == 0) {
-                gfx_fill_circle(i, j, 26, 0x00FF0000);
-            } else {
-                gfx_fill_circle(i, j, 26, 0x000000FF);
-            }
-        }
-    }
-
-    gfx_fill_triangle(0, 0, 0, 150, 150, 0, 0x00FF00FF);
-    gfx_fill_triangle(1024 - 150, 0, 1024, 0, 1024, 150, 0x00FF00FF);
-
-    GUIButton guiStartButton;
-    gui_button(&guiStartButton, 934, 10, "Re Boot");
-    gui_draw_button(&guiStartButton);
-
-    GUIButton guiShutDownButton;
-    gui_button(&guiShutDownButton, 934, 30, "Shut Down");
-    gui_draw_button(&guiShutDownButton);
+void draw_gui() {
+    gfx2d_draw_logo(0, 0, 0xFFFFFF);
 
     GUIButton synestiaOSButton;
-    gui_button(&synestiaOSButton, 10, 10, "[SynestiaOS]");
-    gui_draw_button(&synestiaOSButton);
+    gui_button_create(&synestiaOSButton);
+    synestiaOSButton.component.size.height = 32;
+    synestiaOSButton.component.padding.top = 12;
+    gui_button_init(&synestiaOSButton, 32, 0, "SynestiaOS");
+    gui_button_draw(&synestiaOSButton);
+
+    GUILabel bar;
+    gui_label_create(&bar);
+    bar.component.size.width = 1024 - 32 - synestiaOSButton.component.size.width;
+    bar.component.size.height = 32;
+    bar.component.background.r = 0x00;
+    bar.component.background.g = 0x78;
+    bar.component.background.b = 0xD4;
+    gui_label_init(&bar, 32 + synestiaOSButton.component.size.width, 0, "");
+    gui_label_draw(&bar);
+
+    GUILabel synestiaOSLabel;
+    gui_label_create(&synestiaOSLabel);
+    synestiaOSLabel.component.size.width = 100;
+    gui_label_init(&synestiaOSLabel, 10, 40, "Welcome to Synestia Operation System.");
+    gui_label_draw(&synestiaOSLabel);
+
+    GUILabel synestiaOSLabel2;
+    gui_label_create(&synestiaOSLabel2);
+    gui_label_init(&synestiaOSLabel2, 200, 40, "Welcome to Synestia Operation System.");
+    gui_label_draw(&synestiaOSLabel2);
+
+    GUIWindow window;
+    gui_window_create(&window);
+    gui_window_init(&window, 100, 100, "SynestiaOS");
+    gui_window_draw(&window);
+
+    GUIWindow window1;
+    gui_window_create(&window1);
+    gui_window_init(&window1, 150, 150, "SynestiaOS 1");
+    gui_window_draw(&window1);
+
+    GUIButton ok;
+    gui_button_create(&ok);
+    synestiaOSButton.component.size.height = 32;
+    synestiaOSButton.component.padding.top = 12;
+    gui_button_init(&ok, 10, 0, "Inner Window Button");
+
+    GUILabel label;
+    gui_label_create(&label);
+    label.component.size.height = 32;
+    label.component.padding.top = 12;
+    gui_label_init(&label, 10, 50, "Inner Window Label");
+
+    GUIWindow window2;
+    gui_window_create(&window2);
+    gui_window_add_children(&window2, &(ok.component));
+    gui_window_add_children(&window2, &(label.component));
+    gui_window_init(&window2, 200, 200, "SynestiaOS 2");
+    gui_window_draw(&window2);
 }
 
 void kernel_main(void) {
@@ -78,11 +91,14 @@ void kernel_main(void) {
 
     vmm_init();
 
+    kheap_init(); // this is just for test
+    __run_tests();
+
     kheap_init();
 
     gpu_init();
 
-    draw_chess_board();
+    draw_gui();
 
     init_interrupt();
 

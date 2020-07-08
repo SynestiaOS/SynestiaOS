@@ -3,23 +3,22 @@ project(KernelArch C ASM)
 aux_source_directory(${KernelArch_SOURCE_DIR}/${SynestiaArch} KernelArchSrc)
 aux_source_directory(${KernelArch_SOURCE_DIR}/${SynestiaArch}/vmm/src KernelArchVMMSrc)
 
-add_library(${PROJECT_NAME}
-        OBJECT
+add_executable(${KernelName}
         ${KernelArchSrc}
         ${KernelArchVMMSrc}
-        ${KernelArch_SOURCE_DIR}/${SynestiaArch}/boot.s)
-
-target_include_vmm_header_files(${PROJECT_NAME})
-target_include_kernel_header_files(${PROJECT_NAME})
-target_include_libc_header_files(${PROJECT_NAME})
-
-add_executable(${KernelName}
-        $<TARGET_OBJECTS:KernelArch>
+        ${KernelArch_SOURCE_DIR}/${SynestiaArch}/boot.s
         $<TARGET_OBJECTS:Kernel>
         $<TARGET_OBJECTS:C>
         $<TARGET_OBJECTS:Gfx>
         $<TARGET_OBJECTS:GUI>
-        $<TARGET_OBJECTS:BoardRaspberryPi3>)
+        $<TARGET_OBJECTS:Console>
+        $<TARGET_OBJECTS:BoardRaspberryPi3>
+        $<TARGET_OBJECTS:Tests>)
+
+
+target_include_vmm_header_files(${KernelName})
+target_include_kernel_header_files(${KernelName})
+target_include_libc_header_files(${KernelName})
 
 target_link_options(${KernelName} PRIVATE -T ${KernelArch_SOURCE_DIR}/${SynestiaArch}/kernel.ld)
 
