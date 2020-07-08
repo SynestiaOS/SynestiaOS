@@ -38,7 +38,7 @@ void gui_button(GUIButton *button, uint32_t x, uint32_t y, const char *text) {
 
 void gui_draw_button(GUIButton *button) {
     // 1. draw_background
-    gfx_fill_rect(
+    gfx2d_fill_rect(
             button->conponent.position.x,
             button->conponent.position.y,
             button->conponent.position.x + button->conponent.size.width,
@@ -50,7 +50,7 @@ void gui_draw_button(GUIButton *button) {
     char *tmp = button->text;
     uint32_t xOffset = 0;
     while (*tmp) {
-        gfx_draw_ascii(
+        gfx2d_draw_ascii(
                 button->conponent.position.x + xOffset * 8 + 8,
                 button->conponent.position.y + 8,
                 *tmp,

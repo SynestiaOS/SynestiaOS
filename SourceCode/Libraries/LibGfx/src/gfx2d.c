@@ -9,14 +9,14 @@
 void gpu_write_pixel_color(uint32_t x, uint32_t y, uint32_t c);
 
 
-void gfx_draw_rect(int x1, int y1, int x2, int y2, uint32_t c) {
-    gfx_draw_line(x1, y1, x1, y2, c);
-    gfx_draw_line(x1, y1, x2, y1, c);
-    gfx_draw_line(x2, y1, x2, y2, c);
-    gfx_draw_line(x1, y2, x2, y2, c);
+void gfx2d_draw_rect(int x1, int y1, int x2, int y2, uint32_t c) {
+    gfx2d_draw_line(x1, y1, x1, y2, c);
+    gfx2d_draw_line(x1, y1, x2, y1, c);
+    gfx2d_draw_line(x2, y1, x2, y2, c);
+    gfx2d_draw_line(x1, y2, x2, y2, c);
 }
 
-void gfx_fill_rect(int x1, int y1, int x2, int y2, uint32_t c) {
+void gfx2d_fill_rect(int x1, int y1, int x2, int y2, uint32_t c) {
     for (int x = x1; x < x2; x++) {
         for (int y = y1; y < y2; y++) {
             gpu_write_pixel_color(x, y, c);
@@ -24,7 +24,7 @@ void gfx_fill_rect(int x1, int y1, int x2, int y2, uint32_t c) {
     }
 }
 
-void gfx_draw_line(int x1, int y1, int x2, int y2, uint32_t c) {
+void gfx2d_draw_line(int x1, int y1, int x2, int y2, uint32_t c) {
     int x = 0;
     int y = 0;
     int dx = 0;
@@ -98,10 +98,10 @@ void gfx_draw_line(int x1, int y1, int x2, int y2, uint32_t c) {
 }
 
 
-void gfx_draw_triangle(int x1, int y1, int x2, int y2, int x3, int y3, uint32_t c) {
-    gfx_draw_line(x1, y1, x2, y2, c);
-    gfx_draw_line(x2, y2, x3, y3, c);
-    gfx_draw_line(x3, y3, x1, y1, c);
+void gfx2d_draw_triangle(int x1, int y1, int x2, int y2, int x3, int y3, uint32_t c) {
+    gfx2d_draw_line(x1, y1, x2, y2, c);
+    gfx2d_draw_line(x2, y2, x3, y3, c);
+    gfx2d_draw_line(x3, y3, x1, y1, c);
 }
 
 void drawline(int sx, int ex, int ny, int c) {
@@ -358,7 +358,7 @@ void gfx_fill_triangle(int x1, int y1, int x2, int y2, int x3, int y3, uint32_t 
 }
 
 
-void gfx_draw_circle(int xc, int yc, int r, uint32_t c) {
+void gfx2d_draw_circle(int xc, int yc, int r, uint32_t c) {
     int x = 0;
     int y = r;
     int p = 3 - 2 * r;
@@ -381,7 +381,7 @@ void gfx_draw_circle(int xc, int yc, int r, uint32_t c) {
     }
 }
 
-void gfx_fill_circle(int xc, int yc, int r, uint32_t c) {
+void gfx2d_fill_circle(int xc, int yc, int r, uint32_t c) {
     int x = 0;
     int y = r;
     int p = 3 - 2 * r;
@@ -402,7 +402,7 @@ void gfx_fill_circle(int xc, int yc, int r, uint32_t c) {
 }
 
 
-void gfx_draw_ascii(int x, int y, uint8_t ch, uint32_t color) {
+void gfx2d_draw_ascii(int x, int y, uint8_t ch, uint32_t color) {
     uint8_t *bitmap = font_8_bits(ch);
     for (uint32_t i = 0; i < 8; i++) {
         for (uint32_t j = 0; j < 8; j++) {

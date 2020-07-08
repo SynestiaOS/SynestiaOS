@@ -42,7 +42,7 @@ void gui_window(GUIWindow *window, uint32_t x, uint32_t y, const char *title) {
 
 void gui_draw_window(GUIWindow *window) {
     // 1. draw_background
-    gfx_fill_rect(
+    gfx2d_fill_rect(
             window->conponent.position.x,
             window->conponent.position.y,
             window->conponent.position.x + window->conponent.size.width,
@@ -51,7 +51,7 @@ void gui_draw_window(GUIWindow *window) {
     );
 
     // 2. draw header
-    gfx_fill_rect(
+    gfx2d_fill_rect(
             window->conponent.position.x,
             window->conponent.position.y,
             window->conponent.position.x + window->conponent.size.width,
@@ -63,7 +63,7 @@ void gui_draw_window(GUIWindow *window) {
     char *tmp = window->title;
     uint32_t xOffset = 0;
     while (*tmp) {
-        gfx_draw_ascii(
+        gfx2d_draw_ascii(
                 window->conponent.position.x + xOffset * 8 + 8,
                 window->conponent.position.y + 8,
                 *tmp,
@@ -74,37 +74,37 @@ void gui_draw_window(GUIWindow *window) {
     }
 
     // 4. draw header button
-    gfx_fill_rect(
+    gfx2d_fill_rect(
             window->conponent.position.x + window->conponent.size.width - 24 * 3,
             window->conponent.position.y + 4,
             window->conponent.position.x + window->conponent.size.width - 24 * 3 + 16,
             window->conponent.position.y + 4 + 16,
             0x00FFFFFF
     );
-    gfx_draw_ascii(window->conponent.position.x + window->conponent.size.width - 24 * 3 + 4,
+    gfx2d_draw_ascii(window->conponent.position.x + window->conponent.size.width - 24 * 3 + 4,
                    window->conponent.position.y + 4 + 4, '_', FLUENT_PRIMARY_COLOR);
-    gfx_fill_rect(
+    gfx2d_fill_rect(
             window->conponent.position.x + window->conponent.size.width - 24 * 2,
             window->conponent.position.y + 4,
             window->conponent.position.x + window->conponent.size.width - 24 * 2 + 16,
             window->conponent.position.y + 4 + 16,
             0x00FFFFFF
     );
-    gfx_draw_ascii(window->conponent.position.x + window->conponent.size.width - 24 * 2 + 4,
+    gfx2d_draw_ascii(window->conponent.position.x + window->conponent.size.width - 24 * 2 + 4,
                    window->conponent.position.y + 4 + 4, 'o', FLUENT_PRIMARY_COLOR);
 
-    gfx_fill_rect(
+    gfx2d_fill_rect(
             window->conponent.position.x + window->conponent.size.width - 24 * 1,
             window->conponent.position.y + 4,
             window->conponent.position.x + window->conponent.size.width - 24 * 1 + 16,
             window->conponent.position.y + 4 + 16,
             0x00FFFFFF
     );
-    gfx_draw_ascii(window->conponent.position.x + window->conponent.size.width - 24 * 1 + 4,
+    gfx2d_draw_ascii(window->conponent.position.x + window->conponent.size.width - 24 * 1 + 4,
                    window->conponent.position.y + 4 + 4, 'x', FLUENT_PRIMARY_COLOR);
 
     // 5. draw border
-    gfx_draw_rect(
+    gfx2d_draw_rect(
             window->conponent.position.x,
             window->conponent.position.y,
             window->conponent.position.x + window->conponent.size.width,
