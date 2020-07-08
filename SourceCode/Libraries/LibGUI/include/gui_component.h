@@ -56,6 +56,7 @@ typedef enum ComponentType {
 
 typedef struct GUIComponent {
     ComponentType type;
+    bool visable;
     ListNode node;
     Position position;
     Size size;

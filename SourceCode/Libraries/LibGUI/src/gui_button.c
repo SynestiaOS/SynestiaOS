@@ -3,9 +3,11 @@
 //
 #include <gui_button.h>
 #include <gfx2d.h>
+#include <stdbool.h>
 
 void gui_button_create(GUIButton *button) {
     button->component.type = BUTTON;
+    button->component.visable = true;
     button->component.node.next = nullptr;
     button->component.node.prev = nullptr;
 
@@ -76,45 +78,46 @@ void gui_button_init(GUIButton *button, uint32_t x, uint32_t y, const char *text
 }
 
 void gui_button_draw(GUIButton *button) {
-    // 1. draw_background
-    gfx2d_fill_rect(
-            button->component.position.x + button->component.margin.left,
-            button->component.position.y + button->component.margin.top,
-            button->component.position.x + button->component.size.width,
-            button->component.position.y + button->component.size.height,
-            button->component.background.r << 16 | button->component.background.g << 8 | button->component.background.b
-    );
-
-    // 2. draw_font
-    char *tmp = button->text;
-    uint32_t xOffset = 0;
-    uint32_t length = 0;
-    while (*tmp) {
-        length++;
-        tmp++;
-    }
-    uint32_t lineFonts = (button->component.size.width - button->component.padding.left - button->component.padding.right) / button->fontSize;
-
-    tmp = button->text;
-    uint32_t column = 0;
-    uint32_t row = 0;
-    while (*tmp) {
-        gfx2d_draw_ascii(
-                button->component.position.x + xOffset * button->fontSize + button->component.padding.left,
-                button->component.position.y + row * button->fontSize + button->component.padding.top,
-                *tmp,
-                button->component.foreground.r << 16 | button->component.foreground.g << 8 | button->component.foreground.b
+    if(button->component.visable) {
+        // 1. draw_background
+        gfx2d_fill_rect(
+                button->component.position.x + button->component.margin.left,
+                button->component.position.y + button->component.margin.top,
+                button->component.position.x + button->component.size.width,
+                button->component.position.y + button->component.size.height,
+                button->component.background.r << 16 | button->component.background.g << 8 | button->component.background.b
         );
-        column++;
-        if (column == lineFonts) {
-            row++;
-            xOffset = 0;
-            column = 0;
+
+        // 2. draw_font
+        char *tmp = button->text;
+        uint32_t xOffset = 0;
+        uint32_t length = 0;
+        while (*tmp) {
+            length++;
+            tmp++;
         }
+        uint32_t lineFonts = (button->component.size.width - button->component.padding.left - button->component.padding.right) / button->fontSize;
 
-        xOffset++;
-        tmp++;
+        tmp = button->text;
+        uint32_t column = 0;
+        uint32_t row = 0;
+        while (*tmp) {
+            gfx2d_draw_ascii(
+                    button->component.position.x + xOffset * button->fontSize + button->component.padding.left,
+                    button->component.position.y + row * button->fontSize + button->component.padding.top,
+                    *tmp,
+                    button->component.foreground.r << 16 | button->component.foreground.g << 8 | button->component.foreground.b
+            );
+            column++;
+            if (column == lineFonts) {
+                row++;
+                xOffset = 0;
+                column = 0;
+            }
+
+            xOffset++;
+            tmp++;
+        }
+        // 3. register click event
     }
-
-    // 3. register click event
 }

@@ -4,10 +4,12 @@
 
 #include <gui_label.h>
 #include <gfx2d.h>
+#include <stdbool.h>
 
 
 void gui_label_create(GUILabel *label) {
     label->component.type = LABEL;
+    label->component.visable = true;
     label->component.node.next = nullptr;
     label->component.node.prev = nullptr;
 
@@ -79,43 +81,45 @@ void gui_label_init(GUILabel *label, uint32_t x, uint32_t y, const char *text) {
 }
 
 void gui_label_draw(GUILabel *label) {
-    // 1. draw_background
-    gfx2d_fill_rect(
-            label->component.position.x + label->component.margin.left,
-            label->component.position.y + label->component.margin.top,
-            label->component.position.x + label->component.size.width,
-            label->component.position.y + label->component.size.height,
-            label->component.background.r << 16 | label->component.background.g << 8 | label->component.background.b
-    );
-
-    // 2. draw_font
-    char *tmp = label->text;
-    uint32_t xOffset = 0;
-    uint32_t length = 0;
-    while (*tmp) {
-        length++;
-        tmp++;
-    }
-    uint32_t lineFonts = (label->component.size.width - label->component.padding.left - label->component.padding.right) / label->fontSize;
-
-    tmp = label->text;
-    uint32_t column = 0;
-    uint32_t row = 0;
-    while (*tmp) {
-        gfx2d_draw_ascii(
-                label->component.position.x + xOffset * label->fontSize + label->component.padding.left,
-                label->component.position.y + row * label->fontSize + label->component.padding.top,
-                *tmp,
-                label->component.foreground.r << 16 | label->component.foreground.g << 8 | label->component.foreground.b
+    if(label->component.visable) {
+        // 1. draw_background
+        gfx2d_fill_rect(
+                label->component.position.x + label->component.margin.left,
+                label->component.position.y + label->component.margin.top,
+                label->component.position.x + label->component.size.width,
+                label->component.position.y + label->component.size.height,
+                label->component.background.r << 16 | label->component.background.g << 8 | label->component.background.b
         );
-        column++;
-        if (column == lineFonts) {
-            row++;
-            xOffset = 0;
-            column = 0;
-        }
 
-        xOffset++;
-        tmp++;
+        // 2. draw_font
+        char *tmp = label->text;
+        uint32_t xOffset = 0;
+        uint32_t length = 0;
+        while (*tmp) {
+            length++;
+            tmp++;
+        }
+        uint32_t lineFonts = (label->component.size.width - label->component.padding.left - label->component.padding.right) / label->fontSize;
+
+        tmp = label->text;
+        uint32_t column = 0;
+        uint32_t row = 0;
+        while (*tmp) {
+            gfx2d_draw_ascii(
+                    label->component.position.x + xOffset * label->fontSize + label->component.padding.left,
+                    label->component.position.y + row * label->fontSize + label->component.padding.top,
+                    *tmp,
+                    label->component.foreground.r << 16 | label->component.foreground.g << 8 | label->component.foreground.b
+            );
+            column++;
+            if (column == lineFonts) {
+                row++;
+                xOffset = 0;
+                column = 0;
+            }
+
+            xOffset++;
+            tmp++;
+        }
     }
 }
