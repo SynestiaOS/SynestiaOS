@@ -5,6 +5,8 @@
 #include <gui_window.h>
 #include <gfx2d.h>
 
+#define FLUENT_PRIMARY_COLOR 0x0078D4
+
 
 void gui_window(GUIWindow *window, uint32_t x, uint32_t y, const char *title) {
     Position position;
@@ -54,7 +56,7 @@ void gui_draw_window(GUIWindow *window) {
             window->conponent.position.y,
             window->conponent.position.x + window->conponent.size.width,
             window->conponent.position.y + 24,
-            0x0078D4
+            FLUENT_PRIMARY_COLOR
     );
 
     // 3. draw_font
@@ -80,7 +82,7 @@ void gui_draw_window(GUIWindow *window) {
             0x00FFFFFF
     );
     gfx_draw_ascii(window->conponent.position.x + window->conponent.size.width - 24 * 3 + 4,
-                   window->conponent.position.y + 4 + 4, '_', 0x0078D4);
+                   window->conponent.position.y + 4 + 4, '_', FLUENT_PRIMARY_COLOR);
     gfx_fill_rect(
             window->conponent.position.x + window->conponent.size.width - 24 * 2,
             window->conponent.position.y + 4,
@@ -89,7 +91,7 @@ void gui_draw_window(GUIWindow *window) {
             0x00FFFFFF
     );
     gfx_draw_ascii(window->conponent.position.x + window->conponent.size.width - 24 * 2 + 4,
-                   window->conponent.position.y + 4 + 4, 'o', 0x0078D4);
+                   window->conponent.position.y + 4 + 4, 'o', FLUENT_PRIMARY_COLOR);
 
     gfx_fill_rect(
             window->conponent.position.x + window->conponent.size.width - 24 * 1,
@@ -99,7 +101,7 @@ void gui_draw_window(GUIWindow *window) {
             0x00FFFFFF
     );
     gfx_draw_ascii(window->conponent.position.x + window->conponent.size.width - 24 * 1 + 4,
-                   window->conponent.position.y + 4 + 4, 'x', 0x0078D4);
+                   window->conponent.position.y + 4 + 4, 'x', FLUENT_PRIMARY_COLOR);
 
     // 5. draw border
     gfx_draw_rect(
@@ -107,7 +109,7 @@ void gui_draw_window(GUIWindow *window) {
             window->conponent.position.y,
             window->conponent.position.x + window->conponent.size.width,
             window->conponent.position.y + window->conponent.size.height + 24,
-            0x0078D4
+            FLUENT_PRIMARY_COLOR
     );
 
     // 6. register click event
