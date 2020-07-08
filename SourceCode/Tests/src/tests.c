@@ -8,10 +8,7 @@
 #include <klist_test.h>
 #include <kstack_test.h>
 
-
-// todo: redefinition of kernel_main, consider a way to avoid the redefinition of this function
-// if you want to run tests, rename init.c/kernel_main to kernel_main_x
-void kernel_main() {
+void kernel_main_tests() {
     kheap_init();
 
     TEST_SUIT("should_klist_insert", should_klist_insert)
