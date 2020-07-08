@@ -65,16 +65,22 @@ void draw_gui() {
     gui_window_init(&window1, 150, 150, "SynestiaOS 1");
     gui_window_draw(&window1);
 
-
     GUIButton ok;
     gui_button_create(&ok);
     synestiaOSButton.component.size.height = 32;
     synestiaOSButton.component.padding.top = 12;
-    gui_button_init(&ok, 32, 0, "SynestiaOS");
+    gui_button_init(&ok, 10, 0, "Inner Window Button");
+
+    GUILabel label;
+    gui_label_create(&label);
+    label.component.size.height = 32;
+    label.component.padding.top = 12;
+    gui_label_init(&label, 10, 50, "Inner Window Label");
 
     GUIWindow window2;
     gui_window_create(&window2);
     gui_window_add_children(&window2, &(ok.component));
+    gui_window_add_children(&window2, &(label.component));
     gui_window_init(&window2, 200, 200, "SynestiaOS 2");
     gui_window_draw(&window2);
 }

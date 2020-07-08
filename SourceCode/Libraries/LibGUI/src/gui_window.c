@@ -168,30 +168,28 @@ void gui_window_draw(GUIWindow *window) {
 
 void gui_window_draw_children(GUIWindow *window) {
     GUIComponent *component = window->children;
-    if (component != nullptr) {
-        while (component->node.next != nullptr) {
-            switch (component->type) {
-                case BUTTON: {
-                    GUIButton *button = getNode(component, GUIButton, component);
-                    button->component.position.x = button->component.position.x + window->component.padding.left;
-                    button->component.position.y = button->component.position.y + window->component.padding.top;
-                    gui_button_draw(button);
-                    break;
-                }
-
-                case LABEL: {
-                    GUILabel *label = getNode(component, GUILabel, component);
-                    label->component.position.x = label->component.position.x + window->component.padding.left;
-                    label->component.position.y = label->component.position.y + window->component.padding.top;
-                    gui_label_draw(label);
-                    break;
-                }
-
-                default:
-                    break;
+    while (component != nullptr) {
+        switch (component->type) {
+            case BUTTON: {
+                GUIButton *button = getNode(component, GUIButton, component);
+                button->component.position.x = button->component.position.x + window->component.position.x + window->component.padding.left;
+                button->component.position.y = button->component.position.y + window->component.position.y + DEFAULT_WINDOW_HEADER_HEIGHT + window->component.padding.top;
+                gui_button_draw(button);
+                break;
             }
 
-            component = getNode(component->node.next, GUIComponent, node);
+            case LABEL: {
+                GUILabel *label = getNode(component, GUILabel, component);
+                label->component.position.x = label->component.position.x + window->component.position.x + window->component.padding.left;
+                label->component.position.y = label->component.position.y + window->component.position.y + DEFAULT_WINDOW_HEADER_HEIGHT + window->component.padding.top;
+                gui_label_draw(label);
+                break;
+            }
+
+            default:
+                break;
         }
+
+        component = getNode(component->node.next, GUIComponent, node);
     }
 }
