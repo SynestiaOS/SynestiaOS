@@ -2,6 +2,8 @@
 // Created by XingfengYang on 2020/7/5.
 //
 
+#include <kheap.h>
+
 #include <tests_lib.h>
 
 #include <kheap_test.h>
