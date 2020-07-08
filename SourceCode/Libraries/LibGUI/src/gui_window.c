@@ -73,7 +73,7 @@ void gui_window_init(GUIWindow *window, uint32_t x, uint32_t y, const char *titl
     }
 }
 
-void gui_window_add_component(CUIComponent *component){
+void gui_window_add_component(CUIComponent *component) {
 
 }
 
@@ -112,7 +112,7 @@ void gui_window_draw(GUIWindow *window) {
 
     // 4. draw header window
     gfx2d_fill_rect(
-            window->component.position.x + window->component.size.width - DEFAULT_WINDOW_HEADER_HEIGHT * 3,
+            window->component.position.x + window->component.size.width - 24 * 3,
             window->component.position.y + 4,
             window->component.position.x + window->component.size.width - 24 * 3 + 16,
             window->component.position.y + 4 + 16,
