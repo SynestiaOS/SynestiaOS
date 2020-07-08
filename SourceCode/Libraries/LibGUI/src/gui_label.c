@@ -3,3 +3,11 @@
 //
 
 #include <gui_label.h>
+
+void gui_label(GUILabel *label, uint32_t x, uint32_t y, const char *text) {
+
+}
+
+void gui_draw_label(GUILabel *label) {
+
+}

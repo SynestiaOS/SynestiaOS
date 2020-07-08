@@ -11,6 +11,7 @@ add_executable(${KernelName}
         $<TARGET_OBJECTS:C>
         $<TARGET_OBJECTS:Gfx>
         $<TARGET_OBJECTS:GUI>
+        $<TARGET_OBJECTS:Console>
         $<TARGET_OBJECTS:BoardRaspberryPi3>
         $<TARGET_OBJECTS:Tests>)
 
