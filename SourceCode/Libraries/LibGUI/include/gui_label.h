@@ -9,7 +9,7 @@
 #include <gui_component.h>
 
 typedef struct GUILabel {
-    struct GUIComponent component;
+    GUIComponent component;
     char *text;
     uint32_t fontSize;
 } GUILabel;

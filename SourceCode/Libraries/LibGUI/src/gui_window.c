@@ -4,6 +4,10 @@
 
 #include <gui_window.h>
 #include <gfx2d.h>
+#include <gui_button.h>
+#include <gui_label.h>
+
+void gui_wondow_draw_children(const GUIWindow *window);
 
 void gui_window_create(GUIWindow *window) {
     window->component.type = WINDOW;
@@ -72,8 +76,12 @@ void gui_window_init(GUIWindow *window, uint32_t x, uint32_t y, const char *titl
     }
 }
 
-void gui_window_add_component(CUIComponent *component) {
-
+void gui_window_add_component(GUIWindow *window, GUIComponent *component) {
+    if (window->children == nullptr) {
+        window->children = component;
+    } else {
+        klist_append(window->children, component);
+    }
 }
 
 void gui_window_draw(GUIWindow *window) {
@@ -149,8 +157,34 @@ void gui_window_draw(GUIWindow *window) {
     );
 
     // 6. draw children
+//    gui_window_draw_children(window);
+
 
     // 7. register click event
 
     // 7. register drag event
+}
+
+void gui_window_draw_children(GUIWindow *window) {
+    GUIComponent *component = window->children;
+    while (component->node.next != nullptr) {
+        switch (component->type) {
+            case BUTTON: {
+                GUIButton *button = getNode(component, GUIButton, component);
+                gui_button_draw(button);
+                break;
+            }
+
+            case LABEL: {
+                GUILabel *label = getNode(component, GUILabel, component);
+                gui_label_draw(label);
+                break;
+            }
+
+            default:
+                break;
+        }
+
+        component = getNode(component->node.next, GUIComponent, node);
+    }
 }

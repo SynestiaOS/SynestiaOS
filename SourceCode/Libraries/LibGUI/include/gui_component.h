@@ -63,5 +63,5 @@ typedef struct GUIComponent {
     Color foreground;
     Padding padding;
     Margin margin;
-} CUIComponent;
+} GUIComponent;
 #endif //__LIBRARY_LIBGUI_COMPONENT_H__
