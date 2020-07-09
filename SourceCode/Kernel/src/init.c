@@ -32,6 +32,9 @@ void draw_gui() {
     gui_button_create(&synestiaOSButton);
     synestiaOSButton.component.size.height = 32;
     synestiaOSButton.component.padding.top = 12;
+    synestiaOSButton.component.background.r = (FLUENT_PRIMARY_COLOR >> 16) & 0xFF;
+    synestiaOSButton.component.background.g = (FLUENT_PRIMARY_COLOR >> 8) & 0xFF;
+    synestiaOSButton.component.background.b = (FLUENT_PRIMARY_COLOR) & 0xFF;
     gui_button_init(&synestiaOSButton, 32, 0, "SynestiaOS");
     gui_button_draw(&synestiaOSButton);
 
@@ -39,9 +42,9 @@ void draw_gui() {
     gui_label_create(&bar);
     bar.component.size.width = 1024 - 32 - synestiaOSButton.component.size.width;
     bar.component.size.height = 32;
-    bar.component.background.r = 0x00;
-    bar.component.background.g = 0x78;
-    bar.component.background.b = 0xD4;
+    bar.component.background.r = (FLUENT_PRIMARY_COLOR >> 16) & 0xFF;
+    bar.component.background.g = (FLUENT_PRIMARY_COLOR >> 8) & 0xFF;
+    bar.component.background.b = (FLUENT_PRIMARY_COLOR) & 0xFF;
     gui_label_init(&bar, 32 + synestiaOSButton.component.size.width, 0, "");
     gui_label_draw(&bar);
 
@@ -76,7 +79,6 @@ void draw_gui() {
     gui_label_create(&label);
     gui_label_init(&label, 0, 42, "Inner Window Label");
 
-
     GUILabel label3;
     gui_label_create(&label3);
     gui_label_init(&label3, 0, 0, "Inner Label 1");
@@ -105,7 +107,6 @@ void draw_gui() {
     gui_label_create(&label4container);
     gui_label_init(&label4container, 0, 0, "Label for container");
 
-
     GUIButton button4container;
     gui_button_create(&button4container);
     button4container.component.size.height = 32;
@@ -118,7 +119,6 @@ void draw_gui() {
     gui_container_init(&container, 240, 0, VERTICAL);
     gui_container_add_children(&container, (&label4container.component));
     gui_container_add_children(&container, (&button4container.component));
-
 
     GUIWindow window2;
     gui_window_create(&window2);
