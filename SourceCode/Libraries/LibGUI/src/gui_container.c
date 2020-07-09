@@ -174,15 +174,17 @@ void gui_container_draw_children(GUIContainer *container, Orientation orientatio
 }
 
 void gui_container_draw(GUIContainer *container) {
-    // 1. draw_background
-    gfx2d_fill_rect(
-            container->component.position.x,
-            container->component.position.y,
-            container->component.position.x + container->component.size.width,
-            container->component.position.y + container->component.size.height,
-            container->component.background.r << 16 | container->component.background.g << 8 | container->component.background.b
-    );
+    if (container->component.visable) {
+        // 1. draw_background
+        gfx2d_fill_rect(
+                container->component.position.x,
+                container->component.position.y,
+                container->component.position.x + container->component.size.width,
+                container->component.position.y + container->component.size.height,
+                container->component.background.r << 16 | container->component.background.g << 8 | container->component.background.b
+        );
 
-    // 2. draw children
-    gui_container_draw_children(container, container->orientation);
+        // 2. draw children
+        gui_container_draw_children(container, container->orientation);
+    }
 }
