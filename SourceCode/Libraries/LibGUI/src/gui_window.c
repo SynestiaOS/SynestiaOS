@@ -7,6 +7,7 @@
 #include <gui_button.h>
 #include <gui_label.h>
 #include <stdbool.h>
+#include <gui_panel.h>
 
 void gui_window_create(GUIWindow *window) {
     window->component.type = WINDOW;
@@ -186,10 +187,16 @@ void gui_window_draw_children(GUIWindow *window) {
                 break;
             }
 
+            case PANEL: {
+                GUIPanel *innerPanel = getNode(component, GUIPanel, component);
+                innerPanel->component.position.x = innerPanel->component.position.x + window->component.position.x + window->component.padding.left;
+                innerPanel->component.position.y = innerPanel->component.position.y + window->component.position.y + DEFAULT_WINDOW_HEADER_HEIGHT + window->component.padding.top;
+                gui_panel_draw(innerPanel);
+                break;
+            }
             default:
                 break;
         }
-
         component = getNode(component->node.next, GUIComponent, node);
     }
 }

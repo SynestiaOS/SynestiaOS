@@ -9,6 +9,7 @@
 #include <gui_window.h>
 #include <gui_label.h>
 #include <gfx2d.h>
+#include <gui_panel.h>
 
 void print_splash() {
     const char *str = "   _____                       _   _       \n"
@@ -74,10 +75,38 @@ void draw_gui() {
     gui_label_create(&label);
     gui_label_init(&label, 0, 42, "Inner Window Label");
 
+
+    GUIPanel panel;
+    gui_panel_create(&panel);
+    panel.component.background.r = 0x00;
+    gui_panel_init(&panel, 0, 200);
+
+    GUILabel label3;
+    gui_label_create(&label3);
+    gui_label_init(&label3, 0, 0, "Inner Label 1");
+
+    gui_panel_add_children(&panel, &(label3.component));
+
+    GUIPanel panel2;
+    gui_panel_create(&panel2);
+    panel2.component.size.width = 150;
+    panel2.component.size.height = 50;
+    panel2.component.background.r = 0x00;
+    panel2.component.background.g = 0x00;
+    gui_panel_init(&panel2, 10, 100);
+
+    GUILabel label4;
+    gui_label_create(&label4);
+    gui_label_init(&label4, 0, 0, "Inner Label 2");
+    gui_panel_add_children(&panel2, &(label4.component));
+
+    gui_panel_add_children(&panel, &(panel2.component));
+
     GUIWindow window2;
     gui_window_create(&window2);
     gui_window_add_children(&window2, &(ok.component));
     gui_window_add_children(&window2, &(label.component));
+    gui_window_add_children(&window2, &(panel.component));
     gui_window_init(&window2, 200, 200, "SynestiaOS 2");
     gui_window_draw(&window2);
 }
