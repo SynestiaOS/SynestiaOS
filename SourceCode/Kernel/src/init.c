@@ -12,6 +12,7 @@
 #include <gui_panel.h>
 #include <gui_container.h>
 #include <font8bits.h>
+#include <timer.h>
 
 void print_splash() {
     const char *str = "   _____                       _   _       \n"
@@ -141,6 +142,8 @@ void kernel_main(void) {
     print_splash();
 
     vmm_init();
+
+    gtimer_init();
 
     kheap_init();
 
