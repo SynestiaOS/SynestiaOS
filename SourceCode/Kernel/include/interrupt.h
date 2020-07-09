@@ -2,6 +2,7 @@
 #define __KERNEL_INTERRUPT_H__
 
 #include <stdint.h>
+#include "list.h"
 
 #define ARM_INTERRUPT_REGISTER_BASE 0x3F00B000
 #define RPI_INTERRUPT_CONTROLLER_BASE (ARM_INTERRUPT_REGISTER_BASE + 0x0200)
@@ -54,6 +55,19 @@ void disable_interrupt();
  */
 void register_interrupt_handler(uint32_t interrupt_no, void (*interrupt_handler_func)(void),
                                 void (*interrupt_clear_func)(void));
+
+
+typedef struct timer_handler {
+    void (*timer_interrupt_handler)(void);
+
+    ListNode node;
+} timer_handler_t;
+
+/**
+ * register timer interrupt handler
+ * @param timer_interrupt_handler
+ */
+void register_time_interrupt(timer_handler_t *handler);
 
 /**
  * trigger a software interrupt

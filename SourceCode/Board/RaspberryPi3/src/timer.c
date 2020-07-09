@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <timer.h>
+#include <interrupt.h>
 
 static timer_registers_t *timer_regs = (timer_registers_t *) SYSTEM_TIMER_BASE;
 
@@ -52,14 +53,23 @@ void generic_timer_irq_clear(void) {
     //DO Nothing
 }
 
+
+extern timer_handler_t *timerHandler;
+
 void generic_timer_irq_handler(void) {
+    printf("[Timer]: generic timer interrupted\n");
     write_cntvtval(read_cntfrq());
-    printf("GTimer Interrupt\n");
+    if (timerHandler != nullptr) {
+        timerHandler->timer_interrupt_handler();
+        while (timerHandler->node.next != nullptr) {
+            timer_handler_t *pHandler = getNode(timerHandler->node.next, timer_handler_t, node);
+            pHandler->timer_interrupt_handler();
+            timerHandler = pHandler;
+        }
+    }
 }
 
-/*
- * Init Generic Timer
- */
+
 void generic_timer_init(void) {
     write_cntvtval(read_cntfrq());
     enable_cntv();
