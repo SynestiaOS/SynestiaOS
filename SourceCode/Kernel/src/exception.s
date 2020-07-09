@@ -28,8 +28,19 @@ _fast_interrupt_addr:
 
 
 reset_handler:
+    // Disable extra smp cpus
+    mrc p15, #0, r1, c0, c0, #5
+    and r1, r1, #3
+    cmp r1, #0
+    bne halt_cpu
+
     push    {r4, r5, r6, r7, r8, r9}
+
     ldr     r0, =exception_vector_table
+
+    // set vector address.
+    mcr P15, 0, r0, c12, c0, 0
+
     mov     r1, #0x0000
     ldmia   r0!,{r2, r3, r4, r5, r6, r7, r8, r9}
     stmia   r1!,{r2, r3, r4, r5, r6, r7, r8, r9}
@@ -37,4 +48,9 @@ reset_handler:
     stmia   r1!,{r2, r3, r4, r5, r6, r7, r8}
     pop     {r4, r5, r6, r7, r8, r9}
     ldr     pc, =_start
+
+halt_cpu:
+    wfi // wait for interrup coming
+    b halt_cpu
+
 
