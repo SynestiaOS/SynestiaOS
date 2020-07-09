@@ -26,6 +26,7 @@ void print_splash() {
 }
 
 void draw_gui() {
+    printf("[Desktop]: render\n");
     gfx2d_draw_bitmap(0, 0, 1024, 768, desktop());
 
     gfx2d_draw_logo(0, 0, 0xFFFFFF);
@@ -58,6 +59,9 @@ void draw_gui() {
 
     GUILabel synestiaOSLabel2;
     gui_label_create(&synestiaOSLabel2);
+    synestiaOSLabel2.component.background.r = (FLUENT_PRIMARY_COLOR >> 16) & 0xFF;
+    synestiaOSLabel2.component.background.g = (FLUENT_PRIMARY_COLOR >> 8) & 0xFF;
+    synestiaOSLabel2.component.background.b = (FLUENT_PRIMARY_COLOR) & 0xFF;
     gui_label_init(&synestiaOSLabel2, 300, 4, "Welcome to Synestia Operation System.");
     gui_label_draw(&synestiaOSLabel2);
 
@@ -142,15 +146,15 @@ void kernel_main(void) {
 
     gpu_init();
 
-    draw_gui();
+    init_bsp();
 
     init_interrupt();
-
-    init_bsp();
 
     schd_init();
 
     schd_switch_to(thread_create_idle_thread(0));
+
+    draw_gui();
 
     /**
      * swi test

@@ -11,6 +11,7 @@ void init_interrupt() {
     getIRQController()->Disable_IRQs_2 = 0xffffffff;
 
     enable_interrupt();
+    printf("[Interrupt]: interrupt init\n");
 }
 
 uint32_t is_interrupt_enabled() {
@@ -22,12 +23,14 @@ uint32_t is_interrupt_enabled() {
 void enable_interrupt() {
     if (!is_interrupt_enabled()) {
         __asm__ __volatile__("cpsie i");
+        printf("[Interrupt]: enable\n");
     }
 }
 
 void disable_interrupt() {
     if (is_interrupt_enabled()) {
         __asm__ __volatile__("cpsid i");
+        printf("[Interrupt]: disable\n");
     }
 }
 
