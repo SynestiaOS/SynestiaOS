@@ -143,8 +143,6 @@ void kernel_main(void) {
 
     vmm_init();
 
-    gtimer_init();
-
     kheap_init();
 
     gpu_init();
@@ -157,5 +155,5 @@ void kernel_main(void) {
 
     schd_switch_to(thread_create_idle_thread(0));
 
-    demo_desktop();
+//    demo_desktop();
 }

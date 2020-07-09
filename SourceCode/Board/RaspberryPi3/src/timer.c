@@ -14,7 +14,7 @@ void system_timer_irq_handler(void) {
 
 void system_timer_irq_clear(void) { timer_regs->control.timer1_matched = 1; }
 
-void timer_init(void) {
+void system_timer_init(void) {
     register_interrupt_handler(1, system_timer_irq_handler, system_timer_irq_clear);
 }
 

@@ -12,7 +12,7 @@
 /**
  * timer init
  */
-void timer_init(void);
+void system_timer_init(void);
 
 void timer_set(uint32_t usecs);
 
