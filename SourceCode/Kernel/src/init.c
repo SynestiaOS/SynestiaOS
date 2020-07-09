@@ -52,13 +52,13 @@ void draw_gui() {
 
     GUILabel synestiaOSLabel;
     gui_label_create(&synestiaOSLabel);
-    synestiaOSLabel.component.size.width = 100;
-    gui_label_init(&synestiaOSLabel, 10, 40, "Welcome to Synestia Operation System.");
+    synestiaOSLabel.component.size.width = 120;
+    gui_label_init(&synestiaOSLabel, 890, 40, "Welcome to Synestia Operation System.");
     gui_label_draw(&synestiaOSLabel);
 
     GUILabel synestiaOSLabel2;
     gui_label_create(&synestiaOSLabel2);
-    gui_label_init(&synestiaOSLabel2, 200, 40, "Welcome to Synestia Operation System.");
+    gui_label_init(&synestiaOSLabel2, 300, 4, "Welcome to Synestia Operation System.");
     gui_label_draw(&synestiaOSLabel2);
 
     GUIWindow window;
