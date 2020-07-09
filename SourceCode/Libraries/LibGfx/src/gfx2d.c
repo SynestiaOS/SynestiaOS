@@ -425,3 +425,13 @@ void gfx2d_draw_logo(int x, int y, uint32_t c) {
         }
     }
 }
+
+void gfx2d_draw_bitmap(int x, int y, int width, int height, uint32_t *buffer) {
+    int index = 0;
+    for (uint32_t i = 0; i < height; i++) {
+        for (uint32_t j = 0; j < width; j++) {
+            gpu_write_pixel_color(x + j, y + i, buffer[index]);
+            index++;
+        }
+    }
+}

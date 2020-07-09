@@ -1,17 +1,16 @@
-#include <gfx2d.h>
-#include <gpu.h>
-#include <gui_button.h>
-#include <gui_container.h>
-#include <gui_label.h>
-#include <gui_panel.h>
-#include <gui_window.h>
 #include <interrupt.h>
-#include <kheap.h>
-#include <sched.h>
 #include <stdlib.h>
 #include <synestia_os_hal.h>
-#include <timer.h>
+#include <kheap.h>
 #include <vmm.h>
+#include <sched.h>
+#include <gpu.h>
+#include <gui_button.h>
+#include <gui_window.h>
+#include <gui_label.h>
+#include <gfx2d.h>
+#include <gui_panel.h>
+#include <gui_container.h>
 
 void print_splash() {
     const char *str = "   _____                       _   _       \n"
@@ -135,33 +134,27 @@ void kernel_main(void) {
 
     print_splash();
 
-    //vmm_init();
+    vmm_init();
 
     kheap_init();
-
-    gtimer_init();
-
-    init_interrupt();
-
-    init_bsp();
-
-    //swi(1);
-    //swi(2);
-    while(1);
 
     gpu_init();
 
     draw_gui();
 
+    init_interrupt();
+
+    init_bsp();
 
     schd_init();
-
 
     schd_switch_to(thread_create_idle_thread(0));
 
     /**
      * swi test
      */
+    swi(1);
+    swi(2);
 
     /**
      * printf test

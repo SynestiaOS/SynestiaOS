@@ -1,5 +1,6 @@
 #include <interrupt.h>
 #include <stdlib.h>
+#include <timer.h>
 
 static rpi_irq_controller_t *rpiIRQController = (rpi_irq_controller_t *) RPI_INTERRUPT_CONTROLLER_BASE;
 
@@ -9,7 +10,9 @@ void init_interrupt() {
     getIRQController()->Disable_Basic_IRQs = 0xffffffff;
     getIRQController()->Disable_IRQs_1 = 0xffffffff;
     getIRQController()->Disable_IRQs_2 = 0xffffffff;
+
     enable_interrupt();
+    printf("[Interrupt]: interrupt init\n");
 }
 
 uint32_t is_interrupt_enabled() {
@@ -21,12 +24,14 @@ uint32_t is_interrupt_enabled() {
 void enable_interrupt() {
     if (!is_interrupt_enabled()) {
         __asm__ __volatile__("cpsie i");
+        printf("[Interrupt]: enable\n");
     }
 }
 
 void disable_interrupt() {
     if (is_interrupt_enabled()) {
         __asm__ __volatile__("cpsid i");
+        printf("[Interrupt]: disable\n");
     }
 }
 
@@ -92,6 +97,7 @@ void register_interrupt_handler(uint32_t interrupt_no, void (*interrupt_handler_
 }
 
 void __attribute__((interrupt("IRQ"))) interrupt_handler(void) {
+    printf("[IRQ]: triggered\n");
     for (uint32_t interrupt_no = 0; interrupt_no < IRQ_NUMS; interrupt_no++) {
         if (IRQ_IS_PENDING(getIRQController(), interrupt_no) && irq_handlers[interrupt_no].registered == 1) {
             if (irq_handlers[interrupt_no].interrupt_clear_func)
