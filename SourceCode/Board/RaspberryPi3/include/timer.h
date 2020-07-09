@@ -13,6 +13,12 @@ void timer_init(void);
 
 void timer_set(uint32_t usecs);
 
+extern void io_writeb(uint8_t val, void *addr);
+extern void io_writew(uint16_t val, void *addr);
+extern void io_writel(uint32_t val, void *addr);
+
+void gtimer_init(void);
+
 void block_delay(uint32_t usecs);
 
 typedef struct {
