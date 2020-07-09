@@ -11,6 +11,7 @@
 #include <gfx2d.h>
 #include <gui_panel.h>
 #include <gui_container.h>
+#include <font8bits.h>
 
 void print_splash() {
     const char *str = "   _____                       _   _       \n"
@@ -21,11 +22,12 @@ void print_splash() {
                       " |_____/ \\__, |_| |_|\\___||___/\\__|_|\\__,_|\n"
                       "          __/ |                            \n"
                       "         |___/                          \n";
-
     print(str);
 }
 
 void draw_gui() {
+    gfx2d_draw_bitmap(0, 0, 1024, 768, desktop());
+
     gfx2d_draw_logo(0, 0, 0xFFFFFF);
 
     GUIButton synestiaOSButton;
