@@ -53,6 +53,11 @@ void map_kernel_l1pt(uint64_t l1ptPhysicalAddress, uint64_t l2ptPhysicalAddress)
     kernelVMML1PT->pte[0].table = 1;
     kernelVMML1PT->pte[0].af = 1;
     kernelVMML1PT->pte[0].base = (uint32_t) l2ptPhysicalAddress >> VA_OFFSET;
+
+    kernelVMML1PT->pte[1].valid = 1;
+    kernelVMML1PT->pte[1].table = 1;
+    kernelVMML1PT->pte[1].af = 1;
+    kernelVMML1PT->pte[1].base = (uint32_t) ((l2ptPhysicalAddress + 4 * KB) >> VA_OFFSET);
 }
 
 void map_kernel_l2pt(uint64_t l2ptPhysicalAddress, uint64_t ptPhysicalAddress) {
@@ -79,6 +84,12 @@ void map_kernel_l2pt(uint64_t l2ptPhysicalAddress, uint64_t ptPhysicalAddress) {
         kernelVMML2PT->pte[480 + i].base = (0x3C000000 | (i * 2 * MB)) >> VA_OFFSET;
     }
 
+    // 2 level page table for second first page table
+    L2PT *secondL2PT = (L2PT *) l2ptPhysicalAddress + 4 * KB;
+    secondL2PT->pte[0].valid = 1;
+    secondL2PT->pte[0].table = 0;
+    secondL2PT->pte[0].af = 1;
+    secondL2PT->pte[0].base = 0x40000000 >> VA_OFFSET;
 }
 
 void map_kernel_pt(uint64_t ptPhysicalAddress) {
