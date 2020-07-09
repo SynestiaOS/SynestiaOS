@@ -68,13 +68,11 @@ void draw_gui() {
     gui_button_create(&ok);
     synestiaOSButton.component.size.height = 32;
     synestiaOSButton.component.padding.top = 12;
-    gui_button_init(&ok, 10, 0, "Inner Window Button");
+    gui_button_init(&ok, 0, 0, "Inner Window Button");
 
     GUILabel label;
     gui_label_create(&label);
-    label.component.size.height = 32;
-    label.component.padding.top = 12;
-    gui_label_init(&label, 10, 50, "Inner Window Label");
+    gui_label_init(&label, 0, 42, "Inner Window Label");
 
     GUIWindow window2;
     gui_window_create(&window2);
