@@ -25,7 +25,7 @@ void print_splash() {
     print(str);
 }
 
-void draw_gui() {
+void demo_desktop() {
     printf("[Desktop]: render\n");
     gfx2d_draw_bitmap(0, 0, 1024, 768, desktop());
 
@@ -154,5 +154,5 @@ void kernel_main(void) {
 
     schd_switch_to(thread_create_idle_thread(0));
 
-    draw_gui();
+    demo_desktop();
 }
