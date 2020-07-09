@@ -13,6 +13,7 @@
 void gui_window_create(GUIWindow *window) {
     window->component.type = WINDOW;
     window->component.visable = true;
+    window->component.colorMode = RGB;
     window->component.node.next = nullptr;
     window->component.node.prev = nullptr;
     window->children = nullptr;
@@ -88,14 +89,16 @@ void gui_window_add_children(GUIWindow *window, GUIComponent *component) {
 
 void gui_window_draw(GUIWindow *window) {
     if (window->component.visable) {
-        // 1. draw_background
-        gfx2d_fill_rect(
-                window->component.position.x,
-                window->component.position.y,
-                window->component.position.x + window->component.size.width,
-                window->component.position.y + window->component.size.height + DEFAULT_WINDOW_HEADER_HEIGHT,
-                window->component.background.r << 16 | window->component.background.g << 8 | window->component.background.b
-        );
+        if(window->component.colorMode==RGB) {
+            // 1. draw_background
+            gfx2d_fill_rect(
+                    window->component.position.x,
+                    window->component.position.y,
+                    window->component.position.x + window->component.size.width,
+                    window->component.position.y + window->component.size.height + DEFAULT_WINDOW_HEADER_HEIGHT,
+                    window->component.background.r << 16 | window->component.background.g << 8 | window->component.background.b
+            );
+        }
 
         // 2. draw header
         gfx2d_fill_rect(

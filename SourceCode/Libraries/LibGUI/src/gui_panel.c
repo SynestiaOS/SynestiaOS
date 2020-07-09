@@ -13,6 +13,7 @@
 void gui_panel_create(GUIPanel *panel) {
     panel->component.type = PANEL;
     panel->component.visable = true;
+    panel->component.colorMode = RGB;
     panel->component.node.next = nullptr;
     panel->component.node.prev = nullptr;
     panel->children = nullptr;
@@ -122,13 +123,15 @@ void gui_panel_draw_children(GUIPanel *panel) {
 void gui_panel_draw(GUIPanel *panel) {
     if (panel->component.visable) {
         // 1. draw_background
-        gfx2d_fill_rect(
-                panel->component.position.x,
-                panel->component.position.y,
-                panel->component.position.x + panel->component.size.width,
-                panel->component.position.y + panel->component.size.height,
-                panel->component.background.r << 16 | panel->component.background.g << 8 | panel->component.background.b
-        );
+        if(panel->component.colorMode==RGB) {
+            gfx2d_fill_rect(
+                    panel->component.position.x,
+                    panel->component.position.y,
+                    panel->component.position.x + panel->component.size.width,
+                    panel->component.position.y + panel->component.size.height,
+                    panel->component.background.r << 16 | panel->component.background.g << 8 | panel->component.background.b
+            );
+        }
 
         // 2. draw children
         gui_panel_draw_children(panel);

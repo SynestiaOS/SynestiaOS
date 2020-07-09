@@ -29,39 +29,36 @@ void demo_desktop() {
     printf("[Desktop]: render\n");
     gfx2d_draw_bitmap(0, 0, 1024, 768, desktop());
 
-    gfx2d_draw_logo(0, 0, 0xFFFFFF);
+
+    uint32_t *barBuffer = (uint32_t *) kheap_alloc(1024 * 32 * 4);
+
+    for (int i = 0; i < 1024; i++) {
+        for (int j = 0; j < 31; j++) {
+            barBuffer[j * 1024 + i] = ((FLUENT_PRIMARY_COLOR >> 16) & 0xFF - j) << 16 | ((FLUENT_PRIMARY_COLOR >> 8) & 0xFF - j) << 8 | (FLUENT_PRIMARY_COLOR & 0xFF - j);
+        }
+    }
+    for (int i = 0; i < 1024; i++) {
+        barBuffer[31 * 1024 + i] = 0x999999;
+    }
+    gfx2d_draw_bitmap(0, 0, 1024, 32, barBuffer);
+
+
+    gfx2d_draw_logo(0, 0, 0x000000);
 
     GUIButton synestiaOSButton;
     gui_button_create(&synestiaOSButton);
     synestiaOSButton.component.size.height = 32;
     synestiaOSButton.component.padding.top = 12;
-    synestiaOSButton.component.background.r = (FLUENT_PRIMARY_COLOR >> 16) & 0xFF;
-    synestiaOSButton.component.background.g = (FLUENT_PRIMARY_COLOR >> 8) & 0xFF;
-    synestiaOSButton.component.background.b = (FLUENT_PRIMARY_COLOR) & 0xFF;
+    synestiaOSButton.component.colorMode = TRANSPARENT;
+    synestiaOSButton.component.foreground.r = 0x00;
+    synestiaOSButton.component.foreground.g = 0x00;
+    synestiaOSButton.component.foreground.b = 0x00;
     gui_button_init(&synestiaOSButton, 32, 0, "SynestiaOS");
     gui_button_draw(&synestiaOSButton);
 
-    GUILabel bar;
-    gui_label_create(&bar);
-    bar.component.size.width = 1024 - 32 - synestiaOSButton.component.size.width;
-    bar.component.size.height = 32;
-    bar.component.background.r = (FLUENT_PRIMARY_COLOR >> 16) & 0xFF;
-    bar.component.background.g = (FLUENT_PRIMARY_COLOR >> 8) & 0xFF;
-    bar.component.background.b = (FLUENT_PRIMARY_COLOR) & 0xFF;
-    gui_label_init(&bar, 32 + synestiaOSButton.component.size.width, 0, "");
-    gui_label_draw(&bar);
-
-    GUILabel synestiaOSLabel;
-    gui_label_create(&synestiaOSLabel);
-    synestiaOSLabel.component.size.width = 120;
-    gui_label_init(&synestiaOSLabel, 890, 40, "Welcome to Synestia Operation System.");
-    gui_label_draw(&synestiaOSLabel);
-
     GUILabel synestiaOSLabel2;
     gui_label_create(&synestiaOSLabel2);
-    synestiaOSLabel2.component.background.r = (FLUENT_PRIMARY_COLOR >> 16) & 0xFF;
-    synestiaOSLabel2.component.background.g = (FLUENT_PRIMARY_COLOR >> 8) & 0xFF;
-    synestiaOSLabel2.component.background.b = (FLUENT_PRIMARY_COLOR) & 0xFF;
+    synestiaOSLabel2.component.colorMode = TRANSPARENT;
     gui_label_init(&synestiaOSLabel2, 300, 4, "Welcome to Synestia Operation System.");
     gui_label_draw(&synestiaOSLabel2);
 
@@ -128,10 +125,10 @@ void demo_desktop() {
 
     GUIWindow window2;
     gui_window_create(&window2);
-//    gui_window_add_children(&window2, &(ok.component));
-//    gui_window_add_children(&window2, &(label.component));
+    gui_window_add_children(&window2, &(ok.component));
+    gui_window_add_children(&window2, &(label.component));
 //    gui_window_add_children(&window2, &(panel.component));
-//    gui_window_add_children(&window2, &(container.component));
+    gui_window_add_children(&window2, &(container.component));
     gui_window_init(&window2, 200, 200, "SynestiaOS 2");
     gui_window_draw(&window2);
 }

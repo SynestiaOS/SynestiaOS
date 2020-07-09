@@ -419,8 +419,6 @@ void gfx2d_draw_logo(int x, int y, uint32_t c) {
         for (uint32_t j = 0; j < 32; j++) {
             if ((bitmap[i] & (0x1 << j)) > 0) {
                 gpu_write_pixel_color(x + j, y + i, c);
-            } else {
-                gpu_write_pixel_color(x + j, y + i, FLUENT_PRIMARY_COLOR);
             }
         }
     }

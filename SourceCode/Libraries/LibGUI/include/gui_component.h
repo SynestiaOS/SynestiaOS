@@ -54,9 +54,15 @@ typedef enum ComponentType {
     CONTAINER,
 } ComponentType;
 
+typedef enum ColorMode {
+    TRANSPARENT,
+    RGB,
+} ColorMode;
+
 typedef struct GUIComponent {
     ComponentType type;
     bool visable;
+    ColorMode colorMode;
     ListNode node;
     Position position;
     Size size;
