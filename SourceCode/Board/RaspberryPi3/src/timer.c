@@ -28,11 +28,6 @@ __attribute__((optimize(0))) void block_delay(uint32_t usecs) {
     }
 }
 
-
-void gtimer_irq_clear(void) {
-    //DO Nothing
-}
-
 void enable_core0_irq(void) {
     io_writel(0x8, 0x40000040);
 }
@@ -53,7 +48,11 @@ void enable_cntv(void) {
 }
 
 
-void gtimer_irq_handler(void) {
+void generic_timer_irq_clear(void) {
+    //DO Nothing
+}
+
+void generic_timer_irq_handler(void) {
     write_cntvtval(read_cntfrq());
     printf("GTimer Interrupt\n");
 }
@@ -65,5 +64,5 @@ void generic_timer_init(void) {
     write_cntvtval(read_cntfrq());
     enable_cntv();
     enable_core0_irq();
-    register_interrupt_handler(1, gtimer_irq_handler, gtimer_irq_clear);
+    register_interrupt_handler(1, generic_timer_irq_handler, generic_timer_irq_clear);
 }
