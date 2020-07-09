@@ -55,14 +55,15 @@ void enable_cntv(void) {
 
 void gtimer_irq_handler(void) {
     write_cntvtval(read_cntfrq());
+    printf("GTimer Interrupt\n");
 }
 
 /*
- * Init Generatic Timer
+ * Init Generic Timer
  */
-void gtimer_init(void) {
+void generic_timer_init(void) {
     write_cntvtval(read_cntfrq());
     enable_cntv();
     enable_core0_irq();
-    register_interrupt_handler(8, gtimer_irq_handler, gtimer_irq_clear);
+    register_interrupt_handler(1, gtimer_irq_handler, gtimer_irq_clear);
 }

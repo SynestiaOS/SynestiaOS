@@ -99,9 +99,10 @@ void register_interrupt_handler(uint32_t interrupt_no, void (*interrupt_handler_
 void __attribute__((interrupt("IRQ"))) interrupt_handler(void) {
     printf("[IRQ]: triggered\n");
     for (uint32_t interrupt_no = 0; interrupt_no < IRQ_NUMS; interrupt_no++) {
-        if (IRQ_IS_PENDING(getIRQController(), interrupt_no) && irq_handlers[interrupt_no].registered == 1) {
-            if (irq_handlers[interrupt_no].interrupt_clear_func)
+        if (irq_handlers[interrupt_no].registered == 1) {
+            if (irq_handlers[interrupt_no].interrupt_clear_func) {
                 irq_handlers[interrupt_no].interrupt_clear_func();
+            }
 
             disable_interrupt();
             irq_handlers[interrupt_no].interrupt_handler_func();

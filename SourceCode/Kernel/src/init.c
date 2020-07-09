@@ -145,8 +145,6 @@ void kernel_main(void) {
 
     kheap_init();
 
-    gpu_init();
-
     init_bsp();
 
     init_interrupt();
@@ -154,6 +152,8 @@ void kernel_main(void) {
     schd_init();
 
     schd_switch_to(thread_create_idle_thread(0));
+
+    gpu_init();
 
 //    demo_desktop();
 }
