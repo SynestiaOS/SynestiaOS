@@ -8,6 +8,7 @@
 #include <gui_label.h>
 #include <stdbool.h>
 #include <gui_panel.h>
+#include <gui_container.h>
 
 void gui_window_create(GUIWindow *window) {
     window->component.type = WINDOW;
@@ -192,6 +193,15 @@ void gui_window_draw_children(GUIWindow *window) {
                 innerPanel->component.position.x = innerPanel->component.position.x + window->component.position.x + window->component.padding.left;
                 innerPanel->component.position.y = innerPanel->component.position.y + window->component.position.y + DEFAULT_WINDOW_HEADER_HEIGHT + window->component.padding.top;
                 gui_panel_draw(innerPanel);
+                break;
+            }
+
+            case CONTAINER: {
+                GUIContainer *innerContainer = getNode(component, GUIContainer, component);
+                innerContainer->component.position.x = innerContainer->component.position.x + window->component.position.x + window->component.padding.left;
+                innerContainer->component.position.y =
+                        innerContainer->component.position.y + window->component.position.y + DEFAULT_WINDOW_HEADER_HEIGHT + window->component.padding.top;
+                gui_container_draw(innerContainer);
                 break;
             }
             default:

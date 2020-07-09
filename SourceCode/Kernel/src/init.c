@@ -10,6 +10,7 @@
 #include <gui_label.h>
 #include <gfx2d.h>
 #include <gui_panel.h>
+#include <gui_container.h>
 
 void print_splash() {
     const char *str = "   _____                       _   _       \n"
@@ -76,16 +77,13 @@ void draw_gui() {
     gui_label_init(&label, 0, 42, "Inner Window Label");
 
 
-    GUIPanel panel;
-    gui_panel_create(&panel);
-    panel.component.background.r = 0x00;
-    gui_panel_init(&panel, 0, 200);
-
     GUILabel label3;
     gui_label_create(&label3);
     gui_label_init(&label3, 0, 0, "Inner Label 1");
 
-    gui_panel_add_children(&panel, &(label3.component));
+    GUILabel label4;
+    gui_label_create(&label4);
+    gui_label_init(&label4, 0, 0, "Inner Label 2");
 
     GUIPanel panel2;
     gui_panel_create(&panel2);
@@ -94,19 +92,40 @@ void draw_gui() {
     panel2.component.background.r = 0x00;
     panel2.component.background.g = 0x00;
     gui_panel_init(&panel2, 10, 100);
-
-    GUILabel label4;
-    gui_label_create(&label4);
-    gui_label_init(&label4, 0, 0, "Inner Label 2");
     gui_panel_add_children(&panel2, &(label4.component));
 
+    GUIPanel panel;
+    gui_panel_create(&panel);
+    panel.component.background.r = 0x00;
+    gui_panel_init(&panel, 0, 200);
+    gui_panel_add_children(&panel, &(label3.component));
     gui_panel_add_children(&panel, &(panel2.component));
+
+    GUILabel label4container;
+    gui_label_create(&label4container);
+    gui_label_init(&label4container, 0, 0, "Label for container");
+
+
+    GUIButton button4container;
+    gui_button_create(&button4container);
+    button4container.component.size.height = 32;
+    button4container.component.padding.top = 12;
+    gui_button_init(&button4container, 0, 0, "Button for container");
+
+    GUIContainer container;
+    gui_container_create(&container);
+    container.component.background.b = 0x00;
+    gui_container_init(&container, 240, 0, VERTICAL);
+    gui_container_add_children(&container, (&label4container.component));
+    gui_container_add_children(&container, (&button4container.component));
+
 
     GUIWindow window2;
     gui_window_create(&window2);
     gui_window_add_children(&window2, &(ok.component));
     gui_window_add_children(&window2, &(label.component));
-    gui_window_add_children(&window2, &(panel.component));
+//    gui_window_add_children(&window2, &(panel.component));
+    gui_window_add_children(&window2, &(container.component));
     gui_window_init(&window2, 200, 200, "SynestiaOS 2");
     gui_window_draw(&window2);
 }

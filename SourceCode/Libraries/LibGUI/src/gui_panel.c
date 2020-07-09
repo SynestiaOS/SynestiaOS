@@ -7,6 +7,7 @@
 #include <gui_button.h>
 #include <gui_label.h>
 #include <gfx2d.h>
+#include <gui_container.h>
 
 
 void gui_panel_create(GUIPanel *panel) {
@@ -99,6 +100,14 @@ void gui_panel_draw_children(GUIPanel *panel) {
                 innerPanel->component.position.x = innerPanel->component.position.x + panel->component.position.x + panel->component.padding.left;
                 innerPanel->component.position.y = innerPanel->component.position.y + panel->component.position.y + panel->component.padding.top;
                 gui_panel_draw(innerPanel);
+                break;
+            }
+
+            case CONTAINER: {
+                GUIContainer *innerContainer = getNode(component, GUIContainer, component);
+                innerContainer->component.position.x = innerContainer->component.position.x + panel->component.position.x + panel->component.padding.left;
+                innerContainer->component.position.y = innerContainer->component.position.y + panel->component.position.y + panel->component.padding.top;
+                gui_container_draw(innerContainer);
                 break;
             }
 
