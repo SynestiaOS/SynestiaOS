@@ -129,10 +129,10 @@ void demo_desktop() {
 
     GUIWindow window2;
     gui_window_create(&window2);
-    gui_window_add_children(&window2, &(ok.component));
-    gui_window_add_children(&window2, &(label.component));
+//    gui_window_add_children(&window2, &(ok.component));
+//    gui_window_add_children(&window2, &(label.component));
 //    gui_window_add_children(&window2, &(panel.component));
-    gui_window_add_children(&window2, &(container.component));
+//    gui_window_add_children(&window2, &(container.component));
     gui_window_init(&window2, 200, 200, "SynestiaOS 2");
     gui_window_draw(&window2);
 }
@@ -155,5 +155,5 @@ void kernel_main(void) {
 
     gpu_init();
 
-//    demo_desktop();
+    demo_desktop();
 }
