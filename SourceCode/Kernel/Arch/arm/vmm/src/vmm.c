@@ -85,7 +85,7 @@ void map_kernel_l2pt(uint64_t l2ptPhysicalAddress, uint64_t ptPhysicalAddress) {
     }
 
     // 2 level page table for second first page table
-    L2PT *secondL2PT = (L2PT *) l2ptPhysicalAddress + 4 * KB;
+    L2PT *secondL2PT = (L2PT *) (l2ptPhysicalAddress + 4 * KB);
     secondL2PT->pte[0].valid = 1;
     secondL2PT->pte[0].table = 0;
     secondL2PT->pte[0].af = 1;
