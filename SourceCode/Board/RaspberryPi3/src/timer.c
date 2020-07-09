@@ -3,18 +3,19 @@
 
 static timer_registers_t *timer_regs = (timer_registers_t *) SYSTEM_TIMER_BASE;
 
-void timer_irq_handler(void) {
+extern void register_interrupt_handler(uint32_t interrupt_no, void (*interrupt_handler_func)(void),
+                                       void (*interrupt_clear_func)(void));
+
+
+void system_timer_irq_handler(void) {
     print("timer interrupt triggered\n");
     timer_set(300);
 }
 
-void timer_irq_clear(void) { timer_regs->control.timer1_matched = 1; }
-
-extern void register_interrupt_handler(uint32_t interrupt_no, void (*interrupt_handler_func)(void),
-                                       void (*interrupt_clear_func)(void));
+void system_timer_irq_clear(void) { timer_regs->control.timer1_matched = 1; }
 
 void timer_init(void) {
-    register_interrupt_handler(1, timer_irq_handler, timer_irq_clear);
+    register_interrupt_handler(1, system_timer_irq_handler, system_timer_irq_clear);
 }
 
 void timer_set(uint32_t usecs) { timer_regs->timer1 = timer_regs->counter_low + usecs; }

@@ -130,7 +130,7 @@ void draw_gui() {
     gui_window_create(&window2);
     gui_window_add_children(&window2, &(ok.component));
     gui_window_add_children(&window2, &(label.component));
-    gui_window_add_children(&window2, &(panel.component));
+//    gui_window_add_children(&window2, &(panel.component));
     gui_window_add_children(&window2, &(container.component));
     gui_window_init(&window2, 200, 200, "SynestiaOS 2");
     gui_window_draw(&window2);
@@ -155,35 +155,4 @@ void kernel_main(void) {
     schd_switch_to(thread_create_idle_thread(0));
 
     draw_gui();
-
-    /**
-     * swi test
-     */
-    swi(1);
-    swi(2);
-
-    /**
-     * printf test
-     */
-    printf("test:%d \n", 12);
-    printf("test:%s \n", "lalala");
-
-    /**
-     * heap test
-     */
-    KernelStatus kernelHeapInitStatus = kheap_init();
-    if (kernelHeapInitStatus != OK) {
-        printf("[heap] kernel heap init failed.\n");
-    }
-    int *testInt = (int *) kheap_alloc(sizeof(int) * 2);
-    testInt[0] = 1;
-    testInt[1] = 2;
-
-    printf("test 1:%d \n", testInt[0]);
-    printf("test 2:%d \n", testInt[1]);
-
-    KernelStatus kernelHeapFreeStatus = kheap_free(testInt);
-    if (kernelHeapFreeStatus != OK) {
-        printf("[heap] kernel heap free failed.\n");
-    }
 }

@@ -5,6 +5,9 @@
 #include <stdint.h>
 
 #define SYSTEM_TIMER_BASE (SYSTEM_TIMER_OFFSET + PERIPHERAL_BASE)
+#define CORE0_TIMER_IRQCNTL 0x40000040
+#define CORE0_IRQ_SOURCE 0x40000060
+
 
 /**
  * timer init
