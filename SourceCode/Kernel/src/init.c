@@ -143,15 +143,16 @@ void kernel_main(void) {
 
     vmm_init();
 
-    gtimer_init();
 
     kheap_init();
 
-    gpu_init();
+    //gpu_init();
 
     init_bsp();
 
     init_interrupt();
+
+    while(1);
 
     schd_init();
 
