@@ -25,12 +25,9 @@ void print_splash() {
     print(str);
 }
 
-uint32_t ti = 0;
+uint32_t hour, minutes, second = 0;
 
-void demo_desktop() {
-    gfx2d_draw_bitmap(0, 0, 1024, 768, desktop());
-    printf("[Desktop]: render\n");
-
+void draw_task_bar() {
     uint32_t *barBuffer = (uint32_t *) kheap_alloc(1024 * 32 * 4);
 
     for (int i = 0; i < 1024; i++) {
@@ -42,24 +39,89 @@ void demo_desktop() {
         barBuffer[31 * 1024 + i] = 0x999999;
     }
     gfx2d_draw_bitmap(0, 0, 1024, 32, barBuffer);
-    gfx2d_draw_logo(0, 0, 0x000000);
+    gfx2d_draw_logo(0, 0, 0xFFFFFF);
+}
 
-    GUIButton synestiaOSButton;
-    gui_button_create(&synestiaOSButton);
-    synestiaOSButton.component.size.height = 32;
-    synestiaOSButton.component.padding.top = 12;
-    synestiaOSButton.component.colorMode = TRANSPARENT;
-    synestiaOSButton.component.foreground.r = 0x00;
-    synestiaOSButton.component.foreground.g = 0x00;
-    synestiaOSButton.component.foreground.b = 0x00;
-    char int32s[10] = {'\0'};
-    char *intStr = itoa(ti, &int32s, 10);
-    gui_button_init(&synestiaOSButton, 32, 0, intStr);
-    gui_button_draw(&synestiaOSButton);
+void draw_time() {
+
+    GUILabel hourLabel;
+    gui_label_create(&hourLabel);
+    hourLabel.component.foreground.r = 0xFF;
+    hourLabel.component.foreground.g = 0xFF;
+    hourLabel.component.foreground.b = 0xFF;
+    hourLabel.component.size.height = 32;
+    hourLabel.component.padding.top = 12;
+    hourLabel.component.colorMode = TRANSPARENT;
+    char hour_str[10] = {'\0'};
+    char *hour_str_ = itoa(hour, &hour_str, 10);
+    gui_label_init(&hourLabel, 1000 - 60, 0, hour_str_);
+    gui_label_draw(&hourLabel);
+
+    GUILabel colon;
+    gui_label_create(&colon);
+    colon.component.foreground.r = 0xFF;
+    colon.component.foreground.g = 0xFF;
+    colon.component.foreground.b = 0xFF;
+    colon.component.size.height = 32;
+    colon.component.padding.top = 12;
+    colon.component.colorMode = TRANSPARENT;
+    gui_label_init(&colon, 1000 - 45, 0, ":");
+    gui_label_draw(&colon);
+
+
+    GUILabel minuteLabel;
+    gui_label_create(&minuteLabel);
+    minuteLabel.component.foreground.r = 0xFF;
+    minuteLabel.component.foreground.g = 0xFF;
+    minuteLabel.component.foreground.b = 0xFF;
+    minuteLabel.component.size.height = 32;
+    minuteLabel.component.padding.top = 12;
+    minuteLabel.component.colorMode = TRANSPARENT;
+    char minute_str[10] = {'\0'};
+    char *minute_str_ = itoa(minutes, &minute_str, 10);
+    gui_label_init(&minuteLabel, 1000 - 35, 0, minute_str_);
+    gui_label_draw(&minuteLabel);
+
+    GUILabel colon2;
+    gui_label_create(&colon2);
+    colon2.component.foreground.r = 0xFF;
+    colon2.component.foreground.g = 0xFF;
+    colon2.component.foreground.b = 0xFF;
+    colon2.component.size.height = 32;
+    colon2.component.padding.top = 12;
+    colon2.component.colorMode = TRANSPARENT;
+    gui_label_init(&colon2, 1000 - 20, 0, ":");
+    gui_label_draw(&colon2);
+
+    GUILabel secondLabel;
+    gui_label_create(&secondLabel);
+    secondLabel.component.foreground.r = 0xFF;
+    secondLabel.component.foreground.g = 0xFF;
+    secondLabel.component.foreground.b = 0xFF;
+    secondLabel.component.size.height = 32;
+    secondLabel.component.padding.top = 12;
+    secondLabel.component.colorMode = TRANSPARENT;
+    char second_str[10] = {'\0'};
+    char *second_str_ = itoa(second, &second_str, 10);
+    gui_label_init(&secondLabel, 1000-10, 0, second_str_);
+    gui_label_draw(&secondLabel);
+}
+
+
+void demo_desktop() {
+    gfx2d_draw_bitmap(0, 0, 1024, 768, desktop());
+    printf("[Desktop]: render\n");
+
+    draw_task_bar();
+
+    draw_time();
 
     GUILabel synestiaOSLabel2;
     gui_label_create(&synestiaOSLabel2);
     synestiaOSLabel2.component.colorMode = TRANSPARENT;
+    synestiaOSLabel2.component.foreground.r = 0xFF;
+    synestiaOSLabel2.component.foreground.g = 0xFF;
+    synestiaOSLabel2.component.foreground.b = 0xFF;
     gui_label_init(&synestiaOSLabel2, 300, 4, "Welcome to Synestia Operation System.");
     gui_label_draw(&synestiaOSLabel2);
 
@@ -75,8 +137,6 @@ void demo_desktop() {
 
     GUIButton ok;
     gui_button_create(&ok);
-    synestiaOSButton.component.size.height = 32;
-    synestiaOSButton.component.padding.top = 12;
     gui_button_init(&ok, 0, 0, "Inner Window Button");
 
     GUILabel label;
@@ -135,30 +195,37 @@ void demo_desktop() {
 }
 
 
-Thread * t0;
-Thread * t1;
-Thread * t2;
+Thread *t0;
+Thread *t1;
+Thread *t2;
 
 void xx() {
     //Desktop
     demo_desktop();
-    ti++;
+    second++;
+    if (second == 60) {
+        second = 0;
+        minutes++;
+        if (minutes == 60) {
+            minutes = 0;
+            hour++;
+            if (hour == 24) {
+                hour = 0;
+            }
+        }
+    }
 
     //Switch To thread
-    if((ti % 3) == 0)
-      schd_switch_to(t0);
-    else if((ti % 3) == 1)
-      schd_switch_to(t1);
-    else if((ti % 3) == 2)
-      schd_switch_to(t2);
+    if ((second % 3) == 0) {
+//        schd_switch_to(t0);
+    } else if ((second % 3) == 1) {
+//        schd_switch_to(t1);
+    } else if ((second % 3) == 2) {
+//        schd_switch_to(t2);
+    }
 }
 
 TimerHandler t;
-
-void threa1(int a, int b, int c)
-{
-
-}
 
 void kernel_main(void) {
 
