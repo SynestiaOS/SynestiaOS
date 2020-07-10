@@ -52,7 +52,7 @@ void draw_time() {
     hourLabel.component.size.height = 32;
     hourLabel.component.padding.top = 12;
     hourLabel.component.colorMode = TRANSPARENT;
-    char hour_str[2] = {'\0'};
+    char hour_str[10] = {'\0'};
     char *hour_str_ = itoa(hour, &hour_str, 10);
     gui_label_init(&hourLabel, 1000 - 60, 0, hour_str_);
     gui_label_draw(&hourLabel);
@@ -77,7 +77,7 @@ void draw_time() {
     minuteLabel.component.size.height = 32;
     minuteLabel.component.padding.top = 12;
     minuteLabel.component.colorMode = TRANSPARENT;
-    char minute_str[2] = {'\0'};
+    char minute_str[10] = {'\0'};
     char *minute_str_ = itoa(minutes, &minute_str, 10);
     gui_label_init(&minuteLabel, 1000 - 35, 0, minute_str_);
     gui_label_draw(&minuteLabel);
@@ -101,7 +101,7 @@ void draw_time() {
     secondLabel.component.size.height = 32;
     secondLabel.component.padding.top = 12;
     secondLabel.component.colorMode = TRANSPARENT;
-    char second_str[2] = {'\0'};
+    char second_str[10] = {'\0'};
     char *second_str_ = itoa(second, &second_str, 10);
     gui_label_init(&secondLabel, 1000-10, 0, second_str_);
     gui_label_draw(&secondLabel);
