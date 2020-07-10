@@ -57,31 +57,18 @@ KernelStatus schd_switch_to(Thread *thread) {
     }
     printf("[SC] switch to: %s.\n", thread->name);
 
-//    void *sp;
     disable_interrupt();
 
     //save current thread
 
-    if(currentThread == nullptr)
-    {
-      cpu_context_switch_to(0, thread->stack->virtualMemoryAddress);
-    }
-    else
-    {
-      cpu_context_switch_to(currentThread->stack->virtualMemoryAddress, thread->stack->virtualMemoryAddress);
+    if (currentThread == nullptr) {
+        cpu_context_switch_to(0, thread->stack->virtualMemoryAddress);
+    } else {
+        cpu_context_switch_to(currentThread->stack->virtualMemoryAddress, thread->stack->virtualMemoryAddress);
     }
 
-//    if (currentThread != nullptr) {
-//        currentThread->stack = sp;
-//    }
-//    sp = thread->stack;
-//
-//
-  //restore new thread
-//    currentThread = thread;
-//    currentThread->threadStatus = THREAD_READY;
-//    currentThread->threadStatus = THREAD_RUNNING;
 
+    //restore new thread
     enable_interrupt();
 
     return OK;

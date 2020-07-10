@@ -4,6 +4,7 @@
 
 #include <kheap.h>
 #include <stdlib.h>
+#include <sched.h>
 
 static heap_alloc_func heapAllocFunc = nullptr;
 static heap_free_func heapFreeFunc = nullptr;
@@ -107,6 +108,17 @@ void *kheap_alloc(uint32_t size) {
         // todo: defragmentation
     }
     return nullptr;
+}
+
+void *kheap_alloc_aligned(uint32_t size, uint32_t alignment) {
+    uint32_t offset = alignment - 1 + sizeof(void *);
+    void *p1 = kheap_alloc(size + offset);
+    if (p1 == nullptr) {
+        return nullptr;
+    }
+    void **p2 = (void **) (((uint32_t) p1 + offset) & ~(alignment - 1));
+    p2[-1] = p1;
+    return p2;
 }
 
 void *kheap_calloc(uint32_t num, uint32_t size) {

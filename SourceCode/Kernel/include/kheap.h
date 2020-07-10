@@ -29,6 +29,8 @@ void kheap_set_free_callback(heap_free_func callback);
 
 void *kheap_alloc(uint32_t size);
 
+void *kheap_alloc_aligned(uint32_t size, uint32_t alignment);
+
 void *kheap_calloc(uint32_t num, uint32_t size);
 
 void *kheap_realloc(void *ptr, uint32_t size);
