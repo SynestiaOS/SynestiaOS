@@ -117,7 +117,7 @@ void gui_window_draw(GUIWindow *window) {
                     window->component.position.x + xOffset * DEFAULT_FONT_SIZE + DEFAULT_PADDING,
                     window->component.position.y + DEFAULT_PADDING,
                     *tmp,
-                    window->component.foreground.r << 16 | window->component.foreground.g << 8 | window->component.foreground.b
+                    0xFFFFFF
             );
             xOffset++;
             tmp++;

@@ -42,16 +42,16 @@ void demo_desktop() {
         barBuffer[31 * 1024 + i] = 0x999999;
     }
     gfx2d_draw_bitmap(0, 0, 1024, 32, barBuffer);
-    gfx2d_draw_logo(0, 0, 0x000000);
+    gfx2d_draw_logo(0, 0, 0xFFFFFF);
 
     GUIButton synestiaOSButton;
     gui_button_create(&synestiaOSButton);
     synestiaOSButton.component.size.height = 32;
     synestiaOSButton.component.padding.top = 12;
     synestiaOSButton.component.colorMode = TRANSPARENT;
-    synestiaOSButton.component.foreground.r = 0x00;
-    synestiaOSButton.component.foreground.g = 0x00;
-    synestiaOSButton.component.foreground.b = 0x00;
+    synestiaOSButton.component.foreground.r = 0xFF;
+    synestiaOSButton.component.foreground.g = 0xFF;
+    synestiaOSButton.component.foreground.b = 0xFF;
     char int32s[10] = {'\0'};
     char *intStr = itoa(ti, &int32s, 10);
     gui_button_init(&synestiaOSButton, 32, 0, intStr);
@@ -60,6 +60,9 @@ void demo_desktop() {
     GUILabel synestiaOSLabel2;
     gui_label_create(&synestiaOSLabel2);
     synestiaOSLabel2.component.colorMode = TRANSPARENT;
+    synestiaOSLabel2.component.foreground.r = 0xFF;
+    synestiaOSLabel2.component.foreground.g = 0xFF;
+    synestiaOSLabel2.component.foreground.b = 0xFF;
     gui_label_init(&synestiaOSLabel2, 300, 4, "Welcome to Synestia Operation System.");
     gui_label_draw(&synestiaOSLabel2);
 
@@ -146,11 +149,11 @@ void xx() {
 
     //Switch To thread
     if ((ti % 3) == 0) {
-        schd_switch_to(t0);
+//        schd_switch_to(t0);
     } else if ((ti % 3) == 1) {
-        schd_switch_to(t1);
+//        schd_switch_to(t1);
     } else if ((ti % 3) == 2) {
-        schd_switch_to(t2);
+//        schd_switch_to(t2);
     }
 }
 
