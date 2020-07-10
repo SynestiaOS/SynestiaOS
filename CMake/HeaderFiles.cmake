@@ -2,6 +2,10 @@ function(target_include_libc_header_files Target)
     target_include_directories(${Target} PRIVATE ${SYNESTIAOS_SOURCE_CODE_DIR}/Libraries/LibC/include)
 endfunction()
 
+function(target_include_libstl_header_files Target)
+    target_include_directories(${Target} PRIVATE ${SYNESTIAOS_SOURCE_CODE_DIR}/Libraries/LibSTL/include)
+endfunction()
+
 function(target_include_libgfx_header_files Target)
     target_include_directories(${Target} PRIVATE ${SYNESTIAOS_SOURCE_CODE_DIR}/Libraries/LibGfx/include)
 endfunction()
@@ -21,7 +25,6 @@ endfunction()
 function(target_include_vmm_header_files Target)
     target_include_directories(${Target} PRIVATE ${SYNESTIAOS_SOURCE_CODE_DIR}/Kernel/Arch/${SynestiaArch}/vmm/include)
 endfunction()
-
 
 function(target_include_tests_header_files Target)
     target_include_directories(${Target} PRIVATE ${SYNESTIAOS_SOURCE_CODE_DIR}/Tests/include)
