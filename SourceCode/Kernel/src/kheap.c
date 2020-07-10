@@ -4,7 +4,6 @@
 
 #include <kheap.h>
 #include <stdlib.h>
-#include <sched.h>
 
 static heap_alloc_func heapAllocFunc = nullptr;
 static heap_free_func heapFreeFunc = nullptr;

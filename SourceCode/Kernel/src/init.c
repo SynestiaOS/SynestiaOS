@@ -135,9 +135,9 @@ void demo_desktop() {
 }
 
 
-Thread * t0;
-Thread * t1;
-Thread * t2;
+Thread *t0;
+Thread *t1;
+Thread *t2;
 
 void xx() {
     //Desktop
@@ -145,20 +145,16 @@ void xx() {
     ti++;
 
     //Switch To thread
-    if((ti % 3) == 0)
-      schd_switch_to(t0);
-    else if((ti % 3) == 1)
-      schd_switch_to(t1);
-    else if((ti % 3) == 2)
-      schd_switch_to(t2);
+    if ((ti % 3) == 0) {
+        schd_switch_to(t0);
+    } else if ((ti % 3) == 1) {
+        schd_switch_to(t1);
+    } else if ((ti % 3) == 2) {
+        schd_switch_to(t2);
+    }
 }
 
 TimerHandler t;
-
-void threa1(int a, int b, int c)
-{
-
-}
 
 void kernel_main(void) {
 
