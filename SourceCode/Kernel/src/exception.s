@@ -22,7 +22,7 @@ _data_abort_addr:
 _unused_addr:
     .word unused_handler
 _interrupt_addr:
-    .word interrupt_handler
+    .word interupt_isp
 _fast_interrupt_addr:
     .word fast_interrupt_handler
 
@@ -53,4 +53,12 @@ halt_cpu:
     wfi // wait for interrup coming
     b halt_cpu
 
+
+interupt_isp:
+    stmfd   sp!, {r0-r12,lr}
+
+    bl interrupt_handler
+
+    ldmfd   sp!, {r0-r12,lr}
+    subs    pc,  lr, #4
 

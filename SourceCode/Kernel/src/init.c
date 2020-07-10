@@ -172,13 +172,14 @@ void kernel_main(void) {
 
     init_interrupt();
 
-    schd_init();
+    //schd_init();
 
     //init 0 1 2 Three Thread
     //schd_switch_to(thread_create_idle_thread(0));
     t0 = thread_create_idle_thread(0);
     t1 = thread_create_idle_thread(1);
     t2 = thread_create_idle_thread(2);
+
 
 
     gpu_init();
