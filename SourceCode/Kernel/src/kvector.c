@@ -21,15 +21,18 @@ KernelVector *kvector_allocate() {
 
 KernelStatus kvector_resize(KernelVector *vector, uint32_t newSize) {
     kheap_realloc(vector, newSize);
+    return OK;
 }
 
 KernelStatus kvector_free(KernelVector *vector) {
     kheap_free(vector);
+    return OK;
 }
 
 KernelStatus kvector_add(KernelVector *vector, ListNode *node) {
     vector->node[vector->index] = *node;
     vector->index++;
+    return OK;
 }
 
 ListNode kvector_get(KernelVector *vector, uint32_t index) {
@@ -37,6 +40,7 @@ ListNode kvector_get(KernelVector *vector, uint32_t index) {
 }
 
 KernelStatus kvector_remove_index(KernelVector *vector, uint32_t index) {
+
 }
 
 KernelStatus kvector_remove(KernelVector *vector, ListNode *index) {
@@ -56,4 +60,5 @@ KernelStatus kvector_clear(KernelVector *vector) {
     for (uint32_t i = 0; i < vector->size; i++) {
         vector->node = nullptr;
     }
+    return OK;
 }
