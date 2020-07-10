@@ -25,10 +25,11 @@ void print_splash() {
     print(str);
 }
 
-void demo_desktop() {
-    printf("[Desktop]: render\n");
-    gfx2d_draw_bitmap(0, 0, 1024, 768, desktop());
+uint32_t ti = 0;
 
+void demo_desktop() {
+    gfx2d_draw_bitmap(0, 0, 1024, 768, desktop());
+    printf("[Desktop]: render\n");
 
     uint32_t *barBuffer = (uint32_t *) kheap_alloc(1024 * 32 * 4);
 
@@ -41,8 +42,6 @@ void demo_desktop() {
         barBuffer[31 * 1024 + i] = 0x999999;
     }
     gfx2d_draw_bitmap(0, 0, 1024, 32, barBuffer);
-
-
     gfx2d_draw_logo(0, 0, 0x000000);
 
     GUIButton synestiaOSButton;
@@ -53,7 +52,9 @@ void demo_desktop() {
     synestiaOSButton.component.foreground.r = 0x00;
     synestiaOSButton.component.foreground.g = 0x00;
     synestiaOSButton.component.foreground.b = 0x00;
-    gui_button_init(&synestiaOSButton, 32, 0, "SynestiaOS");
+    char int32s[10] = {'\0'};
+    char *intStr = itoa(ti, &int32s, 10);
+    gui_button_init(&synestiaOSButton, 32, 0, intStr);
     gui_button_draw(&synestiaOSButton);
 
     GUILabel synestiaOSLabel2;
@@ -133,11 +134,6 @@ void demo_desktop() {
     gui_window_draw(&window2);
 }
 
-
-void xxx(void) {
-    printf("[Timer]: invoked\n");
-}
-
 void kernel_main(void) {
 
     print_splash();
@@ -147,13 +143,6 @@ void kernel_main(void) {
     kheap_init();
 
     init_bsp();
-
-    timer_handler_t timer;
-    timer.node.next = nullptr;
-    timer.node.prev = nullptr;
-    timer.timer_interrupt_handler = xxx;
-
-    register_time_interrupt(&timer);
 
     init_interrupt();
 

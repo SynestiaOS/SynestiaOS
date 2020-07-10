@@ -113,12 +113,16 @@ void __attribute__((interrupt("IRQ"))) interrupt_handler(void) {
 
 void __attribute__((interrupt("FIQ"))) fast_interrupt_handler(void) {}
 
-timer_handler_t *timerHandler = nullptr;
+TimerHandler *timerHandler = nullptr;
 
-void register_time_interrupt(timer_handler_t *handler) {
+void register_time_interrupt(TimerHandler *handler) {
     if (timerHandler == nullptr) {
         timerHandler = handler;
     } else {
         klist_append(&timerHandler->node, &handler->node);
     }
+}
+
+TimerHandler *timer_get_handler(void) {
+    return timerHandler;
 }

@@ -53,16 +53,15 @@ void generic_timer_irq_clear(void) {
     //DO Nothing
 }
 
-
-extern timer_handler_t *timerHandler;
-
 void generic_timer_irq_handler(void) {
     printf("[Timer]: generic timer interrupted\n");
-    write_cntvtval(read_cntfrq());
+    write_cntvtval(read_cntfrq() / 5);
+    TimerHandler *timerHandler = timer_get_handler();
     if (timerHandler != nullptr) {
-        timerHandler->timer_interrupt_handler();
+        void (*timer_interrupt_handler)(void) = timerHandler->timer_interrupt_handler;
+        (*timer_interrupt_handler)();
         while (timerHandler->node.next != nullptr) {
-            timer_handler_t *pHandler = getNode(timerHandler->node.next, timer_handler_t, node);
+            TimerHandler *pHandler = getNode(timerHandler->node.next, TimerHandler, node);
             pHandler->timer_interrupt_handler();
             timerHandler = pHandler;
         }
@@ -71,7 +70,7 @@ void generic_timer_irq_handler(void) {
 
 
 void generic_timer_init(void) {
-    write_cntvtval(read_cntfrq());
+    write_cntvtval(read_cntfrq() / 5);
     enable_cntv();
     enable_core0_irq();
     register_interrupt_handler(1, generic_timer_irq_handler, generic_timer_irq_clear);

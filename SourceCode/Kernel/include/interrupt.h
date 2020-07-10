@@ -57,17 +57,20 @@ void register_interrupt_handler(uint32_t interrupt_no, void (*interrupt_handler_
                                 void (*interrupt_clear_func)(void));
 
 
-typedef struct timer_handler {
+typedef struct TimerHandler {
     void (*timer_interrupt_handler)(void);
 
     ListNode node;
-} timer_handler_t;
+} TimerHandler;
 
 /**
  * register timer interrupt handler
  * @param timer_interrupt_handler
  */
-void register_time_interrupt(timer_handler_t *handler);
+void register_time_interrupt(TimerHandler *handler);
+
+
+TimerHandler *timer_get_handler(void);
 
 /**
  * trigger a software interrupt
