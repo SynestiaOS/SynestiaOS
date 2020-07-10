@@ -134,12 +134,31 @@ void demo_desktop() {
     gui_window_draw(&window2);
 }
 
+
+Thread * t0;
+Thread * t1;
+Thread * t2;
+
 void xx() {
-    ti++;
+    //Desktop
     demo_desktop();
+    ti++;
+
+    //Switch To thread
+    if((ti % 3) == 0)
+      schd_switch_to(t0);
+    else if((ti % 3) == 1)
+      schd_switch_to(t1);
+    else if((ti % 3) == 2)
+      schd_switch_to(t2);
 }
 
 TimerHandler t;
+
+void threa1(int a, int b, int c)
+{
+
+}
 
 void kernel_main(void) {
 
@@ -155,7 +174,12 @@ void kernel_main(void) {
 
     schd_init();
 
-    schd_switch_to(thread_create_idle_thread(0));
+    //init 0 1 2 Three Thread
+    //schd_switch_to(thread_create_idle_thread(0));
+    t0 = thread_create_idle_thread(0);
+    t1 = thread_create_idle_thread(1);
+    t2 = thread_create_idle_thread(2);
+
 
     gpu_init();
 

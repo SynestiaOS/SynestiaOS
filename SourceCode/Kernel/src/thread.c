@@ -71,8 +71,9 @@ Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uin
     return nullptr;
 }
 
-uint32_t *idle_thread_routine(void *arg) {
-    asm volatile("wfi");
+uint32_t *idle_thread_routine(int arg) {
+    printf("IDLE Thread %d \n", arg);
+    //asm volatile("wfi");
 }
 
 Thread *thread_create_idle_thread(uint32_t cpuNum) {
@@ -82,6 +83,7 @@ Thread *thread_create_idle_thread(uint32_t cpuNum) {
     if (kernelStack != nullptr && kernelStack != nullptr) {
         // 1. init kernel stack
         kstack_clear(kernelStack);
+        kstack_push(kernelStack, idle_thread_routine);   // R15
         kstack_push(kernelStack, idle_thread_routine);   // R14
         kstack_push(kernelStack, kernelStack->virtualMemoryAddress);   // R13
         kstack_push(kernelStack, 0x12121212);   // R12
@@ -95,7 +97,7 @@ Thread *thread_create_idle_thread(uint32_t cpuNum) {
         kstack_push(kernelStack, 0x04040404);   // R04
         kstack_push(kernelStack, 0x03030303);   // R03
         kstack_push(kernelStack, 0x02020202);   // R02
-        kstack_push(kernelStack, 0x01010101);   // R01
+        kstack_push(kernelStack, cpuNum);   // R01
 
         // 2. idle thread
         Thread *idleThread = (Thread *) kheap_alloc(sizeof(Thread));
