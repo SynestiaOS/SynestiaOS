@@ -134,6 +134,13 @@ void demo_desktop() {
     gui_window_draw(&window2);
 }
 
+void xx() {
+    ti++;
+    demo_desktop();
+}
+
+TimerHandler t;
+
 void kernel_main(void) {
 
     print_splash();
@@ -151,6 +158,12 @@ void kernel_main(void) {
     schd_switch_to(thread_create_idle_thread(0));
 
     gpu_init();
+
+    t.node.next = nullptr;
+    t.node.prev = nullptr;
+    t.timer_interrupt_handler = &xx;
+
+    register_time_interrupt(&t);
 
     demo_desktop();
 }
