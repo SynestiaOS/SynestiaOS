@@ -99,6 +99,7 @@ interupt_isp:
 
     //Save Previous R0-R5
     ldmfd sp!, {r7-r12}
+    bic r3, #(1 << 6) | (1 << 7)
     stmfd sp!, {r3,r7-r12}
 
     //sub r2, r2, #8*4
@@ -120,19 +121,11 @@ interupt_isp:
     ldr r0, =switch_thread_stack
     ldr r2, [r0]
     mov sp, r2
-    ldmfd sp!, {sp}
-
-
-
-
-    //Save old pc(in current lr)
-    //stmfd
-
-    //Save old lr(in system lr)
-    //Save old r0-r12(in system lr)
-
-
+    ldmfd sp!, {r12}
     //Enable Irq/Fiq
+    bic r12, #(1 << 6) | (1 << 7)
+    msr spsr, r12
+    ldmfd sp!, {r0-r12, lr, pc}^
 
 /////////////////////////////////////////////////////////////
 //////////  End of Restore Previous Thread Status ///////////
