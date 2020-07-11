@@ -67,14 +67,21 @@ interupt_isp:
 
     ldr r0, =switch_to_signal
     ldr r1, [r0]
-    mov r2, #0
-    cmp r2, r1
 
+    mov r2, #0
+    str r2,[r0]
+
+    cmp r2, r1
     beq just_exit_interrupt
+
+    mov r2, #2
+    cmp r2, r1
+    beq cpu_restore_context
 
 /////////////////////////////////////////////////////////////
 //////////  Save Previous Thread Status /////////////////////
 /////////////////////////////////////////////////////////////
+cpu_save_context:
     //R0: swithch_to_signal Address
     //R1: Irq Stack, Save for Pop Previous Registers
     ldmfd   sp!, {r6-r12,r5}
@@ -117,6 +124,7 @@ interupt_isp:
 /////////////////////////////////////////////////////////////
 //////////  Restore Previous Thread Status //////////////////
 /////////////////////////////////////////////////////////////
+cpu_restore_context:
     //Restore Sp to
     ldr r0, =switch_thread_stack
     ldr r2, [r0]
