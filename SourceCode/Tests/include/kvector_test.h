@@ -7,5 +7,10 @@
 
 #include <kvector.h>
 
+void should_kvector_create() {
+    KernelVector *kernelVector = kvector_allocate();
+    ASSERT_NEQ(kernelVector, nullptr);
+}
+
 
 #endif //__KERNEL_KVECTOR_TEST_H__

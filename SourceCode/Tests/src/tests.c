@@ -9,6 +9,7 @@
 #include <kheap_test.h>
 #include <klist_test.h>
 #include <kstack_test.h>
+#include <kvector_test.h>
 
 void kernel_main_tests() {
     kheap_init();
@@ -30,4 +31,6 @@ void kernel_main_tests() {
     TEST_CASE("should_kheap_calloc", should_kheap_calloc);
     TEST_CASE("should_kheap_realloc", should_kheap_realloc);
     TEST_CASE("should_kheap_free", should_kheap_free);
+
+    TEST_CASE("should_kvector_create", should_kvector_create);
 }
