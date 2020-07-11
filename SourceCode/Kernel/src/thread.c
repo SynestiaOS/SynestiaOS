@@ -83,9 +83,8 @@ Thread *thread_create_idle_thread(uint32_t cpuNum) {
     if (kernelStack != nullptr && kernelStack != nullptr) {
         // 1. init kernel stack
         kstack_clear(kernelStack);
-        //kstack_push(kernelStack, idle_thread_routine);   // R15 PC
+        kstack_push(kernelStack, idle_thread_routine);   // R15 PC
         kstack_push(kernelStack, idle_thread_routine);   // R14 LR
-        //kstack_push(kernelStack, kernelStack->virtualMemoryAddress);   // R13
         kstack_push(kernelStack, 0x12121212);   // R12
         kstack_push(kernelStack, 0x11111111);   // R11
         kstack_push(kernelStack, 0x10101010);   // R10
@@ -100,7 +99,8 @@ Thread *thread_create_idle_thread(uint32_t cpuNum) {
         kstack_push(kernelStack, 0x01010101);   // R01
         kstack_push(kernelStack, cpuNum);   // R00
         kstack_push(kernelStack, 0x600001d3);   // cpsr
-        //kstack_push(kernelStack, 0x600001d3);   // spsr
+        //kstack_push(kernelStack, kernelStack->top);   // R13 SP
+      //kstack_push(kernelStack, 0x600001d3);   // spsr
 
         // 2. idle thread
         Thread *idleThread = (Thread *) kheap_alloc(sizeof(Thread));

@@ -50,6 +50,12 @@ KernelStatus schd_preempt(void) {
 
 extern void cpu_context_switch_to(uint32_t current_stack, uint32_t switch_stack);
 
+
+uint32_t  current_thread_stack;
+uint32_t  switch_thread_stack;
+uint32_t  switch_to_signal;
+
+
 KernelStatus schd_switch_to(Thread *thread) {
 
   //push r0~r3
