@@ -50,7 +50,16 @@ KernelStatus schd_preempt(void) {
 
 extern void cpu_context_switch_to(uint32_t current_stack, uint32_t switch_stack);
 
+
+uint32_t  current_thread_stack;
+uint32_t  switch_thread_stack;
+uint32_t  switch_to_signal;
+
+
 KernelStatus schd_switch_to(Thread *thread) {
+
+  //push r0~r3
+
     if (thread == nullptr) {
         printf("[SC] cant switch to nullptr thread.\n");
         return ERROR;
@@ -62,15 +71,17 @@ KernelStatus schd_switch_to(Thread *thread) {
     //save current thread
 
     if (currentThread == nullptr) {
-        cpu_context_switch_to(0, thread->stack->virtualMemoryAddress);
+        cpu_context_switch_to(0, thread->stack->top);
+        //restore r0~r12
     } else {
-        cpu_context_switch_to(currentThread->stack->virtualMemoryAddress, thread->stack->virtualMemoryAddress);
+        cpu_context_switch_to(currentThread->stack->top, thread->stack->top);
     }
 
 
     //restore new thread
     enable_interrupt();
 
+      //pop r0~r3
     return OK;
 }
 
