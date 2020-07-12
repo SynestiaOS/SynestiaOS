@@ -145,10 +145,12 @@ void demo_desktop() {
 
     GUILabel label3;
     gui_label_create(&label3);
+    label3.component.colorMode = TRANSPARENT;
     gui_label_init(&label3, 0, 0, "Inner Label 1");
 
     GUILabel label4;
     gui_label_create(&label4);
+    label4.component.colorMode = TRANSPARENT;
     gui_label_init(&label4, 0, 0, "Inner Label 2");
 
     GUIPanel panel2;
@@ -156,7 +158,7 @@ void demo_desktop() {
     panel2.component.size.width = 150;
     panel2.component.size.height = 50;
     panel2.component.background.r = 0x00;
-    panel2.component.background.g = 0x00;
+    panel2.component.background.g = 0x77;
     gui_panel_init(&panel2, 10, 100);
     gui_panel_add_children(&panel2, &(label4.component));
 
@@ -188,7 +190,7 @@ void demo_desktop() {
     gui_window_create(&window2);
     gui_window_add_children(&window2, &(ok.component));
     gui_window_add_children(&window2, &(label.component));
-    gui_window_add_children(&window2, &(panel.component));
+//    gui_window_add_children(&window2, &(panel.component));
     gui_window_add_children(&window2, &(container.component));
     gui_window_init(&window2, 200, 200, "SynestiaOS 2");
     gui_window_draw(&window2);
@@ -240,13 +242,13 @@ void kernel_main(void) {
 
     init_interrupt();
 
-    //schd_init();
+    //  schd_init();
 
-    //init 0 1 2 Three Thread
-    //schd_switch_to(thread_create_idle_thread(0));
-//    t0 = thread_create_idle_thread(0);
-//    t1 = thread_create_idle_thread(1);
-//    t2 = thread_create_idle_thread(2);
+    //  init 0 1 2 Three Thread
+    //  schd_switch_to(thread_create_idle_thread(0));
+    //  t0 = thread_create_idle_thread(0);
+    //  t1 = thread_create_idle_thread(1);
+    //  t2 = thread_create_idle_thread(2);
 
     gpu_init();
 
@@ -254,8 +256,8 @@ void kernel_main(void) {
     t.node.prev = nullptr;
     t.timer_interrupt_handler = &xx;
 
-//    register_time_interrupt(&t);
-//    while(1);
+    //  register_time_interrupt(&t);
+    //  while(1);
 
     demo_desktop();
 }
