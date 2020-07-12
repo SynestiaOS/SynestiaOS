@@ -114,9 +114,14 @@ Thread *thread_create_idle_thread(uint32_t cpuNum) {
         idleThread->runtimVirtualNs = 0;
         idleThread->entry = (ThreadStartRoutine) idle_thread_routine;
         idleThread->pid = 0;
-        strcpy(idleThread->name, "idle");
+        if(cpuNum == 0)
+          strcpy(idleThread->name, "idle0");
+        else if(cpuNum == 1)
+          strcpy(idleThread->name, "idle1");
+        else if(cpuNum == 2)
+          strcpy(idleThread->name, "idle2");
 
-        // todo : other properties, like list
+      // todo : other properties, like list
 
         printf("[Thread] Idle thread created.\n");
         return idleThread;

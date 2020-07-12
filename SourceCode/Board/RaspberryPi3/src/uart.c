@@ -22,7 +22,7 @@ void uart_init(void) {
               (void *) (PERIPHERAL_BASE + UART0_OFFSET + UART_IMSC_OFFSET));
     io_writel((1 << 0) | (1 << 8) | (1 << 9), (void *) (PERIPHERAL_BASE + UART0_OFFSET + UART_CR_OFFSET));
 
-    register_interrupt_handler(57, uart_interrupt_handler, (void *) 0);
+    //register_interrupt_handler(57, uart_interrupt_handler, (void *) 0);
     io_writel(0x10, (void *) (PERIPHERAL_BASE + UART0_OFFSET + UART_IMSC_OFFSET));
 }
 

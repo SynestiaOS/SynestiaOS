@@ -202,7 +202,6 @@ Thread *t2;
 void xx() {
     //Desktop
     demo_desktop();
-    second++;
     if (second == 60) {
         second = 0;
         minutes++;
@@ -217,12 +216,14 @@ void xx() {
 
     //Switch To thread
     if ((second % 3) == 0) {
-//        schd_switch_to(t0);
+          schd_switch_to(t0);
     } else if ((second % 3) == 1) {
-//        schd_switch_to(t1);
+          schd_switch_to(t1);
     } else if ((second % 3) == 2) {
-//        schd_switch_to(t2);
+          schd_switch_to(t2);
     }
+
+    second++;
 }
 
 TimerHandler t;
@@ -247,15 +248,14 @@ void kernel_main(void) {
     t1 = thread_create_idle_thread(1);
     t2 = thread_create_idle_thread(2);
 
-
-
-    gpu_init();
+    //gpu_init();
 
     t.node.next = nullptr;
     t.node.prev = nullptr;
     t.timer_interrupt_handler = &xx;
 
     register_time_interrupt(&t);
+    while(1);
 
     demo_desktop();
 }
