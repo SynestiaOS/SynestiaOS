@@ -10,6 +10,8 @@
 void should_kvector_create() {
     KernelVector *kernelVector = kvector_allocate();
     ASSERT_NEQ(kernelVector, nullptr);
+    ASSERT_EQ(kernelVector->index,0);
+    ASSERT_EQ(kernelVector->size,DEFAULT_VECTOR_SIZE);
 }
 
 
