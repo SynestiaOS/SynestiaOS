@@ -84,10 +84,6 @@ void should_kvector_get() {
     kvector_add(kernelVector, &(t2.node));
     ASSERT_EQ(kernelVector->index, 2);
 
-    for (uint32_t i = 0; i < kernelVector->index; i++) {
-        printf("XXX: %d \n", getNode(kvector_get(kernelVector, i), TestElement, node)->id);
-    }
-
     ASSERT_EQ(getNode(kvector_get(kernelVector, 0), TestElement, node)->id, 1);
     ASSERT_EQ(getNode(kvector_get(kernelVector, 1), TestElement, node)->id, 2);
 }
