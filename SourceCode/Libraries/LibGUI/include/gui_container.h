@@ -6,6 +6,7 @@
 #define __LIBRARY_LIBGUI_CONTAINER_H__
 
 #include <gui_component.h>
+#include <kvector.h>
 
 #define DEFAULT_CONTAINER_WIDTH 300
 #define DEFAULT_CONTAINER_HEIGHT 300
@@ -18,7 +19,7 @@ typedef enum Orientation {
 typedef struct GUIContainer {
     GUIComponent component;
     Orientation orientation;
-    GUIComponent *children;
+    KernelVector *children;
 } GUIContainer;
 
 

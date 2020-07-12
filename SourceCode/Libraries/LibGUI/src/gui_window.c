@@ -86,9 +86,7 @@ void gui_window_init(GUIWindow *window, uint32_t x, uint32_t y, const char *titl
 }
 
 void gui_window_add_children(GUIWindow *window, GUIComponent *component) {
-    if (window->children == nullptr) {
-        window->children = component;
-    } else {
+    if (window->children != nullptr) {
         kvector_add(window->children, &component->node);
     }
 }
@@ -179,7 +177,6 @@ void gui_window_draw(GUIWindow *window) {
 
 void gui_window_draw_children(GUIWindow *window) {
     KernelVector *children = window->children;
-
     if (children != nullptr) {
         for (uint32_t i = 0; i < children->index; i++) {
             ListNode *listNode = children->node[i];

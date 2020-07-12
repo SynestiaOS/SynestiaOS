@@ -103,7 +103,7 @@ void draw_time() {
     secondLabel.component.colorMode = TRANSPARENT;
     char second_str[10] = {'\0'};
     char *second_str_ = itoa(second, &second_str, 10);
-    gui_label_init(&secondLabel, 1000-10, 0, second_str_);
+    gui_label_init(&secondLabel, 1000 - 10, 0, second_str_);
     gui_label_draw(&secondLabel);
 }
 
@@ -188,8 +188,8 @@ void demo_desktop() {
     gui_window_create(&window2);
     gui_window_add_children(&window2, &(ok.component));
     gui_window_add_children(&window2, &(label.component));
-//    gui_window_add_children(&window2, &(panel.component));
-//    gui_window_add_children(&window2, &(container.component));
+    gui_window_add_children(&window2, &(panel.component));
+    gui_window_add_children(&window2, &(container.component));
     gui_window_init(&window2, 200, 200, "SynestiaOS 2");
     gui_window_draw(&window2);
 }
@@ -216,11 +216,11 @@ void xx() {
 
     //Switch To thread
     if ((second % 3) == 0) {
-          schd_switch_to(t0);
+        schd_switch_to(t0);
     } else if ((second % 3) == 1) {
-          schd_switch_to(t1);
+        schd_switch_to(t1);
     } else if ((second % 3) == 2) {
-          schd_switch_to(t2);
+        schd_switch_to(t2);
     }
 
     second++;

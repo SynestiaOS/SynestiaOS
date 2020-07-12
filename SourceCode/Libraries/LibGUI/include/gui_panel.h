@@ -6,13 +6,14 @@
 #define __LIBRARY_LIBGUI_PANEL_H__
 
 #include <gui_component.h>
+#include <kvector.h>
 
 #define DEFAULT_PANEL_WIDTH 200
 #define DEFAULT_PANEL_HEIGHT 200
 
 typedef struct GUIPanel {
     GUIComponent component;
-    GUIComponent *children;
+    KernelVector *children;
 } GUIPanel;
 
 
