@@ -33,4 +33,13 @@ void kernel_main_tests() {
     TEST_CASE("should_kheap_free", should_kheap_free);
 
     TEST_CASE("should_kvector_create", should_kvector_create);
+    TEST_CASE("should_kvector_resize", should_kvector_resize);
+    TEST_CASE("should_kvector_free", should_kvector_free);
+    TEST_CASE("should_kvector_add", should_kvector_add);
+    TEST_CASE("should_kvector_get", should_kvector_get);
+    TEST_CASE("should_kvector_remove_index", should_kvector_remove_index);
+    TEST_CASE("should_kvector_remove", should_kvector_remove);
+    TEST_CASE("should_kvector_is_empty", should_kvector_is_empty);
+    TEST_CASE("should_kvector_is_full", should_kvector_is_full);
+    TEST_CASE("should_kvector_clear", should_kvector_clear);
 }

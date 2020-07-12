@@ -9,6 +9,7 @@
 #include <stdbool.h>
 #include <gui_panel.h>
 #include <gui_container.h>
+#include <stdlib.h>
 
 void gui_window_create(GUIWindow *window) {
     window->component.type = WINDOW;
@@ -45,6 +46,11 @@ void gui_window_create(GUIWindow *window) {
     window->component.foreground.b = 0x00;
 
     window->title = "";
+
+    window->children = kvector_allocate();
+    if (window->children == nullptr) {
+        printf("[GUI]: window create failed, unable to allocate children vector\n");
+    }
 }
 
 void gui_window_init(GUIWindow *window, uint32_t x, uint32_t y, const char *title) {
@@ -83,13 +89,14 @@ void gui_window_add_children(GUIWindow *window, GUIComponent *component) {
     if (window->children == nullptr) {
         window->children = component;
     } else {
+        kvector_add(window->children, &component->node);
         klist_append(&(window->children->node), &(component->node));
     }
 }
 
 void gui_window_draw(GUIWindow *window) {
     if (window->component.visable) {
-        if(window->component.colorMode==RGB) {
+        if (window->component.colorMode == RGB) {
             // 1. draw_background
             gfx2d_fill_rect(
                     window->component.position.x,
@@ -172,44 +179,49 @@ void gui_window_draw(GUIWindow *window) {
 }
 
 void gui_window_draw_children(GUIWindow *window) {
-    GUIComponent *component = window->children;
-    while (component != nullptr) {
-        switch (component->type) {
-            case BUTTON: {
-                GUIButton *button = getNode(component, GUIButton, component);
-                button->component.position.x = button->component.position.x + window->component.position.x + window->component.padding.left;
-                button->component.position.y = button->component.position.y + window->component.position.y + DEFAULT_WINDOW_HEADER_HEIGHT + window->component.padding.top;
-                gui_button_draw(button);
-                break;
-            }
+    KernelVector *children = window->children;
 
-            case LABEL: {
-                GUILabel *label = getNode(component, GUILabel, component);
-                label->component.position.x = label->component.position.x + window->component.position.x + window->component.padding.left;
-                label->component.position.y = label->component.position.y + window->component.position.y + DEFAULT_WINDOW_HEADER_HEIGHT + window->component.padding.top;
-                gui_label_draw(label);
-                break;
-            }
+    if (children != nullptr) {
+        for (uint32_t i = 0; i < children->index; i++) {
+            ListNode listNode = children->node[i];
+            GUIComponent *component = getNode(&listNode, GUIComponent, node);
+            switch (component->type) {
+                case BUTTON: {
+                    GUIButton *button = getNode(component, GUIButton, component);
+                    button->component.position.x = button->component.position.x + window->component.position.x + window->component.padding.left;
+                    button->component.position.y = button->component.position.y + window->component.position.y + DEFAULT_WINDOW_HEADER_HEIGHT + window->component.padding.top;
+                    gui_button_draw(button);
+                    break;
+                }
 
-            case PANEL: {
-                GUIPanel *innerPanel = getNode(component, GUIPanel, component);
-                innerPanel->component.position.x = innerPanel->component.position.x + window->component.position.x + window->component.padding.left;
-                innerPanel->component.position.y = innerPanel->component.position.y + window->component.position.y + DEFAULT_WINDOW_HEADER_HEIGHT + window->component.padding.top;
-                gui_panel_draw(innerPanel);
-                break;
-            }
+                case LABEL: {
+                    GUILabel *label = getNode(component, GUILabel, component);
+                    label->component.position.x = label->component.position.x + window->component.position.x + window->component.padding.left;
+                    label->component.position.y = label->component.position.y + window->component.position.y + DEFAULT_WINDOW_HEADER_HEIGHT + window->component.padding.top;
+                    gui_label_draw(label);
+                    break;
+                }
 
-            case CONTAINER: {
-                GUIContainer *innerContainer = getNode(component, GUIContainer, component);
-                innerContainer->component.position.x = innerContainer->component.position.x + window->component.position.x + window->component.padding.left;
-                innerContainer->component.position.y =
-                        innerContainer->component.position.y + window->component.position.y + DEFAULT_WINDOW_HEADER_HEIGHT + window->component.padding.top;
-                gui_container_draw(innerContainer);
-                break;
+                case PANEL: {
+                    GUIPanel *innerPanel = getNode(component, GUIPanel, component);
+                    innerPanel->component.position.x = innerPanel->component.position.x + window->component.position.x + window->component.padding.left;
+                    innerPanel->component.position.y =
+                            innerPanel->component.position.y + window->component.position.y + DEFAULT_WINDOW_HEADER_HEIGHT + window->component.padding.top;
+                    gui_panel_draw(innerPanel);
+                    break;
+                }
+
+                case CONTAINER: {
+                    GUIContainer *innerContainer = getNode(component, GUIContainer, component);
+                    innerContainer->component.position.x = innerContainer->component.position.x + window->component.position.x + window->component.padding.left;
+                    innerContainer->component.position.y =
+                            innerContainer->component.position.y + window->component.position.y + DEFAULT_WINDOW_HEADER_HEIGHT + window->component.padding.top;
+                    gui_container_draw(innerContainer);
+                    break;
+                }
+                default:
+                    break;
             }
-            default:
-                break;
         }
-        component = getNode(component->node.next, GUIComponent, node);
     }
 }
