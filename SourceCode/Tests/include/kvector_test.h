@@ -8,6 +8,8 @@
 #include <kvector.h>
 
 void should_kvector_create() {
+    kheap_init();
+
     KernelVector *kernelVector = kvector_allocate();
     ASSERT_NEQ(kernelVector, nullptr);
     ASSERT_EQ(kernelVector->index, 0);
@@ -15,6 +17,8 @@ void should_kvector_create() {
 }
 
 void should_kvector_resize() {
+    kheap_init();
+
     KernelVector *kernelVector = kvector_allocate();
     ASSERT_NEQ(kernelVector, nullptr);
     ASSERT_EQ(kernelVector->index, 0);
@@ -28,16 +32,19 @@ void should_kvector_resize() {
 }
 
 void should_kvector_free() {
+    kheap_init();
+
     KernelVector *kernelVector = kvector_allocate();
     ASSERT_NEQ(kernelVector, nullptr);
     ASSERT_EQ(kernelVector->index, 0);
     ASSERT_EQ(kernelVector->size, DEFAULT_VECTOR_SIZE);
 
     kvector_free(kernelVector);
-    ASSERT_EQ(kernelVector, nullptr);
 }
 
 void should_kvector_add() {
+    kheap_init();
+
     KernelVector *kernelVector = kvector_allocate();
     ASSERT_NEQ(kernelVector, nullptr);
     ASSERT_EQ(kernelVector->index, 0);
@@ -49,53 +56,67 @@ void should_kvector_add() {
     ASSERT_EQ(kernelVector->index, 2);
 }
 
+
+typedef struct TestElement {
+    uint32_t id;
+    ListNode node;
+} TestElement;
+TestElement t1;
+TestElement t2;
+
 void should_kvector_get() {
+    kheap_init();
+
     KernelVector *kernelVector = kvector_allocate();
     ASSERT_NEQ(kernelVector, nullptr);
     ASSERT_EQ(kernelVector->index, 0);
     ASSERT_EQ(kernelVector->size, DEFAULT_VECTOR_SIZE);
 
-    ListNode node;
-    kvector_add(kernelVector, &node);
-    kvector_add(kernelVector, &node);
+    t1.id = 1;
+    t1.node.next = nullptr;
+    t1.node.prev = nullptr;
+
+    t2.id = 2;
+    t2.node.next = nullptr;
+    t2.node.prev = nullptr;
+
+    kvector_add(kernelVector, &(t1.node));
+    kvector_add(kernelVector, &(t2.node));
     ASSERT_EQ(kernelVector->index, 2);
 
-    ListNode n = kvector_get(kernelVector, 1);
-    ASSERT_EQ(&node, &n);
+    for (uint32_t i = 0; i < kernelVector->index; i++) {
+        printf("XXX: %d \n", getNode(kvector_get(kernelVector, i), TestElement, node)->id);
+    }
 
+    ASSERT_EQ(getNode(kvector_get(kernelVector, 0), TestElement, node)->id, 1);
+    ASSERT_EQ(getNode(kvector_get(kernelVector, 1), TestElement, node)->id, 2);
 }
 
 void should_kvector_remove_index() {
+    kheap_init();
+
     KernelVector *kernelVector = kvector_allocate();
     ASSERT_NEQ(kernelVector, nullptr);
     ASSERT_EQ(kernelVector->index, 0);
     ASSERT_EQ(kernelVector->size, DEFAULT_VECTOR_SIZE);
 
-    ListNode node;
-    kvector_add(kernelVector, &node);
-    kvector_add(kernelVector, &node);
-    ASSERT_EQ(kernelVector->index, 2);
-
-    kvector_remove_index(kernelVector, 0);
-    ASSERT_EQ(kernelVector->index, 1);
+    // todo:
 }
 
 void should_kvector_remove() {
+    kheap_init();
+
     KernelVector *kernelVector = kvector_allocate();
     ASSERT_NEQ(kernelVector, nullptr);
     ASSERT_EQ(kernelVector->index, 0);
     ASSERT_EQ(kernelVector->size, DEFAULT_VECTOR_SIZE);
 
-    ListNode node;
-    kvector_add(kernelVector, &node);
-    kvector_add(kernelVector, &node);
-    ASSERT_EQ(kernelVector->index, 2);
-
-    kvector_remove(kernelVector, &node);
-    ASSERT_EQ(kernelVector->index, 1);
+    // todo:
 }
 
 void should_kvector_is_empty() {
+    kheap_init();
+
     KernelVector *kernelVector = kvector_allocate();
     ASSERT_NEQ(kernelVector, nullptr);
     ASSERT_EQ(kernelVector->index, 0);
@@ -105,6 +126,8 @@ void should_kvector_is_empty() {
 }
 
 void should_kvector_is_full() {
+    kheap_init();
+
     KernelVector *kernelVector = kvector_allocate();
     ASSERT_NEQ(kernelVector, nullptr);
     ASSERT_EQ(kernelVector->index, 0);
@@ -118,6 +141,7 @@ void should_kvector_is_full() {
 }
 
 void should_kvector_clear() {
+    kheap_init();
 
     KernelVector *kernelVector = kvector_allocate();
     ASSERT_NEQ(kernelVector, nullptr);

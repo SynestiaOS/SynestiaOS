@@ -90,7 +90,6 @@ void gui_window_add_children(GUIWindow *window, GUIComponent *component) {
         window->children = component;
     } else {
         kvector_add(window->children, &component->node);
-        klist_append(&(window->children->node), &(component->node));
     }
 }
 
@@ -183,8 +182,8 @@ void gui_window_draw_children(GUIWindow *window) {
 
     if (children != nullptr) {
         for (uint32_t i = 0; i < children->index; i++) {
-            ListNode listNode = children->node[i];
-            GUIComponent *component = getNode(&listNode, GUIComponent, node);
+            ListNode *listNode = children->node[i];
+            GUIComponent *component = getNode(listNode, GUIComponent, node);
             switch (component->type) {
                 case BUTTON: {
                     GUIButton *button = getNode(component, GUIButton, component);

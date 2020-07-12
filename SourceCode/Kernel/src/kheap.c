@@ -161,10 +161,6 @@ KernelStatus kheap_free(void *ptr) {
     currentArea->list.prev = &freeArea->list;
     currentArea->list.next = freeArea->list.next;
     freeArea->list.next = &currentArea->list;
-    if (heapFreeFunc == nullptr) {
-        default_heap_free_func(ptr);
-        return OK;
-    }
 
     // do some merge stuff, between two adjacent free heap area
     HeapArea *firstFreeArea = freeListHead;
@@ -190,6 +186,13 @@ KernelStatus kheap_free(void *ptr) {
         }
     }
 
+    if (heapFreeFunc == nullptr) {
+        default_heap_free_func(ptr);
+        ptr = nullptr;
+        return OK;
+    }
+
     heapFreeFunc(ptr);
+    ptr = nullptr;
     return OK;
 }
