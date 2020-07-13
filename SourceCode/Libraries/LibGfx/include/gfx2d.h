@@ -9,7 +9,6 @@
 
 
 #define FLUENT_PRIMARY_COLOR 0x0078D4
-//#define FLUENT_PRIMARY_COLOR 0xB3ADB2
 
 void gfx2d_draw_rect(int x1, int y1, int x2, int y2, uint32_t c);
 

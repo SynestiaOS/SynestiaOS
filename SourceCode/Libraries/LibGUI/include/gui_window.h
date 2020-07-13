@@ -3,6 +3,7 @@
 //
 
 #include <gui_component.h>
+#include <kvector.h>
 
 #ifndef __LIBRARY_LIBGUI_WINDOW_H__
 #define __LIBRARY_LIBGUI_WINDOW_H__
@@ -13,7 +14,7 @@
 typedef struct GUIWindow {
     GUIComponent component;
     char *title;
-    GUIComponent *children;
+    KernelVector *children;
 } GUIWindow;
 
 void gui_window_create(GUIWindow *window);

@@ -103,7 +103,7 @@ void draw_time() {
     secondLabel.component.colorMode = TRANSPARENT;
     char second_str[10] = {'\0'};
     char *second_str_ = itoa(second, &second_str, 10);
-    gui_label_init(&secondLabel, 1000-10, 0, second_str_);
+    gui_label_init(&secondLabel, 1000 - 10, 0, second_str_);
     gui_label_draw(&secondLabel);
 }
 
@@ -145,10 +145,12 @@ void demo_desktop() {
 
     GUILabel label3;
     gui_label_create(&label3);
+    label3.component.colorMode = TRANSPARENT;
     gui_label_init(&label3, 0, 0, "Inner Label 1");
 
     GUILabel label4;
     gui_label_create(&label4);
+    label4.component.colorMode = TRANSPARENT;
     gui_label_init(&label4, 0, 0, "Inner Label 2");
 
     GUIPanel panel2;
@@ -156,7 +158,7 @@ void demo_desktop() {
     panel2.component.size.width = 150;
     panel2.component.size.height = 50;
     panel2.component.background.r = 0x00;
-    panel2.component.background.g = 0x00;
+    panel2.component.background.g = 0x77;
     gui_panel_init(&panel2, 10, 100);
     gui_panel_add_children(&panel2, &(label4.component));
 
@@ -186,10 +188,10 @@ void demo_desktop() {
 
     GUIWindow window2;
     gui_window_create(&window2);
-//    gui_window_add_children(&window2, &(ok.component));
-//    gui_window_add_children(&window2, &(label.component));
+    gui_window_add_children(&window2, &(ok.component));
+    gui_window_add_children(&window2, &(label.component));
 //    gui_window_add_children(&window2, &(panel.component));
-//    gui_window_add_children(&window2, &(container.component));
+    gui_window_add_children(&window2, &(container.component));
     gui_window_init(&window2, 200, 200, "SynestiaOS 2");
     gui_window_draw(&window2);
 }
@@ -215,6 +217,7 @@ void xx() {
     }
 
     //Switch To thread
+<<<<<<< HEAD
     if ((second % 2) == 0)
         schd_switch_to(t0);
     else
@@ -224,6 +227,15 @@ void xx() {
       } else if ((second % 3) == 2) {
             schd_switch_to(t2);
       }*/
+=======
+    if ((second % 3) == 0) {
+        schd_switch_to(t0);
+    } else if ((second % 3) == 1) {
+        schd_switch_to(t1);
+    } else if ((second % 3) == 2) {
+        schd_switch_to(t2);
+    }
+>>>>>>> 5a19381468120acaa8e7dba46ac50cbcf248645d
 
     second++;
 }
@@ -242,22 +254,22 @@ void kernel_main(void) {
 
     init_interrupt();
 
-    //schd_init();
+    //  schd_init();
 
-    //init 0 1 2 Three Thread
-    //schd_switch_to(thread_create_idle_thread(0));
-    t0 = thread_create_idle_thread(0);
-    t1 = thread_create_idle_thread(1);
-    t2 = thread_create_idle_thread(2);
+    //  init 0 1 2 Three Thread
+    //  schd_switch_to(thread_create_idle_thread(0));
+    //  t0 = thread_create_idle_thread(0);
+    //  t1 = thread_create_idle_thread(1);
+    //  t2 = thread_create_idle_thread(2);
 
-    //gpu_init();
+    gpu_init();
 
     t.node.next = nullptr;
     t.node.prev = nullptr;
     t.timer_interrupt_handler = &xx;
 
-    register_time_interrupt(&t);
-    while(1);
+    //  register_time_interrupt(&t);
+    //  while(1);
 
     demo_desktop();
 }

@@ -12,7 +12,7 @@
 
 typedef struct KernelVector {
     uint32_t size;
-    ListNode *node;
+    ListNode **node;
     uint32_t index;
 } __attribute__((packed)) KernelVector;
 
@@ -24,7 +24,7 @@ KernelStatus kvector_free(KernelVector *vector);
 
 KernelStatus kvector_add(KernelVector *vector, ListNode *node);
 
-ListNode kvector_get(KernelVector *vector, uint32_t index);
+ListNode *kvector_get(KernelVector *vector, uint32_t index);
 
 KernelStatus kvector_remove_index(KernelVector *vector, uint32_t index);
 
