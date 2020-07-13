@@ -203,7 +203,7 @@ Thread *t2;
 
 void xx() {
     //Desktop
-    demo_desktop();
+    //demo_desktop();
     if (second == 60) {
         second = 0;
         minutes++;
@@ -230,6 +230,36 @@ void xx() {
     second++;
 }
 
+
+uint32_t *idle0(int arg) {
+  uint32_t  i = 0;
+  uint32_t  j = 0;
+  uint32_t  k = 0;
+  while(1)
+  {
+      i = 0;
+      while(i < 1e8) i++;
+      printf("IDLE 0, count = %d \n", k);
+    k++;
+  }
+  //asm volatile("wfi");
+}
+
+
+uint32_t *idle1(int arg) {
+  uint32_t  i = 0;
+  uint32_t  j = 0;
+  uint32_t  k = 0;
+  while(1)
+  {
+    i = 0;
+    while(i < 1e8) i++;
+    printf("IDLE 1, count = %d \n", k);
+    k++;
+  }
+  //asm volatile("wfi");
+}
+
 TimerHandler t;
 
 void kernel_main(void) {
@@ -248,18 +278,20 @@ void kernel_main(void) {
 
     //  init 0 1 2 Three Thread
     //  schd_switch_to(thread_create_idle_thread(0));
-    //  t0 = thread_create_idle_thread(0);
-    //  t1 = thread_create_idle_thread(1);
-    //  t2 = thread_create_idle_thread(2);
+    t0 = thread_create("IDLE0", idle0, 0, 0);
+    t1 = thread_create("IDLE1", idle1, 1, 0);
+  //t0 = thread_create_idle_thread(0);
+      //t1 = thread_create_idle_thread(1);
+      t2 = thread_create_idle_thread(2);
 
-    gpu_init();
+    //gpu_init();
 
     t.node.next = nullptr;
     t.node.prev = nullptr;
     t.timer_interrupt_handler = &xx;
 
-    //  register_time_interrupt(&t);
-    //  while(1);
+      register_time_interrupt(&t);
+      while(1);
 
     demo_desktop();
 }

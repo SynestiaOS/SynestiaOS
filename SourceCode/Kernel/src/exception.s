@@ -79,7 +79,7 @@ interupt_isp:
     cmp r2, r1
     beq cpu_save_context
 
-    add sp, sp, #16*4
+    add sp, sp, #14*4
     b cpu_restore_context
 
 /////////////////////////////////////////////////////////////
@@ -90,19 +90,21 @@ cpu_save_context:
     mov r1, sp
     //Save Irq SP to normal SP
     //Restore Irq Stack, Leave Irq State
-    add sp, sp, #16*4
+    add sp, sp, #13*4
 
     //R0: Irq LR(Thread PC)
-    mov r0, lr
+    ldmfd sp!, {r0}
+    //The LR Should sub 4, because the instruction interruptted has not been execute over
+    sub r0, r0, #4
 
     //R3: Save cpsr
     //Change to Previous State, Disable Irq/Fiq
     mrs r3, spsr
     mov r2, r3
-    orr r3, #(1 << 6) | (1 << 7)
+    orr r3,#(1 << 6) | (1 << 7)
     msr cpsr, r3
 
-    //push r4-r12, lr, pc
+    //Push r4-r12, lr, pc
     stmfd sp!, {r0}
     stmfd sp!, {r4-r12, lr}
 
