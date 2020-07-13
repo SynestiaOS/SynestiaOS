@@ -87,7 +87,7 @@ void gui_window_init(GUIWindow *window, uint32_t x, uint32_t y, const char *titl
 
 void gui_window_add_children(GUIWindow *window, GUIComponent *component) {
     if (window->children != nullptr) {
-        kvector_add(window->children, &component->node);
+        kvector_add(window->children, &(component->node));
     }
 }
 

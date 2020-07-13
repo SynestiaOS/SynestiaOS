@@ -13,4 +13,11 @@ uint32_t *logo_32_bits();
 
 uint32_t *desktop();
 
+uint8_t *logo_minize_8_bits();
+
+uint8_t *logo_max_8_bits();
+
+uint8_t *logo_close_8_bits();
+
+
 #endif //__LIBRARY_LIBGFX_FONT_8BITS_H__

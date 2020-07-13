@@ -42,9 +42,13 @@ void draw_task_bar() {
     gfx2d_draw_logo(0, 0, 0xFFFFFF);
 }
 
-void draw_time() {
 
-    GUILabel hourLabel;
+GUILabel hourLabel;
+GUILabel colon;
+GUILabel minuteLabel;
+GUILabel colon2;
+GUILabel secondLabel;
+void draw_time() {
     gui_label_create(&hourLabel);
     hourLabel.component.foreground.r = 0xFF;
     hourLabel.component.foreground.g = 0xFF;
@@ -57,7 +61,6 @@ void draw_time() {
     gui_label_init(&hourLabel, 1000 - 60, 0, hour_str_);
     gui_label_draw(&hourLabel);
 
-    GUILabel colon;
     gui_label_create(&colon);
     colon.component.foreground.r = 0xFF;
     colon.component.foreground.g = 0xFF;
@@ -68,8 +71,6 @@ void draw_time() {
     gui_label_init(&colon, 1000 - 45, 0, ":");
     gui_label_draw(&colon);
 
-
-    GUILabel minuteLabel;
     gui_label_create(&minuteLabel);
     minuteLabel.component.foreground.r = 0xFF;
     minuteLabel.component.foreground.g = 0xFF;
@@ -82,7 +83,6 @@ void draw_time() {
     gui_label_init(&minuteLabel, 1000 - 35, 0, minute_str_);
     gui_label_draw(&minuteLabel);
 
-    GUILabel colon2;
     gui_label_create(&colon2);
     colon2.component.foreground.r = 0xFF;
     colon2.component.foreground.g = 0xFF;
@@ -93,7 +93,6 @@ void draw_time() {
     gui_label_init(&colon2, 1000 - 20, 0, ":");
     gui_label_draw(&colon2);
 
-    GUILabel secondLabel;
     gui_label_create(&secondLabel);
     secondLabel.component.foreground.r = 0xFF;
     secondLabel.component.foreground.g = 0xFF;
@@ -107,16 +106,8 @@ void draw_time() {
     gui_label_draw(&secondLabel);
 }
 
-
-void demo_desktop() {
-    gfx2d_draw_bitmap(0, 0, 1024, 768, desktop());
-    printf("[Desktop]: render\n");
-
-    draw_task_bar();
-
-    draw_time();
-
-    GUILabel synestiaOSLabel2;
+GUILabel synestiaOSLabel2;
+void draw_notification(){
     gui_label_create(&synestiaOSLabel2);
     synestiaOSLabel2.component.colorMode = TRANSPARENT;
     synestiaOSLabel2.component.foreground.r = 0xFF;
@@ -124,36 +115,52 @@ void demo_desktop() {
     synestiaOSLabel2.component.foreground.b = 0xFF;
     gui_label_init(&synestiaOSLabel2, 300, 4, "Welcome to Synestia Operation System.");
     gui_label_draw(&synestiaOSLabel2);
+}
 
-    GUIWindow window;
+
+GUIWindow window;
+GUIWindow window1;
+GUIButton ok;
+GUILabel label;
+GUILabel label3;
+GUILabel label4;
+GUIPanel panel2;
+GUIPanel panel;
+GUILabel label4container;
+GUIButton button4container;
+GUIContainer container;
+GUIWindow window2;
+void demo_desktop() {
+    gfx2d_draw_bitmap(0, 0, 1024, 768, desktop());
+
+    draw_task_bar();
+
+    draw_time();
+
+    draw_notification();
+
     gui_window_create(&window);
     gui_window_init(&window, 100, 100, "SynestiaOS");
     gui_window_draw(&window);
 
-    GUIWindow window1;
     gui_window_create(&window1);
     gui_window_init(&window1, 150, 150, "SynestiaOS 1");
     gui_window_draw(&window1);
 
-    GUIButton ok;
     gui_button_create(&ok);
     gui_button_init(&ok, 0, 0, "Inner Window Button");
 
-    GUILabel label;
     gui_label_create(&label);
     gui_label_init(&label, 0, 42, "Inner Window Label");
 
-    GUILabel label3;
     gui_label_create(&label3);
     label3.component.colorMode = TRANSPARENT;
     gui_label_init(&label3, 0, 0, "Inner Label 1");
 
-    GUILabel label4;
     gui_label_create(&label4);
     label4.component.colorMode = TRANSPARENT;
     gui_label_init(&label4, 0, 0, "Inner Label 2");
 
-    GUIPanel panel2;
     gui_panel_create(&panel2);
     panel2.component.size.width = 150;
     panel2.component.size.height = 50;
@@ -162,35 +169,30 @@ void demo_desktop() {
     gui_panel_init(&panel2, 10, 100);
     gui_panel_add_children(&panel2, &(label4.component));
 
-    GUIPanel panel;
     gui_panel_create(&panel);
     panel.component.background.r = 0x00;
     gui_panel_init(&panel, 0, 200);
     gui_panel_add_children(&panel, &(label3.component));
     gui_panel_add_children(&panel, &(panel2.component));
 
-    GUILabel label4container;
     gui_label_create(&label4container);
     gui_label_init(&label4container, 0, 0, "Label for container");
 
-    GUIButton button4container;
     gui_button_create(&button4container);
     button4container.component.size.height = 32;
     button4container.component.padding.top = 12;
     gui_button_init(&button4container, 0, 0, "Button for container");
 
-    GUIContainer container;
     gui_container_create(&container);
     container.component.background.b = 0x00;
     gui_container_init(&container, 240, 0, VERTICAL);
     gui_container_add_children(&container, (&label4container.component));
     gui_container_add_children(&container, (&button4container.component));
 
-    GUIWindow window2;
     gui_window_create(&window2);
     gui_window_add_children(&window2, &(ok.component));
     gui_window_add_children(&window2, &(label.component));
-//    gui_window_add_children(&window2, &(panel.component));
+    gui_window_add_children(&window2, &(panel.component));
     gui_window_add_children(&window2, &(container.component));
     gui_window_init(&window2, 200, 200, "SynestiaOS 2");
     gui_window_draw(&window2);
@@ -200,7 +202,6 @@ void demo_desktop() {
 Thread *t0;
 Thread *t1;
 Thread *t2;
-
 void xx() {
     //Desktop
     //demo_desktop();
@@ -217,15 +218,16 @@ void xx() {
     }
 
     //Switch To thread
-    if ((second % 2) == 0)
+    if ((second % 2) == 0) {
         schd_switch_to(t0);
-    else
+    }else {
         schd_switch_to(t1);
-      /*} else if ((second % 3) == 1) {
-            schd_switch_to(t1);
-      } else if ((second % 3) == 2) {
-            schd_switch_to(t2);
-      }*/
+        /*} else if ((second % 3) == 1) {
+              schd_switch_to(t1);
+        } else if ((second % 3) == 2) {
+              schd_switch_to(t2);
+        }*/
+    }
 
     second++;
 }
