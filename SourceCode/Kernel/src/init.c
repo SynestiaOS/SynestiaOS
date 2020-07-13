@@ -217,7 +217,6 @@ void xx() {
     }
 
     //Switch To thread
-<<<<<<< HEAD
     if ((second % 2) == 0)
         schd_switch_to(t0);
     else
@@ -227,15 +226,6 @@ void xx() {
       } else if ((second % 3) == 2) {
             schd_switch_to(t2);
       }*/
-=======
-    if ((second % 3) == 0) {
-        schd_switch_to(t0);
-    } else if ((second % 3) == 1) {
-        schd_switch_to(t1);
-    } else if ((second % 3) == 2) {
-        schd_switch_to(t2);
-    }
->>>>>>> 5a19381468120acaa8e7dba46ac50cbcf248645d
 
     second++;
 }
