@@ -65,6 +65,7 @@ interupt_isp:
 
     bl interrupt_handler
 
+    //R0: swithch_to_signal Address
     ldr r0, =switch_to_signal
     ldr r1, [r0]
 
@@ -74,46 +75,49 @@ interupt_isp:
     cmp r2, r1
     beq just_exit_interrupt
 
-    mov r2, #2
+    mov r2, #1
     cmp r2, r1
-    beq cpu_restore_context
+    beq cpu_save_context
+
+    add sp, sp, #16*4
+    b cpu_restore_context
 
 /////////////////////////////////////////////////////////////
 //////////  Save Previous Thread Status /////////////////////
 /////////////////////////////////////////////////////////////
 cpu_save_context:
-    //R0: swithch_to_signal Address
     //R1: Irq Stack, Save for Pop Previous Registers
-    ldmfd   sp!, {r6-r12,r5}
     mov r1, sp
-
     //Save Irq SP to normal SP
-    add sp, sp, #14*4
+    //Restore Irq Stack, Leave Irq State
+    add sp, sp, #16*4
+
+    //R0: Irq LR(Thread PC)
+    mov r0, lr
 
     //R3: Save cpsr
     //Change to Previous State, Disable Irq/Fiq
     mrs r3, spsr
+    mov r2, r3
     orr r3, #(1 << 6) | (1 << 7)
     msr cpsr, r3
 
-    //Save pc, lr, r6-r12
-    stmfd sp!, {r6-r12, lr, r5}
+    //push r4-r12, lr, pc
+    stmfd sp!, {r0}
+    stmfd sp!, {r4-r12, lr}
 
-    //R1: Irq Stack, For pop Previous Registers
-    //R2: Save Current SP
-    mov r2, sp
-    mov sp, r1
+    //Restore r0-r3 to r9-r12
+    ldr r9, [r1, #0]
+    ldr r10, [r1, #4]
+    ldr r11, [r1, #8]
+    ldr r12, [r1, #0xc]
 
-    //Save Previous R0-R5
-    ldmfd sp!, {r7-r12}
-    bic r3, #(1 << 6) | (1 << 7)
-    stmfd sp!, {r3,r7-r12}
-
-    //sub r2, r2, #8*4
-    //stmfd sp!, {r2, r3,r7-r12}
+    //Push cpsr, r0-r3
+    stmfd sp!, {r2, r9-r12}
 
     //Update Current Thread Stack
-    ldr r0, =current_thread_stack
+    ldr r0, =current_thread_stack   //Pointer **
+    ldr r0, [r0]                    //Pointer *
     str sp, [r0]
 
 /////////////////////////////////////////////////////////////
@@ -125,9 +129,14 @@ cpu_save_context:
 //////////  Restore Previous Thread Status //////////////////
 /////////////////////////////////////////////////////////////
 cpu_restore_context:
-    //Restore Sp to
-    ldr r0, =switch_thread_stack
-    ldr r2, [r0]
+    //Restore Sp to New Stack
+    ldr r2, =switch_thread_stack    //Pointer **
+    ldr r2, [r2]                    //Pointer *
+    ldr r2, [r2]                    //Stack
+
+    mov r0,  #0xd3
+    msr cpsr_c, r0
+
     mov sp, r2
     ldmfd sp!, {r12}
     //Enable Irq/Fiq

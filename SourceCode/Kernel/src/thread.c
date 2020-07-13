@@ -72,7 +72,12 @@ Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uin
 }
 
 uint32_t *idle_thread_routine(int arg) {
-    printf("IDLE Thread %d \n", arg);
+    uint32_t  i;
+    while(1)
+    {
+      if((i & 0xffff) == 0)
+        printf("IDLE Thread %d, count = %d \n", arg, i%0xffff);
+    }
     //asm volatile("wfi");
 }
 

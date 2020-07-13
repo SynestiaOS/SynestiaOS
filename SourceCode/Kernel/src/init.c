@@ -217,13 +217,15 @@ void xx() {
     }
 
     //Switch To thread
-    if ((second % 3) == 0) {
+    if ((second % 2) == 0)
         schd_switch_to(t0);
-    } else if ((second % 3) == 1) {
+    else
         schd_switch_to(t1);
-    } else if ((second % 3) == 2) {
-        schd_switch_to(t2);
-    }
+      /*} else if ((second % 3) == 1) {
+            schd_switch_to(t1);
+      } else if ((second % 3) == 2) {
+            schd_switch_to(t2);
+      }*/
 
     second++;
 }
