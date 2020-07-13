@@ -1,6 +1,6 @@
-PROJECT(GUI C ASM)
+PROJECT(LibGUI C ASM)
 
-aux_source_directory(${GUI_SOURCE_DIR}/src LibGUISrc)
+aux_source_directory(${LibGUI_SOURCE_DIR}/src LibGUISrc)
 
 add_library(${PROJECT_NAME}
         OBJECT

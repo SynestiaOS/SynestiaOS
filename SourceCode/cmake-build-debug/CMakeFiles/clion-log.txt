@@ -1,0 +1,61 @@
+"/Users/xingfeng.yang/Library/Application Support/JetBrains/Toolbox/apps/CLion/ch-0/201.6668.86/CLion.app/Contents/bin/cmake/mac/bin/cmake" -DCMAKE_BUILD_TYPE=Debug -DCMAKE_TOOLCHAIN_FILE=~/project/SynestiaOS/cmake/ToolchainArm.cmake -DARCH=arm -G "CodeBlocks - Unix Makefiles" /Users/xingfeng.yang/project/SynestiaOS/SourceCode
+CMake Warning (dev) in CMakeLists.txt:
+  No project() command is present.  The top-level CMakeLists.txt file must
+  contain a literal, direct call to the project() command.  Add a line of
+  code such as
+
+    project(ProjectName)
+
+  near the top of the file, but after cmake_minimum_required().
+
+  CMake is pretending there is a "project(Project)" command on the first
+  line.
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+-- The C compiler identification is GNU 9.2.1
+-- The CXX compiler identification is GNU 9.2.1
+-- Check for working C compiler: /Users/xingfeng.yang/project/SynestiaOS/Tools/gcc-arm-none-eabi-9-2019-q4-major/bin/arm-none-eabi-gcc
+-- Check for working C compiler: /Users/xingfeng.yang/project/SynestiaOS/Tools/gcc-arm-none-eabi-9-2019-q4-major/bin/arm-none-eabi-gcc -- broken
+CMake Error at /Users/xingfeng.yang/Library/Application Support/JetBrains/Toolbox/apps/CLion/ch-0/201.6668.86/CLion.app/Contents/bin/cmake/mac/share/cmake-3.16/Modules/CMakeTestCCompiler.cmake:60 (message):
+  The C compiler
+
+    "/Users/xingfeng.yang/project/SynestiaOS/Tools/gcc-arm-none-eabi-9-2019-q4-major/bin/arm-none-eabi-gcc"
+
+  is not able to compile a simple test program.
+
+  It fails with the following output:
+
+    Change Dir: /Users/xingfeng.yang/project/SynestiaOS/SourceCode/cmake-build-debug/CMakeFiles/CMakeTmp
+    
+    Run Build Command(s):/usr/local/bin/gmake cmTC_8a369/fast && /usr/local/bin/gmake -f CMakeFiles/cmTC_8a369.dir/build.make CMakeFiles/cmTC_8a369.dir/build
+    gmake[1]: Entering directory '/Users/xingfeng.yang/project/SynestiaOS/SourceCode/cmake-build-debug/CMakeFiles/CMakeTmp'
+    Building C object CMakeFiles/cmTC_8a369.dir/testCCompiler.c.o
+    /Users/xingfeng.yang/project/SynestiaOS/Tools/gcc-arm-none-eabi-9-2019-q4-major/bin/arm-none-eabi-gcc    -o CMakeFiles/cmTC_8a369.dir/testCCompiler.c.o   -c /Users/xingfeng.yang/project/SynestiaOS/SourceCode/cmake-build-debug/CMakeFiles/CMakeTmp/testCCompiler.c
+    Linking C executable cmTC_8a369
+    "/Users/xingfeng.yang/Library/Application Support/JetBrains/Toolbox/apps/CLion/ch-0/201.6668.86/CLion.app/Contents/bin/cmake/mac/bin/cmake" -E cmake_link_script CMakeFiles/cmTC_8a369.dir/link.txt --verbose=1
+    /Users/xingfeng.yang/project/SynestiaOS/Tools/gcc-arm-none-eabi-9-2019-q4-major/bin/arm-none-eabi-gcc      -rdynamic CMakeFiles/cmTC_8a369.dir/testCCompiler.c.o  -o cmTC_8a369 
+    arm-none-eabi-gcc: error: unrecognized command line option '-rdynamic'
+    gmake[1]: *** [CMakeFiles/cmTC_8a369.dir/build.make:87: cmTC_8a369] Error 1
+    gmake[1]: Leaving directory '/Users/xingfeng.yang/project/SynestiaOS/SourceCode/cmake-build-debug/CMakeFiles/CMakeTmp'
+    gmake: *** [Makefile:121: cmTC_8a369/fast] Error 2
+    
+    
+
+  
+
+  CMake will not be able to correctly generate this project.
+
+
+CMake Warning (dev) in CMakeLists.txt:
+  No cmake_minimum_required command is present.  A line of code such as
+
+    cmake_minimum_required(VERSION 3.16)
+
+  should be added at the top of the file.  The version specified may be lower
+  if you wish to support older CMake versions for this project.  For more
+  information run "cmake --help-policy CMP0000".
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+-- Configuring incomplete, errors occurred!
+See also "/Users/xingfeng.yang/project/SynestiaOS/SourceCode/cmake-build-debug/CMakeFiles/CMakeOutput.log".
+See also "/Users/xingfeng.yang/project/SynestiaOS/SourceCode/cmake-build-debug/CMakeFiles/CMakeError.log".

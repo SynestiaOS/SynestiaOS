@@ -4,8 +4,6 @@
 
 #include <gfxm.h>
 
-#include "math.h"
-
 Vec3D gfxm_vector_add(Vec3D v1, Vec3D v2) {
     Vec3D vec;
     vec.x = v1.x + v2.x;
@@ -66,8 +64,8 @@ float gfxm_vector_dot_product(Vec3D v1, Vec3D v2) {
  */
 float Q_rsqrt(float number) {
     long i = 0;
-    float x2 = NAN;
-    float y = NAN;
+    float x2 = 0;
+    float y = 0;
     const float threehalfs = 1.5F;
 
     x2 = number * 0.5F;

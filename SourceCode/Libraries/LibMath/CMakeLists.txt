@@ -1,6 +1,6 @@
-PROJECT(Math C ASM)
+PROJECT(LibMath C ASM)
 
-aux_source_directory(${Math_SOURCE_DIR}/src LibMathSrc)
+aux_source_directory(${LibMath_SOURCE_DIR}/src LibMathSrc)
 
 add_library(${PROJECT_NAME}
         OBJECT

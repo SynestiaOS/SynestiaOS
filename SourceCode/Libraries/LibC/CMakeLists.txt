@@ -1,6 +1,6 @@
-PROJECT(C C ASM)
+PROJECT(LibC C ASM)
 
-aux_source_directory(${C_SOURCE_DIR}/src LibCSrc)
+aux_source_directory(${LibC_SOURCE_DIR}/src LibCSrc)
 
 add_library(${PROJECT_NAME}
         OBJECT

@@ -16,9 +16,10 @@ target_include_libc_header_files(${PROJECT_NAME})
 add_executable(${KernelName}
         $<TARGET_OBJECTS:KernelArch>
         $<TARGET_OBJECTS:Kernel>
-        $<TARGET_OBJECTS:C>
-        $<TARGET_OBJECTS:Gfx>
-        $<TARGET_OBJECTS:GUI>
+        $<TARGET_OBJECTS:LibC>
+        $<TARGET_OBJECTS:LibMath>
+        $<TARGET_OBJECTS:LibGfx>
+        $<TARGET_OBJECTS:LibGUI>
         $<TARGET_OBJECTS:Console>
         $<TARGET_OBJECTS:BoardRaspberryPi3>)
 

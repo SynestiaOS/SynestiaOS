@@ -32,9 +32,10 @@ add_executable(${PROJECT_NAME}
         $<TARGET_OBJECTS:KernelArchOnlyForTests>
         $<TARGET_OBJECTS:Kernel>
         $<TARGET_OBJECTS:BoardRaspberryPi3>
-        $<TARGET_OBJECTS:Gfx>
-        $<TARGET_OBJECTS:GUI>
-        $<TARGET_OBJECTS:C>)
+        $<TARGET_OBJECTS:LibGfx>
+        $<TARGET_OBJECTS:LibGUI>
+        $<TARGET_OBJECTS:LibMath>
+        $<TARGET_OBJECTS:LibC>)
 
 target_include_tests_header_files(${PROJECT_NAME})
 target_include_libc_header_files(${PROJECT_NAME})
