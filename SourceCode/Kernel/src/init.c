@@ -192,7 +192,7 @@ void demo_desktop() {
     gui_window_create(&window2);
     gui_window_add_children(&window2, &(ok.component));
     gui_window_add_children(&window2, &(label.component));
-    gui_window_add_children(&window2, &(panel.component));
+//    gui_window_add_children(&window2, &(panel.component));
     gui_window_add_children(&window2, &(container.component));
     gui_window_init(&window2, 200, 200, "SynestiaOS 2");
     gui_window_draw(&window2);
@@ -222,11 +222,6 @@ void xx() {
         schd_switch_to(t0);
     }else {
         schd_switch_to(t1);
-        /*} else if ((second % 3) == 1) {
-              schd_switch_to(t1);
-        } else if ((second % 3) == 2) {
-              schd_switch_to(t2);
-        }*/
     }
 
     second++;
@@ -278,22 +273,16 @@ void kernel_main(void) {
 
     //  schd_init();
 
-    //  init 0 1 2 Three Thread
-    //  schd_switch_to(thread_create_idle_thread(0));
     t0 = thread_create("IDLE0", idle0, 0, 0);
     t1 = thread_create("IDLE1", idle1, 1, 0);
-  //t0 = thread_create_idle_thread(0);
-      //t1 = thread_create_idle_thread(1);
-      t2 = thread_create_idle_thread(2);
 
-    //gpu_init();
+    gpu_init();
 
     t.node.next = nullptr;
     t.node.prev = nullptr;
     t.timer_interrupt_handler = &xx;
 
-      register_time_interrupt(&t);
-      while(1);
+    register_time_interrupt(&t);
 
     demo_desktop();
 }
