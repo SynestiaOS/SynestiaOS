@@ -42,12 +42,12 @@ void draw_task_bar() {
     gfx2d_draw_logo(0, 0, 0xFFFFFF);
 }
 
-
 GUILabel hourLabel;
 GUILabel colon;
 GUILabel minuteLabel;
 GUILabel colon2;
 GUILabel secondLabel;
+
 void draw_time() {
     gui_label_create(&hourLabel);
     hourLabel.component.foreground.r = 0xFF;
@@ -106,105 +106,51 @@ void draw_time() {
     gui_label_draw(&secondLabel);
 }
 
-GUILabel synestiaOSLabel2;
-void draw_notification(){
-    gui_label_create(&synestiaOSLabel2);
-    synestiaOSLabel2.component.colorMode = TRANSPARENT;
-    synestiaOSLabel2.component.foreground.r = 0xFF;
-    synestiaOSLabel2.component.foreground.g = 0xFF;
-    synestiaOSLabel2.component.foreground.b = 0xFF;
-    gui_label_init(&synestiaOSLabel2, 300, 4, "Welcome to Synestia Operation System.");
-    gui_label_draw(&synestiaOSLabel2);
-}
-
-
 GUIWindow window;
 GUIWindow window1;
-GUIButton ok;
-GUILabel label;
-GUILabel label3;
-GUILabel label4;
-GUIPanel panel2;
-GUIPanel panel;
-GUILabel label4container;
-GUIButton button4container;
-GUIContainer container;
-GUIWindow window2;
+GUILabel labelIdle1;
+GUILabel labelIdle2;
+
+uint32_t idle_0_count = 0;
+uint32_t idle_1_count = 0;
+
 void demo_desktop() {
-    gfx2d_draw_bitmap(0, 0, 1024, 768, desktop());
-
-    draw_task_bar();
-
     draw_time();
 
-    draw_notification();
-
     gui_window_create(&window);
-    gui_window_init(&window, 100, 100, "SynestiaOS");
+    window.component.size.width = 510;
+    window.component.size.height = 500;
+    gui_window_init(&window, 0, 32, "Process 1");
+
+    gui_label_create(&labelIdle1);
+    labelIdle1.component.foreground.r = 0x00;
+    labelIdle1.component.foreground.g = 0x00;
+    labelIdle1.component.foreground.b = 0x00;
+    labelIdle1.component.colorMode = TRANSPARENT;
+    char idle_1_str[10] = {'\0'};
+    gui_label_init(&labelIdle1, 0, 0, itoa(idle_0_count, &idle_1_str, 10));
+    gui_window_add_children(&window, &(labelIdle1.component));
     gui_window_draw(&window);
 
     gui_window_create(&window1);
-    gui_window_init(&window1, 150, 150, "SynestiaOS 1");
+    window1.component.size.width = 510;
+    window1.component.size.height = 500;
+    gui_window_init(&window1, 512, 32, "Process 2");
+    gui_label_create(&labelIdle2);
+    labelIdle2.component.foreground.r = 0x00;
+    labelIdle2.component.foreground.g = 0x00;
+    labelIdle2.component.foreground.b = 0x00;
+    labelIdle2.component.colorMode = TRANSPARENT;
+    char idle_2_str[10] = {'\0'};
+    gui_label_init(&labelIdle2, 0, 0, itoa(idle_1_count, &idle_2_str, 10));
+    gui_window_add_children(&window1, &(labelIdle2.component));
     gui_window_draw(&window1);
-
-    gui_button_create(&ok);
-    gui_button_init(&ok, 0, 0, "Inner Window Button");
-
-    gui_label_create(&label);
-    gui_label_init(&label, 0, 42, "Inner Window Label");
-
-    gui_label_create(&label3);
-    label3.component.colorMode = TRANSPARENT;
-    gui_label_init(&label3, 0, 0, "Inner Label 1");
-
-    gui_label_create(&label4);
-    label4.component.colorMode = TRANSPARENT;
-    gui_label_init(&label4, 0, 0, "Inner Label 2");
-
-    gui_panel_create(&panel2);
-    panel2.component.size.width = 150;
-    panel2.component.size.height = 50;
-    panel2.component.background.r = 0x00;
-    panel2.component.background.g = 0x77;
-    gui_panel_init(&panel2, 10, 100);
-    gui_panel_add_children(&panel2, &(label4.component));
-
-    gui_panel_create(&panel);
-    panel.component.background.r = 0x00;
-    gui_panel_init(&panel, 0, 200);
-    gui_panel_add_children(&panel, &(label3.component));
-    gui_panel_add_children(&panel, &(panel2.component));
-
-    gui_label_create(&label4container);
-    gui_label_init(&label4container, 0, 0, "Label for container");
-
-    gui_button_create(&button4container);
-    button4container.component.size.height = 32;
-    button4container.component.padding.top = 12;
-    gui_button_init(&button4container, 0, 0, "Button for container");
-
-    gui_container_create(&container);
-    container.component.background.b = 0x00;
-    gui_container_init(&container, 240, 0, VERTICAL);
-    gui_container_add_children(&container, (&label4container.component));
-    gui_container_add_children(&container, (&button4container.component));
-
-    gui_window_create(&window2);
-    gui_window_add_children(&window2, &(ok.component));
-    gui_window_add_children(&window2, &(label.component));
-//    gui_window_add_children(&window2, &(panel.component));
-    gui_window_add_children(&window2, &(container.component));
-    gui_window_init(&window2, 200, 200, "SynestiaOS 2");
-    gui_window_draw(&window2);
 }
-
 
 Thread *t0;
 Thread *t1;
-Thread *t2;
+
 void xx() {
-    //Desktop
-    //demo_desktop();
     if (second == 60) {
         second = 0;
         minutes++;
@@ -216,45 +162,48 @@ void xx() {
             }
         }
     }
+    second++;
 
     //Switch To thread
     if ((second % 2) == 0) {
         schd_switch_to(t0);
-    }else {
+    } else {
         schd_switch_to(t1);
     }
-
-    second++;
 }
-
 
 uint32_t *idle0(int arg) {
-  uint32_t  i = 0;
-  uint32_t  j = 0;
-  uint32_t  k = 0;
-  while(1)
-  {
-      i = 0;
-      while(i < 1e8) i++;
-      printf("IDLE 0, count = %d \n", k);
-    k++;
-  }
-  //asm volatile("wfi");
+    uint32_t i = 0;
+    uint32_t j = 0;
+    while (1) {
+        i = 0;
+        printf("IDLE 0, count = %d \n", idle_0_count);
+        idle_0_count++;
+
+        disable_interrupt();
+        char idle_1_str[10] = {'\0'};
+        gui_label_init(&labelIdle1, 0, 0, itoa(idle_0_count, &idle_1_str, 10));
+        gui_window_draw(&window);
+        enable_interrupt();
+    }
+    //asm volatile("wfi");x
 }
 
-
 uint32_t *idle1(int arg) {
-  uint32_t  i = 0;
-  uint32_t  j = 0;
-  uint32_t  k = 0;
-  while(1)
-  {
-    i = 0;
-    while(i < 1e8) i++;
-    printf("IDLE 1, count = %d \n", k);
-    k++;
-  }
-  //asm volatile("wfi");
+    uint32_t i = 0;
+    uint32_t j = 0;
+    while (1) {
+        i = 0;
+        printf("IDLE 1, count = %d \n", idle_1_count);
+        idle_1_count++;
+
+        disable_interrupt();
+        char idle_2_str[10] = {'\0'};
+        gui_label_init(&labelIdle2, 0, 0, itoa(idle_1_count, &idle_2_str, 10));
+        gui_window_draw(&window1);
+        enable_interrupt();
+    }
+    //asm volatile("wfi");
 }
 
 TimerHandler t;
@@ -284,5 +233,7 @@ void kernel_main(void) {
 
     register_time_interrupt(&t);
 
+    gfx2d_draw_bitmap(0, 0, 1024, 768, desktop());
+    draw_task_bar();
     demo_desktop();
 }

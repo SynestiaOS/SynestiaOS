@@ -20,7 +20,7 @@ void gui_label_create(GUILabel *label) {
     label->component.size.height = 0;
     label->component.size.width = 0;
 
-    label->fontSize = 0;
+    label->fontSize = DEFAULT_FONT_SIZE;
     label->component.padding.top = 0;
     label->component.padding.bottom = 0;
     label->component.padding.left = 0;
@@ -47,17 +47,6 @@ void gui_label_init(GUILabel *label, uint32_t x, uint32_t y, const char *text) {
     label->component.position.x = x;
     label->component.position.y = y;
 
-    label->fontSize = (label->fontSize == 0 ? DEFAULT_FONT_SIZE : label->fontSize);
-    label->component.padding.top = (label->component.padding.top == 0 ? DEFAULT_PADDING : label->component.padding.top);
-    label->component.padding.bottom = (label->component.padding.bottom == 0 ? DEFAULT_PADDING : label->component.padding.bottom);
-    label->component.padding.left = (label->component.padding.left == 0 ? DEFAULT_PADDING : label->component.padding.left);
-    label->component.padding.right = (label->component.padding.right == 0 ? DEFAULT_PADDING : label->component.padding.right);
-
-    label->component.margin.top = (label->component.margin.top == 0 ? DEFAULT_MARGIN : label->component.margin.top);
-    label->component.margin.bottom = (label->component.margin.bottom == 0 ? DEFAULT_MARGIN : label->component.margin.bottom);
-    label->component.margin.left = (label->component.margin.left == 0 ? DEFAULT_MARGIN : label->component.margin.left);
-    label->component.margin.right = (label->component.margin.right == 0 ? DEFAULT_MARGIN : label->component.margin.right);
-
     label->text = text;
 
     char *tmp = text;
@@ -82,9 +71,9 @@ void gui_label_init(GUILabel *label, uint32_t x, uint32_t y, const char *text) {
 }
 
 void gui_label_draw(GUILabel *label) {
-    if(label->component.visable) {
+    if (label->component.visable) {
         // 1. draw_background
-        if(label->component.colorMode==RGB) {
+        if (label->component.colorMode == RGB) {
             gfx2d_fill_rect(
                     label->component.position.x + label->component.margin.left,
                     label->component.position.y + label->component.margin.top,

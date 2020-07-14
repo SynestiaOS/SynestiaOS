@@ -22,18 +22,18 @@ void gui_window_create(GUIWindow *window) {
     window->component.position.x = 0;
     window->component.position.y = 0;
 
-    window->component.size.height = 0;
-    window->component.size.width = 0;
+    window->component.size.height = DEFAULT_WINDOW_HEIGHT;
+    window->component.size.width = DEFAULT_WINDOW_WIDTH;
 
-    window->component.padding.top = 0;
-    window->component.padding.bottom = 0;
-    window->component.padding.left = 0;
-    window->component.padding.right = 0;
+    window->component.padding.top = DEFAULT_PADDING;
+    window->component.padding.bottom = DEFAULT_PADDING;
+    window->component.padding.left = DEFAULT_PADDING;
+    window->component.padding.right = DEFAULT_PADDING;
 
-    window->component.margin.top = 0;
-    window->component.margin.bottom = 0;
-    window->component.margin.left = 0;
-    window->component.margin.right = 0;
+    window->component.margin.top = DEFAULT_MARGIN;
+    window->component.margin.bottom = DEFAULT_MARGIN;
+    window->component.margin.left = DEFAULT_MARGIN;
+    window->component.margin.right = DEFAULT_MARGIN;
 
     window->component.background.a = 0x00;
     window->component.background.r = 0xFF;
@@ -57,16 +57,6 @@ void gui_window_init(GUIWindow *window, uint32_t x, uint32_t y, const char *titl
     window->component.position.x = x;
     window->component.position.y = y;
 
-    window->component.padding.top = (window->component.padding.top == 0 ? DEFAULT_PADDING : window->component.padding.top);
-    window->component.padding.bottom = (window->component.padding.bottom == 0 ? DEFAULT_PADDING : window->component.padding.bottom);
-    window->component.padding.left = (window->component.padding.left == 0 ? DEFAULT_PADDING : window->component.padding.left);
-    window->component.padding.right = (window->component.padding.right == 0 ? DEFAULT_PADDING : window->component.padding.right);
-
-    window->component.margin.top = (window->component.margin.top == 0 ? DEFAULT_MARGIN : window->component.margin.top);
-    window->component.margin.bottom = (window->component.margin.bottom == 0 ? DEFAULT_MARGIN : window->component.margin.bottom);
-    window->component.margin.left = (window->component.margin.left == 0 ? DEFAULT_MARGIN : window->component.margin.left);
-    window->component.margin.right = (window->component.margin.right == 0 ? DEFAULT_MARGIN : window->component.margin.right);
-
     window->title = title;
 
     char *tmp = title;
@@ -74,14 +64,6 @@ void gui_window_init(GUIWindow *window, uint32_t x, uint32_t y, const char *titl
     while (*tmp) {
         length++;
         tmp++;
-    }
-
-    if (window->component.size.width == 0) {
-        window->component.size.width = DEFAULT_WINDOW_WIDTH;
-
-    }
-    if (window->component.size.height == 0) {
-        window->component.size.height = DEFAULT_WINDOW_HEIGHT;
     }
 }
 

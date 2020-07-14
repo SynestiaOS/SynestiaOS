@@ -1,0 +1,41 @@
+Compiling the C compiler identification source file "CMakeCCompilerId.c" failed.
+Compiler: /Users/xingfeng.yang/project/SynestiaOS/Tools/gcc-arm-none-eabi-9-2019-q4-major/bin/arm-none-eabi-gcc 
+Build flags: 
+Id flags:  
+
+The output was:
+1
+/Users/xingfeng.yang/project/SynestiaOS/Tools/gcc-arm-none-eabi-9-2019-q4-major/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/bin/ld: /Users/xingfeng.yang/project/SynestiaOS/Tools/gcc-arm-none-eabi-9-2019-q4-major/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/libc.a(lib_a-exit.o): in function `exit':
+exit.c:(.text.exit+0x2c): undefined reference to `_exit'
+collect2: error: ld returned 1 exit status
+
+
+Compiling the CXX compiler identification source file "CMakeCXXCompilerId.cpp" failed.
+Compiler: /Users/xingfeng.yang/project/SynestiaOS/Tools/gcc-arm-none-eabi-9-2019-q4-major/bin/arm-none-eabi-g++ 
+Build flags: 
+Id flags:  
+
+The output was:
+1
+/Users/xingfeng.yang/project/SynestiaOS/Tools/gcc-arm-none-eabi-9-2019-q4-major/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/bin/ld: /Users/xingfeng.yang/project/SynestiaOS/Tools/gcc-arm-none-eabi-9-2019-q4-major/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/libc.a(lib_a-exit.o): in function `exit':
+exit.c:(.text.exit+0x2c): undefined reference to `_exit'
+collect2: error: ld returned 1 exit status
+
+
+Determining if the C compiler works failed with the following output:
+Change Dir: /Users/xingfeng.yang/project/SynestiaOS/SourceCode/cmake-build-debug/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/local/bin/gmake cmTC_e8ba5/fast && /usr/local/bin/gmake -f CMakeFiles/cmTC_e8ba5.dir/build.make CMakeFiles/cmTC_e8ba5.dir/build
+gmake[1]: Entering directory '/Users/xingfeng.yang/project/SynestiaOS/SourceCode/cmake-build-debug/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_e8ba5.dir/testCCompiler.c.o
+/Users/xingfeng.yang/project/SynestiaOS/Tools/gcc-arm-none-eabi-9-2019-q4-major/bin/arm-none-eabi-gcc    -o CMakeFiles/cmTC_e8ba5.dir/testCCompiler.c.o   -c /Users/xingfeng.yang/project/SynestiaOS/SourceCode/cmake-build-debug/CMakeFiles/CMakeTmp/testCCompiler.c
+Linking C executable cmTC_e8ba5
+"/Users/xingfeng.yang/Library/Application Support/JetBrains/Toolbox/apps/CLion/ch-0/201.6668.86/CLion.app/Contents/bin/cmake/mac/bin/cmake" -E cmake_link_script CMakeFiles/cmTC_e8ba5.dir/link.txt --verbose=1
+/Users/xingfeng.yang/project/SynestiaOS/Tools/gcc-arm-none-eabi-9-2019-q4-major/bin/arm-none-eabi-gcc      -rdynamic CMakeFiles/cmTC_e8ba5.dir/testCCompiler.c.o  -o cmTC_e8ba5 
+arm-none-eabi-gcc: error: unrecognized command line option '-rdynamic'
+gmake[1]: *** [CMakeFiles/cmTC_e8ba5.dir/build.make:87: cmTC_e8ba5] Error 1
+gmake[1]: Leaving directory '/Users/xingfeng.yang/project/SynestiaOS/SourceCode/cmake-build-debug/CMakeFiles/CMakeTmp'
+gmake: *** [Makefile:121: cmTC_e8ba5/fast] Error 2
+
+
+

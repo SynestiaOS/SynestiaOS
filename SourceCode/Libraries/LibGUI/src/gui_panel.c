@@ -22,18 +22,18 @@ void gui_panel_create(GUIPanel *panel) {
     panel->component.position.x = 0;
     panel->component.position.y = 0;
 
-    panel->component.size.height = 0;
-    panel->component.size.width = 0;
+    panel->component.size.height = DEFAULT_PANEL_HEIGHT;
+    panel->component.size.width = DEFAULT_PANEL_WIDTH;
 
-    panel->component.padding.top = 0;
-    panel->component.padding.bottom = 0;
-    panel->component.padding.left = 0;
-    panel->component.padding.right = 0;
+    panel->component.padding.top = DEFAULT_PADDING;
+    panel->component.padding.bottom = DEFAULT_PADDING;
+    panel->component.padding.left = DEFAULT_PADDING;
+    panel->component.padding.right = DEFAULT_PADDING;
 
-    panel->component.margin.top = 0;
-    panel->component.margin.bottom = 0;
-    panel->component.margin.left = 0;
-    panel->component.margin.right = 0;
+    panel->component.margin.top = DEFAULT_MARGIN;
+    panel->component.margin.bottom = DEFAULT_MARGIN;
+    panel->component.margin.left = DEFAULT_MARGIN;
+    panel->component.margin.right = DEFAULT_MARGIN;
 
     panel->component.background.a = 0x00;
     panel->component.background.r = 0xFF;
@@ -54,24 +54,6 @@ void gui_panel_create(GUIPanel *panel) {
 void gui_panel_init(GUIPanel *panel, uint32_t x, uint32_t y) {
     panel->component.position.x = x;
     panel->component.position.y = y;
-
-    panel->component.padding.top = (panel->component.padding.top == 0 ? DEFAULT_PADDING : panel->component.padding.top);
-    panel->component.padding.bottom = (panel->component.padding.bottom == 0 ? DEFAULT_PADDING : panel->component.padding.bottom);
-    panel->component.padding.left = (panel->component.padding.left == 0 ? DEFAULT_PADDING : panel->component.padding.left);
-    panel->component.padding.right = (panel->component.padding.right == 0 ? DEFAULT_PADDING : panel->component.padding.right);
-
-    panel->component.margin.top = (panel->component.margin.top == 0 ? DEFAULT_MARGIN : panel->component.margin.top);
-    panel->component.margin.bottom = (panel->component.margin.bottom == 0 ? DEFAULT_MARGIN : panel->component.margin.bottom);
-    panel->component.margin.left = (panel->component.margin.left == 0 ? DEFAULT_MARGIN : panel->component.margin.left);
-    panel->component.margin.right = (panel->component.margin.right == 0 ? DEFAULT_MARGIN : panel->component.margin.right);
-
-    if (panel->component.size.width == 0) {
-        panel->component.size.width = DEFAULT_PANEL_WIDTH;
-
-    }
-    if (panel->component.size.height == 0) {
-        panel->component.size.height = DEFAULT_PANEL_HEIGHT;
-    }
 }
 
 void gui_panel_add_children(GUIPanel *panel, GUIComponent *component) {

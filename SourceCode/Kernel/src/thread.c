@@ -7,8 +7,6 @@
 #include <kheap.h>
 #include <stdlib.h>
 
-Thread *initThread;
-
 void thread_insert_to_rb_tree(RBNode *root, RBNode *node) {
     uint32_t parentValue = getNode(root, Thread, rbTree)->runtimVirtualNs;
     uint32_t nodeValue = getNode(node, Thread, rbTree)->runtimVirtualNs;
@@ -36,22 +34,22 @@ Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uin
         // 1. init kernel stack
         kstack_clear(kernelStack);
 
-      kstack_push(kernelStack, entry);   // R15 PC
-      kstack_push(kernelStack, entry);   // R14 LR
-      kstack_push(kernelStack, 0x12121212);   // R12
-      kstack_push(kernelStack, 0x11111111);   // R11
-      kstack_push(kernelStack, 0x10101010);   // R10
-      kstack_push(kernelStack, 0x09090909);   // R09
-      kstack_push(kernelStack, 0x08080808);   // R08
-      kstack_push(kernelStack, 0x07070707);   // R07
-      kstack_push(kernelStack, 0x06060606);   // R06
-      kstack_push(kernelStack, 0x05050505);   // R05
-      kstack_push(kernelStack, 0x04040404);   // R04
-      kstack_push(kernelStack, 0x03030303);   // R03
-      kstack_push(kernelStack, 0x02020202);   // R02
-      kstack_push(kernelStack, 0x01010101);   // R01
-      kstack_push(kernelStack, arg);   // R00
-      kstack_push(kernelStack, 0x600001d3);   // cpsr
+        kstack_push(kernelStack, entry);        // R15 PC
+        kstack_push(kernelStack, entry);        // R14 LR
+        kstack_push(kernelStack, 0x12121212);   // R12
+        kstack_push(kernelStack, 0x11111111);   // R11
+        kstack_push(kernelStack, 0x10101010);   // R10
+        kstack_push(kernelStack, 0x09090909);   // R09
+        kstack_push(kernelStack, 0x08080808);   // R08
+        kstack_push(kernelStack, 0x07070707);   // R07
+        kstack_push(kernelStack, 0x06060606);   // R06
+        kstack_push(kernelStack, 0x05050505);   // R05
+        kstack_push(kernelStack, 0x04040404);   // R04
+        kstack_push(kernelStack, 0x03030303);   // R03
+        kstack_push(kernelStack, 0x02020202);   // R02
+        kstack_push(kernelStack, 0x01010101);   // R01
+        kstack_push(kernelStack, arg);          // R00
+        kstack_push(kernelStack, 0x600001d3);   // cpsr
 
         Thread *thread = (Thread *) kheap_alloc(sizeof(Thread));
         thread->magic = THREAD_MAGIC;
@@ -67,84 +65,48 @@ Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uin
         strcpy(thread->name, name);
         thread->arg = arg;
         // todo : other properties, like list
-
-        //thread_insert_to_rb_tree(initThread->rbTree, thread->rbTree);
         return thread;
     }
     return nullptr;
 }
 
 uint32_t *idle_thread_routine(int arg) {
-    uint32_t  i = 0;
-    uint32_t  j = 0;
-    uint32_t  k = 0;
-    while(1)
-    {
-      if(arg == 0)
-      {
-        i = 0;
-        while(i < 1e8) i++;
-        printf("IDLE %d, count = %d \n", arg, k);
-      }
-      else
-      {
-        i = 0;
-        while(i < 1e8) i++;
-        printf("IDLE %d, count = %d \n", arg, k);
-      }
+    uint32_t i = 0;
+    uint32_t j = 0;
+    uint32_t k = 0;
+    while (1) {
+        if (arg == 0) {
+            i = 0;
+            while (i < 1e8) i++;
+            printf("IDLE %d, count = %d \n", arg, k);
+        } else {
+            i = 0;
+            while (i < 1e8) i++;
+            printf("IDLE %d, count = %d \n", arg, k);
+        }
 
-      k++;
+        k++;
     }
     //asm volatile("wfi");
 }
 
 Thread *thread_create_idle_thread(uint32_t cpuNum) {
-
     // 1. allocate stack memory from kernel heap for idle task
     KernelStack *kernelStack = kstack_allocate(kernelStack);
     if (kernelStack != nullptr && kernelStack != nullptr) {
-        // 1. init kernel stack
-        kstack_clear(kernelStack);
-        kstack_push(kernelStack, idle_thread_routine);   // R15 PC
-        kstack_push(kernelStack, idle_thread_routine);   // R14 LR
-        kstack_push(kernelStack, 0x12121212);   // R12
-        kstack_push(kernelStack, 0x11111111);   // R11
-        kstack_push(kernelStack, 0x10101010);   // R10
-        kstack_push(kernelStack, 0x09090909);   // R09
-        kstack_push(kernelStack, 0x08080808);   // R08
-        kstack_push(kernelStack, 0x07070707);   // R07
-        kstack_push(kernelStack, 0x06060606);   // R06
-        kstack_push(kernelStack, 0x05050505);   // R05
-        kstack_push(kernelStack, 0x04040404);   // R04
-        kstack_push(kernelStack, 0x03030303);   // R03
-        kstack_push(kernelStack, 0x02020202);   // R02
-        kstack_push(kernelStack, 0x01010101);   // R01
-        kstack_push(kernelStack, cpuNum);   // R00
-        kstack_push(kernelStack, 0x600001d3);   // cpsr
-        //kstack_push(kernelStack, kernelStack->top);   // R13 SP
-      //kstack_push(kernelStack, 0x600001d3);   // spsr
+        Thread *idleThread = thread_create("IDLE", idle_thread_routine, cpuNum, IDLE_PRIORITY);
 
         // 2. idle thread
-        Thread *idleThread = (Thread *) kheap_alloc(sizeof(Thread));
-        idleThread->magic = THREAD_MAGIC;
-        idleThread->threadStatus = THREAD_READY;
-        idleThread->stack = kernelStack;
-        idleThread->priority = IDLE_PRIORITY;
-        idleThread->currCpu = INVALID_CPU;
-        idleThread->lastCpu = INVALID_CPU;
-        idleThread->runtimeNs = 0;
-        idleThread->runtimVirtualNs = 0;
-        idleThread->entry = (ThreadStartRoutine) idle_thread_routine;
         idleThread->pid = 0;
-        if(cpuNum == 0)
-          strcpy(idleThread->name, "idle0");
-        else if(cpuNum == 1)
-          strcpy(idleThread->name, "idle1");
-        else if(cpuNum == 2)
-          strcpy(idleThread->name, "idle2");
+        if (cpuNum == 0) {
+            strcpy(idleThread->name, "idle0");
+        } else if (cpuNum == 1) {
+            strcpy(idleThread->name, "idle1");
+        } else if (cpuNum == 2) {
+            strcpy(idleThread->name, "idle2");
+        }
 
-      // todo : other properties, like list
-
+        // todo : other properties, like list
         printf("[Thread] Idle thread created.\n");
         return idleThread;
     }
@@ -173,7 +135,6 @@ KernelStatus thread_join(Thread *thread, int *retcode, uint32_t deadline) {
 }
 
 KernelStatus init_thread_struct(Thread *thread, const char *name) {
-
     // 1. allocate stack memory from kernel heap for idle task
     KernelStack *kernelStack = kstack_allocate(kernelStack);
     if (kernelStack != nullptr && kernelStack != nullptr) {

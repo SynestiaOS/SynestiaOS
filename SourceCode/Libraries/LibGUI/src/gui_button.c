@@ -18,16 +18,16 @@ void gui_button_create(GUIButton *button) {
     button->component.size.height = 0;
     button->component.size.width = 0;
 
-    button->fontSize = 0;
-    button->component.padding.top = 0;
-    button->component.padding.bottom = 0;
-    button->component.padding.left = 0;
-    button->component.padding.right = 0;
+    button->fontSize = DEFAULT_FONT_SIZE;
+    button->component.padding.top = DEFAULT_PADDING;
+    button->component.padding.bottom = DEFAULT_PADDING;
+    button->component.padding.left = DEFAULT_PADDING;
+    button->component.padding.right = DEFAULT_PADDING;
 
-    button->component.margin.top = 0;
-    button->component.margin.bottom = 0;
-    button->component.margin.left = 0;
-    button->component.margin.right = 0;
+    button->component.margin.top = DEFAULT_MARGIN;
+    button->component.margin.bottom = DEFAULT_MARGIN;
+    button->component.margin.left = DEFAULT_MARGIN;
+    button->component.margin.right = DEFAULT_MARGIN;
     button->text = "";
 
     button->component.background.a = 0x00;
@@ -43,17 +43,6 @@ void gui_button_create(GUIButton *button) {
 void gui_button_init(GUIButton *button, uint32_t x, uint32_t y, const char *text) {
     button->component.position.x = x;
     button->component.position.y = y;
-
-    button->fontSize = (button->fontSize == 0 ? DEFAULT_FONT_SIZE : button->fontSize);
-    button->component.padding.top = (button->component.padding.top == 0 ? DEFAULT_PADDING : button->component.padding.top);
-    button->component.padding.bottom = (button->component.padding.bottom == 0 ? DEFAULT_PADDING : button->component.padding.bottom);
-    button->component.padding.left = (button->component.padding.left == 0 ? DEFAULT_PADDING : button->component.padding.left);
-    button->component.padding.right = (button->component.padding.right == 0 ? DEFAULT_PADDING : button->component.padding.right);
-
-    button->component.margin.top = (button->component.margin.top == 0 ? DEFAULT_MARGIN : button->component.margin.top);
-    button->component.margin.bottom = (button->component.margin.bottom == 0 ? DEFAULT_MARGIN : button->component.margin.bottom);
-    button->component.margin.left = (button->component.margin.left == 0 ? DEFAULT_MARGIN : button->component.margin.left);
-    button->component.margin.right = (button->component.margin.right == 0 ? DEFAULT_MARGIN : button->component.margin.right);
 
     button->text = text;
 

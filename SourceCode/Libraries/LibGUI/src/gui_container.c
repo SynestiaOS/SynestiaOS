@@ -23,18 +23,18 @@ void gui_container_create(GUIContainer *container) {
     container->component.position.x = 0;
     container->component.position.y = 0;
 
-    container->component.size.height = 0;
-    container->component.size.width = 0;
+    container->component.size.height = DEFAULT_CONTAINER_HEIGHT;
+    container->component.size.width = DEFAULT_CONTAINER_WIDTH;
 
-    container->component.padding.top = 0;
-    container->component.padding.bottom = 0;
-    container->component.padding.left = 0;
-    container->component.padding.right = 0;
+    container->component.padding.top = DEFAULT_PADDING;
+    container->component.padding.bottom = DEFAULT_PADDING;
+    container->component.padding.left = DEFAULT_PADDING;
+    container->component.padding.right = DEFAULT_PADDING;
 
-    container->component.margin.top = 0;
-    container->component.margin.bottom = 0;
-    container->component.margin.left = 0;
-    container->component.margin.right = 0;
+    container->component.margin.top = DEFAULT_MARGIN;
+    container->component.margin.bottom = DEFAULT_MARGIN;
+    container->component.margin.left = DEFAULT_MARGIN;
+    container->component.margin.right = DEFAULT_MARGIN;
 
     container->component.background.a = 0x00;
     container->component.background.r = 0xFF;
@@ -56,24 +56,6 @@ void gui_container_init(GUIContainer *container, uint32_t x, uint32_t y, Orienta
     container->component.position.x = x;
     container->component.position.y = y;
     container->orientation = orientation;
-
-    container->component.padding.top = (container->component.padding.top == 0 ? DEFAULT_PADDING : container->component.padding.top);
-    container->component.padding.bottom = (container->component.padding.bottom == 0 ? DEFAULT_PADDING : container->component.padding.bottom);
-    container->component.padding.left = (container->component.padding.left == 0 ? DEFAULT_PADDING : container->component.padding.left);
-    container->component.padding.right = (container->component.padding.right == 0 ? DEFAULT_PADDING : container->component.padding.right);
-
-    container->component.margin.top = (container->component.margin.top == 0 ? DEFAULT_MARGIN : container->component.margin.top);
-    container->component.margin.bottom = (container->component.margin.bottom == 0 ? DEFAULT_MARGIN : container->component.margin.bottom);
-    container->component.margin.left = (container->component.margin.left == 0 ? DEFAULT_MARGIN : container->component.margin.left);
-    container->component.margin.right = (container->component.margin.right == 0 ? DEFAULT_MARGIN : container->component.margin.right);
-
-    if (container->component.size.width == 0) {
-        container->component.size.width = DEFAULT_CONTAINER_WIDTH;
-
-    }
-    if (container->component.size.height == 0) {
-        container->component.size.height = DEFAULT_CONTAINER_HEIGHT;
-    }
 }
 
 void gui_container_add_children(GUIContainer *container, GUIComponent *component) {
