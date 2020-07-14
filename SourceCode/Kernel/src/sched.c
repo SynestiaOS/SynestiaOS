@@ -78,10 +78,10 @@ KernelStatus schd_switch_to(Thread *thread) {
   //push r0~r3
 
     if (thread == nullptr) {
-        printf("[Schd] cant switch to nullptr thread.\n");
+        printf("[Schd]: cant switch to nullptr thread.\n");
         return ERROR;
     }
-    printf("[Schd] switch to: %s.\n", thread->name);
+    printf("[Schd]: switch to: %s.\n", thread->name);
 
     //disable_interrupt();
 
