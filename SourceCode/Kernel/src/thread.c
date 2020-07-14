@@ -71,23 +71,8 @@ Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uin
 }
 
 uint32_t *idle_thread_routine(int arg) {
-    uint32_t i = 0;
-    uint32_t j = 0;
-    uint32_t k = 0;
-    while (1) {
-        if (arg == 0) {
-            i = 0;
-            while (i < 1e8) i++;
-            printf("IDLE %d, count = %d \n", arg, k);
-        } else {
-            i = 0;
-            while (i < 1e8) i++;
-            printf("IDLE %d, count = %d \n", arg, k);
-        }
-
-        k++;
-    }
-    //asm volatile("wfi");
+    printf("[Thread] IDLE: %d \n",arg);
+    asm volatile("wfi");
 }
 
 Thread *thread_create_idle_thread(uint32_t cpuNum) {
@@ -95,19 +80,14 @@ Thread *thread_create_idle_thread(uint32_t cpuNum) {
     KernelStack *kernelStack = kstack_allocate(kernelStack);
     if (kernelStack != nullptr && kernelStack != nullptr) {
         Thread *idleThread = thread_create("IDLE", idle_thread_routine, cpuNum, IDLE_PRIORITY);
-
+        idleThread->cpuAffinity = cpuNum;
         // 2. idle thread
         idleThread->pid = 0;
-        if (cpuNum == 0) {
-            strcpy(idleThread->name, "idle0");
-        } else if (cpuNum == 1) {
-            strcpy(idleThread->name, "idle1");
-        } else if (cpuNum == 2) {
-            strcpy(idleThread->name, "idle2");
-        }
 
+        char idleNameStr[10] = {'\0'};
+        strcpy(idleThread->name, itoa(cpuNum, &idleNameStr, 10));
         // todo : other properties, like list
-        printf("[Thread] Idle thread created.\n");
+        printf("[Thread] Idle thread for CPU '%d' created.\n",cpuNum);
         return idleThread;
     }
     printf("[Thread] Idle thread create failed.\n");

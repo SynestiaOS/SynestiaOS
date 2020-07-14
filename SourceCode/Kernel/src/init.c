@@ -11,6 +11,7 @@
 #include <gfx2d.h>
 #include <gui_panel.h>
 #include <gui_container.h>
+#include <gui_canvas.h>
 #include <font8bits.h>
 
 void print_splash() {
@@ -156,7 +157,7 @@ void kernel_main(void) {
 
     init_interrupt();
 
-    //  schd_init();
+    schd_init();
 
     t0 = thread_create("IDLE0", idle0, 0, 0);
     t1 = thread_create("IDLE1", idle1, 1, 0);

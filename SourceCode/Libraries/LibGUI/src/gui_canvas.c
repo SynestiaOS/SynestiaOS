@@ -99,6 +99,10 @@ void gui_canvas_draw_bitmap(GUICanvas *canvas, int x, int y, int width, int heig
     gfx2d_draw_bitmap(canvas->component.position.x+x,canvas->component.position.y+y,width,height,buffer);
 }
 
+void gui_canvas_clear(GUICanvas *canvas,uint32_t color){
+
+}
+
 void gui_canvas_draw(GUICanvas *canvas) {
-    
+
 }

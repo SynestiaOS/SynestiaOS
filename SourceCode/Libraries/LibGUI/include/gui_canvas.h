@@ -40,6 +40,8 @@ void gui_canvas_draw_ascii(GUICanvas *canvas, int x, int y, uint8_t ch, uint32_t
 
 void gui_canvas_draw_bitmap(GUICanvas *canvas, int x, int y, int width, int height, uint32_t *buffer);
 
+void gui_canvas_clear(GUICanvas *canvas,uint32_t color);
+
 void gui_canvas_draw(GUICanvas *canvas);
 
 #endif //__LIBRARY_LIBGUI_CANVAS_H__
