@@ -40,7 +40,7 @@ KernelStatus schd_init() {
     t.timer_interrupt_handler = &xx;
     register_time_interrupt(&t);
 
-    printf("[Schd] Schd inited.\n");
+    printf("[Schd]: Schd inited.\n");
     return OK;
 }
 
@@ -78,10 +78,10 @@ KernelStatus schd_switch_to(Thread *thread) {
   //push r0~r3
 
     if (thread == nullptr) {
-        printf("[SC] cant switch to nullptr thread.\n");
+        printf("[Schd] cant switch to nullptr thread.\n");
         return ERROR;
     }
-    printf("[SC] switch to: %s.\n", thread->name);
+    printf("[Schd] switch to: %s.\n", thread->name);
 
     //disable_interrupt();
 
