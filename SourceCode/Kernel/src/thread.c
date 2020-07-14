@@ -71,7 +71,7 @@ Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uin
 }
 
 uint32_t *idle_thread_routine(int arg) {
-    printf("[Thread] IDLE: %d \n",arg);
+    printf("[Thread]: IDLE: %d \n",arg);
     asm volatile("wfi");
 }
 
@@ -87,10 +87,10 @@ Thread *thread_create_idle_thread(uint32_t cpuNum) {
         char idleNameStr[10] = {'\0'};
         strcpy(idleThread->name, itoa(cpuNum, &idleNameStr, 10));
         // todo : other properties, like list
-        printf("[Thread] Idle thread for CPU '%d' created.\n",cpuNum);
+        printf("[Thread]: Idle thread for CPU '%d' created.\n",cpuNum);
         return idleThread;
     }
-    printf("[Thread] Idle thread create failed.\n");
+    printf("[Thread]: Idle thread create failed.\n");
     return nullptr;
 }
 
