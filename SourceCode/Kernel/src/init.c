@@ -84,31 +84,6 @@ void demo_desktop() {
     gui_window_draw(&window1);
 }
 
-Thread *t0;
-Thread *t1;
-
-void xx() {
-    if (second == 60) {
-        second = 0;
-        minutes++;
-        if (minutes == 60) {
-            minutes = 0;
-            hour++;
-            if (hour == 24) {
-                hour = 0;
-            }
-        }
-    }
-    second++;
-
-    //Switch To thread
-    if ((second % 2) == 0) {
-        schd_switch_to(t0);
-    } else {
-        schd_switch_to(t1);
-    }
-}
-
 uint32_t *idle0(int arg) {
     uint32_t i = 0;
     uint32_t j = 0;
@@ -143,7 +118,7 @@ uint32_t *idle1(int arg) {
     //asm volatile("wfi");
 }
 
-TimerHandler t;
+
 
 void kernel_main(void) {
 
@@ -159,16 +134,7 @@ void kernel_main(void) {
 
     schd_init();
 
-    t0 = thread_create("IDLE0", idle0, 0, 0);
-    t1 = thread_create("IDLE1", idle1, 1, 0);
-
     gpu_init();
-
-    t.node.next = nullptr;
-    t.node.prev = nullptr;
-    t.timer_interrupt_handler = &xx;
-
-    register_time_interrupt(&t);
 
     gfx2d_draw_bitmap(0, 0, 1024, 768, desktop());
     draw_task_bar();

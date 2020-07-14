@@ -10,8 +10,20 @@
 
 Thread *currentThread = nullptr;
 
-KernelStatus schd_init() {
 
+TimerHandler t;
+int i = 0;
+void xx() {
+    //Switch To thread
+    PerCpu *preCpu = percpu_get(i);
+    schd_switch_to(preCpu->idleThread);
+    i++;
+    if(i==4){
+        i = 0;
+    }
+}
+
+KernelStatus schd_init() {
     // 1. create PreCpus
     if (percpu_create(CPU_4) != ERROR) {
         // 2. init PerCpu
@@ -22,6 +34,11 @@ KernelStatus schd_init() {
             preCpu->idleThread = thread_create_idle_thread(i);
         }
     }
+
+    t.node.next = nullptr;
+    t.node.prev = nullptr;
+    t.timer_interrupt_handler = &xx;
+    register_time_interrupt(&t);
 
     printf("[Schd] Schd inited.\n");
     return OK;
