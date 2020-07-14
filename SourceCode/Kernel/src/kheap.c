@@ -14,12 +14,12 @@ HeapArea *freeListHead;
 #define ALL_PHYSICAL_MEM_SIZE 0xFFFFFFFF
 
 void default_heap_alloc_func(void *ptr, uint32_t size) {
-    printf("[Heap] alloc %d bytes at %d.\n", size, (uint32_t) ptr);
+    printf("[Heap]: alloc %d bytes at %d.\n", size, (uint32_t) ptr);
 }
 
 void default_heap_free_func(void *ptr) {
     HeapArea *heap = (HeapArea *) (ptr - sizeof(HeapArea));
-    printf("[Heap] free %d bytes at %d.\n", heap->size, (uint32_t) ptr);
+    printf("[Heap]: free %d bytes at %d.\n", heap->size, (uint32_t) ptr);
 }
 
 void kheap_set_alloc_callback(heap_alloc_func callback) {
@@ -54,7 +54,7 @@ void *kheap_alloc(uint32_t size) {
     uint32_t allocSize = size + sizeof(HeapArea);
 
     if (freeListHead == nullptr) {
-        printf("[KHeap] failed to get freeListHead.\n");
+        printf("[KHeap]: failed to get freeListHead.\n");
         return nullptr;
     }
 
