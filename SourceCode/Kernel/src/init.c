@@ -84,42 +84,6 @@ void demo_desktop() {
     gui_window_draw(&window1);
 }
 
-uint32_t *idle0(int arg) {
-    uint32_t i = 0;
-    uint32_t j = 0;
-    while (1) {
-        i = 0;
-        printf("IDLE 0, count = %d \n", idle_0_count);
-        idle_0_count++;
-
-        disable_interrupt();
-        char idle_1_str[10] = {'\0'};
-        gui_label_init(&labelIdle1, 0, 0, itoa(idle_0_count, &idle_1_str, 10));
-        gui_window_draw(&window);
-        enable_interrupt();
-    }
-    //asm volatile("wfi");x
-}
-
-uint32_t *idle1(int arg) {
-    uint32_t i = 0;
-    uint32_t j = 0;
-    while (1) {
-        i = 0;
-        printf("IDLE 1, count = %d \n", idle_1_count);
-        idle_1_count++;
-
-        disable_interrupt();
-        char idle_2_str[10] = {'\0'};
-        gui_label_init(&labelIdle2, 0, 0, itoa(idle_1_count, &idle_2_str, 10));
-        gui_window_draw(&window1);
-        enable_interrupt();
-    }
-    //asm volatile("wfi");
-}
-
-
-
 void kernel_main(void) {
 
     print_splash();
