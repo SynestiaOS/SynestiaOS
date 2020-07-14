@@ -10,13 +10,13 @@
 
 #define DEFAULT_KERNEL_STACK_SIZE 32*KB
 
-typedef uint32_t VirtualAddress;
+typedef uint32_t* VirtualAddress;
 
 typedef struct KernelStack {
     uint32_t size;
     VirtualAddress base;
     VirtualAddress top;
-    VirtualAddress *virtualMemoryAddress;
+    VirtualAddress virtualMemoryAddress;
 } __attribute__((packed)) KernelStack;
 
 

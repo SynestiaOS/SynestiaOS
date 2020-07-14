@@ -13,7 +13,7 @@ KernelStack *kstack_allocate() {
         printf("[KStack] kStack allocate failed.\n");
         return nullptr;
     }
-    stack->virtualMemoryAddress = (void *) (uint64_t) (stack + sizeof(KernelStack) + DEFAULT_KERNEL_STACK_SIZE);
+    stack->virtualMemoryAddress = (uint32_t *)(stack + sizeof(KernelStack) + DEFAULT_KERNEL_STACK_SIZE);
     stack->size = 0;
     stack->base = stack->virtualMemoryAddress;
     stack->top = stack->base;
