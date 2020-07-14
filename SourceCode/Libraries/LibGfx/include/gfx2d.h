@@ -10,6 +10,9 @@
 
 #define FLUENT_PRIMARY_COLOR 0x0078D4
 
+
+void gfx2d_draw_pixel(int x, int y, uint32_t c);
+
 void gfx2d_draw_rect(int x1, int y1, int x2, int y2, uint32_t c);
 
 void gfx2d_fill_rect(int x1, int y1, int x2, int y2, uint32_t c);

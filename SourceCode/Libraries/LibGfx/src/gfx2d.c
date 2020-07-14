@@ -8,6 +8,10 @@
 
 void gpu_write_pixel_color(uint32_t x, uint32_t y, uint32_t c);
 
+void gfx2d_draw_pixel(int x, int y, uint32_t c){
+    gpu_write_pixel_color(x, y, c);
+}
+
 void gfx2d_draw_rect(int x1, int y1, int x2, int y2, uint32_t c) {
     gfx2d_draw_line(x1, y1, x1, y2, c);
     gfx2d_draw_line(x1, y1, x2, y1, c);
@@ -116,7 +120,7 @@ void SWAP(int *x, int *y) {
     *y = temp;
 }
 
-void gfx_fill_triangle(int x1, int y1, int x2, int y2, int x3, int y3, uint32_t c) {
+void gfx2d_fill_triangle(int x1, int y1, int x2, int y2, int x3, int y3, uint32_t c) {
     int t1x = 0;
     int t2x = 0;
     int y = 0;
