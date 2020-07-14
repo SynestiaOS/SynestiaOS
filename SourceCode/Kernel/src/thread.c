@@ -118,37 +118,13 @@ KernelStatus init_thread_struct(Thread *thread, const char *name) {
     // 1. allocate stack memory from kernel heap for idle task
     KernelStack *kernelStack = kstack_allocate(kernelStack);
     if (kernelStack != nullptr && kernelStack != nullptr) {
-        // 1. init kernel stack
-        kstack_clear(kernelStack);
-        kstack_push(kernelStack, 0x15151515);
-        kstack_push(kernelStack, 0x14141414);   // R14
-        kstack_push(kernelStack, kernelStack->virtualMemoryAddress);   // R13
-        kstack_push(kernelStack, 0x12121212);   // R12
-        kstack_push(kernelStack, 0x11111111);   // R11
-        kstack_push(kernelStack, 0x10101010);   // R10
-        kstack_push(kernelStack, 0x09090909);   // R09
-        kstack_push(kernelStack, 0x08080808);   // R08
-        kstack_push(kernelStack, 0x07070707);   // R07
-        kstack_push(kernelStack, 0x06060606);   // R06
-        kstack_push(kernelStack, 0x05050505);   // R05
-        kstack_push(kernelStack, 0x04040404);   // R04
-        kstack_push(kernelStack, 0x03030303);   // R03
-        kstack_push(kernelStack, 0x02020202);   // R02
-        kstack_push(kernelStack, 0x01010101);   // R01
-
-        thread->magic = THREAD_MAGIC;
-        thread->threadStatus = THREAD_INITIAL;
         thread->stack = kernelStack;
-        thread->priority = IDLE_PRIORITY;
-        thread->currCpu = INVALID_CPU;
-        thread->runtimeNs = 0;
-        thread->runtimVirtualNs = 0;
-        thread->lastCpu = INVALID_CPU;
-        thread->entry = (ThreadStartRoutine) idle_thread_routine;
-        thread->pid = 0;
         strcpy(thread->name, name);
+        // todo : other properties, like list
+        printf("[Thread]: thread: '%s' initialed.\n",name);
         return OK;
     }
+    printf("[Thread]:thread '%s' init failed. cause stack alloc failed.\n",name);
     return ERROR;
 }
 
