@@ -76,22 +76,16 @@ uint32_t *idle_thread_routine(int arg) {
 }
 
 Thread *thread_create_idle_thread(uint32_t cpuNum) {
-    // 1. allocate stack memory from kernel heap for idle task
-    KernelStack *kernelStack = kstack_allocate(kernelStack);
-    if (kernelStack != nullptr && kernelStack != nullptr) {
-        Thread *idleThread = thread_create("IDLE", idle_thread_routine, cpuNum, IDLE_PRIORITY);
-        idleThread->cpuAffinity = cpuNum;
-        // 2. idle thread
-        idleThread->pid = 0;
+    Thread *idleThread = thread_create("IDLE", idle_thread_routine, cpuNum, IDLE_PRIORITY);
+    idleThread->cpuAffinity = cpuNum;
+    // 2. idle thread
+    idleThread->pid = 0;
 
-        char idleNameStr[10] = {'\0'};
-        strcpy(idleThread->name, itoa(cpuNum, &idleNameStr, 10));
-        // todo : other properties, like list
-        printf("[Thread]: Idle thread for CPU '%d' created.\n",cpuNum);
-        return idleThread;
-    }
-    printf("[Thread]: Idle thread create failed.\n");
-    return nullptr;
+    char idleNameStr[10] = {'\0'};
+    strcpy(idleThread->name, itoa(cpuNum, &idleNameStr, 10));
+    // todo : other properties, like list
+    printf("[Thread]: Idle thread for CPU '%d' created.\n",cpuNum);
+    return idleThread;
 }
 
 KernelStatus thread_reschedule(void) {
@@ -115,17 +109,10 @@ KernelStatus thread_join(Thread *thread, int *retcode, uint32_t deadline) {
 }
 
 KernelStatus init_thread_struct(Thread *thread, const char *name) {
-    // 1. allocate stack memory from kernel heap for idle task
-    KernelStack *kernelStack = kstack_allocate(kernelStack);
-    if (kernelStack != nullptr && kernelStack != nullptr) {
-        thread->stack = kernelStack;
-        strcpy(thread->name, name);
-        // todo : other properties, like list
-        printf("[Thread]: thread: '%s' initialed.\n",name);
-        return OK;
-    }
-    printf("[Thread]:thread '%s' init failed. cause stack alloc failed.\n",name);
-    return ERROR;
+    strcpy(thread->name, name);
+    // todo : other properties, like list
+    printf("[Thread]: thread: '%s' initialed.\n",name);
+    return OK;
 }
 
 KernelStatus thread_exit(uint32_t returnCode) {
