@@ -127,6 +127,7 @@ void demo_desktop() {
     labelIdle1.component.foreground.g = 0x00;
     labelIdle1.component.foreground.b = 0x00;
     labelIdle1.component.colorMode = TRANSPARENT;
+    labelIdle1.component.size.width = 100;
     char idle_1_str[10] = {'\0'};
     gui_label_init(&labelIdle1, 0, 0, itoa(idle_0_count, &idle_1_str, 10));
     gui_window_add_children(&window, &(labelIdle1.component));
@@ -141,6 +142,7 @@ void demo_desktop() {
     labelIdle2.component.foreground.g = 0x00;
     labelIdle2.component.foreground.b = 0x00;
     labelIdle2.component.colorMode = TRANSPARENT;
+    labelIdle2.component.size.width = 100;
     char idle_2_str[10] = {'\0'};
     gui_label_init(&labelIdle2, 0, 0, itoa(idle_1_count, &idle_2_str, 10));
     gui_window_add_children(&window1, &(labelIdle2.component));
