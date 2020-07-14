@@ -51,7 +51,7 @@ GUILabel labelIdle2;
 uint32_t idle_0_count = 0;
 uint32_t idle_1_count = 0;
 
-void demo_desktop() {
+uint32_t* demo_desktop(int args) {
     gui_window_create(&window);
     window.component.size.width = 510;
     window.component.size.height = 500;
@@ -99,8 +99,11 @@ void kernel_main(void) {
     schd_init();
 
     gpu_init();
-
     gfx2d_draw_bitmap(0, 0, 1024, 768, desktop());
     draw_task_bar();
-    demo_desktop();
+
+    Thread* desktopThread = thread_create("desktop", &desktop, 1, 1);
+    schd_init_thread(desktopThread,1);
+    
+    demo_desktop(1);
 }

@@ -46,7 +46,11 @@ KernelStatus schd_init() {
 
 KernelStatus schd_init_thread(Thread *thread, uint32_t priority) {
     thread->priority = priority;
-    // todo:
+
+    // todo : it's just a test
+    
+    PerCpu *preCpu = percpu_get(0);
+    preCpu->idleThread = thread;
     return OK;
 }
 
