@@ -14,6 +14,7 @@
 
 #define DEFAULT_WINDOW_HEADER_HEIGHT  DEFAULT_FONT_SIZE+2*DEFAULT_PADDING
 
+
 typedef struct Position {
     uint32_t x;
     uint32_t y;
@@ -46,12 +47,18 @@ typedef struct Color {
     uint8_t b;
 } Color;
 
+typedef struct Pixel {
+    Position pos;
+    Color color;
+} Pixel;
+
 typedef enum ComponentType {
     BUTTON,
     LABEL,
     WINDOW,
     PANEL,
     CONTAINER,
+    CANVAS,
 } ComponentType;
 
 typedef enum ColorMode {
