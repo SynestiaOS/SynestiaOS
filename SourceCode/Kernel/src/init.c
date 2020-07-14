@@ -42,70 +42,6 @@ void draw_task_bar() {
     gfx2d_draw_logo(0, 0, 0xFFFFFF);
 }
 
-GUILabel hourLabel;
-GUILabel colon;
-GUILabel minuteLabel;
-GUILabel colon2;
-GUILabel secondLabel;
-
-void draw_time() {
-    gui_label_create(&hourLabel);
-    hourLabel.component.foreground.r = 0xFF;
-    hourLabel.component.foreground.g = 0xFF;
-    hourLabel.component.foreground.b = 0xFF;
-    hourLabel.component.size.height = 32;
-    hourLabel.component.padding.top = 12;
-    hourLabel.component.colorMode = TRANSPARENT;
-    char hour_str[10] = {'\0'};
-    char *hour_str_ = itoa(hour, &hour_str, 10);
-    gui_label_init(&hourLabel, 1000 - 60, 0, hour_str_);
-    gui_label_draw(&hourLabel);
-
-    gui_label_create(&colon);
-    colon.component.foreground.r = 0xFF;
-    colon.component.foreground.g = 0xFF;
-    colon.component.foreground.b = 0xFF;
-    colon.component.size.height = 32;
-    colon.component.padding.top = 12;
-    colon.component.colorMode = TRANSPARENT;
-    gui_label_init(&colon, 1000 - 45, 0, ":");
-    gui_label_draw(&colon);
-
-    gui_label_create(&minuteLabel);
-    minuteLabel.component.foreground.r = 0xFF;
-    minuteLabel.component.foreground.g = 0xFF;
-    minuteLabel.component.foreground.b = 0xFF;
-    minuteLabel.component.size.height = 32;
-    minuteLabel.component.padding.top = 12;
-    minuteLabel.component.colorMode = TRANSPARENT;
-    char minute_str[10] = {'\0'};
-    char *minute_str_ = itoa(minutes, &minute_str, 10);
-    gui_label_init(&minuteLabel, 1000 - 35, 0, minute_str_);
-    gui_label_draw(&minuteLabel);
-
-    gui_label_create(&colon2);
-    colon2.component.foreground.r = 0xFF;
-    colon2.component.foreground.g = 0xFF;
-    colon2.component.foreground.b = 0xFF;
-    colon2.component.size.height = 32;
-    colon2.component.padding.top = 12;
-    colon2.component.colorMode = TRANSPARENT;
-    gui_label_init(&colon2, 1000 - 20, 0, ":");
-    gui_label_draw(&colon2);
-
-    gui_label_create(&secondLabel);
-    secondLabel.component.foreground.r = 0xFF;
-    secondLabel.component.foreground.g = 0xFF;
-    secondLabel.component.foreground.b = 0xFF;
-    secondLabel.component.size.height = 32;
-    secondLabel.component.padding.top = 12;
-    secondLabel.component.colorMode = TRANSPARENT;
-    char second_str[10] = {'\0'};
-    char *second_str_ = itoa(second, &second_str, 10);
-    gui_label_init(&secondLabel, 1000 - 10, 0, second_str_);
-    gui_label_draw(&secondLabel);
-}
-
 GUIWindow window;
 GUIWindow window1;
 GUILabel labelIdle1;
@@ -115,8 +51,6 @@ uint32_t idle_0_count = 0;
 uint32_t idle_1_count = 0;
 
 void demo_desktop() {
-    draw_time();
-
     gui_window_create(&window);
     window.component.size.width = 510;
     window.component.size.height = 500;
