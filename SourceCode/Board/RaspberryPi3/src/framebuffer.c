@@ -65,7 +65,7 @@ int framebuffer_init(void) {
         pitch = mailbox[33];
         lfb = (void *) ((uint64_t) mailbox[28]);
     } else {
-        printf("[Framebuffer] Unable to set screen resolution to 1024x768x32\n");
+        printf("[Framebuffer]: Unable to set screen resolution to 1024x768x32\n");
     }
 }
 

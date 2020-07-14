@@ -41,7 +41,7 @@ TimerHandler timer;
 
 void gpu_init(void) {
     framebuffer_init();
-    printf("[Framebuffer]： Inited 1024x768x32\n");
+    printf("[Framebuffer]: Inited 1024x768x32\n");
     framebuffer_clear(0xFFFFFF);
 
     timer.node.next = nullptr;

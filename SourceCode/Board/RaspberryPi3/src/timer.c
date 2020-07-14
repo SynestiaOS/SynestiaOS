@@ -9,7 +9,7 @@ extern void register_interrupt_handler(uint32_t interrupt_no, void (*interrupt_h
 
 
 void system_timer_irq_handler(void) {
-    print("timer interrupt triggered\n");
+    print("[Timer]: system timer interrupt triggered\n");
     timer_set(300);
 }
 
