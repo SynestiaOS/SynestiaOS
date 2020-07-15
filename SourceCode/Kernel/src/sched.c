@@ -10,19 +10,20 @@
 
 Thread *currentThread = nullptr;
 
-
 TimerHandler tickHandler;
+Thread *tmp = nullptr;
+Thread *head = nullptr;
 void tick() {
     //Switch To thread
-    Thread* headThread = currentThread;
-    Thread* tmp = currentThread;
-    while(tmp!=nullptr){
+    if(tmp!=nullptr){
         schd_switch_to(tmp);
         if(tmp->threadList.next!=nullptr){
             tmp = getNode(tmp->threadList.next,Thread,threadList);
         }else{
-            tmp = headThread;
+            tmp = head;
         }
+    }else{
+        tmp = head;
     }
 }
 
@@ -35,28 +36,35 @@ KernelStatus schd_init() {
             preCpu->cpuNum = i;
             preCpu->status.idleTime = 0;
             Thread* idleThread = thread_create_idle_thread(i);
+            preCpu->idleThread = idleThread;
             if(currentThread == nullptr){
                 currentThread = idleThread;
             }else{
                 klist_append(&currentThread->threadList,&idleThread->threadList);
+                printf("append\n");
             }
-            preCpu->idleThread = idleThread;
         }
     }
-
-    tickHandler.node.next = nullptr;
-    tickHandler.node.prev = nullptr;
-    tickHandler.timer_interrupt_handler = &tick;
-    register_time_interrupt(&tickHandler);
-
     printf("[Schd]: Schd inited.\n");
+
+    tmp = currentThread;
+    head = currentThread;
+
     return OK;
 }
 
 KernelStatus schd_init_thread(Thread *thread, uint32_t priority) {
     thread->priority = priority;
-    // todo : it's just a test
     klist_append(&currentThread->threadList,&thread->threadList);
+    return OK;
+}
+
+KernelStatus schd_schedule(void){
+    tickHandler.node.next = nullptr;
+    tickHandler.node.prev = nullptr;
+    tickHandler.timer_interrupt_handler = &tick;
+    register_time_interrupt(&tickHandler);
+    printf("[Schd]: Schd started.\n");
     return OK;
 }
 

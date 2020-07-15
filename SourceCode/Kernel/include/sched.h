@@ -12,6 +12,8 @@ KernelStatus schd_init(void);
 
 KernelStatus schd_init_thread(Thread *thread, uint32_t priority);
 
+KernelStatus schd_schedule(void);
+
 KernelStatus schd_block(void);
 
 KernelStatus schd_yield(void);

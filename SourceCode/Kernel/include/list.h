@@ -22,6 +22,8 @@ KernelStatus klist_append(ListNode *list, ListNode *node);
 
 ListNode *klist_remove_node(ListNode *node);
 
+ListNode *klist_get_head(ListNode *node);
+
 uint32_t klist_size(ListNode *node);
 
 #endif //__KERNEL_LIST_H__

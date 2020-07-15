@@ -30,6 +30,12 @@ KernelStatus kvector_free(KernelVector *vector) {
 }
 
 KernelStatus kvector_add(KernelVector *vector, ListNode *node) {
+  if(vector->index>=vector->size){
+    KernelStatus status = kvector_resize(vector,vector->size*2);
+    if(status!=OK){
+      return status;
+    }
+  }
   vector->node[vector->index] = node;
   vector->index++;
   return OK;

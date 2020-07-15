@@ -49,10 +49,9 @@ void draw_task_bar() {
 uint32_t idle_0_count = 0;
 uint32_t idle_1_count = 0;
 
-uint32_t *window1(int args) {
+GUIWindow window;
+uint32_t *window_thread1(int args) {
   while (1) {
-    GUIWindow window;
-    gui_window_create(&window);
     window.component.size.width = 510;
     window.component.size.height = 500;
     gui_window_init(&window, 0, 32, "Process 1");
@@ -71,10 +70,10 @@ uint32_t *window1(int args) {
   }
 }
 
-uint32_t *window2(int args) {
+
+GUIWindow window1;
+uint32_t *window_thread2(int args) {
   while (1) {
-    GUIWindow window1;
-    gui_window_create(&window1);
     window1.component.size.width = 510;
     window1.component.size.height = 500;
     gui_window_init(&window1, 512, 32, "Process 2");
@@ -114,12 +113,16 @@ void kernel_main(void) {
 
   schd_init();
 
-  Thread *window1Thread = thread_create("window1", &window1, 1, 1);
+  Thread *window1Thread = thread_create("window1", &window_thread1, 1, 1);
+  gui_window_create(&window);
   schd_init_thread(window1Thread, 0);
 
-  Thread *window2Thread = thread_create("window2", &window2, 1, 1);
+  Thread *window2Thread = thread_create("window2", &window_thread2, 1, 1);
+  gui_window_create(&window1);
   schd_init_thread(window2Thread, 1);
 
   Thread *gpuFlushThread = thread_create("GPU FLUSHER", &gpu_flush, 1, 1);
   schd_init_thread(gpuFlushThread, 2);
+
+  schd_schedule();
 }
