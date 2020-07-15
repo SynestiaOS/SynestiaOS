@@ -6,16 +6,15 @@
 #define __LIBRARY_LIBGFX_GLMATH_H__
 
 typedef struct Vec3D {
-    float x;
-    float y;
-    float z;
-    float w;
+  float x;
+  float y;
+  float z;
+  float w;
 } Vec3D;
 
 typedef struct Mat4x4 {
-    float m[4][4];
+  float m[4][4];
 } Mat4x4;
-
 
 Vec3D gfxm_vector_add(Vec3D v1, Vec3D v2);
 

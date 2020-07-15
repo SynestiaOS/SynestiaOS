@@ -102,5 +102,4 @@ void should_klist_return_size() {
   ASSERT_EQ(klist_size(&list), 2);
 }
 
-
 #endif //__KERNEL_KLIST_TEST_H__

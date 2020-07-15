@@ -6,7 +6,7 @@
 
 #define asmlinkage __attribute__((regparm(0)))
 
-#define SYSCALL_DEFINE0(name) asmlinkage long sys_ ## name ## (void)
+#define SYSCALL_DEFINE0(name) asmlinkage long sys_##name##(void)
 
 // SYSCALL_DEFINE0(get_pid){
 //         return 0;

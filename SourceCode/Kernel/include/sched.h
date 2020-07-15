@@ -5,7 +5,6 @@
 #ifndef __KERNEL_SCHED_H__
 #define __KERNEL_SCHED_H__
 
-
 #include <stdint.h>
 #include <thread.h>
 

@@ -11,10 +11,9 @@
 #define DEFAULT_CANVAS_HEIGHT 300
 
 typedef struct GUICanvas {
-    GUIComponent component;
-    uint32_t *buffer;
+  GUIComponent component;
+  uint32_t *buffer;
 } GUICanvas;
-
 
 void gui_canvas_create(GUICanvas *canvas);
 
@@ -40,7 +39,7 @@ void gui_canvas_draw_ascii(GUICanvas *canvas, int x, int y, uint8_t ch, uint32_t
 
 void gui_canvas_draw_bitmap(GUICanvas *canvas, int x, int y, int width, int height, uint32_t *buffer);
 
-void gui_canvas_clear(GUICanvas *canvas,uint32_t color);
+void gui_canvas_clear(GUICanvas *canvas, uint32_t color);
 
 void gui_canvas_draw(GUICanvas *canvas);
 

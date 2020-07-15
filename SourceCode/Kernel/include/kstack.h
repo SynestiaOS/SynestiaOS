@@ -5,20 +5,19 @@
 #ifndef __KERNEL_KSTACK_H__
 #define __KERNEL_KSTACK_H__
 
-#include <stdint.h>
 #include "type.h"
+#include <stdint.h>
 
-#define DEFAULT_KERNEL_STACK_SIZE 32*KB
+#define DEFAULT_KERNEL_STACK_SIZE 32 * KB
 
 typedef uint32_t VirtualAddress;
 
 typedef struct KernelStack {
-    uint32_t size;
-    VirtualAddress base;
-    VirtualAddress top;
-    VirtualAddress *virtualMemoryAddress;
+  uint32_t size;
+  VirtualAddress base;
+  VirtualAddress top;
+  VirtualAddress *virtualMemoryAddress;
 } __attribute__((packed)) KernelStack;
-
 
 KernelStack *kstack_allocate();
 

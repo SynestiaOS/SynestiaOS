@@ -5,20 +5,20 @@
 #ifndef __KERNEL_RBTREE_H__
 #define __KERNEL_RBTREE_H__
 
-#include <stdint.h>
 #include <list.h>
+#include <stdint.h>
 #include <type.h>
 
 typedef enum NodeColor {
-    RED,
-    BLACK,
+  RED,
+  BLACK,
 } __attribute__((packed)) NodeColor;
 
 typedef struct RBNode {
-    struct RBNode *left;
-    struct RBNode *right;
-    NodeColor color;
-}  __attribute__((packed)) RBNode;
+  struct RBNode *left;
+  struct RBNode *right;
+  NodeColor color;
+} __attribute__((packed)) RBNode;
 
 void *rbtree_create(RBNode *root);
 

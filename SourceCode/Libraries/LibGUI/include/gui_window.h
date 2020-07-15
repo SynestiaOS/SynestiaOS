@@ -12,9 +12,9 @@
 #define DEFAULT_WINDOW_HEIGHT 480
 
 typedef struct GUIWindow {
-    GUIComponent component;
-    char *title;
-    KernelVector *children;
+  GUIComponent component;
+  char *title;
+  KernelVector *children;
 } GUIWindow;
 
 void gui_window_create(GUIWindow *window);

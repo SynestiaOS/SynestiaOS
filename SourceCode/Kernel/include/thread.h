@@ -5,11 +5,11 @@
 #ifndef __KERNEL_THREAD_H__
 #define __KERNEL_THREAD_H__
 
-#include <stdint.h>
-#include <list.h>
-#include <kstack.h>
 #include <kqueue.h>
+#include <kstack.h>
+#include <list.h>
 #include <rbtree.h>
+#include <stdint.h>
 
 typedef uint8_t CpuNum;
 typedef uint8_t CpuMask;
@@ -26,48 +26,48 @@ typedef uint8_t CpuMask;
 #define HIGH_PRIORITY ((NUM_PRIORITIES / 4) * 3)
 
 typedef enum CPU {
-    CPU_0 = 0,
-    CPU_1,
-    CPU_2,
-    CPU_3,
-    CPU_4,
-    CPU_5,
-    CPU_6,
-    CPU_7,
-    CPU_8,
-    CPU_9,
-    CPU_10,
-    CPU_11,
-    CPU_12,
-    CPU_13,
-    CPU_14,
-    CPU_15,
-    INVALID_CPU = 255,
+  CPU_0 = 0,
+  CPU_1,
+  CPU_2,
+  CPU_3,
+  CPU_4,
+  CPU_5,
+  CPU_6,
+  CPU_7,
+  CPU_8,
+  CPU_9,
+  CPU_10,
+  CPU_11,
+  CPU_12,
+  CPU_13,
+  CPU_14,
+  CPU_15,
+  INVALID_CPU = 255,
 } CPU;
 
 typedef enum ThreadStatus {
-    THREAD_INITIAL = 0,
-    THREAD_READY,
-    THREAD_RUNNING,
-    THREAD_BLOCKED,
-    THREAD_BLOCKED_READ_LOCK,
-    THREAD_SLEEPING,
-    THREAD_SUSPENDED,
-    THREAD_DEATH,
+  THREAD_INITIAL = 0,
+  THREAD_READY,
+  THREAD_RUNNING,
+  THREAD_BLOCKED,
+  THREAD_BLOCKED_READ_LOCK,
+  THREAD_SLEEPING,
+  THREAD_SUSPENDED,
+  THREAD_DEATH,
 } ThreadStatus;
 
 typedef struct CpuContextSave {
-    uint32_t r4;
-    uint32_t r5;
-    uint32_t r6;
-    uint32_t r7;
-    uint32_t r8;
-    uint32_t r9;
-    uint32_t sl;
-    uint32_t fp;
-    uint32_t sp;
-    uint32_t pc;
-    uint32_t extra[2];
+  uint32_t r4;
+  uint32_t r5;
+  uint32_t r6;
+  uint32_t r7;
+  uint32_t r8;
+  uint32_t r9;
+  uint32_t sl;
+  uint32_t fp;
+  uint32_t sp;
+  uint32_t pc;
+  uint32_t extra[2];
 } __attribute__((packed)) CpuContextSave;
 
 typedef uint32_t (*ThreadStartRoutine)(void *arg);
@@ -77,39 +77,38 @@ typedef struct VMMAssociatedSpace {
 } __attribute__((packed)) VMMAssociatedSpace;
 
 typedef struct Thread {
-    uint32_t magic;
-    CpuContextSave cpuContextSave;
+  uint32_t magic;
+  CpuContextSave cpuContextSave;
 
-    uint64_t pid;
-    char name[THREAD_NAME_LENGTH];
-    KernelStack *stack;
-    ThreadStartRoutine entry;
-    VMMAssociatedSpace vmmSpace;
+  uint64_t pid;
+  char name[THREAD_NAME_LENGTH];
+  KernelStack *stack;
+  ThreadStartRoutine entry;
+  VMMAssociatedSpace vmmSpace;
 
-    uint32_t flags;
-    uint32_t signals;
+  uint32_t flags;
+  uint32_t signals;
 
-    ThreadStatus threadStatus;
-    ListNode threadList;
-    KQueue threadReadyQueue;
+  ThreadStatus threadStatus;
+  ListNode threadList;
+  KQueue threadReadyQueue;
 
-    RBNode *rbTree;
+  RBNode *rbTree;
 
-    uint32_t runtimeNs;
-    uint32_t runtimVirtualNs;
+  uint32_t runtimeNs;
+  uint32_t runtimVirtualNs;
 
-    uint32_t priority;
-    bool interruptable;
+  uint32_t priority;
+  bool interruptable;
 
-    CpuNum lastCpu;
-    CpuNum currCpu;
-    CpuMask cpuAffinity;
-    void *arg;
+  CpuNum lastCpu;
+  CpuNum currCpu;
+  CpuMask cpuAffinity;
+  void *arg;
 
-    uint32_t returnCode;
+  uint32_t returnCode;
 
 } __attribute__((packed)) Thread;
-
 
 Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uint32_t priority);
 

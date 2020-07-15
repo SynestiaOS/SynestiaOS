@@ -9,21 +9,19 @@
 #include "thread.h"
 
 typedef struct CpuStatus {
-    uint32_t idleTime;
+  uint32_t idleTime;
 } CpuStatus;
 
-
 typedef struct PerCpu {
-    CpuNum cpuNum;
+  CpuNum cpuNum;
 
-    KQueue readyThreadQueue;
-    KQueue waitThreadQueue;
+  KQueue readyThreadQueue;
+  KQueue waitThreadQueue;
 
-    Thread *idleThread;
+  Thread *idleThread;
 
-    CpuStatus status;
+  CpuStatus status;
 } __attribute__((packed)) PerCpu;
-
 
 KernelStatus percpu_create(uint32_t cpuNum);
 

@@ -5,15 +5,15 @@
 #ifndef __KERNEL_VECTOR_H__
 #define __KERNEL_VECTOR_H__
 
-#include <type.h>
 #include "list.h"
+#include <type.h>
 
 #define DEFAULT_VECTOR_SIZE 12
 
 typedef struct KernelVector {
-    uint32_t size;
-    ListNode **node;
-    uint32_t index;
+  uint32_t size;
+  ListNode **node;
+  uint32_t index;
 } __attribute__((packed)) KernelVector;
 
 KernelVector *kvector_allocate();

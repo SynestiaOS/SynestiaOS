@@ -8,11 +8,10 @@
 #include <gui_component.h>
 
 typedef struct GUIButton {
-    GUIComponent component;
-    char *text;
-    uint32_t fontSize;
+  GUIComponent component;
+  char *text;
+  uint32_t fontSize;
 } GUIButton;
-
 
 void gui_button_create(GUIButton *button);
 

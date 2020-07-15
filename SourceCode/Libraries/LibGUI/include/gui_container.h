@@ -12,16 +12,15 @@
 #define DEFAULT_CONTAINER_HEIGHT 300
 
 typedef enum Orientation {
-    VERTICAL,
-    HORIZONTAL,
+  VERTICAL,
+  HORIZONTAL,
 } Orientation;
 
 typedef struct GUIContainer {
-    GUIComponent component;
-    Orientation orientation;
-    KernelVector *children;
+  GUIComponent component;
+  Orientation orientation;
+  KernelVector *children;
 } GUIContainer;
-
 
 void gui_container_create(GUIContainer *container);
 

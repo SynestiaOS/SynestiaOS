@@ -9,12 +9,12 @@
 #include <type.h>
 
 #define offsetOf(type, member) (char *)(&(((type *)0)->member))
-#define getNode(ptr, type, member)((type *)((char *)(ptr) - (char *)(&(((type *)0)->member))))
+#define getNode(ptr, type, member) ((type *)((char *)(ptr) - (char *)(&(((type *)0)->member))))
 
 typedef struct ListNode {
-    struct ListNode *prev;
-    struct ListNode *next;
-}  __attribute__((packed)) ListNode;
+  struct ListNode *prev;
+  struct ListNode *next;
+} __attribute__((packed)) ListNode;
 
 KernelStatus klist_insert(ListNode *list, ListNode *node);
 

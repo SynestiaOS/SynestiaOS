@@ -5,21 +5,20 @@
 #ifndef __KERNEL_KHEAP_H__
 #define __KERNEL_KHEAP_H__
 
+#include <list.h>
 #include <stdint.h>
 #include <type.h>
-#include <list.h>
 
 typedef struct HeapArea {
-    uint32_t size;
-    ListNode list;
-}  __attribute__((packed)) HeapArea;
+  uint32_t size;
+  ListNode list;
+} __attribute__((packed)) HeapArea;
 
 extern uint32_t __HEAP_BEGIN;
 
 typedef void (*heap_alloc_func)(void *ptr, uint32_t size);
 
 typedef void (*heap_free_func)(void *ptr);
-
 
 KernelStatus kheap_init();
 
