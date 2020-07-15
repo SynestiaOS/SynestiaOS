@@ -6,6 +6,7 @@
 #define __KERNEL_CACHE_H__
 
 #define CONFIG_ARM_LPAE 1
+#include <stdint.h>
 
 /**
  * read memory model feature register 0 (MMFR0)
