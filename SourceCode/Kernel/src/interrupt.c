@@ -99,7 +99,7 @@ void register_interrupt_handler(uint32_t interrupt_no, void (*interrupt_handler_
 void interrupt_handler(void) {
   for (uint32_t interrupt_no = 0; interrupt_no < IRQ_NUMS; interrupt_no++) {
     if (irq_handlers[interrupt_no].registered == 1) {
-      printf("[Interrupt] innterrupt '%d' triggered.\n", interrupt_no);
+      printf("[Interrupt]: interrupt '%d' triggered.\n", interrupt_no);
       if (irq_handlers[interrupt_no].interrupt_clear_func) {
         irq_handlers[interrupt_no].interrupt_clear_func();
       }

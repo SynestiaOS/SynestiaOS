@@ -65,6 +65,8 @@ Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uin
     strcpy(thread->name, name);
     thread->arg = arg;
     // todo : other properties, like list
+
+    printf("[Thread]: thread '%s' created.\n", name);
     return thread;
   }
   return nullptr;
