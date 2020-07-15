@@ -159,7 +159,6 @@ Vec3D gfx3d_vector_intersect_plane(Vec3D *plane_p, Vec3D *plane_n, Vec3D *lineSt
     return gfxm_vector_add(*lineStart, lineToIntersect);
 }
 
-
 float dist(Vec3D plane_p, Vec3D plane_n, Vec3D *p) {
     Vec3D n = gfxm_vector_normalise(*p);
     return (plane_n.x * p->x + plane_n.y * p->y + plane_n.z * p->z - gfxm_vector_dot_product(plane_n, plane_p));
@@ -244,7 +243,6 @@ uint32_t gfx3d_get_lum_color(uint32_t color, float lum) {
     return (uint32_t) (r << 24 | g << 16 | b << 8 | a << 0);
 }
 
-
 Vec3D gfx3d_get_specular_color(Vec3D mspec, Vec3D sspec, float lum) {
     Vec3D color = gfxm_vector_mul_vector(mspec, sspec);
     Vec3D result = gfxm_vector_mul(color, fmax(0.0f, lum));
@@ -275,7 +273,6 @@ Vec3D gfx3d_get_ambient_color(Vec3D mamb, Vec3D gamb) {
     Vec3D color = gfxm_vector_mul_vector(mamb, gamb);
     return color;
 }
-
 
 float gfx3d_get_attenuation_factor(float d) {
     return 1.0f / (GL_CONSTANT_ATTENUATION + GL_LINEAR_ATTENUATION * d + GL_QUADRATIC_ATTENUATION * d * d);
