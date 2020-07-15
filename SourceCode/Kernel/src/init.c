@@ -14,6 +14,8 @@
 #include <gui_canvas.h>
 #include <font8bits.h>
 
+extern uint32_t* gpu_flush(int args);
+
 void print_splash() {
     const char *str = "   _____                       _   _       \n"
                       "  / ____|                     | | (_)      \n"
@@ -43,16 +45,16 @@ void draw_task_bar() {
     gfx2d_draw_logo(0, 0, 0xFFFFFF);
 }
 
-GUIWindow window;
-GUIWindow window1;
-GUILabel labelIdle1;
-GUILabel labelIdle2;
-
 uint32_t idle_0_count = 0;
 uint32_t idle_1_count = 0;
 
 uint32_t* demo_desktop(int args) {
     while(1){
+        GUIWindow window;
+        GUIWindow window1;
+        GUILabel labelIdle1;
+        GUILabel labelIdle2;
+
         gui_window_create(&window);
         window.component.size.width = 510;
         window.component.size.height = 500;
@@ -101,14 +103,14 @@ void kernel_main(void) {
 
     init_interrupt();
 
-    schd_init();
-
     gpu_init();
     gfx2d_draw_bitmap(0, 0, 1024, 768, desktop());
     draw_task_bar();
 
+    schd_init();
     Thread* desktopThread = thread_create("desktop", &desktop, 1, 1);
     schd_init_thread(desktopThread,1);
-    
-    demo_desktop(1);
+
+    Thread* gpuFlushThread = thread_create("gpu", &gpu_flush, 1, 1);
+    schd_init_thread(gpuFlushThread,2);
 }

@@ -32,20 +32,13 @@ void gpu_write_pixel_color(uint32_t x, uint32_t y, uint32_t c) {
     *((uint32_t *) ptr) = *(&pixel);
 }
 
-void gpu_flush() {
+uint32_t* gpu_flush(int arg) {
     printf("[GPU]: flush.\n");
     memcpy(lfb, &SCREEN_BUFFER, 1024 * 768 * 4);
 }
 
-TimerHandler timer;
 void gpu_init(void) {
     framebuffer_init();
     printf("[Framebuffer]: Inited 1024x768x32\n");
     framebuffer_clear(0xFFFFFF);
-
-    timer.node.next = nullptr;
-    timer.node.prev = nullptr;
-    timer.timer_interrupt_handler = &gpu_flush;
-
-    register_time_interrupt(&timer);
 }
