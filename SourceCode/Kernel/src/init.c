@@ -66,7 +66,9 @@ uint32_t *window_thread1(int args) {
   while (1) {
     char idle_1_str[10] = {'\0'};
     gui_label_init(&labelIdle1, 0, 0, itoa(idle_0_count, &idle_1_str, 10));
+    disable_interrupt();
     gui_window_draw(&window);
+    enable_interrupt();
     idle_0_count += 2;
   }
 }
@@ -88,7 +90,9 @@ uint32_t *window_thread2(int args) {
   while (1) {
     char idle_2_str[10] = {'\0'};
     gui_label_init(&labelIdle2, 0, 0, itoa(idle_1_count, &idle_2_str, 10));
+    disable_interrupt();
     gui_window_draw(&window1);
+    enable_interrupt();
     idle_1_count++;
   }
 }
