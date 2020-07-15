@@ -52,36 +52,41 @@ uint32_t idle_0_count = 0;
 uint32_t idle_1_count = 0;
 
 uint32_t* demo_desktop(int args) {
-    gui_window_create(&window);
-    window.component.size.width = 510;
-    window.component.size.height = 500;
-    gui_window_init(&window, 0, 32, "Process 1");
+    while(1){
+        gui_window_create(&window);
+        window.component.size.width = 510;
+        window.component.size.height = 500;
+        gui_window_init(&window, 0, 32, "Process 1");
 
-    gui_label_create(&labelIdle1);
-    labelIdle1.component.foreground.r = 0x00;
-    labelIdle1.component.foreground.g = 0x00;
-    labelIdle1.component.foreground.b = 0x00;
-    labelIdle1.component.colorMode = TRANSPARENT;
-    labelIdle1.component.size.width = 100;
-    char idle_1_str[10] = {'\0'};
-    gui_label_init(&labelIdle1, 0, 0, itoa(idle_0_count, &idle_1_str, 10));
-    gui_window_add_children(&window, &(labelIdle1.component));
-    gui_window_draw(&window);
+        gui_label_create(&labelIdle1);
+        labelIdle1.component.foreground.r = 0x00;
+        labelIdle1.component.foreground.g = 0x00;
+        labelIdle1.component.foreground.b = 0x00;
+        labelIdle1.component.colorMode = TRANSPARENT;
+        labelIdle1.component.size.width = 100;
+        char idle_1_str[10] = {'\0'};
+        gui_label_init(&labelIdle1, 0, 0, itoa(idle_0_count, &idle_1_str, 10));
+        gui_window_add_children(&window, &(labelIdle1.component));
+        gui_window_draw(&window);
 
-    gui_window_create(&window1);
-    window1.component.size.width = 510;
-    window1.component.size.height = 500;
-    gui_window_init(&window1, 512, 32, "Process 2");
-    gui_label_create(&labelIdle2);
-    labelIdle2.component.foreground.r = 0x00;
-    labelIdle2.component.foreground.g = 0x00;
-    labelIdle2.component.foreground.b = 0x00;
-    labelIdle2.component.colorMode = TRANSPARENT;
-    labelIdle2.component.size.width = 100;
-    char idle_2_str[10] = {'\0'};
-    gui_label_init(&labelIdle2, 0, 0, itoa(idle_1_count, &idle_2_str, 10));
-    gui_window_add_children(&window1, &(labelIdle2.component));
-    gui_window_draw(&window1);
+        gui_window_create(&window1);
+        window1.component.size.width = 510;
+        window1.component.size.height = 500;
+        gui_window_init(&window1, 512, 32, "Process 2");
+        gui_label_create(&labelIdle2);
+        labelIdle2.component.foreground.r = 0x00;
+        labelIdle2.component.foreground.g = 0x00;
+        labelIdle2.component.foreground.b = 0x00;
+        labelIdle2.component.colorMode = TRANSPARENT;
+        labelIdle2.component.size.width = 100;
+        char idle_2_str[10] = {'\0'};
+        gui_label_init(&labelIdle2, 0, 0, itoa(idle_1_count, &idle_2_str, 10));
+        gui_window_add_children(&window1, &(labelIdle2.component));
+        gui_window_draw(&window1);
+
+        idle_0_count+=2;
+        idle_1_count++;
+    }
 }
 
 void kernel_main(void) {

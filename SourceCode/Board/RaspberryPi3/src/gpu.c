@@ -38,7 +38,6 @@ void gpu_flush() {
 }
 
 TimerHandler timer;
-
 void gpu_init(void) {
     framebuffer_init();
     printf("[Framebuffer]: Inited 1024x768x32\n");
