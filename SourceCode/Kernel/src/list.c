@@ -21,7 +21,7 @@ KernelStatus klist_append(ListNode *list, ListNode *node) {
   tmp->next = node;
 }
 
-ListNode *klist_get_head(ListNode *node){
+ListNode *klist_get_head(ListNode *node) {
   ListNode *first = node;
   while (first->prev != nullptr) {
     first = first->prev;
