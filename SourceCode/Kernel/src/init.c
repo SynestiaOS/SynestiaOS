@@ -48,18 +48,15 @@ void draw_task_bar() {
 uint32_t idle_0_count = 0;
 uint32_t idle_1_count = 0;
 
-uint32_t* demo_desktop(int args) {
+uint32_t* window1(int args) {
     while(1){
         GUIWindow window;
-        GUIWindow window1;
-        GUILabel labelIdle1;
-        GUILabel labelIdle2;
-
         gui_window_create(&window);
         window.component.size.width = 510;
         window.component.size.height = 500;
         gui_window_init(&window, 0, 32, "Process 1");
 
+        GUILabel labelIdle1;
         gui_label_create(&labelIdle1);
         labelIdle1.component.foreground.r = 0x00;
         labelIdle1.component.foreground.g = 0x00;
@@ -70,11 +67,18 @@ uint32_t* demo_desktop(int args) {
         gui_label_init(&labelIdle1, 0, 0, itoa(idle_0_count, &idle_1_str, 10));
         gui_window_add_children(&window, &(labelIdle1.component));
         gui_window_draw(&window);
+    }
+}
 
+uint32_t* window2(int args) {
+    while(1){
+        GUIWindow window1;
         gui_window_create(&window1);
         window1.component.size.width = 510;
         window1.component.size.height = 500;
         gui_window_init(&window1, 512, 32, "Process 2");
+
+        GUILabel labelIdle2;
         gui_label_create(&labelIdle2);
         labelIdle2.component.foreground.r = 0x00;
         labelIdle2.component.foreground.g = 0x00;
@@ -108,9 +112,13 @@ void kernel_main(void) {
     draw_task_bar();
 
     schd_init();
-    Thread* desktopThread = thread_create("desktop", &desktop, 1, 1);
-    schd_init_thread(desktopThread,1);
 
-    Thread* gpuFlushThread = thread_create("gpu", &gpu_flush, 1, 1);
+    Thread* window1Thread = thread_create("window1", &window1, 1, 1);
+    schd_init_thread(window1Thread,0);
+
+    Thread* window2Thread = thread_create("window2", &window2, 1, 1);
+    schd_init_thread(window2Thread,1);
+
+    Thread* gpuFlushThread = thread_create("GPU FLUSHER", &gpu_flush, 1, 1);
     schd_init_thread(gpuFlushThread,2);
 }
