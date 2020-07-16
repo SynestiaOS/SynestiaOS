@@ -20,6 +20,10 @@ typedef struct GUIAnimation {
 
 typedef struct GUIAnimationTranslation {
   GUIAnimation animation;
+  uint32_t beginX;
+  uint32_t beginY;
+  uint32_t currentX;
+  uint32_t currentY;
   uint32_t posX;
   uint32_t posY;
   uint32_t targetX;

@@ -63,8 +63,8 @@ uint32_t *window_thread1(int args) {
   label.component.size.width = 100;
   gui_window_add_children(&window, &(label.component));
   while (1) {
-    char idle_1_str[10] = {'\0'};
-    gui_label_init(&label, 0, 0, itoa(count, &idle_1_str, 10));
+    char str[10] = {'\0'};
+    gui_label_init(&label, 0, 0, itoa(count, &str, 10));
     disable_interrupt();
     gui_window_draw(&window);
     enable_interrupt();
@@ -74,11 +74,11 @@ uint32_t *window_thread1(int args) {
 
 uint32_t *window_thread2(int args) {
   uint32_t count = 0;
-  GUIWindow window1;
-  gui_window_create(&window1);
-  window1.component.size.width = 510;
-  window1.component.size.height = 500;
-  gui_window_init(&window1, 512, 32, "window2");
+  GUIWindow window;
+  gui_window_create(&window);
+  window.component.size.width = 510;
+  window.component.size.height = 500;
+  gui_window_init(&window, 512, 32, "window2");
   GUILabel label;
   gui_label_create(&label);
   label.component.foreground.r = 0x00;
@@ -86,37 +86,36 @@ uint32_t *window_thread2(int args) {
   label.component.foreground.b = 0x00;
   label.component.colorMode = TRANSPARENT;
   label.component.size.width = 100;
-  gui_window_add_children(&window1, &(label.component));
+  gui_window_add_children(&window, &(label.component));
   while (1) {
-    char idle_2_str[10] = {'\0'};
-    gui_label_init(&label, 0, 0, itoa(count, &idle_2_str, 10));
+    char str[10] = {'\0'};
+    gui_label_init(&label, 0, 0, itoa(count, &str, 10));
     disable_interrupt();
-    gui_window_draw(&window1);
+    gui_window_draw(&window);
     enable_interrupt();
     count++;
   }
 }
 
 uint32_t *window_thread3(int args) {
-  GUIWindow window3;
-  gui_window_create(&window3);
-  window3.component.size.width = 1020;
-  window3.component.size.height = 150;
-  gui_window_init(&window3, 2, 560, "window3");
+  GUIWindow window;
+  gui_window_create(&window);
+  window.component.size.width = 1020;
+  window.component.size.height = 150;
+  gui_window_init(&window, 2, 560, "window3");
   GUIButton button;
   gui_button_create(&button);
   gui_button_init(&button,0,0,"TEST");
-  gui_window_add_children(&window3, &(button.component));
+  gui_window_add_children(&window, &(button.component));
 
     GUIAnimationTranslation translation;
-    gui_animation_translation_create(&translation,&(button.component),3,100,0);
+    gui_animation_translation_create(&translation,&(button.component),10,10,0);
   
   while (1) {
-
-    gui_button_init(&button,0,0,"TEST");
+    gui_button_init(&button,translation.currentX,translation.currentY,"TEST");
     gui_animation_update(&translation);
     disable_interrupt();
-    gui_window_draw(&window3);
+    gui_window_draw(&window);
     enable_interrupt();
   }
 }

@@ -11,8 +11,11 @@ void gui_animation_translation_create(GUIAnimationTranslation *animation, GUICom
   animation->animation.animationType = ANIMATION_TRANSLATION;
   animation->animation.time = time;
 
-  animation->posX = component->position.x;
-  animation->posY = component->position.y;
+  animation->beginX = component->position.x;
+  animation->beginY = component->position.y;
+
+  animation->currentX = 0;
+  animation->currentY = 0;
 
   animation->targetX = component->position.x + targetX;
   animation->targetY = component->position.y + targetY;
@@ -27,11 +30,15 @@ void gui_animation_update(GUIAnimation *animation) {
     GUIAnimationTranslation *translation = getNode(animation, GUIAnimationTranslation, animation);
     animation->component->position.x += translation->speedX;
     animation->component->position.y += translation->speedX;
+    translation->currentX  += translation->speedX;
+    translation->currentY  += translation->speedY;
     if (animation->component->position.x >= translation->targetX) {
       animation->component->position.x -= translation->posX;
+       translation->currentX = 0;
     }
     if (animation->component->position.y >= translation->targetY) {
       animation->component->position.y -= translation->posY;
+       translation->currentY = 0;
     }
   } break;
 
