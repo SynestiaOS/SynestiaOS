@@ -30,15 +30,15 @@ void gui_animation_update(GUIAnimation *animation) {
     GUIAnimationTranslation *translation = getNode(animation, GUIAnimationTranslation, animation);
     animation->component->position.x += translation->speedX;
     animation->component->position.y += translation->speedX;
-    translation->currentX  += translation->speedX;
-    translation->currentY  += translation->speedY;
+    translation->currentX += translation->speedX;
+    translation->currentY += translation->speedY;
     if (animation->component->position.x >= translation->targetX) {
       animation->component->position.x -= translation->posX;
-       translation->currentX = 0;
+      translation->currentX = 0;
     }
     if (animation->component->position.y >= translation->targetY) {
       animation->component->position.y -= translation->posY;
-       translation->currentY = 0;
+      translation->currentY = 0;
     }
   } break;
 

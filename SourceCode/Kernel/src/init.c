@@ -1,13 +1,13 @@
 #include <font8bits.h>
 #include <gfx2d.h>
 #include <gpu.h>
+#include <gui_animation.h>
 #include <gui_button.h>
 #include <gui_canvas.h>
 #include <gui_container.h>
 #include <gui_label.h>
 #include <gui_panel.h>
 #include <gui_window.h>
-#include <gui_animation.h>
 #include <interrupt.h>
 #include <kheap.h>
 #include <sched.h>
@@ -105,14 +105,14 @@ uint32_t *window_thread3(int args) {
   gui_window_init(&window, 2, 560, "window3");
   GUIButton button;
   gui_button_create(&button);
-  gui_button_init(&button,0,0,"TEST");
+  gui_button_init(&button, 0, 0, "TEST");
   gui_window_add_children(&window, &(button.component));
 
-    GUIAnimationTranslation translation;
-    gui_animation_translation_create(&translation,&(button.component),10,10,0);
-  
+  GUIAnimationTranslation translation;
+  gui_animation_translation_create(&translation, &(button.component), 10, 10, 0);
+
   while (1) {
-    gui_button_init(&button,translation.currentX,translation.currentY,"TEST");
+    gui_button_init(&button, translation.currentX, translation.currentY, "TEST");
     gui_animation_update(&translation);
     disable_interrupt();
     gui_window_draw(&window);
