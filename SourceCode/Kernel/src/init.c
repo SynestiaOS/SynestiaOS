@@ -7,6 +7,7 @@
 #include <gui_label.h>
 #include <gui_panel.h>
 #include <gui_window.h>
+#include <gui_animation.h>
 #include <interrupt.h>
 #include <kheap.h>
 #include <sched.h>
@@ -46,54 +47,77 @@ void draw_task_bar() {
   gfx2d_draw_logo(0, 0, 0xFFFFFF);
 }
 
-uint32_t idle_0_count = 0;
-uint32_t idle_1_count = 0;
-
 uint32_t *window_thread1(int args) {
+  uint32_t count = 0;
   GUIWindow window;
   gui_window_create(&window);
   window.component.size.width = 510;
   window.component.size.height = 500;
   gui_window_init(&window, 0, 32, "window1");
-  GUILabel labelIdle1;
-  gui_label_create(&labelIdle1);
-  labelIdle1.component.foreground.r = 0x00;
-  labelIdle1.component.foreground.g = 0x00;
-  labelIdle1.component.foreground.b = 0x00;
-  labelIdle1.component.colorMode = TRANSPARENT;
-  labelIdle1.component.size.width = 100;
-  gui_window_add_children(&window, &(labelIdle1.component));
+  GUILabel label;
+  gui_label_create(&label);
+  label.component.foreground.r = 0x00;
+  label.component.foreground.g = 0x00;
+  label.component.foreground.b = 0x00;
+  label.component.colorMode = TRANSPARENT;
+  label.component.size.width = 100;
+  gui_window_add_children(&window, &(label.component));
   while (1) {
     char idle_1_str[10] = {'\0'};
-    gui_label_init(&labelIdle1, 0, 0, itoa(idle_0_count, &idle_1_str, 10));
+    gui_label_init(&label, 0, 0, itoa(count, &idle_1_str, 10));
     disable_interrupt();
     gui_window_draw(&window);
     enable_interrupt();
-    idle_0_count += 2;
+    count += 2;
   }
 }
 
 uint32_t *window_thread2(int args) {
+  uint32_t count = 0;
   GUIWindow window1;
   gui_window_create(&window1);
   window1.component.size.width = 510;
   window1.component.size.height = 500;
   gui_window_init(&window1, 512, 32, "window2");
-  GUILabel labelIdle2;
-  gui_label_create(&labelIdle2);
-  labelIdle2.component.foreground.r = 0x00;
-  labelIdle2.component.foreground.g = 0x00;
-  labelIdle2.component.foreground.b = 0x00;
-  labelIdle2.component.colorMode = TRANSPARENT;
-  labelIdle2.component.size.width = 100;
-  gui_window_add_children(&window1, &(labelIdle2.component));
+  GUILabel label;
+  gui_label_create(&label);
+  label.component.foreground.r = 0x00;
+  label.component.foreground.g = 0x00;
+  label.component.foreground.b = 0x00;
+  label.component.colorMode = TRANSPARENT;
+  label.component.size.width = 100;
+  gui_window_add_children(&window1, &(label.component));
   while (1) {
     char idle_2_str[10] = {'\0'};
-    gui_label_init(&labelIdle2, 0, 0, itoa(idle_1_count, &idle_2_str, 10));
+    gui_label_init(&label, 0, 0, itoa(count, &idle_2_str, 10));
     disable_interrupt();
     gui_window_draw(&window1);
     enable_interrupt();
-    idle_1_count++;
+    count++;
+  }
+}
+
+uint32_t *window_thread3(int args) {
+  GUIWindow window3;
+  gui_window_create(&window3);
+  window3.component.size.width = 1020;
+  window3.component.size.height = 150;
+  gui_window_init(&window3, 2, 560, "window3");
+  GUIButton button;
+  gui_button_create(&button);
+  gui_button_init(&button,0,0,"TEST");
+  gui_window_add_children(&window3, &(button.component));
+
+    GUIAnimationTranslation translation;
+    gui_animation_translation_create(&translation,&(button.component),3,100,0);
+  
+  while (1) {
+
+    gui_button_init(&button,0,0,"TEST");
+    gui_animation_update(&translation);
+    disable_interrupt();
+    gui_window_draw(&window3);
+    enable_interrupt();
   }
 }
 
@@ -126,6 +150,9 @@ void kernel_main(void) {
 
   Thread *window2Thread = thread_create("window2", &window_thread2, 1, 1);
   schd_init_thread(window2Thread, 1);
+
+  Thread *window3Thread = thread_create("window3", &window_thread3, 1, 1);
+  schd_init_thread(window3Thread, 2);
 
   schd_schedule();
 }

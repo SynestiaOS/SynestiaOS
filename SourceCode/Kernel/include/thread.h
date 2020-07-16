@@ -73,11 +73,11 @@ typedef struct CpuContextSave {
 typedef uint32_t (*ThreadStartRoutine)(void *arg);
 
 typedef struct VMMAssociatedSpace {
-    uint32_t pageTableAddr;
-    uint32_t codeSectionAddr;
-    uint32_t rodataSectionAddr;
-    uint32_t dataSectionAddr;
-    uint32_t bssSectionAddr;
+  uint32_t pageTableAddr;
+  uint32_t codeSectionAddr;
+  uint32_t rodataSectionAddr;
+  uint32_t dataSectionAddr;
+  uint32_t bssSectionAddr;
 } __attribute__((packed)) VMMAssociatedSpace;
 
 typedef struct Thread {
