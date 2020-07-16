@@ -111,7 +111,6 @@ typedef struct Thread {
   void *arg;
 
   uint32_t returnCode;
-
 } __attribute__((packed)) Thread;
 
 Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uint32_t priority);
