@@ -54,7 +54,7 @@ uint32_t *window_thread1(int args) {
   gui_window_create(&window);
   window.component.size.width = 510;
   window.component.size.height = 500;
-  gui_window_init(&window, 0, 32, "Process 1");
+  gui_window_init(&window, 0, 32, "window1");
   GUILabel labelIdle1;
   gui_label_create(&labelIdle1);
   labelIdle1.component.foreground.r = 0x00;
@@ -78,7 +78,7 @@ uint32_t *window_thread2(int args) {
   gui_window_create(&window1);
   window1.component.size.width = 510;
   window1.component.size.height = 500;
-  gui_window_init(&window1, 512, 32, "Process 2");
+  gui_window_init(&window1, 512, 32, "window2");
   GUILabel labelIdle2;
   gui_label_create(&labelIdle2);
   labelIdle2.component.foreground.r = 0x00;
