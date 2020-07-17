@@ -29,8 +29,6 @@ void print_splash() {
   print(str);
 }
 
-uint32_t hour, minutes, second = 0;
-
 void draw_task_bar() {
   uint32_t *barBuffer = (uint32_t *)kheap_alloc(1024 * 32 * 4);
 
