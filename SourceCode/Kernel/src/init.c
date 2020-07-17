@@ -53,7 +53,7 @@ uint32_t *window_thread1(int args) {
   gui_window_create(&window);
   window.component.size.width = 510;
   window.component.size.height = 500;
-  gui_window_init(&window, 0, 32, "window1");
+  gui_window_init(&window, 0, 33, "window1");
   GUILabel label;
   gui_label_create(&label);
   label.component.foreground.r = 0x00;
@@ -78,7 +78,7 @@ uint32_t *window_thread2(int args) {
   gui_window_create(&window);
   window.component.size.width = 510;
   window.component.size.height = 500;
-  gui_window_init(&window, 512, 32, "window2");
+  gui_window_init(&window, 512, 33, "window2");
   GUILabel label;
   gui_label_create(&label);
   label.component.foreground.r = 0x00;
@@ -100,9 +100,9 @@ uint32_t *window_thread2(int args) {
 uint32_t *window_thread3(int args) {
   GUIWindow window;
   gui_window_create(&window);
-  window.component.size.width = 1020;
+  window.component.size.width = 1022;
   window.component.size.height = 150;
-  gui_window_init(&window, 2, 560, "window3");
+  gui_window_init(&window, 0, 560, "window3");
   GUIButton button;
   gui_button_create(&button);
   gui_button_init(&button, 0, 0, "TEST");
