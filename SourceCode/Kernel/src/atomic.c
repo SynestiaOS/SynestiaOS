@@ -3,13 +3,10 @@
 //
 #include <atomic.h>
 
-
-void atomic_create(Atomic * atomic){
-    atomic_set(atomic,0);
-}
+void atomic_create(Atomic *atomic) { atomic_set(atomic, 0); }
 
 void atomic_set(Atomic *atomic, uint32_t val) {
-  unsigned long tmp;
+  uint32_t tmp;
   __asm__ __volatile__("@ atomic_set/n"
                        "1:  ldrex    %0, [%1]/n"
                        "    strex    %0, %2, [%1]/n"
@@ -21,5 +18,10 @@ void atomic_set(Atomic *atomic, uint32_t val) {
 }
 
 uint32_t atomic_get(Atomic *atomic) {
-  // todo : LDREX
+  uint32_t result;
+  __asm__ __volatile__("@ atomic_get\n"
+                       "	ldrex	%0, [%1]"
+                       : "=&r"(result)
+                       : "r"(&atomic->counter));
+  return result;
 }

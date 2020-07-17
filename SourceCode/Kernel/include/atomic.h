@@ -10,7 +10,7 @@ typedef struct Atomic {
   uint32_t counter;
 } Atomic;
 
-void atomic_create(Atomic * atomic);
+void atomic_create(Atomic *atomic);
 void atomic_set(Atomic *atomic, uint32_t val);
 uint32_t atomic_get(Atomic *atomic);
 
