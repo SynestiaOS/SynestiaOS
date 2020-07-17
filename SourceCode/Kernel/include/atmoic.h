@@ -5,7 +5,6 @@
 #ifndef __KERNEL_ATMOIC_H__
 #define __KERNEL_ATMOIC_H__
 #include <stdint.h>
-
 typedef uint32_t Atmoic;
 
 void atmoic_set(Atmoic *atmoic,uint32_t val);

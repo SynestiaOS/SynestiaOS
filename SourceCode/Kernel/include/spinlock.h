@@ -4,7 +4,6 @@
 
 #ifndef __KERNEL_SPINLOCK_H__
 #define __KERNEL_SPINLOCK_H__
-#include <stdbool.h>
 #include <atmoic.h>
 
 typedef struct SpinLock{

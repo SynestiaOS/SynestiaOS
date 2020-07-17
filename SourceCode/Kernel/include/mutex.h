@@ -6,7 +6,6 @@
 #define __KERNEL_MUTEX_H__
 #include <stdint.h>
 #include <atmoic.h>
-#include <stdbool.h>
 
 Atmoic STATE_FREE = 0u;
 Atmoic STATE_CONTESTED = 1u;
