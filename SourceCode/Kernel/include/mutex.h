@@ -7,8 +7,8 @@
 #include <atomic.h>
 #include <stdint.h>
 
-Atomic STATE_FREE = 0u;
-Atomic STATE_CONTESTED = 1u;
+Atomic STATE_FREE = {0u};
+Atomic STATE_CONTESTED = {1u};
 
 typedef struct Mutex {
   Atomic val;
