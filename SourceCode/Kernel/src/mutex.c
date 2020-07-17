@@ -4,7 +4,9 @@
 
 #include <mutex.h>
 
-void mutex_create(Mutex *mutex) {}
+void mutex_create(Mutex *mutex) {
+    mutex->val = STATE_FREE;
+}
 
 bool mutex_acquire(Mutex *mutex) {}
 
