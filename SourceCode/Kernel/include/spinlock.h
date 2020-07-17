@@ -4,10 +4,10 @@
 
 #ifndef __KERNEL_SPINLOCK_H__
 #define __KERNEL_SPINLOCK_H__
-#include <atmoic.h>
+#include <atomic.h>
 
 typedef struct SpinLock{
-    Atmoic lock;
+    Atomic lock;
 } SpinLock;
 
 void spinlock_create(SpinLock *spinLock);

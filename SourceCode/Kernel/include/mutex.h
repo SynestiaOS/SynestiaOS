@@ -5,13 +5,13 @@
 #ifndef __KERNEL_MUTEX_H__
 #define __KERNEL_MUTEX_H__
 #include <stdint.h>
-#include <atmoic.h>
+#include <atomic.h>
 
-Atmoic STATE_FREE = 0u;
-Atmoic STATE_CONTESTED = 1u;
+Atomic STATE_FREE = 0u;
+Atomic STATE_CONTESTED = 1u;
 
 typedef struct Mutex{
-    Atmoic val;
+    Atomic val;
 } Mutex;
 
 void mutex_create(Mutex *mutex);
