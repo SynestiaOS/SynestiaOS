@@ -11,6 +11,8 @@
 #include <kstack_test.h>
 #include <kvector_test.h>
 
+#include <atomic_test.h>
+
 void kernel_main_tests() {
   kheap_init();
 
@@ -42,4 +44,8 @@ void kernel_main_tests() {
   TEST_CASE("should_kvector_is_empty", should_kvector_is_empty);
   TEST_CASE("should_kvector_is_full", should_kvector_is_full);
   TEST_CASE("should_kvector_clear", should_kvector_clear);
+
+  TEST_CASE("should_atomic_create", should_atomic_create);
+  TEST_CASE("should_atomic_set", should_atomic_set);
+  TEST_CASE("should_atomic_get", should_atomic_get);
 }

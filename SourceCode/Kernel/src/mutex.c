@@ -4,10 +4,12 @@
 
 #include <mutex.h>
 
-void mutex_create(Mutex *mutex) {
-    mutex->val = STATE_FREE;
+void mutex_create(Mutex *mutex, Atomic *atomic) { mutex->val = atomic; }
+
+bool mutex_acquire(Mutex *mutex) {
+  // todo :
 }
 
-bool mutex_acquire(Mutex *mutex) {}
-
-void mutex_release(Mutex *mutex) {}
+void mutex_release(Mutex *mutex) {
+  // todo :
+}

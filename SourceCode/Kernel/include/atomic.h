@@ -7,7 +7,7 @@
 #include <stdint.h>
 
 typedef struct Atomic {
-  uint32_t counter;
+  volatile uint32_t counter;
 } Atomic;
 
 void atomic_create(Atomic *atomic);
