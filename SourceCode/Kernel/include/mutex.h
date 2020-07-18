@@ -6,14 +6,14 @@
 #define __KERNEL_MUTEX_H__
 #include <atomic.h>
 #include <stdint.h>
-#include <list.h>
+#include <kqueue.h>
 
 #define STATE_FREE 0u
 #define STATE_CONTESTED 1u
 
 typedef struct Mutex {
   Atomic *val;
-  ListNode *waitList;
+  KQueue *waitList;
 } Mutex;
 
 void mutex_create(Mutex *mutex, Atomic *atmoic);
