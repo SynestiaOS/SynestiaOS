@@ -4,7 +4,10 @@
 
 #include <mutex.h>
 
-void mutex_create(Mutex *mutex, Atomic *atomic) { mutex->val = atomic; }
+void mutex_create(Mutex *mutex, Atomic *atomic) { 
+    mutex->val = atomic;
+    mutex->waitList = nullptr;
+}
 
 bool mutex_acquire(Mutex *mutex) {
   // todo :
