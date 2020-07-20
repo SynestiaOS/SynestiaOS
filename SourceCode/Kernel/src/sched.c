@@ -8,6 +8,8 @@
 #include <sched.h>
 #include <stdlib.h>
 
+extern uint64_t ktimer_sys_runtime_tick(uint64_t tickIntreval);
+
 Thread *currentThread = nullptr;
 
 TimerHandler tickHandler;
@@ -15,6 +17,7 @@ Thread *tmp = nullptr;
 Thread *head = nullptr;
 void tick() {
   // switch to next
+  ktimer_sys_runtime_tick(50);
   schd_switch_next();
 }
 
