@@ -67,6 +67,12 @@ Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uin
     thread->pid = 0;
     strcpy(thread->name, name);
     thread->arg = arg;
+
+    thread->threadList.prev = nullptr;
+    thread->threadList.next = nullptr;
+
+    thread->threadReadyQueue.prev = nullptr;
+    thread->threadReadyQueue.next = nullptr;
     // todo : other properties, like list
 
     printf("[Thread]: thread '%s' created.\n", name);
@@ -78,7 +84,7 @@ Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uin
 uint32_t *idle_thread_routine(int arg) {
   while (1) {
     printf("[Thread]: IDLE: %d \n", arg);
-    // asm volatile("wfi");
+    asm volatile("wfi");
   }
 }
 

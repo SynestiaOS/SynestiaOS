@@ -9,7 +9,6 @@
 #include <stdlib.h>
 
 extern uint64_t ktimer_sys_runtime_tick(uint64_t tickIntreval);
-
 #define TIMER_TICK_MS 50
 
 Thread *currentThread = nullptr;
