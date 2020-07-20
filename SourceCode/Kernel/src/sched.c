@@ -16,6 +16,11 @@ Thread *currentThread = nullptr;
 TimerHandler tickHandler;
 Thread *tmp = nullptr;
 Thread *head = nullptr;
+
+uint32_t current_thread_stack = 0;
+uint32_t switch_thread_stack = 0;
+uint32_t switch_to_signal = 0;
+
 void tick() {
   // switch to next
   ktimer_sys_runtime_tick(TIMER_TICK_MS);
@@ -77,12 +82,6 @@ KernelStatus schd_preempt(void) {
   // todo:
   return OK;
 }
-
-extern void cpu_context_switch_to(uint32_t current_stack, uint32_t switch_stack);
-
-uint32_t current_thread_stack = 0;
-uint32_t switch_thread_stack = 0;
-uint32_t switch_to_signal = 0;
 
 KernelStatus schd_switch_to(Thread *thread) {
   // push r0~r3

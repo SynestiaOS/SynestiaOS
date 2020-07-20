@@ -114,6 +114,7 @@ KernelStatus thread_join(Thread *thread, int *retcode, uint32_t deadline) {
 
 KernelStatus init_thread_struct(Thread *thread, const char *name) {
   strcpy(thread->name, name);
+  thread->threadStatus = THREAD_INITIAL;
   // todo : other properties, like list
   printf("[Thread]: thread: '%s' initialed.\n", name);
   return OK;
