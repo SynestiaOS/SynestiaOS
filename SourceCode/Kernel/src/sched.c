@@ -14,17 +14,8 @@ TimerHandler tickHandler;
 Thread *tmp = nullptr;
 Thread *head = nullptr;
 void tick() {
-  // Switch To thread
-  if (tmp != nullptr) {
-    schd_switch_to(tmp);
-    if (tmp->threadList.next != nullptr) {
-      tmp = getNode(tmp->threadList.next, Thread, threadList);
-    } else {
-      tmp = head;
-    }
-  } else {
-    tmp = head;
-  }
+  // switch to next
+  schd_switch_next();
 }
 
 KernelStatus schd_init() {
@@ -116,12 +107,21 @@ KernelStatus schd_switch_to(Thread *thread) {
 }
 
 KernelStatus schd_switch_next() {
-  // todo
+  if (tmp != nullptr) {
+    schd_switch_to(tmp);
+    if (tmp->threadList.next != nullptr) {
+      tmp = getNode(tmp->threadList.next, Thread, threadList);
+    } else {
+      tmp = head;
+    }
+  } else {
+    tmp = head;
+  }
   return OK;
 }
 
 KernelStatus schd_add_to_schduler(Thread *thread) {
-  // todo
+  //   klist_append(&currentThread->threadList, &thread->threadList);
   return OK;
 }
 

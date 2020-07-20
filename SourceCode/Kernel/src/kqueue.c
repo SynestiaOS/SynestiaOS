@@ -6,7 +6,7 @@
 
 KernelStatus kqueue_enqueue(KQueue *queue, KQueue *node) {
   klist_remove_node(node);
-  
+
   KQueue *last = queue;
   if (last == nullptr) {
     queue = node;
