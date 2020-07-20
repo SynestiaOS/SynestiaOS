@@ -90,7 +90,6 @@ uint32_t switch_thread_stack = 0;
 uint32_t switch_to_signal = 0;
 
 KernelStatus schd_switch_to(Thread *thread) {
-
   // push r0~r3
 
   if (thread == nullptr) {
@@ -99,28 +98,19 @@ KernelStatus schd_switch_to(Thread *thread) {
   }
   printf("[Schd]: switch to: %s.\n", thread->name);
 
-  // disable_interrupt();
-
   // save current thread
-
   if (currentThread == nullptr) {
     switch_to_signal = 2;
     current_thread_stack = 0;
     switch_thread_stack = (uint32_t)(&thread->stack->top);
     currentThread = thread;
-    // cpu_context_switch_to(0, thread->stack->top);
     // restore r0~r12
   } else {
     switch_to_signal = 1;
     current_thread_stack = (uint32_t)(&currentThread->stack->top);
     switch_thread_stack = (uint32_t)(&thread->stack->top);
     currentThread = thread;
-    // cpu_context_switch_to(currentThread->stack->top, thread->stack->top);
   }
-
-  // restore new thread
-  // enable_interrupt();
-
   // pop r0~r3
   return OK;
 }
