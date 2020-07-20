@@ -48,4 +48,8 @@ void kernel_main_tests() {
   TEST_CASE("should_atomic_create", should_atomic_create);
   TEST_CASE("should_atomic_set", should_atomic_set);
   TEST_CASE("should_atomic_get", should_atomic_get);
+  TEST_CASE("should_atomic_inc", should_atomic_inc);
+  TEST_CASE("should_atomic_dec", should_atomic_dec);
+  TEST_CASE("should_atomic_sub", should_atomic_sub);
+  TEST_CASE("should_atomic_add", should_atomic_add);
 }
