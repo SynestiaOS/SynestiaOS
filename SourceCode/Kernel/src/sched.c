@@ -130,7 +130,7 @@ KernelStatus schd_switch_next() {
   return OK;
 }
 
-KernelStatus schd_add_to_schduler(Thread *thread){
+KernelStatus schd_add_to_schduler(Thread *thread) {
   // todo
   return OK;
 }
