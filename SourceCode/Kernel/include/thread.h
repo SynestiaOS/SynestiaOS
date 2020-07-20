@@ -97,12 +97,13 @@ typedef struct Thread {
   ListNode threadList;
   KQueue threadReadyQueue;
 
-  RBNode *rbTree;
+  uint32_t priority;
 
+  RBNode *rbTree;
+  uint64_t startTime;
   uint32_t runtimeNs;
   uint32_t runtimVirtualNs;
 
-  uint32_t priority;
   bool interruptable;
 
   CpuNum lastCpu;
