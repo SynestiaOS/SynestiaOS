@@ -9,6 +9,7 @@
 #include <stdlib.h>
 
 extern uint64_t ktimer_sys_runtime_tick(uint64_t tickIntreval);
+#define TIMER_TICK_MS 50
 
 Thread *currentThread = nullptr;
 
@@ -17,7 +18,7 @@ Thread *tmp = nullptr;
 Thread *head = nullptr;
 void tick() {
   // switch to next
-  ktimer_sys_runtime_tick(50);
+  ktimer_sys_runtime_tick(TIMER_TICK_MS);
   schd_switch_next();
 }
 

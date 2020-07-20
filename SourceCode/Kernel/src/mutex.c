@@ -12,17 +12,17 @@ extern KernelStatus schd_add_to_schduler(Thread *thread);
 
 void mutex_create(Mutex *mutex, Atomic *atomic) {
   mutex->val = atomic;
-  mutex->waitList = nullptr;
+  mutex->waitQueue = nullptr;
   atomic_create(atomic);
 }
 
 bool mutex_acquire(Mutex *mutex) {
   if (atomic_get(mutex->val) == 0) {
     atomic_set(mutex->val, 1);
-    return 1;
+    return true;
   } else {
     // can not get the lock, just add to lock wait list
-    KernelStatus enQueueStatus = kqueue_enqueue(mutex->waitList, &currentThread->threadReadyQueue);
+    KernelStatus enQueueStatus = kqueue_enqueue(mutex->waitQueue, &currentThread->threadReadyQueue);
     if (enQueueStatus != OK) {
       printf("[Mutex]: thread add to wait list failed. \n");
     }
@@ -37,7 +37,7 @@ bool mutex_acquire(Mutex *mutex) {
 
 void mutex_release(Mutex *mutex) {
   atomic_set(mutex->val, 0);
-  KQueue *queueNode = kqueue_dequeue(mutex->waitList);
+  KQueue *queueNode = kqueue_dequeue(mutex->waitQueue);
   Thread *releasedThread = getNode(queueNode, Thread, threadReadyQueue);
   KernelStatus addToSchduler = schd_add_to_schduler(releasedThread);
   if (addToSchduler != OK) {

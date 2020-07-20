@@ -13,10 +13,13 @@
 
 typedef struct Mutex {
   Atomic *val;
-  KQueue *waitList;
+  KQueue *waitQueue;
 } Mutex;
 
 void mutex_create(Mutex *mutex, Atomic *atmoic);
+
 bool mutex_acquire(Mutex *mutex);
+
 void mutex_release(Mutex *mutex);
+
 #endif // __KERNEL_MUTEX_H__
