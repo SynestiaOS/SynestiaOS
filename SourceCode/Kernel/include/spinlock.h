@@ -7,12 +7,10 @@
 #include <atomic.h>
 
 typedef struct SpinLock {
-  Atomic lock;
+  Atomic *lock;
 } SpinLock;
 
-void spinlock_create(SpinLock *spinLock);
+void spinlock_create(SpinLock *spinLock, Atomic *atomic);
 void spinlock_acquire(SpinLock *spinLock);
 void spinlock_release(SpinLock *spinLock);
-bool spinlock_try_acquire(SpinLock *spinLock);
-bool spinlock_try_held(SpinLock *spinLock);
 #endif // __KERNEL_SPINLOCK_H__

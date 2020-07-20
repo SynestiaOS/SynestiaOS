@@ -5,8 +5,8 @@
 #ifndef __KERNEL_MUTEX_H__
 #define __KERNEL_MUTEX_H__
 #include <atomic.h>
-#include <stdint.h>
 #include <kqueue.h>
+#include <stdint.h>
 
 #define STATE_FREE 0u
 #define STATE_CONTESTED 1u
