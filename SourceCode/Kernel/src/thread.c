@@ -7,6 +7,8 @@
 #include <stdlib.h>
 #include <thread.h>
 
+extern uint64_t ktimer_sys_runtime();
+
 void thread_insert_to_rb_tree(RBNode *root, RBNode *node) {
   uint32_t parentValue = getNode(root, Thread, rbTree)->runtimVirtualNs;
   uint32_t nodeValue = getNode(node, Thread, rbTree)->runtimVirtualNs;
@@ -61,6 +63,7 @@ Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uin
     thread->entry = (ThreadStartRoutine)entry;
     thread->runtimeNs = 0;
     thread->runtimVirtualNs = 0;
+    thread->startTime = ktimer_sys_runtime();
     thread->pid = 0;
     strcpy(thread->name, name);
     thread->arg = arg;
