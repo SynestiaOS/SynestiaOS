@@ -125,6 +125,16 @@ KernelStatus schd_switch_to(Thread *thread) {
   return OK;
 }
 
+KernelStatus schd_switch_next() {
+  // todo
+  return OK;
+}
+
+KernelStatus schd_add_to_schduler(Thread *thread){
+  // todo
+  return OK;
+}
+
 KernelStatus schd_reschedule(void) {
   // todo:
   return OK;
