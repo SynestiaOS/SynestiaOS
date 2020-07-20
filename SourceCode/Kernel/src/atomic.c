@@ -35,3 +35,7 @@ uint32_t atomic_get(Atomic *atomic) {
                        : "r"(&atomic->counter));
   return result;
 }
+
+uint32_t atomic_inc(Atomic *atomic) {}
+
+uint32_t atomic_dec(Atomic *atomic) {}

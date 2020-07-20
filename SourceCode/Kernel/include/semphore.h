@@ -13,10 +13,10 @@ typedef struct Semphore {
   KQueue *waitQueue;
 } Semphore;
 
-void semphore_create(Semphore *semphore, Atomic *atomic);
+void semphore_create(Semphore *semphore, Atomic *atomic, uint32_t count);
 
 uint32_t semphore_post(Semphore *semphore);
 
-void semphore_wait(Semphore *semphore);
+KernelStatus semphore_wait(Semphore *semphore);
 
 #endif // __KERNEL_SEMPHORE_H__

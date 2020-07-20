@@ -11,7 +11,13 @@ typedef struct Atomic {
 } Atomic;
 
 void atomic_create(Atomic *atomic);
+
 void atomic_set(Atomic *atomic, uint32_t val);
+
 uint32_t atomic_get(Atomic *atomic);
+
+uint32_t atomic_inc(Atomic *atomic);
+
+uint32_t atomic_dec(Atomic *atomic);
 
 #endif // __KERNEL_ATOMIC_H__
