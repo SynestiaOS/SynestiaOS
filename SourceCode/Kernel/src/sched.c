@@ -128,6 +128,11 @@ KernelStatus schd_add_to_schduler(Thread *thread) {
   return OK;
 }
 
+KernelStatus schd_remove_from_schduler(Thread *thread) {
+  // todo:
+  return OK;
+}
+
 KernelStatus schd_reschedule(void) {
   // todo:
   return OK;
