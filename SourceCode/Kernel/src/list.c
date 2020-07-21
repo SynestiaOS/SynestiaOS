@@ -31,7 +31,6 @@ ListNode *klist_get_head(ListNode *node) {
 }
 
 ListNode *klist_remove_node(ListNode *node) {
-
   if (node->next == nullptr && node->prev == nullptr) {
     return node;
   }

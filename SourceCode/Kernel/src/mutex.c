@@ -28,6 +28,7 @@ bool mutex_acquire(Mutex *mutex) {
       printf("[Mutex]: thread add to wait list failed. \n");
       return false;
     }
+
     // reomve from schd list
     KernelStatus removeStatus = schd_remove_from_schduler(currentThread);
     if (removeStatus != OK) {
