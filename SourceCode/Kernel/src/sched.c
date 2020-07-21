@@ -129,7 +129,7 @@ KernelStatus schd_add_to_schduler(Thread *thread) {
 }
 
 KernelStatus schd_remove_from_schduler(Thread *thread) {
-  // todo:
+  klist_remove_node(&thread->threadList);
   return OK;
 }
 
