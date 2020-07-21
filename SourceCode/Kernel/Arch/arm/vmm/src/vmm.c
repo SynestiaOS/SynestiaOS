@@ -44,7 +44,7 @@ void map_kernel_l2pt(uint64_t l2ptPhysicalAddress, uint64_t ptPhysicalAddress) {
     kernelVMML2PT->pte[504 + i].table = 0;
     kernelVMML2PT->pte[504 + i].af = 1;
     uint64_t physicalPageNumber =
-        vmm_alloc_huge_page_at(USAGE_PERIPHERAL, (0x3F000000 | (i * 2 * MB)) >> VA_OFFSET, 2 * MB);
+        page_alloc_huge_at(USAGE_PERIPHERAL, (0x3F000000 | (i * 2 * MB)) >> VA_OFFSET, 2 * MB);
     kernelVMML2PT->pte[504 + i].base =
         ((KERNEL_PHYSICAL_START + physicalPageNumber * PAGE_SIZE) & 0x000FFFFF000) >> VA_OFFSET;
   }
@@ -55,7 +55,7 @@ void map_kernel_l2pt(uint64_t l2ptPhysicalAddress, uint64_t ptPhysicalAddress) {
     kernelVMML2PT->pte[480 + i].table = 0;
     kernelVMML2PT->pte[480 + i].af = 1;
     uint64_t physicalPageNumber =
-        vmm_alloc_huge_page_at(USAGE_FRAMEBUFFER, (0x3C000000 | (i * 2 * MB)) >> VA_OFFSET, 2 * MB);
+        page_alloc_huge_at(USAGE_FRAMEBUFFER, (0x3C000000 | (i * 2 * MB)) >> VA_OFFSET, 2 * MB);
     kernelVMML2PT->pte[480 + i].base =
         ((KERNEL_PHYSICAL_START + physicalPageNumber * PAGE_SIZE) & 0x000FFFFF000) >> VA_OFFSET;
   }
@@ -65,7 +65,7 @@ void map_kernel_l2pt(uint64_t l2ptPhysicalAddress, uint64_t ptPhysicalAddress) {
   secondL2PT->pte[0].valid = 1;
   secondL2PT->pte[0].table = 0;
   secondL2PT->pte[0].af = 1;
-  uint64_t physicalPageNumber = vmm_alloc_huge_page_at(USAGE_PAGETABLE, 0x40000000 >> VA_OFFSET, 2 * MB);
+  uint64_t physicalPageNumber = page_alloc_huge_at(USAGE_PAGETABLE, 0x40000000 >> VA_OFFSET, 2 * MB);
   secondL2PT->pte[0].base = ((KERNEL_PHYSICAL_START + physicalPageNumber * PAGE_SIZE) & 0x000FFFFF000) >> VA_OFFSET;
 }
 
@@ -74,7 +74,7 @@ void map_kernel_pt(uint64_t ptPhysicalAddress) {
   uint32_t index = 0;
   for (uint32_t i = 0; i < KERNEL_L2PT_NUMBER; i++) {
     for (uint32_t j = 0; j < KERNEL_PTE_NUMBER; j++) {
-      uint64_t physicalPageNumber = vmm_alloc_page(USAGE_KERNEL);
+      uint64_t physicalPageNumber = page_alloc(USAGE_KERNEL);
       kernelVMMPT->pte[index].valid = 1;
       kernelVMMPT->pte[index].table = 1;
       kernelVMMPT->pte[index].af = 1;

@@ -76,14 +76,14 @@ typedef struct PhysicalPage {
   uint64_t reserved : 8;
 } __attribute__((packed)) PhysicalPage;
 
-uint64_t vmm_alloc_page(PhysicalPageUsage usage);
+uint64_t page_alloc(PhysicalPageUsage usage);
 
-uint64_t vmm_free_page(uint64_t page);
+uint64_t page_free(uint64_t page);
 
-uint64_t vmm_alloc_huge_page(PhysicalPageUsage usage);
+uint64_t page_alloc_huge(PhysicalPageUsage usage);
 
-uint64_t vmm_alloc_huge_page_at(PhysicalPageUsage usage, uint64_t page, uint64_t size);
+uint64_t page_alloc_huge_at(PhysicalPageUsage usage, uint64_t page, uint64_t size);
 
-uint64_t vmm_free_huge_page(uint64_t page, uint64_t size);
+uint64_t page_free_huge(uint64_t page, uint64_t size);
 
 #endif // __KERNEL_PAGE_H__
