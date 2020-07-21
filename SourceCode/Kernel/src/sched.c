@@ -41,7 +41,6 @@ KernelStatus schd_init() {
         currentThread = idleThread;
       } else {
         klist_append(&currentThread->threadList, &idleThread->threadList);
-        printf("append\n");
       }
     }
   }
@@ -55,7 +54,10 @@ KernelStatus schd_init() {
 
 KernelStatus schd_init_thread(Thread *thread, uint32_t priority) {
   thread->priority = priority;
-  klist_append(&currentThread->threadList, &thread->threadList);
+  KernelStatus threadAddStatus = schd_add_to_schduler(thread);
+  if(threadAddStatus!=OK){
+      return ERROR;
+  }
   return OK;
 }
 
@@ -124,7 +126,12 @@ KernelStatus schd_switch_next(void) {
 }
 
 KernelStatus schd_add_to_schduler(Thread *thread) {
-  klist_append(&currentThread->threadList, &thread->threadList);
+  KernelStatus threadAddStatus = klist_append(&currentThread->threadList, &thread->threadList);
+  if(threadAddStatus!=OK){
+      printf("[Schd]: thread '%s' add to schduler failed.\n",thread->name);
+      return ERROR;
+  }
+  printf("[Schd]: thread '%s' add to schduler.\n",thread->name);
   return OK;
 }
 
