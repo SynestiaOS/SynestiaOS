@@ -54,13 +54,32 @@ typedef struct Level1PageTable {
   PTE pte[KERNEL_L1PT_NUMBER];
 } L1PT;
 
+typedef enum PhysicalPageType {
+  PAGE_UNKNOWD = 0,
+  PAGE_4K,
+  PAGE_2M,
+} PhysicalPageType;
+
+typedef enum PhysicalPageUsage {
+  USAGE_UNKNOWD = 0,
+  USAGE_KERNEL,
+  USAGE_USER,
+  USAGE_PERIPHERAL,
+} PhysicalPageUsage;
+
 typedef struct PhysicalPage {
   uint64_t ref_count : 8;
-  uint64_t reserved : 24;
+  PhysicalPageType type : 8;
+  PhysicalPageUsage usage : 8;
+  uint64_t reserved : 8;
 } __attribute__((packed)) PhysicalPage;
 
-uint64_t vmm_alloc_page();
+uint64_t vmm_alloc_page(PhysicalPageUsage usage);
 
 uint64_t vmm_free_page(uint64_t page);
+
+uint64_t vmm_alloc_huge_page(PhysicalPageUsage usage);
+
+uint64_t vmm_free_huge_page(uint64_t page);
 
 #endif // __KERNEL_PAGE_H__

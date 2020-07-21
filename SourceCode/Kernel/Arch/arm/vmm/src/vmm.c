@@ -10,6 +10,7 @@
 
 #define KERNEL_PHYSICAL_START 0
 #define PAGE_SIZE 4 * KB
+
 #define VA_OFFSET 12
 
 L1PT *kernelVMML1PT;
@@ -66,7 +67,7 @@ void map_kernel_pt(uint64_t ptPhysicalAddress) {
   uint32_t index = 0;
   for (uint32_t i = 0; i < KERNEL_L2PT_NUMBER; i++) {
     for (uint32_t j = 0; j < KERNEL_PTE_NUMBER; j++) {
-      uint64_t physicalPageNumber = vmm_alloc_page();
+      uint64_t physicalPageNumber = vmm_alloc_page(USAGE_KERNEL);
       kernelVMMPT->pte[index].valid = 1;
       kernelVMMPT->pte[index].table = 1;
       kernelVMMPT->pte[index].af = 1;
