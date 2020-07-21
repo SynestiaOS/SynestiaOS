@@ -43,7 +43,10 @@ void map_kernel_l2pt(uint64_t l2ptPhysicalAddress, uint64_t ptPhysicalAddress) {
     kernelVMML2PT->pte[504 + i].valid = 1;
     kernelVMML2PT->pte[504 + i].table = 0;
     kernelVMML2PT->pte[504 + i].af = 1;
-    kernelVMML2PT->pte[504 + i].base = (0x3F000000 | (i * 2 * MB)) >> VA_OFFSET;
+    uint64_t physicalPageNumber =
+        vmm_alloc_huge_page_at(USAGE_PERIPHERAL, (0x3F000000 | (i * 2 * MB)) >> VA_OFFSET, 2 * MB);
+    kernelVMML2PT->pte[504 + i].base =
+        ((KERNEL_PHYSICAL_START + physicalPageNumber * PAGE_SIZE) & 0x000FFFFF000) >> VA_OFFSET;
   }
 
   // VideoBuffer 8M 0x3C100000
@@ -51,7 +54,10 @@ void map_kernel_l2pt(uint64_t l2ptPhysicalAddress, uint64_t ptPhysicalAddress) {
     kernelVMML2PT->pte[480 + i].valid = 1;
     kernelVMML2PT->pte[480 + i].table = 0;
     kernelVMML2PT->pte[480 + i].af = 1;
-    kernelVMML2PT->pte[480 + i].base = (0x3C000000 | (i * 2 * MB)) >> VA_OFFSET;
+    uint64_t physicalPageNumber =
+        vmm_alloc_huge_page_at(USAGE_FRAMEBUFFER, (0x3C000000 | (i * 2 * MB)) >> VA_OFFSET, 2 * MB);
+    kernelVMML2PT->pte[480 + i].base =
+        ((KERNEL_PHYSICAL_START + physicalPageNumber * PAGE_SIZE) & 0x000FFFFF000) >> VA_OFFSET;
   }
 
   // 2 level page table for second first page table
@@ -59,7 +65,8 @@ void map_kernel_l2pt(uint64_t l2ptPhysicalAddress, uint64_t ptPhysicalAddress) {
   secondL2PT->pte[0].valid = 1;
   secondL2PT->pte[0].table = 0;
   secondL2PT->pte[0].af = 1;
-  secondL2PT->pte[0].base = 0x40000000 >> VA_OFFSET;
+  uint64_t physicalPageNumber = vmm_alloc_huge_page_at(USAGE_PAGETABLE, 0x40000000 >> VA_OFFSET, 2 * MB);
+  secondL2PT->pte[0].base = ((KERNEL_PHYSICAL_START + physicalPageNumber * PAGE_SIZE) & 0x000FFFFF000) >> VA_OFFSET;
 }
 
 void map_kernel_pt(uint64_t ptPhysicalAddress) {

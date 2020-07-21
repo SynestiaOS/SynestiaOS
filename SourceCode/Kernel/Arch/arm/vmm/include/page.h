@@ -65,6 +65,8 @@ typedef enum PhysicalPageUsage {
   USAGE_KERNEL,
   USAGE_USER,
   USAGE_PERIPHERAL,
+  USAGE_FRAMEBUFFER,
+  USAGE_PAGETABLE,
 } PhysicalPageUsage;
 
 typedef struct PhysicalPage {
@@ -80,8 +82,8 @@ uint64_t vmm_free_page(uint64_t page);
 
 uint64_t vmm_alloc_huge_page(PhysicalPageUsage usage);
 
-uint64_t vmm_alloc_huge_page_at(PhysicalPageUsage usage, uint64_t page);
+uint64_t vmm_alloc_huge_page_at(PhysicalPageUsage usage, uint64_t page, uint64_t size);
 
-uint64_t vmm_free_huge_page(uint64_t page);
+uint64_t vmm_free_huge_page(uint64_t page, uint64_t size);
 
 #endif // __KERNEL_PAGE_H__

@@ -37,8 +37,8 @@ uint64_t vmm_free_page(uint64_t pageIndex) {
   }
 }
 
-uint64_t vmm_alloc_huge_page_at(PhysicalPageUsage usage, uint64_t page) {
-  for (uint32_t pageOffset = 0; pageOffset < 512; pageOffset++) {
+uint64_t vmm_alloc_huge_page_at(PhysicalPageUsage usage, uint64_t page, uint64_t size) {
+  for (uint32_t pageOffset = 0; pageOffset < size / (4 * KB); pageOffset++) {
     physicalPages[page + pageOffset].ref_count += 1;
     physicalPages[page + pageOffset].type = PAGE_2M;
     physicalPages[page + pageOffset].usage = usage;
@@ -48,10 +48,12 @@ uint64_t vmm_alloc_huge_page_at(PhysicalPageUsage usage, uint64_t page) {
 
     physicalPagesUsedBitMap[index] |= (uint32_t)0x1 << bitIndex;
   }
+  return page;
 }
 
-uint64_t vmm_free_huge_page(uint64_t page) {
-  for (uint32_t pageOffset = 0; pageOffset < 512; pageOffset++) {
+uint64_t vmm_free_huge_page(uint64_t page, uint64_t size) {
+  for (uint32_t pageOffset = 0; pageOffset < size / (4 * KB); pageOffset++) {
     vmm_free_page(page + pageOffset);
   }
+  return page;
 }
