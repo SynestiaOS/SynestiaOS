@@ -80,6 +80,8 @@ uint64_t vmm_free_page(uint64_t page);
 
 uint64_t vmm_alloc_huge_page(PhysicalPageUsage usage);
 
+uint64_t vmm_alloc_huge_page_at(PhysicalPageUsage usage, uint64_t page);
+
 uint64_t vmm_free_huge_page(uint64_t page);
 
 #endif // __KERNEL_PAGE_H__
