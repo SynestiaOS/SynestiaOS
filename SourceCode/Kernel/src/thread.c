@@ -78,6 +78,7 @@ Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uin
     printf("[Thread]: thread '%s' created.\n", name);
     return thread;
   }
+  printf("[Thread]: thread '%s' created failed.\n", name);
   return nullptr;
 }
 

@@ -35,12 +35,20 @@ KernelStatus schd_init() {
       PerCpu *preCpu = percpu_get(i);
       preCpu->cpuNum = i;
       preCpu->status.idleTime = 0;
+      
       Thread *idleThread = thread_create_idle_thread(i);
+      if(idleThread==nullptr){
+          return ERROR;
+      }
       preCpu->idleThread = idleThread;
+
       if (currentThread == nullptr) {
         currentThread = idleThread;
       } else {
-        klist_append(&currentThread->threadList, &idleThread->threadList);
+        KernelStatus threadAddStatus = schd_add_to_schduler(idleThread);
+        if (threadAddStatus != OK) {
+          return ERROR;
+        }
       }
     }
   }
