@@ -25,14 +25,26 @@ uint64_t page_alloc(PhysicalPageUsage usage) {
   }
 }
 
-uint64_t page_free(uint64_t pageIndex) {
-  if (physicalPages[pageIndex].ref_count > 0) {
-    physicalPages[pageIndex].ref_count -= 1;
-
+void page_mark_as_free(uint64_t pageIndex){
     uint32_t index = pageIndex / BITS_IN_UINT32;
     uint8_t bitIndex = pageIndex % BITS_IN_UINT32;
 
     physicalPagesUsedBitMap[index] ^= (uint32_t)0x1 << bitIndex;
+}
+
+void page_mark_as_used(uint64_t pageIndex){
+    uint32_t index = pageIndex / BITS_IN_UINT32;
+    uint8_t bitIndex = pageIndex % BITS_IN_UINT32;
+
+    physicalPagesUsedBitMap[index] |= (uint32_t)0x1 << bitIndex;
+}
+
+uint64_t page_free(uint64_t pageIndex) {
+  if (physicalPages[pageIndex].ref_count > 0) {
+    physicalPages[pageIndex].ref_count -= 1;
+
+    page_mark_as_free(pageIndex);
+    
     return pageIndex;
   }
 }
@@ -43,10 +55,7 @@ uint64_t page_alloc_huge_at(PhysicalPageUsage usage, uint64_t page, uint64_t siz
     physicalPages[page + pageOffset].type = PAGE_2M;
     physicalPages[page + pageOffset].usage = usage;
 
-    uint32_t index = (page + pageOffset) / BITS_IN_UINT32;
-    uint8_t bitIndex = (page + pageOffset) % BITS_IN_UINT32;
-
-    physicalPagesUsedBitMap[index] |= (uint32_t)0x1 << bitIndex;
+    page_mark_as_used(page + pageOffset);
   }
   return page;
 }
