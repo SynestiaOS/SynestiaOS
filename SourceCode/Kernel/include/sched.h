@@ -26,7 +26,7 @@ KernelStatus schd_add_to_schduler(Thread *thread);
 
 KernelStatus schd_remove_from_schduler(Thread *thread);
 
-KernelStatus schd_switch_next();
+KernelStatus schd_switch_next(void);
 
 KernelStatus schd_reschedule(void);
 

@@ -109,7 +109,7 @@ KernelStatus schd_switch_to(Thread *thread) {
   return OK;
 }
 
-KernelStatus schd_switch_next() {
+KernelStatus schd_switch_next(void) {
   if (tmp != nullptr) {
     schd_switch_to(tmp);
     if (tmp->threadList.next != nullptr) {
@@ -124,7 +124,7 @@ KernelStatus schd_switch_next() {
 }
 
 KernelStatus schd_add_to_schduler(Thread *thread) {
-  //   klist_append(&currentThread->threadList, &thread->threadList);
+  klist_append(&currentThread->threadList, &thread->threadList);
   return OK;
 }
 
