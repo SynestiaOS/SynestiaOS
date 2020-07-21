@@ -42,7 +42,7 @@ KernelStatus semphore_wait(Semphore *semphore) {
     // reomve from schd list
     KernelStatus removeStatus = schd_remove_from_schduler(currentThread);
     if (removeStatus != OK) {
-      printf("[Mutex]: thread remove from schd list failed. \n");
+      printf("[Semphore]: thread remove from schd list failed. \n");
       return ERROR;
     }
 
