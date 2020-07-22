@@ -141,7 +141,7 @@ KernelStatus schd_add_to_cfs_schduler(Thread *root, Thread *node) {
     } else {
       root->rbTree.right = &node->rbTree;
       node->rbTree.parent = &root->rbTree;
-      rbtree_rebalance(&root->rbTree,&node->rbTree);
+      // rbtree_rebalance(rbtree_get_root(&root->rbTree), &node->rbTree);
       return OK;
     }
   } else {
@@ -150,7 +150,7 @@ KernelStatus schd_add_to_cfs_schduler(Thread *root, Thread *node) {
     } else {
       root->rbTree.left = &node->rbTree;
       node->rbTree.parent = &root->rbTree;
-      rbtree_rebalance(&root->rbTree,&node->rbTree);
+      // rbtree_rebalance(rbtree_get_root(&root->rbTree), &node->rbTree);
       return OK;
     }
   }
