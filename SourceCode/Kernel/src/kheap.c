@@ -32,17 +32,21 @@ KernelStatus kheap_init() {
   kheap_set_alloc_callback(default_heap_alloc_func);
   kheap_set_free_callback(default_heap_free_func);
 
-  uint32_t heap_address = (uint32_t)&__HEAP_BEGIN;
-  LogInfo("[KHeap] heap at: %d. \n",heap_address);
+  uint32_t heapAddress = (uint32_t)&__HEAP_BEGIN;
+  LogInfo("[KHeap] heap at: %d. \n",heapAddress);
 
-  page_alloc_huge_at(USAGE_KERNEL_HEAP,heap_address>>VA_OFFSET,128*MB-heap_address);
+  uint64_t heapPhysicalPage = page_alloc_huge_at(USAGE_KERNEL_HEAP,(heapAddress | 4*KB)>>VA_OFFSET,64*MB);
+  LogInfo("[KHeap] want alloc heap page: %d. \n",(heapAddress | 4*KB)>>VA_OFFSET);
+  LogInfo("[KHeap] alloc heap page: %d. \n",heapPhysicalPage);
 
-  freeListHead = (HeapArea *)heap_address;
+  // heapAddress = ((KERNEL_PHYSICAL_START + heapPhysicalPage * PAGE_SIZE) & 0x000FFFFF000) >> VA_OFFSET;
+
+  freeListHead = (HeapArea *)heapAddress;
   freeListHead->size = 0;
   freeListHead->list.prev = nullptr;
 
-  HeapArea *freeArea = (HeapArea *)(heap_address + sizeof(HeapArea));
-  freeArea->size = (ALL_PHYSICAL_MEM_SIZE - (uint32_t)(char *)heap_address - 2 * sizeof(HeapArea)); // all memory
+  HeapArea *freeArea = (HeapArea *)(heapAddress + sizeof(HeapArea));
+  freeArea->size = (ALL_PHYSICAL_MEM_SIZE - (uint32_t)(char *)heapAddress - 2 * sizeof(HeapArea)); // all memory
   freeListHead->list.next = &freeArea->list;
   freeArea->list.next = nullptr;
   freeArea->list.prev = &freeListHead->list;

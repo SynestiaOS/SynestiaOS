@@ -12,6 +12,8 @@
 #define KERNEL_PTE_NUMBER 512
 
 #define VA_OFFSET 12
+#define KERNEL_PHYSICAL_START 0
+#define PAGE_SIZE 4 * KB
 
 typedef struct PageTableEntry {
   /* These are used in all kinds of entry. */

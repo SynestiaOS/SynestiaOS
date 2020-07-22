@@ -3,6 +3,7 @@
 //
 #include <page.h>
 #include <type.h>
+#include <log.h>
 
 #define PHYSICAL_PAGE_NUMBERS (1 << 20)
 
@@ -51,18 +52,20 @@ uint64_t page_free(uint64_t pageIndex) {
 
 uint64_t page_alloc_huge_at(PhysicalPageUsage usage, uint64_t page, uint64_t size) {
   for (uint32_t pageOffset = 0; pageOffset < size / (4 * KB); pageOffset++) {
-    physicalPages[page + pageOffset].ref_count += 1;
-    physicalPages[page + pageOffset].type = PAGE_2M;
-    physicalPages[page + pageOffset].usage = usage;
+    uint64_t pageIndex = page + pageOffset;
+    physicalPages[pageIndex].ref_count += 1;
+    physicalPages[pageIndex].type = PAGE_2M;
+    physicalPages[pageIndex].usage = usage;
 
-    page_mark_as_used(page + pageOffset);
+    page_mark_as_used(pageIndex);
   }
   return page;
 }
 
 uint64_t page_free_huge(uint64_t page, uint64_t size) {
   for (uint32_t pageOffset = 0; pageOffset < size / (4 * KB); pageOffset++) {
-    page_free(page + pageOffset);
+    uint64_t pageIndex = page + pageOffset;
+    page_free(pageIndex);
   }
   return page;
 }

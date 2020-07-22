@@ -9,9 +9,6 @@
 #include <type.h>
 #include <vmm.h>
 
-#define KERNEL_PHYSICAL_START 0
-#define PAGE_SIZE 4 * KB
-
 L1PT *kernelVMML1PT;
 L2PT *kernelVMML2PT;
 PT *kernelVMMPT;
