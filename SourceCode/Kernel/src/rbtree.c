@@ -23,7 +23,7 @@ RBNode *rbtree_get_root(RBNode *node) {
 }
 
 void rbtree_rebalance(RBNode *root, RBNode *node) {
-  LogWarnning("[CSF] rebalance.\n");
+  LogWarnning("[RBTree] rebalance.\n");
   RBNode *newNodeParent = node->parent;
   if (newNodeParent != nullptr && newNodeParent->color != NODE_BLACK) {
     RBNode *pnode = node;
@@ -34,8 +34,8 @@ void rbtree_rebalance(RBNode *root, RBNode *node) {
       uint32_t uncle_is_left;
 
       if (pnode->color != NODE_RED) {
-        // todo: error
         LogError("[RBTree]: unexpected node color.\n");
+        return;
       }
 
       if (parent == grandparent->left) {
