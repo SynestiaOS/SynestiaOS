@@ -137,19 +137,37 @@ KernelStatus schd_add_to_cfs_schduler(Thread *root, Thread *node) {
   uint32_t nodeValue = node->runtimVirtualNs;
   if (nodeValue >= parentValue) {
     if (root->rbTree.right != nullptr) {
+
       return schd_add_to_cfs_schduler(root->rbTree.right, node);
+
     } else {
-      root->rbTree.right = &node->rbTree;
-      rbtree_balance(&root->rbTree, &node->rbTree);
-      return OK;
+      // father node os black
+      if (root->rbTree.color == NODE_BLACK) {
+        root->rbTree.right = &node->rbTree;
+        return OK;
+      }else{
+          // uncle node exists and it's red
+
+          // uncle node not exists or it's black, and father node is left node of grand pa
+
+          // uncle node not exists or it's black, and father node is right node of grand pa
+      }
     }
   } else {
     if (root->rbTree.left != nullptr) {
       return schd_add_to_cfs_schduler(root->rbTree.left, node);
     } else {
-      root->rbTree.left = &node->rbTree;
-      rbtree_balance(&root->rbTree, &node->rbTree);
-      return OK;
+      // father node os black
+      if (root->rbTree.color == NODE_BLACK) {
+        root->rbTree.left = &node->rbTree;
+        return OK;
+      }else{
+          // uncle node exists and it's red
+
+          // uncle node not exists or it's black, and father node is left node of grand pa
+
+          // uncle node not exists or it's black, and father node is right node of grand pa
+      }
     }
   }
 }
@@ -163,8 +181,9 @@ KernelStatus schd_add_to_schduler(Thread *thread) {
   }
   LogInfo("[Schd]: thread '%s' add to schduler.\n", thread->name);
 
-  // Add thread to CFS scheduler tree 
-  schd_add_to_cfs_schduler(headThread,thread);
+  // Add thread to CFS scheduler tree
+  headThread->rbTree.color = NODE_BLACK;
+  schd_add_to_cfs_schduler(headThread, thread);
 
   return OK;
 }
