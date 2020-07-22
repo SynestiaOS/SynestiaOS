@@ -24,4 +24,10 @@ void rbtree_rotate_left(RBNode *root, RBNode *node) {}
 
 void rbtree_rotate_right(RBNode *root, RBNode *node) {}
 
-RBNode *rbtree_get_min(RBNode *root) {}
+RBNode *rbtree_get_min(RBNode *root) {
+  RBNode *tmp = root;
+  while(tmp->left!=nullptr){
+    tmp = tmp->left;
+  }
+  return tmp;
+}
