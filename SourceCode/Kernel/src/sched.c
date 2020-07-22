@@ -135,6 +135,9 @@ KernelStatus schd_switch_next(void) {
 
 KernelStatus schd_add_to_schduler(Thread *thread) {
   KernelStatus threadAddStatus = klist_append(&currentThread->threadList, &thread->threadList);
+
+  // todo: add to cfs schduler tree
+
   if (threadAddStatus != OK) {
     printf("[Schd]: thread '%s' add to schduler failed.\n", thread->name);
     return ERROR;
