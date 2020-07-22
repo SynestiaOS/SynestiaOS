@@ -67,8 +67,8 @@ void *kheap_alloc(uint32_t size) {
 
   HeapArea *currentFreeArea = freeListHead;
   while (currentFreeArea != nullptr) {
-    // if the size of the free block can contain the request size and a rest HeapArea, then just use it, and split a new
-    // block
+    // if the size of the free block can contain the request size and a rest HeapArea, 
+    // then just use it, and split a new block
     if (currentFreeArea->size >= allocSize) {
       // 1. split a rest free HeapArea
       uint32_t newFreeHeapAreaAddress = (uint32_t)(void *)currentFreeArea + sizeof(HeapArea) + size;

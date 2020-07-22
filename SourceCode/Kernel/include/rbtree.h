@@ -21,7 +21,7 @@ typedef struct RBNode {
   NodeColor color;
 } __attribute__((packed)) RBNode;
 
-void rbtree_balance(RBNode *root, RBNode *node);
+void rbtree_rebalance(RBNode *root, RBNode *node);
 
 void rbtree_erase(RBNode *root, RBNode *node);
 

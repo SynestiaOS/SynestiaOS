@@ -139,30 +139,19 @@ KernelStatus schd_add_to_cfs_schduler(Thread *root, Thread *node) {
     if (root->rbTree.right != nullptr) {
       return schd_add_to_cfs_schduler(root->rbTree.right, node);
     } else {
-      // father node is black
-      if (root->rbTree.color == NODE_BLACK) {
-        root->rbTree.right = &node->rbTree;
-        node->rbTree.parent = &root->rbTree;
-        return OK;
-      } else {
-      }
+      root->rbTree.right = &node->rbTree;
+      node->rbTree.parent = &root->rbTree;
+      rbtree_rebalance(&root->rbTree,&node->rbTree);
+      return OK;
     }
   } else {
     if (root->rbTree.left != nullptr) {
       return schd_add_to_cfs_schduler(root->rbTree.left, node);
     } else {
-      // father node is black
-      if (root->rbTree.color == NODE_BLACK) {
-        root->rbTree.left = &node->rbTree;
-        node->rbTree.parent = &root->rbTree;
-        return OK;
-      } else {
-        // uncle node exists and it's red
-
-        // uncle node not exists or it's black, and father node is left node of grand pa
-
-        // uncle node not exists or it's black, and father node is right node of grand pa
-      }
+      root->rbTree.left = &node->rbTree;
+      node->rbTree.parent = &root->rbTree;
+      rbtree_rebalance(&root->rbTree,&node->rbTree);
+      return OK;
     }
   }
 }

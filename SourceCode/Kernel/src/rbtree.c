@@ -12,7 +12,9 @@
  * 4. The red node's children must be black, it means there can not have two connected red node from root to a leaf node
  * 5. All paths from any node to each of its leaves contain the same number of black nodes
  **/
-void rbtree_balance(RBNode *root, RBNode *node) { LogWarnning("[CSF] balance.\n"); }
+void rbtree_rebalance(RBNode *root, RBNode *node) { 
+  LogWarnning("[CSF] rebalance.\n"); 
+}
 
 void rbtree_erase(RBNode *root, RBNode *node) {}
 
