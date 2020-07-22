@@ -11,6 +11,8 @@
 #define KERNEL_L2PT_NUMBER 64
 #define KERNEL_PTE_NUMBER 512
 
+#define VA_OFFSET 12
+
 typedef struct PageTableEntry {
   /* These are used in all kinds of entry. */
   uint64_t valid : 1; /* Valid mapping */
@@ -63,6 +65,7 @@ typedef enum PhysicalPageType {
 typedef enum PhysicalPageUsage {
   USAGE_UNKNOWD = 0,
   USAGE_KERNEL,
+  USAGE_KERNEL_HEAP,
   USAGE_USER,
   USAGE_PERIPHERAL,
   USAGE_FRAMEBUFFER,

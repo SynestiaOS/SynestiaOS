@@ -12,8 +12,6 @@
 #define KERNEL_PHYSICAL_START 0
 #define PAGE_SIZE 4 * KB
 
-#define VA_OFFSET 12
-
 L1PT *kernelVMML1PT;
 L2PT *kernelVMML2PT;
 PT *kernelVMMPT;
