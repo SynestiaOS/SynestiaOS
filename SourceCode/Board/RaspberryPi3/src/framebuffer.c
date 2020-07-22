@@ -5,6 +5,7 @@
 #include <framebuffer.h>
 #include <mailbox.h>
 #include <stdlib.h>
+#include <log.h>
 
 uint32_t pitch;
 unsigned char *lfb;
@@ -64,7 +65,7 @@ int framebuffer_init(void) {
     pitch = mailbox[33];
     lfb = (void *)((uint64_t)mailbox[28]);
   } else {
-    printf("[Framebuffer]: Unable to set screen resolution to 1024x768x32\n");
+    LogError("[Framebuffer]: Unable to set screen resolution to 1024x768x32\n");
   }
 }
 

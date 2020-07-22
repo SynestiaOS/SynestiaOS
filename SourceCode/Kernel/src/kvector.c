@@ -4,12 +4,13 @@
 #include <kheap.h>
 #include <kvector.h>
 #include <stdlib.h>
+#include <log.h>
 
 KernelVector *kvector_allocate() {
   // 1. allocate vector memory block from virtual memory (heap), and align.
   KernelVector *vector = (KernelVector *)kheap_alloc(DEFAULT_VECTOR_SIZE * sizeof(ListNode *) + sizeof(KernelVector));
   if (vector == nullptr) {
-    printf("[KVector] kVector allocate failed.\n");
+    LogError("[KVector] kVector allocate failed.\n");
     return nullptr;
   }
   vector->size = DEFAULT_VECTOR_SIZE;

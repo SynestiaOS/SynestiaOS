@@ -5,12 +5,13 @@
 #include <kstack.h>
 #include <stdbool.h>
 #include <stdlib.h>
+#include <log.h>
 
 KernelStack *kstack_allocate() {
   // 1. allocate stack memory block from virtual memory (heap), and align.
   KernelStack *stack = (KernelStack *)kheap_alloc_aligned(DEFAULT_KERNEL_STACK_SIZE + sizeof(KernelStack), 16);
   if (stack == nullptr) {
-    printf("[KStack] kStack allocate failed.\n");
+    LogError("[KStack] kStack allocate failed.\n");
     return nullptr;
   }
   stack->virtualMemoryAddress = (uint32_t *)(stack + sizeof(KernelStack) + DEFAULT_KERNEL_STACK_SIZE);

@@ -1,6 +1,7 @@
 #include <interrupt.h>
 #include <stdlib.h>
 #include <timer.h>
+#include <log.h>
 
 static timer_registers_t *timer_regs = (timer_registers_t *)SYSTEM_TIMER_BASE;
 
@@ -8,7 +9,7 @@ extern void register_interrupt_handler(uint32_t interrupt_no, void (*interrupt_h
                                        void (*interrupt_clear_func)(void));
 
 void system_timer_irq_handler(void) {
-  print("[Timer]: system timer interrupt triggered\n");
+  LogInfo("[Timer]: system timer interrupt triggered\n");
   timer_set(300);
 }
 
@@ -46,7 +47,7 @@ void generic_timer_irq_clear(void) {
 }
 
 void generic_timer_irq_handler(void) {
-  printf("[Timer]: generic timer interrupted\n");
+  LogInfo("[Timer]: generic timer interrupted\n");
   write_cntvtval(read_cntfrq() / 20);
   TimerHandler *timerHandler = timer_get_handler();
   if (timerHandler != nullptr) {

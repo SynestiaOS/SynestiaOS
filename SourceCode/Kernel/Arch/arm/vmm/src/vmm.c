@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include <type.h>
 #include <vmm.h>
+#include <log.h>
 
 #define KERNEL_PHYSICAL_START 0
 #define PAGE_SIZE 4 * KB
@@ -93,11 +94,11 @@ void map_kernel_mm() {
   uint64_t ptPhysicalAddress = (l2ptPhysicalAddress + KERNEL_PTE_NUMBER * 4 * KB);
 
   map_kernel_l1pt(l1ptPhysicalAddress, l2ptPhysicalAddress);
-  printf("[vmm]: level 1 page table done\n");
+  LogInfo("[vmm]: level 1 page table done\n");
   map_kernel_l2pt(l2ptPhysicalAddress, ptPhysicalAddress);
-  printf("[vmm]: level 2 page table done\n");
+  LogInfo("[vmm]: level 2 page table done\n");
   map_kernel_pt(ptPhysicalAddress);
-  printf("[vmm]: page table done\n");
+  LogInfo("[vmm]: page table done\n");
 }
 
 void vmm_init() {
@@ -108,21 +109,21 @@ void vmm_init() {
    * if lpaeSupport = 5, means LPAE is supported
    */
   uint32_t lpaeSupport = (read_mmfr0() & 0xF);
-  printf("[LPAE]: mmfr0: %d\n", lpaeSupport);
+  LogInfo("[LPAE]: mmfr0: %d\n", lpaeSupport);
 
   vmm_enable();
 }
 
 void vmm_enable() {
   write_ttbcr(CONFIG_ARM_LPAE << 31);
-  printf("[vmm]: ttbcr writed\n");
+  LogInfo("[vmm]: ttbcr writed\n");
 
   write_ttbr0((uint32_t)kernelVMML1PT);
-  printf("[vmm]: ttbr0 writed\n");
+  LogInfo("[vmm]: ttbr0 writed\n");
 
   write_dacr(0x55555555);
-  printf("[vmm]: dacr writed\n");
+  LogInfo("[vmm]: dacr writed\n");
 
   mmu_enable();
-  printf("[vmm]: vmm enabled\n");
+  LogInfo("[vmm]: vmm enabled\n");
 }

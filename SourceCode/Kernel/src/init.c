@@ -14,19 +14,19 @@
 #include <stdlib.h>
 #include <synestia_os_hal.h>
 #include <vmm.h>
+#include <log.h>
 
 extern uint32_t *gpu_flush(int args);
 
 void print_splash() {
-  const char *str = "   _____                       _   _       \n"
-                    "  / ____|                     | | (_)      \n"
-                    " | (___  _   _ _ __   ___  ___| |_ _  __ _ \n"
-                    "  \\___ \\| | | | '_ \\ / _ \\/ __| __| |/ _` |\n"
-                    "  ____) | |_| | | | |  __/\\__ \\ |_| | (_| |\n"
-                    " |_____/ \\__, |_| |_|\\___||___/\\__|_|\\__,_|\n"
-                    "          __/ |                            \n"
-                    "         |___/                          \n";
-  print(str);
+  LogWarnning("   _____                       _   _       \n");
+  LogWarnning("  / ____|                     | | (_)      \n");
+  LogWarnning(" | (___  _   _ _ __   ___  ___| |_ _  __ _ \n");
+  LogWarnning("  \\___ \\| | | | '_ \\ / _ \\/ __| __| |/ _` |\n");
+  LogWarnning("  ____) | |_| | | | |  __/\\__ \\ |_| | (_| |\n");
+  LogWarnning(" |_____/ \\__, |_| |_|\\___||___/\\__|_|\\__,_|\n");
+  LogWarnning("          __/ |                            \n");
+  LogWarnning("         |___/                          \n");
 }
 
 void draw_task_bar() {

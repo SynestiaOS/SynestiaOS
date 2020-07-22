@@ -6,6 +6,7 @@
 #include <kstack.h>
 #include <stdlib.h>
 #include <thread.h>
+#include <log.h>
 
 extern uint64_t ktimer_sys_runtime();
 
@@ -75,16 +76,16 @@ Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uin
     thread->threadReadyQueue.next = nullptr;
     // todo : other properties, like list
 
-    printf("[Thread]: thread '%s' created.\n", name);
+    LogInfo("[Thread]: thread '%s' created.\n", name);
     return thread;
   }
-  printf("[Thread]: thread '%s' created failed.\n", name);
+  LogError("[Thread]: thread '%s' created failed.\n", name);
   return nullptr;
 }
 
 uint32_t *idle_thread_routine(int arg) {
   while (1) {
-    printf("[Thread]: IDLE: %d \n", arg);
+    LogInfo("[Thread]: IDLE: %d \n", arg);
     asm volatile("wfi");
   }
 }
@@ -98,7 +99,7 @@ Thread *thread_create_idle_thread(uint32_t cpuNum) {
   char idleNameStr[10] = {'\0'};
   strcpy(idleThread->name, itoa(cpuNum, &idleNameStr, 10));
   // todo : other properties, like list
-  printf("[Thread]: Idle thread for CPU '%d' created.\n", cpuNum);
+  LogInfo("[Thread]: Idle thread for CPU '%d' created.\n", cpuNum);
   return idleThread;
 }
 
@@ -126,7 +127,7 @@ KernelStatus init_thread_struct(Thread *thread, const char *name) {
   strcpy(thread->name, name);
   thread->threadStatus = THREAD_INITIAL;
   // todo : other properties, like list
-  printf("[Thread]: thread: '%s' initialed.\n", name);
+  LogInfo("[Thread]: thread: '%s' initialed.\n", name);
   return OK;
 }
 

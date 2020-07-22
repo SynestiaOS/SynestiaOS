@@ -5,6 +5,7 @@
 #include <semphore.h>
 #include <stdbool.h>
 #include <thread.h>
+#include <log.h>
 
 extern Thread *currentThread;
 extern KernelStatus schd_switch_next();
@@ -23,7 +24,7 @@ uint32_t semphore_post(Semphore *semphore) {
   Thread *releasedThread = getNode(queueNode, Thread, threadReadyQueue);
   KernelStatus addToSchduler = schd_add_to_schduler(releasedThread);
   if (addToSchduler != OK) {
-    printf("[Semphore]: thread add to schduler failed. \n");
+    LogError("[Semphore]: thread add to schduler failed. \n");
   }
   return atomic_get(semphore->count);
 }
@@ -36,20 +37,20 @@ KernelStatus semphore_wait(Semphore *semphore) {
     // can not get the lock, just add to lock wait list
     KernelStatus enQueueStatus = kqueue_enqueue(semphore->waitQueue, &currentThread->threadReadyQueue);
     if (enQueueStatus != OK) {
-      printf("[Semphore]: thread add to wait list failed. \n");
+      LogError("[Semphore]: thread add to wait list failed. \n");
       return ERROR;
     }
     // reomve from schd list
     KernelStatus removeStatus = schd_remove_from_schduler(currentThread);
     if (removeStatus != OK) {
-      printf("[Semphore]: thread remove from schd list failed. \n");
+      LogError("[Semphore]: thread remove from schd list failed. \n");
       return ERROR;
     }
 
     // 2. switch to the next thread in scheduler
     KernelStatus thradSwitchNextStatus = schd_switch_next();
     if (thradSwitchNextStatus != OK) {
-      printf("[Semphore]: thread switch to next failed. \n");
+      LogError("[Semphore]: thread switch to next failed. \n");
       return ERROR;
     }
     return OK;

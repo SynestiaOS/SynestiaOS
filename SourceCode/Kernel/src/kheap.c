@@ -4,6 +4,7 @@
 
 #include <kheap.h>
 #include <stdlib.h>
+#include <log.h>
 
 static heap_alloc_func heapAllocFunc = nullptr;
 static heap_free_func heapFreeFunc = nullptr;
@@ -14,12 +15,12 @@ HeapArea *freeListHead;
 #define ALL_PHYSICAL_MEM_SIZE 0xFFFFFFFF
 
 void default_heap_alloc_func(void *ptr, uint32_t size) {
-  printf("[Heap]: alloc %d bytes at %d.\n", size, (uint32_t)ptr);
+  LogInfo("[Heap]: alloc %d bytes at %d.\n", size, (uint32_t)ptr);
 }
 
 void default_heap_free_func(void *ptr) {
   HeapArea *heap = (HeapArea *)(ptr - sizeof(HeapArea));
-  printf("[Heap]: free %d bytes at %d.\n", heap->size, (uint32_t)ptr);
+  LogInfo("[Heap]: free %d bytes at %d.\n", heap->size, (uint32_t)ptr);
 }
 
 void kheap_set_alloc_callback(heap_alloc_func callback) { heapAllocFunc = callback; }
@@ -50,7 +51,7 @@ void *kheap_alloc(uint32_t size) {
   uint32_t allocSize = size + sizeof(HeapArea);
 
   if (freeListHead == nullptr) {
-    printf("[KHeap]: failed to get freeListHead.\n");
+    LogError("[KHeap]: failed to get freeListHead.\n");
     return nullptr;
   }
 

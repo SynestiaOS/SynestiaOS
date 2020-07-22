@@ -7,6 +7,7 @@
 #include <percpu.h>
 #include <sched.h>
 #include <stdlib.h>
+#include <log.h>
 
 extern uint64_t ktimer_sys_runtime_tick(uint64_t tickIntreval);
 #define TIMER_TICK_MS 50
@@ -52,7 +53,7 @@ KernelStatus schd_init() {
       }
     }
   }
-  printf("[Schd]: Schd inited.\n");
+  LogInfo("[Schd]: Schd inited.\n");
 
   tmp = currentThread;
   head = currentThread;
@@ -74,7 +75,7 @@ KernelStatus schd_schedule(void) {
   tickHandler.node.prev = nullptr;
   tickHandler.timer_interrupt_handler = &tick;
   register_time_interrupt(&tickHandler);
-  printf("[Schd]: Schd started.\n");
+  LogInfo("[Schd]: Schd started.\n");
   return OK;
 }
 
@@ -97,10 +98,10 @@ KernelStatus schd_switch_to(Thread *thread) {
   // push r0~r3
 
   if (thread == nullptr) {
-    printf("[Schd]: cant switch to nullptr thread.\n");
+    LogWarnning("[Schd]: cant switch to nullptr thread.\n");
     return ERROR;
   }
-  printf("[Schd]: switch to: %s.\n", thread->name);
+  LogInfo("[Schd]: switch to: %s.\n", thread->name);
 
   // save current thread
   if (currentThread == nullptr) {
@@ -139,10 +140,10 @@ KernelStatus schd_add_to_schduler(Thread *thread) {
   // todo: add to cfs schduler tree
 
   if (threadAddStatus != OK) {
-    printf("[Schd]: thread '%s' add to schduler failed.\n", thread->name);
+    LogError("[Schd]: thread '%s' add to schduler failed.\n", thread->name);
     return ERROR;
   }
-  printf("[Schd]: thread '%s' add to schduler.\n", thread->name);
+  LogInfo("[Schd]: thread '%s' add to schduler.\n", thread->name);
   return OK;
 }
 

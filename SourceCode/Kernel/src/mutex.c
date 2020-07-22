@@ -5,6 +5,7 @@
 #include <mutex.h>
 #include <stdbool.h>
 #include <thread.h>
+#include <log.h>
 
 extern Thread *currentThread;
 extern KernelStatus schd_switch_next();
@@ -25,21 +26,21 @@ bool mutex_acquire(Mutex *mutex) {
     // can not get the lock, just add to lock wait list
     KernelStatus enQueueStatus = kqueue_enqueue(mutex->waitQueue, &currentThread->threadReadyQueue);
     if (enQueueStatus != OK) {
-      printf("[Mutex]: thread add to wait list failed. \n");
+      LogError("[Mutex]: thread add to wait list failed. \n");
       return false;
     }
 
     // reomve from schd list
     KernelStatus removeStatus = schd_remove_from_schduler(currentThread);
     if (removeStatus != OK) {
-      printf("[Mutex]: thread remove from schd list failed. \n");
+      LogError("[Mutex]: thread remove from schd list failed. \n");
       return false;
     }
 
     // 2. switch to the next thread in scheduler
     KernelStatus thradSwitchNextStatus = schd_switch_next();
     if (thradSwitchNextStatus != OK) {
-      printf("[Mutex]: thread switch to next failed. \n");
+      LogError("[Mutex]: thread switch to next failed. \n");
     }
     return false;
   }
@@ -51,6 +52,6 @@ void mutex_release(Mutex *mutex) {
   Thread *releasedThread = getNode(queueNode, Thread, threadReadyQueue);
   KernelStatus addToSchduler = schd_add_to_schduler(releasedThread);
   if (addToSchduler != OK) {
-    printf("[Mutex]: thread add to schduler failed. \n");
+    LogError("[Mutex]: thread add to schduler failed. \n");
   }
 }
