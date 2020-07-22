@@ -7,8 +7,8 @@
 
 #define PHYSICAL_PAGE_NUMBERS (1 << 20)
 
-PhysicalPage physicalPages[PHYSICAL_PAGE_NUMBERS];
-uint32_t physicalPagesUsedBitMap[PHYSICAL_PAGE_NUMBERS / BITS_IN_UINT32];
+PhysicalPage physicalPages[PHYSICAL_PAGE_NUMBERS] = {'\0'};
+uint32_t physicalPagesUsedBitMap[PHYSICAL_PAGE_NUMBERS / BITS_IN_UINT32]  = {'\0'};
 
 uint64_t page_alloc(PhysicalPageUsage usage) {
   for (uint32_t i = 0; i < PHYSICAL_PAGE_NUMBERS / BITS_IN_UINT32; i++) {
