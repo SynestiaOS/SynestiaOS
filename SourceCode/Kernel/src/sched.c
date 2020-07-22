@@ -144,8 +144,7 @@ KernelStatus schd_add_to_cfs_schduler(Thread *root, Thread *node) {
         root->rbTree.right = &node->rbTree;
         node->rbTree.parent = &root->rbTree;
         return OK;
-      }else{
-         
+      } else {
       }
     }
   } else {
@@ -157,12 +156,12 @@ KernelStatus schd_add_to_cfs_schduler(Thread *root, Thread *node) {
         root->rbTree.left = &node->rbTree;
         node->rbTree.parent = &root->rbTree;
         return OK;
-      }else{
-          // uncle node exists and it's red
+      } else {
+        // uncle node exists and it's red
 
-          // uncle node not exists or it's black, and father node is left node of grand pa
+        // uncle node not exists or it's black, and father node is left node of grand pa
 
-          // uncle node not exists or it's black, and father node is right node of grand pa
+        // uncle node not exists or it's black, and father node is right node of grand pa
       }
     }
   }

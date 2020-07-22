@@ -4,8 +4,8 @@
 
 #include <kheap.h>
 #include <log.h>
-#include <stdlib.h>
 #include <page.h>
+#include <stdlib.h>
 
 static heap_alloc_func heapAllocFunc = nullptr;
 static heap_free_func heapFreeFunc = nullptr;
@@ -33,13 +33,14 @@ KernelStatus kheap_init() {
   kheap_set_free_callback(default_heap_free_func);
 
   uint32_t heapAddress = (uint32_t)&__HEAP_BEGIN;
-  LogInfo("[KHeap] end bss at: %d. \n",heapAddress);
+  LogInfo("[KHeap] end bss at: %d. \n", heapAddress);
 
-  uint32_t heapPhysicalPage = (uint32_t)page_alloc_huge_at(USAGE_KERNEL_HEAP,(heapAddress | 4*KB)>>VA_OFFSET,64*MB);
-  LogInfo("[KHeap] alloc heap page: %d. \n",(uint32_t)heapPhysicalPage);
+  uint32_t heapPhysicalPage =
+      (uint32_t)page_alloc_huge_at(USAGE_KERNEL_HEAP, (heapAddress | 4 * KB) >> VA_OFFSET, 128 * MB - heapAddress);
+  LogInfo("[KHeap] alloc heap page: %d. \n", (uint32_t)heapPhysicalPage);
 
   heapAddress = KERNEL_PHYSICAL_START + heapPhysicalPage * PAGE_SIZE;
-  LogInfo("[KHeap] kheap at: %d. \n",heapAddress);
+  LogInfo("[KHeap] kheap at: %d. \n", heapAddress);
 
   freeListHead = (HeapArea *)heapAddress;
   freeListHead->size = 0;
