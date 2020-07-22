@@ -15,6 +15,7 @@ typedef enum NodeColor {
 } __attribute__((packed)) NodeColor;
 
 typedef struct RBNode {
+  struct RBNode *parent;
   struct RBNode *left;
   struct RBNode *right;
   NodeColor color;

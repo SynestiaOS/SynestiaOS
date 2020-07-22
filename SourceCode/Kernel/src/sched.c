@@ -137,13 +137,12 @@ KernelStatus schd_add_to_cfs_schduler(Thread *root, Thread *node) {
   uint32_t nodeValue = node->runtimVirtualNs;
   if (nodeValue >= parentValue) {
     if (root->rbTree.right != nullptr) {
-
       return schd_add_to_cfs_schduler(root->rbTree.right, node);
-
     } else {
-      // father node os black
+      // father node is black
       if (root->rbTree.color == NODE_BLACK) {
         root->rbTree.right = &node->rbTree;
+        node->rbTree.parent = &root->rbTree;
         return OK;
       }else{
           // uncle node exists and it's red
@@ -157,9 +156,10 @@ KernelStatus schd_add_to_cfs_schduler(Thread *root, Thread *node) {
     if (root->rbTree.left != nullptr) {
       return schd_add_to_cfs_schduler(root->rbTree.left, node);
     } else {
-      // father node os black
+      // father node is black
       if (root->rbTree.color == NODE_BLACK) {
         root->rbTree.left = &node->rbTree;
+        node->rbTree.parent = &root->rbTree;
         return OK;
       }else{
           // uncle node exists and it's red

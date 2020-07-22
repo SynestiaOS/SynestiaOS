@@ -57,6 +57,7 @@ Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uin
     thread->threadReadyQueue.prev = nullptr;
     thread->threadReadyQueue.next = nullptr;
 
+    thread->rbTree.parent = nullptr;
     thread->rbTree.left = nullptr;
     thread->rbTree.right = nullptr;
     thread->rbTree.color = NODE_RED;
