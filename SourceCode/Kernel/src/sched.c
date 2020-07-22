@@ -132,23 +132,24 @@ KernelStatus schd_switch_next(void) {
   return OK;
 }
 
-
-void thread_insert_to_rb_tree(RBNode *root, RBNode *node) {
-  uint32_t parentValue = getNode(root, Thread, rbTree)->runtimVirtualNs;
-  uint32_t nodeValue = getNode(node, Thread, rbTree)->runtimVirtualNs;
+KernelStatus schd_add_to_cfs_schduler(Thread *root, Thread *node) {
+  uint32_t parentValue = root->runtimVirtualNs;
+  uint32_t nodeValue = node->runtimVirtualNs;
   if (nodeValue >= parentValue) {
-    if (root->right != nullptr) {
-      thread_insert_to_rb_tree(root->right, node);
+    if (root->rbTree.right != nullptr) {
+      return schd_add_to_cfs_schduler(root->rbTree.right, node);
     } else {
-      root->right = node;
-      rbtree_balance(root, node);
+      root->rbTree.right = &node->rbTree;
+      rbtree_balance(&root->rbTree, &node->rbTree);
+      return OK;
     }
   } else {
-    if (root->left != nullptr) {
-      thread_insert_to_rb_tree(root->left, node);
+    if (root->rbTree.left != nullptr) {
+      return schd_add_to_cfs_schduler(root->rbTree.left, node);
     } else {
-      root->left = node;
-      rbtree_balance(root, node);
+      root->rbTree.left = &node->rbTree;
+      rbtree_balance(&root->rbTree, &node->rbTree);
+      return OK;
     }
   }
 }
@@ -163,7 +164,7 @@ KernelStatus schd_add_to_schduler(Thread *thread) {
   LogInfo("[Schd]: thread '%s' add to schduler.\n", thread->name);
 
   // Add thread to CFS scheduler tree 
-  thread_insert_to_rb_tree(&headThread->rbTree,&thread->rbTree);
+  schd_add_to_cfs_schduler(headThread,thread);
 
   return OK;
 }
