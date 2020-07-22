@@ -4,6 +4,7 @@
 #include <kheap.h>
 #include <log.h>
 #include <rbtree.h>
+#include <stdint.h>
 
 /**
  * 1. Node is red or black
@@ -13,9 +14,9 @@
  * 5. All paths from any node to each of its leaves contain the same number of black nodes
  **/
 
-RBNode* rbtree_get_root(RBNode *node){
-  RBNode* tmp = node;
-  while(tmp->parent!=nullptr){
+RBNode *rbtree_get_root(RBNode *node) {
+  RBNode *tmp = node;
+  while (tmp->parent != nullptr) {
     tmp = tmp->parent;
   }
   return tmp;
@@ -30,7 +31,7 @@ void rbtree_rebalance(RBNode *root, RBNode *node) {
       RBNode *parent = pnode->parent;
       RBNode *grandparent = pnode->parent->parent;
       RBNode *uncle = nullptr;
-      int uncle_is_left;
+      uint32_t uncle_is_left;
 
       if (pnode->color != NODE_RED) {
         // todo: error
@@ -86,8 +87,6 @@ void rbtree_rebalance(RBNode *root, RBNode *node) {
 }
 
 void rbtree_erase(RBNode *root, RBNode *node) {}
-
-void rbtree_recolor(RBNode *root, RBNode *node) {}
 
 void rbtree_rotate_left(RBNode *root, RBNode *node) {
   RBNode *x = node;

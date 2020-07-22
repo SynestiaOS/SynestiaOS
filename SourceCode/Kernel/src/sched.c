@@ -133,27 +133,52 @@ KernelStatus schd_switch_next(void) {
 }
 
 KernelStatus schd_add_to_cfs_schduler(Thread *root, Thread *node) {
-  uint32_t parentValue = root->runtimVirtualNs;
-  uint32_t nodeValue = node->runtimVirtualNs;
-  if (nodeValue >= parentValue) {
-    if (root->rbTree.right != nullptr) {
-      return schd_add_to_cfs_schduler(root->rbTree.right, node);
-    } else {
-      root->rbTree.right = &node->rbTree;
-      node->rbTree.parent = &root->rbTree;
-      // rbtree_rebalance(rbtree_get_root(&root->rbTree), &node->rbTree);
+  KernelStatus ret = OK;
+  RBNode *nd = nullptr;
+
+  /* Case 1: Simplest case -- tree is empty */
+  if (&root->rbTree == nullptr) {
+    root->rbTree = node->rbTree;
+    node->rbTree.color = NODE_BLACK;
+    return ret;
+  }
+
+  /* Otherwise, insert the node as you would typically in a BST */
+  nd = &root->rbTree;
+  node->rbTree.color = NODE_RED;
+
+  /* Insert a node into the tree as you normally would */
+  while (nd != nullptr) {
+    uint32_t parentValue = root->runtimVirtualNs;
+    uint32_t nodeValue = node->runtimVirtualNs;
+
+    int compare = parentValue - nodeValue;
+
+    if (compare == 0) {
+      LogError("[RBTree]: dup thread virtual time.\n");
       return OK;
     }
-  } else {
-    if (root->rbTree.left != nullptr) {
-      return schd_add_to_cfs_schduler(root->rbTree.left, node);
+
+    if (compare < 0) {
+      if (nd->left == nullptr) {
+        nd->left = &node->rbTree;
+        break;
+      } else {
+        nd = nd->left;
+      }
     } else {
-      root->rbTree.left = &node->rbTree;
-      node->rbTree.parent = &root->rbTree;
-      // rbtree_rebalance(rbtree_get_root(&root->rbTree), &node->rbTree);
-      return OK;
+      if (nd->right == nullptr) {
+        nd->right = &node->rbTree;
+        break;
+      } else {
+        nd = nd->right;
+      }
     }
   }
+
+  node->rbTree.parent = nd;
+
+  rbtree_rebalance(&root->rbTree, &node->rbTree);
 }
 
 KernelStatus schd_add_to_schduler(Thread *thread) {
