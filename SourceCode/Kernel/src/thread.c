@@ -10,26 +10,6 @@
 
 extern uint64_t ktimer_sys_runtime();
 
-void thread_insert_to_rb_tree(RBNode *root, RBNode *node) {
-  uint32_t parentValue = getNode(root, Thread, rbTree)->runtimVirtualNs;
-  uint32_t nodeValue = getNode(node, Thread, rbTree)->runtimVirtualNs;
-  if (nodeValue >= parentValue) {
-    if (root->right != nullptr) {
-      thread_insert_to_rb_tree(root->right, node);
-    } else {
-      root->right = node;
-      rbtree_balance(root, node);
-    }
-  } else {
-    if (root->left != nullptr) {
-      thread_insert_to_rb_tree(root->left, node);
-    } else {
-      root->left = node;
-      rbtree_balance(root, node);
-    }
-  }
-}
-
 Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uint32_t priority) {
   // 1. allocate stack memory from kernel heap for idle task
   KernelStack *kernelStack = kstack_allocate(kernelStack);
@@ -62,9 +42,11 @@ Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uin
     thread->currCpu = INVALID_CPU;
     thread->lastCpu = INVALID_CPU;
     thread->entry = (ThreadStartRoutine)entry;
+
     thread->runtimeNs = 0;
     thread->runtimVirtualNs = 0;
     thread->startTime = ktimer_sys_runtime();
+
     thread->pid = 0;
     strcpy(thread->name, name);
     thread->arg = arg;
@@ -74,6 +56,10 @@ Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uin
 
     thread->threadReadyQueue.prev = nullptr;
     thread->threadReadyQueue.next = nullptr;
+
+    thread->rbTree.left = nullptr;
+    thread->rbTree.right = nullptr;
+    thread->rbTree.color = NODE_RED;
     // todo : other properties, like list
 
     LogInfo("[Thread]: thread '%s' created.\n", name);

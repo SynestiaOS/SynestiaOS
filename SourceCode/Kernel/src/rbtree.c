@@ -5,13 +5,6 @@
 #include <kheap.h>
 #include <rbtree.h>
 
-void *rbtree_create(RBNode *root) {
-  root = kheap_alloc(sizeof(RBNode));
-  root->color = BLACK;
-  root->left = nullptr;
-  root->right = nullptr;
-}
-
 void rbtree_balance(RBNode *root, RBNode *node) {}
 
 void rbtree_erase(RBNode *root, RBNode *node) {}

@@ -13,10 +13,10 @@ extern uint64_t ktimer_sys_runtime_tick(uint64_t tickIntreval);
 #define TIMER_TICK_MS 50
 
 Thread *currentThread = nullptr;
+Thread *headThread = nullptr;
+Thread *tmpThread = nullptr;
 
 TimerHandler tickHandler;
-Thread *tmp = nullptr;
-Thread *head = nullptr;
 
 uint32_t current_thread_stack = 0;
 uint32_t switch_thread_stack = 0;
@@ -54,10 +54,8 @@ KernelStatus schd_init() {
     }
   }
   LogInfo("[Schd]: Schd inited.\n");
-
-  tmp = currentThread;
-  head = currentThread;
-
+  headThread = currentThread;
+  tmpThread = currentThread;
   return OK;
 }
 
@@ -121,29 +119,51 @@ KernelStatus schd_switch_to(Thread *thread) {
 }
 
 KernelStatus schd_switch_next(void) {
-  if (tmp != nullptr) {
-    schd_switch_to(tmp);
-    if (tmp->threadList.next != nullptr) {
-      tmp = getNode(tmp->threadList.next, Thread, threadList);
+  if (tmpThread != nullptr) {
+    schd_switch_to(tmpThread);
+    if (tmpThread->threadList.next != nullptr) {
+      tmpThread = getNode(tmpThread->threadList.next, Thread, threadList);
     } else {
-      tmp = head;
+      tmpThread = headThread;
     }
   } else {
-    tmp = head;
+    tmpThread = headThread;
   }
   return OK;
 }
 
+
+void thread_insert_to_rb_tree(RBNode *root, RBNode *node) {
+  uint32_t parentValue = getNode(root, Thread, rbTree)->runtimVirtualNs;
+  uint32_t nodeValue = getNode(node, Thread, rbTree)->runtimVirtualNs;
+  if (nodeValue >= parentValue) {
+    if (root->right != nullptr) {
+      thread_insert_to_rb_tree(root->right, node);
+    } else {
+      root->right = node;
+      rbtree_balance(root, node);
+    }
+  } else {
+    if (root->left != nullptr) {
+      thread_insert_to_rb_tree(root->left, node);
+    } else {
+      root->left = node;
+      rbtree_balance(root, node);
+    }
+  }
+}
+
 KernelStatus schd_add_to_schduler(Thread *thread) {
   KernelStatus threadAddStatus = klist_append(&currentThread->threadList, &thread->threadList);
-
-  // todo: add to cfs schduler tree
-
   if (threadAddStatus != OK) {
     LogError("[Schd]: thread '%s' add to schduler failed.\n", thread->name);
     return ERROR;
   }
   LogInfo("[Schd]: thread '%s' add to schduler.\n", thread->name);
+
+  // todo: add to cfs schduler tree
+  thread_insert_to_rb_tree(&headThread->rbTree,&thread->rbTree);
+  
   return OK;
 }
 

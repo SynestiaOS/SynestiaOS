@@ -99,7 +99,7 @@ typedef struct Thread {
 
   uint32_t priority;
 
-  RBNode *rbTree;
+  RBNode rbTree;
   uint64_t startTime;
   uint32_t runtimeNs;
   uint32_t runtimVirtualNs;
