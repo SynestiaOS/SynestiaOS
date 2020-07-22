@@ -4,10 +4,10 @@
 
 #include <interrupt.h>
 #include <kqueue.h>
+#include <log.h>
 #include <percpu.h>
 #include <sched.h>
 #include <stdlib.h>
-#include <log.h>
 
 extern uint64_t ktimer_sys_runtime_tick(uint64_t tickIntreval);
 #define TIMER_TICK_MS 50
@@ -36,10 +36,10 @@ KernelStatus schd_init() {
       PerCpu *preCpu = percpu_get(i);
       preCpu->cpuNum = i;
       preCpu->status.idleTime = 0;
-      
+
       Thread *idleThread = thread_create_idle_thread(i);
-      if(idleThread==nullptr){
-          return ERROR;
+      if (idleThread == nullptr) {
+        return ERROR;
       }
       preCpu->idleThread = idleThread;
 

@@ -3,9 +3,9 @@
 //
 #include <kheap.h>
 #include <kstack.h>
+#include <log.h>
 #include <stdbool.h>
 #include <stdlib.h>
-#include <log.h>
 
 KernelStack *kstack_allocate() {
   // 1. allocate stack memory block from virtual memory (heap), and align.

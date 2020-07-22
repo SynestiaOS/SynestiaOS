@@ -1,8 +1,8 @@
+#include <log.h>
 #include <stdlib.h>
 #include <synestia_os_hal.h>
 #include <timer.h>
 #include <uart.h>
-#include <log.h>
 
 void init_bsp(void) {
   LogInfo("[Device]: uart_init...\n");

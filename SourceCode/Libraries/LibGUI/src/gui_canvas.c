@@ -5,9 +5,9 @@
 #include <gfx2d.h>
 #include <gui_canvas.h>
 #include <kheap.h>
+#include <log.h>
 #include <stdbool.h>
 #include <stdlib.h>
-#include <log.h>
 
 void gui_canvas_create(GUICanvas *canvas) {
   canvas->component.type = CANVAS;

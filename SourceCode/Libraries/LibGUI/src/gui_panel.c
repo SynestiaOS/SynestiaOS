@@ -7,9 +7,9 @@
 #include <gui_container.h>
 #include <gui_label.h>
 #include <gui_panel.h>
+#include <log.h>
 #include <stdbool.h>
 #include <stdlib.h>
-#include <log.h>
 
 void gui_panel_create(GUIPanel *panel) {
   panel->component.type = PANEL;

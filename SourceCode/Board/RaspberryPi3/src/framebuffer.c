@@ -3,9 +3,9 @@
 //
 
 #include <framebuffer.h>
+#include <log.h>
 #include <mailbox.h>
 #include <stdlib.h>
-#include <log.h>
 
 uint32_t pitch;
 unsigned char *lfb;

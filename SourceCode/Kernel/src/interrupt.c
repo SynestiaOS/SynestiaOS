@@ -1,7 +1,7 @@
 #include <interrupt.h>
+#include <log.h>
 #include <stdlib.h>
 #include <timer.h>
-#include <log.h>
 
 static rpi_irq_controller_t *rpiIRQController = (rpi_irq_controller_t *)RPI_INTERRUPT_CONTROLLER_BASE;
 

@@ -3,8 +3,8 @@
 //
 
 #include <kheap.h>
-#include <stdlib.h>
 #include <log.h>
+#include <stdlib.h>
 
 static heap_alloc_func heapAllocFunc = nullptr;
 static heap_free_func heapFreeFunc = nullptr;

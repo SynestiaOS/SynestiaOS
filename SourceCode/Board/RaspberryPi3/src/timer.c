@@ -1,7 +1,7 @@
 #include <interrupt.h>
+#include <log.h>
 #include <stdlib.h>
 #include <timer.h>
-#include <log.h>
 
 static timer_registers_t *timer_regs = (timer_registers_t *)SYSTEM_TIMER_BASE;
 

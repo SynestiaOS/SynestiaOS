@@ -3,11 +3,11 @@
 //
 
 #include <cache.h>
+#include <log.h>
 #include <page.h>
 #include <stdlib.h>
 #include <type.h>
 #include <vmm.h>
-#include <log.h>
 
 #define KERNEL_PHYSICAL_START 0
 #define PAGE_SIZE 4 * KB

@@ -8,9 +8,9 @@
 #include <gui_label.h>
 #include <gui_panel.h>
 #include <gui_window.h>
+#include <log.h>
 #include <stdbool.h>
 #include <stdlib.h>
-#include <log.h>
 
 void gui_window_create(GUIWindow *window) {
   window->component.type = WINDOW;

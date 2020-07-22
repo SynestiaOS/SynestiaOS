@@ -4,9 +4,9 @@
 
 #include <kheap.h>
 #include <kstack.h>
+#include <log.h>
 #include <stdlib.h>
 #include <thread.h>
-#include <log.h>
 
 extern uint64_t ktimer_sys_runtime();
 

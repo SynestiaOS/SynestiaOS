@@ -3,8 +3,8 @@
 //
 #include <kheap.h>
 #include <kvector.h>
-#include <stdlib.h>
 #include <log.h>
+#include <stdlib.h>
 
 KernelVector *kvector_allocate() {
   // 1. allocate vector memory block from virtual memory (heap), and align.

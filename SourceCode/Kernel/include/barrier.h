@@ -7,11 +7,11 @@
 
 #include <mutex.h>
 
-typedef struct Barrier{
-    uint32_t arrivalCounter;
-    uint32_t leaveCounter;
-    uint32_t flag;
-    Mutex lock;
+typedef struct Barrier {
+  uint32_t arrivalCounter;
+  uint32_t leaveCounter;
+  uint32_t flag;
+  Mutex lock;
 };
 
 #endif // __KERNEL_BARRIER_H__

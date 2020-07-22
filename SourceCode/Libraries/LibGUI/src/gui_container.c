@@ -8,9 +8,9 @@
 #include <gui_label.h>
 #include <gui_panel.h>
 #include <kvector.h>
+#include <log.h>
 #include <stdbool.h>
 #include <stdlib.h>
-#include <log.h>
 
 void gui_container_create(GUIContainer *container) {
   container->component.type = CONTAINER;

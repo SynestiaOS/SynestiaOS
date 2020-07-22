@@ -2,10 +2,10 @@
 // Created by XingfengYang on 2020/7/17.
 //
 
+#include <log.h>
 #include <mutex.h>
 #include <stdbool.h>
 #include <thread.h>
-#include <log.h>
 
 extern Thread *currentThread;
 extern KernelStatus schd_switch_next();

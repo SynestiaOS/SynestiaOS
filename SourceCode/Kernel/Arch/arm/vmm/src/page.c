@@ -25,18 +25,18 @@ uint64_t page_alloc(PhysicalPageUsage usage) {
   }
 }
 
-void page_mark_as_free(uint64_t pageIndex){
-    uint32_t index = pageIndex / BITS_IN_UINT32;
-    uint8_t bitIndex = pageIndex % BITS_IN_UINT32;
+void page_mark_as_free(uint64_t pageIndex) {
+  uint32_t index = pageIndex / BITS_IN_UINT32;
+  uint8_t bitIndex = pageIndex % BITS_IN_UINT32;
 
-    physicalPagesUsedBitMap[index] ^= (uint32_t)0x1 << bitIndex;
+  physicalPagesUsedBitMap[index] ^= (uint32_t)0x1 << bitIndex;
 }
 
-void page_mark_as_used(uint64_t pageIndex){
-    uint32_t index = pageIndex / BITS_IN_UINT32;
-    uint8_t bitIndex = pageIndex % BITS_IN_UINT32;
+void page_mark_as_used(uint64_t pageIndex) {
+  uint32_t index = pageIndex / BITS_IN_UINT32;
+  uint8_t bitIndex = pageIndex % BITS_IN_UINT32;
 
-    physicalPagesUsedBitMap[index] |= (uint32_t)0x1 << bitIndex;
+  physicalPagesUsedBitMap[index] |= (uint32_t)0x1 << bitIndex;
 }
 
 uint64_t page_free(uint64_t pageIndex) {
@@ -44,7 +44,7 @@ uint64_t page_free(uint64_t pageIndex) {
     physicalPages[pageIndex].ref_count -= 1;
 
     page_mark_as_free(pageIndex);
-    
+
     return pageIndex;
   }
 }
