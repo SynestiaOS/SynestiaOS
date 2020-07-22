@@ -154,6 +154,7 @@ void thread_insert_to_rb_tree(RBNode *root, RBNode *node) {
 }
 
 KernelStatus schd_add_to_schduler(Thread *thread) {
+  // Add thread to global list for track or for other usage
   KernelStatus threadAddStatus = klist_append(&currentThread->threadList, &thread->threadList);
   if (threadAddStatus != OK) {
     LogError("[Schd]: thread '%s' add to schduler failed.\n", thread->name);
@@ -161,9 +162,9 @@ KernelStatus schd_add_to_schduler(Thread *thread) {
   }
   LogInfo("[Schd]: thread '%s' add to schduler.\n", thread->name);
 
-  // todo: add to cfs schduler tree
+  // Add thread to CFS scheduler tree 
   thread_insert_to_rb_tree(&headThread->rbTree,&thread->rbTree);
-  
+
   return OK;
 }
 
