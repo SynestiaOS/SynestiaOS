@@ -109,7 +109,7 @@ void vmm_init() {
    * if lpaeSupport = 5, means LPAE is supported
    */
   uint32_t lpaeSupport = (read_mmfr0() & 0xF);
-  LogInfo("[LPAE]: mmfr0: %d\n", lpaeSupport);
+  LogWarnning("[LPAE]: mmfr0: %d\n", lpaeSupport);
 
   vmm_enable();
 }
