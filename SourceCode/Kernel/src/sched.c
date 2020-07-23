@@ -205,8 +205,19 @@ KernelStatus schd_reschedule(void) {
   RBNode *list = nullptr;
   list = rbtree_reconstruct_to_list(list, &headThread->rbTree);
 
+  headThread->rbTree.parent = nullptr;
+  headThread->rbTree.left = nullptr;
+  headThread->rbTree.right = nullptr;
+
   // re construct a new rb tree with list above
-  // todo:
+  LogInfo("[Schd]: reconstruct csf schdule tree. \n");
+  if (list != nullptr) {
+    while (list->right != nullptr) {
+      schd_add_to_cfs_schduler(headThread, getNode(list, Thread, rbTree));
+      list = list->right;
+    }
+  }
+
   return OK;
 }
 
