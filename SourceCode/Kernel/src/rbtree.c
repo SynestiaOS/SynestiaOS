@@ -89,6 +89,10 @@ void rbtree_rebalance(RBNode *root, RBNode *node) {
 }
 
 void rbtree_pre_order_traveral(KernelVector *vector, RBNode *node) {
+  if(node == nullptr){
+    return;
+  }
+
   Thread *thread = getNode(node, Thread, rbTree);
   kvector_add(vector, &thread->threadList);
 
