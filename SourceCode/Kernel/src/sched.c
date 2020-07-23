@@ -4,11 +4,11 @@
 
 #include <interrupt.h>
 #include <kqueue.h>
+#include <kvector.h>
 #include <log.h>
 #include <percpu.h>
 #include <sched.h>
 #include <stdlib.h>
-#include <kvector.h>
 
 extern uint64_t ktimer_sys_runtime_tick(uint64_t tickIntreval);
 #define TIMER_TICK_MS 50
@@ -32,14 +32,14 @@ KernelStatus schd_switch_next(void) {
   // todo: switch to virtualRuntime mix Thread in cfs tree
   RBNode *minvirtualRuntimeNode = rbtree_get_min(&headThread->rbTree);
 
-  if(minvirtualRuntimeNode==nullptr){
+  if (minvirtualRuntimeNode == nullptr) {
     LogError("[CFS]: The smallest node from csf tree is null. \n");
   }
 
-  Thread* thread = getNode(minvirtualRuntimeNode,Thread,rbTree);
-  LogInfo("[CFS]: smallet thread '%s'. \n",thread->name);
+  Thread *thread = getNode(minvirtualRuntimeNode, Thread, rbTree);
+  LogInfo("[CFS]: smallet thread '%s'. \n", thread->name);
   schd_switch_to(thread);
-  thread->runtimVirtualNs+=TIMER_TICK_MS;
+  thread->runtimVirtualNs += TIMER_TICK_MS;
   schd_reschedule();
   return OK;
 }
@@ -225,18 +225,21 @@ KernelStatus schd_remove_from_schduler(Thread *thread) {
 KernelStatus schd_reschedule(void) {
   KernelVector *vector = kvector_allocate();
   rbtree_reconstruct_to_list(vector, &headThread->rbTree);
+  LogInfo("[CSF]: %d thread in cfs.\n", vector->index);
 
   headThread->rbTree.parent = nullptr;
   headThread->rbTree.left = nullptr;
   headThread->rbTree.right = nullptr;
 
   // re construct a new rb tree with list above
-  
-  LogInfo("[CSF]: %d thread in cfs.\n",vector->index);
-
   LogInfo("[CFS]: reconstruct csf schdule tree. \n");
-  for(uint32_t i = 0;i<vector->index;i++){
-    schd_add_to_cfs_schduler(headThread, getNode(kvector_get(vector,i), Thread, threadList));
+  for (uint32_t i = 0; i < vector->index; i++) {
+    Thread *thread = getNode(kvector_get(vector, i), Thread, threadList);
+    thread->rbTree.parent = nullptr;
+    thread->rbTree.left = nullptr;
+    thread->rbTree.right = nullptr;
+    thread->rbTree.color = NODE_RED;
+    schd_add_to_cfs_schduler(headThread, thread);
   }
 
   kvector_free(vector);
