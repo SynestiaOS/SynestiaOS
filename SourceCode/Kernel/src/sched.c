@@ -146,13 +146,7 @@ KernelStatus schd_add_to_cfs_schduler(Thread *root, Thread *node) {
   while (nd != nullptr) {
     uint32_t parentValue = root->runtimVirtualNs;
     uint32_t nodeValue = node->runtimVirtualNs;
-
-    int compare = parentValue - nodeValue;
-
-    if (compare == 0) {
-      LogWarnning("[CFS]: same thread virtual time.\n");
-    }
-
+    int compare = nodeValue - parentValue;
     if (compare < 0) {
       if (nd->left == nullptr) {
         nd->left = &node->rbTree;
