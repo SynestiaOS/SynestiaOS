@@ -96,12 +96,8 @@ void rbtree_pre_order_traveral(KernelVector *vector, RBNode *node) {
   Thread *thread = getNode(node, Thread, rbTree);
   kvector_add(vector, &thread->threadList);
 
-  if (node->left != nullptr) {
-    rbtree_pre_order_traveral(vector, node->left);
-  }
-  if (node->right != nullptr) {
-    rbtree_pre_order_traveral(vector, node->right);
-  }
+  rbtree_pre_order_traveral(vector, node->left);
+  rbtree_pre_order_traveral(vector, node->right);
 }
 
 void rbtree_reconstruct_to_list(KernelVector *vector, RBNode *root) { rbtree_pre_order_traveral(vector, root); }
