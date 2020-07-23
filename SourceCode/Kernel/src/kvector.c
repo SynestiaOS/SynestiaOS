@@ -26,7 +26,11 @@ KernelStatus kvector_resize(KernelVector *vector, uint32_t newSize) {
 }
 
 KernelStatus kvector_free(KernelVector *vector) {
-  kheap_free(vector);
+  KernelStatus status = kheap_free(vector);
+  if (status != OK) {
+    LogError("[KVector] kVector free failed.\n");
+    return status;
+  }
   return OK;
 }
 
