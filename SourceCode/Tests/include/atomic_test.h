@@ -1,4 +1,6 @@
-
+//
+// Created by XingfengYang on 2020/7/21.
+//
 #include <atomic.h>
 
 Atomic atomic;

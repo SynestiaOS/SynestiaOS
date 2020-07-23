@@ -103,21 +103,6 @@ KernelStatus schd_schedule(void) {
   return OK;
 }
 
-KernelStatus schd_block(void) {
-  // todo:
-  return OK;
-}
-
-KernelStatus schd_yield(void) {
-  // todo:
-  return OK;
-}
-
-KernelStatus schd_preempt(void) {
-  // todo:
-  return OK;
-}
-
 KernelStatus schd_switch_to(Thread *thread) {
   // push r0~r3
   if (thread == nullptr) {
@@ -247,5 +232,20 @@ KernelStatus schd_reschedule(void) {
 KernelStatus sche_insert_into_percpu_rq(CpuNum cpuNum, Thread *thread) {
   PerCpu *preCpu = percpu_get(cpuNum);
   kqueue_enqueue(&preCpu->readyThreadQueue, &thread->threadReadyQueue);
+  return OK;
+}
+
+KernelStatus schd_block(void) {
+  // todo:
+  return OK;
+}
+
+KernelStatus schd_yield(void) {
+  // todo:
+  return OK;
+}
+
+KernelStatus schd_preempt(void) {
+  // todo:
   return OK;
 }
