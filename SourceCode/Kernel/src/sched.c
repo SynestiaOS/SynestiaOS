@@ -155,8 +155,7 @@ KernelStatus schd_add_to_cfs_schduler(Thread *root, Thread *node) {
     int compare = parentValue - nodeValue;
 
     if (compare == 0) {
-      LogError("[RBTree]: dup thread virtual time.\n");
-      return OK;
+      LogWarnning("[RBTree]: same thread virtual time.\n");
     }
 
     if (compare < 0) {
