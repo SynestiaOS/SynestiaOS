@@ -238,6 +238,8 @@ KernelStatus schd_reschedule(void) {
   for(uint32_t i = 0;i<vector->index;i++){
     schd_add_to_cfs_schduler(headThread, getNode(kvector_get(vector,i), Thread, threadList));
   }
+
+  kvector_free(vector);
   return OK;
 }
 
