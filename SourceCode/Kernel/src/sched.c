@@ -28,6 +28,20 @@ void tick() {
   schd_switch_next();
 }
 
+KernelStatus schd_switch_next(void) {
+  if (tmpThread != nullptr) {
+    schd_switch_to(tmpThread);
+    if (tmpThread->threadList.next != nullptr) {
+      tmpThread = getNode(tmpThread->threadList.next, Thread, threadList);
+    } else {
+      tmpThread = headThread;
+    }
+  } else {
+    tmpThread = headThread;
+  }
+  return OK;
+}
+
 KernelStatus schd_init() {
   // 1. create PreCpus
   if (percpu_create(CPU_4) != ERROR) {
@@ -118,20 +132,6 @@ KernelStatus schd_switch_to(Thread *thread) {
   return OK;
 }
 
-KernelStatus schd_switch_next(void) {
-  if (tmpThread != nullptr) {
-    schd_switch_to(tmpThread);
-    if (tmpThread->threadList.next != nullptr) {
-      tmpThread = getNode(tmpThread->threadList.next, Thread, threadList);
-    } else {
-      tmpThread = headThread;
-    }
-  } else {
-    tmpThread = headThread;
-  }
-  return OK;
-}
-
 KernelStatus schd_add_to_cfs_schduler(Thread *root, Thread *node) {
   KernelStatus ret = OK;
   RBNode *nd = nullptr;
@@ -197,7 +197,9 @@ KernelStatus schd_add_to_schduler(Thread *thread) {
 }
 
 KernelStatus schd_remove_from_schduler(Thread *thread) {
-  klist_remove_node(&thread->threadList);
+  // klist_remove_node(&thread->threadList);
+
+  // todo: remove thread from cfs schedule tree.
   return OK;
 }
 
