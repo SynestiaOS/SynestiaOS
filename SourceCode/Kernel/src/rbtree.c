@@ -96,17 +96,18 @@ void rbtree_pre_order_traveral(RBNode *list, RBNode *node) {
     list = node;
   } else {
     list->right = node;
+    list->left = nullptr;
+    list->parent = nullptr;
+    list->color = NODE_RED;
     list = list->right;
   }
   rbtree_pre_order_traveral(list, node->left);
   rbtree_pre_order_traveral(list, node->right);
 }
 
-RBNode *rbtree_reconstruct_to_list(RBNode *list, RBNode *root) {
+void rbtree_reconstruct_to_list(RBNode *list, RBNode *root) {
   RBNode *plist = list;
   rbtree_pre_order_traveral(plist, root);
-
-  return list;
 }
 
 KernelStatus rbtree_remove(RBNode *root, RBNode *node) {

@@ -25,7 +25,7 @@ RBNode *rbtree_get_root(RBNode *node);
 
 void rbtree_rebalance(RBNode *root, RBNode *node);
 
-RBNode *rbtree_reconstruct_to_list(RBNode *list, RBNode *root);
+void rbtree_reconstruct_to_list(RBNode *list, RBNode *root);
 
 KernelStatus rbtree_remove(RBNode *root, RBNode *node);
 

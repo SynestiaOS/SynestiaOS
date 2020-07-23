@@ -38,7 +38,8 @@ KernelStatus schd_switch_next(void) {
   Thread* thread = getNode(minvirtualRuntimeNode,Thread,rbTree);
   LogInfo("[CFS]: smallet thread '%s'. \n",thread->name);
   schd_switch_to(thread);
-
+  thread->runtimVirtualNs+=TIMER_TICK_MS;
+  schd_reschedule();
   return OK;
 }
 
@@ -222,7 +223,7 @@ KernelStatus schd_remove_from_schduler(Thread *thread) {
 
 KernelStatus schd_reschedule(void) {
   RBNode *list = nullptr;
-  list = rbtree_reconstruct_to_list(list, &headThread->rbTree);
+  rbtree_reconstruct_to_list(list, &headThread->rbTree);
 
   headThread->rbTree.parent = nullptr;
   headThread->rbTree.left = nullptr;
@@ -230,12 +231,15 @@ KernelStatus schd_reschedule(void) {
 
   // re construct a new rb tree with list above
   LogInfo("[CFS]: reconstruct csf schdule tree. \n");
+  uint32_t listSize = 0;
   if (list != nullptr) {
     while (list->right != nullptr) {
       schd_add_to_cfs_schduler(headThread, getNode(list, Thread, rbTree));
       list = list->right;
+      listSize++;
     }
   }
+  LogInfo("[CSF]: %d thread in cfs.\n",listSize);
 
   return OK;
 }
