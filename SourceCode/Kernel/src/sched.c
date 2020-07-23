@@ -14,7 +14,6 @@ extern uint64_t ktimer_sys_runtime_tick(uint64_t tickIntreval);
 
 Thread *currentThread = nullptr;
 Thread *headThread = nullptr;
-Thread *tmpThread = nullptr;
 
 TimerHandler tickHandler;
 
@@ -32,20 +31,14 @@ KernelStatus schd_switch_next(void) {
   // todo: switch to virtualRuntime mix Thread in cfs tree
   RBNode *minvirtualRuntimeNode = rbtree_get_min(&headThread->rbTree);
 
-  // if(minvirtualRuntimeNode==nullptr){
-  //   LogError("[Schd]: The smallest node from csf tree is null. \n");
-  // }
-
-  if (tmpThread != nullptr) {
-    schd_switch_to(tmpThread);
-    if (tmpThread->threadList.next != nullptr) {
-      tmpThread = getNode(tmpThread->threadList.next, Thread, threadList);
-    } else {
-      tmpThread = headThread;
-    }
-  } else {
-    tmpThread = headThread;
+  if(minvirtualRuntimeNode==nullptr){
+    LogError("[CFS]: The smallest node from csf tree is null. \n");
   }
+
+  Thread* thread = getNode(minvirtualRuntimeNode,Thread,rbTree);
+  LogInfo("[CFS]: smallet thread '%s'. \n",thread->name);
+  schd_switch_to(thread);
+
   return OK;
 }
 
@@ -81,7 +74,6 @@ KernelStatus schd_init() {
   }
   LogInfo("[Schd]: Schd inited.\n");
   headThread = currentThread;
-  tmpThread = currentThread;
   return OK;
 }
 
@@ -156,7 +148,7 @@ KernelStatus schd_add_to_cfs_schduler(Thread *root, Thread *node) {
     int compare = parentValue - nodeValue;
 
     if (compare == 0) {
-      LogWarnning("[RBTree]: same thread virtual time.\n");
+      LogWarnning("[CFS]: same thread virtual time.\n");
     }
 
     if (compare < 0) {
@@ -199,10 +191,10 @@ KernelStatus schd_add_to_schduler(Thread *thread) {
   headThread->rbTree.color = NODE_BLACK;
   KernelStatus threadAddCSFStatus = schd_add_to_cfs_schduler(headThread, thread);
   if (threadAddCSFStatus != OK) {
-    LogError("[Schd]: thread '%s' add to CFS schduler failed.\n", thread->name);
+    LogError("[CFS]: thread '%s' add to CFS schduler failed.\n", thread->name);
     return ERROR;
   }
-  LogInfo("[Schd]: thread '%s' add to CFS schduler.\n", thread->name);
+  LogInfo("[CFS]: thread '%s' add to CFS schduler.\n", thread->name);
 
   return OK;
 }
@@ -222,7 +214,7 @@ KernelStatus schd_remove_from_schduler(Thread *thread) {
     thread->rbTree.left = nullptr;
     thread->rbTree.right = nullptr;
   } else {
-    LogError("[Schd] can not remove root node from cfs tree. \n");
+    LogError("[CFS] can not remove root node from cfs tree. \n");
     return ERROR;
   }
   return OK;
@@ -237,7 +229,7 @@ KernelStatus schd_reschedule(void) {
   headThread->rbTree.right = nullptr;
 
   // re construct a new rb tree with list above
-  LogInfo("[Schd]: reconstruct csf schdule tree. \n");
+  LogInfo("[CFS]: reconstruct csf schdule tree. \n");
   if (list != nullptr) {
     while (list->right != nullptr) {
       schd_add_to_cfs_schduler(headThread, getNode(list, Thread, rbTree));
