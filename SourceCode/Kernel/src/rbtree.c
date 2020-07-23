@@ -2,6 +2,7 @@
 // Created by XingfengYang on 2020/6/30.
 //
 #include <kheap.h>
+#include <list.h>
 #include <log.h>
 #include <rbtree.h>
 #include <stdint.h>
@@ -86,12 +87,34 @@ void rbtree_rebalance(RBNode *root, RBNode *node) {
   }
 }
 
-KernelStatus rbtree_remove(RBNode *root, RBNode *node){
-    // todo: 
+void rbtree_pre_order_traveral(RBNode *list, RBNode *node) {
+  if (node == nullptr) {
+    return;
+  }
+  node->parent = nullptr;
+  if (list = nullptr) {
+    list = node;
+  } else {
+    list->right = node;
+    list = list->right;
+  }
+  rbtree_pre_order_traveral(list, node->left);
+  rbtree_pre_order_traveral(list, node->right);
 }
 
-void rbtree_remove_rebalance(RBNode *root, RBNode *node){
-  // todo: 
+RBNode *rbtree_reconstruct_to_list(RBNode *list, RBNode *root) {
+  RBNode *plist = list;
+  rbtree_pre_order_traveral(plist, root);
+
+  return list;
+}
+
+KernelStatus rbtree_remove(RBNode *root, RBNode *node) {
+  // todo:
+}
+
+void rbtree_remove_rebalance(RBNode *root, RBNode *node) {
+  // todo:
 }
 
 void rbtree_rotate_left(RBNode *root, RBNode *node) {
@@ -158,7 +181,7 @@ RBNode *rbtree_get_min(RBNode *root) {
   return tmp;
 }
 
-RBNode *rbtree_get_max(RBNode *root){
+RBNode *rbtree_get_max(RBNode *root) {
   RBNode *tmp = root;
   while (tmp->right != nullptr) {
     tmp = tmp->right;

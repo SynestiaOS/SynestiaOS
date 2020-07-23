@@ -202,6 +202,10 @@ KernelStatus schd_remove_from_schduler(Thread *thread) {
 }
 
 KernelStatus schd_reschedule(void) {
+  RBNode *list = nullptr;
+  list = rbtree_reconstruct_to_list(list, &headThread->rbTree);
+
+  // re construct a new rb tree with list above
   // todo:
   return OK;
 }
