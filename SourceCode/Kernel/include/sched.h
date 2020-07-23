@@ -22,6 +22,8 @@ KernelStatus schd_preempt(void);
 
 KernelStatus schd_switch_to(Thread *thread);
 
+KernelStatus schd_add_to_global_list(Thread *thread);
+
 KernelStatus schd_add_to_cfs_schduler(Thread *root, Thread *node);
 
 KernelStatus schd_add_to_schduler(Thread *thread);

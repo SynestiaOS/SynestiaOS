@@ -29,6 +29,8 @@ void tick() {
 }
 
 KernelStatus schd_switch_next(void) {
+  // todo: switch to virtualRuntime mix Thread in cfs tree
+
   if (tmpThread != nullptr) {
     schd_switch_to(tmpThread);
     if (tmpThread->threadList.next != nullptr) {
@@ -60,6 +62,11 @@ KernelStatus schd_init() {
       if (currentThread == nullptr) {
         currentThread = idleThread;
       } else {
+        KernelStatus threadAddGlobalStatus = schd_add_to_global_list(idleThread);
+        if (threadAddGlobalStatus != OK) {
+          return ERROR;
+        }
+
         KernelStatus threadAddStatus = schd_add_to_schduler(idleThread);
         if (threadAddStatus != OK) {
           return ERROR;
@@ -75,6 +82,11 @@ KernelStatus schd_init() {
 
 KernelStatus schd_init_thread(Thread *thread, uint32_t priority) {
   thread->priority = priority;
+  KernelStatus threadAddGlobalStatus = schd_add_to_global_list(thread);
+  if (threadAddGlobalStatus != OK) {
+    return ERROR;
+  }
+
   KernelStatus threadAddStatus = schd_add_to_schduler(thread);
   if (threadAddStatus != OK) {
     return ERROR;
@@ -108,7 +120,6 @@ KernelStatus schd_preempt(void) {
 
 KernelStatus schd_switch_to(Thread *thread) {
   // push r0~r3
-
   if (thread == nullptr) {
     LogWarnning("[Schd]: cant switch to nullptr thread.\n");
     return ERROR;
@@ -178,20 +189,30 @@ KernelStatus schd_add_to_cfs_schduler(Thread *root, Thread *node) {
   node->rbTree.parent = nd;
 
   rbtree_rebalance(&root->rbTree, &node->rbTree);
+
+  return OK;
 }
 
-KernelStatus schd_add_to_schduler(Thread *thread) {
+KernelStatus schd_add_to_global_list(Thread *thread) {
   // Add thread to global list for track or for other usage
   KernelStatus threadAddStatus = klist_append(&currentThread->threadList, &thread->threadList);
   if (threadAddStatus != OK) {
-    LogError("[Schd]: thread '%s' add to schduler failed.\n", thread->name);
+    LogError("[Schd]: thread '%s' add to global list failed.\n", thread->name);
     return ERROR;
   }
-  LogInfo("[Schd]: thread '%s' add to schduler.\n", thread->name);
+  LogInfo("[Schd]: thread '%s' add to global list.\n", thread->name);
+  return OK;
+}
 
+KernelStatus schd_add_to_schduler(Thread *thread) {
   // Add thread to CFS scheduler tree
   headThread->rbTree.color = NODE_BLACK;
-  schd_add_to_cfs_schduler(headThread, thread);
+  KernelStatus threadAddCSFStatus = schd_add_to_cfs_schduler(headThread, thread);
+  if (threadAddCSFStatus != OK) {
+    LogError("[Schd]: thread '%s' add to CFS schduler failed.\n", thread->name);
+    return ERROR;
+  }
+  LogInfo("[Schd]: thread '%s' add to CFS schduler.\n", thread->name);
 
   return OK;
 }
