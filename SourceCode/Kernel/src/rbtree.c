@@ -6,6 +6,7 @@
 #include <log.h>
 #include <rbtree.h>
 #include <stdint.h>
+#include <thread.h>
 
 /**
  * 1. Node is red or black
@@ -87,27 +88,20 @@ void rbtree_rebalance(RBNode *root, RBNode *node) {
   }
 }
 
-void rbtree_pre_order_traveral(RBNode *list, RBNode *node) {
-  if (node == nullptr) {
-    return;
+void rbtree_pre_order_traveral(KernelVector *vector, RBNode *node) {
+  Thread* thread = getNode(node,Thread,rbTree);
+  kvector_add(vector,&thread->threadList);
+
+  if(node->left!=nullptr) {
+      rbtree_pre_order_traveral(vector, node->left);
   }
-  node->parent = nullptr;
-  if (list = nullptr) {
-    list = node;
-  } else {
-    list->right = node;
-    list->left = nullptr;
-    list->parent = nullptr;
-    list->color = NODE_RED;
-    list = list->right;
+  if(node->right!=nullptr) {
+      rbtree_pre_order_traveral(vector, node->right);
   }
-  rbtree_pre_order_traveral(list, node->left);
-  rbtree_pre_order_traveral(list, node->right);
 }
 
-void rbtree_reconstruct_to_list(RBNode *list, RBNode *root) {
-  RBNode *plist = list;
-  rbtree_pre_order_traveral(plist, root);
+void rbtree_reconstruct_to_list(KernelVector *vector, RBNode *root) {
+  rbtree_pre_order_traveral(vector, root);
 }
 
 KernelStatus rbtree_remove(RBNode *root, RBNode *node) {

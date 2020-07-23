@@ -8,6 +8,7 @@
 #include <list.h>
 #include <stdint.h>
 #include <type.h>
+#include <kvector.h>
 
 typedef enum NodeColor {
   NODE_RED,
@@ -25,7 +26,7 @@ RBNode *rbtree_get_root(RBNode *node);
 
 void rbtree_rebalance(RBNode *root, RBNode *node);
 
-void rbtree_reconstruct_to_list(RBNode *list, RBNode *root);
+void rbtree_reconstruct_to_list(KernelVector *vector, RBNode *root);
 
 KernelStatus rbtree_remove(RBNode *root, RBNode *node);
 

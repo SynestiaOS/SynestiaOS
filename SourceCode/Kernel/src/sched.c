@@ -8,6 +8,7 @@
 #include <percpu.h>
 #include <sched.h>
 #include <stdlib.h>
+#include <kvector.h>
 
 extern uint64_t ktimer_sys_runtime_tick(uint64_t tickIntreval);
 #define TIMER_TICK_MS 50
@@ -222,25 +223,21 @@ KernelStatus schd_remove_from_schduler(Thread *thread) {
 }
 
 KernelStatus schd_reschedule(void) {
-  RBNode *list = nullptr;
-  rbtree_reconstruct_to_list(list, &headThread->rbTree);
+  KernelVector *vector = kvector_allocate();
+  rbtree_reconstruct_to_list(vector, &headThread->rbTree);
 
   headThread->rbTree.parent = nullptr;
   headThread->rbTree.left = nullptr;
   headThread->rbTree.right = nullptr;
 
   // re construct a new rb tree with list above
-  LogInfo("[CFS]: reconstruct csf schdule tree. \n");
-  uint32_t listSize = 0;
-  if (list != nullptr) {
-    while (list->right != nullptr) {
-      schd_add_to_cfs_schduler(headThread, getNode(list, Thread, rbTree));
-      list = list->right;
-      listSize++;
-    }
-  }
-  LogInfo("[CSF]: %d thread in cfs.\n",listSize);
+  
+  LogInfo("[CSF]: %d thread in cfs.\n",vector->index);
 
+  LogInfo("[CFS]: reconstruct csf schdule tree. \n");
+  for(uint32_t i = 0;i<vector->index;i++){
+    schd_add_to_cfs_schduler(headThread, getNode(kvector_get(vector,i), Thread, threadList));
+  }
   return OK;
 }
 
