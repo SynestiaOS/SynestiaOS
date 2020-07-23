@@ -30,6 +30,11 @@ void tick() {
 
 KernelStatus schd_switch_next(void) {
   // todo: switch to virtualRuntime mix Thread in cfs tree
+  RBNode *minvirtualRuntimeNode = rbtree_get_min(&headThread->rbTree);
+
+  // if(minvirtualRuntimeNode==nullptr){
+  //   LogError("[Schd]: The smallest node from csf tree is null. \n");
+  // }
 
   if (tmpThread != nullptr) {
     schd_switch_to(tmpThread);
