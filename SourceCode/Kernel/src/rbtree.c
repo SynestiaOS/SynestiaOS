@@ -86,7 +86,13 @@ void rbtree_rebalance(RBNode *root, RBNode *node) {
   }
 }
 
-void rbtree_erase(RBNode *root, RBNode *node) {}
+KernelStatus rbtree_remove(RBNode *root, RBNode *node){
+    // todo: 
+}
+
+void rbtree_remove_rebalance(RBNode *root, RBNode *node){
+  // todo: 
+}
 
 void rbtree_rotate_left(RBNode *root, RBNode *node) {
   RBNode *x = node;
@@ -148,6 +154,14 @@ RBNode *rbtree_get_min(RBNode *root) {
   RBNode *tmp = root;
   while (tmp->left != nullptr) {
     tmp = tmp->left;
+  }
+  return tmp;
+}
+
+RBNode *rbtree_get_max(RBNode *root){
+  RBNode *tmp = root;
+  while (tmp->right != nullptr) {
+    tmp = tmp->right;
   }
   return tmp;
 }

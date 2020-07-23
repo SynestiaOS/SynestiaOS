@@ -25,12 +25,16 @@ RBNode *rbtree_get_root(RBNode *node);
 
 void rbtree_rebalance(RBNode *root, RBNode *node);
 
-void rbtree_erase(RBNode *root, RBNode *node);
+KernelStatus rbtree_remove(RBNode *root, RBNode *node);
+
+void rbtree_remove_rebalance(RBNode *root, RBNode *node);
 
 void rbtree_rotate_left(RBNode *root, RBNode *node);
 
 void rbtree_rotate_right(RBNode *root, RBNode *node);
 
 RBNode *rbtree_get_min(RBNode *root);
+
+RBNode *rbtree_get_max(RBNode *root);
 
 #endif //__KERNEL_RBTREE_H__
