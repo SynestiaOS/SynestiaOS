@@ -203,9 +203,23 @@ KernelStatus schd_add_to_schduler(Thread *thread) {
 }
 
 KernelStatus schd_remove_from_schduler(Thread *thread) {
-  // klist_remove_node(&thread->threadList);
-
-  // todo: remove thread from cfs schedule tree.
+  // remove thread from cfs schedule tree.
+  if (thread->rbTree.parent != nullptr && thread->rbTree.parent->color != NODE_BLACK &&
+      thread->rbTree.left == nullptr && thread->rbTree.right == nullptr) {
+    if (thread->rbTree.parent->left == &thread->rbTree) {
+      thread->rbTree.parent->left = nullptr;
+    }
+    if (thread->rbTree.parent->right == &thread->rbTree) {
+      thread->rbTree.parent->right = nullptr;
+    }
+    rbtree_rebalance(&headThread->rbTree, thread->rbTree.parent);
+    thread->rbTree.parent = nullptr;
+    thread->rbTree.left = nullptr;
+    thread->rbTree.right = nullptr;
+  } else {
+    LogError("[Schd] can not remove root node from cfs tree. \n");
+    return ERROR;
+  }
   return OK;
 }
 
