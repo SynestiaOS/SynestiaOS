@@ -14,6 +14,7 @@
 #define MAX_UINT_32 0xFFFFFFFF
 
 #define nullptr (void *)0
+#define readonly const
 
 typedef enum KernelStatus {
   OK = 0,
