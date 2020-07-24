@@ -21,7 +21,7 @@ KernelVector *kvector_allocate() {
 
 KernelStatus kvector_resize(KernelVector *vector, uint32_t newSize) {
   vector = kheap_realloc(vector, newSize);
-  if(vector==nullptr){
+  if (vector == nullptr) {
     return ERROR;
   }
   vector->size = newSize;
@@ -39,7 +39,8 @@ KernelStatus kvector_free(KernelVector *vector) {
 
 KernelStatus kvector_add(KernelVector *vector, ListNode *node) {
   if (vector->index >= vector->size) {
-    KernelStatus status = kvector_resize(vector, vector->size * sizeof(ListNode *) + sizeof(KernelVector) + DEFAULT_VECTOR_SIZE);
+    KernelStatus status =
+        kvector_resize(vector, vector->size * sizeof(ListNode *) + sizeof(KernelVector) + DEFAULT_VECTOR_SIZE);
     vector->size += DEFAULT_VECTOR_SIZE;
     if (status != OK) {
       LogError("[KVector] kVector resiz failed.\n");

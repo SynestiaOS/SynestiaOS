@@ -89,7 +89,7 @@ void rbtree_rebalance(RBNode *root, RBNode *node) {
 }
 
 void rbtree_pre_order_traveral(KernelVector *vector, RBNode *node) {
-  if(node == nullptr){
+  if (node == nullptr) {
     return;
   }
 
@@ -100,9 +100,7 @@ void rbtree_pre_order_traveral(KernelVector *vector, RBNode *node) {
   rbtree_pre_order_traveral(vector, node->right);
 }
 
-void rbtree_reconstruct_to_list(KernelVector *vector, RBNode *root) { 
-  rbtree_pre_order_traveral(vector, root); 
-}
+void rbtree_reconstruct_to_list(KernelVector *vector, RBNode *root) { rbtree_pre_order_traveral(vector, root); }
 
 KernelStatus rbtree_remove(RBNode *root, RBNode *node) {
   // todo:
