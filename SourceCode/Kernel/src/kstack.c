@@ -14,6 +14,7 @@ KernelStack *kstack_allocate() {
     LogError("[KStack] kStack allocate failed.\n");
     return nullptr;
   }
+  LogInfo("[KStack] kStack allocated.\n");
   stack->virtualMemoryAddress = (uint32_t *)(stack + sizeof(KernelStack) + DEFAULT_KERNEL_STACK_SIZE);
   stack->size = 0;
   stack->base = stack->virtualMemoryAddress;
@@ -25,11 +26,18 @@ KernelStatus kstack_free(KernelStack *stack) {
   stack->size = 0;
   stack->base = 0;
   stack->top = 0;
-  return kheap_free(stack);
+  KernelStatus freeStatus = kheap_free(stack);
+  if(freeStatus!=OK){
+    LogError("[KStack] kStack free failed.\n");
+    return freeStatus;
+  }
+  LogInfo("[KStack] kStack freed.\n");
+  return OK;
 }
 
 KernelStatus kstack_push(KernelStack *stack, uint32_t data) {
   if (kstack_is_full(stack)) {
+    LogError("[KStack] kStack push failed, stack full.\n");
     return ERROR;
   }
   stack->top = stack->top - sizeof(uint32_t);
@@ -40,6 +48,7 @@ KernelStatus kstack_push(KernelStack *stack, uint32_t data) {
 
 uint32_t kstack_pop(KernelStack *stack) {
   if (kstack_is_empty(stack)) {
+    LogError("[KStack] kStack pop failed, stack empty.\n");
     return ERROR;
   }
   uint32_t val = *(uint32_t *)(stack->top);

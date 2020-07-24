@@ -100,7 +100,29 @@ void rbtree_pre_order_traveral(KernelVector *vector, RBNode *node) {
   rbtree_pre_order_traveral(vector, node->right);
 }
 
-void rbtree_reconstruct_to_list(KernelVector *vector, RBNode *root) { rbtree_pre_order_traveral(vector, root); }
+void rbtree_reconstruct_to_list_recursion(KernelVector *vector, RBNode *root) { rbtree_pre_order_traveral(vector, root); }
+
+void rbtree_reconstruct_to_list(KernelVector *vector, RBNode *root) {
+  KernelStatus *stack = kstack_allocate();
+  if (root == nullptr) {
+    return;
+  }
+  RBNode *p = root;
+  while (!kstack_is_empty(stack) || p != nullptr) {
+    while (p != nullptr) {
+      kstack_push(stack, (uint32_t)p);
+      Thread *thread = getNode(p, Thread, rbTree);
+      kvector_add(vector, &thread->threadList);
+      p = p->left;
+    }
+    if (!kstack_is_empty(stack)) {
+      RBNode *node = kstack_peek(stack);
+      kstack_pop(stack);
+      p = node->right;
+    }
+  }
+  kstack_free(stack);
+}
 
 KernelStatus rbtree_remove(RBNode *root, RBNode *node) {
   // todo:
