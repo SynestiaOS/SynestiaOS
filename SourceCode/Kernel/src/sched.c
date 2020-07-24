@@ -219,7 +219,7 @@ KernelStatus schd_remove_from_schduler(Thread *thread) {
 KernelStatus schd_reschedule(void) {
   KernelVector *vector = kvector_allocate();
   rbtree_reconstruct_to_list(vector, &headThread->rbTree);
-  LogInfo("[CSF]: %d thread in cfs.\n", vector->index);
+  LogInfo("[CSF]: %d thread in cfs.\n", kvector_size(vector));
 
   headThread->rbTree.parent = nullptr;
   headThread->rbTree.left = nullptr;

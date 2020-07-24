@@ -30,6 +30,8 @@ KernelStatus kvector_remove_index(KernelVector *vector, uint32_t index);
 
 KernelStatus kvector_remove(KernelVector *vector, ListNode *index);
 
+uint32_t kvector_size(KernelVector *vector);
+
 bool kvector_is_empty(KernelVector *vector);
 
 bool kvector_is_full(KernelVector *vector);
