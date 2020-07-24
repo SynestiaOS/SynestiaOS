@@ -28,19 +28,25 @@ void tick() {
   schd_switch_next();
 }
 
+Thread *tmpThread = nullptr;
 KernelStatus schd_switch_next(void) {
-  // switch to virtualRuntime mix Thread in cfs tree
-  RBNode *minvirtualRuntimeNode = rbtree_get_min(&headThread->rbTree);
-
-  if (minvirtualRuntimeNode == nullptr) {
-    LogError("[CFS]: The smallest node from csf tree is null. \n");
+  schd_switch_to(tmpThread);
+  if (tmpThread->threadList.next != nullptr) {
+    tmpThread = getNode(tmpThread->threadList.next, Thread, threadList);
+  } else {
+    tmpThread = headThread;
   }
 
-  Thread *thread = getNode(minvirtualRuntimeNode, Thread, rbTree);
-  LogInfo("[CFS]: smallet thread '%s'. \n", thread->name);
-  schd_switch_to(thread);
-  thread->runtimVirtualNs += 1;
-  schd_reschedule();
+  // switch to virtualRuntime mix Thread in cfs tree
+  // RBNode *minvirtualRuntimeNode = rbtree_get_min(&headThread->rbTree);
+  // if (minvirtualRuntimeNode == nullptr) {
+  //   LogError("[CFS]: The smallest node from csf tree is null. \n");
+  // }
+  // Thread *thread = getNode(minvirtualRuntimeNode, Thread, rbTree);
+  // LogInfo("[CFS]: smallet thread '%s'. \n", thread->name);
+  // schd_switch_to(thread);
+  // thread->runtimVirtualNs += 1;
+  // schd_reschedule();
   return OK;
 }
 
@@ -76,6 +82,7 @@ KernelStatus schd_init() {
   }
   LogInfo("[Schd]: Schd inited.\n");
   headThread = currentThread;
+  tmpThread = headThread;
   return OK;
 }
 
