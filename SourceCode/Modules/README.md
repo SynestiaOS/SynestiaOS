@@ -1,1 +1,1 @@
-# This folder is for libs code.
+# This folder is for kernel modules.
