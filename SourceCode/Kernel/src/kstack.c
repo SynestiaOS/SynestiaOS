@@ -27,7 +27,7 @@ KernelStatus kstack_free(KernelStack *stack) {
   stack->base = 0;
   stack->top = 0;
   KernelStatus freeStatus = kheap_free(stack);
-  if(freeStatus!=OK){
+  if (freeStatus != OK) {
     LogError("[KStack] kStack free failed.\n");
     return freeStatus;
   }

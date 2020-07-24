@@ -100,7 +100,9 @@ void rbtree_pre_order_traveral(KernelVector *vector, RBNode *node) {
   rbtree_pre_order_traveral(vector, node->right);
 }
 
-void rbtree_reconstruct_to_list_recursion(KernelVector *vector, RBNode *root) { rbtree_pre_order_traveral(vector, root); }
+void rbtree_reconstruct_to_list_recursion(KernelVector *vector, RBNode *root) {
+  rbtree_pre_order_traveral(vector, root);
+}
 
 void rbtree_reconstruct_to_list(KernelVector *vector, RBNode *root) {
   KernelStatus *stack = kstack_allocate();

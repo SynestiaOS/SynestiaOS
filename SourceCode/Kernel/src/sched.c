@@ -128,14 +128,13 @@ KernelStatus schd_switch_to(Thread *thread) {
 }
 
 KernelStatus schd_add_to_cfs_schduler(Thread *root, Thread *node) {
-  KernelStatus ret = OK;
   RBNode *nd = nullptr;
 
   /* Case 1: Simplest case -- tree is empty */
   if (&root->rbTree == nullptr) {
     root->rbTree = node->rbTree;
     node->rbTree.color = NODE_BLACK;
-    return ret;
+    return OK;
   }
 
   /* Otherwise, insert the node as you would typically in a BST */
