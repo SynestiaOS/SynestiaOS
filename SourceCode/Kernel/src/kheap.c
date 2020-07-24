@@ -139,7 +139,10 @@ void *kheap_realloc(void *ptr, uint32_t size) {
   memcpy(newHeapArea, ptr, dataSize);
 
   // 3. free old heap area
-  kheap_free(ptr);
+  KernelStatus freeStatus = kheap_free(ptr);
+  if(freeStatus!=OK){
+    LogError("[heap] free old mem failed when realloc.\n");
+  }
   return newHeapArea + sizeof(HeapArea);
 }
 

@@ -39,7 +39,7 @@ KernelStatus schd_switch_next(void) {
   Thread *thread = getNode(minvirtualRuntimeNode, Thread, rbTree);
   LogInfo("[CFS]: smallet thread '%s'. \n", thread->name);
   schd_switch_to(thread);
-  thread->runtimVirtualNs += TIMER_TICK_MS;
+  thread->runtimVirtualNs += 1;
   schd_reschedule();
   return OK;
 }

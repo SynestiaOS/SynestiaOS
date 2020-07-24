@@ -39,7 +39,8 @@ KernelStatus kvector_free(KernelVector *vector) {
 
 KernelStatus kvector_add(KernelVector *vector, ListNode *node) {
   if (vector->index >= vector->size) {
-    KernelStatus status = kvector_resize(vector, 2 * vector->size * sizeof(ListNode *) + sizeof(KernelVector));
+    KernelStatus status = kvector_resize(vector, vector->size * sizeof(ListNode *) + sizeof(KernelVector) + DEFAULT_VECTOR_SIZE);
+    vector->size += DEFAULT_VECTOR_SIZE;
     if (status != OK) {
       LogError("[KVector] kVector resiz failed.\n");
       return status;
