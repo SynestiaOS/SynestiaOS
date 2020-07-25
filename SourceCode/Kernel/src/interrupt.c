@@ -44,9 +44,13 @@ void disable_interrupt() {
 
 void __attribute__((interrupt("UNDEF"))) undefined_instruction_handler(void) {}
 
+
+extern funcPtr sys_call_table[];
 void __attribute__((interrupt("SWI"))) software_interrupt_handler(uint32_t id) { 
   disable_interrupt();
-  LogError("[SWI]: id %d .\n",id);
+  LogInfo("[SWI]: id %d .\n",id);
+  // sys call 
+  sys_call_table[id]();
   enable_interrupt();
 }
 

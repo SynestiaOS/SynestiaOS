@@ -16,6 +16,8 @@
 #define nullptr (void *)0
 #define readonly const
 
+typedef int (*funcPtr)(void);
+
 typedef enum KernelStatus {
   OK = 0,
   ERROR,

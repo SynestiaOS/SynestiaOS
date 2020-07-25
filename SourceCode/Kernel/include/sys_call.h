@@ -3,8 +3,8 @@
 //
 #ifndef __KERNEL_SYSCALL_H__
 #define __KERNEL_SYSCALL_H__
-#include <interrupt.h>
-
+#include <stdint.h>
+#include <type.h>
 /**
  * trigger a software interrupt
  * @param num
@@ -15,34 +15,29 @@ void swi(uint32_t num);
 
 #define __SYS_write 4
 
-#define SYSCALL_DEFINE0(type,name)  \
-asmlinkage type sys_##name(void){     \
-    swi(__SYS_##name);   \
+#define _syscall0(type,name)  \
+asmlinkage type name(void){     \
+    swi(__SYSCALL_##name);   \
 }
 
-#define __SYS_setup 0
-SYSCALL_DEFINE0(int,setup)
+#define __SYSCALL_setup 0
+#define __SYSCALL_exit 1
+#define __SYSCALL_fork 2
+#define __SYSCALL_read 3
+#define __SYSCALL_write 4
 
-#define __SYS_exit 1
-SYSCALL_DEFINE0(int,exit)
+_syscall0(int,setup)
+_syscall0(int,exit)
+_syscall0(int,fork)
+_syscall0(int,read)
+_syscall0(int,write)
 
-#define __SYS_fork 2
-SYSCALL_DEFINE0(int,fork)
+// For kernel
 
-#define __SYS_read 3
-SYSCALL_DEFINE0(int,read)
-
-#define __SYS_write 4
-SYSCALL_DEFINE0(int,write)
-
-typedef int (*funcPtr)(void);
-
-funcPtr sys_call_table[]={
-    sys_setup,
-    sys_exit,
-    sys_fork,
-    sys_read,
-    sys_write,
-};
+int sys_setup(void);
+int sys_exit(void);
+int sys_fork(void);
+int sys_read(void);
+int sys_write(void);
 
 #endif // __KERNEL_SYSCALL_H__
