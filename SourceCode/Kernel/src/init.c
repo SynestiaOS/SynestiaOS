@@ -124,8 +124,6 @@ void kernel_main(void) {
 
   print_splash();
 
-  LogError("[SWI]: cpsr %d .\n",cpsr_value());
-
   vmm_init();
 
   kheap_init();
