@@ -70,10 +70,4 @@ void register_time_interrupt(TimerHandler *handler);
 
 TimerHandler *timer_get_handler(void);
 
-/**
- * trigger a software interrupt
- * @param num
- */
-void swi(uint32_t num);
-
 #endif // __KERNEL_INTERRUPT_H__

@@ -121,7 +121,6 @@ uint32_t *window_thread3(int args) {
 
 TimerHandler gpuHandler;
 void kernel_main(void) {
-
   print_splash();
 
   vmm_init();
