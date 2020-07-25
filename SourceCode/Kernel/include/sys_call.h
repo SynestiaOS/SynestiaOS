@@ -5,10 +5,9 @@
 #define __KERNEL_SYSCALL_H__
 #include <stdint.h>
 #include <type.h>
-/**
- * trigger a software interrupt
- * @param num
- */
+
+
+// Below would move to libC
 void swi(uint32_t num);
 
 #define asmlinkage __attribute__((regparm(0)))
@@ -32,12 +31,19 @@ _syscall0(int,fork)
 _syscall0(int,read)
 _syscall0(int,write)
 
-// For kernel
-
+// Below in kernel
 int sys_setup(void);
 int sys_exit(void);
 int sys_fork(void);
 int sys_read(void);
 int sys_write(void);
+
+funcPtr sys_call_table[]={
+    sys_setup,
+    sys_exit,
+    sys_fork,
+    sys_read,
+    sys_write,
+};
 
 #endif // __KERNEL_SYSCALL_H__

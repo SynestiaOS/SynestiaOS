@@ -16,7 +16,7 @@ void init_interrupt() {
   LogInfo("[Interrupt]: interrupt init\n");
 }
 
-uint32_t cpsr_value(){
+uint32_t cpsr_value() {
   uint32_t cpsr;
   __asm__ __volatile__("mrs %0, cpsr" : "=r"(cpsr) :);
   return cpsr;
@@ -44,12 +44,11 @@ void disable_interrupt() {
 
 void __attribute__((interrupt("UNDEF"))) undefined_instruction_handler(void) {}
 
-
 extern funcPtr sys_call_table[];
-void __attribute__((interrupt("SWI"))) software_interrupt_handler(uint32_t id) { 
+void __attribute__((interrupt("SWI"))) software_interrupt_handler(uint32_t id) {
   disable_interrupt();
-  LogInfo("[SWI]: id %d .\n",id);
-  // sys call 
+  LogInfo("[SWI]: id %d .\n", id);
+  // sys call
   sys_call_table[id]();
   enable_interrupt();
 }

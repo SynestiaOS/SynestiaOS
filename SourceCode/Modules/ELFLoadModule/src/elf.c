@@ -9,16 +9,9 @@
 #define ModuleInit(func)
 #define ModuleExit(func)
 
-KernelStatus init(){
-  return OK;
-}
+KernelStatus init() { return OK; }
 
-KernelStatus exit(){
-  return OK;
-}
+KernelStatus exit() { return OK; }
 
-ModuleName("elf")
-ModuleAuthor("neo")
-ModuleDescription(load module)
-ModuleInit(init);
+ModuleName("elf") ModuleAuthor("neo") ModuleDescription(load module) ModuleInit(init);
 ModuleExit(exit);

@@ -95,8 +95,6 @@ uint32_t *window_thread2(int args) {
   }
 }
 
-
-
 extern int write();
 uint32_t *window_thread3(int args) {
   GUIWindow window;
