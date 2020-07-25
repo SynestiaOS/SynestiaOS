@@ -14,6 +14,7 @@ HeapArea *usingListHead;
 HeapArea *freeListHead;
 
 #define ALL_PHYSICAL_MEM_SIZE 0xFFFFFFFF
+#define ALL_KERNEL_HEAP_MEM_SIZE 96*MB
 
 void default_heap_alloc_func(void *ptr, uint32_t size) {
   LogInfo("[Heap]: alloc %d bytes at %d.\n", size, (uint32_t)ptr);
@@ -47,7 +48,7 @@ KernelStatus kheap_init() {
   freeListHead->list.prev = nullptr;
 
   HeapArea *freeArea = (HeapArea *)(heapAddress + sizeof(HeapArea));
-  freeArea->size = (ALL_PHYSICAL_MEM_SIZE - (uint32_t)(char *)heapAddress - 2 * sizeof(HeapArea)); // all memory
+  freeArea->size = (ALL_KERNEL_HEAP_MEM_SIZE - (uint32_t)(char *)heapAddress - 2 * sizeof(HeapArea)); // all memory
   freeListHead->list.next = &freeArea->list;
   freeArea->list.next = nullptr;
   freeArea->list.prev = &freeListHead->list;
