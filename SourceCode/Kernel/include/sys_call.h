@@ -16,7 +16,10 @@ void swi(uint32_t num);
 
 #define _syscall0(type,name)  \
 asmlinkage type name(void){     \
-    swi(__SYSCALL_##name);   \
+    __asm__ __volatile__("push {lr}\n\t"    \
+                       "mov r0, %0\n\t"     \
+                       "swi 0x0\n\t"        \
+                       "pop {pc}\n\t" ::"r"(__SYSCALL_##name));  \
 }
 
 #define __SYSCALL_setup 0
