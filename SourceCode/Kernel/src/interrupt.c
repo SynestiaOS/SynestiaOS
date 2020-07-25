@@ -16,6 +16,12 @@ void init_interrupt() {
   LogInfo("[Interrupt]: interrupt init\n");
 }
 
+uint32_t cpsr_value(){
+  uint32_t cpsr;
+  __asm__ __volatile__("mrs %0, cpsr" : "=r"(cpsr) :);
+  return cpsr;
+}
+
 uint32_t is_interrupt_enabled() {
   uint32_t cpsr;
   __asm__ __volatile__("mrs %0, cpsr" : "=r"(cpsr) :);
@@ -43,16 +49,13 @@ void swi(uint32_t num) {
                        "pop {pc}\n\t" ::"r"(num));
 }
 
-void hello_from_swi() {
-  disable_interrupt();
-  const char str[] = "hello from swi\n";
-  print(str);
-  enable_interrupt();
-}
-
 void __attribute__((interrupt("UNDEF"))) undefined_instruction_handler(void) {}
 
-void __attribute__((interrupt("SWI"))) software_interrupt_handler(void) { hello_from_swi(); }
+void __attribute__((interrupt("SWI"))) software_interrupt_handler(uint32_t id) { 
+  disable_interrupt();
+  LogError("[SWI]: id %d .\n",id);
+  enable_interrupt();
+}
 
 void __attribute__((interrupt("ABORT"))) prefetch_abort_handler(void) {}
 

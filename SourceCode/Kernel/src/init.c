@@ -115,6 +115,7 @@ uint32_t *window_thread3(int args) {
     disable_interrupt();
     gui_window_draw(&window);
     enable_interrupt();
+    swi(0x80);
   }
 }
 
@@ -122,6 +123,8 @@ TimerHandler gpuHandler;
 void kernel_main(void) {
 
   print_splash();
+
+  LogError("[SWI]: cpsr %d .\n",cpsr_value());
 
   vmm_init();
 
