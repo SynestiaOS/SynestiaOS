@@ -30,6 +30,11 @@ int sys_write(void) {
   return 0;
 }
 
+int sys_test1(int id){
+  LogWarnning("[SysCall] syscall test1 invoked. %d \n",id);
+  return 0;
+}
+
 void swi(uint32_t num) {
   __asm__ __volatile__("push {lr}\n\t"
                        "mov r0, %0\n\t"

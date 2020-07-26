@@ -96,6 +96,7 @@ uint32_t *window_thread2(int args) {
 }
 
 extern int write();
+extern int test1(int id);
 uint32_t *window_thread3(int args) {
   GUIWindow window;
   gui_window_create(&window);
@@ -117,6 +118,7 @@ uint32_t *window_thread3(int args) {
     gui_window_draw(&window);
     enable_interrupt();
     write();
+    test1(3);
   }
 }
 
