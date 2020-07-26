@@ -12,10 +12,8 @@ void swi(uint32_t num);
 
 #define asmlinkage __attribute__((regparm(0)))
 
-#define __SYS_write 4
-
 #define _syscall0(type,name)  \
-asmlinkage type name(void){     \
+type name(void){     \
     __asm__ __volatile__("push {lr}\n\t"    \
                        "mov r0, %0\n\t"     \
                        "swi 0x0\n\t"        \
@@ -23,7 +21,7 @@ asmlinkage type name(void){     \
 }
 
 #define _syscall1(type,name,type1,name1)  \
-asmlinkage type name(type1 name1){     \
+type name(type1 name1){     \
     __asm__ __volatile__("push {lr}\n\t"    \
                        "mov r0, %0\n\t"     \
                        "mov r1, %1\n\t"     \
@@ -32,7 +30,7 @@ asmlinkage type name(type1 name1){     \
 }
 
 #define _syscall2(type,name,type1,name1,type2,name2)  \
-asmlinkage type name(type1 name1, type2 name2){     \
+type name(type1 name1, type2 name2){     \
     __asm__ __volatile__("push {lr}\n\t"    \
                        "mov r0, %0\n\t"     \
                        "mov r1, %1\n\t"     \
@@ -42,7 +40,7 @@ asmlinkage type name(type1 name1, type2 name2){     \
 }
 
 #define _syscall3(type,name,type1,name1,type2,name2,type3,name3)  \
-asmlinkage type name(type1 name1, type2 name2, type3 name3){     \
+type name(type1 name1, type2 name2, type3 name3){     \
     __asm__ __volatile__("push {lr}\n\t"    \
                        "mov r0, %0\n\t"     \
                        "mov r1, %1\n\t"     \
@@ -53,7 +51,7 @@ asmlinkage type name(type1 name1, type2 name2, type3 name3){     \
 }
 
 #define _syscall4(type,name,type1,name1,type2,name2,type3,name3,type4,name4)  \
-asmlinkage type name(type1 name1, type2 name2, type3 name3, type4 name4){     \
+type name(type1 name1, type2 name2, type3 name3, type4 name4){     \
     __asm__ __volatile__("push {lr}\n\t"    \
                        "mov r0, %0\n\t"     \
                        "mov r1, %1\n\t"     \
@@ -65,7 +63,7 @@ asmlinkage type name(type1 name1, type2 name2, type3 name3, type4 name4){     \
 }
 
 #define _syscall5(type,name,type1,name1,type2,name2,type3,name3,type4,name4,type5,name5)  \
-asmlinkage type name(type1 name1, type2 name2, type3 name3, type4 name4, type5 name5){     \
+type name(type1 name1, type2 name2, type3 name3, type4 name4, type5 name5){     \
     __asm__ __volatile__("push {lr}\n\t"    \
                        "mov r0, %0\n\t"     \
                        "mov r1, %1\n\t"     \
@@ -90,20 +88,19 @@ _syscall0(int,fork)
 _syscall0(int,read)
 _syscall0(int,write)
 
-
 #define __SYSCALL_test1 5
 _syscall1(int,test1,int,arg1)
 
 #define __SYSCALL_test2 6
 _syscall2(int,test2,int,arg1,int,arg2)
 
-#define __SYSCALL_test3 6
+#define __SYSCALL_test3 7
 _syscall3(int,test3,int,arg1,int,arg2,int,arg3)
 
-#define __SYSCALL_test4 7
+#define __SYSCALL_test4 8
 _syscall4(int,test4,int,arg1,int,arg2,int,arg3,int,arg4)
 
-#define __SYSCALL_test5 8
+#define __SYSCALL_test5 9
 _syscall5(int,test5,int,arg1,int,arg2,int,arg3,int,arg4,int,arg5)
 
 // Below in kernel
@@ -112,7 +109,6 @@ int sys_exit(void);
 int sys_fork(void);
 int sys_read(void);
 int sys_write(void);
-
 int sys_test1(int arg1);
 int sys_test2(int arg1,int arg2);
 int sys_test3(int arg1,int arg2,int arg3);

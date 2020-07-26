@@ -45,16 +45,8 @@ void disable_interrupt() {
 void __attribute__((interrupt("UNDEF"))) undefined_instruction_handler(void) {}
 
 extern funcPtr sys_call_table[];
-void __attribute__((interrupt("SWI"))) software_interrupt_handler(uint32_t sysCallNo) {
+void __attribute__((interrupt("SWI"))) software_interrupt_handler(int sysCallNo,int r1,int r2,int r3,int r4,int r5) {
   disable_interrupt();
-  uint32_t r0,r1,r2,r3,r4,r5;
-  __asm__ __volatile__("mov	%0, r0 \n\t"
-                       "mov	%1, r1 \n\t"
-                       "mov	%2, r2 \n\t"
-                       "mov	%3, r3 \n\t"
-                       "mov	%4, r4 \n\t"
-                       "mov	%5, r5 \n\t"
-                       : "=r"(r0),"=r"(r1),"=r"(r2),"=r"(r3),"=r"(r4),"=r"(r5));
   sys_call_table[sysCallNo](r1,r2,r3,r4,r5);
   enable_interrupt();
 }
