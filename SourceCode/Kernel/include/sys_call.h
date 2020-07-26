@@ -32,7 +32,7 @@ asmlinkage type name(type1 name1){     \
 }
 
 #define _syscall2(type,name,type1,name1,type2,name2)  \
-asmlinkage type name(type1 name1){     \
+asmlinkage type name(type1 name1, type2 name2){     \
     __asm__ __volatile__("push {lr}\n\t"    \
                        "mov r0, %0\n\t"     \
                        "mov r1, %1\n\t"     \
@@ -42,7 +42,7 @@ asmlinkage type name(type1 name1){     \
 }
 
 #define _syscall3(type,name,type1,name1,type2,name2,type3,name3)  \
-asmlinkage type name(type1 name1){     \
+asmlinkage type name(type1 name1, type2 name2, type3 name3){     \
     __asm__ __volatile__("push {lr}\n\t"    \
                        "mov r0, %0\n\t"     \
                        "mov r1, %1\n\t"     \
@@ -53,7 +53,7 @@ asmlinkage type name(type1 name1){     \
 }
 
 #define _syscall4(type,name,type1,name1,type2,name2,type3,name3,type4,name4)  \
-asmlinkage type name(type1 name1){     \
+asmlinkage type name(type1 name1, type2 name2, type3 name3, type4 name4){     \
     __asm__ __volatile__("push {lr}\n\t"    \
                        "mov r0, %0\n\t"     \
                        "mov r1, %1\n\t"     \
@@ -64,8 +64,8 @@ asmlinkage type name(type1 name1){     \
                        "pop {pc}\n\t" ::"r"(__SYSCALL_##name),"r"(name1),"r"(name2),"r"(name3),"r"(name4));  \
 }
 
-#define _syscall4(type,name,type1,name1,type2,name2,type3,name3,type4,name4,type5,name5)  \
-asmlinkage type name(type1 name1){     \
+#define _syscall5(type,name,type1,name1,type2,name2,type3,name3,type4,name4,type5,name5)  \
+asmlinkage type name(type1 name1, type2 name2, type3 name3, type4 name4, type5 name5){     \
     __asm__ __volatile__("push {lr}\n\t"    \
                        "mov r0, %0\n\t"     \
                        "mov r1, %1\n\t"     \
@@ -92,7 +92,19 @@ _syscall0(int,write)
 
 
 #define __SYSCALL_test1 5
-_syscall1(int,test1,int,id)
+_syscall1(int,test1,int,arg1)
+
+#define __SYSCALL_test2 6
+_syscall2(int,test2,int,arg1,int,arg2)
+
+#define __SYSCALL_test3 6
+_syscall3(int,test3,int,arg1,int,arg2,int,arg3)
+
+#define __SYSCALL_test4 7
+_syscall4(int,test4,int,arg1,int,arg2,int,arg3,int,arg4)
+
+#define __SYSCALL_test5 8
+_syscall5(int,test5,int,arg1,int,arg2,int,arg3,int,arg4,int,arg5)
 
 // Below in kernel
 int sys_setup(void);
@@ -101,7 +113,11 @@ int sys_fork(void);
 int sys_read(void);
 int sys_write(void);
 
-int sys_test1(int id);
+int sys_test1(int arg1);
+int sys_test2(int arg1,int arg2);
+int sys_test3(int arg1,int arg2,int arg3);
+int sys_test4(int arg1,int arg2,int arg3,int arg4);
+int sys_test5(int arg1,int arg2,int arg3,int arg4,int arg5);
 
 funcPtr sys_call_table[]={
     sys_setup,
@@ -109,7 +125,11 @@ funcPtr sys_call_table[]={
     sys_fork,
     sys_read,
     sys_write,
-    sys_test1
+    sys_test1,
+    sys_test2,
+    sys_test3,
+    sys_test4,
+    sys_test5
 };
 
 #endif // __KERNEL_SYSCALL_H__
