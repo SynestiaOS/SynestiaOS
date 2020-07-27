@@ -64,10 +64,3 @@ int sys_test5(int arg1,int arg2,int arg3,int arg4,int arg5){
   LogWarnning("[SysCall] syscall test5 invoked. arg5: %d \n",arg5);
   return 0;
 }
-
-void swi(uint32_t num) {
-  __asm__ __volatile__("push {lr}\n\t"
-                       "mov r0, %0\n\t"
-                       "swi 0x0\n\t"
-                       "pop {pc}\n\t" ::"r"(num));
-}

@@ -16,7 +16,7 @@
 #define nullptr (void *)0
 #define readonly const
 
-typedef int (*funcPtr)(int arg1,int arg2,int arg3,int arg4,int arg5);
+typedef int (*SysCall)(int arg1,int arg2,int arg3,int arg4,int arg5,int arg6);
 
 typedef enum KernelStatus {
   OK = 0,

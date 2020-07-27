@@ -16,6 +16,13 @@ void init_interrupt() {
   LogInfo("[Interrupt]: interrupt init\n");
 }
 
+void swi(uint32_t num) {
+  __asm__ __volatile__("push {lr}\n\t"
+                       "mov r0, %0\n\t"
+                       "swi 0x0\n\t"
+                       "pop {pc}\n\t" ::"r"(num));
+}
+
 uint32_t cpsr_value() {
   uint32_t cpsr;
   __asm__ __volatile__("mrs %0, cpsr" : "=r"(cpsr) :);
@@ -44,11 +51,11 @@ void disable_interrupt() {
 
 void __attribute__((interrupt("UNDEF"))) undefined_instruction_handler(void) {}
 
-extern funcPtr sys_call_table[];
-void __attribute__((interrupt("SWI"))) software_interrupt_handler(int sysCallNo,int r1,int r2,int r3,int r4,int r5) {
-  // disable_interrupt();
-  sys_call_table[sysCallNo](r1,r2,r3,r4,r5);
-  // enable_interrupt();
+extern SysCall sys_call_table[];
+void __attribute__((interrupt("SWI"))) software_interrupt_handler(int r0,int r1,int r2,int r3,int r4,int r5,int r6, int sysCallNo) {
+  disable_interrupt();
+  sys_call_table[sysCallNo](r0,r1,r2,r3,r4,r5);
+  enable_interrupt();
 }
 
 void __attribute__((interrupt("ABORT"))) prefetch_abort_handler(void) {}
