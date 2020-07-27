@@ -9,6 +9,13 @@
 #define _syscall0(type,name)  \
 type name(void){     \
     __asm__ __volatile__("push {lr}\n\t"    \
+                       "mov r0, #0\n\t"     \
+                       "mov r1, #0\n\t"     \
+                       "mov r2, #0\n\t"     \
+                       "mov r3, #0\n\t"     \
+                       "mov r4, #0\n\t"     \
+                       "mov r5, #0\n\t"     \
+                       "mov r6, #0\n\t"     \
                        "mov r7, %0\n\t"     \
                        "swi 0x0\n\t"        \
                        "pop {pc}\n\t" ::"r"(__SYSCALL_##name));  \
@@ -18,6 +25,12 @@ type name(void){     \
 type name(type1 name1){     \
     __asm__ __volatile__("push {lr}\n\t"    \
                        "mov r0, %1\n\t"     \
+                       "mov r1, #0\n\t"     \
+                       "mov r2, #0\n\t"     \
+                       "mov r3, #0\n\t"     \
+                       "mov r4, #0\n\t"     \
+                       "mov r5, #0\n\t"     \
+                       "mov r6, #0\n\t"     \
                        "mov r7, %0\n\t"     \
                        "swi 0x0\n\t"        \
                        "pop {pc}\n\t" ::"r"(__SYSCALL_##name),"r"(name1));  \
@@ -28,6 +41,11 @@ type name(type1 name1, type2 name2){     \
     __asm__ __volatile__("push {lr}\n\t"    \
                        "mov r0, %1\n\t"     \
                        "mov r1, %2\n\t"     \
+                       "mov r2, #0\n\t"     \
+                       "mov r3, #0\n\t"     \
+                       "mov r4, #0\n\t"     \
+                       "mov r5, #0\n\t"     \
+                       "mov r6, #0\n\t"     \
                        "mov r7, %0\n\t"     \
                        "swi 0x0\n\t"        \
                        "pop {pc}\n\t" ::"r"(__SYSCALL_##name),"r"(name1),"r"(name2));  \
@@ -39,6 +57,10 @@ type name(type1 name1, type2 name2, type3 name3){     \
                        "mov r0, %1\n\t"     \
                        "mov r1, %2\n\t"     \
                        "mov r2, %3\n\t"     \
+                       "mov r3, #0\n\t"     \
+                       "mov r4, #0\n\t"     \
+                       "mov r5, #0\n\t"     \
+                       "mov r6, #0\n\t"     \
                        "mov r7, %0\n\t"     \
                        "swi 0x0\n\t"        \
                        "pop {pc}\n\t" ::"r"(__SYSCALL_##name),"r"(name1),"r"(name2),"r"(name3));  \
@@ -51,6 +73,9 @@ type name(type1 name1, type2 name2, type3 name3, type4 name4){     \
                        "mov r1, %2\n\t"     \
                        "mov r2, %3\n\t"     \
                        "mov r3, %4\n\t"     \
+                       "mov r4, #0\n\t"     \
+                       "mov r5, #0\n\t"     \
+                       "mov r6, #0\n\t"     \
                        "mov r7, %0\n\t"     \
                        "swi 0x0\n\t"        \
                        "pop {pc}\n\t" ::"r"(__SYSCALL_##name),"r"(name1),"r"(name2),"r"(name3),"r"(name4));  \
@@ -68,7 +93,7 @@ type name(type1 name1, type2 name2, type3 name3, type4 name4, type5 name5){     
                        "mov r6, #0\n\t"     \
                        "mov r7, %0\n\t"     \
                        "swi 0x0\n\t"        \
-                       "pop {pc}\n\t" ::"r"(__SYSCALL_##name),"r"(name1),"r"(name2),"r"(name3),"r"(name4),"r"(name5));  \
+                       "pop {pc}\n\t" ::"r"(__SYSCALL_##name),"r"(name1),"r"(name2),"r"(name3),"r"(name4),"r"(name5):"memory");  \
 }
 
 #define _syscall6(type,name,type1,name1,type2,name2,type3,name3,type4,name4,type5,name5,type6,name6)  \
@@ -80,6 +105,7 @@ type name(type1 name1, type2 name2, type3 name3, type4 name4, type5 name5,type6 
                        "mov r3, %4\n\t"     \
                        "mov r4, %5\n\t"     \
                        "mov r5, %6\n\t"     \
+                       "mov r6, #0\n\t"     \
                        "mov r7, %0\n\t"     \
                        "swi 0x0\n\t"        \
                        "pop {pc}\n\t" ::"r"(__SYSCALL_##name),"r"(name1),"r"(name2),"r"(name3),"r"(name4),"r"(name5),"r"(name6));  \
