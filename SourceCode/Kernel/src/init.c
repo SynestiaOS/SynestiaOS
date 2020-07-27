@@ -120,13 +120,8 @@ uint32_t *window_thread3(int args) {
     gui_animation_update(&translation);
     disable_interrupt();
     gui_window_draw(&window);
-    enable_interrupt();
-    write();
-    test1(1);
     test2(1,2);
-    // test3(1,2,3);
-    // test4(1,2,3,4);
-    // test5(1,2,3,4,5);
+    enable_interrupt();
   }
 }
 

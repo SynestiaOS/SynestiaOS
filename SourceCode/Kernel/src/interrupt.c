@@ -46,9 +46,9 @@ void __attribute__((interrupt("UNDEF"))) undefined_instruction_handler(void) {}
 
 extern funcPtr sys_call_table[];
 void __attribute__((interrupt("SWI"))) software_interrupt_handler(int sysCallNo,int r1,int r2,int r3,int r4,int r5) {
-  disable_interrupt();
+  // disable_interrupt();
   sys_call_table[sysCallNo](r1,r2,r3,r4,r5);
-  enable_interrupt();
+  // enable_interrupt();
 }
 
 void __attribute__((interrupt("ABORT"))) prefetch_abort_handler(void) {}
