@@ -7,7 +7,9 @@
 #ifndef __LIBRARY_LIBGFX_GL2D_H__
 #define __LIBRARY_LIBGFX_GL2D_H__
 
-#define FLUENT_PRIMARY_COLOR 0x0078D4
+#define FLUENT_PRIMARY_COLOR 0x0b0711
+#define FLUENT_PRIMARY_BACK_COLOR 0x171520
+#define FLUENT_PRIMARY_FORE_COLOR 0xFFFFFF
 
 void gfx2d_draw_pixel(int x, int y, uint32_t c);
 

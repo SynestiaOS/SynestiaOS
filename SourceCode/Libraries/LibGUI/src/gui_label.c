@@ -31,15 +31,15 @@ void gui_label_create(GUILabel *label) {
   label->component.margin.right = 0;
   label->text = "";
 
-  label->component.background.a = 0x00;
-  label->component.background.r = 0xFF;
-  label->component.background.g = 0xFF;
-  label->component.background.b = 0xFF;
+  label->component.background.a = (FLUENT_PRIMARY_BACK_COLOR>>24)&0xFF;
+  label->component.background.r = (FLUENT_PRIMARY_BACK_COLOR>>16)&0xFF;
+  label->component.background.g = (FLUENT_PRIMARY_BACK_COLOR>>8)&0xFF;
+  label->component.background.b = FLUENT_PRIMARY_BACK_COLOR & 0xFF;
 
-  label->component.foreground.a = 0x00;
-  label->component.foreground.r = 0x00;
-  label->component.foreground.g = 0x00;
-  label->component.foreground.b = 0x00;
+  label->component.foreground.a = (FLUENT_PRIMARY_FORE_COLOR>>24)&0xFF;
+  label->component.foreground.r = (FLUENT_PRIMARY_FORE_COLOR>>16)&0xFF;
+  label->component.foreground.g = (FLUENT_PRIMARY_FORE_COLOR>>8)&0xFF;
+  label->component.foreground.b = FLUENT_PRIMARY_FORE_COLOR & 0xFF;
 }
 
 void gui_label_init(GUILabel *label, uint32_t x, uint32_t y, const char *text) {

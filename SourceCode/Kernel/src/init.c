@@ -30,18 +30,7 @@ void print_splash() {
 }
 
 void draw_task_bar() {
-  uint32_t *barBuffer = (uint32_t *)kheap_alloc(1024 * 32 * 4);
-
-  for (int i = 0; i < 1024; i++) {
-    for (int j = 0; j < 31; j++) {
-      barBuffer[j * 1024 + i] = ((FLUENT_PRIMARY_COLOR >> 16) & 0xFF - j) << 16 |
-                                ((FLUENT_PRIMARY_COLOR >> 8) & 0xFF - j) << 8 | (FLUENT_PRIMARY_COLOR & 0xFF - j);
-    }
-  }
-  for (int i = 0; i < 1024; i++) {
-    barBuffer[31 * 1024 + i] = 0x999999;
-  }
-  gfx2d_draw_bitmap(0, 0, 1024, 32, barBuffer);
+  gfx2d_fill_rect(0, 0, 1024, 32, FLUENT_PRIMARY_COLOR);
   gfx2d_draw_logo(0, 0, 0xFFFFFF);
 }
 
@@ -54,9 +43,6 @@ uint32_t *window_thread1(int args) {
   gui_window_init(&window, 0, 33, "window1");
   GUILabel label;
   gui_label_create(&label);
-  label.component.foreground.r = 0x00;
-  label.component.foreground.g = 0x00;
-  label.component.foreground.b = 0x00;
   label.component.colorMode = TRANSPARENT;
   label.component.size.width = 100;
   gui_window_add_children(&window, &(label.component));
@@ -79,9 +65,6 @@ uint32_t *window_thread2(int args) {
   gui_window_init(&window, 512, 33, "window2");
   GUILabel label;
   gui_label_create(&label);
-  label.component.foreground.r = 0x00;
-  label.component.foreground.g = 0x00;
-  label.component.foreground.b = 0x00;
   label.component.colorMode = TRANSPARENT;
   label.component.size.width = 100;
   gui_window_add_children(&window, &(label.component));

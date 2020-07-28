@@ -36,15 +36,15 @@ void gui_window_create(GUIWindow *window) {
   window->component.margin.left = DEFAULT_MARGIN;
   window->component.margin.right = DEFAULT_MARGIN;
 
-  window->component.background.a = 0x00;
-  window->component.background.r = 0xFF;
-  window->component.background.g = 0xFF;
-  window->component.background.b = 0xFF;
+  window->component.background.a = (FLUENT_PRIMARY_BACK_COLOR>>24)&0xFF;
+  window->component.background.r = (FLUENT_PRIMARY_BACK_COLOR>>16)&0xFF;
+  window->component.background.g = (FLUENT_PRIMARY_BACK_COLOR>>8)&0xFF;
+  window->component.background.b = FLUENT_PRIMARY_BACK_COLOR & 0xFF;
 
-  window->component.foreground.a = 0x00;
-  window->component.foreground.r = 0x00;
-  window->component.foreground.g = 0x00;
-  window->component.foreground.b = 0x00;
+  window->component.foreground.a = (FLUENT_PRIMARY_FORE_COLOR>>24)&0xFF;
+  window->component.foreground.r = (FLUENT_PRIMARY_FORE_COLOR>>16)&0xFF;
+  window->component.foreground.g = (FLUENT_PRIMARY_FORE_COLOR>>8)&0xFF;
+  window->component.foreground.b = FLUENT_PRIMARY_FORE_COLOR & 0xFF;
 
   window->title = "";
 
@@ -101,25 +101,13 @@ void gui_window_draw(GUIWindow *window) {
     }
 
     // 4. draw header window
-    gfx2d_draw_rect(window->component.position.x + window->component.size.width - 24 * 3,
-                    window->component.position.y + 4,
-                    window->component.position.x + window->component.size.width - 24 * 3 + 16,
-                    window->component.position.y + 4 + 16, 0x00FFFFFF);
     gfx2d_draw_ascii(window->component.position.x + window->component.size.width - 24 * 3 + 4,
-                     window->component.position.y + 4 + 4, '_', 0xFFFFFF);
-    gfx2d_draw_rect(window->component.position.x + window->component.size.width - 24 * 2,
-                    window->component.position.y + 4,
-                    window->component.position.x + window->component.size.width - 24 * 2 + 16,
-                    window->component.position.y + 4 + 16, 0x00FFFFFF);
+                     window->component.position.y + 4 + 4, '-', 0xFFFFFF);
     gfx2d_draw_ascii(window->component.position.x + window->component.size.width - 24 * 2 + 4,
                      window->component.position.y + 4 + 4, '#', 0xFFFFFF);
 
-    gfx2d_draw_rect(window->component.position.x + window->component.size.width - 24 * 1,
-                    window->component.position.y + 4,
-                    window->component.position.x + window->component.size.width - 24 * 1 + 16,
-                    window->component.position.y + 4 + 16, 0x00FFFFFF);
     gfx2d_draw_ascii(window->component.position.x + window->component.size.width - 24 * 1 + 4,
-                     window->component.position.y + 4 + 4, 'x', 0xFFFFFF);
+                     window->component.position.y + 4 + 4, 'X', 0xFFFFFF);
 
     // 5. draw border
     gfx2d_draw_rect(window->component.position.x, window->component.position.y,
