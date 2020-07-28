@@ -54,7 +54,6 @@ void __attribute__((interrupt("UNDEF"))) undefined_instruction_handler(void) {}
 extern SysCall sys_call_table[];
 
 int software_interrupt_handler() {
-  disable_interrupt();
   volatile int r0, r1, r2, r3, r4, sysCallNo;
   __asm__ volatile("mov %0,r1\n\t"
                    "mov %1,r2\n\t"
@@ -66,9 +65,7 @@ int software_interrupt_handler() {
                    :
                    : "r1", "r2", "r4", "r5", "r6", "r7");
 
-  int result = sys_call_table[sysCallNo](r0, r1, r2, r3, r4);
-  enable_interrupt();
-  return result;
+  return sys_call_table[sysCallNo](r0, r1, r2, r3, r4);
 }
 
 void __attribute__((interrupt("ABORT"))) prefetch_abort_handler(void) {}

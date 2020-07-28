@@ -14,7 +14,7 @@ _reset_addr:
 _undefined_instruction_addr:
     .word undefined_instruction_handler
 _software_interrupt_addr:
-    .word software_interrupt_handler
+    .word software_insterupt_isp
 _prefetch_abort_addr:
     .word prefetch_abort_handler
 _data_abort_addr:
@@ -57,6 +57,17 @@ reset_handler:
 halt_cpu:
     wfi // wait for interrup coming
     b halt_cpu
+
+software_insterupt_isp:
+    //cpsr
+    stmfd   sp!, {r1-r12,lr}
+    
+    bl software_interrupt_handler
+
+    ldmfd   sp!, {r1-r12,lr}
+    subs    pc,  lr, #0
+    nop
+
 
 
 interupt_isp:
