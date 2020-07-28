@@ -122,6 +122,8 @@ uint32_t *window_thread3(int args) {
     gui_window_draw(&window);
     // write();
     // test2(1,2);
+    // test3(1,2,3);
+    // test4(1,2,3,4);
     test5(1,2,3,4,5);
     enable_interrupt();
   }

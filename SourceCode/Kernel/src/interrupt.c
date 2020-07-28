@@ -55,17 +55,18 @@ extern SysCall sys_call_table[];
 
 void __attribute__((interrupt("SWI"))) software_interrupt_handler() {
     disable_interrupt();
-    volatile int r0, r1, r2, r3, r4, r5, r6, sysCallNo;
-    __asm__ volatile("mov %0,r0":"=r"(r0)::"r0");
-    __asm__ volatile("mov %0,r1":"=r"(r1)::"r0","r1");
-    __asm__ volatile("mov %0,r2":"=r"(r2)::"r0","r1","r2");
-    __asm__ volatile("mov %0,r3":"=r"(r3)::"r0","r1","r2","r3");
-    __asm__ volatile("mov %0,r4":"=r"(r4)::"r0","r1","r2","r3","r4");
-    __asm__ volatile("mov %0,r5":"=r"(r5)::);
-    __asm__ volatile("mov %0,r6":"=r"(r6)::);
-    __asm__ volatile("mov %0,r7":"=r"(sysCallNo)::"r0","r1","r2","r3","r4");
+    volatile int r0, r1, r2, r3, r4, sysCallNo;
+    __asm__ volatile("mov %0,r1\n\t"
+                     "mov %1,r2\n\t"
+                     "mov %2,r4\n\t"
+                     "mov %3,r5\n\t"
+                     "mov %4,r6\n\t"
+                     "mov %5,r7\n\t"
+                     :"=r"(r0),"=r"(r1),"=r"(r2),"=r"(r3),"=r"(r4),"=r"(sysCallNo)
+                     :
+                     :"r1","r2","r4","r5","r6","r7");
 
-    int result = sys_call_table[sysCallNo](r0, r1, r2, r3, r4, r5);
+    int result = sys_call_table[sysCallNo](r0, r1, r2, r3, r4);
     enable_interrupt();
     return result;
 }
