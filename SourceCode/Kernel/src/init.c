@@ -30,17 +30,17 @@ void print_splash() {
 }
 
 void draw_task_bar() {
-  gfx2d_fill_rect(0, 0, 1024, 32, FLUENT_PRIMARY_COLOR);
-  gfx2d_draw_logo(0, 0, 0xFFFFFF);
+  gfx2d_fill_rect(0, 0, 1024, 48, FLUENT_PRIMARY_COLOR);
+  gfx2d_draw_logo(8, 8, 0xFFFFFF);
 }
 
 uint32_t *window_thread1(int args) {
   uint32_t count = 0;
   GUIWindow window;
   gui_window_create(&window);
-  window.component.size.width = 510;
-  window.component.size.height = 500;
-  gui_window_init(&window, 0, 33, "window1");
+  window.component.size.width = 300;
+  window.component.size.height = 200;
+  gui_window_init(&window, 20, 70, "window1");
   GUILabel label;
   gui_label_create(&label);
   label.component.colorMode = TRANSPARENT;
@@ -60,9 +60,9 @@ uint32_t *window_thread2(int args) {
   uint32_t count = 0;
   GUIWindow window;
   gui_window_create(&window);
-  window.component.size.width = 510;
-  window.component.size.height = 500;
-  gui_window_init(&window, 512, 33, "window2");
+  window.component.size.width = 300;
+  window.component.size.height = 200;
+  gui_window_init(&window, 340, 70, "window2");
   GUILabel label;
   gui_label_create(&label);
   label.component.colorMode = TRANSPARENT;
@@ -82,9 +82,9 @@ extern uint32_t getpid();
 uint32_t *window_thread3(int args) {
   GUIWindow window;
   gui_window_create(&window);
-  window.component.size.width = 1022;
-  window.component.size.height = 150;
-  gui_window_init(&window, 0, 560, "window3");
+  window.component.size.width = 620;
+  window.component.size.height = 200;
+  gui_window_init(&window, 20, 330, "window3");
   GUIButton button;
   gui_button_create(&button);
   gui_button_init(&button, 0, 0, "TEST");
