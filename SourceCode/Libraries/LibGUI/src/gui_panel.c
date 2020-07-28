@@ -35,14 +35,14 @@ void gui_panel_create(GUIPanel *panel) {
   panel->component.margin.left = DEFAULT_MARGIN;
   panel->component.margin.right = DEFAULT_MARGIN;
 
-  panel->component.background.a = (FLUENT_PRIMARY_BACK_COLOR>>24)&0xFF;
-  panel->component.background.r = (FLUENT_PRIMARY_BACK_COLOR>>16)&0xFF;
-  panel->component.background.g = (FLUENT_PRIMARY_BACK_COLOR>>8)&0xFF;
+  panel->component.background.a = (FLUENT_PRIMARY_BACK_COLOR >> 24) & 0xFF;
+  panel->component.background.r = (FLUENT_PRIMARY_BACK_COLOR >> 16) & 0xFF;
+  panel->component.background.g = (FLUENT_PRIMARY_BACK_COLOR >> 8) & 0xFF;
   panel->component.background.b = FLUENT_PRIMARY_BACK_COLOR & 0xFF;
 
-  panel->component.foreground.a = (FLUENT_PRIMARY_FORE_COLOR>>24)&0xFF;
-  panel->component.foreground.r = (FLUENT_PRIMARY_FORE_COLOR>>16)&0xFF;
-  panel->component.foreground.g = (FLUENT_PRIMARY_FORE_COLOR>>8)&0xFF;
+  panel->component.foreground.a = (FLUENT_PRIMARY_FORE_COLOR >> 24) & 0xFF;
+  panel->component.foreground.r = (FLUENT_PRIMARY_FORE_COLOR >> 16) & 0xFF;
+  panel->component.foreground.g = (FLUENT_PRIMARY_FORE_COLOR >> 8) & 0xFF;
   panel->component.foreground.b = FLUENT_PRIMARY_FORE_COLOR & 0xFF;
 
   panel->children = kvector_allocate();
