@@ -20,7 +20,7 @@
                          "mov r6, %6\n\t"                                                                              \
                          "mov r7, %1\n\t"                                                                              \
                          "swi 0x0\n\t"                                                                                 \
-                         "mov %0, r0\n\t"                                                                                \
+                         "mov %0, r0\n\t"                                                                              \
                          "pop {lr}\n\t"                                                                                \
                          : "=r"(result)                                                                                \
                          : "r"(__SYSCALL_##name), "r"(name1), "r"(name2), "r"(name3), "r"(name4), "r"(name5)           \
