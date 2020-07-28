@@ -3,9 +3,7 @@
 //
 
 #include <log.h>
-#include <sys_call.h>
 #include <sched.h>
+#include <sys_call.h>
 
-uint32_t sys_getpid(void) {
-  return schd_getpid();
-}
+uint32_t sys_getpid(void) { return schd_getpid(); }

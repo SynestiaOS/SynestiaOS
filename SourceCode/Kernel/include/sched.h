@@ -36,7 +36,6 @@ KernelStatus schd_reschedule(void);
 
 KernelStatus sche_insert_into_percpu_rq(CpuNum cpuNum, Thread *thread);
 
-
 uint32_t schd_getpid();
 
 #endif //__KERNEL_SCHED_H__

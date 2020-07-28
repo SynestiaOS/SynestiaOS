@@ -9,6 +9,26 @@
 #include <thread.h>
 
 extern uint64_t ktimer_sys_runtime();
+uint32_t pidMap[2048] = {0};
+
+uint32_t thread_alloc_pid() {
+  for (uint32_t i = 0; i < 2048 / BITS_IN_UINT32; i++) {
+    if (pidMap[i] != MAX_UINT_32) {
+      for (uint8_t j = 0; j < BITS_IN_UINT32; j++) {
+        if ((pidMap[i] & ((uint32_t)0x1 << j)) == 0) {
+          pidMap[i] |= (uint32_t)0x1 << j;
+          return i * BITS_IN_UINT32 + j;
+        }
+      }
+    }
+  }
+}
+
+uint32_t thread_free_pid(uint32_t pid) {
+  uint32_t index = pid / BITS_IN_UINT32;
+  uint8_t bitIndex = pid % BITS_IN_UINT32;
+  pidMap[index] ^= (uint32_t)0x1 << bitIndex;
+}
 
 Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uint32_t priority) {
   // 1. allocate stack memory from kernel heap for idle task
@@ -47,7 +67,7 @@ Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uin
     thread->runtimVirtualNs = 0;
     thread->startTime = ktimer_sys_runtime();
 
-    thread->pid = 0;
+    thread->pid = thread_alloc_pid();
     strcpy(thread->name, name);
     thread->arg = arg;
 

@@ -116,7 +116,7 @@ uint32_t *window_thread3(int args) {
     disable_interrupt();
     gui_window_draw(&window);
     uint32_t pid = getpid();
-    LogWarnning("[Thread3] pid: %d .\n",pid);
+    LogWarnning("[Thread3] pid: %d .\n", pid);
     enable_interrupt();
   }
 }

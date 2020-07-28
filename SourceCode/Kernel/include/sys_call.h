@@ -8,8 +8,6 @@
 
 uint32_t sys_getpid(void);
 
-SysCall sys_call_table[]={
-    sys_getpid
-};
+SysCall sys_call_table[] = {sys_getpid};
 
 #endif // __KERNEL_SYSCALL_H__
