@@ -68,6 +68,7 @@ void __attribute__((interrupt("SWI"))) software_interrupt_handler() {
 
     int result = sys_call_table[sysCallNo](r0, r1, r2, r3, r4);
     enable_interrupt();
+    // __asm__ volatile("mov r0,%0"::"r"(result):"r0");
     return result;
 }
 

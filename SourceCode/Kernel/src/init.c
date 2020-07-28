@@ -95,12 +95,7 @@ uint32_t *window_thread2(int args) {
   }
 }
 
-extern int write();
-extern int test1(int agr1);
-extern int test2(int agr1, int arg2);
-extern int test3(int agr1, int arg2, int agr3);
-extern int test4(int agr1, int arg2, int agr3, int agr4);
-extern int test5(int agr1, int arg2, int agr3, int agr4, int arg5);
+extern uint32_t getpid();
 uint32_t *window_thread3(int args) {
   GUIWindow window;
   gui_window_create(&window);
@@ -120,11 +115,8 @@ uint32_t *window_thread3(int args) {
     gui_animation_update(&translation);
     disable_interrupt();
     gui_window_draw(&window);
-    // write();
-    // test2(1,2);
-    // test3(1,2,3);
-    // test4(1,2,3,4);
-    test5(1,2,3,4,5);
+    uint32_t pid = getpid();
+    LogWarnning("[Thread3] pid: %d .\n",pid);
     enable_interrupt();
   }
 }

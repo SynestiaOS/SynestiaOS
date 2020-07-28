@@ -266,3 +266,8 @@ KernelStatus schd_preempt(void) {
   // todo:
   return OK;
 }
+
+
+uint32_t schd_getpid(){
+  return currentThread->pid;
+}
