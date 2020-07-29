@@ -14,16 +14,17 @@ void gpu_write_pixel(uint32_t x, uint32_t y, const pixel_t *pix) {
   framebuffer_draw_pixel(x, y, pix->red, pix->green, pix->blue);
 }
 
-unsigned char SCREEN_BUFFER[1024 * 768 * 4] = {'\0'};
+extern uint32_t GFX2D_BUFFER[1024 * 768];
+
 extern uint32_t pitch;
 extern unsigned char *lfb;
 
-void gpu_write_pixel_color(unsigned char *buffer, uint32_t x, uint32_t y, uint32_t c) {
+void gpu_write_pixel_color(uint32_t x, uint32_t y, uint32_t c) {
   uint32_t r = (c >> 16) & 0xFF;
   uint32_t g = (c >> 8) & 0xFF;
   uint32_t b = c & 0xFF;
 
-  unsigned char *ptr = buffer;
+  unsigned char *ptr = lfb;
 
   ptr += pitch * y;
   ptr += (x << 2);
@@ -35,7 +36,13 @@ void gpu_write_pixel_color(unsigned char *buffer, uint32_t x, uint32_t y, uint32
 
 uint32_t *gpu_flush(int arg) {
   LogInfo("[GPU]: flush.\n");
-  memcpy(lfb, &SCREEN_BUFFER, 1024 * 768 * 4);
+  int index = 0;
+  for (uint32_t i = 0; i < 768; i++) {
+    for (uint32_t j = 0; j < 1024; j++) {
+      gpu_write_pixel_color(j, i, GFX2D_BUFFER[index]);
+      index++;
+    }
+  }
 }
 
 void gpu_init(void) {

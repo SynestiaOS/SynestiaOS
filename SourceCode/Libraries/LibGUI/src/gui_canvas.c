@@ -9,6 +9,7 @@
 #include <stdbool.h>
 #include <stdlib.h>
 
+extern uint32_t GFX2D_BUFFER[1024 * 768];
 void gui_canvas_create(GUICanvas *canvas) {
   canvas->component.type = CANVAS;
   canvas->component.visable = true;
@@ -41,7 +42,7 @@ void gui_canvas_create(GUICanvas *canvas) {
   canvas->component.foreground.g = 0x00;
   canvas->component.foreground.b = 0x00;
 
-  canvas->buffer = kheap_alloc(canvas->component.size.width * canvas->component.size.height * sizeof(uint32_t));
+  canvas->buffer = (unsigned char *)kheap_alloc(canvas->component.size.width * canvas->component.size.height * 4);
   if (canvas->buffer == nullptr) {
     LogError("[GUI]: canvas create failed, unable to allocate buffer memory\n");
   }
@@ -61,63 +62,82 @@ void gui_canvas_draw_pixel(GUICanvas *canvas, int x, int y, uint32_t c) {
     return;
   }
 
-  gfx2d_draw_pixel(canvas->buffer, canvas->component.position.x + x, canvas->component.position.y + y, c);
+  Gfx2DContext context = {
+      .width = canvas->component.size.width, .height = canvas->component.size.height, .buffer = canvas->buffer};
+  gfx2d_draw_pixel(context, canvas->component.position.x + x, canvas->component.position.y + y, c);
 }
 
 void gui_canvas_draw_rect(GUICanvas *canvas, int x1, int y1, int x2, int y2, uint32_t c) {
-  gfx2d_draw_rect(canvas->buffer, canvas->component.position.x + x1, canvas->component.position.y + y1,
+  Gfx2DContext context = {
+      .width = canvas->component.size.width, .height = canvas->component.size.height, .buffer = canvas->buffer};
+  gfx2d_draw_rect(context, canvas->component.position.x + x1, canvas->component.position.y + y1,
                   canvas->component.position.x + x2, canvas->component.position.y + y2, c);
 }
 
 void gui_canvas_fill_rect(GUICanvas *canvas, int x1, int y1, int x2, int y2, uint32_t c) {
-  gfx2d_fill_rect(canvas->buffer, canvas->component.position.x + x1, canvas->component.position.y + y1,
+  Gfx2DContext context = {
+      .width = canvas->component.size.width, .height = canvas->component.size.height, .buffer = canvas->buffer};
+  gfx2d_fill_rect(context, canvas->component.position.x + x1, canvas->component.position.y + y1,
                   canvas->component.position.x + x2, canvas->component.position.y + y2, c);
 }
 
 void gui_canvas_draw_line(GUICanvas *canvas, int x1, int y1, int x2, int y2, uint32_t c) {
-  gfx2d_draw_line(canvas->buffer, canvas->component.position.x + x1, canvas->component.position.y + y1,
+  Gfx2DContext context = {
+      .width = canvas->component.size.width, .height = canvas->component.size.height, .buffer = canvas->buffer};
+  gfx2d_draw_line(context, canvas->component.position.x + x1, canvas->component.position.y + y1,
                   canvas->component.position.x + x2, canvas->component.position.y + y2, c);
 }
 
 void gui_canvas_draw_triangle(GUICanvas *canvas, int x1, int y1, int x2, int y2, int x3, int y3, uint32_t c) {
-  gfx2d_draw_triangle(canvas->buffer, canvas->component.position.x + x1, canvas->component.position.y + y1,
+  Gfx2DContext context = {
+      .width = canvas->component.size.width, .height = canvas->component.size.height, .buffer = canvas->buffer};
+  gfx2d_draw_triangle(context, canvas->component.position.x + x1, canvas->component.position.y + y1,
                       canvas->component.position.x + x2, canvas->component.position.y + y2,
                       canvas->component.position.x + x3, canvas->component.position.y + y3, c);
 }
 
 void gui_canvas_fill_triangle(GUICanvas *canvas, int x1, int y1, int x2, int y2, int x3, int y3, uint32_t c) {
-  gfx2d_fill_triangle(canvas->buffer, canvas->component.position.x + x1, canvas->component.position.y + y1,
+  Gfx2DContext context = {
+      .width = canvas->component.size.width, .height = canvas->component.size.height, .buffer = canvas->buffer};
+  gfx2d_fill_triangle(context, canvas->component.position.x + x1, canvas->component.position.y + y1,
                       canvas->component.position.x + x2, canvas->component.position.y + y2,
                       canvas->component.position.x + x3, canvas->component.position.y + y3, c);
 }
 
 void gui_canvas_draw_circle(GUICanvas *canvas, int xc, int yc, int r, uint32_t c) {
-  gfx2d_draw_circle(canvas->buffer, canvas->component.position.x + xc, canvas->component.position.y + yc, r, c);
+  Gfx2DContext context = {
+      .width = canvas->component.size.width, .height = canvas->component.size.height, .buffer = canvas->buffer};
+  gfx2d_draw_circle(context, canvas->component.position.x + xc, canvas->component.position.y + yc, r, c);
 }
 
 void gui_canvas_fill_circle(GUICanvas *canvas, int xc, int yc, int r, uint32_t c) {
-  gfx2d_fill_circle(canvas->buffer, canvas->component.position.x + xc, canvas->component.position.y + yc, r, c);
+  Gfx2DContext context = {
+      .width = canvas->component.size.width, .height = canvas->component.size.height, .buffer = canvas->buffer};
+  gfx2d_fill_circle(context, canvas->component.position.x + xc, canvas->component.position.y + yc, r, c);
 }
 
 void gui_canvas_draw_ascii(GUICanvas *canvas, int x, int y, uint8_t ch, uint32_t color) {
-  gfx2d_draw_ascii(canvas->buffer, canvas->component.position.x + x, canvas->component.position.y + y, ch, color);
+  Gfx2DContext context = {
+      .width = canvas->component.size.width, .height = canvas->component.size.height, .buffer = canvas->buffer};
+  gfx2d_draw_ascii(context, canvas->component.position.x + x, canvas->component.position.y + y, ch, color);
 }
 
 void gui_canvas_draw_bitmap(GUICanvas *canvas, int x, int y, int width, int height, uint32_t *buffer) {
-  gfx2d_draw_bitmap(canvas->buffer, canvas->component.position.x + x, canvas->component.position.y + y, width, height,
-                    buffer);
+  Gfx2DContext context = {
+      .width = canvas->component.size.width, .height = canvas->component.size.height, .buffer = canvas->buffer};
+  gfx2d_draw_bitmap(context, canvas->component.position.x + x, canvas->component.position.y + y, width, height, buffer);
 }
 
 void gui_canvas_clear(GUICanvas *canvas, uint32_t color) {
-  gfx2d_fill_rect(canvas->buffer,0,0,canvas->component.size.width,canvas->component.size.height,canvas->component.background.a<<24 | canvas->component.background.r<<16 | canvas->component.background.g<<8 | canvas->component.background.b);
+  Gfx2DContext context = {
+      .width = canvas->component.size.width, .height = canvas->component.size.height, .buffer = canvas->buffer};
+  gfx2d_fill_rect(context, 0, 0, canvas->component.size.width, canvas->component.size.height,
+                  canvas->component.background.a << 24 | canvas->component.background.r << 16 |
+                      canvas->component.background.g << 8 | canvas->component.background.b);
 }
 
 void gui_canvas_draw(GUICanvas *canvas) {
-  int index = 0;
-  for (uint32_t i = 0; i < canvas->component.size.height; i++) {
-    for (uint32_t j = 0; j < canvas->component.size.width; j++) {
-      gpu_write_pixel_color(SCREEN_BUFFER, canvas->component.position.x+j, canvas->component.position.y+i, canvas->buffer[index]);
-      index++;
-    }
-  }
+  Gfx2DContext context = {.width = 1024, .height = 768, .buffer = GFX2D_BUFFER};
+  gfx2d_draw_bitmap(context, canvas->component.position.x, canvas->component.position.y, canvas->component.size.width,
+                    canvas->component.size.height, canvas->buffer);
 }

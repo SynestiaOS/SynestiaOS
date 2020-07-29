@@ -12,6 +12,7 @@
 #include <stdbool.h>
 #include <stdlib.h>
 
+extern uint32_t GFX2D_BUFFER[1024 * 768];
 void gui_container_create(GUIContainer *container) {
   container->component.type = CONTAINER;
   container->component.visable = true;
@@ -187,10 +188,11 @@ void gui_container_draw_children(GUIContainer *container, Orientation orientatio
 }
 
 void gui_container_draw(GUIContainer *container) {
+  Gfx2DContext context = {.width = 1024, .height = 768, .buffer = GFX2D_BUFFER};
   if (container->component.visable) {
     // 1. draw_background
     if (container->component.colorMode == RGB) {
-      gfx2d_fill_rect(SCREEN_BUFFER, container->component.position.x, container->component.position.y,
+      gfx2d_fill_rect(context, container->component.position.x, container->component.position.y,
                       container->component.position.x + container->component.size.width,
                       container->component.position.y + container->component.size.height,
                       container->component.background.r << 16 | container->component.background.g << 8 |

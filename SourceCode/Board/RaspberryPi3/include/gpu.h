@@ -20,6 +20,6 @@ void gpu_init(void);
 
 void gpu_write_pixel(uint32_t x, uint32_t y, const pixel_t *pixel);
 
-void gpu_write_pixel_color(unsigned char *buffer, uint32_t x, uint32_t y, uint32_t color);
+void gpu_write_pixel_color(uint32_t x, uint32_t y, uint32_t color);
 
 #endif //__BOARD_RASP3_GPU_H__

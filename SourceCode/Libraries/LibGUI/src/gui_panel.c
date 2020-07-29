@@ -11,6 +11,7 @@
 #include <stdbool.h>
 #include <stdlib.h>
 
+extern uint32_t GFX2D_BUFFER[1024 * 768];
 void gui_panel_create(GUIPanel *panel) {
   panel->component.type = PANEL;
   panel->component.visable = true;
@@ -117,10 +118,11 @@ void gui_panel_draw_children(GUIPanel *panel) {
 }
 
 void gui_panel_draw(GUIPanel *panel) {
+  Gfx2DContext context = {.width = 1024, .height = 768, .buffer = GFX2D_BUFFER};
   if (panel->component.visable) {
     // 1. draw_background
     if (panel->component.colorMode == RGB) {
-      gfx2d_fill_rect(SCREEN_BUFFER, panel->component.position.x, panel->component.position.y,
+      gfx2d_fill_rect(context, panel->component.position.x, panel->component.position.y,
                       panel->component.position.x + panel->component.size.width,
                       panel->component.position.y + panel->component.size.height,
                       panel->component.background.r << 16 | panel->component.background.g << 8 |
