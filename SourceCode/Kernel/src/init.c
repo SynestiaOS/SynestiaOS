@@ -117,8 +117,8 @@ uint32_t *window_thread4(int args) {
   gui_canvas_init(&canvas, 0, 0);
   gui_window_add_children(&window, &(canvas.component));
   gui_canvas_fill_circle(&canvas, 30, 30, 20, 0x00FF0000);
-  gui_canvas_fill_rect(&canvas, 60, 60, 100,100, 0x0000FF00);
-  gui_canvas_fill_triangle(&canvas, 10, 60, 60,60,10,100,0x0000FF);
+  gui_canvas_fill_rect(&canvas, 60, 60, 100, 100, 0x0000FF00);
+  gui_canvas_fill_triangle(&canvas, 10, 60, 60, 60, 10, 100, 0x0000FF);
   while (1) {
     disable_interrupt();
     gui_window_draw(&window);

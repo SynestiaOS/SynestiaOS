@@ -93,9 +93,19 @@ void gui_window_draw(GUIWindow *window) {
                     window->component.position.x + window->component.size.width,
                     window->component.position.y + DEFAULT_WINDOW_HEADER_HEIGHT, FLUENT_PRIMARY_COLOR);
 
+    uint16_t *bitmap = win_app_16_bits();
+    for (uint32_t i = 0; i < 16; i++) {
+      for (uint32_t j = 0; j < 16; j++) {
+        if ((bitmap[i] & (0x1 << j)) > 0) {
+          gfx2d_write_pixel_color(context, window->component.position.x + j + DEFAULT_PADDING,
+                                  window->component.position.y + i + DEFAULT_PADDING + 4, 0xFFFFFF);
+        }
+      }
+    }
+
     // 3. draw_font
     char *tmp = window->title;
-    uint32_t xOffset = 0;
+    uint32_t xOffset = 2;
     while (*tmp) {
       gfx2d_draw_ascii(context, window->component.position.x + xOffset * DEFAULT_FONT_SIZE + 2 * DEFAULT_PADDING,
                        window->component.position.y + 2 * DEFAULT_PADDING, *tmp, 0xFFFFFF);
@@ -104,13 +114,35 @@ void gui_window_draw(GUIWindow *window) {
     }
 
     // 4. draw header window
-    gfx2d_draw_ascii(context, window->component.position.x + window->component.size.width - 24 * 3 + 4,
-                     window->component.position.y + 2 * DEFAULT_PADDING, '-', 0xFFFFFF);
-    gfx2d_draw_ascii(context, window->component.position.x + window->component.size.width - 24 * 2 + 4,
-                     window->component.position.y + 2 * DEFAULT_PADDING, '#', 0xFFFFFF);
+    uint16_t *minBitmap = win_min_16_bits();
+    for (uint32_t i = 0; i < 16; i++) {
+      for (uint32_t j = 0; j < 16; j++) {
+        if ((minBitmap[i] & (0x1 << j)) > 0) {
+          gfx2d_write_pixel_color(context, window->component.position.x + j + window->component.size.width - 24 * 3,
+                                  window->component.position.y + i + DEFAULT_PADDING + 4, 0xFFFFFF);
+        }
+      }
+    }
 
-    gfx2d_draw_ascii(context, window->component.position.x + window->component.size.width - 24 * 1 + 4,
-                     window->component.position.y + 2 * DEFAULT_PADDING, 'X', 0xFFFFFF);
+    uint16_t *maxBitmap = win_max_16_bits();
+    for (uint32_t i = 0; i < 16; i++) {
+      for (uint32_t j = 0; j < 16; j++) {
+        if ((maxBitmap[i] & (0x1 << j)) > 0) {
+          gfx2d_write_pixel_color(context, window->component.position.x + j + window->component.size.width - 24 * 2,
+                                  window->component.position.y + i + DEFAULT_PADDING + 4, 0xFFFFFF);
+        }
+      }
+    }
+
+    uint16_t *closeBitmap = win_close_16_bits();
+    for (uint32_t i = 0; i < 16; i++) {
+      for (uint32_t j = 0; j < 16; j++) {
+        if ((closeBitmap[i] & (0x1 << j)) > 0) {
+          gfx2d_write_pixel_color(context, window->component.position.x + j + window->component.size.width - 24,
+                                  window->component.position.y + i + DEFAULT_PADDING + 4, 0xFFFFFF);
+        }
+      }
+    }
 
     // 5. draw border
     gfx2d_draw_rect(context, window->component.position.x, window->component.position.y,
