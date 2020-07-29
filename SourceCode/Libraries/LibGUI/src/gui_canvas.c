@@ -108,6 +108,16 @@ void gui_canvas_draw_bitmap(GUICanvas *canvas, int x, int y, int width, int heig
                     buffer);
 }
 
-void gui_canvas_clear(GUICanvas *canvas, uint32_t color) {}
+void gui_canvas_clear(GUICanvas *canvas, uint32_t color) {
+  gfx2d_fill_rect(canvas->buffer,0,0,canvas->component.size.width,canvas->component.size.height,canvas->component.background.a<<24 | canvas->component.background.r<<16 | canvas->component.background.g<<8 | canvas->component.background.b);
+}
 
-void gui_canvas_draw(GUICanvas *canvas) {}
+void gui_canvas_draw(GUICanvas *canvas) {
+  int index = 0;
+  for (uint32_t i = 0; i < canvas->component.size.height; i++) {
+    for (uint32_t j = 0; j < canvas->component.size.width; j++) {
+      gpu_write_pixel_color(SCREEN_BUFFER, canvas->component.position.x+j, canvas->component.position.y+i, canvas->buffer[index]);
+      index++;
+    }
+  }
+}

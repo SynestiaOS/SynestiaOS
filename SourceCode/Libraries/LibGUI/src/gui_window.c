@@ -8,6 +8,7 @@
 #include <gui_label.h>
 #include <gui_panel.h>
 #include <gui_window.h>
+#include <gui_canvas.h>
 #include <log.h>
 #include <stdbool.h>
 #include <stdlib.h>
@@ -148,6 +149,15 @@ void gui_window_draw_children(GUIWindow *window) {
         label->component.position.y = label->component.position.y + window->component.position.y +
                                       DEFAULT_WINDOW_HEADER_HEIGHT + window->component.padding.top;
         gui_label_draw(label);
+        break;
+      }
+
+      case CANVAS: {
+        GUICanvas *canvas = getNode(component, GUICanvas, component);
+        canvas->component.position.x = window->component.position.x + window->component.padding.left;
+        canvas->component.position.y = window->component.position.y +
+                                      DEFAULT_WINDOW_HEADER_HEIGHT + window->component.padding.top;
+        gui_canvas_draw(canvas);
         break;
       }
 

@@ -7,8 +7,8 @@
 
 #include <gui_component.h>
 
-#define DEFAULT_CANVAS_WIDTH 300
-#define DEFAULT_CANVAS_HEIGHT 200
+#define DEFAULT_CANVAS_WIDTH 200
+#define DEFAULT_CANVAS_HEIGHT 150
 
 typedef struct GUICanvas {
   GUIComponent component;

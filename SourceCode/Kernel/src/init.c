@@ -85,7 +85,7 @@ uint32_t *window_thread3(int args) {
   gui_window_create(&window);
   window.component.size.width = 620;
   window.component.size.height = 200;
-  gui_window_init(&window, 20, 330, "window3");
+  gui_window_init(&window, 20, 330, "Button Animation Test Window");
   GUIButton button;
   gui_button_create(&button);
   gui_button_init(&button, 0, 0, "TEST");
@@ -110,7 +110,7 @@ uint32_t *window_thread4(int args) {
   gui_window_create(&window);
   window.component.size.width = 300;
   window.component.size.height = 200;
-  gui_window_init(&window, 700, 70, "window4");
+  gui_window_init(&window, 700, 70, "Canvas 2D Test Window");
   GUICanvas canvas;
   gui_canvas_create(&canvas);
   gui_canvas_init(&canvas, 0, 0);
@@ -118,7 +118,7 @@ uint32_t *window_thread4(int args) {
 
   while (1) {
     disable_interrupt();
-    gui_canvas_fill_circle(&canvas, 720, 120, 10, 0xFF0000);
+    gui_canvas_fill_circle(&canvas, 10, 10, 10, 0xFF0000);
     gui_window_draw(&window);
     enable_interrupt();
   }
