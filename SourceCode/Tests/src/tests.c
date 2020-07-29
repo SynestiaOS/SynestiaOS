@@ -12,6 +12,7 @@
 #include <kvector_test.h>
 
 #include <atomic_test.h>
+#include <libmath_test.h>
 
 void kernel_main_tests() {
   kheap_init();
@@ -52,4 +53,6 @@ void kernel_main_tests() {
   TEST_CASE("should_atomic_dec", should_atomic_dec);
   TEST_CASE("should_atomic_sub", should_atomic_sub);
   TEST_CASE("should_atomic_add", should_atomic_add);
+
+  TEST_CASE("should_math_sinf", should_math_sinf);
 }
