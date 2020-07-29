@@ -6,26 +6,26 @@
 #include <gfx2d.h>
 #include <stdbool.h>
 
-void gpu_write_pixel_color(uint32_t x, uint32_t y, uint32_t c);
+void gpu_write_pixel_color(unsigned char *buffer, uint32_t x, uint32_t y, uint32_t c);
 
-void gfx2d_draw_pixel(int x, int y, uint32_t c) { gpu_write_pixel_color(x, y, c); }
+void gfx2d_draw_pixel(unsigned char *buffer, int x, int y, uint32_t c) { gpu_write_pixel_color(buffer, x, y, c); }
 
-void gfx2d_draw_rect(int x1, int y1, int x2, int y2, uint32_t c) {
-  gfx2d_draw_line(x1, y1, x1, y2, c);
-  gfx2d_draw_line(x1, y1, x2, y1, c);
-  gfx2d_draw_line(x2, y1, x2, y2, c);
-  gfx2d_draw_line(x1, y2, x2, y2, c);
+void gfx2d_draw_rect(unsigned char *buffer, int x1, int y1, int x2, int y2, uint32_t c) {
+  gfx2d_draw_line(buffer, x1, y1, x1, y2, c);
+  gfx2d_draw_line(buffer, x1, y1, x2, y1, c);
+  gfx2d_draw_line(buffer, x2, y1, x2, y2, c);
+  gfx2d_draw_line(buffer, x1, y2, x2, y2, c);
 }
 
-void gfx2d_fill_rect(int x1, int y1, int x2, int y2, uint32_t c) {
+void gfx2d_fill_rect(unsigned char *buffer, int x1, int y1, int x2, int y2, uint32_t c) {
   for (int x = x1; x < x2; x++) {
     for (int y = y1; y < y2; y++) {
-      gpu_write_pixel_color(x, y, c);
+      gpu_write_pixel_color(buffer, x, y, c);
     }
   }
 }
 
-void gfx2d_draw_line(int x1, int y1, int x2, int y2, uint32_t c) {
+void gfx2d_draw_line(unsigned char *buffer, int x1, int y1, int x2, int y2, uint32_t c) {
   int x = 0;
   int y = 0;
   int dx = 0;
@@ -54,7 +54,7 @@ void gfx2d_draw_line(int x1, int y1, int x2, int y2, uint32_t c) {
       xe = x1;
     }
 
-    gpu_write_pixel_color(x, y, c);
+    gpu_write_pixel_color(buffer, x, y, c);
 
     for (i = 0; x < xe; i++) {
       x = x + 1;
@@ -68,7 +68,7 @@ void gfx2d_draw_line(int x1, int y1, int x2, int y2, uint32_t c) {
         }
         px = px + 2 * (dy1 - dx1);
       }
-      gpu_write_pixel_color(x, y, c);
+      gpu_write_pixel_color(buffer, x, y, c);
     }
   } else {
     if (dy >= 0) {
@@ -80,7 +80,7 @@ void gfx2d_draw_line(int x1, int y1, int x2, int y2, uint32_t c) {
       y = y2;
       ye = y1;
     }
-    gpu_write_pixel_color(x, y, c);
+    gpu_write_pixel_color(buffer, x, y, c);
     for (i = 0; y < ye; i++) {
       y = y + 1;
       if (py <= 0) {
@@ -93,20 +93,20 @@ void gfx2d_draw_line(int x1, int y1, int x2, int y2, uint32_t c) {
         }
         py = py + 2 * (dx1 - dy1);
       }
-      gpu_write_pixel_color(x, y, c);
+      gpu_write_pixel_color(buffer, x, y, c);
     }
   }
 }
 
-void gfx2d_draw_triangle(int x1, int y1, int x2, int y2, int x3, int y3, uint32_t c) {
-  gfx2d_draw_line(x1, y1, x2, y2, c);
-  gfx2d_draw_line(x2, y2, x3, y3, c);
-  gfx2d_draw_line(x3, y3, x1, y1, c);
+void gfx2d_draw_triangle(unsigned char *buffer, int x1, int y1, int x2, int y2, int x3, int y3, uint32_t c) {
+  gfx2d_draw_line(buffer, x1, y1, x2, y2, c);
+  gfx2d_draw_line(buffer, x2, y2, x3, y3, c);
+  gfx2d_draw_line(buffer, x3, y3, x1, y1, c);
 }
 
-void drawline(int sx, int ex, int ny, int c) {
+void drawline(unsigned char *buffer, int sx, int ex, int ny, int c) {
   for (int i = sx; i <= ex; i++) {
-    gpu_write_pixel_color(i, ny, c);
+    gpu_write_pixel_color(buffer, i, ny, c);
   }
 }
 
@@ -118,7 +118,7 @@ void SWAP(int *x, int *y) {
   *y = temp;
 }
 
-void gfx2d_fill_triangle(int x1, int y1, int x2, int y2, int x3, int y3, uint32_t c) {
+void gfx2d_fill_triangle(unsigned char *buffer, int x1, int y1, int x2, int y2, int x3, int y3, uint32_t c) {
   int t1x = 0;
   int t2x = 0;
   int y = 0;
@@ -244,7 +244,7 @@ void gfx2d_fill_triangle(int x1, int y1, int x2, int y2, int x3, int y3, uint32_
     if (maxx < t2x) {
       maxx = t2x;
     }
-    drawline(minx, maxx, y, c); // Draw line from min to max points found on the y
+    drawline(buffer, minx, maxx, y, c); // Draw line from min to max points found on the y
     // Now increase y
     if (!changed1) {
       t1x += signx1;
@@ -340,7 +340,7 @@ next:
     if (maxx < t2x) {
       maxx = t2x;
     }
-    drawline(minx, maxx, y, c);
+    drawline(buffer, minx, maxx, y, c);
     if (!changed1) {
       t1x += signx1;
     }
@@ -356,7 +356,7 @@ next:
   }
 }
 
-void gfx2d_draw_circle(int xc, int yc, int r, uint32_t c) {
+void gfx2d_draw_circle(unsigned char *buffer, int xc, int yc, int r, uint32_t c) {
   int x = 0;
   int y = r;
   int p = 3 - 2 * r;
@@ -364,15 +364,15 @@ void gfx2d_draw_circle(int xc, int yc, int r, uint32_t c) {
     return;
   }
 
-  while (y >= x) {                            // only formulate 1/8 of circle
-    gpu_write_pixel_color(xc - x, yc - y, c); // upper left left
-    gpu_write_pixel_color(xc - y, yc - x, c); // upper upper left
-    gpu_write_pixel_color(xc + y, yc - x, c); // upper upper right
-    gpu_write_pixel_color(xc + x, yc - y, c); // upper right right
-    gpu_write_pixel_color(xc - x, yc + y, c); // lower left left
-    gpu_write_pixel_color(xc - y, yc + x, c); // lower lower left
-    gpu_write_pixel_color(xc + y, yc + x, c); // lower lower right
-    gpu_write_pixel_color(xc + x, yc + y, c); // lower right right
+  while (y >= x) {                                    // only formulate 1/8 of circle
+    gpu_write_pixel_color(buffer, xc - x, yc - y, c); // upper left left
+    gpu_write_pixel_color(buffer, xc - y, yc - x, c); // upper upper left
+    gpu_write_pixel_color(buffer, xc + y, yc - x, c); // upper upper right
+    gpu_write_pixel_color(buffer, xc + x, yc - y, c); // upper right right
+    gpu_write_pixel_color(buffer, xc - x, yc + y, c); // lower left left
+    gpu_write_pixel_color(buffer, xc - y, yc + x, c); // lower lower left
+    gpu_write_pixel_color(buffer, xc + y, yc + x, c); // lower lower right
+    gpu_write_pixel_color(buffer, xc + x, yc + y, c); // lower right right
     if (p < 0) {
       p += 4 * x++ + 6;
     } else {
@@ -381,7 +381,7 @@ void gfx2d_draw_circle(int xc, int yc, int r, uint32_t c) {
   }
 }
 
-void gfx2d_fill_circle(int xc, int yc, int r, uint32_t c) {
+void gfx2d_fill_circle(unsigned char *buffer, int xc, int yc, int r, uint32_t c) {
   int x = 0;
   int y = r;
   int p = 3 - 2 * r;
@@ -391,10 +391,10 @@ void gfx2d_fill_circle(int xc, int yc, int r, uint32_t c) {
 
   while (y >= x) {
     // Modified to draw scan-lines instead of edges
-    drawline(xc - x, xc + x, yc - y, c);
-    drawline(xc - y, xc + y, yc - x, c);
-    drawline(xc - x, xc + x, yc + y, c);
-    drawline(xc - y, xc + y, yc + x, c);
+    drawline(buffer, xc - x, xc + x, yc - y, c);
+    drawline(buffer, xc - y, xc + y, yc - x, c);
+    drawline(buffer, xc - x, xc + x, yc + y, c);
+    drawline(buffer, xc - y, xc + y, yc + x, c);
     if (p < 0) {
       p += 4 * x++ + 6;
     } else {
@@ -403,33 +403,33 @@ void gfx2d_fill_circle(int xc, int yc, int r, uint32_t c) {
   }
 }
 
-void gfx2d_draw_ascii(int x, int y, uint8_t ch, uint32_t color) {
+void gfx2d_draw_ascii(unsigned char *buffer, int x, int y, uint8_t ch, uint32_t color) {
   uint8_t *bitmap = font_8_bits(ch);
   for (uint32_t i = 0; i < 8; i++) {
     for (uint32_t j = 0; j < 8; j++) {
       if ((bitmap[i] & (0x1 << j)) > 0) {
-        gpu_write_pixel_color(x + j, y + i, color);
+        gpu_write_pixel_color(buffer, x + j, y + i, color);
       }
     }
   }
 }
 
-void gfx2d_draw_logo(int x, int y, uint32_t c) {
+void gfx2d_draw_logo(unsigned char *buffer, int x, int y, uint32_t c) {
   uint32_t *bitmap = logo_32_bits();
   for (uint32_t i = 0; i < 32; i++) {
     for (uint32_t j = 0; j < 32; j++) {
       if ((bitmap[i] & (0x1 << j)) > 0) {
-        gpu_write_pixel_color(x + j, y + i, c);
+        gpu_write_pixel_color(buffer, x + j, y + i, c);
       }
     }
   }
 }
 
-void gfx2d_draw_bitmap(int x, int y, int width, int height, uint32_t *buffer) {
+void gfx2d_draw_bitmap(unsigned char *buffer, int x, int y, int width, int height, uint32_t *bitmap) {
   int index = 0;
   for (uint32_t i = 0; i < height; i++) {
     for (uint32_t j = 0; j < width; j++) {
-      gpu_write_pixel_color(x + j, y + i, buffer[index]);
+      gpu_write_pixel_color(buffer, x + j, y + i, bitmap[index]);
       index++;
     }
   }

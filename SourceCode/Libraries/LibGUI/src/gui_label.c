@@ -77,7 +77,7 @@ void gui_label_draw(GUILabel *label) {
   if (label->component.visable) {
     // 1. draw_background
     if (label->component.colorMode == RGB) {
-      gfx2d_fill_rect(label->component.position.x + label->component.margin.left,
+      gfx2d_fill_rect(SCREEN_BUFFER, label->component.position.x + label->component.margin.left,
                       label->component.position.y + label->component.margin.top,
                       label->component.position.x + label->component.size.width,
                       label->component.position.y + label->component.size.height,
@@ -101,10 +101,10 @@ void gui_label_draw(GUILabel *label) {
     uint32_t column = 0;
     uint32_t row = 0;
     while (*tmp) {
-      gfx2d_draw_ascii(label->component.position.x + xOffset * label->fontSize + label->component.padding.left,
-                       label->component.position.y + row * label->fontSize + label->component.padding.top, *tmp,
-                       label->component.foreground.r << 16 | label->component.foreground.g << 8 |
-                           label->component.foreground.b);
+      gfx2d_draw_ascii(
+          SCREEN_BUFFER, label->component.position.x + xOffset * label->fontSize + label->component.padding.left,
+          label->component.position.y + row * label->fontSize + label->component.padding.top, *tmp,
+          label->component.foreground.r << 16 | label->component.foreground.g << 8 | label->component.foreground.b);
       column++;
       if (column == lineFonts) {
         row++;

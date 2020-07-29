@@ -76,7 +76,7 @@ void gui_button_draw(GUIButton *button) {
   if (button->component.visable) {
     // 1. draw_background
     if (button->component.colorMode == RGB) {
-      gfx2d_fill_rect(button->component.position.x + button->component.margin.left,
+      gfx2d_fill_rect(SCREEN_BUFFER, button->component.position.x + button->component.margin.left,
                       button->component.position.y + button->component.margin.top,
                       button->component.position.x + button->component.size.width,
                       button->component.position.y + button->component.size.height,
@@ -100,10 +100,10 @@ void gui_button_draw(GUIButton *button) {
     uint32_t column = 0;
     uint32_t row = 0;
     while (*tmp) {
-      gfx2d_draw_ascii(button->component.position.x + xOffset * button->fontSize + button->component.padding.left,
-                       button->component.position.y + row * button->fontSize + button->component.padding.top, *tmp,
-                       button->component.foreground.r << 16 | button->component.foreground.g << 8 |
-                           button->component.foreground.b);
+      gfx2d_draw_ascii(
+          SCREEN_BUFFER, button->component.position.x + xOffset * button->fontSize + button->component.padding.left,
+          button->component.position.y + row * button->fontSize + button->component.padding.top, *tmp,
+          button->component.foreground.r << 16 | button->component.foreground.g << 8 | button->component.foreground.b);
       column++;
       if (column == lineFonts) {
         row++;

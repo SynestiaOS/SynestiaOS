@@ -14,6 +14,8 @@
 
 #define DEFAULT_WINDOW_HEADER_HEIGHT DEFAULT_FONT_SIZE + 4 * DEFAULT_PADDING
 
+extern unsigned char SCREEN_BUFFER[1024 * 768 * 4];
+
 typedef struct Position {
   uint32_t x;
   uint32_t y;

@@ -16,6 +16,7 @@
 #include <synestia_os_hal.h>
 #include <vmm.h>
 
+extern unsigned char SCREEN_BUFFER[1024 * 768 * 4];
 extern uint32_t *gpu_flush(int args);
 
 void print_splash() {
@@ -30,8 +31,8 @@ void print_splash() {
 }
 
 void draw_task_bar() {
-  gfx2d_fill_rect(0, 0, 1024, 48, FLUENT_PRIMARY_COLOR);
-  gfx2d_draw_logo(8, 8, 0xFFFFFF);
+  gfx2d_fill_rect(SCREEN_BUFFER, 0, 0, 1024, 48, FLUENT_PRIMARY_COLOR);
+  gfx2d_draw_logo(SCREEN_BUFFER, 8, 8, 0xFFFFFF);
 }
 
 uint32_t *window_thread1(int args) {
@@ -104,6 +105,25 @@ uint32_t *window_thread3(int args) {
   }
 }
 
+uint32_t *window_thread4(int args) {
+  GUIWindow window;
+  gui_window_create(&window);
+  window.component.size.width = 300;
+  window.component.size.height = 200;
+  gui_window_init(&window, 700, 70, "window4");
+  GUICanvas canvas;
+  gui_canvas_create(&canvas);
+  gui_canvas_init(&canvas, 0, 0);
+  gui_window_add_children(&window, &(canvas.component));
+
+  while (1) {
+    disable_interrupt();
+    gui_canvas_fill_circle(&canvas, 720, 120, 10, 0xFF0000);
+    gui_window_draw(&window);
+    enable_interrupt();
+  }
+}
+
 TimerHandler gpuHandler;
 void kernel_main(void) {
   print_splash();
@@ -117,7 +137,7 @@ void kernel_main(void) {
   init_interrupt();
 
   gpu_init();
-  gfx2d_draw_bitmap(0, 0, 1024, 768, desktop());
+  gfx2d_draw_bitmap(SCREEN_BUFFER, 0, 0, 1024, 768, desktop());
   draw_task_bar();
 
   gpuHandler.node.next = nullptr;
@@ -135,6 +155,9 @@ void kernel_main(void) {
 
   Thread *window3Thread = thread_create("window3", &window_thread3, 1, 1);
   schd_init_thread(window3Thread, 2);
+
+  Thread *window4Thread = thread_create("window4", &window_thread4, 1, 1);
+  schd_init_thread(window4Thread, 3);
 
   schd_schedule();
 }

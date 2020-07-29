@@ -55,4 +55,7 @@ void kernel_main_tests() {
   TEST_CASE("should_atomic_add", should_atomic_add);
 
   TEST_CASE("should_math_sinf", should_math_sinf);
+  TEST_CASE("should_math_cosf", should_math_cosf);
+  TEST_CASE("should_math_fmod", should_math_fmod);
+  TEST_CASE("should_math_powf", should_math_powf);
 }

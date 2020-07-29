@@ -61,50 +61,51 @@ void gui_canvas_draw_pixel(GUICanvas *canvas, int x, int y, uint32_t c) {
     return;
   }
 
-  gfx2d_draw_pixel(canvas->component.position.x + x, canvas->component.position.y + y, c);
+  gfx2d_draw_pixel(canvas->buffer, canvas->component.position.x + x, canvas->component.position.y + y, c);
 }
 
 void gui_canvas_draw_rect(GUICanvas *canvas, int x1, int y1, int x2, int y2, uint32_t c) {
-  gfx2d_draw_rect(canvas->component.position.x + x1, canvas->component.position.y + y1,
+  gfx2d_draw_rect(canvas->buffer, canvas->component.position.x + x1, canvas->component.position.y + y1,
                   canvas->component.position.x + x2, canvas->component.position.y + y2, c);
 }
 
 void gui_canvas_fill_rect(GUICanvas *canvas, int x1, int y1, int x2, int y2, uint32_t c) {
-  gfx2d_fill_rect(canvas->component.position.x + x1, canvas->component.position.y + y1,
+  gfx2d_fill_rect(canvas->buffer, canvas->component.position.x + x1, canvas->component.position.y + y1,
                   canvas->component.position.x + x2, canvas->component.position.y + y2, c);
 }
 
 void gui_canvas_draw_line(GUICanvas *canvas, int x1, int y1, int x2, int y2, uint32_t c) {
-  gfx2d_draw_line(canvas->component.position.x + x1, canvas->component.position.y + y1,
+  gfx2d_draw_line(canvas->buffer, canvas->component.position.x + x1, canvas->component.position.y + y1,
                   canvas->component.position.x + x2, canvas->component.position.y + y2, c);
 }
 
 void gui_canvas_draw_triangle(GUICanvas *canvas, int x1, int y1, int x2, int y2, int x3, int y3, uint32_t c) {
-  gfx2d_draw_triangle(canvas->component.position.x + x1, canvas->component.position.y + y1,
+  gfx2d_draw_triangle(canvas->buffer, canvas->component.position.x + x1, canvas->component.position.y + y1,
                       canvas->component.position.x + x2, canvas->component.position.y + y2,
                       canvas->component.position.x + x3, canvas->component.position.y + y3, c);
 }
 
 void gui_canvas_fill_triangle(GUICanvas *canvas, int x1, int y1, int x2, int y2, int x3, int y3, uint32_t c) {
-  gfx2d_fill_triangle(canvas->component.position.x + x1, canvas->component.position.y + y1,
+  gfx2d_fill_triangle(canvas->buffer, canvas->component.position.x + x1, canvas->component.position.y + y1,
                       canvas->component.position.x + x2, canvas->component.position.y + y2,
                       canvas->component.position.x + x3, canvas->component.position.y + y3, c);
 }
 
 void gui_canvas_draw_circle(GUICanvas *canvas, int xc, int yc, int r, uint32_t c) {
-  gfx2d_draw_circle(canvas->component.position.x + xc, canvas->component.position.y + yc, r, c);
+  gfx2d_draw_circle(canvas->buffer, canvas->component.position.x + xc, canvas->component.position.y + yc, r, c);
 }
 
 void gui_canvas_fill_circle(GUICanvas *canvas, int xc, int yc, int r, uint32_t c) {
-  gfx2d_fill_circle(canvas->component.position.x + xc, canvas->component.position.y + yc, r, c);
+  gfx2d_fill_circle(canvas->buffer, canvas->component.position.x + xc, canvas->component.position.y + yc, r, c);
 }
 
 void gui_canvas_draw_ascii(GUICanvas *canvas, int x, int y, uint8_t ch, uint32_t color) {
-  gfx2d_draw_ascii(canvas->component.position.x + x, canvas->component.position.y + y, ch, color);
+  gfx2d_draw_ascii(canvas->buffer, canvas->component.position.x + x, canvas->component.position.y + y, ch, color);
 }
 
 void gui_canvas_draw_bitmap(GUICanvas *canvas, int x, int y, int width, int height, uint32_t *buffer) {
-  gfx2d_draw_bitmap(canvas->component.position.x + x, canvas->component.position.y + y, width, height, buffer);
+  gfx2d_draw_bitmap(canvas->buffer, canvas->component.position.x + x, canvas->component.position.y + y, width, height,
+                    buffer);
 }
 
 void gui_canvas_clear(GUICanvas *canvas, uint32_t color) {}

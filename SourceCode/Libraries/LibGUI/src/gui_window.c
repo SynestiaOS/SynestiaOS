@@ -78,7 +78,7 @@ void gui_window_draw(GUIWindow *window) {
   if (window->component.visable) {
     if (window->component.colorMode == RGB) {
       // 1. draw_background
-      gfx2d_fill_rect(window->component.position.x, window->component.position.y,
+      gfx2d_fill_rect(SCREEN_BUFFER, window->component.position.x, window->component.position.y,
                       window->component.position.x + window->component.size.width,
                       window->component.position.y + window->component.size.height + DEFAULT_WINDOW_HEADER_HEIGHT,
                       window->component.background.r << 16 | window->component.background.g << 8 |
@@ -86,7 +86,7 @@ void gui_window_draw(GUIWindow *window) {
     }
 
     // 2. draw header
-    gfx2d_fill_rect(window->component.position.x, window->component.position.y,
+    gfx2d_fill_rect(SCREEN_BUFFER, window->component.position.x, window->component.position.y,
                     window->component.position.x + window->component.size.width,
                     window->component.position.y + DEFAULT_WINDOW_HEADER_HEIGHT, FLUENT_PRIMARY_COLOR);
 
@@ -94,23 +94,23 @@ void gui_window_draw(GUIWindow *window) {
     char *tmp = window->title;
     uint32_t xOffset = 0;
     while (*tmp) {
-      gfx2d_draw_ascii(window->component.position.x + xOffset * DEFAULT_FONT_SIZE + 2 * DEFAULT_PADDING,
+      gfx2d_draw_ascii(SCREEN_BUFFER, window->component.position.x + xOffset * DEFAULT_FONT_SIZE + 2 * DEFAULT_PADDING,
                        window->component.position.y + 2 * DEFAULT_PADDING, *tmp, 0xFFFFFF);
       xOffset++;
       tmp++;
     }
 
     // 4. draw header window
-    gfx2d_draw_ascii(window->component.position.x + window->component.size.width - 24 * 3 + 4,
+    gfx2d_draw_ascii(SCREEN_BUFFER, window->component.position.x + window->component.size.width - 24 * 3 + 4,
                      window->component.position.y + 2 * DEFAULT_PADDING, '-', 0xFFFFFF);
-    gfx2d_draw_ascii(window->component.position.x + window->component.size.width - 24 * 2 + 4,
+    gfx2d_draw_ascii(SCREEN_BUFFER, window->component.position.x + window->component.size.width - 24 * 2 + 4,
                      window->component.position.y + 2 * DEFAULT_PADDING, '#', 0xFFFFFF);
 
-    gfx2d_draw_ascii(window->component.position.x + window->component.size.width - 24 * 1 + 4,
+    gfx2d_draw_ascii(SCREEN_BUFFER, window->component.position.x + window->component.size.width - 24 * 1 + 4,
                      window->component.position.y + 2 * DEFAULT_PADDING, 'X', 0xFFFFFF);
 
     // 5. draw border
-    gfx2d_draw_rect(window->component.position.x, window->component.position.y,
+    gfx2d_draw_rect(SCREEN_BUFFER, window->component.position.x, window->component.position.y,
                     window->component.position.x + window->component.size.width,
                     window->component.position.y + window->component.size.height + DEFAULT_WINDOW_HEADER_HEIGHT,
                     FLUENT_PRIMARY_COLOR);

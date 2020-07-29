@@ -18,12 +18,12 @@ unsigned char SCREEN_BUFFER[1024 * 768 * 4] = {'\0'};
 extern uint32_t pitch;
 extern unsigned char *lfb;
 
-void gpu_write_pixel_color(uint32_t x, uint32_t y, uint32_t c) {
+void gpu_write_pixel_color(unsigned char *buffer, uint32_t x, uint32_t y, uint32_t c) {
   uint32_t r = (c >> 16) & 0xFF;
   uint32_t g = (c >> 8) & 0xFF;
   uint32_t b = c & 0xFF;
 
-  unsigned char *ptr = &SCREEN_BUFFER;
+  unsigned char *ptr = buffer;
 
   ptr += pitch * y;
   ptr += (x << 2);

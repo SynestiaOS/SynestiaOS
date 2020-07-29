@@ -9,7 +9,7 @@ float cosf(float x) { return __builtin_cosf(x); }
 
 float sinf(float x) { return __builtin_sinf(x); }
 
-float tanf(float angle) { __builtin_sinf(angle) / __builtin_cosf(angle); }
+float tanf(float angle) { return __builtin_sinf(angle) / __builtin_cosf(angle); }
 
 float fmax(float x, float y) { return x > y ? x : y; }
 

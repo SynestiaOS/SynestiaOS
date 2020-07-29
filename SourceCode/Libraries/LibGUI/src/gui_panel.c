@@ -120,7 +120,7 @@ void gui_panel_draw(GUIPanel *panel) {
   if (panel->component.visable) {
     // 1. draw_background
     if (panel->component.colorMode == RGB) {
-      gfx2d_fill_rect(panel->component.position.x, panel->component.position.y,
+      gfx2d_fill_rect(SCREEN_BUFFER, panel->component.position.x, panel->component.position.y,
                       panel->component.position.x + panel->component.size.width,
                       panel->component.position.y + panel->component.size.height,
                       panel->component.background.r << 16 | panel->component.background.g << 8 |
