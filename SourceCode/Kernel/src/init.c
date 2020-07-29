@@ -109,9 +109,9 @@ uint32_t *window_thread3(int args) {
 uint32_t *window_thread4(int args) {
   GUIWindow window;
   gui_window_create(&window);
-  window.component.size.width = 300;
+  window.component.size.width = 340;
   window.component.size.height = 200;
-  gui_window_init(&window, 700, 70, "Canvas 2D Test Window");
+  gui_window_init(&window, 660, 70, "Canvas 2D Test Window");
   GUICanvas canvas;
   gui_canvas_create(&canvas);
   gui_canvas_init(&canvas, 0, 0);
@@ -119,6 +119,19 @@ uint32_t *window_thread4(int args) {
   gui_canvas_fill_circle(&canvas, 30, 30, 20, 0x00FF0000);
   gui_canvas_fill_rect(&canvas, 60, 60, 100,100, 0x0000FF00);
   gui_canvas_fill_triangle(&canvas, 10, 60, 60,60,10,100,0x0000FF);
+  while (1) {
+    disable_interrupt();
+    gui_window_draw(&window);
+    enable_interrupt();
+  }
+}
+
+uint32_t *window_thread5(int args) {
+  GUIWindow window;
+  gui_window_create(&window);
+  window.component.size.width = 340;
+  window.component.size.height = 200;
+  gui_window_init(&window, 660, 330, "Canvas 3D Test Window");
   while (1) {
     disable_interrupt();
     gui_window_draw(&window);
@@ -161,6 +174,9 @@ void kernel_main(void) {
 
   Thread *window4Thread = thread_create("window4", &window_thread4, 1, 1);
   schd_init_thread(window4Thread, 3);
+
+  Thread *window5Thread = thread_create("window5", &window_thread5, 1, 1);
+  schd_init_thread(window5Thread, 4);
 
   schd_schedule();
 }
