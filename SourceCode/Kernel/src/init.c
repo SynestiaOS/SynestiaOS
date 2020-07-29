@@ -115,10 +115,10 @@ uint32_t *window_thread4(int args) {
   gui_canvas_create(&canvas);
   gui_canvas_init(&canvas, 0, 0);
   gui_window_add_children(&window, &(canvas.component));
+  gui_canvas_fill_circle(&canvas, 10, 10, 10, 0xFF0000);
 
   while (1) {
     disable_interrupt();
-    gui_canvas_fill_circle(&canvas, 10, 10, 10, 0xFF0000);
     gui_window_draw(&window);
     enable_interrupt();
   }
