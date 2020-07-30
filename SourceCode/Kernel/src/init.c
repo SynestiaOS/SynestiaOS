@@ -4,6 +4,7 @@
 #include <gui_animation.h>
 #include <gui_button.h>
 #include <gui_canvas.h>
+#include <gui_view3d.h>
 #include <gui_container.h>
 #include <gui_label.h>
 #include <gui_panel.h>
@@ -132,6 +133,10 @@ uint32_t *window_thread5(int args) {
   window.component.size.width = 340;
   window.component.size.height = 200;
   gui_window_init(&window, 660, 330, "View 3D Test Window");
+  GUIView3D view;
+  gui_view3d_create(&view);
+  gui_view3d_init(&view, 0, 0);
+  gui_window_add_children(&window, &(view.component));
   while (1) {
     disable_interrupt();
     gui_window_draw(&window);

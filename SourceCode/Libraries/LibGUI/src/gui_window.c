@@ -5,6 +5,7 @@
 #include <gfx2d.h>
 #include <gui_button.h>
 #include <gui_canvas.h>
+#include <gui_view3d.h>
 #include <gui_container.h>
 #include <gui_label.h>
 #include <gui_panel.h>
@@ -192,6 +193,15 @@ void gui_window_draw_children(GUIWindow *window) {
         canvas->component.position.y =
             window->component.position.y + DEFAULT_WINDOW_HEADER_HEIGHT + window->component.padding.top;
         gui_canvas_draw(canvas);
+        break;
+      }
+
+      case VIEW3D: {
+        GUIView3D *view = getNode(component, GUIView3D, component);
+        view->component.position.x = window->component.position.x + window->component.padding.left;
+        view->component.position.y =
+            window->component.position.y + DEFAULT_WINDOW_HEADER_HEIGHT + window->component.padding.top;
+        gui_view3d_draw(view);
         break;
       }
 

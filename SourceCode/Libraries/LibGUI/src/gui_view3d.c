@@ -9,6 +9,7 @@
 #include <stdbool.h>
 #include <stdlib.h>
 
+extern uint32_t GFX2D_BUFFER[1024 * 768];
 void gui_view3d_create(GUIView3D *view) {
   view->component.type = VIEW3D;
   view->component.visable = true;
@@ -20,8 +21,8 @@ void gui_view3d_create(GUIView3D *view) {
   view->component.position.x = 0;
   view->component.position.y = 0;
 
-  view->component.size.height = DEFAULT_CANVAS_HEIGHT;
-  view->component.size.width = DEFAULT_CANVAS_WIDTH;
+  view->component.size.height = DEFAULT_VIEW3D_HEIGHT;
+  view->component.size.width = DEFAULT_VIEW3D_WIDTH;
 
   view->component.padding.top = DEFAULT_PADDING;
   view->component.padding.bottom = DEFAULT_PADDING;
@@ -45,4 +46,16 @@ void gui_view3d_create(GUIView3D *view) {
   if (view->buffer == nullptr) {
     LogError("[GUI]: canvas create failed, unable to allocate buffer memory\n");
   }
+}
+
+void gui_view3d_init(GUIView3D *view, uint32_t x, uint32_t y) {
+  view->component.position.x = x;
+  view->component.position.y = y;
+}
+
+
+void gui_view3d_draw(GUIView3D *view) {
+  Gfx2DContext context = {.width = 1024, .height = 768, .buffer = GFX2D_BUFFER};
+  gfx2d_draw_bitmap(context, view->component.position.x, view->component.position.y, view->component.size.width,
+                    view->component.size.height, view->buffer);
 }

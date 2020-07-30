@@ -7,8 +7,8 @@
 
 #include <gui_component.h>
 
-#define DEFAULT_CANVAS_WIDTH 300
-#define DEFAULT_CANVAS_HEIGHT 300
+#define DEFAULT_VIEW3D_WIDTH 200
+#define DEFAULT_VIEW3D_HEIGHT 150
 
 typedef struct GUIView3D {
   GUIComponent component;
@@ -16,5 +16,9 @@ typedef struct GUIView3D {
 } GUIView3D;
 
 void gui_view3d_create(GUIView3D *view);
+
+void gui_view3d_init(GUIView3D *view, uint32_t x, uint32_t y);
+
+void gui_view3d_draw(GUIView3D *view);
 
 #endif //__LIBRARY_LIBGUI_VIEW_3D_H__
