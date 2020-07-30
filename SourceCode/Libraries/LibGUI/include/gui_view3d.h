@@ -6,12 +6,18 @@
 #define __LIBRARY_LIBGUI_VIEW_3D_H__
 
 #include <gui_component.h>
+#include <gfx3d.h>
 
 #define DEFAULT_VIEW3D_WIDTH 200
 #define DEFAULT_VIEW3D_HEIGHT 150
 
 typedef struct GUIView3D {
   GUIComponent component;
+  Mesh mesh;
+	Mat4x4 matProjection;
+	Vec3D vCamera;
+	Vec3D vLookDir;
+	float fYaw;
   uint32_t *buffer;
 } GUIView3D;
 

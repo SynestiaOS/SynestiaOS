@@ -51,6 +51,9 @@ void gui_view3d_create(GUIView3D *view) {
 void gui_view3d_init(GUIView3D *view, uint32_t x, uint32_t y) {
   view->component.position.x = x;
   view->component.position.y = y;
+  // Mesh m = {};
+  // view->mesh = m;
+  // view->matProjection = gfx3d_matrix_make_projection(90.0f, view->component.size.height / view->component.size.width, 0.1f, 1000.0f);
 }
 
 
