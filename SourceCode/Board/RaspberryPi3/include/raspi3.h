@@ -1,12 +1,7 @@
 #ifndef __BOARD_RASP3_H__
 #define __BOARD_RASP3_H__
 
-#ifdef MODEL_1
-#define PERIPHERAL_BASE 0x20000000
-#else
 #define PERIPHERAL_BASE 0x3F000000
-#endif
-
 #define PERIPHERAL_LENGTH 0x01000000
 
 #define SYSTEM_TIMER_OFFSET 0x3000
