@@ -57,6 +57,7 @@ typedef enum ComponentType {
   PANEL,
   CONTAINER,
   CANVAS,
+  VIEW3D,
 } ComponentType;
 
 typedef enum ColorMode {

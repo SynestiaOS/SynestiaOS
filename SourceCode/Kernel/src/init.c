@@ -131,7 +131,7 @@ uint32_t *window_thread5(int args) {
   gui_window_create(&window);
   window.component.size.width = 340;
   window.component.size.height = 200;
-  gui_window_init(&window, 660, 330, "Canvas 3D Test Window");
+  gui_window_init(&window, 660, 330, "View 3D Test Window");
   while (1) {
     disable_interrupt();
     gui_window_draw(&window);
