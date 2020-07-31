@@ -27,13 +27,70 @@ _fast_interrupt_addr:
     .word fast_interrupt_handler
 
 
-reset_handler:
-    // Disable extra smp cpus
-    mrc p15, #0, r0, c0, c0, #5
-    and r0, r0, #3
-    cmp r0, #0
-    bne halt_cpu
+reset_handler: 
+    mrc p15, #0, r0, c0, c0, #5 // Move to ARM Register r0 from Coprocessor c0. Read ID Code Register
+    and r0, r0, #3 // r0 &= 0x3
+    cmp r0, #0 // check whether r0==0
+    beq _reset_cpu0 // reset cpu0
 
+    cmp r0, #1 // check whether r0==1
+    beq _reset_cpu1 // reset cpu1
+
+    cmp r0, #2 // check whether r0==2
+    beq _reset_cpu2 // reset cpu2
+
+    cmp r0, #3 // check whether r0==3
+    beq _reset_cpu3 // reset cpu3
+
+_reset_cpu0:
+    push    {r4, r5, r6, r7, r8, r9}
+
+    ldr     r0, =exception_vector_table
+
+    // set vector address.
+    mcr P15, 0, r0, c12, c0, 0
+
+    mov     r1, #0x0000
+    ldmia   r0!,{r2, r3, r4, r5, r6, r7, r8, r9}
+    stmia   r1!,{r2, r3, r4, r5, r6, r7, r8, r9}
+    ldmia   r0!,{r2, r3, r4, r5, r6, r7, r8}
+    stmia   r1!,{r2, r3, r4, r5, r6, r7, r8}
+    pop     {r4, r5, r6, r7, r8, r9}
+    ldr     pc, =_start
+
+_reset_cpu1:
+    push    {r4, r5, r6, r7, r8, r9}
+
+    ldr     r0, =exception_vector_table
+
+    // set vector address.
+    mcr P15, 0, r0, c12, c0, 0
+
+    mov     r1, #0x0000
+    ldmia   r0!,{r2, r3, r4, r5, r6, r7, r8, r9}
+    stmia   r1!,{r2, r3, r4, r5, r6, r7, r8, r9}
+    ldmia   r0!,{r2, r3, r4, r5, r6, r7, r8}
+    stmia   r1!,{r2, r3, r4, r5, r6, r7, r8}
+    pop     {r4, r5, r6, r7, r8, r9}
+    ldr     pc, =_start
+
+_reset_cpu2:
+    push    {r4, r5, r6, r7, r8, r9}
+
+    ldr     r0, =exception_vector_table
+
+    // set vector address.
+    mcr P15, 0, r0, c12, c0, 0
+
+    mov     r1, #0x0000
+    ldmia   r0!,{r2, r3, r4, r5, r6, r7, r8, r9}
+    stmia   r1!,{r2, r3, r4, r5, r6, r7, r8, r9}
+    ldmia   r0!,{r2, r3, r4, r5, r6, r7, r8}
+    stmia   r1!,{r2, r3, r4, r5, r6, r7, r8}
+    pop     {r4, r5, r6, r7, r8, r9}
+    ldr     pc, =_start
+
+_reset_cpu3:
     push    {r4, r5, r6, r7, r8, r9}
 
     ldr     r0, =exception_vector_table
