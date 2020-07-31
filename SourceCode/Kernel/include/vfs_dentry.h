@@ -10,7 +10,7 @@
 #include <mutex.h>
 #include <spinlock.h>
 
-typedef uint64_t (*DirectoryEntryHashOperation)(struct DirectoryEntry *directoryEntry, const char *);
+typedef uint64_t (*DirectoryEntryHashOperation)(struct DirectoryEntry *directoryEntry, const char *name);
 typedef char *(*DirectoryEntryGetNameOperaction)(struct DirectoryEntry *directoryEntry);
 typedef KernelStatus (*DirectoryEntryDeleteOperation)(struct DirectoryEntry *directory);
 typedef KernelStatus (*DirectoryEntryReleaseOperation)(struct DirectoryEntry *directory);
@@ -34,6 +34,7 @@ typedef struct DirectoryEntry {
   Atomic refCount;
   SpinLock parallelLock;
 
+  char *fileName;
   uint64_t fileNameHash;
   DirectoryEntryOperations *operations;
 } DirectoryEntry;

@@ -35,7 +35,7 @@ typedef struct IndexNode {
   IndexNodeType type;
   uint64_t id;
 
-  SuperBlock *superBlock;
+  struct SuperBlock *superBlock;
 
   Mutex mutex;
   uint64_t state;

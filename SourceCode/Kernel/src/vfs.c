@@ -9,7 +9,7 @@
 
 SuperBlock *fileSystems = nullptr;
 KernelStatus vfs_init() {
-  SuperBlock *root = vfs_mount("/", FILESYSTEM_FAT32);
+  SuperBlock *root = vfs_mount("rootfs", FILESYSTEM_FAT32);
   return OK;
 }
 
@@ -22,6 +22,7 @@ SuperBlock *vfs_mount(const char *name, FileSystemType type) {
 
   DirectoryEntry *rootDirectoryEntry = superBlock->operations->createDirectoryEntry(superBlock);
   rootDirectoryEntry->operations->initOperation(rootDirectoryEntry, nullptr, rootIndexNode);
+  rootDirectoryEntry->fileName = "/";
 
   klist_append(&fileSystems->node, &superBlock->node);
   return superBlock;
