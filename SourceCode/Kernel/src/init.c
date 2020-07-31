@@ -1,3 +1,4 @@
+#include <cache.h>
 #include <font8bits.h>
 #include <gfx2d.h>
 #include <gpu.h>
@@ -17,7 +18,6 @@
 #include <string.h>
 #include <synestia_os_hal.h>
 #include <vmm.h>
-#include <cache.h>
 
 extern uint32_t *gpu_flush(int args);
 extern uint32_t GFX2D_BUFFER[1024 * 768];

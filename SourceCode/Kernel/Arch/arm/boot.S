@@ -3,11 +3,22 @@
 _start:
     // comment out following code because it's halted within exception.S#reset_handler
     // there are 4 cores within rasberry pi 3, and 4 cores will execute the following code at the same time
-    // mrc p15, #0, r0, c0, c0, #5 // Move to ARM Register r0 from Coprocessor c0. Read ID Code Register
-    // and r0, r0, #3 // r0 &= 0x3
-    // cmp r0, #0 // check whether r0==0 or not
-    // bne _halt_smp // if r0!=0, go to _halt_smp, it means only core with id 0 will execute the following code
+    mrc p15, #0, r0, c0, c0, #5 // Move to ARM Register r0 from Coprocessor c0. Read ID Code Register
+    and r0, r0, #3 // r0 &= 0x3
+    cmp r0, #0 // check whether r0==0 or not
+    beq _init_cpu0
 
+    cmp r0, #1 // check whether r0==1 or not
+    beq _init_cpu1
+
+    cmp r0, #2 // check whether r0==1 or not
+    beq _init_cpu2
+
+    cmp r0, #3 // check whether r0==1 or not
+    beq _init_cpu2
+    ; bne _halt_smp // if r0!=0, go to _halt_smp, it means only core with id 0 will execute the following code
+
+_init_cpu0:
     ldr sp, =__sys_stack
 
     ldr r0, =__bss_start
@@ -37,13 +48,111 @@ _start:
     bic r0,     #0x1F
     orr r0,     #0x13
     msr cpsr_c, r0 // enter SVC (supervisor) mode
+    ldr pc, =_goto_kernel_main
 
-#ifndef ENV_KERNEL_UNIT_TESTS
-    bl kernel_main
-#else
-#warning "building kernel for unit tests!!!"
-    bl kernel_main_tests
-#endif
+_init_cpu1:
+    ldr sp, =__sys_stack+0x8000
+
+    ldr r0, =__bss_start
+    ldr r1, =__bss_end
+    bl  memclean // call memclean(r0, r1)
+
+    mrs r0, cpsr // move coprocessor register cpsr to ARM register r0
+
+    bic r0,     #0x1F // set r0[4:0] to bit 0
+    orr r0,     #0x13 // set r0[4], r0[1:0] to bit 1, 0b10011
+    msr cpsr_c, r0 // enter SVC (supervisor) mode
+    ldr r1,=__svc_stack+0x8000
+    bic sp, r1, #0x7
+
+    bic r0,     #0x1F
+    orr r0,     #0x12 // set r0[4], r0[1] to bit 1, 0b10010
+    msr cpsr_c, r0 // enter IRQ mode
+    ldr r1,=__irq_stack+0x8000
+    bic sp, r1, #0x7
+
+    bic r0,     #0x1F
+    orr r0,     #0x11 // set r0[4], r0[0] to bit 1, 0b10001
+    msr cpsr_c, r0 // enter FIQ mode
+    ldr r1,=__fiq_stack+0x8000
+    bic sp, r1, #0x7
+
+    bic r0,     #0x1F
+    orr r0,     #0x13
+    msr cpsr_c, r0 // enter SVC (supervisor) mode
+    ldr pc, =_goto_kernel_main
+
+_init_cpu2:
+    ldr sp, =__sys_stack+0x8000+0x8000
+
+    ldr r0, =__bss_start
+    ldr r1, =__bss_end
+    bl  memclean // call memclean(r0, r1)
+
+    mrs r0, cpsr // move coprocessor register cpsr to ARM register r0
+
+    bic r0,     #0x1F // set r0[4:0] to bit 0
+    orr r0,     #0x13 // set r0[4], r0[1:0] to bit 1, 0b10011
+    msr cpsr_c, r0 // enter SVC (supervisor) mode
+    ldr r1,=__svc_stack+0x8000+0x8000
+    bic sp, r1, #0x7
+
+    bic r0,     #0x1F
+    orr r0,     #0x12 // set r0[4], r0[1] to bit 1, 0b10010
+    msr cpsr_c, r0 // enter IRQ mode
+    ldr r1,=__irq_stack+0x8000+0x8000
+    bic sp, r1, #0x7
+
+    bic r0,     #0x1F
+    orr r0,     #0x11 // set r0[4], r0[0] to bit 1, 0b10001
+    msr cpsr_c, r0 // enter FIQ mode
+    ldr r1,=__fiq_stack+0x8000+0x8000
+    bic sp, r1, #0x7
+
+    bic r0,     #0x1F
+    orr r0,     #0x13
+    msr cpsr_c, r0 // enter SVC (supervisor) mode
+    ldr pc, =_goto_kernel_main
+
+_init_cpu3:
+    ldr sp, =__sys_stack+0x8000+0x8000+0x8000
+
+    ldr r0, =__bss_start
+    ldr r1, =__bss_end
+    bl  memclean // call memclean(r0, r1)
+
+    mrs r0, cpsr // move coprocessor register cpsr to ARM register r0
+
+    bic r0,     #0x1F // set r0[4:0] to bit 0
+    orr r0,     #0x13 // set r0[4], r0[1:0] to bit 1, 0b10011
+    msr cpsr_c, r0 // enter SVC (supervisor) mode
+    ldr r1,=__svc_stack+0x8000+0x8000+0x8000
+    bic sp, r1, #0x7
+
+    bic r0,     #0x1F
+    orr r0,     #0x12 // set r0[4], r0[1] to bit 1, 0b10010
+    msr cpsr_c, r0 // enter IRQ mode
+    ldr r1,=__irq_stack+0x8000+0x8000+0x8000
+    bic sp, r1, #0x7
+
+    bic r0,     #0x1F
+    orr r0,     #0x11 // set r0[4], r0[0] to bit 1, 0b10001
+    msr cpsr_c, r0 // enter FIQ mode
+    ldr r1,=__fiq_stack+0x8000+0x8000+0x8000
+    bic sp, r1, #0x7
+
+    bic r0,     #0x1F
+    orr r0,     #0x13
+    msr cpsr_c, r0 // enter SVC (supervisor) mode
+    ldr pc, =_goto_kernel_main
+
+_goto_kernel_main:
+    #ifndef ENV_KERNEL_UNIT_TESTS
+        bl kernel_main
+    #else
+    #warning "building kernel for unit tests!!!"
+        bl kernel_main_tests
+    #endif
 
 _halt_smp:
     wfi // wait for interrup coming

@@ -38,16 +38,16 @@ SECTIONS
     . = ALIGN(4096);
     __bss_end = .;
 
-    . = 0x8000 + __bss_end;
+    . = 0x20000 + __bss_end;
     __svc_stack = .;
 
-    . = 0x8000 + __svc_stack;
+    . = 0x20000 + __svc_stack;
     __irq_stack = .;
 
-    . = 0x8000 + __irq_stack;
+    . = 0x20000 + __irq_stack;
     __fiq_stack = .;
 
-    . = 0x8000 + __fiq_stack;
+    . = 0x20000 + __fiq_stack;
     __sys_stack = .;
 
     __end_stack = .;
