@@ -5,17 +5,17 @@ _start:
     // there are 4 cores within rasberry pi 3, and 4 cores will execute the following code at the same time
     mrc p15, #0, r0, c0, c0, #5 // Move to ARM Register r0 from Coprocessor c0. Read ID Code Register
     and r0, r0, #3 // r0 &= 0x3
-    cmp r0, #0 // check whether r0==0 or not
-    beq _init_cpu0
+    cmp r0, #0 // check whether r0==0
+    beq _init_cpu0 // init cpu0
 
-    cmp r0, #1 // check whether r0==1 or not
-    beq _init_cpu1
+    cmp r0, #1 // check whether r0==1
+    beq _init_cpu1 // init cpu1
 
-    cmp r0, #2 // check whether r0==1 or not
-    beq _init_cpu2
+    cmp r0, #2 // check whether r0==2
+    beq _init_cpu2 // init cpu2
 
-    cmp r0, #3 // check whether r0==1 or not
-    beq _init_cpu2
+    cmp r0, #3 // check whether r0==3
+    beq _init_cpu2 // init cpu3
 
     ldr pc, =_halt_smp // else, go to _halt_smp, it means only core with id 0 will execute the following code
 
