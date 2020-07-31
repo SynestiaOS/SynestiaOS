@@ -6,6 +6,7 @@
 #define __KERNEL_MUTEX_H__
 #include <atomic.h>
 #include <kqueue.h>
+#include <stdbool.h>
 #include <stdint.h>
 
 #define STATE_FREE 0u

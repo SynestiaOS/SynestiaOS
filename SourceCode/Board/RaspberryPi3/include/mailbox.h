@@ -6,7 +6,9 @@
 #define __BOARD_RASP3_MAILBOX_H__
 
 #include <raspi3.h>
+#include <stdbool.h>
 #include <stdint.h>
+
 /* a properly aligned buffer */
 extern volatile uint32_t mailbox[36];
 

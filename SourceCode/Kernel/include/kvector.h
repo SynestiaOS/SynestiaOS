@@ -6,6 +6,7 @@
 #define __KERNEL_VECTOR_H__
 
 #include "list.h"
+#include <stdbool.h>
 #include <type.h>
 
 #define DEFAULT_VECTOR_SIZE 12
