@@ -4,7 +4,6 @@
 #include <stdlib.h>
 
 #include <stdarg.h>
-#include <stdbool.h>
 #include <string.h>
 
 void memclean(uint8_t *start, const uint8_t *end) {
