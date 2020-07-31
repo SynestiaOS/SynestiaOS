@@ -1,7 +1,6 @@
 cmake_minimum_required(VERSION 3.12 FATAL_ERROR)
 
 # skip cmake compiler check
-#set(CMAKE_TRY_COMPILE_TARGET_TYPE "STATIC_LIBRARY")
 set(CMAKE_C_COMPILER_WORKS TRUE)
 set(CMAKE_CXX_COMPILER_WORKS TRUE)
 
