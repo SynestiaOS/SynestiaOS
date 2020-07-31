@@ -139,6 +139,7 @@ uint32_t *window_thread5(int args) {
   gui_window_add_children(&window, &(view.component));
   while (1) {
     disable_interrupt();
+    gui_canvas_fill_circle(&canvas, 10, 10, 10, 0xFF0000);
     gui_window_draw(&window);
     enable_interrupt();
   }
