@@ -151,11 +151,11 @@ TimerHandler gpuHandler;
 SpinLock spinlock;
 Atomic atomic;
 void kernel_main(void) {
-  // spinlock_create(&spinlock, &atomic);
+  spinlock_create(&spinlock, &atomic);
   uint32_t cpuid = read_cpuid();
   LogWarn("[MPCore] cpuid: %d .\n", cpuid);
 
-  // spinlock_acquire(&spinlock);
+  spinlock_acquire(&spinlock);
   if (cpuid == 0) {
     init_bsp();
     print_splash();
@@ -192,7 +192,7 @@ void kernel_main(void) {
     schd_init_thread(window5Thread, 4);
   }
 
-  // spinlock_release(&spinlock);
+  spinlock_release(&spinlock);
 
   schd_schedule();
 }
