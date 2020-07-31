@@ -51,7 +51,7 @@ _init_cpu0:
     ldr pc, =_goto_kernel_main
 
 _init_cpu1:
-    ldr sp, =__sys_stack
+    ldr sp, =__sys_stack+0x8000
 
     ldr r0, =__bss_start
     ldr r1, =__bss_end
@@ -62,19 +62,19 @@ _init_cpu1:
     bic r0,     #0x1F // set r0[4:0] to bit 0
     orr r0,     #0x13 // set r0[4], r0[1:0] to bit 1, 0b10011
     msr cpsr_c, r0 // enter SVC (supervisor) mode
-    ldr r1,=__svc_stack
+    ldr r1,=__svc_stack+0x8000
     bic sp, r1, #0x7
 
     bic r0,     #0x1F
     orr r0,     #0x12 // set r0[4], r0[1] to bit 1, 0b10010
     msr cpsr_c, r0 // enter IRQ mode
-    ldr r1,=__irq_stack
+    ldr r1,=__irq_stack+0x8000
     bic sp, r1, #0x7
 
     bic r0,     #0x1F
     orr r0,     #0x11 // set r0[4], r0[0] to bit 1, 0b10001
     msr cpsr_c, r0 // enter FIQ mode
-    ldr r1,=__fiq_stack
+    ldr r1,=__fiq_stack+0x8000
     bic sp, r1, #0x7
 
     bic r0,     #0x1F
@@ -83,7 +83,7 @@ _init_cpu1:
     ldr pc, =_goto_kernel_main
 
 _init_cpu2:
-    ldr sp, =__sys_stack
+    ldr sp, =__sys_stack+0x8000+0x8000
 
     ldr r0, =__bss_start
     ldr r1, =__bss_end
@@ -94,19 +94,19 @@ _init_cpu2:
     bic r0,     #0x1F // set r0[4:0] to bit 0
     orr r0,     #0x13 // set r0[4], r0[1:0] to bit 1, 0b10011
     msr cpsr_c, r0 // enter SVC (supervisor) mode
-    ldr r1,=__svc_stack
+    ldr r1,=__svc_stack+0x8000+0x8000
     bic sp, r1, #0x7
 
     bic r0,     #0x1F
     orr r0,     #0x12 // set r0[4], r0[1] to bit 1, 0b10010
     msr cpsr_c, r0 // enter IRQ mode
-    ldr r1,=__irq_stack
+    ldr r1,=__irq_stack+0x8000+0x8000
     bic sp, r1, #0x7
 
     bic r0,     #0x1F
     orr r0,     #0x11 // set r0[4], r0[0] to bit 1, 0b10001
     msr cpsr_c, r0 // enter FIQ mode
-    ldr r1,=__fiq_stack
+    ldr r1,=__fiq_stack+0x8000+0x8000
     bic sp, r1, #0x7
 
     bic r0,     #0x1F
@@ -115,7 +115,7 @@ _init_cpu2:
     ldr pc, =_goto_kernel_main
 
 _init_cpu3:
-    ldr sp, =__sys_stack
+    ldr sp, =__sys_stack+0x8000+0x8000+0x8000
 
     ldr r0, =__bss_start
     ldr r1, =__bss_end
@@ -126,19 +126,19 @@ _init_cpu3:
     bic r0,     #0x1F // set r0[4:0] to bit 0
     orr r0,     #0x13 // set r0[4], r0[1:0] to bit 1, 0b10011
     msr cpsr_c, r0 // enter SVC (supervisor) mode
-    ldr r1,=__svc_stack
+    ldr r1,=__svc_stack+0x8000+0x8000+0x8000
     bic sp, r1, #0x7
 
     bic r0,     #0x1F
     orr r0,     #0x12 // set r0[4], r0[1] to bit 1, 0b10010
     msr cpsr_c, r0 // enter IRQ mode
-    ldr r1,=__irq_stack
+    ldr r1,=__irq_stack+0x8000+0x8000+0x8000
     bic sp, r1, #0x7
 
     bic r0,     #0x1F
     orr r0,     #0x11 // set r0[4], r0[0] to bit 1, 0b10001
     msr cpsr_c, r0 // enter FIQ mode
-    ldr r1,=__fiq_stack
+    ldr r1,=__fiq_stack+0x8000+0x8000+0x8000
     bic sp, r1, #0x7
 
     bic r0,     #0x1F
