@@ -15,6 +15,7 @@
 #include <sched.h>
 #include <stdlib.h>
 #include <synestia_os_hal.h>
+#include <uart.h>
 #include <vmm.h>
 
 extern uint32_t *gpu_flush(int args);
@@ -147,13 +148,13 @@ uint32_t *window_thread5(int args) {
 
 TimerHandler gpuHandler;
 void kernel_main(void) {
+  init_bsp();
+
   print_splash();
 
   vmm_init();
 
   kheap_init();
-
-  init_bsp();
 
   init_interrupt();
 
