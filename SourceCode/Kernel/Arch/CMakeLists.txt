@@ -7,7 +7,7 @@ add_library(${PROJECT_NAME}
         OBJECT
         ${KernelArchSrc}
         ${KernelArchVMMSrc}
-        ${KernelArch_SOURCE_DIR}/${SynestiaArch}/boot.s)
+        ${KernelArch_SOURCE_DIR}/${SynestiaArch}/boot.S)
 
 target_include_vmm_header_files(${PROJECT_NAME})
 target_include_kernel_header_files(${PROJECT_NAME})

@@ -30,18 +30,22 @@ void __assert_func_success(const char *file, int line, const char *func, const c
   do {                                                                                                                 \
     assert((left) == (right));                                                                                         \
   } while (0)
+
 #define ASSERT_NEQ(left, right)                                                                                        \
   do {                                                                                                                 \
     assert((left) != (right));                                                                                         \
   } while (0)
+
 #define ASSERT_TRUE(value)                                                                                             \
   do {                                                                                                                 \
     assert(value);                                                                                                     \
   } while (0)
+
 #define ASSERT_FALSE(value)                                                                                            \
   do {                                                                                                                 \
     assert(!(value));                                                                                                  \
   } while (0)
+
 #define ASSERT_EQ_FLOAT(left, right, sill)                                                                             \
   do {                                                                                                                 \
     assert(abs((left) - (right)) < (sill));                                                                            \
