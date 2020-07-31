@@ -8,3 +8,4 @@ Tests/os_test
 Tests/tools
 /cmake-build-debug/
 Build/
+.DS_Store
