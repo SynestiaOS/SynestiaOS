@@ -11,6 +11,7 @@ DirectoryEntry *vfs_super_block_default_create_directory_entry(struct SuperBlock
     LogError("[VFS]: root dentry create failed,cause heap alloc failed.\n");
     return nullptr;
   }
+  directoryEntry->superBlock = superBlock;
   return directoryEntry;
 }
 
@@ -20,6 +21,7 @@ IndexNode *vfs_super_block_default_create_index_node(struct SuperBlock *superBlo
     LogError("[VFS]: root inode create failed,cause heap alloc failed.\n");
     return nullptr;
   }
+  indexNode->superBlock = superBlock;
   return indexNode;
 }
 
