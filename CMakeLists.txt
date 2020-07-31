@@ -32,7 +32,7 @@ else ()
 endif ()
 message(STATUS "PLATFORM is ${PLATFORM}")
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fpic -ffreestanding -std=gnu11 -Wall -Wextra -g -nostdlib -D${PLATFORM}")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -MD -fpic -ffreestanding -std=gnu11 -Wall -Wextra -g -nostdlib -D${PLATFORM}")
 set(CMAKE_ASM_FLAGS "${CMAKE_C_FLAGS}")
 
 message(STATUS "CMAKE_C_FLAGS is ${CMAKE_C_FLAGS}")
