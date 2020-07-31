@@ -1,11 +1,4 @@
 .idea/
-Tools/
-*.o
-*.ao
-Kernel/kernel
-Tests/integrate_test
-Tests/os_test
-Tests/tools
-/cmake-build-debug/
-Build/
 .DS_Store
+cmake-build-debug/
+Build/
