@@ -53,10 +53,6 @@ _init_cpu0:
 _init_cpu1:
     ldr sp, =__sys_stack-0x8000
 
-    ldr r0, =__bss_start
-    ldr r1, =__bss_end
-    bl  memclean // call memclean(r0, r1)
-
     mrs r0, cpsr // move coprocessor register cpsr to ARM register r0
 
     bic r0,     #0x1F // set r0[4:0] to bit 0
@@ -80,14 +76,11 @@ _init_cpu1:
     bic r0,     #0x1F
     orr r0,     #0x13
     msr cpsr_c, r0 // enter SVC (supervisor) mode
+    wfe
     ldr pc, =_goto_kernel_main
 
 _init_cpu2:
     ldr sp, =__sys_stack-0x8000-0x8000
-
-    ldr r0, =__bss_start
-    ldr r1, =__bss_end
-    bl  memclean // call memclean(r0, r1)
 
     mrs r0, cpsr // move coprocessor register cpsr to ARM register r0
 
@@ -112,14 +105,11 @@ _init_cpu2:
     bic r0,     #0x1F
     orr r0,     #0x13
     msr cpsr_c, r0 // enter SVC (supervisor) mode
+    wfe
     ldr pc, =_goto_kernel_main
 
 _init_cpu3:
     ldr sp, =__sys_stack-0x8000-0x8000-0x8000
-
-    ldr r0, =__bss_start
-    ldr r1, =__bss_end
-    bl  memclean // call memclean(r0, r1)
 
     mrs r0, cpsr // move coprocessor register cpsr to ARM register r0
 
@@ -144,6 +134,7 @@ _init_cpu3:
     bic r0,     #0x1F
     orr r0,     #0x13
     msr cpsr_c, r0 // enter SVC (supervisor) mode
+    wfe
     ldr pc, =_goto_kernel_main
 
 _goto_kernel_main:

@@ -148,14 +148,10 @@ uint32_t *window_thread5(int args) {
 }
 
 TimerHandler gpuHandler;
-SpinLock spinlock;
-Atomic atomic;
 void kernel_main(void) {
-  spinlock_create(&spinlock, &atomic);
   uint32_t cpuid = read_cpuid();
   LogWarn("[MPCore] cpuid: %d .\n", cpuid);
 
-  spinlock_acquire(&spinlock);
   if (cpuid == 0) {
     init_bsp();
     print_splash();
@@ -190,9 +186,8 @@ void kernel_main(void) {
 
     Thread *window5Thread = thread_create("window5", &window_thread5, 1, 1);
     schd_init_thread(window5Thread, 4);
+
+    asm volatile("SEV");
   }
-
-  spinlock_release(&spinlock);
-
   schd_schedule();
 }
