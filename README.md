@@ -39,16 +39,20 @@ within the docker container, under the Build dir, run following command to build
 ```
 cmake .. && make VERBOSE=1
 ```
-if you are using mac, specify the cross compile toolchain in CMake/ToolchainArmMac.cmake, 
+if you are using mac, specify the cross compile toolchain in CMake/ToolchainMacArm.cmake, 
 and specify the toolchain file location
 ```
-cmake -DCMAKE_TOOLCHAIN_FILE=${PATH_TO_THIS_PROJECT}/SynestiaOS/CMake/ToolchainArmMac.cmake .. && make VERBOSE=1
+cmake -DCMAKE_TOOLCHAIN_FILE=${PATH_TO_THIS_PROJECT}/SynestiaOS/CMake/ToolchainMacArm.cmake .. && make VERBOSE=1
 ```
 To run kernel, you can find the kernel image under Build/
 ```
 qemu-system-arm -M raspi2 -kernel bin/Kernel.img -nographic -serial mon:stdio      #for raspi2 and arm32
 qemu-system-aarch64 -M raspi3 -kernel bin/Kernel.img -nographic -serial mon:stdio  #for raspi3 and arm64
 ```
+To run kernel unit tests, you can find the kernel unit tests image under Build/
+```
+qemu-system-arm -M raspi2 -kernel bin/KernelUnitTests.img -nographic -serial mon:stdio      #for raspi2 and arm32
+qemu-system-aarch64 -M raspi3 -kernel bin/KernelUnitTests.img -nographic -serial mon:stdio  #for raspi3 and arm64
 To clean workspace:
 ```
 make clean
@@ -72,6 +76,3 @@ gdb-multiarch Kernel.img
 
 # Pipeline
 [Jenkins](http://ci.synestiaos.org/)
-
-# Resource
-[Makefile](https://wiki.ubuntu.org.cn/%E8%B7%9F%E6%88%91%E4%B8%80%E8%B5%B7%E5%86%99Makefile:%E6%A6%82%E8%BF%B0)
