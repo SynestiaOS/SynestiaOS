@@ -17,6 +17,7 @@
 #include <string.h>
 #include <synestia_os_hal.h>
 #include <vmm.h>
+#include <cache.h>
 
 extern uint32_t *gpu_flush(int args);
 extern uint32_t GFX2D_BUFFER[1024 * 768];
@@ -150,6 +151,9 @@ void kernel_main(void) {
   init_bsp();
 
   print_splash();
+
+  uint32_t cpuid = read_cpuid();
+  LogWarn("[MPCore] cpuid: %d .\n", cpuid);
 
   vmm_init();
 
