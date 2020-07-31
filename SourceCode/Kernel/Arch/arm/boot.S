@@ -17,7 +17,7 @@ _start:
     cmp r0, #3 // check whether r0==3
     beq _init_cpu3 // init cpu3
 
-    ldr pc, =_halt_smp // else, go to _halt_smp, it means only core with id 0 will execute the following code
+    ldr pc, =_halt_smp // else, go to _halt_smp, it means only core with id 0,1,2,3 will execute the following code
 
 _init_cpu0:
     ldr sp, =__sys_stack
