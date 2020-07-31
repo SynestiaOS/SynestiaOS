@@ -14,8 +14,8 @@
 #include <log.h>
 #include <sched.h>
 #include <stdlib.h>
+#include <string.h>
 #include <synestia_os_hal.h>
-#include <uart.h>
 #include <vmm.h>
 
 extern uint32_t *gpu_flush(int args);
