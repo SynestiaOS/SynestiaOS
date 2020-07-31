@@ -2,9 +2,10 @@
 // Created by XingfengYang on 2020/7/30.
 //
 
-#include <string.h>
 #include <stdbool.h>
 #include <stdint.h>
+#include <stdlib.h>
+#include <string.h>
 
 
 char *strcpy(char *des, char *source) {
