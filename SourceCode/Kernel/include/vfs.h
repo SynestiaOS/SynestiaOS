@@ -44,7 +44,7 @@ typedef struct DirectoryEntryOperations {
 } DirectoryEntryOperations;
 
 typedef struct DirectoryEntry {
-  DirectoryEntry *parent;
+  struct DirectoryEntry *parent;
   ListNode list;
   IndexNode indexNode;
 
