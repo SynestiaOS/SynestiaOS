@@ -26,21 +26,11 @@ _interrupt_addr:
 _fast_interrupt_addr:
     .word fast_interrupt_handler
 
-
-<<<<<<< HEAD
 reset_handler: 
     mrc p15, #0, r0, c0, c0, #5 // Move to ARM Register r0 from Coprocessor c0. Read ID Code Register
     and r0, r0, #3 // r0 &= 0x3
     cmp r0, #0 // check whether r0==0
     beq _reset_cpu0 // reset cpu0
-=======
-reset_handler:
-    // Disable extra smp cpus
-    mrc p15, #0, r0, c0, c0, #5
-    and r0, r0, #0xFF
-    cmp r0, #0
-    bne halt_cpu
->>>>>>> b93472607b6add69c138d165a0cdf8b07018f288
 
     cmp r0, #1 // check whether r0==1
     beq _reset_cpu1 // reset cpu1
