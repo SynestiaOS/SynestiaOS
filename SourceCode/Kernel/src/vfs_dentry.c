@@ -2,13 +2,14 @@
 // Created by XingfengYang & ChengyuZhao on 2020/7/30.
 //
 
+#include <hash.h>
 #include <log.h>
+#include <string.h>
 #include <vfs_dentry.h>
 #include <vfs_inode.h>
 
 uint64_t vfs_directory_entry_default_hash(DirectoryEntry *directoryEntry, const char *name) {
-  // todo
-  return OK;
+  return adler32(name, strlen(name));
 }
 
 char *vfs_directory_entry_default_get_name(DirectoryEntry *directoryEntry) {

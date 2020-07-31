@@ -5,6 +5,7 @@
 
 #include <stdarg.h>
 #include <stdbool.h>
+#include <string.h>
 
 void memclean(uint8_t *start, const uint8_t *end) {
   uint32_t i;
@@ -19,21 +20,6 @@ void bzero(void *s1, uint32_t n) {
   while (n != 0) {
     *t++ = 0;
     n--;
-  }
-}
-
-char *strcpy(char *des, char *source) {
-  char *r = des;
-  while ((*r++ = *source++) != '\0')
-    ;
-  return des;
-}
-
-void memcpy(void *dest, const void *src, uint32_t bytes) {
-  char *d = dest;
-  const char *s = src;
-  while (bytes--) {
-    *d++ = *s++;
   }
 }
 
@@ -113,35 +99,6 @@ void reverse(char str[], int length) {
     start++;
     end--;
   }
-}
-
-char *itoa(int num, char *str, int base) {
-  int i = 0;
-  _Bool isNegative = false;
-
-  if (num == 0) {
-    str[i] = '0';
-    return str;
-  }
-
-  if (num < 0 && base == 10) {
-    isNegative = true;
-    num = -num;
-  }
-
-  while (num != 0) {
-    int rem = num % base;
-    str[i++] = (rem > 9) ? (rem - 10) + 'a' : rem + '0';
-    num = num / base;
-  }
-
-  if (isNegative) {
-    str[i++] = '-';
-  }
-
-  reverse(str, i);
-
-  return str;
 }
 
 int printf(const char *format, ...) {
