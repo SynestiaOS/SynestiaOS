@@ -41,6 +41,8 @@ reset_handler:
     cmp r0, #3 // check whether r0==3
     beq _reset_cpu3 // reset cpu3
 
+    ldr pc,=halt_cpu
+
 _reset_cpu0:
     push    {r4, r5, r6, r7, r8, r9}
 
