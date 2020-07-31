@@ -1,1 +1,0 @@
-[SynestiaOS](https://synestiaos.org/)
