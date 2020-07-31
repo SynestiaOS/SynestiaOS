@@ -30,7 +30,7 @@ _fast_interrupt_addr:
 reset_handler:
     // Disable extra smp cpus
     mrc p15, #0, r0, c0, c0, #5
-    and r0, r0, #3
+    and r0, r0, #0xFF
     cmp r0, #0
     bne halt_cpu
 
