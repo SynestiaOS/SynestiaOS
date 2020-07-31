@@ -1,10 +1,9 @@
 .section ".text.boot"
 .globl _start
 _start:
-    // comment out following code because it's halted within exception.S#reset_handler
     // there are 4 cores within rasberry pi 3, and 4 cores will execute the following code at the same time
     mrc p15, #0, r0, c0, c0, #5 // Move to ARM Register r0 from Coprocessor c0. Read ID Code Register
-    and r0, r0, #3 // r0 &= 0x3
+    and r0, r0, #0xFF // r0 &= 0xFF
     cmp r0, #0 // check whether r0==0
     beq _init_cpu0 // init cpu0
 
@@ -15,9 +14,9 @@ _start:
     beq _init_cpu2 // init cpu2
 
     cmp r0, #3 // check whether r0==3
-    beq _init_cpu2 // init cpu3
+    beq _init_cpu3 // init cpu3
 
-    ldr pc, =_halt_smp // else, go to _halt_smp, it means only core with id 0 will execute the following code
+    ldr pc, =_halt_smp // else, go to _halt_smp, it means only core with id 0,1,2,3 will execute the following code
 
 _init_cpu0:
     ldr sp, =__sys_stack
