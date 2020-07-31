@@ -9,3 +9,8 @@ KernelStatus vfs_init(){
     return OK;
 }
 
+KernelStatus vfs_mount(const char* name, FileSystemType type){
+    // todo
+    return OK;
+}
+
