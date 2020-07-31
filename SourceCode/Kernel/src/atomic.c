@@ -13,8 +13,8 @@ void atomic_create(Atomic *atomic) { atomic_set(atomic, 0); }
 void atomic_set(Atomic *atomic, uint32_t val) {
   volatile uint32_t tmp;
   __asm__ __volatile__("@ atomic_set\n\t"
-                       "1:  ldrex    %0, [%1]\n\t"          //ldrex : arm的
-                       "    strex    %0, %2, [%1]\n\t"      //strex
+                       "1:  ldrex    %0, [%1]\n\t"     // ldrex : arm的
+                       "    strex    %0, %2, [%1]\n\t" // strex
                        "    teq      %0, #0\n\t"
                        "    bne      1b"
                        : "=&r"(tmp)

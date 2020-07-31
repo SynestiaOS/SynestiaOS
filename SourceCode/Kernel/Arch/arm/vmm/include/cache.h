@@ -17,11 +17,12 @@ static inline uint32_t read_mmfr0(void) {
   return mmfr;
 }
 
-static inline uint32_t read_cpuid(void){
+static inline uint32_t read_cpuid(void) {
   uint32_t cpuid;
   asm volatile("mrc p15, #0, r1, c0, c0, #5\n\t"
                "and r1, r1, #3\n\t"
-               "mov %0, r1":"=r"(cpuid));
+               "mov %0, r1"
+               : "=r"(cpuid));
   return cpuid;
 }
 

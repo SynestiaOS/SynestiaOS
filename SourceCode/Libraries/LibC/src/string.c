@@ -7,7 +7,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-
 char *strcpy(char *des, char *source) {
   char *r = des;
   while ((*r++ = *source++) != '\0')
