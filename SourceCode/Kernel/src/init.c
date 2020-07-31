@@ -4,10 +4,10 @@
 #include <gui_animation.h>
 #include <gui_button.h>
 #include <gui_canvas.h>
-#include <gui_view3d.h>
 #include <gui_container.h>
 #include <gui_label.h>
 #include <gui_panel.h>
+#include <gui_view3d.h>
 #include <gui_window.h>
 #include <interrupt.h>
 #include <kheap.h>

@@ -5,10 +5,10 @@
 #include <gfx2d.h>
 #include <gui_button.h>
 #include <gui_canvas.h>
-#include <gui_view3d.h>
 #include <gui_container.h>
 #include <gui_label.h>
 #include <gui_panel.h>
+#include <gui_view3d.h>
 #include <gui_window.h>
 #include <log.h>
 #include <stdbool.h>
