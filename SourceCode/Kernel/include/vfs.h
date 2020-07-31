@@ -38,7 +38,7 @@ typedef struct IndexNode {
   uint64_t lastUpdateTimestamp;
 } IndexNode;
 
-uint64_t (*DirectoryEntryHashOperation)(const char *);
+typedef uint64_t (*DirectoryEntryHashOperation)(const char *);
 typedef struct DirectoryEntryOperations {
   DirectoryEntryHashOperation hashOperaction;
 } DirectoryEntryOperations;
