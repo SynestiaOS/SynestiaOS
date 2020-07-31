@@ -112,7 +112,7 @@ KernelStatus schd_schedule(void) {
 KernelStatus schd_switch_to(Thread *thread) {
   // push r0~r3
   if (thread == nullptr) {
-    LogWarnning("[Schd]: cant switch to nullptr thread.\n");
+    LogWarn("[Schd]: cant switch to nullptr thread.\n");
     return ERROR;
   }
   LogInfo("[Schd]: switch to: %s.\n", thread->name);

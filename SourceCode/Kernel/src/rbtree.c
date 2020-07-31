@@ -25,7 +25,7 @@ RBNode *rbtree_get_root(RBNode *node) {
 }
 
 void rbtree_rebalance(RBNode *root, RBNode *node) {
-  LogWarnning("[RBTree] rebalance.\n");
+  LogWarn("[RBTree] rebalance.\n");
   RBNode *newNodeParent = node->parent;
   if (newNodeParent != nullptr && newNodeParent->color != NODE_BLACK) {
     RBNode *pnode = node;

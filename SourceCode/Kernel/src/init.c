@@ -21,14 +21,14 @@ extern uint32_t *gpu_flush(int args);
 extern uint32_t GFX2D_BUFFER[1024 * 768];
 
 void print_splash() {
-  LogWarnning("   _____                       _   _       \n");
-  LogWarnning("  / ____|                     | | (_)      \n");
-  LogWarnning(" | (___  _   _ _ __   ___  ___| |_ _  __ _ \n");
-  LogWarnning("  \\___ \\| | | | '_ \\ / _ \\/ __| __| |/ _` |\n");
-  LogWarnning("  ____) | |_| | | | |  __/\\__ \\ |_| | (_| |\n");
-  LogWarnning(" |_____/ \\__, |_| |_|\\___||___/\\__|_|\\__,_|\n");
-  LogWarnning("          __/ |                            \n");
-  LogWarnning("         |___/                          \n");
+  LogWarn("   _____                       _   _       \n");
+  LogWarn("  / ____|                     | | (_)      \n");
+  LogWarn(" | (___  _   _ _ __   ___  ___| |_ _  __ _ \n");
+  LogWarn("  \\___ \\| | | | '_ \\ / _ \\/ __| __| |/ _` |\n");
+  LogWarn("  ____) | |_| | | | |  __/\\__ \\ |_| | (_| |\n");
+  LogWarn(" |_____/ \\__, |_| |_|\\___||___/\\__|_|\\__,_|\n");
+  LogWarn("          __/ |                            \n");
+  LogWarn("         |___/                          \n");
 }
 
 void draw_task_bar() {
@@ -102,7 +102,7 @@ uint32_t *window_thread3(int args) {
     disable_interrupt();
     gui_window_draw(&window);
     uint32_t pid = getpid();
-    LogWarnning("[Thread3] pid: %d .\n", pid);
+    LogWarn("[Thread3] pid: %d .\n", pid);
     enable_interrupt();
   }
 }
@@ -139,7 +139,7 @@ uint32_t *window_thread5(int args) {
   gui_window_add_children(&window, &(view.component));
   while (1) {
     disable_interrupt();
-    gui_canvas_fill_circle(&canvas, 10, 10, 10, 0xFF0000);
+//    gui_canvas_fill_circle(&canvas, 10, 10, 10, 0xFF0000);
     gui_window_draw(&window);
     enable_interrupt();
   }
