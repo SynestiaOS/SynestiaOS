@@ -1,17 +1,15 @@
 .section ".text.boot"
 .globl _start
 _start:
-    // Disable extra smp cpus
-    mrs x0, mpidr_el1
-    and x0, x0, #3
-    cmp x0, #0
-    b.ne _halt_smp
+    mrc p15, #0, r1, c0, c0, #5
+    and r1, r1, #3
+    cmp r1, #0
+    bne _halt_smp
 
-    ldr x0, =__stack
-    mov sp, x0
+    ldr sp, =__sys_stack
 
-    ldr x0, =__bss_start
-    ldr x1, =__bss_end
+    ldr r0, =__bss_start
+    ldr r1, =__bss_end
     bl  memclean
 
     mrs r0, cpsr
@@ -38,7 +36,12 @@ _start:
     orr r0,     #0x13
     msr cpsr_c, r0
 
-    bl  kernel_main
+#ifndef ENV_KERNEL_UNIT_TESTS
+    bl kernel_main
+#else
+#warning "building kernel for unit tests!!!"
+    bl kernel_main_tests
+#endif
 
 _halt_smp:
     wfi // wait for interrup coming

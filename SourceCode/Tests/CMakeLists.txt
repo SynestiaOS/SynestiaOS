@@ -1,48 +1,38 @@
 PROJECT(Tests C ASM)
 
-set(TestsTempDir ${CMAKE_BINARY_DIR}/TempDir)
-set(TestsKernelArchTempDir ${TestsTempDir}/Arch/${SynestiaArch})
-set(BootSourceCodeOnlyForTests ${TestsKernelArchTempDir}/boot.s)
-
-file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/TempDir)
-file(COPY ${SynestiaOS_SOURCE_DIR}/SourceCode/Kernel/Arch DESTINATION ${TestsTempDir})
-file(READ ${BootSourceCodeOnlyForTests} BootSourceCode)
-# replace kernel_main to kernel_main_tests
-string(REPLACE kernel_main
-        kernel_main_tests KernelMainTests
-        ${BootSourceCode})
-file(WRITE ${BootSourceCodeOnlyForTests} ${KernelMainTests})
-
-aux_source_directory(${TestsKernelArchTempDir} KernelArchOnlyForTestsSrc)
-aux_source_directory(${TestsKernelArchTempDir}/vmm/src KernelArchOnlyForTestsVMMSrc)
-
-add_library(KernelArchOnlyForTests
-        OBJECT
-        ${KernelArchOnlyForTestsSrc}
-        ${KernelArchOnlyForTestsVMMSrc}
-        ${BootSourceCodeOnlyForTests})
-
-target_include_vmm_header_files(KernelArchOnlyForTests)
-target_include_kernel_header_files(KernelArchOnlyForTests)
-target_include_libc_header_files(KernelArchOnlyForTests)
-
+set(KernelArchDir ${SynestiaOS_SOURCE_DIR}/SourceCode/Kernel/Arch/${SynestiaArch})
 aux_source_directory(${Tests_SOURCE_DIR}/src TestsSrc)
-add_executable(${PROJECT_NAME}
+aux_source_directory(${KernelArchDir} KernelArchSrc)
+aux_source_directory(${KernelArchDir}/vmm/src KernelArchVMMSrc)
+
+set(KernelArchForUnitTests KernelArchForUnitTests)
+add_library(${KernelArchForUnitTests}
+        OBJECT
+        ${KernelArchSrc}
+        ${KernelArchVMMSrc}
+        ${KernelArchDir}/boot.S)
+target_compile_definitions(${KernelArchForUnitTests} PRIVATE "-DENV_KERNEL_UNIT_TESTS")
+
+target_include_vmm_header_files(${KernelArchForUnitTests})
+target_include_kernel_header_files(${KernelArchForUnitTests})
+target_include_libc_header_files(${KernelArchForUnitTests})
+
+set(KernelUnitTestsImg KernelUnitTests.img)
+add_executable(${KernelUnitTestsImg}
         ${TestsSrc}
-        $<TARGET_OBJECTS:KernelArchOnlyForTests>
+        $<TARGET_OBJECTS:${KernelArchForUnitTests}>
         $<TARGET_OBJECTS:Kernel>
-        $<TARGET_OBJECTS:BoardRaspberryPi3>
+        $<TARGET_OBJECTS:LibC>
+        $<TARGET_OBJECTS:LibMath>
         $<TARGET_OBJECTS:LibGfx>
         $<TARGET_OBJECTS:LibGUI>
-        $<TARGET_OBJECTS:LibMath>
-        $<TARGET_OBJECTS:LibC>)
+        $<TARGET_OBJECTS:Console>
+        $<TARGET_OBJECTS:BoardRaspberryPi3>)
+target_include_tests_header_files(${KernelUnitTestsImg})
+target_include_libc_header_files(${KernelUnitTestsImg})
+target_include_raspberry_pi3_header_files(${KernelUnitTestsImg})
+target_include_kernel_header_files(${KernelUnitTestsImg})
+target_include_vmm_header_files(${KernelUnitTestsImg})
 
-target_include_tests_header_files(${PROJECT_NAME})
-target_include_libc_header_files(${PROJECT_NAME})
-target_include_raspberry_pi3_header_files(${PROJECT_NAME})
-target_include_kernel_header_files(${PROJECT_NAME})
-target_include_vmm_header_files(${PROJECT_NAME})
-
-target_link_options(${PROJECT_NAME} PRIVATE -T ${TestsKernelArchTempDir}/kernel.ld)
-
-target_link_libraries(${PROJECT_NAME} PRIVATE gcc)
+target_link_options(${KernelUnitTestsImg} PRIVATE -T ${KernelArchDir}/kernel.ld)
+target_link_libraries(${KernelUnitTestsImg} PRIVATE gcc)
