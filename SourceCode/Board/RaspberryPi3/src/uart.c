@@ -67,7 +67,7 @@ void uart_put_char(uint8_t ch) {
 }
 
 uint8_t do_uart_get_char(void) {
-  //   // The UART_FR Register is the flag register. 1<<4 means Receive FIFO empty.
+  // The UART_FR Register is the flag register. 1<<4 means Receive FIFO empty.
   while (io_readl((void *)(PERIPHERAL_BASE + UART0_OFFSET + UART_FR_OFFSET)) & (1 << 4)) {
   }
 
