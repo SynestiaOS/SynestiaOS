@@ -10,7 +10,7 @@
 #define COLORDEPTH 24
 #define BYTES_PER_PIXEL COLORDEPTH / 8
 
-typedef struct {
+typedef struct psf_t {
   uint32_t magic;
   uint32_t version;
   uint32_t headersize;

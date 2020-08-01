@@ -32,3 +32,8 @@ target_link_libraries(${KernelName} PRIVATE gcc)
 #        WORKING_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
 #        COMMAND ${CMAKE_OBJCOPY} ${KernelName} -O binary Kernel7.img)
 # TODO: ${CMAKE_OBJCOPY} not working here within docker env, find a better way to objcopy the kernel images
+#add_custom_target(Objcopy ALL
+#        COMMAND ${CMAKE_COMMAND} -E echo making Kernel7.img, wait a moment
+#        WORKING_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
+#        COMMAND ${CMAKE_OBJCOPY} ${KernelName} -O binary Kernel7.img)
+#
