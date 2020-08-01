@@ -21,7 +21,7 @@ set(CMAKE_MODULE_PATH "${SynestiaOS_SOURCE_DIR}/CMake" ${CMAKE_MODULE_PATH})
 include(${SynestiaOS_SOURCE_DIR}/CMake/ArchDetector.cmake)
 include(${SynestiaOS_SOURCE_DIR}/CMake/VarsDump.cmake)
 include(${SynestiaOS_SOURCE_DIR}/CMake/HeaderFiles.cmake)
-include(${SynestiaOS_SOURCE_DIR}/CMake/GenDocs.cmake)
+#include(${SynestiaOS_SOURCE_DIR}/CMake/GenDocs.cmake)
 
 
 if (SynestiaArch STREQUAL arm)
