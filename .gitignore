@@ -2,3 +2,6 @@
 .DS_Store
 cmake-build-debug/
 Build/
+GenDocs/html/
+GenDocs/xml/
+GenDocs/latex/

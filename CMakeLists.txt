@@ -16,9 +16,12 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON) # compile commands can be used to help cla
 set(SYNESTIAOS_SOURCE_CODE_DIR ${SynestiaOS_SOURCE_DIR}/SourceCode)
 set(KernelName Kernel.img)
 
+set(CMAKE_MODULE_PATH "${SynestiaOS_SOURCE_DIR}/CMake" ${CMAKE_MODULE_PATH})
+
 include(${SynestiaOS_SOURCE_DIR}/CMake/ArchDetector.cmake)
 include(${SynestiaOS_SOURCE_DIR}/CMake/VarsDump.cmake)
 include(${SynestiaOS_SOURCE_DIR}/CMake/HeaderFiles.cmake)
+include(${SynestiaOS_SOURCE_DIR}/CMake/GenDocs.cmake)
 
 
 if (SynestiaArch STREQUAL arm)
