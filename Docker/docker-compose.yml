@@ -1,10 +1,22 @@
 version: "3.7"
 
 services:
-  dev:
+  dev-arm:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.arm
+    ports:
+      - "1234:1234"
+      - "2222:2222"
+    networks:
+      - os_share_network
+    volumes:
+      - ../:/root/SynestiaOS
+    privileged: true
+  dev-riscv:
+    build:
+      context: .
+      dockerfile: Dockerfile.riscv
     ports:
       - "1234:1234"
       - "2222:2222"
