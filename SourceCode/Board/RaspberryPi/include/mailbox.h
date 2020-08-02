@@ -69,7 +69,7 @@ extern volatile uint32_t __attribute__((aligned(16))) mailbox[36];
 typedef struct PropertyGetFirmwareRevision {
   uint32_t tag;
   uint32_t firmwareRevision;
-} GetFirmwareRevision;
+} PropertyGetFirmwareRevision;
 
 #define PROPERTY_TAG_GET_BOARD_MODEL 0x00010001
 typedef struct PropertyGetBoardModel {
@@ -158,7 +158,7 @@ typedef struct PropertyGetPowerState {
    * Bits 2-31: reserved for future use
    */
   uint32_t state;
-} PropertyGetPowerStatewe;
+} PropertyGetPowerState;
 
 #define PROPERTY_TAG_GET_TIMING 0x00020002
 typedef struct PropertyGetTiming {
@@ -697,7 +697,72 @@ typedef struct PropertySetCursorState {
   uint32_t value;
 } PropertySetCursorState;
 
-uint32_t mailbox_call(uint8_t channel);
+uint32_t mailbox_call(uint8_t channel, uint32_t mailbox);
 uint32_t mailbox_read(uint8_t channel);
 void mailbox_write(uint8_t channel, uint32_t data);
+
+void mailboxSetPropertyGetFirmwareRevision(PropertyGetFirmwareRevision property);
+void mailboxSetPropertyGetBoardModel(PropertyGetBoardModel property);
+void mailboxSetPropertyGetBoardRevision(PropertyGetBoardRevision property);
+void mailboxSetPropertyGetBoardMacAddress(PropertyGetBoardMacAddress property);
+void mailboxSetPropertyGetBoardSerial(PropertyGetBoardSerial property);
+void mailboxSetPropertyGetArmMemory(PropertyGetArmMemory property);
+void mailboxSetPropertyGetVideoCoreMemory(PropertyGetVideoCoreMemory property);
+void mailboxSetPropertyGetClocks(PropertyGetClocks property);
+void mailboxSetPropertyGetCommandLine(PropertyGetCommandLine property);
+void mailboxSetPropertyGetDMAChannels(PropertyGetDMAChannels property);
+void mailboxSetPropertyGetPowerState(PropertyGetPowerState property);
+void mailboxSetPropertyGetTiming(PropertyGetTiming property);
+void mailboxSetPropertySetPowerState(PropertySetPowerState property);
+void mailboxSetPropertyGetClockState(PropertyGetClockState property);
+void mailboxSetPropertySetClockState(PropertySetClockState property);
+void mailboxSetPropertyGetClockRate(PropertyGetClockRate property);
+void mailboxSetPropertySetClockRate(PropertySetClockRate property);
+void mailboxSetPropertyGetMaxClockRate(PropertyGetMaxClockRate property);
+void mailboxSetPropertyGetMinClockRate(PropertyGetMinClockRate property);
+void mailboxSetPropertyGetTurbo(PropertyGetTurbo property);
+void mailboxSetPropertySetTurbo(PropertySetTurbo property);
+void mailboxSetPropertyGetVoltage(PropertyGetVoltage property);
+void mailboxSetPropertySetVoltage(PropertySetVoltage property);
+void mailboxSetPropertyGetMaxVoltage(PropertyGetMaxVoltage property);
+void mailboxSetPropertyGetMinVoltage(PropertyGetMinVoltage property);
+void mailboxSetPropertyGetTemperature(PropertyGetTemperature property);
+void mailboxSetPropertyGetMaxTemperature(PropertyGetMaxTemperature property);
+void mailboxSetPropertyAllocateMemory(PropertyAllocateMemory property);
+void mailboxSetPropertyLockMemory(PropertyLockMemory property);
+void mailboxSetPropertyUnLockMemory(PropertyUnLockMemory property);
+void mailboxSetPropertyReleaseMemory(PropertyReleaseMemory property);
+void mailboxSetPropertyExecuteCode(PropertyExecuteCode property);
+void mailboxSetPropertyGetDispmanxResourceMemHandle(PropertyGetDispmanxResourceMemHandle property);
+void mailboxSetPropertyGetEDIDBlock(PropertyGetEDIDBlock property);
+void mailboxSetPropertyAllocateBuffer(PropertyAllocateBuffer property);
+void mailboxSetPropertyReleaseBuffer(PropertyReleaseBuffer property);
+void mailboxSetPropertyBlankScreen(PropertyBlankScreen property);
+void mailboxSetPropertyGetPhysicalDisplayWH(PropertyGetPhysicalDisplayWH property);
+void mailboxSetPropertyTestPhysicalDisplayWH(PropertyTestPhysicalDisplayWH property);
+void mailboxSetPropertySetPhysicalDisplayWH(PropertySetPhysicalDisplayWH property);
+void mailboxSetPropertyGetVirtualBufferWH(PropertyGetVirtualBufferWH property);
+void mailboxSetPropertyTestVirtualBufferWH(PropertyTestVirtualBufferWH property);
+void mailboxSetPropertySetVirtualBufferWH(PropertySetVirtualBufferWH property);
+void mailboxSetPropertyGetDepth(PropertyGetDepth property);
+void mailboxSetPropertyTestDepth(PropertyTestDepth property);
+void mailboxSetPropertySetDepth(PropertySetDepth property);
+void mailboxSetPropertyGetPixelOrder(PropertyGetPixelOrder property);
+void mailboxSetPropertyTestPixelOrder(PropertyTestPixelOrder property);
+void mailboxSetPropertySetPixelOrder(PropertySetPixelOrder property);
+void mailboxSetPropertyGetAlphaMode(PropertyGetAlphaMode property);
+void mailboxSetPropertyTestAlphaMode(PropertyTestAlphaMode property);
+void mailboxSetPropertySetAlphaMode(PropertySetAlphaMode property);
+void mailboxSetPropertyGetPitch(PropertyGetPitch property);
+void mailboxSetPropertyGetVirtualOffset(PropertyGetVirtualOffset property);
+void mailboxSetPropertyTestVirtualOffset(PropertyTestVirtualOffset property);
+void mailboxSetPropertySetVirtualOffset(PropertySetVirtualOffset property);
+void mailboxSetPropertyGetOverscan(PropertyGetOverscan property);
+void mailboxSetPropertyTestOverscan(PropertyTestOverscan property);
+void mailboxSetPropertySetOverscan(PropertySetOverscan property);
+void mailboxSetPropertyGetPalette(PropertyGetPalette property);
+void mailboxSetPropertyTestPalette(PropertyTestPalette property);
+void mailboxSetPropertySetPalette(PropertySetPalette property);
+void mailboxSetPropertySetCursorInfo(PropertySetCursorInfo property);
+void mailboxSetPropertySetCursorState(PropertySetCursorState property);
 #endif //__BOARD_RASP_MAILBOX_H__
