@@ -1,5 +1,5 @@
-#ifndef __BOARD_RASP3_TIMER_H__
-#define __BOARD_RASP3_TIMER_H__
+#ifndef __BOARD_RASP_TIMER_H__
+#define __BOARD_RASP_TIMER_H__
 
 #include <raspi3.h>
 #include <stdint.h>
@@ -43,4 +43,4 @@ typedef struct {
   uint32_t timer3;
 } timer_registers_t;
 
-#endif // __BOARD_RASP3_TIMER_H__
+#endif // __BOARD_RASP_TIMER_H__

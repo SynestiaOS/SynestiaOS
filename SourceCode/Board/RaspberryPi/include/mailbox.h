@@ -2,8 +2,8 @@
 // Created by XingfengYang on 2020/7/7.
 //
 
-#ifndef __BOARD_RASP3_MAILBOX_H__
-#define __BOARD_RASP3_MAILBOX_H__
+#ifndef __BOARD_RASP_MAILBOX_H__
+#define __BOARD_RASP_MAILBOX_H__
 
 #include <raspi3.h>
 #include <stdbool.h>
@@ -38,4 +38,4 @@ int32_t mailbox_call(uint8_t ch);
 bool mailbox_tag_write(uint32_t message);
 uint32_t mailbox_tag_read();
 
-#endif //__BOARD_RASP3_MAILBOX_H__
+#endif //__BOARD_RASP_MAILBOX_H__

@@ -1,11 +1,7 @@
 #include <stdint.h>
 #include <uart.h>
 
-#if defined(RASPI2) || defined(RASPI3)
-
 #include <raspi3.h>
-
-#endif
 
 void register_interrupt_handler(uint32_t interrupt_no, void (*interrupt_handler_func)(void),
                                 void (*interrupt_clear_func)(void));
