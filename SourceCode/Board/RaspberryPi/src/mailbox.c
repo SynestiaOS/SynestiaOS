@@ -57,11 +57,11 @@ uint32_t mailbox_call(uint8_t ch) {
 uint32_t mailbox_read(uint8_t channel){
 	// Loop until we receive something from the requested channel
 	for (;;){
-		while ((*(uint32_t*)(VIDEOCORE_MBOX+MAIL0_STATUS) & MBOX_EMPTY) != 0){
+		while ((*(uint32_t*)(MAIL0_STATUS) & MBOX_EMPTY) != 0){
 			// Wait for data
 		}
 		// Read the data
-		uint32_t data = *(uint32_t*)(VIDEOCORE_MBOX+ MAIL0_READ);
+		uint32_t data = *(uint32_t*)(MAIL0_READ);
 		uint32_t readChannel = data & 0xF;
 		data >>= 4;
 		// Return it straight away if it's for the requested channel
@@ -72,9 +72,9 @@ uint32_t mailbox_read(uint8_t channel){
 }
 
 void mailbox_write(uint8_t channel, uint32_t data){
-  	while ((*(uint32_t*)(VIDEOCORE_MBOX+MAIL0_STATUS) & MBOX_FULL) != 0){
+  	while ((*(uint32_t*)(MAIL0_STATUS) & MBOX_FULL) != 0){
 			// Wait for data
 		}
     // Write the value to the requested channel
-    *(uint32_t*)(VIDEOCORE_MBOX+ MAIL0_WRITE) = ((data<<4)|channel);
+    *(uint32_t*)(MAIL0_WRITE) = ((data<<4)|channel);
 }
