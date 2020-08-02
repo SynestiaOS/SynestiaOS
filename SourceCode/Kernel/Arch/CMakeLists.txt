@@ -13,6 +13,16 @@ target_include_vmm_header_files(${PROJECT_NAME})
 target_include_kernel_header_files(${PROJECT_NAME})
 target_include_libc_header_files(${PROJECT_NAME})
 
+if (SynestiaPlatform STREQUAL pi2)
+	set(boardObj BoardRaspberryPi3)
+elseif (SynestiaPlatform STREQUAL pi3)
+	set(boardObj BoardRaspberryPi3)
+elseif (SynestiaPlatform STREQUAL pi4)
+	set(boardObj BoardRaspberryPi4)
+else ()
+	message(ERROR "unexpected PLATFORM ${PLATFORM}")
+endif ()
+
 add_executable(${KernelName}
         $<TARGET_OBJECTS:KernelArch>
         $<TARGET_OBJECTS:Kernel>
@@ -21,7 +31,7 @@ add_executable(${KernelName}
         $<TARGET_OBJECTS:LibGfx>
         $<TARGET_OBJECTS:LibGUI>
         $<TARGET_OBJECTS:Console>
-        $<TARGET_OBJECTS:BoardRaspberryPi3>)
+	$<TARGET_OBJECTS:${boardObj}>)
 
 target_link_options(${KernelName} PRIVATE -T ${KernelArch_SOURCE_DIR}/${SynestiaArch}/kernel.ld)
 

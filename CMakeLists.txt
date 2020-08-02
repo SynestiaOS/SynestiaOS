@@ -19,23 +19,24 @@ set(KernelName Kernel.img)
 set(CMAKE_MODULE_PATH "${SynestiaOS_SOURCE_DIR}/CMake" ${CMAKE_MODULE_PATH})
 
 include(${SynestiaOS_SOURCE_DIR}/CMake/ArchDetector.cmake)
+include(${SynestiaOS_SOURCE_DIR}/CMake/PlatformDetector.cmake)
 include(${SynestiaOS_SOURCE_DIR}/CMake/VarsDump.cmake)
 include(${SynestiaOS_SOURCE_DIR}/CMake/HeaderFiles.cmake)
 #include(${SynestiaOS_SOURCE_DIR}/CMake/GenDocs.cmake)
 
 
+message(STATUS "PLATFORM is ${PLATFORM}")
+
 if (SynestiaArch STREQUAL arm)
-    set(PLATFORM RASPI2)
     set(CMAKE_C_FLAGS "-O0 -mfpu=neon-vfpv4 -mfloat-abi=hard -march=armv7-a -mtune=cortex-a7")
-elseif (SynestiaArch STREQUAL arm64)
-    set(PLATFORM RASPI3)
+elseif (SynestiaArch STREQUAL aarch64)
     set(CMAKE_C_FLAGS "-O0 -mfpu=crypto-neon-fp-armv8 -mfloat-abi=hard -march=armv8-a+crc -mcpu=cortex-a53")
 else ()
     message(FATAL_ERROR "unexpected ARCH ${SynestiaArch}")
 endif ()
-message(STATUS "PLATFORM is ${PLATFORM}")
+message(STATUS "ARCH is ${ARCH}")
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -MD -fpic -ffreestanding -std=gnu11 -Wall -Wextra -g -nostdlib -D${PLATFORM}")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -MD -fpic -ffreestanding -std=gnu11 -Wall -Wextra -g -nostdlib -D${SynestiaPlatformMacro}")
 set(CMAKE_ASM_FLAGS "${CMAKE_C_FLAGS}")
 
 message(STATUS "CMAKE_C_FLAGS is ${CMAKE_C_FLAGS}")
