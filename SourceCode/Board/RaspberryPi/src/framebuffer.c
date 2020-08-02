@@ -58,7 +58,7 @@ int framebuffer_init(void) {
 
   mailbox[34] = PROPTAG_END;
 
-  if (mailbox_call(MAILBOX_CHANNEL_PROP) && mailbox[20] == 32 && mailbox[28] != 0) {
+  if (mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC) && mailbox[20] == 32 && mailbox[28] != 0) {
     mailbox[28] &= 0x3FFFFFFF;
     framebufferWidth = mailbox[5];
     framebufferHeight = mailbox[6];

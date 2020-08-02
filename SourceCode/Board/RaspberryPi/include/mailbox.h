@@ -58,7 +58,8 @@ extern volatile uint32_t __attribute__((aligned(16))) mailbox[36];
 #define MAILBOX_CHANNEL_BUTTONS 5
 #define MAILBOX_CHANNEL_TOUCH_SCREEN 6
 #define MAILBOX_CHANNEL_COUNT 7
-#define MAILBOX_CHANNEL_PROP 8
+#define MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC 8
+#define MAILBOX_CHANNEL_PROPERTY_TAGS_VC_TO_ARM 9
 
 /**
  * The read register for mailbox 0 at offset (the Linux source mentions something of "and the next 4 words", but I've found it sufficient to read only from this address)
@@ -96,8 +97,7 @@ extern volatile uint32_t __attribute__((aligned(16))) mailbox[36];
 #define MBOX_FULL 1<<31
 #define MBOX_EMPTY 1<<30
 
-int32_t mailbox_call(uint8_t ch);
-bool mailbox_tag_write(uint32_t message);
-uint32_t mailbox_tag_read();
-
+uint32_t mailbox_call(uint8_t channel);
+uint32_t mailbox_read(uint8_t channel);
+void mailbox_write(uint8_t channel, uint32_t data);
 #endif //__BOARD_RASP_MAILBOX_H__

@@ -8,52 +8,6 @@
 
 volatile uint32_t __attribute__((aligned(16))) mailbox[36];
 
-#define VIDEOCORE_MBOX PERIPHERAL_BASE + MAILBOX_OFFSET
-
-
-#define MAILBOX_CHANNEL_POWER_MANAGEMENT 0
-#define MAILBOX_CHANNEL_FRAMEBUFFER 1
-#define MAILBOX_CHANNEL_VIRTUAL_UART 2
-#define MAILBOX_CHANNEL_VCHIQ 3
-#define MAILBOX_CHANNEL_LEDS 4
-#define MAILBOX_CHANNEL_BUTTONS 5
-#define MAILBOX_CHANNEL_TOUCH_SCREEN 6
-
-/**
- * The read register for mailbox 0 at offset (the Linux source mentions something of "and the next 4 words", but I've found it sufficient to read only from this address)
- * 0-3(channel):	The mailbox channel number from which the data originated
- * 4-31(data):	The 28 bits of data sent to the CPU
- */
-#define MAIL0_READ ((volatile uint32_t *)(VIDEOCORE_MBOX + 0x0))
-
-// Read from the mailbox without removing data from it.
-#define MAIL0_PEAK ((volatile uint32_t *)(VIDEOCORE_MBOX + 0x10))
-
-// Sender ID (bottom 2 bits only)
-#define MAIL0_SENDER ((volatile uint32_t *)(VIDEOCORE_MBOX + 0x14))
-
-/**
- * The status register for mailbox 0
- * 0-29:	N/A	Not documented here. Unused?
- * 30:	MAIL_EMPTY	Set if the mailbox is empty, and thus no more data is available to be read from it.
- * 31:	MAIL_FULL	Set if the mailbox is full, and thus no more data can be written to it.
- */
-#define MAIL0_STATUS ((volatile uint32_t *)(VIDEOCORE_MBOX + 0x18))
-
-// The configuration register for mailbox 0
-#define MAIL0_CONFIG ((volatile uint32_t *)(VIDEOCORE_MBOX + 0x1C))
-
-/**
- *  The write register for mailbox 0 (this is actually the read register for mailbox 1).
- *  0-3:	channel	The mailbox channel number to which the data is to be sent
- *  4-31:	data	The 28 bits of data to be sent to the destination
- */
-#define MAIL0_WRITE ((volatile uint32_t *)(VIDEOCORE_MBOX + 0x20))
-
-#define MBOX_RESPONSE 0x80000000
-#define MBOX_FULL 1<<31
-#define MBOX_EMPTY 1<<30
-
 struct __attribute__((__packed__, aligned(4))) mbox_registers {
   const volatile uint32_t read_0; // 0x00         Read data from VC to ARM
   uint32_t unused[3];             // 0x04-0x0F
@@ -69,7 +23,6 @@ struct __attribute__((__packed__, aligned(4))) mbox_registers {
   volatile uint32_t config_1;     // 0x3C
 };
 
-_Static_assert((sizeof(struct mbox_registers) == 0x40), "Structure MailBoxRegisters should be 0x40 bytes in size");
 
 #define MAILBOX_FOR_READ_WRITES                                                                                        \
   ((volatile __attribute__((aligned(4))) struct mbox_registers *)(uint32_t *)(PERIPHERAL_BASE + 0xB880))
@@ -77,7 +30,7 @@ _Static_assert((sizeof(struct mbox_registers) == 0x40), "Structure MailBoxRegist
 /**
  * Make a mailbox call. Returns 0 on failure, non-zero on success
  */
-int32_t mailbox_call(uint8_t ch) {
+uint32_t mailbox_call(uint8_t ch) {
   uint32_t r;
   /* wait until we can write to the mailbox */
   do {
@@ -93,9 +46,35 @@ int32_t mailbox_call(uint8_t ch) {
     } while (*MAIL0_STATUS & MBOX_EMPTY);
     r = *MAIL0_READ;
     /* is it a response to our message? */
-    if ((unsigned char)(r & 0xF) == ch && (r & ~0xF) == (uint32_t)((uint64_t)&mailbox))
+    if ((unsigned char)(r & 0xF) == ch && (r & ~0xF) == (uint32_t)((uint64_t)&mailbox)){
       /* is it a valid successful response? */
       return mailbox[1] == MBOX_RESPONSE;
+    }
   }
   return 0;
+}
+
+uint32_t mailbox_read(uint8_t channel){
+	// Loop until we receive something from the requested channel
+	for (;;){
+		while ((*(uint32_t*)(VIDEOCORE_MBOX+MAIL0_STATUS) & MBOX_EMPTY) != 0){
+			// Wait for data
+		}
+		// Read the data
+		uint32_t data = *(uint32_t*)(VIDEOCORE_MBOX+ MAIL0_READ);
+		uint32_t readChannel = data & 0xF;
+		data >>= 4;
+		// Return it straight away if it's for the requested channel
+		if (readChannel == channel){
+			return data;
+    }
+	}
+}
+
+void mailbox_write(uint8_t channel, uint32_t data){
+  	while ((*(uint32_t*)(VIDEOCORE_MBOX+MAIL0_STATUS) & MBOX_FULL) != 0){
+			// Wait for data
+		}
+    // Write the value to the requested channel
+    *(uint32_t*)(VIDEOCORE_MBOX+ MAIL0_WRITE) = ((data<<4)|channel);
 }
