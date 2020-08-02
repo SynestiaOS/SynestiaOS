@@ -8,7 +8,7 @@
 
 volatile uint32_t __attribute__((aligned(16))) mailbox[36];
 
-struct __attribute__((__packed__, aligned(4))) mbox_registers {
+struct mbox_registers {
   const volatile uint32_t read_0; // 0x00         Read data from VC to ARM
   uint32_t unused[3];             // 0x04-0x0F
   volatile uint32_t peek_0;       // 0x10
@@ -21,37 +21,12 @@ struct __attribute__((__packed__, aligned(4))) mbox_registers {
   volatile uint32_t sender_1;     // 0x34
   volatile uint32_t status_1;     // 0x38         Status of ARM to VC
   volatile uint32_t config_1;     // 0x3C
-};
+} __attribute__((__packed__, aligned(4)));
 
+uint32_t mailbox_call(uint8_t channel) {
+  mailbox_write(channel,(uint32_t)(&mailbox));
 
-#define MAILBOX_FOR_READ_WRITES                                                                                        \
-  ((volatile __attribute__((aligned(4))) struct mbox_registers *)(uint32_t *)(PERIPHERAL_BASE + 0xB880))
-
-/**
- * Make a mailbox call. Returns 0 on failure, non-zero on success
- */
-uint32_t mailbox_call(uint8_t ch) {
-  uint32_t r;
-  /* wait until we can write to the mailbox */
-  do {
-    asm volatile("nop");
-  } while (*MAIL0_STATUS & MBOX_FULL);
-  /* write the address of our message to the mailbox with channel identifier */
-  *MAIL0_WRITE = (((uint32_t)((uint64_t)&mailbox) & ~0xF) | (ch & 0xF));
-  /* now wait for the response */
-  while (1) {
-    /* is there a response? */
-    do {
-      asm volatile("nop");
-    } while (*MAIL0_STATUS & MBOX_EMPTY);
-    r = *MAIL0_READ;
-    /* is it a response to our message? */
-    if ((unsigned char)(r & 0xF) == ch && (r & ~0xF) == (uint32_t)((uint64_t)&mailbox)){
-      /* is it a valid successful response? */
-      return mailbox[1] == MBOX_RESPONSE;
-    }
-  }
-  return 0;
+  uint32_t data = mailbox_read(channel);
 }
 
 uint32_t mailbox_read(uint8_t channel){
@@ -76,5 +51,5 @@ void mailbox_write(uint8_t channel, uint32_t data){
 			// Wait for data
 		}
     // Write the value to the requested channel
-    *(uint32_t*)(MAIL0_WRITE) = ((data<<4)|channel);
+    *(uint32_t*)(MAIL0_WRITE) = ((data & ~0xF)|channel);
 }
