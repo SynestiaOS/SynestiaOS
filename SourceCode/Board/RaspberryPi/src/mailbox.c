@@ -24,32 +24,33 @@ struct mbox_registers {
 } __attribute__((__packed__, aligned(4)));
 
 uint32_t mailbox_call(uint8_t channel) {
-  mailbox_write(channel,(uint32_t)(&mailbox));
+  mailbox_write(channel, (uint32_t)(&mailbox));
 
   uint32_t data = mailbox_read(channel);
+  return data;
 }
 
-uint32_t mailbox_read(uint8_t channel){
-	// Loop until we receive something from the requested channel
-	for (;;){
-		while ((*(uint32_t*)(MAIL0_STATUS) & MBOX_EMPTY) != 0){
-			// Wait for data
-		}
-		// Read the data
-		uint32_t data = *(uint32_t*)(MAIL0_READ);
-		uint32_t readChannel = data & 0xF;
-		data >>= 4;
-		// Return it straight away if it's for the requested channel
-		if (readChannel == channel){
-			return data;
+uint32_t mailbox_read(uint8_t channel) {
+  // Loop until we receive something from the requested channel
+  for (;;) {
+    while ((*(uint32_t *)(MAIL0_STATUS)&MBOX_EMPTY) != 0) {
+      // Wait for data
     }
-	}
+    // Read the data
+    uint32_t data = *(uint32_t *)(MAIL0_READ);
+    uint32_t readChannel = data & 0xF;
+    data >>= 4;
+    // Return it straight away if it's for the requested channel
+    if (readChannel == channel) {
+      return data;
+    }
+  }
 }
 
-void mailbox_write(uint8_t channel, uint32_t data){
-  	while ((*(uint32_t*)(MAIL0_STATUS) & MBOX_FULL) != 0){
-			// Wait for data
-		}
-    // Write the value to the requested channel
-    *(uint32_t*)(MAIL0_WRITE) = ((data & ~0xF)|channel);
+void mailbox_write(uint8_t channel, uint32_t data) {
+  while ((*(uint32_t *)(MAIL0_STATUS)&MBOX_FULL) != 0) {
+    // Wait for data
+  }
+  // Write the value to the requested channel
+  *(uint32_t *)(MAIL0_WRITE) = ((data & ~0xF) | channel);
 }

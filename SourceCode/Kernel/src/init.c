@@ -13,13 +13,13 @@
 #include <interrupt.h>
 #include <kheap.h>
 #include <log.h>
+#include <mutex.h>
 #include <sched.h>
 #include <spinlock.h>
 #include <stdlib.h>
 #include <string.h>
 #include <synestia_os_hal.h>
 #include <vmm.h>
-#include <mutex.h>
 
 extern uint32_t *gpu_flush(int args);
 extern uint32_t GFX2D_BUFFER[1024 * 768];
@@ -157,8 +157,8 @@ void kernel_main(void) {
   LogWarn("[MPCore] cpuid: %d .\n", cpuid);
   if (cpuid == 0) {
     atomic_create(&atomic);
-    mutex_create(&mutex,&atomic);
-    spinlock_create(&spinlock,&mutex);
+    mutex_create(&mutex, &atomic);
+    spinlock_create(&spinlock, &mutex);
 
     init_bsp();
     print_splash();
@@ -197,9 +197,8 @@ void kernel_main(void) {
     asm volatile("SEV");
     schd_schedule();
   }
-  
 
-  while(1){
+  while (1) {
     spinlock_acquire(&spinlock);
     uint32_t cpuid = read_cpuid();
     LogWarn("[MPCore] cpuid: %d .\n", cpuid);

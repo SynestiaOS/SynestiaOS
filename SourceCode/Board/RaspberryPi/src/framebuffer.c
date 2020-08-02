@@ -56,7 +56,7 @@ int framebuffer_init(void) {
   mailbox[32] = 4;
   mailbox[33] = 0; // FrameBufferInfo.pitch
 
-  mailbox[34] = PROPTAG_END;
+  mailbox[34] = PROPERTY_TAG_END;
 
   if (mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC) && mailbox[20] == 32 && mailbox[28] != 0) {
     mailbox[28] &= 0x3FFFFFFF;
