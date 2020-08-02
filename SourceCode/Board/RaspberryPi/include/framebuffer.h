@@ -22,8 +22,6 @@ typedef struct psf_t {
   unsigned char glyphs;
 } __attribute__((packed)) psf_t;
 
-extern volatile unsigned char _binary_src_font_font_psf_start;
-
 int framebuffer_init(void);
 
 void framebuffer_draw_pixel(uint32_t x, uint32_t y, char r, char g, char b);

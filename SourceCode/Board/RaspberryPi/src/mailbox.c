@@ -64,26 +64,3 @@ int32_t mailbox_call(uint8_t ch) {
   }
   return 0;
 }
-
-bool mailbox_tag_write(uint32_t message) {
-  uint32_t value;    // Temporary read value
-  message &= ~(0xF); // Make sure 4 low channel bits are clear
-  message |= 0x8;    // OR the channel bits to the value
-  do {
-    value = MAILBOX_FOR_READ_WRITES->status_1; // Read mailbox1 status from GPU
-  } while ((value & MAIL_FULL) != 0);          // Make sure arm mailbox is not full
-  MAILBOX_FOR_READ_WRITES->write_1 = message;  // Write value to mailbox
-  return true;                                 // Write success
-}
-
-uint32_t mailbox_tag_read() {
-  uint32_t value; // Temporary read value
-  do {
-    do {
-      value = MAILBOX_FOR_READ_WRITES->status_0; // Read mailbox0 status
-    } while ((value & MAIL_EMPTY) != 0);         // Wait for data in mailbox
-    value = MAILBOX_FOR_READ_WRITES->read_0;     // Read the mailbox
-  } while ((value & 0xF) != 0x8);                // We have response back
-  value &= ~(0xF);                               // Lower 4 low channel bits are not part of message
-  return value;                                  // Return the value
-}
