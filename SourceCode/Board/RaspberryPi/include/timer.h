@@ -1,7 +1,7 @@
 #ifndef __BOARD_RASP_TIMER_H__
 #define __BOARD_RASP_TIMER_H__
 
-#include <raspi3.h>
+#include <raspi.h>
 #include <stdint.h>
 
 #define SYSTEM_TIMER_BASE (SYSTEM_TIMER_OFFSET + PERIPHERAL_BASE)

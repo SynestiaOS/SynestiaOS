@@ -5,7 +5,7 @@
 #ifndef __BOARD_RASP_MAILBOX_H__
 #define __BOARD_RASP_MAILBOX_H__
 
-#include <raspi3.h>
+#include <raspi.h>
 #include <stdbool.h>
 #include <stdint.h>
 
@@ -29,6 +29,7 @@ extern volatile uint32_t mailbox[36];
 #define MBOX_TAG_SETPOWER 0x28001
 #define MBOX_TAG_SETCLKRATE 0x38002
 #define MBOX_TAG_SETVOLTAGE 0x38003
+#define MBOX_TAG_GET_DISPWH 0x40003
 #define MBOX_TAG_LAST 0
 
 #define MAIL_EMPTY 0x40000000 /* Mailbox Status Register: Mailbox Empty */
