@@ -2,9 +2,12 @@
 // Created by XingfengYang on 2020/7/7.
 //
 
+#include <kheap.h>
+#include <log.h>
 #include <mailbox.h>
 #include <stdbool.h>
 #include <stdlib.h>
+#include <string.h>
 
 volatile uint32_t __attribute__((aligned(16))) mailbox[36];
 
@@ -54,130 +57,1410 @@ void mailbox_write(uint8_t channel, uint32_t data) {
   *(uint32_t *)(MAIL0_WRITE) = ((data & ~0xF) | channel);
 }
 
-void mailboxSetPropertyGetFirmwareRevision(PropertyGetFirmwareRevision property) {}
+uint32_t mailboxSetPropertyGetFirmwareRevision(PropertyGetFirmwareRevision property) {
+  uint32_t size = sizeof(property) + 3 * sizeof(uint32_t);
+  uint32_t *mail = (uint32_t *)kheap_alloc_aligned(size, 16);
+  if (mail == nullptr) {
+    LogError("[MailBox]: mail alloc failed.\n");
+    return 0;
+  }
+  mail[0] = size;
+  mail[1] = MBOX_REQUEST;
+  memcpy(&mail[2], &property, sizeof(property));
+  mail[(size / 4) - 1] = PROPERTY_TAG_END;
 
-void mailboxSetPropertyGetBoardModel(PropertyGetBoardModel property) {}
+  uint32_t data = mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, (uint32_t)&mail);
 
-void mailboxSetPropertyGetBoardRevision(PropertyGetBoardRevision property) {}
+  KernelStatus status = kheap_free(mail);
+  if (status == ERROR) {
+    LogWarn("[MailBox]: mail free failed.\n");
+  }
 
-void mailboxSetPropertyGetBoardMacAddress(PropertyGetBoardMacAddress property) {}
+  return data;
+}
 
-void mailboxSetPropertyGetBoardSerial(PropertyGetBoardSerial property) {}
+uint32_t mailboxSetPropertyGetBoardModel(PropertyGetBoardModel property) {
+  uint32_t size = sizeof(property) + 3 * sizeof(uint32_t);
+  uint32_t *mail = (uint32_t *)kheap_alloc_aligned(size, 16);
+  if (mail == nullptr) {
+    LogError("[MailBox]: mail alloc failed.\n");
+    return 0;
+  }
+  mail[0] = size;
+  mail[1] = MBOX_REQUEST;
+  memcpy(&mail[2], &property, sizeof(property));
+  mail[(size / 4) - 1] = PROPERTY_TAG_END;
 
-void mailboxSetPropertyGetArmMemory(PropertyGetArmMemory property) {}
+  uint32_t data = mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, (uint32_t)&mail);
 
-void mailboxSetPropertyGetVideoCoreMemory(PropertyGetVideoCoreMemory property) {}
+  KernelStatus status = kheap_free(mail);
+  if (status == ERROR) {
+    LogWarn("[MailBox]: mail free failed.\n");
+  }
 
-void mailboxSetPropertyGetClocks(PropertyGetClocks property) {}
+  return data;
+}
 
-void mailboxSetPropertyGetCommandLine(PropertyGetCommandLine property) {}
+uint32_t mailboxSetPropertyGetBoardRevision(PropertyGetBoardRevision property) {
+  uint32_t size = sizeof(property) + 3 * sizeof(uint32_t);
+  uint32_t *mail = (uint32_t *)kheap_alloc_aligned(size, 16);
+  if (mail == nullptr) {
+    LogError("[MailBox]: mail alloc failed.\n");
+    return 0;
+  }
+  mail[0] = size;
+  mail[1] = MBOX_REQUEST;
+  memcpy(&mail[2], &property, sizeof(property));
+  mail[(size / 4) - 1] = PROPERTY_TAG_END;
 
-void mailboxSetPropertyGetDMAChannels(PropertyGetDMAChannels property) {}
+  uint32_t data = mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, (uint32_t)&mail);
 
-void mailboxSetPropertyGetPowerState(PropertyGetPowerState property) {}
+  KernelStatus status = kheap_free(mail);
+  if (status == ERROR) {
+    LogWarn("[MailBox]: mail free failed.\n");
+  }
 
-void mailboxSetPropertyGetTiming(PropertyGetTiming property) {}
+  return data;
+}
 
-void mailboxSetPropertySetPowerState(PropertySetPowerState property) {}
+uint32_t mailboxSetPropertyGetBoardMacAddress(PropertyGetBoardMacAddress property) {
+  uint32_t size = sizeof(property) + 3 * sizeof(uint32_t);
+  uint32_t *mail = (uint32_t *)kheap_alloc_aligned(size, 16);
+  if (mail == nullptr) {
+    LogError("[MailBox]: mail alloc failed.\n");
+    return 0;
+  }
+  mail[0] = size;
+  mail[1] = MBOX_REQUEST;
+  memcpy(&mail[2], &property, sizeof(property));
+  mail[(size / 4) - 1] = PROPERTY_TAG_END;
 
-void mailboxSetPropertyGetClockState(PropertyGetClockState property) {}
+  uint32_t data = mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, (uint32_t)&mail);
 
-void mailboxSetPropertySetClockState(PropertySetClockState property) {}
+  KernelStatus status = kheap_free(mail);
+  if (status == ERROR) {
+    LogWarn("[MailBox]: mail free failed.\n");
+  }
 
-void mailboxSetPropertyGetClockRate(PropertyGetClockRate property) {}
+  return data;
+}
 
-void mailboxSetPropertySetClockRate(PropertySetClockRate property) {}
+uint32_t mailboxSetPropertyGetBoardSerial(PropertyGetBoardSerial property) {
+  uint32_t size = sizeof(property) + 3 * sizeof(uint32_t);
+  uint32_t *mail = (uint32_t *)kheap_alloc_aligned(size, 16);
+  if (mail == nullptr) {
+    LogError("[MailBox]: mail alloc failed.\n");
+    return 0;
+  }
+  mail[0] = size;
+  mail[1] = MBOX_REQUEST;
+  memcpy(&mail[2], &property, sizeof(property));
+  mail[(size / 4) - 1] = PROPERTY_TAG_END;
 
-void mailboxSetPropertyGetMaxClockRate(PropertyGetMaxClockRate property) {}
+  uint32_t data = mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, (uint32_t)&mail);
 
-void mailboxSetPropertyGetMinClockRate(PropertyGetMinClockRate property) {}
+  KernelStatus status = kheap_free(mail);
+  if (status == ERROR) {
+    LogWarn("[MailBox]: mail free failed.\n");
+  }
 
-void mailboxSetPropertyGetTurbo(PropertyGetTurbo property) {}
+  return data;
+}
 
-void mailboxSetPropertySetTurbo(PropertySetTurbo property) {}
+uint32_t mailboxSetPropertyGetArmMemory(PropertyGetArmMemory property) {
+  uint32_t size = sizeof(property) + 3 * sizeof(uint32_t);
+  uint32_t *mail = (uint32_t *)kheap_alloc_aligned(size, 16);
+  if (mail == nullptr) {
+    LogError("[MailBox]: mail alloc failed.\n");
+    return 0;
+  }
+  mail[0] = size;
+  mail[1] = MBOX_REQUEST;
+  memcpy(&mail[2], &property, sizeof(property));
+  mail[(size / 4) - 1] = PROPERTY_TAG_END;
 
-void mailboxSetPropertyGetVoltage(PropertyGetVoltage property) {}
+  uint32_t data = mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, (uint32_t)&mail);
 
-void mailboxSetPropertySetVoltage(PropertySetVoltage property) {}
+  KernelStatus status = kheap_free(mail);
+  if (status == ERROR) {
+    LogWarn("[MailBox]: mail free failed.\n");
+  }
 
-void mailboxSetPropertyGetMaxVoltage(PropertyGetMaxVoltage property) {}
+  return data;
+}
 
-void mailboxSetPropertyGetMinVoltage(PropertyGetMinVoltage property) {}
+uint32_t mailboxSetPropertyGetVideoCoreMemory(PropertyGetVideoCoreMemory property) {
+  uint32_t size = sizeof(property) + 3 * sizeof(uint32_t);
+  uint32_t *mail = (uint32_t *)kheap_alloc_aligned(size, 16);
+  if (mail == nullptr) {
+    LogError("[MailBox]: mail alloc failed.\n");
+    return 0;
+  }
+  mail[0] = size;
+  mail[1] = MBOX_REQUEST;
+  memcpy(&mail[2], &property, sizeof(property));
+  mail[(size / 4) - 1] = PROPERTY_TAG_END;
 
-void mailboxSetPropertyGetTemperature(PropertyGetTemperature property) {}
+  uint32_t data = mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, (uint32_t)&mail);
 
-void mailboxSetPropertyGetMaxTemperature(PropertyGetMaxTemperature property) {}
+  KernelStatus status = kheap_free(mail);
+  if (status == ERROR) {
+    LogWarn("[MailBox]: mail free failed.\n");
+  }
 
-void mailboxSetPropertyAllocateMemory(PropertyAllocateMemory property) {}
+  return data;
+}
 
-void mailboxSetPropertyLockMemory(PropertyLockMemory property) {}
+uint32_t mailboxSetPropertyGetClocks(PropertyGetClocks property) {
+  uint32_t size = sizeof(property) + 3 * sizeof(uint32_t);
+  uint32_t *mail = (uint32_t *)kheap_alloc_aligned(size, 16);
+  if (mail == nullptr) {
+    LogError("[MailBox]: mail alloc failed.\n");
+    return 0;
+  }
+  mail[0] = size;
+  mail[1] = MBOX_REQUEST;
+  memcpy(&mail[2], &property, sizeof(property));
+  mail[(size / 4) - 1] = PROPERTY_TAG_END;
 
-void mailboxSetPropertyUnLockMemory(PropertyUnLockMemory property) {}
+  uint32_t data = mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, (uint32_t)&mail);
 
-void mailboxSetPropertyReleaseMemory(PropertyReleaseMemory property) {}
+  KernelStatus status = kheap_free(mail);
+  if (status == ERROR) {
+    LogWarn("[MailBox]: mail free failed.\n");
+  }
 
-void mailboxSetPropertyExecuteCode(PropertyExecuteCode property) {}
+  return data;
+}
 
-void mailboxSetPropertyGetDispmanxResourceMemHandle(PropertyGetDispmanxResourceMemHandle property) {}
+uint32_t mailboxSetPropertyGetCommandLine(PropertyGetCommandLine property) {
+  uint32_t size = sizeof(property) + 3 * sizeof(uint32_t);
+  uint32_t *mail = (uint32_t *)kheap_alloc_aligned(size, 16);
+  if (mail == nullptr) {
+    LogError("[MailBox]: mail alloc failed.\n");
+    return 0;
+  }
+  mail[0] = size;
+  mail[1] = MBOX_REQUEST;
+  memcpy(&mail[2], &property, sizeof(property));
+  mail[(size / 4) - 1] = PROPERTY_TAG_END;
 
-void mailboxSetPropertyGetEDIDBlock(PropertyGetEDIDBlock property) {}
+  uint32_t data = mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, (uint32_t)&mail);
 
-void mailboxSetPropertyAllocateBuffer(PropertyAllocateBuffer property) {}
+  KernelStatus status = kheap_free(mail);
+  if (status == ERROR) {
+    LogWarn("[MailBox]: mail free failed.\n");
+  }
 
-void mailboxSetPropertyReleaseBuffer(PropertyReleaseBuffer property) {}
+  return data;
+}
 
-void mailboxSetPropertyBlankScreen(PropertyBlankScreen property) {}
+uint32_t mailboxSetPropertyGetDMAChannels(PropertyGetDMAChannels property) {
+  uint32_t size = sizeof(property) + 3 * sizeof(uint32_t);
+  uint32_t *mail = (uint32_t *)kheap_alloc_aligned(size, 16);
+  if (mail == nullptr) {
+    LogError("[MailBox]: mail alloc failed.\n");
+    return 0;
+  }
+  mail[0] = size;
+  mail[1] = MBOX_REQUEST;
+  memcpy(&mail[2], &property, sizeof(property));
+  mail[(size / 4) - 1] = PROPERTY_TAG_END;
 
-void mailboxSetPropertyGetPhysicalDisplayWH(PropertyGetPhysicalDisplayWH property) {}
+  uint32_t data = mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, (uint32_t)&mail);
 
-void mailboxSetPropertyTestPhysicalDisplayWH(PropertyTestPhysicalDisplayWH property) {}
+  KernelStatus status = kheap_free(mail);
+  if (status == ERROR) {
+    LogWarn("[MailBox]: mail free failed.\n");
+  }
 
-void mailboxSetPropertySetPhysicalDisplayWH(PropertySetPhysicalDisplayWH property) {}
+  return data;
+}
 
-void mailboxSetPropertyGetVirtualBufferWH(PropertyGetVirtualBufferWH property) {}
+uint32_t mailboxSetPropertyGetPowerState(PropertyGetPowerState property) {
+  uint32_t size = sizeof(property) + 3 * sizeof(uint32_t);
+  uint32_t *mail = (uint32_t *)kheap_alloc_aligned(size, 16);
+  if (mail == nullptr) {
+    LogError("[MailBox]: mail alloc failed.\n");
+    return 0;
+  }
+  mail[0] = size;
+  mail[1] = MBOX_REQUEST;
+  memcpy(&mail[2], &property, sizeof(property));
+  mail[(size / 4) - 1] = PROPERTY_TAG_END;
 
-void mailboxSetPropertyTestVirtualBufferWH(PropertyTestVirtualBufferWH property) {}
+  uint32_t data = mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, (uint32_t)&mail);
 
-void mailboxSetPropertySetVirtualBufferWH(PropertySetVirtualBufferWH property) {}
+  KernelStatus status = kheap_free(mail);
+  if (status == ERROR) {
+    LogWarn("[MailBox]: mail free failed.\n");
+  }
 
-void mailboxSetPropertyGetDepth(PropertyGetDepth property) {}
+  return data;
+}
 
-void mailboxSetPropertyTestDepth(PropertyTestDepth property) {}
+uint32_t mailboxSetPropertyGetTiming(PropertyGetTiming property) {
+  uint32_t size = sizeof(property) + 3 * sizeof(uint32_t);
+  uint32_t *mail = (uint32_t *)kheap_alloc_aligned(size, 16);
+  if (mail == nullptr) {
+    LogError("[MailBox]: mail alloc failed.\n");
+    return 0;
+  }
+  mail[0] = size;
+  mail[1] = MBOX_REQUEST;
+  memcpy(&mail[2], &property, sizeof(property));
+  mail[(size / 4) - 1] = PROPERTY_TAG_END;
 
-void mailboxSetPropertySetDepth(PropertySetDepth property) {}
+  uint32_t data = mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, (uint32_t)&mail);
 
-void mailboxSetPropertyGetPixelOrder(PropertyGetPixelOrder property) {}
+  KernelStatus status = kheap_free(mail);
+  if (status == ERROR) {
+    LogWarn("[MailBox]: mail free failed.\n");
+  }
 
-void mailboxSetPropertyTestPixelOrder(PropertyTestPixelOrder property) {}
+  return data;
+}
 
-void mailboxSetPropertySetPixelOrder(PropertySetPixelOrder property) {}
+uint32_t mailboxSetPropertySetPowerState(PropertySetPowerState property) {
+  uint32_t size = sizeof(property) + 3 * sizeof(uint32_t);
+  uint32_t *mail = (uint32_t *)kheap_alloc_aligned(size, 16);
+  if (mail == nullptr) {
+    LogError("[MailBox]: mail alloc failed.\n");
+    return 0;
+  }
+  mail[0] = size;
+  mail[1] = MBOX_REQUEST;
+  memcpy(&mail[2], &property, sizeof(property));
+  mail[(size / 4) - 1] = PROPERTY_TAG_END;
 
-void mailboxSetPropertyGetAlphaMode(PropertyGetAlphaMode property) {}
+  uint32_t data = mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, (uint32_t)&mail);
 
-void mailboxSetPropertyTestAlphaMode(PropertyTestAlphaMode property) {}
+  KernelStatus status = kheap_free(mail);
+  if (status == ERROR) {
+    LogWarn("[MailBox]: mail free failed.\n");
+  }
 
-void mailboxSetPropertySetAlphaMode(PropertySetAlphaMode property) {}
+  return data;
+}
 
-void mailboxSetPropertyGetPitch(PropertyGetPitch property) {}
+uint32_t mailboxSetPropertyGetClockState(PropertyGetClockState property) {
+  uint32_t size = sizeof(property) + 3 * sizeof(uint32_t);
+  uint32_t *mail = (uint32_t *)kheap_alloc_aligned(size, 16);
+  if (mail == nullptr) {
+    LogError("[MailBox]: mail alloc failed.\n");
+    return 0;
+  }
+  mail[0] = size;
+  mail[1] = MBOX_REQUEST;
+  memcpy(&mail[2], &property, sizeof(property));
+  mail[(size / 4) - 1] = PROPERTY_TAG_END;
 
-void mailboxSetPropertyGetVirtualOffset(PropertyGetVirtualOffset property) {}
+  uint32_t data = mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, (uint32_t)&mail);
 
-void mailboxSetPropertyTestVirtualOffset(PropertyTestVirtualOffset property) {}
+  KernelStatus status = kheap_free(mail);
+  if (status == ERROR) {
+    LogWarn("[MailBox]: mail free failed.\n");
+  }
 
-void mailboxSetPropertySetVirtualOffset(PropertySetVirtualOffset property) {}
+  return data;
+}
 
-void mailboxSetPropertyGetOverscan(PropertyGetOverscan property) {}
+uint32_t mailboxSetPropertySetClockState(PropertySetClockState property) {
+  uint32_t size = sizeof(property) + 3 * sizeof(uint32_t);
+  uint32_t *mail = (uint32_t *)kheap_alloc_aligned(size, 16);
+  if (mail == nullptr) {
+    LogError("[MailBox]: mail alloc failed.\n");
+    return 0;
+  }
+  mail[0] = size;
+  mail[1] = MBOX_REQUEST;
+  memcpy(&mail[2], &property, sizeof(property));
+  mail[(size / 4) - 1] = PROPERTY_TAG_END;
 
-void mailboxSetPropertyTestOverscan(PropertyTestOverscan property) {}
+  uint32_t data = mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, (uint32_t)&mail);
 
-void mailboxSetPropertySetOverscan(PropertySetOverscan property) {}
+  KernelStatus status = kheap_free(mail);
+  if (status == ERROR) {
+    LogWarn("[MailBox]: mail free failed.\n");
+  }
 
-void mailboxSetPropertyGetPalette(PropertyGetPalette property) {}
+  return data;
+}
 
-void mailboxSetPropertyTestPalette(PropertyTestPalette property) {}
+uint32_t mailboxSetPropertyGetClockRate(PropertyGetClockRate property) {
+  uint32_t size = sizeof(property) + 3 * sizeof(uint32_t);
+  uint32_t *mail = (uint32_t *)kheap_alloc_aligned(size, 16);
+  if (mail == nullptr) {
+    LogError("[MailBox]: mail alloc failed.\n");
+    return 0;
+  }
+  mail[0] = size;
+  mail[1] = MBOX_REQUEST;
+  memcpy(&mail[2], &property, sizeof(property));
+  mail[(size / 4) - 1] = PROPERTY_TAG_END;
 
-void mailboxSetPropertySetPalette(PropertySetPalette property) {}
+  uint32_t data = mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, (uint32_t)&mail);
 
-void mailboxSetPropertySetCursorInfo(PropertySetCursorInfo property) {}
+  KernelStatus status = kheap_free(mail);
+  if (status == ERROR) {
+    LogWarn("[MailBox]: mail free failed.\n");
+  }
 
-void mailboxSetPropertySetCursorState(PropertySetCursorState property) {}
+  return data;
+}
+
+uint32_t mailboxSetPropertySetClockRate(PropertySetClockRate property) {
+  uint32_t size = sizeof(property) + 3 * sizeof(uint32_t);
+  uint32_t *mail = (uint32_t *)kheap_alloc_aligned(size, 16);
+  if (mail == nullptr) {
+    LogError("[MailBox]: mail alloc failed.\n");
+    return 0;
+  }
+  mail[0] = size;
+  mail[1] = MBOX_REQUEST;
+  memcpy(&mail[2], &property, sizeof(property));
+  mail[(size / 4) - 1] = PROPERTY_TAG_END;
+
+  uint32_t data = mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, (uint32_t)&mail);
+
+  KernelStatus status = kheap_free(mail);
+  if (status == ERROR) {
+    LogWarn("[MailBox]: mail free failed.\n");
+  }
+
+  return data;
+}
+
+uint32_t mailboxSetPropertyGetMaxClockRate(PropertyGetMaxClockRate property) {
+  uint32_t size = sizeof(property) + 3 * sizeof(uint32_t);
+  uint32_t *mail = (uint32_t *)kheap_alloc_aligned(size, 16);
+  if (mail == nullptr) {
+    LogError("[MailBox]: mail alloc failed.\n");
+    return 0;
+  }
+  mail[0] = size;
+  mail[1] = MBOX_REQUEST;
+  memcpy(&mail[2], &property, sizeof(property));
+  mail[(size / 4) - 1] = PROPERTY_TAG_END;
+
+  uint32_t data = mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, (uint32_t)&mail);
+
+  KernelStatus status = kheap_free(mail);
+  if (status == ERROR) {
+    LogWarn("[MailBox]: mail free failed.\n");
+  }
+
+  return data;
+}
+
+uint32_t mailboxSetPropertyGetMinClockRate(PropertyGetMinClockRate property) {
+  uint32_t size = sizeof(property) + 3 * sizeof(uint32_t);
+  uint32_t *mail = (uint32_t *)kheap_alloc_aligned(size, 16);
+  if (mail == nullptr) {
+    LogError("[MailBox]: mail alloc failed.\n");
+    return 0;
+  }
+  mail[0] = size;
+  mail[1] = MBOX_REQUEST;
+  memcpy(&mail[2], &property, sizeof(property));
+  mail[(size / 4) - 1] = PROPERTY_TAG_END;
+
+  uint32_t data = mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, (uint32_t)&mail);
+
+  KernelStatus status = kheap_free(mail);
+  if (status == ERROR) {
+    LogWarn("[MailBox]: mail free failed.\n");
+  }
+
+  return data;
+}
+
+uint32_t mailboxSetPropertyGetTurbo(PropertyGetTurbo property) {
+  uint32_t size = sizeof(property) + 3 * sizeof(uint32_t);
+  uint32_t *mail = (uint32_t *)kheap_alloc_aligned(size, 16);
+  if (mail == nullptr) {
+    LogError("[MailBox]: mail alloc failed.\n");
+    return 0;
+  }
+  mail[0] = size;
+  mail[1] = MBOX_REQUEST;
+  memcpy(&mail[2], &property, sizeof(property));
+  mail[(size / 4) - 1] = PROPERTY_TAG_END;
+
+  uint32_t data = mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, (uint32_t)&mail);
+
+  KernelStatus status = kheap_free(mail);
+  if (status == ERROR) {
+    LogWarn("[MailBox]: mail free failed.\n");
+  }
+
+  return data;
+}
+
+uint32_t mailboxSetPropertySetTurbo(PropertySetTurbo property) {
+  uint32_t size = sizeof(property) + 3 * sizeof(uint32_t);
+  uint32_t *mail = (uint32_t *)kheap_alloc_aligned(size, 16);
+  if (mail == nullptr) {
+    LogError("[MailBox]: mail alloc failed.\n");
+    return 0;
+  }
+  mail[0] = size;
+  mail[1] = MBOX_REQUEST;
+  memcpy(&mail[2], &property, sizeof(property));
+  mail[(size / 4) - 1] = PROPERTY_TAG_END;
+
+  uint32_t data = mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, (uint32_t)&mail);
+
+  KernelStatus status = kheap_free(mail);
+  if (status == ERROR) {
+    LogWarn("[MailBox]: mail free failed.\n");
+  }
+
+  return data;
+}
+
+uint32_t mailboxSetPropertyGetVoltage(PropertyGetVoltage property) {
+  uint32_t size = sizeof(property) + 3 * sizeof(uint32_t);
+  uint32_t *mail = (uint32_t *)kheap_alloc_aligned(size, 16);
+  if (mail == nullptr) {
+    LogError("[MailBox]: mail alloc failed.\n");
+    return 0;
+  }
+  mail[0] = size;
+  mail[1] = MBOX_REQUEST;
+  memcpy(&mail[2], &property, sizeof(property));
+  mail[(size / 4) - 1] = PROPERTY_TAG_END;
+
+  uint32_t data = mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, (uint32_t)&mail);
+
+  KernelStatus status = kheap_free(mail);
+  if (status == ERROR) {
+    LogWarn("[MailBox]: mail free failed.\n");
+  }
+
+  return data;
+}
+
+uint32_t mailboxSetPropertySetVoltage(PropertySetVoltage property) {
+  uint32_t size = sizeof(property) + 3 * sizeof(uint32_t);
+  uint32_t *mail = (uint32_t *)kheap_alloc_aligned(size, 16);
+  if (mail == nullptr) {
+    LogError("[MailBox]: mail alloc failed.\n");
+    return 0;
+  }
+  mail[0] = size;
+  mail[1] = MBOX_REQUEST;
+  memcpy(&mail[2], &property, sizeof(property));
+  mail[(size / 4) - 1] = PROPERTY_TAG_END;
+
+  uint32_t data = mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, (uint32_t)&mail);
+
+  KernelStatus status = kheap_free(mail);
+  if (status == ERROR) {
+    LogWarn("[MailBox]: mail free failed.\n");
+  }
+
+  return data;
+}
+
+uint32_t mailboxSetPropertyGetMaxVoltage(PropertyGetMaxVoltage property) {
+  uint32_t size = sizeof(property) + 3 * sizeof(uint32_t);
+  uint32_t *mail = (uint32_t *)kheap_alloc_aligned(size, 16);
+  if (mail == nullptr) {
+    LogError("[MailBox]: mail alloc failed.\n");
+    return 0;
+  }
+  mail[0] = size;
+  mail[1] = MBOX_REQUEST;
+  memcpy(&mail[2], &property, sizeof(property));
+  mail[(size / 4) - 1] = PROPERTY_TAG_END;
+
+  uint32_t data = mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, (uint32_t)&mail);
+
+  KernelStatus status = kheap_free(mail);
+  if (status == ERROR) {
+    LogWarn("[MailBox]: mail free failed.\n");
+  }
+
+  return data;
+}
+
+uint32_t mailboxSetPropertyGetMinVoltage(PropertyGetMinVoltage property) {
+  uint32_t size = sizeof(property) + 3 * sizeof(uint32_t);
+  uint32_t *mail = (uint32_t *)kheap_alloc_aligned(size, 16);
+  if (mail == nullptr) {
+    LogError("[MailBox]: mail alloc failed.\n");
+    return 0;
+  }
+  mail[0] = size;
+  mail[1] = MBOX_REQUEST;
+  memcpy(&mail[2], &property, sizeof(property));
+  mail[(size / 4) - 1] = PROPERTY_TAG_END;
+
+  uint32_t data = mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, (uint32_t)&mail);
+
+  KernelStatus status = kheap_free(mail);
+  if (status == ERROR) {
+    LogWarn("[MailBox]: mail free failed.\n");
+  }
+
+  return data;
+}
+
+uint32_t mailboxSetPropertyGetTemperature(PropertyGetTemperature property) {
+  uint32_t size = sizeof(property) + 3 * sizeof(uint32_t);
+  uint32_t *mail = (uint32_t *)kheap_alloc_aligned(size, 16);
+  if (mail == nullptr) {
+    LogError("[MailBox]: mail alloc failed.\n");
+    return 0;
+  }
+  mail[0] = size;
+  mail[1] = MBOX_REQUEST;
+  memcpy(&mail[2], &property, sizeof(property));
+  mail[(size / 4) - 1] = PROPERTY_TAG_END;
+
+  uint32_t data = mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, (uint32_t)&mail);
+
+  KernelStatus status = kheap_free(mail);
+  if (status == ERROR) {
+    LogWarn("[MailBox]: mail free failed.\n");
+  }
+
+  return data;
+}
+
+uint32_t mailboxSetPropertyGetMaxTemperature(PropertyGetMaxTemperature property) {
+  uint32_t size = sizeof(property) + 3 * sizeof(uint32_t);
+  uint32_t *mail = (uint32_t *)kheap_alloc_aligned(size, 16);
+  if (mail == nullptr) {
+    LogError("[MailBox]: mail alloc failed.\n");
+    return 0;
+  }
+  mail[0] = size;
+  mail[1] = MBOX_REQUEST;
+  memcpy(&mail[2], &property, sizeof(property));
+  mail[(size / 4) - 1] = PROPERTY_TAG_END;
+
+  uint32_t data = mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, (uint32_t)&mail);
+
+  KernelStatus status = kheap_free(mail);
+  if (status == ERROR) {
+    LogWarn("[MailBox]: mail free failed.\n");
+  }
+
+  return data;
+}
+
+uint32_t mailboxSetPropertyAllocateMemory(PropertyAllocateMemory property) {
+  uint32_t size = sizeof(property) + 3 * sizeof(uint32_t);
+  uint32_t *mail = (uint32_t *)kheap_alloc_aligned(size, 16);
+  if (mail == nullptr) {
+    LogError("[MailBox]: mail alloc failed.\n");
+    return 0;
+  }
+  mail[0] = size;
+  mail[1] = MBOX_REQUEST;
+  memcpy(&mail[2], &property, sizeof(property));
+  mail[(size / 4) - 1] = PROPERTY_TAG_END;
+
+  uint32_t data = mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, (uint32_t)&mail);
+
+  KernelStatus status = kheap_free(mail);
+  if (status == ERROR) {
+    LogWarn("[MailBox]: mail free failed.\n");
+  }
+
+  return data;
+}
+
+uint32_t mailboxSetPropertyLockMemory(PropertyLockMemory property) {
+  uint32_t size = sizeof(property) + 3 * sizeof(uint32_t);
+  uint32_t *mail = (uint32_t *)kheap_alloc_aligned(size, 16);
+  if (mail == nullptr) {
+    LogError("[MailBox]: mail alloc failed.\n");
+    return 0;
+  }
+  mail[0] = size;
+  mail[1] = MBOX_REQUEST;
+  memcpy(&mail[2], &property, sizeof(property));
+  mail[(size / 4) - 1] = PROPERTY_TAG_END;
+
+  uint32_t data = mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, (uint32_t)&mail);
+
+  KernelStatus status = kheap_free(mail);
+  if (status == ERROR) {
+    LogWarn("[MailBox]: mail free failed.\n");
+  }
+
+  return data;
+}
+
+uint32_t mailboxSetPropertyUnLockMemory(PropertyUnLockMemory property) {
+  uint32_t size = sizeof(property) + 3 * sizeof(uint32_t);
+  uint32_t *mail = (uint32_t *)kheap_alloc_aligned(size, 16);
+  if (mail == nullptr) {
+    LogError("[MailBox]: mail alloc failed.\n");
+    return 0;
+  }
+  mail[0] = size;
+  mail[1] = MBOX_REQUEST;
+  memcpy(&mail[2], &property, sizeof(property));
+  mail[(size / 4) - 1] = PROPERTY_TAG_END;
+
+  uint32_t data = mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, (uint32_t)&mail);
+
+  KernelStatus status = kheap_free(mail);
+  if (status == ERROR) {
+    LogWarn("[MailBox]: mail free failed.\n");
+  }
+
+  return data;
+}
+
+uint32_t mailboxSetPropertyReleaseMemory(PropertyReleaseMemory property) {
+  uint32_t size = sizeof(property) + 3 * sizeof(uint32_t);
+  uint32_t *mail = (uint32_t *)kheap_alloc_aligned(size, 16);
+  if (mail == nullptr) {
+    LogError("[MailBox]: mail alloc failed.\n");
+    return 0;
+  }
+  mail[0] = size;
+  mail[1] = MBOX_REQUEST;
+  memcpy(&mail[2], &property, sizeof(property));
+  mail[(size / 4) - 1] = PROPERTY_TAG_END;
+
+  uint32_t data = mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, (uint32_t)&mail);
+
+  KernelStatus status = kheap_free(mail);
+  if (status == ERROR) {
+    LogWarn("[MailBox]: mail free failed.\n");
+  }
+
+  return data;
+}
+
+uint32_t mailboxSetPropertyExecuteCode(PropertyExecuteCode property) {
+  uint32_t size = sizeof(property) + 3 * sizeof(uint32_t);
+  uint32_t *mail = (uint32_t *)kheap_alloc_aligned(size, 16);
+  if (mail == nullptr) {
+    LogError("[MailBox]: mail alloc failed.\n");
+    return 0;
+  }
+  mail[0] = size;
+  mail[1] = MBOX_REQUEST;
+  memcpy(&mail[2], &property, sizeof(property));
+  mail[(size / 4) - 1] = PROPERTY_TAG_END;
+
+  uint32_t data = mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, (uint32_t)&mail);
+
+  KernelStatus status = kheap_free(mail);
+  if (status == ERROR) {
+    LogWarn("[MailBox]: mail free failed.\n");
+  }
+
+  return data;
+}
+
+uint32_t mailboxSetPropertyGetDispmanxResourceMemHandle(PropertyGetDispmanxResourceMemHandle property) {
+  uint32_t size = sizeof(property) + 3 * sizeof(uint32_t);
+  uint32_t *mail = (uint32_t *)kheap_alloc_aligned(size, 16);
+  if (mail == nullptr) {
+    LogError("[MailBox]: mail alloc failed.\n");
+    return 0;
+  }
+  mail[0] = size;
+  mail[1] = MBOX_REQUEST;
+  memcpy(&mail[2], &property, sizeof(property));
+  mail[(size / 4) - 1] = PROPERTY_TAG_END;
+
+  uint32_t data = mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, (uint32_t)&mail);
+
+  KernelStatus status = kheap_free(mail);
+  if (status == ERROR) {
+    LogWarn("[MailBox]: mail free failed.\n");
+  }
+
+  return data;
+}
+
+uint32_t mailboxSetPropertyGetEDIDBlock(PropertyGetEDIDBlock property) {
+  uint32_t size = sizeof(property) + 3 * sizeof(uint32_t);
+  uint32_t *mail = (uint32_t *)kheap_alloc_aligned(size, 16);
+  if (mail == nullptr) {
+    LogError("[MailBox]: mail alloc failed.\n");
+    return 0;
+  }
+  mail[0] = size;
+  mail[1] = MBOX_REQUEST;
+  memcpy(&mail[2], &property, sizeof(property));
+  mail[(size / 4) - 1] = PROPERTY_TAG_END;
+
+  uint32_t data = mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, (uint32_t)&mail);
+
+  KernelStatus status = kheap_free(mail);
+  if (status == ERROR) {
+    LogWarn("[MailBox]: mail free failed.\n");
+  }
+
+  return data;
+}
+
+uint32_t mailboxSetPropertyAllocateBuffer(PropertyAllocateBuffer property) {
+  uint32_t size = sizeof(property) + 3 * sizeof(uint32_t);
+  uint32_t *mail = (uint32_t *)kheap_alloc_aligned(size, 16);
+  if (mail == nullptr) {
+    LogError("[MailBox]: mail alloc failed.\n");
+    return 0;
+  }
+  mail[0] = size;
+  mail[1] = MBOX_REQUEST;
+  memcpy(&mail[2], &property, sizeof(property));
+  mail[(size / 4) - 1] = PROPERTY_TAG_END;
+
+  uint32_t data = mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, (uint32_t)&mail);
+
+  KernelStatus status = kheap_free(mail);
+  if (status == ERROR) {
+    LogWarn("[MailBox]: mail free failed.\n");
+  }
+
+  return data;
+}
+
+uint32_t mailboxSetPropertyReleaseBuffer(PropertyReleaseBuffer property) {
+  uint32_t size = sizeof(property) + 3 * sizeof(uint32_t);
+  uint32_t *mail = (uint32_t *)kheap_alloc_aligned(size, 16);
+  if (mail == nullptr) {
+    LogError("[MailBox]: mail alloc failed.\n");
+    return 0;
+  }
+  mail[0] = size;
+  mail[1] = MBOX_REQUEST;
+  memcpy(&mail[2], &property, sizeof(property));
+  mail[(size / 4) - 1] = PROPERTY_TAG_END;
+
+  uint32_t data = mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, (uint32_t)&mail);
+
+  KernelStatus status = kheap_free(mail);
+  if (status == ERROR) {
+    LogWarn("[MailBox]: mail free failed.\n");
+  }
+
+  return data;
+}
+
+uint32_t mailboxSetPropertyBlankScreen(PropertyBlankScreen property) {
+  uint32_t size = sizeof(property) + 3 * sizeof(uint32_t);
+  uint32_t *mail = (uint32_t *)kheap_alloc_aligned(size, 16);
+  if (mail == nullptr) {
+    LogError("[MailBox]: mail alloc failed.\n");
+    return 0;
+  }
+  mail[0] = size;
+  mail[1] = MBOX_REQUEST;
+  memcpy(&mail[2], &property, sizeof(property));
+  mail[(size / 4) - 1] = PROPERTY_TAG_END;
+
+  uint32_t data = mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, (uint32_t)&mail);
+
+  KernelStatus status = kheap_free(mail);
+  if (status == ERROR) {
+    LogWarn("[MailBox]: mail free failed.\n");
+  }
+
+  return data;
+}
+
+uint32_t mailboxSetPropertyGetPhysicalDisplayWH(PropertyGetPhysicalDisplayWH property) {
+  uint32_t size = sizeof(property) + 3 * sizeof(uint32_t);
+  uint32_t *mail = (uint32_t *)kheap_alloc_aligned(size, 16);
+  if (mail == nullptr) {
+    LogError("[MailBox]: mail alloc failed.\n");
+    return 0;
+  }
+  mail[0] = size;
+  mail[1] = MBOX_REQUEST;
+  memcpy(&mail[2], &property, sizeof(property));
+  mail[(size / 4) - 1] = PROPERTY_TAG_END;
+
+  uint32_t data = mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, (uint32_t)&mail);
+
+  KernelStatus status = kheap_free(mail);
+  if (status == ERROR) {
+    LogWarn("[MailBox]: mail free failed.\n");
+  }
+
+  return data;
+}
+
+uint32_t mailboxSetPropertyTestPhysicalDisplayWH(PropertyTestPhysicalDisplayWH property) {
+  uint32_t size = sizeof(property) + 3 * sizeof(uint32_t);
+  uint32_t *mail = (uint32_t *)kheap_alloc_aligned(size, 16);
+  if (mail == nullptr) {
+    LogError("[MailBox]: mail alloc failed.\n");
+    return 0;
+  }
+  mail[0] = size;
+  mail[1] = MBOX_REQUEST;
+  memcpy(&mail[2], &property, sizeof(property));
+  mail[(size / 4) - 1] = PROPERTY_TAG_END;
+
+  uint32_t data = mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, (uint32_t)&mail);
+
+  KernelStatus status = kheap_free(mail);
+  if (status == ERROR) {
+    LogWarn("[MailBox]: mail free failed.\n");
+  }
+
+  return data;
+}
+
+uint32_t mailboxSetPropertySetPhysicalDisplayWH(PropertySetPhysicalDisplayWH property) {
+  uint32_t size = sizeof(property) + 3 * sizeof(uint32_t);
+  uint32_t *mail = (uint32_t *)kheap_alloc_aligned(size, 16);
+  if (mail == nullptr) {
+    LogError("[MailBox]: mail alloc failed.\n");
+    return 0;
+  }
+  mail[0] = size;
+  mail[1] = MBOX_REQUEST;
+  memcpy(&mail[2], &property, sizeof(property));
+  mail[(size / 4) - 1] = PROPERTY_TAG_END;
+
+  uint32_t data = mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, (uint32_t)&mail);
+
+  KernelStatus status = kheap_free(mail);
+  if (status == ERROR) {
+    LogWarn("[MailBox]: mail free failed.\n");
+  }
+
+  return data;
+}
+
+uint32_t mailboxSetPropertyGetVirtualBufferWH(PropertyGetVirtualBufferWH property) {
+  uint32_t size = sizeof(property) + 3 * sizeof(uint32_t);
+  uint32_t *mail = (uint32_t *)kheap_alloc_aligned(size, 16);
+  if (mail == nullptr) {
+    LogError("[MailBox]: mail alloc failed.\n");
+    return 0;
+  }
+  mail[0] = size;
+  mail[1] = MBOX_REQUEST;
+  memcpy(&mail[2], &property, sizeof(property));
+  mail[(size / 4) - 1] = PROPERTY_TAG_END;
+
+  uint32_t data = mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, (uint32_t)&mail);
+
+  KernelStatus status = kheap_free(mail);
+  if (status == ERROR) {
+    LogWarn("[MailBox]: mail free failed.\n");
+  }
+
+  return data;
+}
+
+uint32_t mailboxSetPropertyTestVirtualBufferWH(PropertyTestVirtualBufferWH property) {
+  uint32_t size = sizeof(property) + 3 * sizeof(uint32_t);
+  uint32_t *mail = (uint32_t *)kheap_alloc_aligned(size, 16);
+  if (mail == nullptr) {
+    LogError("[MailBox]: mail alloc failed.\n");
+    return 0;
+  }
+  mail[0] = size;
+  mail[1] = MBOX_REQUEST;
+  memcpy(&mail[2], &property, sizeof(property));
+  mail[(size / 4) - 1] = PROPERTY_TAG_END;
+
+  uint32_t data = mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, (uint32_t)&mail);
+
+  KernelStatus status = kheap_free(mail);
+  if (status == ERROR) {
+    LogWarn("[MailBox]: mail free failed.\n");
+  }
+
+  return data;
+}
+
+uint32_t mailboxSetPropertySetVirtualBufferWH(PropertySetVirtualBufferWH property) {
+  uint32_t size = sizeof(property) + 3 * sizeof(uint32_t);
+  uint32_t *mail = (uint32_t *)kheap_alloc_aligned(size, 16);
+  if (mail == nullptr) {
+    LogError("[MailBox]: mail alloc failed.\n");
+    return 0;
+  }
+  mail[0] = size;
+  mail[1] = MBOX_REQUEST;
+  memcpy(&mail[2], &property, sizeof(property));
+  mail[(size / 4) - 1] = PROPERTY_TAG_END;
+
+  uint32_t data = mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, (uint32_t)&mail);
+
+  KernelStatus status = kheap_free(mail);
+  if (status == ERROR) {
+    LogWarn("[MailBox]: mail free failed.\n");
+  }
+
+  return data;
+}
+
+uint32_t mailboxSetPropertyGetDepth(PropertyGetDepth property) {
+  uint32_t size = sizeof(property) + 3 * sizeof(uint32_t);
+  uint32_t *mail = (uint32_t *)kheap_alloc_aligned(size, 16);
+  if (mail == nullptr) {
+    LogError("[MailBox]: mail alloc failed.\n");
+    return 0;
+  }
+  mail[0] = size;
+  mail[1] = MBOX_REQUEST;
+  memcpy(&mail[2], &property, sizeof(property));
+  mail[(size / 4) - 1] = PROPERTY_TAG_END;
+
+  uint32_t data = mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, (uint32_t)&mail);
+
+  KernelStatus status = kheap_free(mail);
+  if (status == ERROR) {
+    LogWarn("[MailBox]: mail free failed.\n");
+  }
+
+  return data;
+}
+
+uint32_t mailboxSetPropertyTestDepth(PropertyTestDepth property) {
+  uint32_t size = sizeof(property) + 3 * sizeof(uint32_t);
+  uint32_t *mail = (uint32_t *)kheap_alloc_aligned(size, 16);
+  if (mail == nullptr) {
+    LogError("[MailBox]: mail alloc failed.\n");
+    return 0;
+  }
+  mail[0] = size;
+  mail[1] = MBOX_REQUEST;
+  memcpy(&mail[2], &property, sizeof(property));
+  mail[(size / 4) - 1] = PROPERTY_TAG_END;
+
+  uint32_t data = mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, (uint32_t)&mail);
+
+  KernelStatus status = kheap_free(mail);
+  if (status == ERROR) {
+    LogWarn("[MailBox]: mail free failed.\n");
+  }
+
+  return data;
+}
+
+uint32_t mailboxSetPropertySetDepth(PropertySetDepth property) {
+  uint32_t size = sizeof(property) + 3 * sizeof(uint32_t);
+  uint32_t *mail = (uint32_t *)kheap_alloc_aligned(size, 16);
+  if (mail == nullptr) {
+    LogError("[MailBox]: mail alloc failed.\n");
+    return 0;
+  }
+  mail[0] = size;
+  mail[1] = MBOX_REQUEST;
+  memcpy(&mail[2], &property, sizeof(property));
+  mail[(size / 4) - 1] = PROPERTY_TAG_END;
+
+  uint32_t data = mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, (uint32_t)&mail);
+
+  KernelStatus status = kheap_free(mail);
+  if (status == ERROR) {
+    LogWarn("[MailBox]: mail free failed.\n");
+  }
+
+  return data;
+}
+
+uint32_t mailboxSetPropertyGetPixelOrder(PropertyGetPixelOrder property) {
+  uint32_t size = sizeof(property) + 3 * sizeof(uint32_t);
+  uint32_t *mail = (uint32_t *)kheap_alloc_aligned(size, 16);
+  if (mail == nullptr) {
+    LogError("[MailBox]: mail alloc failed.\n");
+    return 0;
+  }
+  mail[0] = size;
+  mail[1] = MBOX_REQUEST;
+  memcpy(&mail[2], &property, sizeof(property));
+  mail[(size / 4) - 1] = PROPERTY_TAG_END;
+
+  uint32_t data = mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, (uint32_t)&mail);
+
+  KernelStatus status = kheap_free(mail);
+  if (status == ERROR) {
+    LogWarn("[MailBox]: mail free failed.\n");
+  }
+
+  return data;
+}
+
+uint32_t mailboxSetPropertyTestPixelOrder(PropertyTestPixelOrder property) {
+  uint32_t size = sizeof(property) + 3 * sizeof(uint32_t);
+  uint32_t *mail = (uint32_t *)kheap_alloc_aligned(size, 16);
+  if (mail == nullptr) {
+    LogError("[MailBox]: mail alloc failed.\n");
+    return 0;
+  }
+  mail[0] = size;
+  mail[1] = MBOX_REQUEST;
+  memcpy(&mail[2], &property, sizeof(property));
+  mail[(size / 4) - 1] = PROPERTY_TAG_END;
+
+  uint32_t data = mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, (uint32_t)&mail);
+
+  KernelStatus status = kheap_free(mail);
+  if (status == ERROR) {
+    LogWarn("[MailBox]: mail free failed.\n");
+  }
+
+  return data;
+}
+
+uint32_t mailboxSetPropertySetPixelOrder(PropertySetPixelOrder property) {
+  uint32_t size = sizeof(property) + 3 * sizeof(uint32_t);
+  uint32_t *mail = (uint32_t *)kheap_alloc_aligned(size, 16);
+  if (mail == nullptr) {
+    LogError("[MailBox]: mail alloc failed.\n");
+    return 0;
+  }
+  mail[0] = size;
+  mail[1] = MBOX_REQUEST;
+  memcpy(&mail[2], &property, sizeof(property));
+  mail[(size / 4) - 1] = PROPERTY_TAG_END;
+
+  uint32_t data = mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, (uint32_t)&mail);
+
+  KernelStatus status = kheap_free(mail);
+  if (status == ERROR) {
+    LogWarn("[MailBox]: mail free failed.\n");
+  }
+
+  return data;
+}
+
+uint32_t mailboxSetPropertyGetAlphaMode(PropertyGetAlphaMode property) {
+  uint32_t size = sizeof(property) + 3 * sizeof(uint32_t);
+  uint32_t *mail = (uint32_t *)kheap_alloc_aligned(size, 16);
+  if (mail == nullptr) {
+    LogError("[MailBox]: mail alloc failed.\n");
+    return 0;
+  }
+  mail[0] = size;
+  mail[1] = MBOX_REQUEST;
+  memcpy(&mail[2], &property, sizeof(property));
+  mail[(size / 4) - 1] = PROPERTY_TAG_END;
+
+  uint32_t data = mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, (uint32_t)&mail);
+
+  KernelStatus status = kheap_free(mail);
+  if (status == ERROR) {
+    LogWarn("[MailBox]: mail free failed.\n");
+  }
+
+  return data;
+}
+
+uint32_t mailboxSetPropertyTestAlphaMode(PropertyTestAlphaMode property) {
+  uint32_t size = sizeof(property) + 3 * sizeof(uint32_t);
+  uint32_t *mail = (uint32_t *)kheap_alloc_aligned(size, 16);
+  if (mail == nullptr) {
+    LogError("[MailBox]: mail alloc failed.\n");
+    return 0;
+  }
+  mail[0] = size;
+  mail[1] = MBOX_REQUEST;
+  memcpy(&mail[2], &property, sizeof(property));
+  mail[(size / 4) - 1] = PROPERTY_TAG_END;
+
+  uint32_t data = mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, (uint32_t)&mail);
+
+  KernelStatus status = kheap_free(mail);
+  if (status == ERROR) {
+    LogWarn("[MailBox]: mail free failed.\n");
+  }
+
+  return data;
+}
+
+uint32_t mailboxSetPropertySetAlphaMode(PropertySetAlphaMode property) {
+  uint32_t size = sizeof(property) + 3 * sizeof(uint32_t);
+  uint32_t *mail = (uint32_t *)kheap_alloc_aligned(size, 16);
+  if (mail == nullptr) {
+    LogError("[MailBox]: mail alloc failed.\n");
+    return 0;
+  }
+  mail[0] = size;
+  mail[1] = MBOX_REQUEST;
+  memcpy(&mail[2], &property, sizeof(property));
+  mail[(size / 4) - 1] = PROPERTY_TAG_END;
+
+  uint32_t data = mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, (uint32_t)&mail);
+
+  KernelStatus status = kheap_free(mail);
+  if (status == ERROR) {
+    LogWarn("[MailBox]: mail free failed.\n");
+  }
+
+  return data;
+}
+
+uint32_t mailboxSetPropertyGetPitch(PropertyGetPitch property) {
+  uint32_t size = sizeof(property) + 3 * sizeof(uint32_t);
+  uint32_t *mail = (uint32_t *)kheap_alloc_aligned(size, 16);
+  if (mail == nullptr) {
+    LogError("[MailBox]: mail alloc failed.\n");
+    return 0;
+  }
+  mail[0] = size;
+  mail[1] = MBOX_REQUEST;
+  memcpy(&mail[2], &property, sizeof(property));
+  mail[(size / 4) - 1] = PROPERTY_TAG_END;
+
+  uint32_t data = mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, (uint32_t)&mail);
+
+  KernelStatus status = kheap_free(mail);
+  if (status == ERROR) {
+    LogWarn("[MailBox]: mail free failed.\n");
+  }
+
+  return data;
+}
+
+uint32_t mailboxSetPropertyGetVirtualOffset(PropertyGetVirtualOffset property) {
+  uint32_t size = sizeof(property) + 3 * sizeof(uint32_t);
+  uint32_t *mail = (uint32_t *)kheap_alloc_aligned(size, 16);
+  if (mail == nullptr) {
+    LogError("[MailBox]: mail alloc failed.\n");
+    return 0;
+  }
+  mail[0] = size;
+  mail[1] = MBOX_REQUEST;
+  memcpy(&mail[2], &property, sizeof(property));
+  mail[(size / 4) - 1] = PROPERTY_TAG_END;
+
+  uint32_t data = mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, (uint32_t)&mail);
+
+  KernelStatus status = kheap_free(mail);
+  if (status == ERROR) {
+    LogWarn("[MailBox]: mail free failed.\n");
+  }
+
+  return data;
+}
+
+uint32_t mailboxSetPropertyTestVirtualOffset(PropertyTestVirtualOffset property) {
+  uint32_t size = sizeof(property) + 3 * sizeof(uint32_t);
+  uint32_t *mail = (uint32_t *)kheap_alloc_aligned(size, 16);
+  if (mail == nullptr) {
+    LogError("[MailBox]: mail alloc failed.\n");
+    return 0;
+  }
+  mail[0] = size;
+  mail[1] = MBOX_REQUEST;
+  memcpy(&mail[2], &property, sizeof(property));
+  mail[(size / 4) - 1] = PROPERTY_TAG_END;
+
+  uint32_t data = mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, (uint32_t)&mail);
+
+  KernelStatus status = kheap_free(mail);
+  if (status == ERROR) {
+    LogWarn("[MailBox]: mail free failed.\n");
+  }
+
+  return data;
+}
+
+uint32_t mailboxSetPropertySetVirtualOffset(PropertySetVirtualOffset property) {
+  uint32_t size = sizeof(property) + 3 * sizeof(uint32_t);
+  uint32_t *mail = (uint32_t *)kheap_alloc_aligned(size, 16);
+  if (mail == nullptr) {
+    LogError("[MailBox]: mail alloc failed.\n");
+    return 0;
+  }
+  mail[0] = size;
+  mail[1] = MBOX_REQUEST;
+  memcpy(&mail[2], &property, sizeof(property));
+  mail[(size / 4) - 1] = PROPERTY_TAG_END;
+
+  uint32_t data = mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, (uint32_t)&mail);
+
+  KernelStatus status = kheap_free(mail);
+  if (status == ERROR) {
+    LogWarn("[MailBox]: mail free failed.\n");
+  }
+
+  return data;
+}
+
+uint32_t mailboxSetPropertyGetOverscan(PropertyGetOverscan property) {
+  uint32_t size = sizeof(property) + 3 * sizeof(uint32_t);
+  uint32_t *mail = (uint32_t *)kheap_alloc_aligned(size, 16);
+  if (mail == nullptr) {
+    LogError("[MailBox]: mail alloc failed.\n");
+    return 0;
+  }
+  mail[0] = size;
+  mail[1] = MBOX_REQUEST;
+  memcpy(&mail[2], &property, sizeof(property));
+  mail[(size / 4) - 1] = PROPERTY_TAG_END;
+
+  uint32_t data = mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, (uint32_t)&mail);
+
+  KernelStatus status = kheap_free(mail);
+  if (status == ERROR) {
+    LogWarn("[MailBox]: mail free failed.\n");
+  }
+
+  return data;
+}
+
+uint32_t mailboxSetPropertyTestOverscan(PropertyTestOverscan property) {
+  uint32_t size = sizeof(property) + 3 * sizeof(uint32_t);
+  uint32_t *mail = (uint32_t *)kheap_alloc_aligned(size, 16);
+  if (mail == nullptr) {
+    LogError("[MailBox]: mail alloc failed.\n");
+    return 0;
+  }
+  mail[0] = size;
+  mail[1] = MBOX_REQUEST;
+  memcpy(&mail[2], &property, sizeof(property));
+  mail[(size / 4) - 1] = PROPERTY_TAG_END;
+
+  uint32_t data = mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, (uint32_t)&mail);
+
+  KernelStatus status = kheap_free(mail);
+  if (status == ERROR) {
+    LogWarn("[MailBox]: mail free failed.\n");
+  }
+
+  return data;
+}
+
+uint32_t mailboxSetPropertySetOverscan(PropertySetOverscan property) {
+  uint32_t size = sizeof(property) + 3 * sizeof(uint32_t);
+  uint32_t *mail = (uint32_t *)kheap_alloc_aligned(size, 16);
+  if (mail == nullptr) {
+    LogError("[MailBox]: mail alloc failed.\n");
+    return 0;
+  }
+  mail[0] = size;
+  mail[1] = MBOX_REQUEST;
+  memcpy(&mail[2], &property, sizeof(property));
+  mail[(size / 4) - 1] = PROPERTY_TAG_END;
+
+  uint32_t data = mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, (uint32_t)&mail);
+
+  KernelStatus status = kheap_free(mail);
+  if (status == ERROR) {
+    LogWarn("[MailBox]: mail free failed.\n");
+  }
+
+  return data;
+}
+
+uint32_t mailboxSetPropertyGetPalette(PropertyGetPalette property) {
+  uint32_t size = sizeof(property) + 3 * sizeof(uint32_t);
+  uint32_t *mail = (uint32_t *)kheap_alloc_aligned(size, 16);
+  if (mail == nullptr) {
+    LogError("[MailBox]: mail alloc failed.\n");
+    return 0;
+  }
+  mail[0] = size;
+  mail[1] = MBOX_REQUEST;
+  memcpy(&mail[2], &property, sizeof(property));
+  mail[(size / 4) - 1] = PROPERTY_TAG_END;
+
+  uint32_t data = mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, (uint32_t)&mail);
+
+  KernelStatus status = kheap_free(mail);
+  if (status == ERROR) {
+    LogWarn("[MailBox]: mail free failed.\n");
+  }
+
+  return data;
+}
+
+uint32_t mailboxSetPropertyTestPalette(PropertyTestPalette property) {
+  uint32_t size = sizeof(property) + 3 * sizeof(uint32_t);
+  uint32_t *mail = (uint32_t *)kheap_alloc_aligned(size, 16);
+  if (mail == nullptr) {
+    LogError("[MailBox]: mail alloc failed.\n");
+    return 0;
+  }
+  mail[0] = size;
+  mail[1] = MBOX_REQUEST;
+  memcpy(&mail[2], &property, sizeof(property));
+  mail[(size / 4) - 1] = PROPERTY_TAG_END;
+
+  uint32_t data = mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, (uint32_t)&mail);
+
+  KernelStatus status = kheap_free(mail);
+  if (status == ERROR) {
+    LogWarn("[MailBox]: mail free failed.\n");
+  }
+
+  return data;
+}
+
+uint32_t mailboxSetPropertySetPalette(PropertySetPalette property) {
+  uint32_t size = sizeof(property) + 3 * sizeof(uint32_t);
+  uint32_t *mail = (uint32_t *)kheap_alloc_aligned(size, 16);
+  if (mail == nullptr) {
+    LogError("[MailBox]: mail alloc failed.\n");
+    return 0;
+  }
+  mail[0] = size;
+  mail[1] = MBOX_REQUEST;
+  memcpy(&mail[2], &property, sizeof(property));
+  mail[(size / 4) - 1] = PROPERTY_TAG_END;
+
+  uint32_t data = mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, (uint32_t)&mail);
+
+  KernelStatus status = kheap_free(mail);
+  if (status == ERROR) {
+    LogWarn("[MailBox]: mail free failed.\n");
+  }
+
+  return data;
+}
+
+uint32_t mailboxSetPropertySetCursorInfo(PropertySetCursorInfo property) {
+  uint32_t size = sizeof(property) + 3 * sizeof(uint32_t);
+  uint32_t *mail = (uint32_t *)kheap_alloc_aligned(size, 16);
+  if (mail == nullptr) {
+    LogError("[MailBox]: mail alloc failed.\n");
+    return 0;
+  }
+  mail[0] = size;
+  mail[1] = MBOX_REQUEST;
+  memcpy(&mail[2], &property, sizeof(property));
+  mail[(size / 4) - 1] = PROPERTY_TAG_END;
+
+  uint32_t data = mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, (uint32_t)&mail);
+
+  KernelStatus status = kheap_free(mail);
+  if (status == ERROR) {
+    LogWarn("[MailBox]: mail free failed.\n");
+  }
+
+  return data;
+}
+
+uint32_t mailboxSetPropertySetCursorState(PropertySetCursorState property) {
+  uint32_t size = sizeof(property) + 3 * sizeof(uint32_t);
+  uint32_t *mail = (uint32_t *)kheap_alloc_aligned(size, 16);
+  if (mail == nullptr) {
+    LogError("[MailBox]: mail alloc failed.\n");
+    return 0;
+  }
+  mail[0] = size;
+  mail[1] = MBOX_REQUEST;
+  memcpy(&mail[2], &property, sizeof(property));
+  mail[(size / 4) - 1] = PROPERTY_TAG_END;
+
+  uint32_t data = mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, (uint32_t)&mail);
+
+  KernelStatus status = kheap_free(mail);
+  if (status == ERROR) {
+    LogWarn("[MailBox]: mail free failed.\n");
+  }
+
+  return data;
+}
