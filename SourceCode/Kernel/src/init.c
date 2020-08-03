@@ -194,14 +194,14 @@ void kernel_main(void) {
     Thread *window5Thread = thread_create("window5", &window_thread5, 1, 1);
     schd_init_thread(window5Thread, 4);
 
-    asm volatile("SEV");
+    // asm volatile("SEV");
     schd_schedule();
   }
 
-  while (1) {
-    spinlock_acquire(&spinlock);
-    uint32_t cpuid = read_cpuid();
-    LogWarn("[MPCore] cpuid: %d .\n", cpuid);
-    spinlock_release(&spinlock);
-  }
+  // while (1) {
+  //   spinlock_acquire(&spinlock);
+  //   uint32_t cpuid = read_cpuid();
+  //   LogWarn("[MPCore] cpuid: %d .\n", cpuid);
+  //   spinlock_release(&spinlock);
+  // }
 }
