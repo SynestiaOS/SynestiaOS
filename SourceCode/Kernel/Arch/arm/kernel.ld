@@ -6,9 +6,9 @@ SECTIONS
     __text_start = .;
     .text :
     {
-        KEEP(*(.interrupt_vector_table))
         KEEP(*(.text.boot))
         *(.text)
+        KEEP(*(.interrupt_vector_table))
     }
     . = ALIGN(4096);
     __text_end = .;

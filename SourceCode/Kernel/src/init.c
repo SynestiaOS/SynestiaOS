@@ -161,8 +161,8 @@ void kernel_main(void) {
     // mutex_create(&mutex, &atomic);
     // spinlock_create(&spinlock, &mutex);
 
-    init_bsp();
-    print_splash();
+    // init_bsp();
+    // print_splash();
 
     // vmm_init();
     kheap_init();

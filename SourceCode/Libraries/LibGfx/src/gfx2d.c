@@ -6,7 +6,7 @@
 #include <gfx2d.h>
 #include <stdbool.h>
 
-uint32_t GFX2D_BUFFER[1024 * 768] = {0};
+uint32_t GFX2D_BUFFER[1024 * 768] = {0xFF};
 
 void gfx2d_write_pixel_color(Gfx2DContext context, uint32_t x, uint32_t y, uint32_t c) {
   context.buffer[y * context.width + x] = c;
