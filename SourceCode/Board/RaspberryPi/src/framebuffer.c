@@ -18,84 +18,87 @@ int framebuffer_init(void) {
   PropertySetPhysicalDisplayWHMail *setPhysicalDisplayWHMail =
       kheap_alloc_aligned(sizeof(PropertySetPhysicalDisplayWHMail), 16);
   setPhysicalDisplayWHMail->size = sizeof(PropertySetPhysicalDisplayWHMail);
-  setPhysicalDisplayWHMail->tag = CODE_REQUEST;
+  setPhysicalDisplayWHMail->code = CODE_REQUEST;
   setPhysicalDisplayWHMail->end = PROPERTY_TAG_END;
   setPhysicalDisplayWHMail->property.tag = PROPERTY_TAG_SET_PHYSICAL_DISPLAY_WH;
-  setPhysicalDisplayWHMail->property.reqSize = 8;
-  setPhysicalDisplayWHMail->property.rspSize = 8;
+  setPhysicalDisplayWHMail->property.bufferSzie = 8;
+  setPhysicalDisplayWHMail->property.code = CODE_REQUEST;
   setPhysicalDisplayWHMail->property.width = 1024;
   setPhysicalDisplayWHMail->property.height = 768;
   mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, (uint32_t)setPhysicalDisplayWHMail);
-  if (setPhysicalDisplayWHMail->tag == CODE_RESPONSE_FAILURE) {
+  if (setPhysicalDisplayWHMail->code == CODE_RESPONSE_FAILURE ||
+      setPhysicalDisplayWHMail->property.code == CODE_RESPONSE_FAILURE) {
     LogError("[Framebuffer]: Unable to set physical WH\n");
   }
 
   PropertySetVirtualBufferWHMail *setVirtualBufferWHMail =
       kheap_alloc_aligned(sizeof(PropertySetVirtualBufferWHMail), 16);
   setVirtualBufferWHMail->size = sizeof(PropertySetVirtualBufferWHMail);
-  setVirtualBufferWHMail->tag = CODE_REQUEST;
+  setVirtualBufferWHMail->code = CODE_REQUEST;
   setVirtualBufferWHMail->end = PROPERTY_TAG_END;
   setVirtualBufferWHMail->property.tag = PROPERTY_TAG_SET_VIRTUAL_BUFFER_WH;
-  setVirtualBufferWHMail->property.reqSize = 8;
-  setVirtualBufferWHMail->property.rspSize = 8;
+  setVirtualBufferWHMail->property.bufferSzie = 8;
+  setVirtualBufferWHMail->property.code = CODE_REQUEST;
   setVirtualBufferWHMail->property.width = 1024;
   setVirtualBufferWHMail->property.height = 768;
   mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, (uint32_t)setVirtualBufferWHMail);
-  if (setVirtualBufferWHMail->tag == CODE_RESPONSE_FAILURE) {
+  if (setVirtualBufferWHMail->code == CODE_RESPONSE_FAILURE ||
+      setVirtualBufferWHMail->property.code == CODE_RESPONSE_FAILURE) {
     LogError("[Framebuffer]: Unable to set virtual WH\n");
   }
 
   PropertySetDepthMail *setDepthMail = kheap_alloc_aligned(sizeof(PropertySetDepthMail), 16);
   setDepthMail->size = sizeof(PropertySetDepthMail);
-  setDepthMail->tag = CODE_REQUEST;
+  setDepthMail->code = CODE_REQUEST;
   setDepthMail->end = PROPERTY_TAG_END;
   setDepthMail->property.tag = PROPERTY_TAG_SET_DEPTH;
-  setDepthMail->property.reqSize = 4;
-  setDepthMail->property.rspSize = 4;
+  setDepthMail->property.bufferSzie = 4;
+  setDepthMail->property.code = CODE_REQUEST;
   setDepthMail->property.bitsPerPixel = 32;
   mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, (uint32_t)setDepthMail);
-  if (setDepthMail->tag == CODE_RESPONSE_FAILURE) {
+  if (setDepthMail->code == CODE_RESPONSE_FAILURE || setDepthMail->property.code == CODE_RESPONSE_FAILURE) {
     LogError("[Framebuffer]: Unable to set depth\n");
   }
 
   PropertySetVirtualOffsetMail *setVirtualOffsetMail = kheap_alloc_aligned(sizeof(PropertySetVirtualOffsetMail), 16);
   setVirtualOffsetMail->size = sizeof(PropertySetVirtualOffsetMail);
-  setVirtualOffsetMail->tag = CODE_REQUEST;
+  setVirtualOffsetMail->code = CODE_REQUEST;
   setVirtualOffsetMail->end = PROPERTY_TAG_END;
   setVirtualOffsetMail->property.tag = PROPERTY_TAG_SET_VIRTUAL_OFFSET;
-  setVirtualOffsetMail->property.reqSize = 8;
-  setVirtualOffsetMail->property.rspSize = 8;
+  setVirtualOffsetMail->property.bufferSzie = 8;
+  setVirtualOffsetMail->property.code = CODE_REQUEST;
   setVirtualOffsetMail->property.xOffset = 0;
   setVirtualOffsetMail->property.yOffset = 0;
   mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, (uint32_t)setVirtualOffsetMail);
-  if (setVirtualOffsetMail->tag == CODE_RESPONSE_FAILURE) {
+  if (setVirtualOffsetMail->code == CODE_RESPONSE_FAILURE ||
+      setVirtualOffsetMail->property.code == CODE_RESPONSE_FAILURE) {
     LogError("[Framebuffer]: Unable to set virtual offset\n");
   }
 
   PropertyAllocateBufferMail *allocateBufferMail = kheap_alloc_aligned(sizeof(PropertyAllocateBufferMail), 16);
   allocateBufferMail->size = sizeof(PropertyAllocateBufferMail);
-  allocateBufferMail->tag = CODE_REQUEST;
+  allocateBufferMail->code = CODE_REQUEST;
   allocateBufferMail->end = PROPERTY_TAG_END;
   allocateBufferMail->property.tag = PROPERTY_TAG_ALLOCATE_BUFFER;
-  allocateBufferMail->property.reqSize = 4;
-  allocateBufferMail->property.rspSize = 8;
+  allocateBufferMail->property.bufferSzie = 8;
+  allocateBufferMail->property.code = CODE_REQUEST;
   allocateBufferMail->property.PACKED.alignment = 16;
   allocateBufferMail->property.size = 0;
   mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, (uint32_t)allocateBufferMail);
-  if (allocateBufferMail->tag == CODE_RESPONSE_FAILURE) {
+  if (allocateBufferMail->code == CODE_RESPONSE_FAILURE || allocateBufferMail->property.code == CODE_RESPONSE_FAILURE) {
     LogError("[Framebuffer]: Unable to allocate video buffer\n");
   }
 
   PropertyGetPitchMail *getPitchMail = kheap_alloc_aligned(sizeof(PropertyGetPitchMail), 16);
   getPitchMail->size = sizeof(PropertyGetPitchMail);
-  getPitchMail->tag = CODE_REQUEST;
+  getPitchMail->code = CODE_REQUEST;
   getPitchMail->end = PROPERTY_TAG_END;
   getPitchMail->property.tag = PROPERTY_TAG_GET_PITCH;
-  getPitchMail->property.reqSize = 0;
-  getPitchMail->property.rspSize = 4;
+  getPitchMail->property.bufferSzie = 4;
+  getPitchMail->property.code = CODE_REQUEST;
   getPitchMail->property.bytesPerLine = 0;
   mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, (uint32_t)getPitchMail);
-  if (getPitchMail->tag == CODE_RESPONSE_FAILURE) {
+  if (getPitchMail->code == CODE_RESPONSE_FAILURE || getPitchMail->property.code == CODE_RESPONSE_FAILURE) {
     LogError("[Framebuffer]: Unable to get pitch\n");
   }
 
