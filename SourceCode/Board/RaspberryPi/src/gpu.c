@@ -10,10 +10,6 @@
 #include <stdint.h>
 #include <stdlib.h>
 
-void gpu_write_pixel(uint32_t x, uint32_t y, const pixel_t *pix) {
-  framebuffer_draw_pixel(x, y, pix->red, pix->green, pix->blue);
-}
-
 extern uint32_t GFX2D_BUFFER[1024 * 768];
 
 extern uint32_t pitch;
