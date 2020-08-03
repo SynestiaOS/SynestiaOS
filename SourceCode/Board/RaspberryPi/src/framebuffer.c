@@ -24,7 +24,7 @@ int framebuffer_init(void) {
   setPhysicalDisplayWHMail->property.reqSize = 8;
   setPhysicalDisplayWHMail->property.rspSize = 8;
   setPhysicalDisplayWHMail->property.width = 1024;
-  setPhysicalDisplayWHMail->property.width = 768;
+  setPhysicalDisplayWHMail->property.height = 768;
   mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, (uint32_t)setPhysicalDisplayWHMail);
 
   PropertySetVirtualBufferWHMail *setVirtualBufferWHMail =
@@ -36,7 +36,7 @@ int framebuffer_init(void) {
   setVirtualBufferWHMail->property.reqSize = 8;
   setVirtualBufferWHMail->property.rspSize = 8;
   setVirtualBufferWHMail->property.width = 1024;
-  setVirtualBufferWHMail->property.width = 768;
+  setVirtualBufferWHMail->property.height = 768;
   mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, (uint32_t)setVirtualBufferWHMail);
 
   PropertySetVirtualOffsetMail *setVirtualOffsetMail = kheap_alloc_aligned(sizeof(PropertySetVirtualOffsetMail), 16);
