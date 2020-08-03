@@ -449,7 +449,10 @@ typedef struct PropertyAllocateBuffer {
   uint32_t tag;
   uint32_t reqSize;
   uint32_t rspSize;
-  uint32_t baseAddress;
+  union {
+		uint32_t alignment;
+		uint32_t baseAddress;
+  } PACKED;
   uint32_t size;
 } PropertyAllocateBuffer;
 

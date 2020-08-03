@@ -65,9 +65,9 @@ int framebuffer_init(void) {
   allocateBufferMail->tag = MBOX_REQUEST;
   allocateBufferMail->end = PROPERTY_TAG_END;
   allocateBufferMail->property.tag = PROPERTY_TAG_ALLOCATE_BUFFER;
-  allocateBufferMail->property.reqSize = 8;
-  allocateBufferMail->property.rspSize = 4;
-  allocateBufferMail->property.baseAddress = 4096;
+  allocateBufferMail->property.reqSize = 4;
+  allocateBufferMail->property.rspSize = 8;
+  allocateBufferMail->property.PACKED.baseAddress = 4096;
   allocateBufferMail->property.size = 0;
   mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, (uint32_t)allocateBufferMail);
 
@@ -76,17 +76,17 @@ int framebuffer_init(void) {
   getPitchMail->tag = MBOX_REQUEST;
   getPitchMail->end = PROPERTY_TAG_END;
   getPitchMail->property.tag = PROPERTY_TAG_GET_PITCH;
-  getPitchMail->property.reqSize = 4;
-  getPitchMail->property.rspSize = 0;
+  getPitchMail->property.reqSize = 0;
+  getPitchMail->property.rspSize = 4;
   getPitchMail->property.bytesPerLine = 0;
   mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, (uint32_t)getPitchMail);
 
-  if (setDepthMail->property.bitsPerPixel == 32 && allocateBufferMail->property.baseAddress != 0) {
-    allocateBufferMail->property.baseAddress &= 0x3FFFFFFF;
+  if (setDepthMail->property.bitsPerPixel == 32 && allocateBufferMail->property.PACKED.baseAddress != 0) {
+    allocateBufferMail->property.PACKED.baseAddress &= 0x3FFFFFFF;
     framebufferWidth = setPhysicalDisplayWHMail->property.width;
     framebufferHeight = setPhysicalDisplayWHMail->property.height;
     pitch = getPitchMail->property.bytesPerLine;
-    lfb = (void *)((uint64_t)allocateBufferMail->property.baseAddress);
+    lfb = (void *)((uint64_t)allocateBufferMail->property.PACKED.baseAddress);
   } else {
     LogError("[Framebuffer]: Unable to set screen resolution to 1024x768x32\n");
   }
