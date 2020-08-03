@@ -78,6 +78,43 @@
 /**
  * all property interface can be found at below link:
  * https://github.com/raspberrypi/firmware/wiki/Mailbox-property-interface
+ *
+ *        0       4       8      12      16      20      24      28      32
+ *        +---------------------------------------------------------------+
+ * 0x00   |                         Buffer Size                           |
+ *        +---------------------------------------------------------------+
+ * 0x04   |                   Request/Response Code                       |
+ *        +---------------------------------------------------------------+
+ * 0x08   |                             Tags                              |
+ * ...    \\                                                             \\
+ * 0xXX   |                             Tags                              |
+ *        +---------------------------------------------------------------+
+ * 0xXX+4 |                           End Tag (0)                         |
+ *        +---------------------------------------------------------------+
+ * 0xXX+8 |                           Padding                             |
+ * ...    \\                                                             \\
+ * 0xXX+16|                           Padding                             |
+ *        +---------------------------------------------------------------+
+ *
+ * A Tag starts with a 4 byte tag id, which identifies which command this tag wants to run. 
+ * In general, Tags have form 0x000XYZZZ, 
+ * where X identifies which hardware device you are accessing, 
+ * Y identifies which type of command it is (0 = get, 4 = test, 8 = set), 
+ * and ZZZ identifies the specific command.
+ * 
+ * map of tag:
+ *        0       4       8      12      16      20      24      28      32
+ *        +---------------------------------------------------------------+
+ * 0x00   |                         Tag Identity                          |
+ *        +---------------------------------------------------------------+
+ * 0x04   |                       Value Buffer Size                       |
+ *        +---------------------------------------------------------------+
+ * 0x08   |                     Request/Response Code                     |
+ *        +---------------------------------------------------------------+
+ * 0x0C   |                          Value Buffer                         |
+ * ...    \\                                                             \\
+ * 0xXX   | Value Buffer  |                    Padding                    |
+ *        +---------------------------------------------------------------+
  */
 #define PROPERTY_TAG_END 0x00000000
 
