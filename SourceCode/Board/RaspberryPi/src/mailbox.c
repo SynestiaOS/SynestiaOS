@@ -22,6 +22,9 @@ struct mbox_registers {
 } __attribute__((__packed__, aligned(4)));
 
 uint32_t mailbox_call(uint8_t channel, uint32_t mailbox) {
+  while (!(*(uint32_t *)(MAIL0_STATUS) & MBOX_EMPTY)){
+		*(uint32_t *)(MAIL0_READ);
+  }
   mailbox_write(channel, mailbox);
   uint32_t data = mailbox_read(channel);
   return data;
