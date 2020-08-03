@@ -6,8 +6,6 @@
 #include <stdbool.h>
 #include <stdlib.h>
 
-volatile uint32_t __attribute__((aligned(16))) mailbox[36];
-
 struct mbox_registers {
   const volatile uint32_t read_0; // 0x00         Read data from VC to ARM
   uint32_t unused[3];             // 0x04-0x0F
