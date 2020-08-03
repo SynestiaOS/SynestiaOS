@@ -148,10 +148,11 @@ uint32_t *window_thread5(int args) {
   }
 }
 
-TimerHandler gpuHandler;
+// TimerHandler gpuHandler;
 // SpinLock spinlock;
 // Mutex mutex;
 // Atomic atomic;
+extern uint32_t *gpu_flush(int arg);
 void kernel_main(void) {
   uint32_t cpuid = read_cpuid();
   // LogWarn("[MPCore] cpuid: %d .\n", cpuid);
@@ -165,17 +166,19 @@ void kernel_main(void) {
 
     // vmm_init();
     kheap_init();
-    init_interrupt();
+    // init_interrupt();
     gpu_init();
 
     Gfx2DContext context = {.width = 1024, .height = 768, .buffer = GFX2D_BUFFER};
     gfx2d_draw_bitmap(context, 0, 0, 1024, 768, desktop());
     draw_task_bar();
 
-    gpuHandler.node.next = nullptr;
-    gpuHandler.node.prev = nullptr;
-    gpuHandler.timer_interrupt_handler = &gpu_flush;
-    register_time_interrupt(&gpuHandler);
+    gpu_flush(1);
+
+    // gpuHandler.node.next = nullptr;
+    // gpuHandler.node.prev = nullptr;
+    // gpuHandler.timer_interrupt_handler = &gpu_flush;
+    // register_time_interrupt(&gpuHandler);
 
     // schd_init();
 
