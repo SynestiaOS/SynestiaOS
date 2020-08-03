@@ -6,6 +6,7 @@
 #include <log.h>
 #include <mailbox.h>
 #include <stdlib.h>
+#include <kheap.h>
 
 uint32_t pitch;
 unsigned char *lfb;
@@ -57,6 +58,13 @@ int framebuffer_init(void) {
   mailbox[33] = 0; // FrameBufferInfo.pitch
 
   mailbox[34] = PROPERTY_TAG_END;
+
+  PropertySetPhysicalDisplayWHMail *setPhysicalDisplayWHMail = kheap_alloc_aligned(sizeof(PropertySetPhysicalDisplayWHMail),16);
+  setPhysicalDisplayWHMail->size = sizeof(PropertySetPhysicalDisplayWHMail);
+  setPhysicalDisplayWHMail->tag = MBOX_REQUEST;
+  setPhysicalDisplayWHMail->end = PROPERTY_TAG_END;
+  setPhysicalDisplayWHMail->property.tag = PROPERTY_TAG_SET_PHYSICAL_DISPLAY_WH;
+
 
   if (mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, (uint32_t)&mailbox) && mailbox[20] == 32 &&
       mailbox[28] != 0) {

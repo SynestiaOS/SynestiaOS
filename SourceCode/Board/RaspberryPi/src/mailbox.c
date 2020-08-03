@@ -1,13 +1,9 @@
 //
 // Created by XingfengYang on 2020/7/7.
 //
-
-#include <kheap.h>
-#include <log.h>
 #include <mailbox.h>
 #include <stdbool.h>
 #include <stdlib.h>
-#include <string.h>
 
 volatile uint32_t __attribute__((aligned(16))) mailbox[36];
 
