@@ -67,7 +67,7 @@ int framebuffer_init(void) {
   allocateBufferMail->property.tag = PROPERTY_TAG_ALLOCATE_BUFFER;
   allocateBufferMail->property.reqSize = 4;
   allocateBufferMail->property.rspSize = 8;
-  allocateBufferMail->property.PACKED.baseAddress = 4096;
+  allocateBufferMail->property.PACKED.alignment = 16;
   allocateBufferMail->property.size = 0;
   mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, (uint32_t)allocateBufferMail);
 
