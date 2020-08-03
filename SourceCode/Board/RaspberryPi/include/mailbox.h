@@ -697,72 +697,392 @@ typedef struct PropertySetCursorState {
   uint32_t value;
 } PropertySetCursorState;
 
+typedef struct PropertyGetFirmwareRevisionMail {
+  uint32_t size;
+  uint32_t tag;
+  PropertyGetFirmwareRevision property;
+  uint32_t end;
+} PropertyGetFirmwareRevisionMail;
+typedef struct PropertyGetBoardModelMail {
+  uint32_t size;
+  uint32_t tag;
+  PropertyGetBoardModel property;
+  uint32_t end;
+} PropertyGetBoardModelMail;
+typedef struct PropertyGetBoardRevisionMail {
+  uint32_t size;
+  uint32_t tag;
+  PropertyGetBoardRevision property;
+  uint32_t end;
+} PropertyGetBoardRevisionMail;
+typedef struct PropertyGetBoardMacAddressMail {
+  uint32_t size;
+  uint32_t tag;
+  PropertyGetBoardMacAddress property;
+  uint32_t end;
+} PropertyGetBoardMacAddressMail;
+typedef struct PropertyGetBoardSerialMail {
+  uint32_t size;
+  uint32_t tag;
+  PropertyGetBoardSerial property;
+  uint32_t end;
+} PropertyGetBoardSerialMail;
+typedef struct PropertyGetArmMemoryMail {
+  uint32_t size;
+  uint32_t tag;
+  PropertyGetArmMemory property;
+  uint32_t end;
+} PropertyGetArmMemoryMail;
+typedef struct PropertyGetVideoCoreMemoryMail {
+  uint32_t size;
+  uint32_t tag;
+  PropertyGetVideoCoreMemory property;
+  uint32_t end;
+} PropertyGetVideoCoreMemoryMail;
+typedef struct PropertyGetClocksMail {
+  uint32_t size;
+  uint32_t tag;
+  PropertyGetClocks property;
+  uint32_t end;
+} PropertyGetClocksMail;
+typedef struct PropertyGetCommandLineMail {
+  uint32_t size;
+  uint32_t tag;
+  PropertyGetCommandLine property;
+  uint32_t end;
+} PropertyGetCommandLineMail;
+typedef struct PropertyGetDMAChannelsMail {
+  uint32_t size;
+  uint32_t tag;
+  PropertyGetDMAChannels property;
+  uint32_t end;
+} PropertyGetDMAChannelsMail;
+typedef struct PropertyGetPowerStateMail {
+  uint32_t size;
+  uint32_t tag;
+  PropertyGetPowerState property;
+  uint32_t end;
+} PropertyGetPowerStateMail;
+typedef struct PropertyGetTimingMail {
+  uint32_t size;
+  uint32_t tag;
+  PropertyGetTiming property;
+  uint32_t end;
+} PropertyGetTimingMail;
+typedef struct PropertySetPowerStateMail {
+  uint32_t size;
+  uint32_t tag;
+  PropertySetPowerState property;
+  uint32_t end;
+} PropertySetPowerStateMail;
+typedef struct PropertyGetClockStateMail {
+  uint32_t size;
+  uint32_t tag;
+  PropertyGetClockState property;
+  uint32_t end;
+} PropertyGetClockStateMail;
+typedef struct PropertySetClockStateMail {
+  uint32_t size;
+  uint32_t tag;
+  PropertySetClockState property;
+  uint32_t end;
+} PropertySetClockStateMail;
+typedef struct PropertyGetClockRateMail {
+  uint32_t size;
+  uint32_t tag;
+  PropertyGetClockRate property;
+  uint32_t end;
+} PropertyGetClockRateMail;
+typedef struct PropertySetClockRateMail {
+  uint32_t size;
+  uint32_t tag;
+  PropertySetClockRate property;
+  uint32_t end;
+} PropertySetClockRateMail;
+typedef struct PropertyGetMaxClockRateMail {
+  uint32_t size;
+  uint32_t tag;
+  PropertyGetMaxClockRate property;
+  uint32_t end;
+} PropertyGetMaxClockRateMail;
+typedef struct PropertyGetMinClockRateMail {
+  uint32_t size;
+  uint32_t tag;
+  PropertyGetMinClockRate property;
+  uint32_t end;
+} PropertyGetMinClockRateMail;
+typedef struct PropertyGetTurboMail {
+  uint32_t size;
+  uint32_t tag;
+  PropertyGetTurbo property;
+  uint32_t end;
+} PropertyGetTurboMail;
+typedef struct PropertySetTurboMail {
+  uint32_t size;
+  uint32_t tag;
+  PropertySetTurbo property;
+  uint32_t end;
+} PropertySetTurboMail;
+typedef struct PropertyGetVoltageMail {
+  uint32_t size;
+  uint32_t tag;
+  PropertyGetVoltage property;
+  uint32_t end;
+} PropertyGetVoltageMail;
+typedef struct PropertySetVoltageMail {
+  uint32_t size;
+  uint32_t tag;
+  PropertySetVoltage property;
+  uint32_t end;
+} PropertySetVoltageMail;
+typedef struct PropertyGetMaxVoltageMail {
+  uint32_t size;
+  uint32_t tag;
+  PropertyGetMaxVoltage property;
+  uint32_t end;
+} PropertyGetMaxVoltageMail;
+typedef struct PropertyGetMinVoltageMail {
+  uint32_t size;
+  uint32_t tag;
+  PropertyGetMinVoltage property;
+  uint32_t end;
+} PropertyGetMinVoltageMail;
+typedef struct PropertyGetTemperatureMail {
+  uint32_t size;
+  uint32_t tag;
+  PropertyGetTemperature property;
+  uint32_t end;
+} PropertyGetTemperatureMail;
+typedef struct PropertyGetMaxTemperatureMail {
+  uint32_t size;
+  uint32_t tag;
+  PropertyGetMaxTemperature property;
+  uint32_t end;
+} PropertyGetMaxTemperatureMail;
+typedef struct PropertyAllocateMemoryMail {
+  uint32_t size;
+  uint32_t tag;
+  PropertyAllocateMemory property;
+  uint32_t end;
+} PropertyAllocateMemoryMail;
+typedef struct PropertyLockMemoryMail {
+  uint32_t size;
+  uint32_t tag;
+  PropertyLockMemory property;
+  uint32_t end;
+} PropertyLockMemoryMail;
+typedef struct PropertyUnLockMemoryMail {
+  uint32_t size;
+  uint32_t tag;
+  PropertyUnLockMemory property;
+  uint32_t end;
+} PropertyUnLockMemoryMail;
+typedef struct PropertyReleaseMemoryMail {
+  uint32_t size;
+  uint32_t tag;
+  PropertyReleaseMemory property;
+  uint32_t end;
+} PropertyReleaseMemoryMail;
+typedef struct PropertyExecuteCodeMail {
+  uint32_t size;
+  uint32_t tag;
+  PropertyExecuteCode property;
+  uint32_t end;
+} PropertyExecuteCodeMail;
+typedef struct PropertyGetDispmanxResourceMemHandleMail {
+  uint32_t size;
+  uint32_t tag;
+  PropertyGetDispmanxResourceMemHandle property;
+  uint32_t end;
+} PropertyGetDispmanxResourceMemHandleMail;
+typedef struct PropertyGetEDIDBlockMail {
+  uint32_t size;
+  uint32_t tag;
+  PropertyGetEDIDBlock property;
+  uint32_t end;
+} PropertyGetEDIDBlockMail;
+typedef struct PropertyAllocateBufferMail {
+  uint32_t size;
+  uint32_t tag;
+  PropertyAllocateBuffer property;
+  uint32_t end;
+} PropertyAllocateBufferMail;
+typedef struct PropertyReleaseBufferMail {
+  uint32_t size;
+  uint32_t tag;
+  PropertyReleaseBuffer property;
+  uint32_t end;
+} PropertyReleaseBufferMail;
+typedef struct PropertyBlankScreenMail {
+  uint32_t size;
+  uint32_t tag;
+  PropertyBlankScreen property;
+  uint32_t end;
+} PropertyBlankScreenMail;
+typedef struct PropertyGetPhysicalDisplayWHMail {
+  uint32_t size;
+  uint32_t tag;
+  PropertyGetPhysicalDisplayWH property;
+  uint32_t end;
+} PropertyGetPhysicalDisplayWHMail;
+typedef struct PropertyTestPhysicalDisplayWHMail {
+  uint32_t size;
+  uint32_t tag;
+  PropertyTestPhysicalDisplayWH property;
+  uint32_t end;
+} PropertyTestPhysicalDisplayWHMail;
+typedef struct PropertySetPhysicalDisplayWHMail {
+  uint32_t size;
+  uint32_t tag;
+  PropertySetPhysicalDisplayWH property;
+  uint32_t end;
+} PropertySetPhysicalDisplayWHMail;
+typedef struct PropertyGetVirtualBufferWHMail {
+  uint32_t size;
+  uint32_t tag;
+  PropertyGetVirtualBufferWH property;
+  uint32_t end;
+} PropertyGetVirtualBufferWHMail;
+typedef struct PropertyTestVirtualBufferWHMail {
+  uint32_t size;
+  uint32_t tag;
+  PropertyTestVirtualBufferWH property;
+  uint32_t end;
+} PropertyTestVirtualBufferWHMail;
+typedef struct PropertySetVirtualBufferWHMail {
+  uint32_t size;
+  uint32_t tag;
+  PropertySetVirtualBufferWH property;
+  uint32_t end;
+} PropertySetVirtualBufferWHMail;
+typedef struct PropertyGetDepthMail {
+  uint32_t size;
+  uint32_t tag;
+  PropertyGetDepth property;
+  uint32_t end;
+} PropertyGetDepthMail;
+typedef struct PropertyTestDepthMail {
+  uint32_t size;
+  uint32_t tag;
+  PropertyTestDepth property;
+  uint32_t end;
+} PropertyTestDepthMail;
+typedef struct PropertySetDepthMail {
+  uint32_t size;
+  uint32_t tag;
+  PropertySetDepth property;
+  uint32_t end;
+} PropertySetDepthMail;
+typedef struct PropertyGetPixelOrderMail {
+  uint32_t size;
+  uint32_t tag;
+  PropertyGetPixelOrder property;
+  uint32_t end;
+} PropertyGetPixelOrderMail;
+typedef struct PropertyTestPixelOrderMail {
+  uint32_t size;
+  uint32_t tag;
+  PropertyTestPixelOrder property;
+  uint32_t end;
+} PropertyTestPixelOrderMail;
+typedef struct PropertySetPixelOrderMail {
+  uint32_t size;
+  uint32_t tag;
+  PropertySetPixelOrder property;
+  uint32_t end;
+} PropertySetPixelOrderMail;
+typedef struct PropertyGetAlphaModeMail {
+  uint32_t size;
+  uint32_t tag;
+  PropertyGetAlphaMode property;
+  uint32_t end;
+} PropertyGetAlphaModeMail;
+typedef struct PropertyTestAlphaModeMail {
+  uint32_t size;
+  uint32_t tag;
+  PropertyTestAlphaMode property;
+  uint32_t end;
+} PropertyTestAlphaModeMail;
+typedef struct PropertySetAlphaModeMail {
+  uint32_t size;
+  uint32_t tag;
+  PropertySetAlphaMode property;
+  uint32_t end;
+} PropertySetAlphaModeMail;
+typedef struct PropertyGetPitchMail {
+  uint32_t size;
+  uint32_t tag;
+  PropertyGetPitch property;
+  uint32_t end;
+} PropertyGetPitchMail;
+typedef struct PropertyGetVirtualOffsetMail {
+  uint32_t size;
+  uint32_t tag;
+  PropertyGetVirtualOffset property;
+  uint32_t end;
+} PropertyGetVirtualOffsetMail;
+typedef struct PropertyTestVirtualOffsetMail {
+  uint32_t size;
+  uint32_t tag;
+  PropertyTestVirtualOffset property;
+  uint32_t end;
+} PropertyTestVirtualOffsetMail;
+typedef struct PropertySetVirtualOffsetMail {
+  uint32_t size;
+  uint32_t tag;
+  PropertySetVirtualOffset property;
+  uint32_t end;
+} PropertySetVirtualOffsetMail;
+typedef struct PropertyGetOverscanMail {
+  uint32_t size;
+  uint32_t tag;
+  PropertyGetOverscan property;
+  uint32_t end;
+} PropertyGetOverscanMail;
+typedef struct PropertyTestOverscanMail {
+  uint32_t size;
+  uint32_t tag;
+  PropertyTestOverscan property;
+  uint32_t end;
+} PropertyTestOverscanMail;
+typedef struct PropertySetOverscanMail {
+  uint32_t size;
+  uint32_t tag;
+  PropertySetOverscan property;
+  uint32_t end;
+} PropertySetOverscanMail;
+typedef struct PropertyGetPaletteMail {
+  uint32_t size;
+  uint32_t tag;
+  PropertyGetPalette property;
+  uint32_t end;
+} PropertyGetPaletteMail;
+typedef struct PropertyTestPaletteMail {
+  uint32_t size;
+  uint32_t tag;
+  PropertyTestPalette property;
+  uint32_t end;
+} PropertyTestPaletteMail;
+typedef struct PropertySetPaletteMail {
+  uint32_t size;
+  uint32_t tag;
+  PropertySetPalette property;
+  uint32_t end;
+} PropertySetPaletteMail;
+typedef struct PropertySetCursorInfoMail {
+  uint32_t size;
+  uint32_t tag;
+  PropertySetCursorInfo property;
+  uint32_t end;
+} PropertySetCursorInfoMail;
+typedef struct PropertySetCursorStateMail {
+  uint32_t size;
+  uint32_t tag;
+  PropertySetCursorState property;
+  uint32_t end;
+} PropertySetCursorStateMail;
+
 uint32_t mailbox_call(uint8_t channel, uint32_t mailbox);
 uint32_t mailbox_read(uint8_t channel);
 void mailbox_write(uint8_t channel, uint32_t data);
-
-uint32_t mailboxSetPropertyGetFirmwareRevision(PropertyGetFirmwareRevision property);
-uint32_t mailboxSetPropertyGetBoardModel(PropertyGetBoardModel property);
-uint32_t mailboxSetPropertyGetBoardRevision(PropertyGetBoardRevision property);
-uint32_t mailboxSetPropertyGetBoardMacAddress(PropertyGetBoardMacAddress property);
-uint32_t mailboxSetPropertyGetBoardSerial(PropertyGetBoardSerial property);
-uint32_t mailboxSetPropertyGetArmMemory(PropertyGetArmMemory property);
-uint32_t mailboxSetPropertyGetVideoCoreMemory(PropertyGetVideoCoreMemory property);
-uint32_t mailboxSetPropertyGetClocks(PropertyGetClocks property);
-uint32_t mailboxSetPropertyGetCommandLine(PropertyGetCommandLine property);
-uint32_t mailboxSetPropertyGetDMAChannels(PropertyGetDMAChannels property);
-uint32_t mailboxSetPropertyGetPowerState(PropertyGetPowerState property);
-uint32_t mailboxSetPropertyGetTiming(PropertyGetTiming property);
-uint32_t mailboxSetPropertySetPowerState(PropertySetPowerState property);
-uint32_t mailboxSetPropertyGetClockState(PropertyGetClockState property);
-uint32_t mailboxSetPropertySetClockState(PropertySetClockState property);
-uint32_t mailboxSetPropertyGetClockRate(PropertyGetClockRate property);
-uint32_t mailboxSetPropertySetClockRate(PropertySetClockRate property);
-uint32_t mailboxSetPropertyGetMaxClockRate(PropertyGetMaxClockRate property);
-uint32_t mailboxSetPropertyGetMinClockRate(PropertyGetMinClockRate property);
-uint32_t mailboxSetPropertyGetTurbo(PropertyGetTurbo property);
-uint32_t mailboxSetPropertySetTurbo(PropertySetTurbo property);
-uint32_t mailboxSetPropertyGetVoltage(PropertyGetVoltage property);
-uint32_t mailboxSetPropertySetVoltage(PropertySetVoltage property);
-uint32_t mailboxSetPropertyGetMaxVoltage(PropertyGetMaxVoltage property);
-uint32_t mailboxSetPropertyGetMinVoltage(PropertyGetMinVoltage property);
-uint32_t mailboxSetPropertyGetTemperature(PropertyGetTemperature property);
-uint32_t mailboxSetPropertyGetMaxTemperature(PropertyGetMaxTemperature property);
-uint32_t mailboxSetPropertyAllocateMemory(PropertyAllocateMemory property);
-uint32_t mailboxSetPropertyLockMemory(PropertyLockMemory property);
-uint32_t mailboxSetPropertyUnLockMemory(PropertyUnLockMemory property);
-uint32_t mailboxSetPropertyReleaseMemory(PropertyReleaseMemory property);
-uint32_t mailboxSetPropertyExecuteCode(PropertyExecuteCode property);
-uint32_t mailboxSetPropertyGetDispmanxResourceMemHandle(PropertyGetDispmanxResourceMemHandle property);
-uint32_t mailboxSetPropertyGetEDIDBlock(PropertyGetEDIDBlock property);
-uint32_t mailboxSetPropertyAllocateBuffer(PropertyAllocateBuffer property);
-uint32_t mailboxSetPropertyReleaseBuffer(PropertyReleaseBuffer property);
-uint32_t mailboxSetPropertyBlankScreen(PropertyBlankScreen property);
-uint32_t mailboxSetPropertyGetPhysicalDisplayWH(PropertyGetPhysicalDisplayWH property);
-uint32_t mailboxSetPropertyTestPhysicalDisplayWH(PropertyTestPhysicalDisplayWH property);
-uint32_t mailboxSetPropertySetPhysicalDisplayWH(PropertySetPhysicalDisplayWH property);
-uint32_t mailboxSetPropertyGetVirtualBufferWH(PropertyGetVirtualBufferWH property);
-uint32_t mailboxSetPropertyTestVirtualBufferWH(PropertyTestVirtualBufferWH property);
-uint32_t mailboxSetPropertySetVirtualBufferWH(PropertySetVirtualBufferWH property);
-uint32_t mailboxSetPropertyGetDepth(PropertyGetDepth property);
-uint32_t mailboxSetPropertyTestDepth(PropertyTestDepth property);
-uint32_t mailboxSetPropertySetDepth(PropertySetDepth property);
-uint32_t mailboxSetPropertyGetPixelOrder(PropertyGetPixelOrder property);
-uint32_t mailboxSetPropertyTestPixelOrder(PropertyTestPixelOrder property);
-uint32_t mailboxSetPropertySetPixelOrder(PropertySetPixelOrder property);
-uint32_t mailboxSetPropertyGetAlphaMode(PropertyGetAlphaMode property);
-uint32_t mailboxSetPropertyTestAlphaMode(PropertyTestAlphaMode property);
-uint32_t mailboxSetPropertySetAlphaMode(PropertySetAlphaMode property);
-uint32_t mailboxSetPropertyGetPitch(PropertyGetPitch property);
-uint32_t mailboxSetPropertyGetVirtualOffset(PropertyGetVirtualOffset property);
-uint32_t mailboxSetPropertyTestVirtualOffset(PropertyTestVirtualOffset property);
-uint32_t mailboxSetPropertySetVirtualOffset(PropertySetVirtualOffset property);
-uint32_t mailboxSetPropertyGetOverscan(PropertyGetOverscan property);
-uint32_t mailboxSetPropertyTestOverscan(PropertyTestOverscan property);
-uint32_t mailboxSetPropertySetOverscan(PropertySetOverscan property);
-uint32_t mailboxSetPropertyGetPalette(PropertyGetPalette property);
-uint32_t mailboxSetPropertyTestPalette(PropertyTestPalette property);
-uint32_t mailboxSetPropertySetPalette(PropertySetPalette property);
-uint32_t mailboxSetPropertySetCursorInfo(PropertySetCursorInfo property);
-uint32_t mailboxSetPropertySetCursorState(PropertySetCursorState property);
 #endif //__BOARD_RASP_MAILBOX_H__
