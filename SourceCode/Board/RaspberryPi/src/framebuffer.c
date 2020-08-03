@@ -3,10 +3,10 @@
 //
 
 #include <framebuffer.h>
+#include <kheap.h>
 #include <log.h>
 #include <mailbox.h>
 #include <stdlib.h>
-#include <kheap.h>
 
 uint32_t pitch;
 unsigned char *lfb;
@@ -59,7 +59,8 @@ int framebuffer_init(void) {
 
   mailbox[34] = PROPERTY_TAG_END;
 
-  PropertySetPhysicalDisplayWHMail *setPhysicalDisplayWHMail = kheap_alloc_aligned(sizeof(PropertySetPhysicalDisplayWHMail),16);
+  PropertySetPhysicalDisplayWHMail *setPhysicalDisplayWHMail =
+      kheap_alloc_aligned(sizeof(PropertySetPhysicalDisplayWHMail), 16);
   setPhysicalDisplayWHMail->size = sizeof(PropertySetPhysicalDisplayWHMail);
   setPhysicalDisplayWHMail->tag = MBOX_REQUEST;
   setPhysicalDisplayWHMail->end = PROPERTY_TAG_END;
@@ -68,9 +69,10 @@ int framebuffer_init(void) {
   setPhysicalDisplayWHMail->property.rspSize = 8;
   setPhysicalDisplayWHMail->property.width = 1024;
   setPhysicalDisplayWHMail->property.width = 768;
-  mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC,(uint32_t)setPhysicalDisplayWHMail);
+  mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, (uint32_t)setPhysicalDisplayWHMail);
 
-  PropertySetVirtualBufferWHMail *setVirtualBufferWHMail = kheap_alloc_aligned(sizeof(PropertySetVirtualBufferWHMail),16);
+  PropertySetVirtualBufferWHMail *setVirtualBufferWHMail =
+      kheap_alloc_aligned(sizeof(PropertySetVirtualBufferWHMail), 16);
   setVirtualBufferWHMail->size = sizeof(PropertySetVirtualBufferWHMail);
   setVirtualBufferWHMail->tag = MBOX_REQUEST;
   setVirtualBufferWHMail->end = PROPERTY_TAG_END;
@@ -79,9 +81,9 @@ int framebuffer_init(void) {
   setVirtualBufferWHMail->property.rspSize = 8;
   setVirtualBufferWHMail->property.width = 1024;
   setVirtualBufferWHMail->property.width = 768;
-  mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC,(uint32_t)setVirtualBufferWHMail);
+  mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, (uint32_t)setVirtualBufferWHMail);
 
-  PropertySetVirtualOffsetMail *setVirtualOffsetMail = kheap_alloc_aligned(sizeof(PropertySetVirtualOffsetMail),16);
+  PropertySetVirtualOffsetMail *setVirtualOffsetMail = kheap_alloc_aligned(sizeof(PropertySetVirtualOffsetMail), 16);
   setVirtualOffsetMail->size = sizeof(PropertySetVirtualOffsetMail);
   setVirtualOffsetMail->tag = MBOX_REQUEST;
   setVirtualOffsetMail->end = PROPERTY_TAG_END;
@@ -90,9 +92,9 @@ int framebuffer_init(void) {
   setVirtualOffsetMail->property.rspSize = 8;
   setVirtualOffsetMail->property.xOffset = 0;
   setVirtualOffsetMail->property.yOffset = 0;
-  mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC,(uint32_t)setVirtualOffsetMail);
+  mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, (uint32_t)setVirtualOffsetMail);
 
-  PropertySetDepthMail *setDepthMail = kheap_alloc_aligned(sizeof(PropertySetDepthMail),16);
+  PropertySetDepthMail *setDepthMail = kheap_alloc_aligned(sizeof(PropertySetDepthMail), 16);
   setDepthMail->size = sizeof(PropertySetDepthMail);
   setDepthMail->tag = MBOX_REQUEST;
   setDepthMail->end = PROPERTY_TAG_END;
@@ -100,9 +102,9 @@ int framebuffer_init(void) {
   setDepthMail->property.reqSize = 4;
   setDepthMail->property.rspSize = 4;
   setDepthMail->property.bitsPerPixel = 32;
-  mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC,(uint32_t)setDepthMail);
+  mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, (uint32_t)setDepthMail);
 
-  PropertySetPixelOrderMail *setPixelOrderMail = kheap_alloc_aligned(sizeof(PropertySetPixelOrderMail),16);
+  PropertySetPixelOrderMail *setPixelOrderMail = kheap_alloc_aligned(sizeof(PropertySetPixelOrderMail), 16);
   setPixelOrderMail->size = sizeof(PropertySetPixelOrderMail);
   setPixelOrderMail->tag = MBOX_REQUEST;
   setPixelOrderMail->end = PROPERTY_TAG_END;
@@ -110,10 +112,9 @@ int framebuffer_init(void) {
   setPixelOrderMail->property.reqSize = 4;
   setPixelOrderMail->property.rspSize = 4;
   setPixelOrderMail->property.state = 1;
-  mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC,(uint32_t)setPixelOrderMail);
+  mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, (uint32_t)setPixelOrderMail);
 
-
-  PropertyAllocateBufferMail *allocateBufferMail = kheap_alloc_aligned(sizeof(PropertyAllocateBufferMail),16);
+  PropertyAllocateBufferMail *allocateBufferMail = kheap_alloc_aligned(sizeof(PropertyAllocateBufferMail), 16);
   allocateBufferMail->size = sizeof(PropertyAllocateBufferMail);
   allocateBufferMail->tag = MBOX_REQUEST;
   allocateBufferMail->end = PROPERTY_TAG_END;
@@ -122,30 +123,27 @@ int framebuffer_init(void) {
   allocateBufferMail->property.rspSize = 8;
   allocateBufferMail->property.baseAddress = 4096;
   allocateBufferMail->property.size = 0;
-  mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC,(uint32_t)allocateBufferMail);
+  mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, (uint32_t)allocateBufferMail);
 
+  PropertyGetPitchMail *getPitchMail = kheap_alloc_aligned(sizeof(PropertyGetPitchMail), 16);
+  getPitchMail->size = sizeof(PropertyGetPitchMail);
+  getPitchMail->tag = MBOX_REQUEST;
+  getPitchMail->end = PROPERTY_TAG_END;
+  getPitchMail->property.tag = PROPERTY_TAG_GET_PITCH;
+  getPitchMail->property.reqSize = 4;
+  getPitchMail->property.rspSize = 4;
+  getPitchMail->property.bytesPerLine = 0;
+  mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, (uint32_t)getPitchMail);
 
-  PropertyGetDepthMail *getDepthMail = kheap_alloc_aligned(sizeof(PropertyGetDepthMail),16);
-  getDepthMail->size = sizeof(PropertyGetDepthMail);
-  getDepthMail->tag = MBOX_REQUEST;
-  getDepthMail->end = PROPERTY_TAG_END;
-  getDepthMail->property.tag = PROPERTY_TAG_SET_DEPTH;
-  getDepthMail->property.reqSize = 4;
-  getDepthMail->property.rspSize = 4;
-  getDepthMail->property.bitsPerPixel = 0;
-  mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC,(uint32_t)getDepthMail);
-
-
-  if(setDepthMail->property.bitsPerPixel ==32 && allocateBufferMail->property.baseAddress!=0){
+  if (setDepthMail->property.bitsPerPixel == 32 && allocateBufferMail->property.baseAddress != 0) {
     allocateBufferMail->property.baseAddress &= 0x3FFFFFFF;
     framebufferWidth = setPhysicalDisplayWHMail->property.width;
     framebufferHeight = setPhysicalDisplayWHMail->property.height;
-    pitch = getDepthMail->property.bitsPerPixel;
+    pitch = getPitchMail->property.bytesPerLine;
     lfb = (void *)((uint64_t)allocateBufferMail->property.baseAddress);
   } else {
     LogError("[Framebuffer]: Unable to set screen resolution to 1024x768x32\n");
   }
-
 
   // if (mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, (uint32_t)&mailbox) && mailbox[20] == 32 &&
   //     mailbox[28] != 0) {
