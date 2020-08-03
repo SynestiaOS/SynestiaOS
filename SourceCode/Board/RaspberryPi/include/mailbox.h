@@ -54,8 +54,9 @@ extern volatile uint32_t __attribute__((aligned(16))) mailbox[36];
  */
 #define MAIL0_WRITE ((volatile uint32_t *)(VIDEOCORE_MBOX + 0x20))
 
-#define MBOX_REQUEST 0
-#define MBOX_RESPONSE 0x80000000
+#define CODE_REQUEST 0x00000000
+#define CODE_RESPONSE_SUCCESS 0x80000000
+#define CODE_RESPONSE_FAILURE 0x80000001
 #define MBOX_FULL 1 << 31
 #define MBOX_EMPTY 1 << 30
 
@@ -450,8 +451,8 @@ typedef struct PropertyAllocateBuffer {
   uint32_t reqSize;
   uint32_t rspSize;
   union {
-		uint32_t alignment;
-		uint32_t baseAddress;
+    uint32_t alignment;
+    uint32_t baseAddress;
   } PACKED;
   uint32_t size;
 } PropertyAllocateBuffer;

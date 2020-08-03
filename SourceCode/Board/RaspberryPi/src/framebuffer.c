@@ -18,7 +18,7 @@ int framebuffer_init(void) {
   PropertySetPhysicalDisplayWHMail *setPhysicalDisplayWHMail =
       kheap_alloc_aligned(sizeof(PropertySetPhysicalDisplayWHMail), 16);
   setPhysicalDisplayWHMail->size = sizeof(PropertySetPhysicalDisplayWHMail);
-  setPhysicalDisplayWHMail->tag = MBOX_REQUEST;
+  setPhysicalDisplayWHMail->tag = CODE_REQUEST;
   setPhysicalDisplayWHMail->end = PROPERTY_TAG_END;
   setPhysicalDisplayWHMail->property.tag = PROPERTY_TAG_SET_PHYSICAL_DISPLAY_WH;
   setPhysicalDisplayWHMail->property.reqSize = 8;
@@ -26,11 +26,14 @@ int framebuffer_init(void) {
   setPhysicalDisplayWHMail->property.width = 1024;
   setPhysicalDisplayWHMail->property.height = 768;
   mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, (uint32_t)setPhysicalDisplayWHMail);
+  if (setPhysicalDisplayWHMail->tag == CODE_RESPONSE_FAILURE) {
+    LogError("[Framebuffer]: Unable to set physical WH\n");
+  }
 
   PropertySetVirtualBufferWHMail *setVirtualBufferWHMail =
       kheap_alloc_aligned(sizeof(PropertySetVirtualBufferWHMail), 16);
   setVirtualBufferWHMail->size = sizeof(PropertySetVirtualBufferWHMail);
-  setVirtualBufferWHMail->tag = MBOX_REQUEST;
+  setVirtualBufferWHMail->tag = CODE_REQUEST;
   setVirtualBufferWHMail->end = PROPERTY_TAG_END;
   setVirtualBufferWHMail->property.tag = PROPERTY_TAG_SET_VIRTUAL_BUFFER_WH;
   setVirtualBufferWHMail->property.reqSize = 8;
@@ -38,20 +41,26 @@ int framebuffer_init(void) {
   setVirtualBufferWHMail->property.width = 1024;
   setVirtualBufferWHMail->property.height = 768;
   mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, (uint32_t)setVirtualBufferWHMail);
+  if (setVirtualBufferWHMail->tag == CODE_RESPONSE_FAILURE) {
+    LogError("[Framebuffer]: Unable to set virtual WH\n");
+  }
 
   PropertySetDepthMail *setDepthMail = kheap_alloc_aligned(sizeof(PropertySetDepthMail), 16);
   setDepthMail->size = sizeof(PropertySetDepthMail);
-  setDepthMail->tag = MBOX_REQUEST;
+  setDepthMail->tag = CODE_REQUEST;
   setDepthMail->end = PROPERTY_TAG_END;
   setDepthMail->property.tag = PROPERTY_TAG_SET_DEPTH;
   setDepthMail->property.reqSize = 4;
   setDepthMail->property.rspSize = 4;
   setDepthMail->property.bitsPerPixel = 32;
   mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, (uint32_t)setDepthMail);
+  if (setDepthMail->tag == CODE_RESPONSE_FAILURE) {
+    LogError("[Framebuffer]: Unable to set depth\n");
+  }
 
   PropertySetVirtualOffsetMail *setVirtualOffsetMail = kheap_alloc_aligned(sizeof(PropertySetVirtualOffsetMail), 16);
   setVirtualOffsetMail->size = sizeof(PropertySetVirtualOffsetMail);
-  setVirtualOffsetMail->tag = MBOX_REQUEST;
+  setVirtualOffsetMail->tag = CODE_REQUEST;
   setVirtualOffsetMail->end = PROPERTY_TAG_END;
   setVirtualOffsetMail->property.tag = PROPERTY_TAG_SET_VIRTUAL_OFFSET;
   setVirtualOffsetMail->property.reqSize = 8;
@@ -59,10 +68,13 @@ int framebuffer_init(void) {
   setVirtualOffsetMail->property.xOffset = 0;
   setVirtualOffsetMail->property.yOffset = 0;
   mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, (uint32_t)setVirtualOffsetMail);
+  if (setVirtualOffsetMail->tag == CODE_RESPONSE_FAILURE) {
+    LogError("[Framebuffer]: Unable to set virtual offset\n");
+  }
 
   PropertyAllocateBufferMail *allocateBufferMail = kheap_alloc_aligned(sizeof(PropertyAllocateBufferMail), 16);
   allocateBufferMail->size = sizeof(PropertyAllocateBufferMail);
-  allocateBufferMail->tag = MBOX_REQUEST;
+  allocateBufferMail->tag = CODE_REQUEST;
   allocateBufferMail->end = PROPERTY_TAG_END;
   allocateBufferMail->property.tag = PROPERTY_TAG_ALLOCATE_BUFFER;
   allocateBufferMail->property.reqSize = 4;
@@ -70,16 +82,22 @@ int framebuffer_init(void) {
   allocateBufferMail->property.PACKED.alignment = 16;
   allocateBufferMail->property.size = 0;
   mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, (uint32_t)allocateBufferMail);
+  if (allocateBufferMail->tag == CODE_RESPONSE_FAILURE) {
+    LogError("[Framebuffer]: Unable to allocate video buffer\n");
+  }
 
   PropertyGetPitchMail *getPitchMail = kheap_alloc_aligned(sizeof(PropertyGetPitchMail), 16);
   getPitchMail->size = sizeof(PropertyGetPitchMail);
-  getPitchMail->tag = MBOX_REQUEST;
+  getPitchMail->tag = CODE_REQUEST;
   getPitchMail->end = PROPERTY_TAG_END;
   getPitchMail->property.tag = PROPERTY_TAG_GET_PITCH;
   getPitchMail->property.reqSize = 0;
   getPitchMail->property.rspSize = 4;
   getPitchMail->property.bytesPerLine = 0;
   mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, (uint32_t)getPitchMail);
+  if (getPitchMail->tag == CODE_RESPONSE_FAILURE) {
+    LogError("[Framebuffer]: Unable to get pitch\n");
+  }
 
   if (setDepthMail->property.bitsPerPixel == 32 && allocateBufferMail->property.PACKED.baseAddress != 0) {
     allocateBufferMail->property.PACKED.baseAddress &= 0x3FFFFFFF;
