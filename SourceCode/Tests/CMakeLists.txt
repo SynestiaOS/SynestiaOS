@@ -27,7 +27,7 @@ else ()
 	message(ERROR "unexpected PLATFORM ${PLATFORM}")
 endif ()
 
-set(KernelUnitTestsImg KernelUnitTests.img)
+set(KernelUnitTestsImg KernelUnitTests.elf)
 add_executable(${KernelUnitTestsImg}
         ${KernelUnitTestsSrc}
         $<TARGET_OBJECTS:${KernelArchUnitTests}>

@@ -14,7 +14,7 @@ set(CMAKE_C_STANDARD 11)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON) # compile commands can be used to help clang-tidy code analysis
 
 set(SYNESTIAOS_SOURCE_CODE_DIR ${SynestiaOS_SOURCE_DIR}/SourceCode)
-set(KernelName Kernel.img)
+set(KernelName Kernel.elf)
 
 set(CMAKE_MODULE_PATH "${SynestiaOS_SOURCE_DIR}/CMake" ${CMAKE_MODULE_PATH})
 
