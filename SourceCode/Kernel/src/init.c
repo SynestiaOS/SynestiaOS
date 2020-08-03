@@ -173,7 +173,9 @@ void kernel_main(void) {
     gfx2d_draw_bitmap(context, 0, 0, 1024, 768, desktop());
     draw_task_bar();
 
-    gpu_flush(1);
+    while(1){
+      gpu_flush(1);
+    }
 
     // gpuHandler.node.next = nullptr;
     // gpuHandler.node.prev = nullptr;
