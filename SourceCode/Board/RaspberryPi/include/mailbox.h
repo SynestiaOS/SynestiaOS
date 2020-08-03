@@ -151,7 +151,6 @@ typedef struct PropertyGetDMAChannels {
 typedef struct PropertyGetPowerState {
   uint32_t tag;
   uint32_t deviceId;
-  uint32_t responseDeviceId;
   /**
    * Bit 0: 0=off, 1=on
    * Bit 1: 0=device exists, 1=device does not exist
@@ -164,7 +163,6 @@ typedef struct PropertyGetPowerState {
 typedef struct PropertyGetTiming {
   uint32_t tag;
   uint32_t deviceId;
-  uint32_t responseDeviceId;
   uint32_t waitTime;
 } PropertyGetTiming;
 
@@ -172,12 +170,6 @@ typedef struct PropertyGetTiming {
 typedef struct PropertySetPowerState {
   uint32_t tag;
   uint32_t deviceId;
-  /**
-   * Bit 0: 0=off, 1=on
-   * Bit 1: 0=do not wait, 1=wait
-   * Bits 2-31: reserved for future use (set to 0)
-   */
-  uint32_t responseDeviceId;
   /**
    * Bit 0: 0=off, 1=on
    * Bit 1: 0=device exists, 1=device does not exist
@@ -206,7 +198,6 @@ typedef struct PropertySetPowerState {
 typedef struct PropertyGetClockState {
   uint32_t tag;
   uint32_t clockId;
-  uint32_t responseClockId;
   /**
    * Bit 0: 0=off, 1=on
    * Bit 1: 0=clock exists, 1=clock does not exist
@@ -225,20 +216,12 @@ typedef struct PropertySetClockState {
    * Bits 2-31: reserved for future use (set to 0)
    */
   uint32_t state;
-  uint32_t responseClockId;
-  /**
-   * Bit 0: 0=off, 1=on
-   * Bit 1: 0=clock exists, 1=clock does not exist
-   * Bits 2-31: reserved for future use
-   */
-  uint32_t responseState;
 } PropertySetClockState;
 
 #define PROPERTY_TAG_GET_CLOCK_RATE 0x00030002
 typedef struct PropertyGetClockRate {
   uint32_t tag;
   uint32_t clockId;
-  uint32_t responseClockId;
   uint32_t rate;
 } PropertyGetClockRate;
 
@@ -248,15 +231,12 @@ typedef struct PropertySetClockRate {
   uint32_t clockId;
   uint32_t rate;
   uint32_t skipSettingTurbo;
-  uint32_t responseClockId;
-  uint32_t responseRate;
 } PropertySetClockRate;
 
 #define PROPERTY_TAG_GET_MAX_CLOCK_RATE 0x00030004
 typedef struct PropertyGetMaxClockRate {
   uint32_t tag;
   uint32_t clockId;
-  uint32_t responseClockId;
   uint32_t rate;
 } PropertyGetMaxClockRate;
 
@@ -264,7 +244,6 @@ typedef struct PropertyGetMaxClockRate {
 typedef struct PropertyGetMinClockRate {
   uint32_t tag;
   uint32_t clockId;
-  uint32_t responseClockId;
   uint32_t rate;
 } PropertyGetMinClockRate;
 
@@ -272,7 +251,6 @@ typedef struct PropertyGetMinClockRate {
 typedef struct PropertyGetTurbo {
   uint32_t tag;
   uint32_t id;
-  uint32_t responseId;
   uint32_t level;
 } PropertyGetTurbo;
 
@@ -281,8 +259,6 @@ typedef struct PropertySetTurbo {
   uint32_t tag;
   uint32_t id;
   uint32_t level;
-  uint32_t responseId;
-  uint32_t responseLevel;
 } PropertySetTurbo;
 
 #define VOLTAGE_IDreserved 0x000000000
@@ -295,7 +271,6 @@ typedef struct PropertySetTurbo {
 typedef struct PropertyGetVoltage {
   uint32_t tag;
   uint32_t voltageId;
-  uint32_t responseVoltageId;
   uint32_t value;
 } PropertyGetVoltage;
 
@@ -304,15 +279,12 @@ typedef struct PropertySetVoltage {
   uint32_t tag;
   uint32_t voltageId;
   uint32_t value;
-  uint32_t responseVoltageId;
-  uint32_t responseValue;
 } PropertySetVoltage;
 
 #define PROPERTY_TAG_GET_MAX_VOLTAGE 0x00030005
 typedef struct PropertyGetMaxVoltage {
   uint32_t tag;
   uint32_t voltageId;
-  uint32_t responseVoltageId;
   uint32_t value;
 } PropertyGetMaxVoltage;
 
@@ -320,7 +292,6 @@ typedef struct PropertyGetMaxVoltage {
 typedef struct PropertyGetMinVoltage {
   uint32_t tag;
   uint32_t voltageId;
-  uint32_t responseVoltageId;
   uint32_t value;
 } PropertyGetMinVoltage;
 
@@ -328,7 +299,6 @@ typedef struct PropertyGetMinVoltage {
 typedef struct PropertyGetTemperature {
   uint32_t tag;
   uint32_t temperatureId;
-  uint32_t responseTemperatureId;
   uint32_t value;
 } PropertyGetTemperature;
 
@@ -336,7 +306,6 @@ typedef struct PropertyGetTemperature {
 typedef struct PropertyGetMaxTemperature {
   uint32_t tag;
   uint32_t temperatureId;
-  uint32_t responseTemperatureId;
   uint32_t value;
 } PropertyGetMaxTemperature;
 
@@ -389,7 +358,6 @@ typedef struct PropertyExecuteCode {
   uint32_t r3;
   uint32_t r4;
   uint32_t r5;
-  uint32_t responseR0;
 } PropertyExecuteCode;
 
 #define PROPERTY_TAG_GET_DISPMANX_RESOURCE_MEN_HANDLER 0x00030014
@@ -404,7 +372,6 @@ typedef struct PropertyGetDispmanxResourceMemHandle {
 typedef struct PropertyGetEDIDBlock {
   uint32_t tag;
   uint32_t blockNumber;
-  uint32_t responseBlockNumber;
   uint32_t status;
   uint8_t EDIDBlock[128];
 } PropertyGetEDIDBlock;
@@ -430,12 +397,6 @@ typedef struct PropertyBlankScreen {
    * Bits 1-31: reserved for future use (set to 0)
    */
   uint32_t state;
-
-  /**
-   * Bit 0: 0=off, 1=on
-   * Bits 1-31: reserved for future use
-   */
-  uint32_t responseState;
 } PropertyBlankScreen;
 
 #define PROPERTY_TAG_GET_PHYSICAL_DISPLAY_WH 0x00040003
@@ -450,8 +411,6 @@ typedef struct PropertyTestPhysicalDisplayWH {
   uint32_t tag;
   uint32_t width;
   uint32_t height;
-  uint32_t responseWidth;
-  uint32_t responseHeight;
 } PropertyTestPhysicalDisplayWH;
 
 #define PROPERTY_TAG_SET_PHYSICAL_DISPLAY_WH 0x00048003
@@ -459,8 +418,6 @@ typedef struct PropertySetPhysicalDisplayWH {
   uint32_t tag;
   uint32_t width;
   uint32_t height;
-  uint32_t responseWidth;
-  uint32_t responseHeight;
 } PropertySetPhysicalDisplayWH;
 
 #define PROPERTY_TAG_GET_VIRTUAL_BUFFER_WH 0x00040004
@@ -475,8 +432,6 @@ typedef struct PropertyTestVirtualBufferWH {
   uint32_t tag;
   uint32_t width;
   uint32_t height;
-  uint32_t responseWidth;
-  uint32_t responseHeight;
 } PropertyTestVirtualBufferWH;
 
 #define PROPERTY_TAG_SET_VIRTUAL_BUFFER_WH 0x00048004
@@ -484,8 +439,6 @@ typedef struct PropertySetVirtualBufferWH {
   uint32_t tag;
   uint32_t width;
   uint32_t height;
-  uint32_t responseWidth;
-  uint32_t responseHeight;
 } PropertySetVirtualBufferWH;
 
 #define PROPERTY_TAG_GET_DEPTH 0x00040005
@@ -498,14 +451,12 @@ typedef struct PropertyGetDepth {
 typedef struct PropertyTestDepth {
   uint32_t tag;
   uint32_t bitsPerPixel;
-  uint32_t responseBitsPerPixel;
 } PropertyTestDepth;
 
 #define PROPERTY_TAG_SET_DEPTH 0x00048005
 typedef struct PropertySetDepth {
   uint32_t tag;
   uint32_t bitsPerPixel;
-  uint32_t responseBitsPerPixel;
 } PropertySetDepth;
 
 #define PROPERTY_TAG_GET_PIXEL_ORDER 0x00040006
@@ -526,7 +477,6 @@ typedef struct PropertyTestPixelOrder {
    * 0x1: RGB
    */
   uint32_t state;
-  uint32_t responseState;
 } PropertyTestPixelOrder;
 
 #define PROPERTY_TAG_SET_PIXEL_ORDER 0x00048006
@@ -537,7 +487,6 @@ typedef struct PropertySetPixelOrder {
    * 0x1: RGB
    */
   uint32_t state;
-  uint32_t responseState;
 } PropertySetPixelOrder;
 
 #define PROPERTY_TAG_GET_ALPHA_MODE 0x00040007
@@ -555,14 +504,12 @@ typedef struct PropertyGetAlphaMode {
 typedef struct PropertyTestAlphaMode {
   uint32_t tag;
   uint32_t state;
-  uint32_t responseState;
 } PropertyTestAlphaMode;
 
 #define PROPERTY_TAG_SET_ALPHA_MODE 0x00048007
 typedef struct PropertySetAlphaMode {
   uint32_t tag;
   uint32_t state;
-  uint32_t responseState;
 } PropertySetAlphaMode;
 
 #define PROPERTY_TAG_GET_PITCH 0x00040008
@@ -583,8 +530,6 @@ typedef struct PropertyTestVirtualOffset {
   uint32_t tag;
   uint32_t xOffset;
   uint32_t yOffset;
-  uint32_t responseXOffset;
-  uint32_t responseYOffset;
 } PropertyTestVirtualOffset;
 
 #define PROPERTY_TAG_SET_VIRTUAL_OFFSET 0x00048009
@@ -592,8 +537,6 @@ typedef struct PropertySetVirtualOffset {
   uint32_t tag;
   uint32_t xOffset;
   uint32_t yOffset;
-  uint32_t responseXOffset;
-  uint32_t responseYOffset;
 } PropertySetVirtualOffset;
 
 #define PROPERTY_TAG_GET_OVERSCAN 0x0004000a
@@ -612,10 +555,6 @@ typedef struct PropertyTestOverscan {
   uint32_t bottom;
   uint32_t left;
   uint32_t right;
-  uint32_t responseTop;
-  uint32_t responseBottom;
-  uint32_t responseLeft;
-  uint32_t responseRight;
 } PropertyTestOverscan;
 
 #define PROPERTY_TAG_SET_OVERSCAN 0x0004800a
@@ -625,10 +564,6 @@ typedef struct PropertySetOverscan {
   uint32_t bottom;
   uint32_t left;
   uint32_t right;
-  uint32_t responseTop;
-  uint32_t responseBottom;
-  uint32_t responseLeft;
-  uint32_t responseRight;
 } PropertySetOverscan;
 
 #define PROPERTY_TAG_GET_PALETTE 0x0004000b
