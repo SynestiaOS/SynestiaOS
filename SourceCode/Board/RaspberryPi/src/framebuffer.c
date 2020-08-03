@@ -25,7 +25,9 @@ int framebuffer_init(void) {
   setPhysicalDisplayWHMail->property.code = CODE_REQUEST;
   setPhysicalDisplayWHMail->property.width = 1024;
   setPhysicalDisplayWHMail->property.height = 768;
-  mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, (uint32_t)setPhysicalDisplayWHMail);
+  MailMessage setPhysicalDisplayWHMailMsg = {.channel = MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC,
+                                             .data = setPhysicalDisplayWHMail};
+  mailbox_call(setPhysicalDisplayWHMailMsg);
   if (setPhysicalDisplayWHMail->code == CODE_RESPONSE_FAILURE ||
       setPhysicalDisplayWHMail->property.code == CODE_RESPONSE_FAILURE) {
     LogError("[Framebuffer]: Unable to set physical WH\n");
@@ -41,7 +43,9 @@ int framebuffer_init(void) {
   setVirtualBufferWHMail->property.code = CODE_REQUEST;
   setVirtualBufferWHMail->property.width = 1024;
   setVirtualBufferWHMail->property.height = 768;
-  mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, (uint32_t)setVirtualBufferWHMail);
+  MailMessage setVirtualBufferWHMailMsg = {.channel = MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC,
+                                           .data = setVirtualBufferWHMail};
+  mailbox_call(setVirtualBufferWHMailMsg);
   if (setVirtualBufferWHMail->code == CODE_RESPONSE_FAILURE ||
       setVirtualBufferWHMail->property.code == CODE_RESPONSE_FAILURE) {
     LogError("[Framebuffer]: Unable to set virtual WH\n");
@@ -55,7 +59,8 @@ int framebuffer_init(void) {
   setDepthMail->property.bufferSzie = 4;
   setDepthMail->property.code = CODE_REQUEST;
   setDepthMail->property.bitsPerPixel = 32;
-  mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, (uint32_t)setDepthMail);
+  MailMessage setDepthMailMsg = {.channel = MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, .data = setDepthMail};
+  mailbox_call(setDepthMailMsg);
   if (setDepthMail->code == CODE_RESPONSE_FAILURE || setDepthMail->property.code == CODE_RESPONSE_FAILURE) {
     LogError("[Framebuffer]: Unable to set depth\n");
   }
@@ -69,7 +74,9 @@ int framebuffer_init(void) {
   setVirtualOffsetMail->property.code = CODE_REQUEST;
   setVirtualOffsetMail->property.xOffset = 0;
   setVirtualOffsetMail->property.yOffset = 0;
-  mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, (uint32_t)setVirtualOffsetMail);
+  MailMessage setVirtualOffsetMailMsg = {.channel = MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC,
+                                         .data = setVirtualOffsetMail};
+  mailbox_call(setVirtualOffsetMailMsg);
   if (setVirtualOffsetMail->code == CODE_RESPONSE_FAILURE ||
       setVirtualOffsetMail->property.code == CODE_RESPONSE_FAILURE) {
     LogError("[Framebuffer]: Unable to set virtual offset\n");
@@ -84,7 +91,8 @@ int framebuffer_init(void) {
   allocateBufferMail->property.code = CODE_REQUEST;
   allocateBufferMail->property.PACKED.alignment = 16;
   allocateBufferMail->property.size = 0;
-  mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, (uint32_t)allocateBufferMail);
+  MailMessage allocateBufferMailMsg = {.channel = MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, .data = allocateBufferMail};
+  mailbox_call(allocateBufferMailMsg);
   if (allocateBufferMail->code == CODE_RESPONSE_FAILURE || allocateBufferMail->property.code == CODE_RESPONSE_FAILURE) {
     LogError("[Framebuffer]: Unable to allocate video buffer\n");
   }
@@ -97,7 +105,8 @@ int framebuffer_init(void) {
   getPitchMail->property.bufferSzie = 4;
   getPitchMail->property.code = CODE_REQUEST;
   getPitchMail->property.bytesPerLine = 0;
-  mailbox_call(MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, (uint32_t)getPitchMail);
+  MailMessage getPitchMailMsg = {.channel = MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, .data = getPitchMail};
+  mailbox_call(getPitchMailMsg);
   if (getPitchMail->code == CODE_RESPONSE_FAILURE || getPitchMail->property.code == CODE_RESPONSE_FAILURE) {
     LogError("[Framebuffer]: Unable to get pitch\n");
   }

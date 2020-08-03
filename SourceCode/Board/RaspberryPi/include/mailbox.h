@@ -1148,7 +1148,18 @@ typedef struct PropertySetCursorStateMail {
   uint32_t end;
 } PropertySetCursorStateMail;
 
-uint32_t mailbox_call(uint8_t channel, uint32_t mailbox);
-uint32_t mailbox_read(uint8_t channel);
-void mailbox_write(uint8_t channel, uint32_t data);
+typedef struct MailMessage {
+  uint8_t channel : 4;
+  uint32_t data : 28;
+} MailMessage;
+
+typedef struct MailStatus {
+  uint32_t reserved : 30;
+  uint8_t empty : 1;
+  uint8_t full : 1;
+} MailStatus;
+
+MailMessage mailbox_call(MailMessage msg);
+MailMessage mailbox_read(uint8_t channel);
+void mailbox_send(MailMessage msg);
 #endif //__BOARD_RASP_MAILBOX_H__

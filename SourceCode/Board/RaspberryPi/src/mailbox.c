@@ -6,31 +6,35 @@
 #include <stdbool.h>
 #include <stdlib.h>
 
-uint32_t mailbox_call(uint8_t channel, uint32_t mailbox) {
+MailMessage mailbox_call(MailMessage message) {
   while (!((*(uint32_t *)(MAIL0_STATUS)) & MBOX_EMPTY)) {
     *(uint32_t *)(MAIL0_READ);
   }
-  mailbox_write(channel, mailbox);
-  uint32_t data = mailbox_read(channel);
+  mailbox_send(message);
+  MailMessage data = mailbox_read(message.channel);
   return data;
 }
 
-uint32_t mailbox_read(uint8_t channel) {
-  // Loop until we receive something from the requested channel
-  uint32_t data;
+MailMessage mailbox_read(uint8_t channel) {
+  MailStatus stat;
+  MailMessage res;
   do {
-    while ((*(uint32_t *)(MAIL0_STATUS)) & MBOX_EMPTY) {
-      // Wait for data
-    }
-    data = *(uint32_t *)(MAIL0_READ);
-  } while ((data & 0xF) != channel);
-  return data & ~0xF;
+    do {
+      stat.empty = *MAIL0_STATUS & MBOX_EMPTY;
+      stat.full = *MAIL0_STATUS & MBOX_FULL;
+    } while (stat.empty);
+    res.channel = *MAIL0_READ & 0xF;
+    res.data = *MAIL0_READ & ~0xF;
+  } while (res.channel != channel);
+  return res;
 }
 
-void mailbox_write(uint8_t channel, uint32_t data) {
-  while ((*(uint32_t *)(MAIL0_STATUS)) & MBOX_FULL) {
-    // Wait for data
-  }
-  // Write the value to the requested channel
-  *(uint32_t *)(MAIL0_WRITE) = (data | channel);
+void mailbox_send(MailMessage msg) {
+  MailStatus stat;
+  do {
+    stat.empty = *MAIL0_STATUS & MBOX_EMPTY;
+    stat.full = *MAIL0_STATUS & MBOX_FULL;
+  } while (stat.full);
+
+  *MAIL0_WRITE = (msg.data | msg.channel);
 }
