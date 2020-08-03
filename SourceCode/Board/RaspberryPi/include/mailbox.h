@@ -121,7 +121,7 @@
 #define PROPERTY_TAG_GET_FRIMWARE_REVISION 0x00000001
 typedef struct PropertyGetFirmwareRevision {
   uint32_t tag;
-  uint32_t bufferSzie;
+  uint32_t bufferSize;
   uint32_t code;
   uint32_t firmwareRevision;
 } PropertyGetFirmwareRevision;
@@ -129,7 +129,7 @@ typedef struct PropertyGetFirmwareRevision {
 #define PROPERTY_TAG_GET_BOARD_MODEL 0x00010001
 typedef struct PropertyGetBoardModel {
   uint32_t tag;
-  uint32_t bufferSzie;
+  uint32_t bufferSize;
   uint32_t code;
   uint32_t boardModel;
 } PropertyGetBoardModel;
@@ -137,7 +137,7 @@ typedef struct PropertyGetBoardModel {
 #define PROPERTY_TAG_GET_BOARD_REVISION 0x00010002
 typedef struct PropertyGetBoardRevision {
   uint32_t tag;
-  uint32_t bufferSzie;
+  uint32_t bufferSize;
   uint32_t code;
   uint32_t boardRevision;
 } PropertyGetBoardRevision;
@@ -145,7 +145,7 @@ typedef struct PropertyGetBoardRevision {
 #define PROPERTY_TAG_GET_BOARD_MAC_ADDRESS 0x00010003
 typedef struct PropertyGetBoardMacAddress {
   uint32_t tag;
-  uint32_t bufferSzie;
+  uint32_t bufferSize;
   uint32_t code;
   uint8_t address1;
   uint8_t address2;
@@ -158,7 +158,7 @@ typedef struct PropertyGetBoardMacAddress {
 #define PROPERTY_TAG_GET_BOARD_SERIAL 0x00010004
 typedef struct PropertyGetBoardSerial {
   uint32_t tag;
-  uint32_t bufferSzie;
+  uint32_t bufferSize;
   uint32_t code;
   uint64_t boardSerial;
 } PropertyGetBoardSerial;
@@ -166,7 +166,7 @@ typedef struct PropertyGetBoardSerial {
 #define PROPERTY_TAG_GET_ARM_MEMORY 0x00010005
 typedef struct PropertyGetArmMemory {
   uint32_t tag;
-  uint32_t bufferSzie;
+  uint32_t bufferSize;
   uint32_t code;
   uint32_t baseAddress;
   uint32_t size;
@@ -175,7 +175,7 @@ typedef struct PropertyGetArmMemory {
 #define PROPERTY_TAG_GET_VIDEOCORE_MEMORY 0x00010006
 typedef struct PropertyGetVideoCoreMemory {
   uint32_t tag;
-  uint32_t bufferSzie;
+  uint32_t bufferSize;
   uint32_t code;
   uint32_t baseAddress;
   uint32_t size;
@@ -184,7 +184,7 @@ typedef struct PropertyGetVideoCoreMemory {
 #define PROPERTY_TAG_GET_CLOCKS 0x00010007
 typedef struct PropertyGetClocks {
   uint32_t tag;
-  uint32_t bufferSzie;
+  uint32_t bufferSize;
   uint32_t code;
   uint32_t parentClockId;
   uint32_t clockId;
@@ -194,7 +194,7 @@ typedef struct PropertyGetClocks {
 #define PROPERTY_TAG_GET_COMMAND_LINE 0x00050001
 typedef struct PropertyGetCommandLine {
   uint32_t tag;
-  uint32_t bufferSzie;
+  uint32_t bufferSize;
   uint32_t code;
   uint8_t commandLineStr;
   // ...
@@ -203,7 +203,7 @@ typedef struct PropertyGetCommandLine {
 #define PROPERTY_TAG_GET_DMA_CHANNELS 0x00060001
 typedef struct PropertyGetDMAChannels {
   uint32_t tag;
-  uint32_t bufferSzie;
+  uint32_t bufferSize;
   uint32_t code;
   uint32_t mask; // Bits 0-15: DMA channels 0-15 (0=do not use, 1=usable),Bits 16-31: reserved for future use
 } PropertyGetDMAChannels;
@@ -223,7 +223,7 @@ typedef struct PropertyGetDMAChannels {
 #define PROPERTY_TAG_GET_POWER_STATE 0x00020001
 typedef struct PropertyGetPowerState {
   uint32_t tag;
-  uint32_t bufferSzie;
+  uint32_t bufferSize;
   uint32_t code;
   uint32_t deviceId;
   /**
@@ -237,7 +237,7 @@ typedef struct PropertyGetPowerState {
 #define PROPERTY_TAG_GET_TIMING 0x00020002
 typedef struct PropertyGetTiming {
   uint32_t tag;
-  uint32_t bufferSzie;
+  uint32_t bufferSize;
   uint32_t code;
   uint32_t deviceId;
   uint32_t waitTime;
@@ -246,7 +246,7 @@ typedef struct PropertyGetTiming {
 #define PROPERTY_TAG_SET_POWER_STATE 0x00028001
 typedef struct PropertySetPowerState {
   uint32_t tag;
-  uint32_t bufferSzie;
+  uint32_t bufferSize;
   uint32_t code;
   uint32_t deviceId;
   /**
@@ -276,7 +276,7 @@ typedef struct PropertySetPowerState {
 #define PROPERTY_TAG_GET_CLOCK_STATE 0x00030001
 typedef struct PropertyGetClockState {
   uint32_t tag;
-  uint32_t bufferSzie;
+  uint32_t bufferSize;
   uint32_t code;
   uint32_t clockId;
   /**
@@ -290,7 +290,7 @@ typedef struct PropertyGetClockState {
 #define PROPERTY_TAG_SET_CLOCK_STATE 0x00038001
 typedef struct PropertySetClockState {
   uint32_t tag;
-  uint32_t bufferSzie;
+  uint32_t bufferSize;
   uint32_t code;
   uint32_t clockId;
   /**
@@ -304,7 +304,7 @@ typedef struct PropertySetClockState {
 #define PROPERTY_TAG_GET_CLOCK_RATE 0x00030002
 typedef struct PropertyGetClockRate {
   uint32_t tag;
-  uint32_t bufferSzie;
+  uint32_t bufferSize;
   uint32_t code;
   uint32_t clockId;
   uint32_t rate;
@@ -313,7 +313,7 @@ typedef struct PropertyGetClockRate {
 #define PROPERTY_TAG_SET_CLOCK_RATE 0x00038002
 typedef struct PropertySetClockRate {
   uint32_t tag;
-  uint32_t bufferSzie;
+  uint32_t bufferSize;
   uint32_t code;
   uint32_t clockId;
   uint32_t rate;
@@ -323,7 +323,7 @@ typedef struct PropertySetClockRate {
 #define PROPERTY_TAG_GET_MAX_CLOCK_RATE 0x00030004
 typedef struct PropertyGetMaxClockRate {
   uint32_t tag;
-  uint32_t bufferSzie;
+  uint32_t bufferSize;
   uint32_t code;
   uint32_t clockId;
   uint32_t rate;
@@ -332,7 +332,7 @@ typedef struct PropertyGetMaxClockRate {
 #define PROPERTY_TAG_GET_MIN_CLOCK_RATE 0x00030007
 typedef struct PropertyGetMinClockRate {
   uint32_t tag;
-  uint32_t bufferSzie;
+  uint32_t bufferSize;
   uint32_t code;
   uint32_t clockId;
   uint32_t rate;
@@ -341,7 +341,7 @@ typedef struct PropertyGetMinClockRate {
 #define PROPERTY_TAG_GET_TURBO 0x00030009
 typedef struct PropertyGetTurbo {
   uint32_t tag;
-  uint32_t bufferSzie;
+  uint32_t bufferSize;
   uint32_t code;
   uint32_t id;
   uint32_t level;
@@ -350,7 +350,7 @@ typedef struct PropertyGetTurbo {
 #define PROPERTY_TAG_SET_TURBO 0x00038009
 typedef struct PropertySetTurbo {
   uint32_t tag;
-  uint32_t bufferSzie;
+  uint32_t bufferSize;
   uint32_t code;
   uint32_t id;
   uint32_t level;
@@ -365,7 +365,7 @@ typedef struct PropertySetTurbo {
 #define PROPERTY_TAG_GET_VOLTAGE 0x00030003
 typedef struct PropertyGetVoltage {
   uint32_t tag;
-  uint32_t bufferSzie;
+  uint32_t bufferSize;
   uint32_t code;
   uint32_t voltageId;
   uint32_t value;
@@ -374,7 +374,7 @@ typedef struct PropertyGetVoltage {
 #define PROPERTY_TAG_SET_VOLTAGE 0x00038003
 typedef struct PropertySetVoltage {
   uint32_t tag;
-  uint32_t bufferSzie;
+  uint32_t bufferSize;
   uint32_t code;
   uint32_t voltageId;
   uint32_t value;
@@ -383,7 +383,7 @@ typedef struct PropertySetVoltage {
 #define PROPERTY_TAG_GET_MAX_VOLTAGE 0x00030005
 typedef struct PropertyGetMaxVoltage {
   uint32_t tag;
-  uint32_t bufferSzie;
+  uint32_t bufferSize;
   uint32_t code;
   uint32_t voltageId;
   uint32_t value;
@@ -392,7 +392,7 @@ typedef struct PropertyGetMaxVoltage {
 #define PROPERTY_TAG_GET_MIN_VOLTAGE 0x00030008
 typedef struct PropertyGetMinVoltage {
   uint32_t tag;
-  uint32_t bufferSzie;
+  uint32_t bufferSize;
   uint32_t code;
   uint32_t voltageId;
   uint32_t value;
@@ -401,7 +401,7 @@ typedef struct PropertyGetMinVoltage {
 #define PROPERTY_TAG_GET_TEMPERATURE 0x00030006
 typedef struct PropertyGetTemperature {
   uint32_t tag;
-  uint32_t bufferSzie;
+  uint32_t bufferSize;
   uint32_t code;
   uint32_t temperatureId;
   uint32_t value;
@@ -410,7 +410,7 @@ typedef struct PropertyGetTemperature {
 #define PROPERTY_TAG_GET_MAX_TEMPERATURE 0x0003000a
 typedef struct PropertyGetMaxTemperature {
   uint32_t tag;
-  uint32_t bufferSzie;
+  uint32_t bufferSize;
   uint32_t code;
   uint32_t temperatureId;
   uint32_t value;
@@ -428,7 +428,7 @@ typedef struct PropertyGetMaxTemperature {
 #define PROPERTY_TAG_ALLOCATE_MEMORY 0x0003000c
 typedef struct PropertyAllocateMemory {
   uint32_t tag;
-  uint32_t bufferSzie;
+  uint32_t bufferSize;
   uint32_t code;
   uint32_t size;
   uint32_t alignment;
@@ -439,7 +439,7 @@ typedef struct PropertyAllocateMemory {
 #define PROPERTY_TAG_LOCK_MEMORY 0x0003000d
 typedef struct PropertyLockMemory {
   uint32_t tag;
-  uint32_t bufferSzie;
+  uint32_t bufferSize;
   uint32_t code;
   uint32_t handle;
   uint32_t busAddress;
@@ -448,7 +448,7 @@ typedef struct PropertyLockMemory {
 #define PROPERTY_TAG_UNLOCK_MEMORY 0x0003000e
 typedef struct PropertyUnLockMemory {
   uint32_t tag;
-  uint32_t bufferSzie;
+  uint32_t bufferSize;
   uint32_t code;
   uint32_t handle;
   uint32_t status;
@@ -457,7 +457,7 @@ typedef struct PropertyUnLockMemory {
 #define PROPERTY_TAG_RELEASE_MEMORY 0x0003000f
 typedef struct PropertyReleaseMemory {
   uint32_t tag;
-  uint32_t bufferSzie;
+  uint32_t bufferSize;
   uint32_t code;
   uint32_t handle;
   uint32_t status;
@@ -466,7 +466,7 @@ typedef struct PropertyReleaseMemory {
 #define PROPERTY_TAG_EXECUTE_CODE 0x00030010
 typedef struct PropertyExecuteCode {
   uint32_t tag;
-  uint32_t bufferSzie;
+  uint32_t bufferSize;
   uint32_t code;
   uint32_t functionPointer;
   uint32_t r0;
@@ -480,7 +480,7 @@ typedef struct PropertyExecuteCode {
 #define PROPERTY_TAG_GET_DISPMANX_RESOURCE_MEN_HANDLER 0x00030014
 typedef struct PropertyGetDispmanxResourceMemHandle {
   uint32_t tag;
-  uint32_t bufferSzie;
+  uint32_t bufferSize;
   uint32_t code;
   uint32_t dispmanxResourceHandle;
   uint32_t value;
@@ -490,7 +490,7 @@ typedef struct PropertyGetDispmanxResourceMemHandle {
 #define PROPERTY_TAG_GET_EDID_CLOCK 0x00030020
 typedef struct PropertyGetEDIDBlock {
   uint32_t tag;
-  uint32_t bufferSzie;
+  uint32_t bufferSize;
   uint32_t code;
   uint32_t blockNumber;
   uint32_t status;
@@ -500,7 +500,7 @@ typedef struct PropertyGetEDIDBlock {
 #define PROPERTY_TAG_ALLOCATE_BUFFER 0x00040001
 typedef struct PropertyAllocateBuffer {
   uint32_t tag;
-  uint32_t bufferSzie;
+  uint32_t bufferSize;
   uint32_t code;
   union {
     uint32_t alignment;
@@ -512,14 +512,14 @@ typedef struct PropertyAllocateBuffer {
 #define PROPERTY_TAG_RELEASE_BUFFER 0x00048001
 typedef struct PropertyReleaseBuffer {
   uint32_t tag;
-  uint32_t bufferSzie;
+  uint32_t bufferSize;
   uint32_t code;
 } PropertyReleaseBuffer;
 
 #define PROPERTY_TAG_BLANK_SCREEN 0x00040002
 typedef struct PropertyBlankScreen {
   uint32_t tag;
-  uint32_t bufferSzie;
+  uint32_t bufferSize;
   uint32_t code;
   /**
    * Bit 0: 0=off, 1=on
@@ -531,7 +531,7 @@ typedef struct PropertyBlankScreen {
 #define PROPERTY_TAG_GET_PHYSICAL_DISPLAY_WH 0x00040003
 typedef struct PropertyGetPhysicalDisplayWH {
   uint32_t tag;
-  uint32_t bufferSzie;
+  uint32_t bufferSize;
   uint32_t code;
   uint32_t width;
   uint32_t height;
@@ -540,7 +540,7 @@ typedef struct PropertyGetPhysicalDisplayWH {
 #define PROPERTY_TAG_TEST_PHYSICAL_DISPLAY_WH 0x00044003
 typedef struct PropertyTestPhysicalDisplayWH {
   uint32_t tag;
-  uint32_t bufferSzie;
+  uint32_t bufferSize;
   uint32_t code;
   uint32_t width;
   uint32_t height;
@@ -549,7 +549,7 @@ typedef struct PropertyTestPhysicalDisplayWH {
 #define PROPERTY_TAG_SET_PHYSICAL_DISPLAY_WH 0x00048003
 typedef struct PropertySetPhysicalDisplayWH {
   uint32_t tag;
-  uint32_t bufferSzie;
+  uint32_t bufferSize;
   uint32_t code;
   uint32_t width;
   uint32_t height;
@@ -558,7 +558,7 @@ typedef struct PropertySetPhysicalDisplayWH {
 #define PROPERTY_TAG_GET_VIRTUAL_BUFFER_WH 0x00040004
 typedef struct PropertyGetVirtualBufferWH {
   uint32_t tag;
-  uint32_t bufferSzie;
+  uint32_t bufferSize;
   uint32_t code;
   uint32_t width;
   uint32_t height;
@@ -567,7 +567,7 @@ typedef struct PropertyGetVirtualBufferWH {
 #define PROPERTY_TAG_TEST_VIRTUAL_BUFFER_WH 0x00044004
 typedef struct PropertyTestVirtualBufferWH {
   uint32_t tag;
-  uint32_t bufferSzie;
+  uint32_t bufferSize;
   uint32_t code;
   uint32_t width;
   uint32_t height;
@@ -576,7 +576,7 @@ typedef struct PropertyTestVirtualBufferWH {
 #define PROPERTY_TAG_SET_VIRTUAL_BUFFER_WH 0x00048004
 typedef struct PropertySetVirtualBufferWH {
   uint32_t tag;
-  uint32_t bufferSzie;
+  uint32_t bufferSize;
   uint32_t code;
   uint32_t width;
   uint32_t height;
@@ -585,7 +585,7 @@ typedef struct PropertySetVirtualBufferWH {
 #define PROPERTY_TAG_GET_DEPTH 0x00040005
 typedef struct PropertyGetDepth {
   uint32_t tag;
-  uint32_t bufferSzie;
+  uint32_t bufferSize;
   uint32_t code;
   uint32_t bitsPerPixel;
 } PropertyGetDepth;
@@ -593,7 +593,7 @@ typedef struct PropertyGetDepth {
 #define PROPERTY_TAG_TEST_DEPTH 0x00044005
 typedef struct PropertyTestDepth {
   uint32_t tag;
-  uint32_t bufferSzie;
+  uint32_t bufferSize;
   uint32_t code;
   uint32_t bitsPerPixel;
 } PropertyTestDepth;
@@ -601,7 +601,7 @@ typedef struct PropertyTestDepth {
 #define PROPERTY_TAG_SET_DEPTH 0x00048005
 typedef struct PropertySetDepth {
   uint32_t tag;
-  uint32_t bufferSzie;
+  uint32_t bufferSize;
   uint32_t code;
   uint32_t bitsPerPixel;
 } PropertySetDepth;
@@ -609,7 +609,7 @@ typedef struct PropertySetDepth {
 #define PROPERTY_TAG_GET_PIXEL_ORDER 0x00040006
 typedef struct PropertyGetPixelOrder {
   uint32_t tag;
-  uint32_t bufferSzie;
+  uint32_t bufferSize;
   uint32_t code;
   /**
    * 0x0: BGR
@@ -621,7 +621,7 @@ typedef struct PropertyGetPixelOrder {
 #define PROPERTY_TAG_TEST_PIXEL_ORDER 0x00044006
 typedef struct PropertyTestPixelOrder {
   uint32_t tag;
-  uint32_t bufferSzie;
+  uint32_t bufferSize;
   uint32_t code;
   /**
    * 0x0: BGR
@@ -633,7 +633,7 @@ typedef struct PropertyTestPixelOrder {
 #define PROPERTY_TAG_SET_PIXEL_ORDER 0x00048006
 typedef struct PropertySetPixelOrder {
   uint32_t tag;
-  uint32_t bufferSzie;
+  uint32_t bufferSize;
   uint32_t code;
   /**
    * 0x0: BGR
@@ -645,7 +645,7 @@ typedef struct PropertySetPixelOrder {
 #define PROPERTY_TAG_GET_ALPHA_MODE 0x00040007
 typedef struct PropertyGetAlphaMode {
   uint32_t tag;
-  uint32_t bufferSzie;
+  uint32_t bufferSize;
   uint32_t code;
   /**
    * 0x0: Alpha channel enabled (0 = fully opaque)
@@ -658,7 +658,7 @@ typedef struct PropertyGetAlphaMode {
 #define PROPERTY_TAG_TEST_ALPHA_MODE 0x00044007
 typedef struct PropertyTestAlphaMode {
   uint32_t tag;
-  uint32_t bufferSzie;
+  uint32_t bufferSize;
   uint32_t code;
   uint32_t state;
 } PropertyTestAlphaMode;
@@ -666,7 +666,7 @@ typedef struct PropertyTestAlphaMode {
 #define PROPERTY_TAG_SET_ALPHA_MODE 0x00048007
 typedef struct PropertySetAlphaMode {
   uint32_t tag;
-  uint32_t bufferSzie;
+  uint32_t bufferSize;
   uint32_t code;
   uint32_t state;
 } PropertySetAlphaMode;
@@ -674,7 +674,7 @@ typedef struct PropertySetAlphaMode {
 #define PROPERTY_TAG_GET_PITCH 0x00040008
 typedef struct PropertyGetPitch {
   uint32_t tag;
-  uint32_t bufferSzie;
+  uint32_t bufferSize;
   uint32_t code;
   uint32_t bytesPerLine;
 } PropertyGetPitch;
@@ -682,7 +682,7 @@ typedef struct PropertyGetPitch {
 #define PROPERTY_TAG_GET_VIRTUAL_OFFSET 0x00040009
 typedef struct PropertyGetVirtualOffset {
   uint32_t tag;
-  uint32_t bufferSzie;
+  uint32_t bufferSize;
   uint32_t code;
   uint32_t xOffset;
   uint32_t yOffset;
@@ -691,7 +691,7 @@ typedef struct PropertyGetVirtualOffset {
 #define PROPERTY_TAG_TEST_VIRTUAL_OFFSET 0x00044009
 typedef struct PropertyTestVirtualOffset {
   uint32_t tag;
-  uint32_t bufferSzie;
+  uint32_t bufferSize;
   uint32_t code;
   uint32_t xOffset;
   uint32_t yOffset;
@@ -700,7 +700,7 @@ typedef struct PropertyTestVirtualOffset {
 #define PROPERTY_TAG_SET_VIRTUAL_OFFSET 0x00048009
 typedef struct PropertySetVirtualOffset {
   uint32_t tag;
-  uint32_t bufferSzie;
+  uint32_t bufferSize;
   uint32_t code;
   uint32_t xOffset;
   uint32_t yOffset;
@@ -709,7 +709,7 @@ typedef struct PropertySetVirtualOffset {
 #define PROPERTY_TAG_GET_OVERSCAN 0x0004000a
 typedef struct PropertyGetOverscan {
   uint32_t tag;
-  uint32_t bufferSzie;
+  uint32_t bufferSize;
   uint32_t code;
   uint32_t top;
   uint32_t bottom;
@@ -720,7 +720,7 @@ typedef struct PropertyGetOverscan {
 #define PROPERTY_TAG_TEST_OVERSCAN 0x0004400a
 typedef struct PropertyTestOverscan {
   uint32_t tag;
-  uint32_t bufferSzie;
+  uint32_t bufferSize;
   uint32_t code;
   uint32_t top;
   uint32_t bottom;
@@ -731,7 +731,7 @@ typedef struct PropertyTestOverscan {
 #define PROPERTY_TAG_SET_OVERSCAN 0x0004800a
 typedef struct PropertySetOverscan {
   uint32_t tag;
-  uint32_t bufferSzie;
+  uint32_t bufferSize;
   uint32_t code;
   uint32_t top;
   uint32_t bottom;
@@ -742,7 +742,7 @@ typedef struct PropertySetOverscan {
 #define PROPERTY_TAG_GET_PALETTE 0x0004000b
 typedef struct PropertyGetPalette {
   uint32_t tag;
-  uint32_t bufferSzie;
+  uint32_t bufferSize;
   uint32_t code;
   uint32_t palette[256];
 } PropertyGetPalette;
@@ -750,7 +750,7 @@ typedef struct PropertyGetPalette {
 #define PROPERTY_TAG_TEST_PALETTE 0x0004400b
 typedef struct PropertyTestPalette {
   uint32_t tag;
-  uint32_t bufferSzie;
+  uint32_t bufferSize;
   uint32_t code;
   uint32_t first;
   uint32_t length;
@@ -765,7 +765,7 @@ typedef struct PropertyTestPalette {
 #define PROPERTY_TAG_SET_PALETTE 0x0004800b
 typedef struct PropertySetPalette {
   uint32_t tag;
-  uint32_t bufferSzie;
+  uint32_t bufferSize;
   uint32_t code;
   uint32_t first;
   uint32_t length;
@@ -780,7 +780,7 @@ typedef struct PropertySetPalette {
 #define PROPERTY_TAG_SET_CURSOR_INFO 0x00008010
 typedef struct PropertySetCursorInfo {
   uint32_t tag;
-  uint32_t bufferSzie;
+  uint32_t bufferSize;
   uint32_t code;
   uint32_t width;
   uint32_t height;
@@ -798,7 +798,7 @@ typedef struct PropertySetCursorInfo {
 #define PROPERTY_TAG_SET_CURSOR_STATE 0x00008011
 typedef struct PropertySetCursorState {
   uint32_t tag;
-  uint32_t bufferSzie;
+  uint32_t bufferSize;
   uint32_t code;
   /**
    * 0=invisable,
