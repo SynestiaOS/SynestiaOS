@@ -11,8 +11,6 @@ void init_interrupt() {
   getIRQController()->Disable_Basic_IRQs = 0xffffffff;
   getIRQController()->Disable_IRQs_1 = 0xffffffff;
   getIRQController()->Disable_IRQs_2 = 0xffffffff;
-
-  enable_interrupt();
   LogInfo("[Interrupt]: interrupt init\n");
 }
 

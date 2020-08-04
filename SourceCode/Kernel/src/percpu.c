@@ -10,7 +10,6 @@ PerCpu *perCpu = nullptr;
 
 KernelStatus percpu_default_insert_thread(PerCpu *perCpu, Thread *thread) {
   perCpu->rbTree.operations.insert(&perCpu->rbTree, &thread->rbNode);
-  // todo: insert into rbtree
   return ERROR;
 }
 
@@ -41,7 +40,7 @@ KernelStatus percpu_default_init(PerCpu *perCpu, uint32_t num, Thread *idleThrea
   perCpu->status.idleTime = 0;
   perCpu->currentThread = nullptr;
   perCpu->rbTree.root = nullptr;
-
+  rb_tree_init(&perCpu->rbTree);
   perCpu->waitThreadQueue.next = nullptr;
   perCpu->waitThreadQueue.prev = nullptr;
   return OK;
@@ -55,7 +54,7 @@ KernelStatus percpu_create(uint32_t cpuNum) {
   for (uint32_t cpuId = 0; cpuId < cpuNum; cpuId++) {
     perCpu[cpuId].operations.init = percpu_default_init;
     perCpu[cpuId].operations.insertThread = percpu_default_insert_thread;
-    perCpu[cpuId].operations.insertThread = percpu_default_remove_thread;
+    perCpu[cpuId].operations.removeThread = percpu_default_remove_thread;
     perCpu[cpuId].operations.getNextThread = percpu_default_get_next_thread;
   }
   return OK;
