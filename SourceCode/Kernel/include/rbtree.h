@@ -22,24 +22,24 @@ typedef struct RBNode {
   NodeColor color;
 } __attribute__((packed)) RBNode;
 
-RBNode *rbtree_get_root(RBNode *node);
 
-void rbtree_rebalance(RBNode *root, RBNode *node);
+typedef RBNode* (*RBTreeInsertNode)(struct RBTree* tree, RBNode* node);
+typedef RBNode* (*RbTreeGetMinNode)(struct RBTree* tree);
+typedef RBNode* (*RbTreeGetMaxNode)(struct RBTree* tree);
+typedef RBNode* (*RbTreeRemoveNode)(struct RBTree* tree,RBNode* node);
 
-void rbtree_reconstruct_to_list_recursion(KernelVector *vector, RBNode *root);
+typedef struct RBTreeOperations{
+  RBTreeInsertNode insert;
+  RbTreeGetMinNode getMin;
+  RbTreeGetMaxNode getMax;
+  RbTreeRemoveNode remove;
+} RBTreeOperations;
 
-void rbtree_reconstruct_to_list(KernelVector *vector, RBNode *root);
+typedef struct RBTree{
+  RBNode *root;
+  RBTreeOperations operations;
+} RBTree;
 
-KernelStatus rbtree_remove(RBNode *root, RBNode *node);
-
-void rbtree_remove_rebalance(RBNode *root, RBNode *node);
-
-void rbtree_rotate_left(RBNode *root, RBNode *node);
-
-void rbtree_rotate_right(RBNode *root, RBNode *node);
-
-RBNode *rbtree_get_min(RBNode *root);
-
-RBNode *rbtree_get_max(RBNode *root);
+RBTree *rb_tree_init(RBTree *tree);
 
 #endif //__KERNEL_RBTREE_H__

@@ -149,18 +149,11 @@ uint32_t *window_thread5(int args) {
 }
 
 TimerHandler gpuHandler;
-// SpinLock spinlock;
-// Mutex mutex;
-// Atomic atomic;
-extern uint32_t *gpu_flush(int arg);
+
 void kernel_main(void) {
   uint32_t cpuid = read_cpuid();
   LogWarn("[MPCore] cpuid: %d .\n", cpuid);
   if (cpuid == 0) {
-    // atomic_create(&atomic);
-    // mutex_create(&mutex, &atomic);
-    // spinlock_create(&spinlock, &mutex);
-
     init_bsp();
     print_splash();
 
@@ -181,28 +174,25 @@ void kernel_main(void) {
     schd_init();
 
     Thread *window1Thread = thread_create("window1", &window_thread1, 1, 1);
-    schd_init_thread(window1Thread, 0);
+    schd_add_thread(window1Thread, 0);
 
     Thread *window2Thread = thread_create("window2", &window_thread2, 1, 1);
-    schd_init_thread(window2Thread, 1);
+    schd_add_thread(window2Thread, 1);
 
     Thread *window3Thread = thread_create("window3", &window_thread3, 1, 1);
-    schd_init_thread(window3Thread, 2);
+    schd_add_thread(window3Thread, 2);
 
     Thread *window4Thread = thread_create("window4", &window_thread4, 1, 1);
-    schd_init_thread(window4Thread, 3);
+    schd_add_thread(window4Thread, 3);
 
     Thread *window5Thread = thread_create("window5", &window_thread5, 1, 1);
-    schd_init_thread(window5Thread, 4);
+    schd_add_thread(window5Thread, 4);
 
-    // // asm volatile("SEV");
     schd_schedule();
   }
 
-  // while (1) {
-  //   spinlock_acquire(&spinlock);
-  //   uint32_t cpuid = read_cpuid();
-  //   LogWarn("[MPCore] cpuid: %d .\n", cpuid);
-  //   spinlock_release(&spinlock);
-  // }
+  while (1) {
+    uint32_t cpuid = read_cpuid();
+    LogWarn("[MPCore] cpuid: %d .\n", cpuid);
+  }
 }

@@ -80,6 +80,11 @@ _init_cpu1:
     orr r0,     #0x13
     msr cpsr_c, r0 // enter SVC (supervisor) mode
     wfe
+    wfe
+    wfe
+    wfe
+    wfe  
+    wfe
     ldr pc, =_goto_kernel_main
 
 _init_cpu2:
@@ -109,6 +114,11 @@ _init_cpu2:
     orr r0,     #0x13
     msr cpsr_c, r0 // enter SVC (supervisor) mode
     wfe
+    wfe
+    wfe
+    wfe
+    wfe  
+    wfe
     ldr pc, =_goto_kernel_main
 
 _init_cpu3:
@@ -137,6 +147,11 @@ _init_cpu3:
     bic r0,     #0x1F
     orr r0,     #0x13
     msr cpsr_c, r0 // enter SVC (supervisor) mode
+    wfe
+    wfe
+    wfe
+    wfe
+    wfe  
     wfe
     ldr pc, =_goto_kernel_main
 

@@ -16,192 +16,77 @@
  * 5. All paths from any node to each of its leaves contain the same number of black nodes
  **/
 
-RBNode *rbtree_get_root(RBNode *node) {
-  RBNode *tmp = node;
-  while (tmp->parent != nullptr) {
-    tmp = tmp->parent;
-  }
-  return tmp;
-}
-
-void rbtree_rebalance(RBNode *root, RBNode *node) {
-  LogWarn("[RBTree] rebalance.\n");
-  RBNode *newNodeParent = node->parent;
-  if (newNodeParent != nullptr && newNodeParent->color != NODE_BLACK) {
-    RBNode *pnode = node;
-    while ((root != pnode) && (pnode->parent != nullptr) && pnode->parent->color == NODE_RED) {
-      RBNode *parent = pnode->parent;
-      RBNode *grandparent = pnode->parent->parent;
-      RBNode *uncle = nullptr;
-      uint32_t uncle_is_left;
-
-      if (pnode->color != NODE_RED) {
-        LogError("[RBTree]: unexpected node color.\n");
-        return;
-      }
-
-      if (parent == grandparent->left) {
-        uncle_is_left = 0;
-        uncle = grandparent->right;
-      } else {
-        uncle_is_left = 1;
-        uncle = grandparent->left;
-      }
-
-      /* Case 1: Uncle is not black */
-      if (uncle && uncle->color == NODE_RED) {
-        /* Color parent and uncle black */
-        parent->color = NODE_BLACK;
-        uncle->color = NODE_BLACK;
-
-        /* Color Grandparent as Red */
-        grandparent->color = NODE_RED;
-        pnode = grandparent;
-        /* Continue iteration, processing grandparent */
-      } else {
-        /* Case 2 - node's parent is red, but uncle is black */
-        if (!uncle_is_left && parent->right == pnode) {
-          pnode = pnode->parent;
-          rbtree_rotate_left(root, pnode);
-        } else if (uncle_is_left && parent->left == pnode) {
-          pnode = pnode->parent;
-          rbtree_rotate_right(root, pnode);
-        }
-
-        /* Case 3 - Recolor and rotate*/
-        parent = pnode->parent;
-        parent->color = NODE_BLACK;
-
-        grandparent = pnode->parent->parent;
-        grandparent->color = NODE_RED;
-        if (!uncle_is_left) {
-          rbtree_rotate_right(root, grandparent);
-        } else {
-          rbtree_rotate_left(root, grandparent);
-        }
-      }
-    }
-
-    /* Make sure the tree root is black (Case 1: Continued) */
-    RBNode *treeRoot = root;
-    treeRoot->color = NODE_BLACK;
-  }
-}
-
-void rbtree_pre_order_traveral(KernelVector *vector, RBNode *node) {
-  if (node == nullptr) {
-    return;
-  }
-
-  Thread *thread = getNode(node, Thread, rbTree);
-  kvector_add(vector, &thread->threadList);
-
-  rbtree_pre_order_traveral(vector, node->left);
-  rbtree_pre_order_traveral(vector, node->right);
-}
-
-void rbtree_reconstruct_to_list_recursion(KernelVector *vector, RBNode *root) {
-  rbtree_pre_order_traveral(vector, root);
-}
-
-void rbtree_reconstruct_to_list(KernelVector *vector, RBNode *root) {
-  KernelStatus *stack = kstack_allocate();
-  if (root == nullptr) {
-    return;
-  }
-  RBNode *p = root;
-  while (!kstack_is_empty(stack) || p != nullptr) {
-    while (p != nullptr) {
-      kstack_push(stack, (uint32_t)p);
-      Thread *thread = getNode(p, Thread, rbTree);
-      kvector_add(vector, &thread->threadList);
-      p = p->left;
-    }
-    if (!kstack_is_empty(stack)) {
-      RBNode *node = kstack_peek(stack);
-      kstack_pop(stack);
-      p = node->right;
-    }
-  }
-  kstack_free(stack);
-}
-
-KernelStatus rbtree_remove(RBNode *root, RBNode *node) {
-  // todo:
-}
-
-void rbtree_remove_rebalance(RBNode *root, RBNode *node) {
-  // todo:
-}
-
-void rbtree_rotate_left(RBNode *root, RBNode *node) {
-  RBNode *x = node;
-  RBNode *y = x->right;
-
-  x->right = y->left;
-
-  if (y->left != nullptr) {
-    RBNode *yleft = y->left;
-    yleft->parent = x;
-  }
-
-  y->parent = x->parent;
-
-  if (x->parent == nullptr) {
-    root = y;
-  } else {
-    RBNode *xp = x->parent;
-    if (x == xp->left) {
-      xp->left = y;
-    } else {
-      xp->right = y;
-    }
-  }
-
-  y->left = x;
-  x->parent = y;
-}
-
-void rbtree_rotate_right(RBNode *root, RBNode *node) {
-  RBNode *x = node;
-  RBNode *y = x->left;
-
-  x->left = y->right;
-
-  if (y->right != nullptr) {
-    RBNode *yright = y->right;
-    yright->parent = x;
-  }
-
-  y->parent = x->parent;
-
-  if (x->parent == nullptr) {
-    root = y;
-  } else {
-    RBNode *xp = x->parent;
-    if (x == xp->left) {
-      xp->left = y;
-    } else {
-      xp->right = y;
-    }
-  }
-
-  y->right = x;
-  x->parent = y;
-}
-
-RBNode *rbtree_get_min(RBNode *root) {
-  RBNode *tmp = root;
+RBNode *rbtree_default_get_min(RBTree *tree) {
+  RBNode *tmp = tree->root;
   while (tmp->left != nullptr) {
     tmp = tmp->left;
   }
   return tmp;
 }
 
-RBNode *rbtree_get_max(RBNode *root) {
-  RBNode *tmp = root;
+RBNode *rbtree_default_get_max(RBTree *tree) {
+  RBNode *tmp = tree->root;
   while (tmp->right != nullptr) {
     tmp = tmp->right;
   }
   return tmp;
+}
+
+RBNode* rbtree_insert(RBNode* node1, RBNode* node2){
+  Thread* node1Thread = getNode(node1,Thread,rbNode);
+  Thread* node2Thread = getNode(node2,Thread, rbNode);
+  
+  if(node2Thread->priority < node1Thread->priority){
+    if(node1->left==nullptr){
+      node1->left = node2;
+      node2->parent = node1;
+      return node2;
+    }
+    return rbtree_insert(node1->left,node2);
+  }else{
+    if(node1->right==nullptr){
+      node1->right = node2;
+      node2->parent = node1;
+      return node2;
+    }
+    return rbtree_insert(node1->right,node2);
+  }
+}
+
+RBNode* rbtree_default_insert(RBTree* tree, RBNode* node){
+  RBNode* root = tree->root;
+
+  if(root==nullptr){
+    tree->root = node;
+    return node;
+  }else{
+    return rbtree_insert(root,node);
+  }
+}
+
+RBNode* rbtree_default_remove(RBTree* tree,RBNode* node){
+  RBNode *root = tree->root;
+  RBNode *left = node->left;
+  RBNode *right = node->right;
+  if(node==root){
+    root->left = nullptr;
+    root->right = nullptr;
+    rbtree_default_insert(tree,left);
+    rbtree_default_insert(tree,right);
+  }else{
+    if(node->parent->left==node){
+      node->parent->left==nullptr;
+    }else if(node->parent->right==node){
+      node->parent->right==nullptr;
+    }
+    rbtree_default_insert(tree,left);
+    rbtree_default_insert(tree,right);
+  }
+}
+
+RBTree *rb_tree_init(RBTree *tree){
+  tree->operations.getMax = rbtree_default_get_max;
+  tree->operations.getMin = rbtree_default_get_min;
+  tree->operations.insert = rbtree_default_insert;
+  tree->operations.remove = rbtree_default_remove;
 }

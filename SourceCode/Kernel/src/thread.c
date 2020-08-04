@@ -77,10 +77,10 @@ Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uin
     thread->threadReadyQueue.prev = nullptr;
     thread->threadReadyQueue.next = nullptr;
 
-    thread->rbTree.parent = nullptr;
-    thread->rbTree.left = nullptr;
-    thread->rbTree.right = nullptr;
-    thread->rbTree.color = NODE_RED;
+    thread->rbNode.parent = nullptr;
+    thread->rbNode.left = nullptr;
+    thread->rbNode.right = nullptr;
+    thread->rbNode.color = NODE_RED;
     // todo : other properties, like list
 
     LogInfo("[Thread]: thread '%s' created.\n", name);
