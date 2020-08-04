@@ -10,11 +10,13 @@ PerCpu *perCpu = nullptr;
 
 KernelStatus percpu_default_insert_thread(PerCpu *perCpu, Thread *thread) {
   perCpu->rbTree.operations.insert(&perCpu->rbTree, &thread->rbNode);
+  perCpu->priority += thread->priority;
   return OK;
 }
 
 Thread *percpu_default_remove_thread(PerCpu *perCpu, Thread *thread) {
   RBNode *node = perCpu->rbTree.operations.remove(&perCpu->rbTree, &thread->rbNode);
+  perCpu->priority -= thread->priority;
   return node;
 }
 
