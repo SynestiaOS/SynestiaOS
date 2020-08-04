@@ -101,7 +101,6 @@ void reverse(char str[], int length) {
 }
 
 int printf(const char *format, ...) {
-
   va_list valist;
 
   uint32_t num = getArgsNumFromFormatString(format);

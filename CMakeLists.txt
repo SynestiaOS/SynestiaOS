@@ -22,7 +22,6 @@ include(${SynestiaOS_SOURCE_DIR}/CMake/ArchDetector.cmake)
 include(${SynestiaOS_SOURCE_DIR}/CMake/PlatformDetector.cmake)
 include(${SynestiaOS_SOURCE_DIR}/CMake/VarsDump.cmake)
 include(${SynestiaOS_SOURCE_DIR}/CMake/HeaderFiles.cmake)
-#include(${SynestiaOS_SOURCE_DIR}/CMake/GenDocs.cmake)
 
 
 message(STATUS "PLATFORM is ${PLATFORM}")

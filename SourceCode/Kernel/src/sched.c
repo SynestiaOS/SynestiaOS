@@ -9,12 +9,12 @@
 #include <log.h>
 #include <percpu.h>
 #include <sched.h>
-#include <stdlib.h>
 #include <spinlock.h>
+#include <stdlib.h>
 
 extern uint64_t ktimer_sys_runtime_tick(uint64_t tickIntreval);
-#define TIMER_TICK_MS 50
 
+#define TIMER_TICK_MS 50
 
 TimerHandler tickHandler;
 
@@ -30,9 +30,10 @@ void tick() {
 }
 
 SpinLockCreate(spinlock);
+
 KernelStatus schd_switch_next(void) {
   uint32_t cpuid = read_cpuid();
-  LogWarn("[Schd]: cpuId %d .\n",cpuid);
+  LogWarn("[Schd]: cpuId %d .\n", cpuid);
   PerCpu *perCpu = percpu_get(cpuid);
   Thread *thread = perCpu->operations.getNextThread(perCpu);
 
@@ -41,7 +42,7 @@ KernelStatus schd_switch_next(void) {
   spinlock.operations.release(&spinlock);
 
   Thread *removedThread = perCpu->operations.removeThread(perCpu, thread);
-  if (removedThread != nullptr) {
+  if (removedThread != nullptr && removedThread != percpu_get(cpuid)->idleThread) {
     schd_add_thread(removedThread, removedThread->priority);
   }
   return OK;
@@ -68,7 +69,7 @@ KernelStatus schd_add_thread(Thread *thread, uint32_t priority) {
   PerCpu *perCpu = percpu_min_priority();
   KernelStatus threadAddStatus = perCpu->operations.insertThread(perCpu, thread);
   if (threadAddStatus != OK) {
-    LogError("[schd] thread %s add to schduler failed.\n",thread->name);
+    LogError("[schd] thread %s add to schduler failed.\n", thread->name);
     return ERROR;
   }
   return OK;

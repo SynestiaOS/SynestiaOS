@@ -26,13 +26,12 @@ Thread *percpu_default_get_next_thread(PerCpu *perCpu) {
   if (node == nullptr) {
     // todo: migration from other core.
     return perCpu->idleThread;
-  } else {
-    Thread *thread = getNode(node, Thread, rbNode);
-    if (thread == nullptr) {
-      return perCpu->idleThread;
-    }
-    return thread;
   }
+  Thread *thread = getNode(node, Thread, rbNode);
+  if (thread == nullptr) {
+    return perCpu->idleThread;
+  }
+  return thread;
 }
 
 KernelStatus percpu_default_init(PerCpu *perCpu, uint32_t num, Thread *idleThread) {

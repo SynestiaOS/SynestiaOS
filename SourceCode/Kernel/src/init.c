@@ -190,6 +190,6 @@ void kernel_main(void) {
     bootSpinLock.operations.release(&bootSpinLock);
     schd_schedule();
   }
-  
+
   // schd_switch_next();
 }
