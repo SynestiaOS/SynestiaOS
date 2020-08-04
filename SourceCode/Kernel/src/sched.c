@@ -10,12 +10,11 @@
 #include <percpu.h>
 #include <sched.h>
 #include <stdlib.h>
+#include <spinlock.h>
 
 extern uint64_t ktimer_sys_runtime_tick(uint64_t tickIntreval);
 #define TIMER_TICK_MS 50
 
-Thread *currentThread = nullptr;
-Thread *headThread = nullptr;
 
 TimerHandler tickHandler;
 
@@ -23,16 +22,23 @@ uint32_t current_thread_stack = 0;
 uint32_t switch_thread_stack = 0;
 uint32_t switch_to_signal = 0;
 
+Thread *currentThread = nullptr;
+
 void tick() {
   ktimer_sys_runtime_tick(TIMER_TICK_MS);
   schd_switch_next();
 }
 
+SpinLockCreate(spinlock);
 KernelStatus schd_switch_next(void) {
   uint32_t cpuid = read_cpuid();
   PerCpu *perCpu = percpu_get(cpuid);
   Thread *thread = perCpu->operations.getNextThread(perCpu);
+
+  spinlock.operations.acquire(&spinlock);
   schd_switch_to(thread);
+  spinlock.operations.release(&spinlock);
+
   Thread *removedThread = perCpu->operations.removeThread(perCpu, thread);
   if (removedThread != nullptr) {
     schd_add_thread(removedThread, removedThread->priority);
