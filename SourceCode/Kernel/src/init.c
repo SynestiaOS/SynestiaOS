@@ -149,8 +149,10 @@ uint32_t *window_thread5(int args) {
 }
 
 TimerHandler gpuHandler;
+SpinLockCreate(bootSpinLock);
 void kernel_main(void) {
   if (read_cpuid() == 0) {
+    bootSpinLock.operations.acquire(&bootSpinLock);
     init_bsp();
     print_splash();
 
@@ -185,7 +187,9 @@ void kernel_main(void) {
     Thread *window5Thread = thread_create("window5", &window_thread5, 1, 1);
     schd_add_thread(window5Thread, 4);
 
-    enable_interrupt();
+    bootSpinLock.operations.release(&bootSpinLock);
     schd_schedule();
   }
+  
+  schd_switch_next();
 }

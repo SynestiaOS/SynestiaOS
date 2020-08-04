@@ -32,6 +32,7 @@ void tick() {
 SpinLockCreate(spinlock);
 KernelStatus schd_switch_next(void) {
   uint32_t cpuid = read_cpuid();
+  LogWarn("[Schd]: cpuId %d .\n",cpuid);
   PerCpu *perCpu = percpu_get(cpuid);
   Thread *thread = perCpu->operations.getNextThread(perCpu);
 
