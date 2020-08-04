@@ -88,7 +88,7 @@ int framebuffer_init(void) {
   allocateBufferMail->end = PROPERTY_TAG_END;
   allocateBufferMail->property.tag = PROPERTY_TAG_ALLOCATE_BUFFER;
   allocateBufferMail->property.bufferSize = 8;
-  allocateBufferMail->property.code = 0x80000000 + 8;
+  allocateBufferMail->property.code = 0x80000000 + 4;
   allocateBufferMail->property.PACKED.alignment = 16;
   allocateBufferMail->property.size = 0;
   MailMessage allocateBufferMailMsg = {.channel = MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, .data = allocateBufferMail};
