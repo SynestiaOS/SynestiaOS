@@ -23,8 +23,8 @@ int framebuffer_init(void) {
   setPhysicalDisplayWHMail->property.tag = PROPERTY_TAG_SET_PHYSICAL_DISPLAY_WH;
   setPhysicalDisplayWHMail->property.bufferSize = 8;
   setPhysicalDisplayWHMail->property.code = 0x80000000 + 8;
-  setPhysicalDisplayWHMail->property.width = 1024;
-  setPhysicalDisplayWHMail->property.height = 768;
+  setPhysicalDisplayWHMail->property.width = 640;
+  setPhysicalDisplayWHMail->property.height = 480;
   MailMessage setPhysicalDisplayWHMailMsg = {.channel = MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC,
                                              .data = setPhysicalDisplayWHMail};
   mailbox_call(setPhysicalDisplayWHMailMsg);
@@ -41,8 +41,8 @@ int framebuffer_init(void) {
   setVirtualBufferWHMail->property.tag = PROPERTY_TAG_SET_VIRTUAL_BUFFER_WH;
   setVirtualBufferWHMail->property.bufferSize = 8;
   setVirtualBufferWHMail->property.code = 0x80000000 + 8;
-  setVirtualBufferWHMail->property.width = 1024;
-  setVirtualBufferWHMail->property.height = 768;
+  setVirtualBufferWHMail->property.width = 640;
+  setVirtualBufferWHMail->property.height = 480;
   MailMessage setVirtualBufferWHMailMsg = {.channel = MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC,
                                            .data = setVirtualBufferWHMail};
   mailbox_call(setVirtualBufferWHMailMsg);
