@@ -48,9 +48,7 @@ KernelStatus schd_switch_next(void) {
 }
 
 KernelStatus schd_init() {
-  // 1. create PreCpus
   if (percpu_create(CPU_EXISTS_NUM) != ERROR) {
-    // 2. init PerCpu
     for (uint32_t cpuId = 0; cpuId < CPU_EXISTS_NUM; cpuId++) {
       Thread *idleThread = thread_create_idle_thread(cpuId);
       if (idleThread == nullptr) {

@@ -191,5 +191,5 @@ void kernel_main(void) {
     schd_schedule();
   }
   
-  schd_switch_next();
+  // schd_switch_next();
 }
