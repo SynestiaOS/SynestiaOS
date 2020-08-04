@@ -6,14 +6,18 @@
 #define __KERNEL_SPINLOCK_H__
 #include <atomic.h>
 
-#define SpinLockCreate()                                                                                               \
-  {                                                                                                                    \
+#define SpinLockCreate(x)                                                                                              \
+  SpinLock x = {                                                                                                       \
+      .lock =                                                                                                          \
+          {                                                                                                            \
+              .counter = 0,                                                                                            \
+          },                                                                                                           \
       .operations =                                                                                                    \
           {                                                                                                            \
               .acquire = spinlock_default_acquire,                                                                     \
               .release = spinlock_default_release,                                                                     \
           },                                                                                                           \
-  };
+  }
 
 typedef void (*SpinLockAcquire)(struct SpinLock *spinLock);
 typedef void (*SpinLockRelease)(struct SpinLock *spinLock);

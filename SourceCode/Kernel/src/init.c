@@ -150,7 +150,7 @@ uint32_t *window_thread5(int args) {
 
 TimerHandler gpuHandler;
 
-SpinLock spinlock = SpinLockCreate();
+SpinLockCreate(spinlock);
 void kernel_main(void) {
   spinlock.operations.acquire(&spinlock);
   init_bsp();
