@@ -1,6 +1,9 @@
 .section ".text.boot"
 .globl _start
 _start:
+    mov	r0, #0
+	mcr	p15, 0, r0, c12, c0, 0	
+
     // there are 4 cores within rasberry pi 3, and 4 cores will execute the following code at the same time
     mrc p15, #0, r0, c0, c0, #5 // Move to ARM Register r0 from Coprocessor c0. Read ID Code Register
     and r0, r0, #0xFF // r0 &= 0xFF
