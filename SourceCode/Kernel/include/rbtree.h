@@ -22,20 +22,19 @@ typedef struct RBNode {
   NodeColor color;
 } __attribute__((packed)) RBNode;
 
+typedef RBNode *(*RBTreeInsertNode)(struct RBTree *tree, RBNode *node);
+typedef RBNode *(*RbTreeGetMinNode)(struct RBTree *tree);
+typedef RBNode *(*RbTreeGetMaxNode)(struct RBTree *tree);
+typedef RBNode *(*RbTreeRemoveNode)(struct RBTree *tree, RBNode *node);
 
-typedef RBNode* (*RBTreeInsertNode)(struct RBTree* tree, RBNode* node);
-typedef RBNode* (*RbTreeGetMinNode)(struct RBTree* tree);
-typedef RBNode* (*RbTreeGetMaxNode)(struct RBTree* tree);
-typedef RBNode* (*RbTreeRemoveNode)(struct RBTree* tree,RBNode* node);
-
-typedef struct RBTreeOperations{
+typedef struct RBTreeOperations {
   RBTreeInsertNode insert;
   RbTreeGetMinNode getMin;
   RbTreeGetMaxNode getMax;
   RbTreeRemoveNode remove;
 } RBTreeOperations;
 
-typedef struct RBTree{
+typedef struct RBTree {
   RBNode *root;
   RBTreeOperations operations;
 } RBTree;

@@ -32,59 +32,59 @@ RBNode *rbtree_default_get_max(RBTree *tree) {
   return tmp;
 }
 
-RBNode* rbtree_insert(RBNode* node1, RBNode* node2){
-  Thread* node1Thread = getNode(node1,Thread,rbNode);
-  Thread* node2Thread = getNode(node2,Thread, rbNode);
-  
-  if(node2Thread->priority < node1Thread->priority){
-    if(node1->left==nullptr){
+RBNode *rbtree_insert(RBNode *node1, RBNode *node2) {
+  Thread *node1Thread = getNode(node1, Thread, rbNode);
+  Thread *node2Thread = getNode(node2, Thread, rbNode);
+
+  if (node2Thread->priority < node1Thread->priority) {
+    if (node1->left == nullptr) {
       node1->left = node2;
       node2->parent = node1;
       return node2;
     }
-    return rbtree_insert(node1->left,node2);
-  }else{
-    if(node1->right==nullptr){
+    return rbtree_insert(node1->left, node2);
+  } else {
+    if (node1->right == nullptr) {
       node1->right = node2;
       node2->parent = node1;
       return node2;
     }
-    return rbtree_insert(node1->right,node2);
+    return rbtree_insert(node1->right, node2);
   }
 }
 
-RBNode* rbtree_default_insert(RBTree* tree, RBNode* node){
-  RBNode* root = tree->root;
+RBNode *rbtree_default_insert(RBTree *tree, RBNode *node) {
+  RBNode *root = tree->root;
 
-  if(root==nullptr){
+  if (root == nullptr) {
     tree->root = node;
     return node;
-  }else{
-    return rbtree_insert(root,node);
+  } else {
+    return rbtree_insert(root, node);
   }
 }
 
-RBNode* rbtree_default_remove(RBTree* tree,RBNode* node){
+RBNode *rbtree_default_remove(RBTree *tree, RBNode *node) {
   RBNode *root = tree->root;
   RBNode *left = node->left;
   RBNode *right = node->right;
-  if(node==root){
+  if (node == root) {
     root->left = nullptr;
     root->right = nullptr;
-    rbtree_default_insert(tree,left);
-    rbtree_default_insert(tree,right);
-  }else{
-    if(node->parent->left==node){
-      node->parent->left==nullptr;
-    }else if(node->parent->right==node){
-      node->parent->right==nullptr;
+    rbtree_default_insert(tree, left);
+    rbtree_default_insert(tree, right);
+  } else {
+    if (node->parent->left == node) {
+      node->parent->left == nullptr;
+    } else if (node->parent->right == node) {
+      node->parent->right == nullptr;
     }
-    rbtree_default_insert(tree,left);
-    rbtree_default_insert(tree,right);
+    rbtree_default_insert(tree, left);
+    rbtree_default_insert(tree, right);
   }
 }
 
-RBTree *rb_tree_init(RBTree *tree){
+RBTree *rb_tree_init(RBTree *tree) {
   tree->operations.getMax = rbtree_default_get_max;
   tree->operations.getMin = rbtree_default_get_min;
   tree->operations.insert = rbtree_default_insert;

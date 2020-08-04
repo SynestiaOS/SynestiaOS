@@ -96,12 +96,12 @@
  * 0xXX+16|                           Padding                             |
  *        +---------------------------------------------------------------+
  *
- * A Tag starts with a 4 byte tag id, which identifies which command this tag wants to run. 
- * In general, Tags have form 0x000XYZZZ, 
- * where X identifies which hardware device you are accessing, 
- * Y identifies which type of command it is (0 = get, 4 = test, 8 = set), 
+ * A Tag starts with a 4 byte tag id, which identifies which command this tag wants to run.
+ * In general, Tags have form 0x000XYZZZ,
+ * where X identifies which hardware device you are accessing,
+ * Y identifies which type of command it is (0 = get, 4 = test, 8 = set),
  * and ZZZ identifies the specific command.
- * 
+ *
  * map of tag:
  *        0       4       8      12      16      20      24      28      32
  *        +---------------------------------------------------------------+

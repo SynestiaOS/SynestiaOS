@@ -149,47 +149,46 @@ uint32_t *window_thread5(int args) {
 }
 
 TimerHandler gpuHandler;
-
+SpinLock spinlock;
 void kernel_main(void) {
-  uint32_t cpuid = read_cpuid();
-  LogWarn("[MPCore] cpuid: %d .\n", cpuid);
-  if (cpuid == 0) {
-    init_bsp();
-    print_splash();
+  spinlock.operations.acquire(&spinlock);
+  init_bsp();
+  print_splash();
 
-    vmm_init();
-    kheap_init();
-    init_interrupt();
-    gpu_init();
+  vmm_init();
+  kheap_init();
+  init_interrupt();
+  gpu_init();
 
-    Gfx2DContext context = {.width = 1024, .height = 768, .buffer = GFX2D_BUFFER};
-    gfx2d_draw_bitmap(context, 0, 0, 1024, 768, desktop());
-    draw_task_bar();
+  Gfx2DContext context = {.width = 1024, .height = 768, .buffer = GFX2D_BUFFER};
+  gfx2d_draw_bitmap(context, 0, 0, 1024, 768, desktop());
+  draw_task_bar();
 
-    gpuHandler.node.next = nullptr;
-    gpuHandler.node.prev = nullptr;
-    gpuHandler.timer_interrupt_handler = &gpu_flush;
-    register_time_interrupt(&gpuHandler);
+  gpuHandler.node.next = nullptr;
+  gpuHandler.node.prev = nullptr;
+  gpuHandler.timer_interrupt_handler = &gpu_flush;
+  register_time_interrupt(&gpuHandler);
 
-    schd_init();
+  schd_init();
 
-    Thread *window1Thread = thread_create("window1", &window_thread1, 1, 1);
-    schd_add_thread(window1Thread, 0);
+  Thread *window1Thread = thread_create("window1", &window_thread1, 1, 1);
+  schd_add_thread(window1Thread, 0);
 
-    Thread *window2Thread = thread_create("window2", &window_thread2, 1, 1);
-    schd_add_thread(window2Thread, 1);
+  Thread *window2Thread = thread_create("window2", &window_thread2, 1, 1);
+  schd_add_thread(window2Thread, 1);
 
-    Thread *window3Thread = thread_create("window3", &window_thread3, 1, 1);
-    schd_add_thread(window3Thread, 2);
+  Thread *window3Thread = thread_create("window3", &window_thread3, 1, 1);
+  schd_add_thread(window3Thread, 2);
 
-    Thread *window4Thread = thread_create("window4", &window_thread4, 1, 1);
-    schd_add_thread(window4Thread, 3);
+  Thread *window4Thread = thread_create("window4", &window_thread4, 1, 1);
+  schd_add_thread(window4Thread, 3);
 
-    Thread *window5Thread = thread_create("window5", &window_thread5, 1, 1);
-    schd_add_thread(window5Thread, 4);
+  Thread *window5Thread = thread_create("window5", &window_thread5, 1, 1);
+  schd_add_thread(window5Thread, 4);
 
-    schd_schedule();
-  }
+  schd_schedule();
+
+  spinlock.operations.release(&spinlock);
 
   while (1) {
     uint32_t cpuid = read_cpuid();

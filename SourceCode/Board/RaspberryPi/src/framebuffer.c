@@ -92,9 +92,9 @@ int framebuffer_init(void) {
   // allocateBufferMail->property.code = 0x80000000 + 4;
   // allocateBufferMail->property.PACKED.alignment = 16;
   // allocateBufferMail->property.size = 0;
-  // MailMessage allocateBufferMailMsg = {.channel = MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, .data = allocateBufferMail};
-  // mailbox_call(allocateBufferMailMsg);
-  // if (allocateBufferMail->code == CODE_RESPONSE_FAILURE || allocateBufferMail->property.code == CODE_RESPONSE_FAILURE) {
+  // MailMessage allocateBufferMailMsg = {.channel = MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, .data =
+  // allocateBufferMail}; mailbox_call(allocateBufferMailMsg); if (allocateBufferMail->code == CODE_RESPONSE_FAILURE ||
+  // allocateBufferMail->property.code == CODE_RESPONSE_FAILURE) {
   //   LogError("[Framebuffer]: Unable to allocate video buffer\n");
   // }
 
@@ -127,8 +127,8 @@ int framebuffer_init(void) {
   mailbox[2] = 0x48003; // set phy wh
   mailbox[3] = 8;
   mailbox[4] = 8;
-  mailbox[5] = 1024; // FrameBufferInfo.width
-  mailbox[6] = 768;  // FrameBufferInfo.height
+  mailbox[5] = 1024;    // FrameBufferInfo.width
+  mailbox[6] = 768;     // FrameBufferInfo.height
   mailbox[7] = 0x48004; // set virt wh
   mailbox[8] = 8;
   mailbox[9] = 8;
@@ -144,16 +144,16 @@ int framebuffer_init(void) {
   mailbox[17] = 0x48005; // set depth
   mailbox[18] = 4;
   mailbox[19] = 4;
-  mailbox[20] = 32; // FrameBufferInfo.depth
+  mailbox[20] = 32;      // FrameBufferInfo.depth
   mailbox[21] = 0x48006; // set pixel order
   mailbox[22] = 4;
   mailbox[23] = 4;
-  mailbox[24] = 1; // RGB, not BGR preferably
+  mailbox[24] = 1;       // RGB, not BGR preferably
   mailbox[25] = 0x40001; // get framebuffer, gets alignment on request
   mailbox[26] = 8;
   mailbox[27] = 8;
-  mailbox[28] = 4096; // FrameBufferInfo.pointer
-  mailbox[29] = 0;    // FrameBufferInfo.size
+  mailbox[28] = 4096;    // FrameBufferInfo.pointer
+  mailbox[29] = 0;       // FrameBufferInfo.size
   mailbox[30] = 0x40008; // get pitch
   mailbox[31] = 4;
   mailbox[32] = 4;

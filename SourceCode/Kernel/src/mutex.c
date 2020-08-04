@@ -23,12 +23,9 @@ bool mutex_acquire(Mutex *mutex) {
     // can not get the lock, just add to lock wait list
 
     // reomve from schd list
-  
 
     // 2. switch to the next thread in scheduler
   }
 }
 
-void mutex_release(Mutex *mutex) {
-  atomic_set(mutex->val, 0);
-}
+void mutex_release(Mutex *mutex) { atomic_set(mutex->val, 0); }

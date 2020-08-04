@@ -3,17 +3,21 @@
 //
 #include <spinlock.h>
 
-void spinlock_create(SpinLock *spinLock, Atomic *atomic) { atomic_create(atomic); }
-
-void spinlock_acquire(SpinLock *spinLock) {
-  if (atomic_get(spinLock->lock) == 0) {
-    atomic_set(spinLock->lock, 1);
+void spinlock_default_acquire(SpinLock *spinLock) {
+  if (atomic_get(&spinLock->lock) == 0) {
+    atomic_set(&spinLock->lock, 1);
   } else {
     asm volatile("WFE");
   }
 }
 
-void spinlock_release(SpinLock *spinLock) {
-  atomic_set(spinLock->lock, 0);
+void spinlock_default_release(SpinLock *spinLock) {
+  atomic_set(&spinLock->lock, 0);
   asm volatile("SEV");
+}
+
+void spinlock_create(SpinLock *spinLock) {
+  atomic_create(&spinLock->lock);
+  spinLock->operations.acquire = spinlock_default_acquire;
+  spinLock->operations.release = spinlock_default_release;
 }

@@ -6,8 +6,8 @@
 #define __KERNEL_PRECPU_H__
 
 #include <kqueue.h>
-#include <thread.h>
 #include <rbtree.h>
+#include <thread.h>
 
 #define CPU_EXISTS_NUM 4
 
@@ -15,16 +15,16 @@ typedef struct CpuStatus {
   uint32_t idleTime;
 } CpuStatus;
 
-typedef KernelStatus (*PerCpuInit)(struct PerCpu* perCpu, uint32_t num,Thread *idleThread);
-typedef KernelStatus (*PerCpuInsertThread)(struct PerCpu* perCpu, Thread *thread);
-typedef Thread* (*PerCpuRemoveThread)(struct PerCpu* perCpu, Thread *thread);
-typedef Thread* (*PerCpuGetNextThread)(struct PerCpu* perCpu);
-typedef struct PerCpuOperations{
+typedef KernelStatus (*PerCpuInit)(struct PerCpu *perCpu, uint32_t num, Thread *idleThread);
+typedef KernelStatus (*PerCpuInsertThread)(struct PerCpu *perCpu, Thread *thread);
+typedef Thread *(*PerCpuRemoveThread)(struct PerCpu *perCpu, Thread *thread);
+typedef Thread *(*PerCpuGetNextThread)(struct PerCpu *perCpu);
+typedef struct PerCpuOperations {
   PerCpuInit init;
   PerCpuInsertThread insertThread;
   PerCpuRemoveThread removeThread;
   PerCpuGetNextThread getNextThread;
-}PerCpuOperations;
+} PerCpuOperations;
 
 typedef struct PerCpu {
   CpuNum cpuNum;

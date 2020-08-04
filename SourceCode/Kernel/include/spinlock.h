@@ -6,11 +6,18 @@
 #define __KERNEL_SPINLOCK_H__
 #include <atomic.h>
 
+typedef void (*SpinLockAcquire)(struct SpinLock *spinLock);
+typedef void (*SpinLockRelease)(struct SpinLock *spinLock);
+
+typedef struct SpinLockOperations {
+  SpinLockAcquire acquire;
+  SpinLockRelease release;
+} SpinLockOperations;
+
 typedef struct SpinLock {
-  Atomic *lock;
+  Atomic lock;
+  SpinLockOperations operations;
 } SpinLock;
 
-void spinlock_create(SpinLock *spinLock, Atomic *atomic);
-void spinlock_acquire(SpinLock *spinLock);
-void spinlock_release(SpinLock *spinLock);
+void spinlock_create(SpinLock *spinLock);
 #endif // __KERNEL_SPINLOCK_H__

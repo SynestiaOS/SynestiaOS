@@ -2,6 +2,7 @@
 // Created by XingfengYang on 2020/6/29.
 //
 
+#include <cache.h>
 #include <interrupt.h>
 #include <kqueue.h>
 #include <kvector.h>
@@ -9,7 +10,6 @@
 #include <percpu.h>
 #include <sched.h>
 #include <stdlib.h>
-#include <cache.h>
 
 extern uint64_t ktimer_sys_runtime_tick(uint64_t tickIntreval);
 #define TIMER_TICK_MS 50
@@ -30,11 +30,11 @@ void tick() {
 
 KernelStatus schd_switch_next(void) {
   uint32_t cpuid = read_cpuid();
-  PerCpu * perCpu = percpu_get(cpuid);
-  Thread* thread =  perCpu->operations.getNextThread(perCpu);
+  PerCpu *perCpu = percpu_get(cpuid);
+  Thread *thread = perCpu->operations.getNextThread(perCpu);
   schd_switch_to(thread);
-  Thread* removedThread = perCpu->operations.removeThread(perCpu,thread);
-  if(removedThread!=nullptr){
+  Thread *removedThread = perCpu->operations.removeThread(perCpu, thread);
+  if (removedThread != nullptr) {
     schd_add_thread(removedThread, removedThread->priority);
   }
   return OK;
@@ -50,7 +50,7 @@ KernelStatus schd_init() {
         return ERROR;
       }
       PerCpu *perCpu = percpu_get(cpuId);
-      perCpu->operations.init(perCpu,idleThread,cpuId);
+      perCpu->operations.init(perCpu, idleThread, cpuId);
     }
   }
 
@@ -60,7 +60,7 @@ KernelStatus schd_init() {
 
 KernelStatus schd_add_thread(Thread *thread, uint32_t priority) {
   thread->priority = priority;
-  PerCpu* perCpu = percpu_min_priority();
+  PerCpu *perCpu = percpu_min_priority();
   KernelStatus threadAddStatus = perCpu->operations.insertThread(perCpu, thread);
   if (threadAddStatus != OK) {
     return ERROR;
