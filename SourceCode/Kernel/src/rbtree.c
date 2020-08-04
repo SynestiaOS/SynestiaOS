@@ -71,15 +71,17 @@ RBNode *rbtree_default_remove(RBTree *tree, RBNode *node) {
   if (node == root) {
     root->left = nullptr;
     root->right = nullptr;
-    rbtree_default_insert(tree, left);
-    rbtree_default_insert(tree, right);
   } else {
     if (node->parent->left == node) {
       node->parent->left == nullptr;
     } else if (node->parent->right == node) {
       node->parent->right == nullptr;
     }
+  }
+  if(left!=nullptr){
     rbtree_default_insert(tree, left);
+  }
+  if(right!=nullptr){
     rbtree_default_insert(tree, right);
   }
 }
