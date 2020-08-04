@@ -22,7 +22,7 @@ int framebuffer_init(void) {
   setPhysicalDisplayWHMail->end = PROPERTY_TAG_END;
   setPhysicalDisplayWHMail->property.tag = PROPERTY_TAG_SET_PHYSICAL_DISPLAY_WH;
   setPhysicalDisplayWHMail->property.bufferSize = 8;
-  setPhysicalDisplayWHMail->property.code = CODE_REQUEST;
+  setPhysicalDisplayWHMail->property.code = 0x80000000 + 8;
   setPhysicalDisplayWHMail->property.width = 1024;
   setPhysicalDisplayWHMail->property.height = 768;
   MailMessage setPhysicalDisplayWHMailMsg = {.channel = MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC,
@@ -40,7 +40,7 @@ int framebuffer_init(void) {
   setVirtualBufferWHMail->end = PROPERTY_TAG_END;
   setVirtualBufferWHMail->property.tag = PROPERTY_TAG_SET_VIRTUAL_BUFFER_WH;
   setVirtualBufferWHMail->property.bufferSize = 8;
-  setVirtualBufferWHMail->property.code = CODE_REQUEST;
+  setVirtualBufferWHMail->property.code = 0x80000000 + 8;
   setVirtualBufferWHMail->property.width = 1024;
   setVirtualBufferWHMail->property.height = 768;
   MailMessage setVirtualBufferWHMailMsg = {.channel = MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC,
@@ -57,7 +57,7 @@ int framebuffer_init(void) {
   setDepthMail->end = PROPERTY_TAG_END;
   setDepthMail->property.tag = PROPERTY_TAG_SET_DEPTH;
   setDepthMail->property.bufferSize = 4;
-  setDepthMail->property.code = CODE_REQUEST;
+  setDepthMail->property.code = 0x80000000 + 4;
   setDepthMail->property.bitsPerPixel = 32;
   MailMessage setDepthMailMsg = {.channel = MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, .data = setDepthMail};
   mailbox_call(setDepthMailMsg);
@@ -71,7 +71,7 @@ int framebuffer_init(void) {
   setVirtualOffsetMail->end = PROPERTY_TAG_END;
   setVirtualOffsetMail->property.tag = PROPERTY_TAG_SET_VIRTUAL_OFFSET;
   setVirtualOffsetMail->property.bufferSize = 8;
-  setVirtualOffsetMail->property.code = CODE_REQUEST;
+  setVirtualOffsetMail->property.code = 0x80000000 + 8;
   setVirtualOffsetMail->property.xOffset = 0;
   setVirtualOffsetMail->property.yOffset = 0;
   MailMessage setVirtualOffsetMailMsg = {.channel = MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC,
@@ -88,7 +88,7 @@ int framebuffer_init(void) {
   allocateBufferMail->end = PROPERTY_TAG_END;
   allocateBufferMail->property.tag = PROPERTY_TAG_ALLOCATE_BUFFER;
   allocateBufferMail->property.bufferSize = 8;
-  allocateBufferMail->property.code = CODE_REQUEST;
+  allocateBufferMail->property.code = 0x80000000 + 8;
   allocateBufferMail->property.PACKED.alignment = 16;
   allocateBufferMail->property.size = 0;
   MailMessage allocateBufferMailMsg = {.channel = MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, .data = allocateBufferMail};
@@ -103,7 +103,7 @@ int framebuffer_init(void) {
   getPitchMail->end = PROPERTY_TAG_END;
   getPitchMail->property.tag = PROPERTY_TAG_GET_PITCH;
   getPitchMail->property.bufferSize = 4;
-  getPitchMail->property.code = 0x80000000 + getPitchMail->property.bufferSize;
+  getPitchMail->property.code = 0;
   getPitchMail->property.bytesPerLine = 0;
   MailMessage getPitchMailMsg = {.channel = MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, .data = getPitchMail};
   mailbox_call(getPitchMailMsg);
