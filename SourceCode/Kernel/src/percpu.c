@@ -24,8 +24,7 @@ Thread *percpu_default_remove_thread(PerCpu *perCpu, Thread *thread) {
 }
 
 Thread *percpu_default_get_next_thread(PerCpu *perCpu) {
-  PerCpu *min = percpu_min_priority();
-  RBNode *node = min->rbTree.operations.getMin(&min->rbTree);
+  RBNode *node = perCpu->rbTree.operations.getMin(&perCpu->rbTree);
   if (node == nullptr) {
     // todo: migration from other core.
     LogWarn("[PerCpu]: get min thread null.\n");

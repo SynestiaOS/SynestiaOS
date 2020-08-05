@@ -41,9 +41,11 @@ KernelStatus schd_switch_next(void) {
   schd_switch_to(thread);
   spinlock.operations.release(&spinlock);
 
-  Thread *removedThread = perCpu->operations.removeThread(perCpu, thread);
-  if (removedThread != perCpu->idleThread) {
-    schd_add_thread(removedThread, removedThread->priority);
+  if(thread!=perCpu->idleThread) {
+      Thread *removedThread = perCpu->operations.removeThread(perCpu, thread);
+      if (removedThread != perCpu->idleThread) {
+          schd_add_thread(removedThread, removedThread->priority);
+      }
   }
   return OK;
 }
@@ -69,7 +71,7 @@ KernelStatus schd_add_thread(Thread *thread, uint32_t priority) {
   PerCpu *perCpu = percpu_min_priority();
   KernelStatus threadAddStatus = perCpu->operations.insertThread(perCpu, thread);
   if (threadAddStatus != OK) {
-    LogError("[schd] thread %s add to schduler failed.\n", thread->name);
+    LogError("[Schd] thread %s add to schduler failed.\n", thread->name);
     return ERROR;
   }
   return OK;
