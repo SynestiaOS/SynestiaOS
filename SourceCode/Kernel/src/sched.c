@@ -36,7 +36,7 @@ KernelStatus schd_switch_next(void) {
   Thread *thread = perCpu->operations.getNextThread(perCpu);
 
   spinlock.operations.acquire(&spinlock);
-  thread->runtimVirtualNs+=TIMER_TICK_MS;
+  thread->runtimVirtualNs += TIMER_TICK_MS;
   schd_switch_to(thread);
   spinlock.operations.release(&spinlock);
 
