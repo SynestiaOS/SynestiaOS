@@ -123,4 +123,8 @@ KernelStatus schd_preempt(void) {
   return OK;
 }
 
-uint32_t schd_getpid() { return currentThread->pid; }
+uint32_t schd_getpid() { 
+  uint32_t cpuid = read_cpuid();
+  PerCpu *perCpu = percpu_get(cpuid);
+  return perCpu->currentThread->pid; 
+}
