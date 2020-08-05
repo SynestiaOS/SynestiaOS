@@ -27,7 +27,7 @@ void tick() {
   schd_switch_next();
 }
 
-SpinLockCreate(spinlock);
+SpinLock spinlock = SpinLockCreate();
 
 KernelStatus schd_switch_next(void) {
   uint32_t cpuid = read_cpuid();

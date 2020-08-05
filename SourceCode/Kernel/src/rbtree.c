@@ -84,6 +84,7 @@ RBNode *rbtree_default_remove(RBTree *tree, RBNode *node) {
   }
   node->left = nullptr;
   node->right = nullptr;
+  return node;
 }
 
 RBTree *rb_tree_init(RBTree *tree) {
