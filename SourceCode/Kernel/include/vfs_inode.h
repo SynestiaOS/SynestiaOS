@@ -15,7 +15,7 @@ typedef enum IndexNodeType {
   INDEX_NODE_FILE,
 } IndexNodeType;
 
-typedef enum IndexNodeMode{
+typedef enum IndexNodeMode {
   INDEX_NODE_MODE_EXECUTABLE = 0b100,
   INDEX_NODE_MODE_WRITEABLE = 0b010,
   INDEX_NODE_MODE_READABLE = 0b001,
@@ -24,7 +24,8 @@ typedef enum IndexNodeMode{
 typedef KernelStatus (*IndexNodeDeleteOperation)(struct IndexNode *indexNode);
 typedef KernelStatus (*IndexNodeReleaseOperation)(struct IndexNode *indexNode);
 typedef KernelStatus (*IndexNodeCreateOperation)(struct IndexNode *indexNode);
-typedef KernelStatus (*IndexNodeMakeDirectotyOperation)(struct IndexNode *indexNode, const char* fileName, uint16_t mode);
+typedef KernelStatus (*IndexNodeMakeDirectotyOperation)(struct IndexNode *indexNode, const char *fileName,
+                                                        uint16_t mode);
 typedef KernelStatus (*IndexNodeRenameOperation)(struct IndexNode *indexNode);
 typedef KernelStatus (*IndexNodeHardLinkOperation)(struct IndexNode *indexNode);
 
@@ -61,14 +62,13 @@ typedef struct IndexNode {
   uint64_t lastUpdateTimestamp;
 } IndexNode;
 
-
 KernelStatus vfs_inode_default_delete(IndexNode *indexNode);
 
 KernelStatus vfs_inode_default_release(IndexNode *indexNode);
 
 KernelStatus vfs_inode_default_create(IndexNode *indexNode);
 
-KernelStatus vfs_inode_default_make_directory(IndexNode *indexNode,const char* fileName,uint16_t mode);
+KernelStatus vfs_inode_default_make_directory(IndexNode *indexNode, const char *fileName, uint16_t mode);
 
 KernelStatus vfs_inode_default_rename(IndexNode *indexNode);
 

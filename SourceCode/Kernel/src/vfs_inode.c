@@ -21,10 +21,10 @@ KernelStatus vfs_inode_default_create(IndexNode *indexNode) {
   return OK;
 }
 
-KernelStatus vfs_inode_default_make_directory(IndexNode *indexNode,const char* fileName,uint16_t mode) {
-  DirectoryEntry *newDir = indexNode->superBlock->operations->createDirectoryEntry(indexNode->superBlock);
+KernelStatus vfs_inode_default_make_directory(IndexNode *indexNode, const char *fileName, uint16_t mode) {
+  DirectoryEntry *newDir = indexNode->superBlock->operations->createDirectoryEntry(indexNode->superBlock, fileName);
   newDir->parent = indexNode->dentry;
-  IndexNode* newNode = indexNode->superBlock->operations->createIndexNode(indexNode->superBlock,newDir);
+  IndexNode *newNode = indexNode->superBlock->operations->createIndexNode(indexNode->superBlock, newDir);
   newDir->indexNode->type = INDEX_NODE_DIRECTORY;
   newDir->fileName = fileName;
   newDir->indexNode->mode = mode;
