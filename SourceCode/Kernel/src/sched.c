@@ -4,8 +4,6 @@
 
 #include <cache.h>
 #include <interrupt.h>
-#include <kqueue.h>
-#include <kvector.h>
 #include <log.h>
 #include <percpu.h>
 #include <sched.h>

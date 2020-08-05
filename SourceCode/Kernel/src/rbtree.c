@@ -1,11 +1,8 @@
 //
 // Created by XingfengYang on 2020/6/30.
 //
-#include <kheap.h>
 #include <list.h>
-#include <log.h>
 #include <rbtree.h>
-#include <stdint.h>
 #include <thread.h>
 
 /**
