@@ -27,7 +27,7 @@ typedef struct PerCpuOperations {
 } PerCpuOperations;
 
 typedef struct PerCpu {
-  CpuNum cpuNum;
+  CpuNum cpuId;
   uint32_t priority;
 
   RBTree rbTree;
