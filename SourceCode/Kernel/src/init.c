@@ -172,14 +172,14 @@ void kernel_main(void) {
 
     schd_init();
 
+    Thread *window3Thread = thread_create("window3", &window_thread3, 1, 1);
+    schd_add_thread(window3Thread, 2);
+
     Thread *window1Thread = thread_create("window1", &window_thread1, 1, 1);
     schd_add_thread(window1Thread, 0);
 
     Thread *window2Thread = thread_create("window2", &window_thread2, 1, 1);
     schd_add_thread(window2Thread, 1);
-
-    Thread *window3Thread = thread_create("window3", &window_thread3, 1, 1);
-    schd_add_thread(window3Thread, 2);
 
     Thread *window4Thread = thread_create("window4", &window_thread4, 1, 1);
     schd_add_thread(window4Thread, 3);

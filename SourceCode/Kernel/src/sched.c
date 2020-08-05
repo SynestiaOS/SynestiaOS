@@ -39,12 +39,12 @@ KernelStatus schd_switch_next(void) {
   schd_switch_to(thread);
   spinlock.operations.release(&spinlock);
 
-  if(thread!=perCpu->idleThread) {
-      Thread *removedThread = perCpu->operations.removeThread(perCpu, thread);
-      if (removedThread != perCpu->idleThread) {
-          schd_add_thread(removedThread, removedThread->priority);
-      }
-  }
+  //  if(thread!=perCpu->idleThread) {
+  //      Thread *removedThread = perCpu->operations.removeThread(perCpu, thread);
+  //      if (removedThread != perCpu->idleThread) {
+  //          schd_add_thread(removedThread, removedThread->priority);
+  //      }
+  //  }
   return OK;
 }
 
