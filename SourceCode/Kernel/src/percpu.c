@@ -18,9 +18,9 @@ KernelStatus percpu_default_insert_thread(PerCpu *perCpu, Thread *thread) {
 
 Thread *percpu_default_remove_thread(PerCpu *perCpu, Thread *thread) {
   LogWarn("[PerCpu]: remove thread '%s' from cpu '%d'.\n", thread->name, perCpu->cpuId);
-  perCpu->rbTree.operations.remove(&perCpu->rbTree, &thread->rbNode);
+  RBNode* node = perCpu->rbTree.operations.remove(&perCpu->rbTree, &thread->rbNode);
   perCpu->priority -= thread->priority;
-  return thread;
+  return getNode(node,Thread,rbNode);
 }
 
 Thread *percpu_default_get_next_thread(PerCpu *perCpu) {
