@@ -36,15 +36,14 @@ KernelStatus schd_switch_next(void) {
   Thread *thread = perCpu->operations.getNextThread(perCpu);
 
   spinlock.operations.acquire(&spinlock);
+  thread->runtimVirtualNs+=TIMER_TICK_MS;
   schd_switch_to(thread);
   spinlock.operations.release(&spinlock);
 
-  //  if(thread!=perCpu->idleThread) {
-  //      Thread *removedThread = perCpu->operations.removeThread(perCpu, thread);
-  //      if (removedThread != perCpu->idleThread) {
-  //          schd_add_thread(removedThread, removedThread->priority);
-  //      }
-  //  }
+  if (thread != perCpu->idleThread) {
+    Thread *removedThread = perCpu->operations.removeThread(perCpu, thread);
+    schd_add_thread(removedThread, removedThread->priority);
+  }
   return OK;
 }
 

@@ -33,7 +33,7 @@ RBNode *rbtree_insert(RBNode *node1, RBNode *node2) {
   Thread *node1Thread = getNode(node1, Thread, rbNode);
   Thread *node2Thread = getNode(node2, Thread, rbNode);
 
-  if (node2Thread->priority < node1Thread->priority) {
+  if (node2Thread->runtimVirtualNs < node1Thread->runtimVirtualNs) {
     if (node1->left == nullptr) {
       node1->left = node2;
       node2->parent = node1;
