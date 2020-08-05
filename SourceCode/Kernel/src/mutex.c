@@ -10,7 +10,7 @@
 
 extern Thread *currentThread;
 
-void mutex_default_acquire(struct Mutex *mutex) {
+void mutex_default_acquire(Mutex *mutex) {
   if (atomic_get(&mutex->val) == 0) {
     atomic_set(&mutex->val, 1);
     return true;
@@ -23,4 +23,4 @@ void mutex_default_acquire(struct Mutex *mutex) {
   }
 }
 
-void mutex_default_release(struct Mutex *mutex) {}
+void mutex_default_release(Mutex *mutex) {}

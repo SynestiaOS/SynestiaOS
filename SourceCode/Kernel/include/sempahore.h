@@ -2,45 +2,42 @@
 // Created by XingfengYang on 2020/7/17.
 //
 
-#ifndef __KERNEL_MUTEX_H__
-#define __KERNEL_MUTEX_H__
-#include "spinlock.h"
+#ifndef __KERNEL_SEMAPHORE_H__
+#define __KERNEL_SEMAPHORE_H__
 #include <atomic.h>
 #include <kqueue.h>
-#include <stdbool.h>
 #include <stdint.h>
+#include <spinlock.h>
 
-#define STATE_FREE 0u
-#define STATE_CONTESTED 1u
 
-#define MutexCreate()                                                                                                 \
+#define SemaphoreCreate()                                                                                                 \
   {                                                                                                          \
-      .val =                                                                                                           \
+      .count =                                                                                                           \
           {                                                                                                            \
               .counter = 0,                                                                                            \
           },                                                                                                           \
       .operations =                                                                                                    \
           {                                                                                                            \
-              .acquire = mutex_default_acquire,                                                                        \
-              .release = mutex_default_release,                                                                        \
+              .post = semaphore_default_post,                                                                        \
+              .wait = semaphore_default_wait,                                                                        \
           },                                                                                                           \
       .spinLock = SpinLockCreate(),                                                                                    \
       .waitQueue = nunllptr,                                                                                           \
   }
 
-typedef void (*MutexAcquire)(struct Mutex *mutex);
-typedef void (*MutexRelease)(struct Mutex *mutex);
+typedef void (*SemaphorePost)(struct Semaphore *semaphore);
+typedef void (*SemaphoreWait)(struct Semaphore *semaphore);
 
-typedef struct MutexOperations {
-  MutexAcquire acquire;
-  MutexRelease release;
-} MutexOperations;
+typedef struct SemaphoreOperations {
+    SemaphorePost post;
+    SemaphoreWait wait;
+} SemaphoreOperations;
 
-typedef struct Mutex {
-  Atomic val;
+typedef struct Semaphore {
+  Atomic count;
   SpinLock spinLock;
-  KQueue *waitQueue;
-  MutexOperations operations;
-} Mutex;
+  KQueue waitQueue;
+  SemaphoreOperations operations;
+} Semaphore;
 
-#endif // __KERNEL_MUTEX_H__
+#endif // __KERNEL_SEMAPHORE_H__
