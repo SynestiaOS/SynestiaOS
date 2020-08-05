@@ -22,7 +22,7 @@ KernelStatus vfs_directory_entry_default_delete(DirectoryEntry *directory) {
   return OK;
 }
 
-KernelStatus vfs_directory_entry_default_rename(DirectoryEntry *directory) {
+KernelStatus vfs_directory_entry_default_release(DirectoryEntry *directory){
   // todo
   return OK;
 }

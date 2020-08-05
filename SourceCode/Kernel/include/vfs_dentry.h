@@ -39,4 +39,10 @@ typedef struct DirectoryEntry {
   DirectoryEntryOperations *operations;
 } DirectoryEntry;
 
+uint64_t vfs_directory_entry_default_hash(DirectoryEntry *directoryEntry, const char *name);
+char *vfs_directory_entry_default_get_name(DirectoryEntry *directoryEntry);
+KernelStatus vfs_directory_entry_default_delete(DirectoryEntry *directory);
+KernelStatus vfs_directory_entry_default_release(DirectoryEntry *directory);
+KernelStatus vfs_directory_entry_default_init(DirectoryEntry *directory, DirectoryEntry *parent,struct IndexNode *inode);
+
 #endif // __KERNEL_VFS_DIRECTORY_ENTRY_H__

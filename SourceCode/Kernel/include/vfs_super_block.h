@@ -9,30 +9,31 @@
 #include <list.h>
 #include <mutex.h>
 #include <spinlock.h>
-#include <vfs_dentry.h>
 #include <vfs_inode.h>
+#include <vfs_dentry.h>
 
 #define FILE_SYSTEM_NAME_SIZE 32
 
 typedef enum FileSystemType {
-  FILESYSTEM_FAT32,
+    FILESYSTEM_FAT32,
 } FileSystemType;
 
-typedef DirectoryEntry *(*SuperBlockCreateDirectoryEntry)(struct SuperBlock *superBlock);
-typedef IndexNode *(*SuperBlockCreateIndexNode)(struct SuperBlock *superBlock);
-typedef struct SuperBlockOperations {
-  SuperBlockCreateDirectoryEntry createDirectoryEntry;
-  SuperBlockCreateIndexNode createIndexNode;
+typedef DirectoryEntry* (*SuperBlockCreateDirectoryEntry)(struct SuperBlock* superBlock);
+typedef IndexNode* (*SuperBlockCreateIndexNode)(struct SuperBlock* superBlock, struct DirectoryEntry *dentry);
+typedef struct SuperBlockOperations{
+    SuperBlockCreateDirectoryEntry createDirectoryEntry;
+    SuperBlockCreateIndexNode createIndexNode;
 } SuperBlockOperations;
 
 typedef struct SuperBlock {
-  char *fileName;
+  char* fileName;
   FileSystemType type;
   ListNode node;
   struct DirectoryEntry *rootDirectoryEntry;
-  SuperBlockOperations *operations;
+  SuperBlockOperations* operations;
 } SuperBlock;
 
-SuperBlock *vfs_create_super_block();
+
+SuperBlock* vfs_create_super_block();
 
 #endif // __KERNEL_VFS_SUPER_BLOCK_H__

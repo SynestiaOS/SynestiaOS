@@ -18,9 +18,8 @@ SuperBlock *vfs_mount(const char *name, FileSystemType type) {
   superBlock->fileName = name;
   superBlock->type = type;
 
-  IndexNode *rootIndexNode = superBlock->operations->createIndexNode(superBlock);
-
   DirectoryEntry *rootDirectoryEntry = superBlock->operations->createDirectoryEntry(superBlock);
+  IndexNode *rootIndexNode = superBlock->operations->createIndexNode(superBlock,rootDirectoryEntry);
   rootDirectoryEntry->operations->initOperation(rootDirectoryEntry, nullptr, rootIndexNode);
   rootDirectoryEntry->fileName = "/";
 
