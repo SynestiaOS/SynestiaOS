@@ -6,6 +6,8 @@
 #include <vfs_dentry.h>
 #include <vfs_inode.h>
 #include <vfs_super_block.h>
+#include <spinlock.h>
+#include <mutex.h>
 
 DirectoryEntry *vfs_super_block_default_create_directory_entry(struct SuperBlock *superBlock, const char *fileName) {
   DirectoryEntry *directoryEntry = (DirectoryEntry *)kheap_alloc(sizeof(DirectoryEntry));
@@ -25,7 +27,8 @@ DirectoryEntry *vfs_super_block_default_create_directory_entry(struct SuperBlock
   directoryEntry->fileNameHash = directoryEntry->operations->hashOperation(directoryEntry);
   directoryEntry->indexNode = nullptr;
   directoryEntry->parent = nullptr;
-  //   directoryEntry->parallelLock = SpinLockCreate();
+  SpinLock parallelLock = SpinLockCreate();
+  directoryEntry->parallelLock = parallelLock;
 
   return directoryEntry;
 }
@@ -50,7 +53,8 @@ IndexNode *vfs_super_block_default_create_index_node(struct SuperBlock *superBlo
   indexNode->mode = (INDEX_NODE_MODE_WRITEABLE | INDEX_NODE_MODE_READABLE) << 6 |
                     (INDEX_NODE_MODE_WRITEABLE | INDEX_NODE_MODE_READABLE) << 3 |
                     (INDEX_NODE_MODE_WRITEABLE | INDEX_NODE_MODE_READABLE);
-  //   indexNode->mutex = MutexCreate();
+  Mutex mutex = MutexCreate();
+  indexNode->mutex = mutex;
   indexNode->lastAccessTimestamp = 0;
   indexNode->lastUpdateTimestamp = 0;
   dentry->indexNode = indexNode;

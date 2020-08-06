@@ -4,7 +4,7 @@
 
 #ifndef __KERNEL_MUTEX_H__
 #define __KERNEL_MUTEX_H__
-#include "spinlock.h"
+#include <spinlock.h>
 #include <atomic.h>
 #include <kqueue.h>
 #include <stdbool.h>
@@ -41,5 +41,8 @@ typedef struct Mutex {
   KQueue *waitQueue;
   MutexOperations operations;
 } Mutex;
+
+void mutex_default_acquire(Mutex *mutex);
+void mutex_default_release(Mutex *mutex);
 
 #endif // __KERNEL_MUTEX_H__

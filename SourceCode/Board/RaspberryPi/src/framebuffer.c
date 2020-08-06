@@ -91,9 +91,9 @@ int framebuffer_init(void) {
   allocateBufferMail->property.code = 0x80000000 + 4;
   allocateBufferMail->property.PACKED.alignment = 16;
   allocateBufferMail->property.size = 0;
-  MailMessage allocateBufferMailMsg = {.channel = MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, .data =
-  allocateBufferMail}; mailbox_call(allocateBufferMailMsg); if (allocateBufferMail->code == CODE_RESPONSE_FAILURE ||
-  allocateBufferMail->property.code == CODE_RESPONSE_FAILURE) {
+  MailMessage allocateBufferMailMsg = {.channel = MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, .data = allocateBufferMail};
+  mailbox_call(allocateBufferMailMsg);
+  if (allocateBufferMail->code == CODE_RESPONSE_FAILURE || allocateBufferMail->property.code == CODE_RESPONSE_FAILURE) {
     LogError("[Framebuffer]: Unable to allocate video buffer\n");
   }
 
