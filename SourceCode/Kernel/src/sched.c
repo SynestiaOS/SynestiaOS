@@ -21,6 +21,8 @@ uint32_t PRIORITY_2_WEIGHT[40] = {
  /*  15 */        36,        29,        23,        18,        15,
 };
 
+#define PRIORITY_DEFAULT_WEIGHT 1024
+
 extern uint64_t ktimer_sys_runtime_tick(uint64_t tickIntreval);
 
 #define TIMER_TICK_MS 50
@@ -48,7 +50,7 @@ KernelStatus schd_switch_next(void) {
   spinlock.operations.acquire(&spinlock);
 
   thread->runtimeNs += TIMER_TICK_MS;
-  thread->runtimVirtualNs += (1024 / PRIORITY_2_WEIGHT[thread->priority])*thread->runtimeNs;
+  thread->runtimVirtualNs += (PRIORITY_DEFAULT_WEIGHT / PRIORITY_2_WEIGHT[thread->priority])*thread->runtimeNs;
   schd_switch_to(thread);
   spinlock.operations.release(&spinlock);
 
