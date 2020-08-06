@@ -81,7 +81,7 @@ Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uin
     thread->rbNode.left = nullptr;
     thread->rbNode.right = nullptr;
     thread->rbNode.color = NODE_RED;
-    // todo : other properties, like list
+    // TODO : other properties, like list
 
     LogInfo("[Thread]: thread '%s' created.\n", name);
     return thread;
@@ -105,45 +105,45 @@ Thread *thread_create_idle_thread(uint32_t cpuNum) {
 
   char idleNameStr[10] = {'\0'};
   strcpy(idleThread->name, itoa(cpuNum, &idleNameStr, 10));
-  // todo : other properties, like list
+  // TODO : other properties, like list
   LogInfo("[Thread]: Idle thread for CPU '%d' created.\n", cpuNum);
   return idleThread;
 }
 
 KernelStatus thread_reschedule(void) {
-  // todo
+  // TODO
   return OK;
 }
 
 KernelStatus thread_sleep(uint32_t deadline) {
-  // todo
+  // TODO
   return OK;
 }
 
 KernelStatus thread_detach(Thread *thread) {
-  // todo
+  // TODO
   return OK;
 }
 
 KernelStatus thread_join(Thread *thread, int *retcode, uint32_t deadline) {
-  // todo
+  // TODO
   return OK;
 }
 
 KernelStatus init_thread_struct(Thread *thread, const char *name) {
   strcpy(thread->name, name);
   thread->threadStatus = THREAD_INITIAL;
-  // todo : other properties, like list
+  // TODO : other properties, like list
   LogInfo("[Thread]: thread: '%s' initialed.\n", name);
   return OK;
 }
 
 KernelStatus thread_exit(uint32_t returnCode) {
-  // todo
+  // TODO
   return OK;
 }
 
 KernelStatus thread_kill(Thread *thread) {
-  // todo
+  // TODO
   return OK;
 }

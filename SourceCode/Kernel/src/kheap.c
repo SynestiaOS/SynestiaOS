@@ -112,7 +112,7 @@ void *kheap_alloc(uint32_t size) {
     }
     currentFreeArea = getNode(currentFreeArea->list.next, HeapArea, list);
     // no free block found ,it's means we must do some memory defragmentation
-    // todo: defragmentation
+    // TODO: defragmentation
   }
   return nullptr;
 }

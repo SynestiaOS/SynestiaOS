@@ -9,17 +9,17 @@
 #include <vfs_super_block.h>
 
 KernelStatus vfs_inode_default_release(IndexNode *indexNode) {
-  // todo
+  // TODO
   return OK;
 }
 
 KernelStatus vfs_inode_default_create(IndexNode *indexNode) {
-  // todo
+  // TODO
   return OK;
 }
 
 KernelStatus vfs_inode_default_delete(IndexNode *indexNode) {
-  // todo
+  // TODO
   return OK;
 }
 
@@ -35,7 +35,9 @@ KernelStatus vfs_inode_default_make_directory(IndexNode *indexNode, char *fileNa
 KernelStatus vfs_inode_default_delete_directory(IndexNode *indexNode, DirectoryEntry *dentry) {
   if (vfs_inode_default_unlink(indexNode, dentry) != ERROR) {
     if (atomic_get(&dentry->indexNode->linkCount) == 0) {
+      // Recursively delete dentrys
     }
+    return OK;
   }
   return OK;
 }
@@ -43,7 +45,7 @@ KernelStatus vfs_inode_default_delete_directory(IndexNode *indexNode, DirectoryE
 KernelStatus vfs_inode_default_rename(IndexNode *indexNode, char *newName) {
   indexNode->dentry->fileName = newName;
   indexNode->dentry->fileNameHash = indexNode->dentry->operations->hashOperation(indexNode->dentry);
-  // todo : change last modify time
+  // TODO : change last modify time
   return OK;
 }
 

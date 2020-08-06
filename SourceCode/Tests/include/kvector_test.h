@@ -94,7 +94,7 @@ void should_kvector_remove_index() {
   ASSERT_EQ(kernelVector->index, 0);
   ASSERT_EQ(kernelVector->size, DEFAULT_VECTOR_SIZE);
 
-  // todo:
+  // TODO:
 }
 
 void should_kvector_remove() {
@@ -105,7 +105,7 @@ void should_kvector_remove() {
   ASSERT_EQ(kernelVector->index, 0);
   ASSERT_EQ(kernelVector->size, DEFAULT_VECTOR_SIZE);
 
-  // todo:
+  // TODO:
 }
 
 void should_kvector_is_empty() {

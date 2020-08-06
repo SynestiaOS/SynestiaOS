@@ -119,17 +119,17 @@ KernelStatus schd_switch_to(Thread *thread) {
 }
 
 KernelStatus schd_block(void) {
-  // todo:
+  // TODO:
   return OK;
 }
 
 KernelStatus schd_yield(void) {
-  // todo:
+  // TODO:
   return OK;
 }
 
 KernelStatus schd_preempt(void) {
-  // todo:
+  // TODO:
   return OK;
 }
 

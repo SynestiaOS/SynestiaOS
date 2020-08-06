@@ -38,7 +38,7 @@ void uart_init(void) {
   io_writel((1 << 0) | (1 << 8) | (1 << 9), (void *)(PERIPHERAL_BASE + UART0_OFFSET + UART_CR_OFFSET));
 
   // register_interrupt_handler(57, uart_interrupt_handler, (void *) 0);
-  // todo(shifu) what does 0x10 mean ???
+  // TODO(shifu) what does 0x10 mean ???
   io_writel(0x10, (void *)(PERIPHERAL_BASE + UART0_OFFSET + UART_IMSC_OFFSET));
 }
 
