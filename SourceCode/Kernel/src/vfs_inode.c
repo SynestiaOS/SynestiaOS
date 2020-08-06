@@ -26,7 +26,6 @@ KernelStatus vfs_inode_default_make_directory(IndexNode *indexNode, const char *
   newDir->parent = indexNode->dentry;
   IndexNode *newNode = indexNode->superBlock->operations->createIndexNode(indexNode->superBlock, newDir);
   newDir->indexNode->type = INDEX_NODE_DIRECTORY;
-  newDir->fileName = fileName;
   newDir->indexNode->mode = mode;
   return OK;
 }
