@@ -187,7 +187,6 @@ void kernel_main(void) {
     Thread *window2Thread = thread_create("window2", &window_thread2, 1, 2);
     schd_add_thread(window2Thread, 1);
 
-
     bootSpinLock.operations.release(&bootSpinLock);
     schd_schedule();
   }
