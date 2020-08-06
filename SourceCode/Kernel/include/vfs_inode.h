@@ -24,8 +24,7 @@ typedef enum IndexNodeMode {
 typedef KernelStatus (*IndexNodeDeleteOperation)(struct IndexNode *indexNode);
 typedef KernelStatus (*IndexNodeReleaseOperation)(struct IndexNode *indexNode);
 typedef KernelStatus (*IndexNodeCreateOperation)(struct IndexNode *indexNode);
-typedef KernelStatus (*IndexNodeMakeDirectotyOperation)(struct IndexNode *indexNode, char *fileName,
-                                                        uint16_t mode);
+typedef KernelStatus (*IndexNodeMakeDirectotyOperation)(struct IndexNode *indexNode, char *fileName, uint16_t mode);
 typedef KernelStatus (*IndexNodeDeleteDirectotyOperation)(struct IndexNode *indexNode, struct DirectoryEntry *dentry);
 typedef KernelStatus (*IndexNodeRenameOperation)(struct IndexNode *indexNode, char *newName);
 typedef KernelStatus (*IndexNodeLinkOperation)(struct IndexNode *indexNode, struct DirectoryEntry *dentry);

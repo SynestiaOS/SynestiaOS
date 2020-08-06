@@ -30,6 +30,9 @@ DirectoryEntry *vfs_super_block_default_create_directory_entry(struct SuperBlock
   SpinLock parallelLock = SpinLockCreate();
   directoryEntry->parallelLock = parallelLock;
 
+  directoryEntry->list.next = nullptr;
+  directoryEntry->list.prev = nullptr;
+
   return directoryEntry;
 }
 

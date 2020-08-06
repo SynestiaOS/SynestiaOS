@@ -3,6 +3,7 @@
 //
 
 #include <atomic.h>
+#include <list.h>
 #include <log.h>
 #include <vfs_inode.h>
 #include <vfs_super_block.h>
@@ -32,7 +33,10 @@ KernelStatus vfs_inode_default_make_directory(IndexNode *indexNode, char *fileNa
 }
 
 KernelStatus vfs_inode_default_delete_directory(IndexNode *indexNode, DirectoryEntry *dentry) {
-  // todo
+  if (vfs_inode_default_unlink(indexNode, dentry) != ERROR) {
+    if (atomic_get(&dentry->indexNode->linkCount) == 0) {
+    }
+  }
   return OK;
 }
 
@@ -45,6 +49,7 @@ KernelStatus vfs_inode_default_rename(IndexNode *indexNode, char *newName) {
 
 KernelStatus vfs_inode_default_link(IndexNode *indexNode, DirectoryEntry *dentry) {
   dentry->indexNode = indexNode;
+  klist_append(&indexNode->dentry->list, &dentry->list);
   atomic_inc(&indexNode->linkCount);
   return OK;
 }
