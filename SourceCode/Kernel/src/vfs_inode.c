@@ -2,14 +2,10 @@
 // Created by XingfengYang & ChengyuZhao on 2020/7/30.
 //
 
+#include <atomic.h>
 #include <log.h>
 #include <vfs_inode.h>
 #include <vfs_super_block.h>
-
-KernelStatus vfs_inode_default_delete(IndexNode *indexNode) {
-  // todo
-  return OK;
-}
 
 KernelStatus vfs_inode_default_release(IndexNode *indexNode) {
   // todo
@@ -21,7 +17,12 @@ KernelStatus vfs_inode_default_create(IndexNode *indexNode) {
   return OK;
 }
 
-KernelStatus vfs_inode_default_make_directory(IndexNode *indexNode, const char *fileName, uint16_t mode) {
+KernelStatus vfs_inode_default_delete(IndexNode *indexNode) {
+  // todo
+  return OK;
+}
+
+KernelStatus vfs_inode_default_make_directory(IndexNode *indexNode, char *fileName, uint16_t mode) {
   DirectoryEntry *newDir = indexNode->superBlock->operations->createDirectoryEntry(indexNode->superBlock, fileName);
   newDir->parent = indexNode->dentry;
   IndexNode *newNode = indexNode->superBlock->operations->createIndexNode(indexNode->superBlock, newDir);
@@ -30,12 +31,28 @@ KernelStatus vfs_inode_default_make_directory(IndexNode *indexNode, const char *
   return OK;
 }
 
-KernelStatus vfs_inode_default_rename(IndexNode *indexNode) {
+KernelStatus vfs_inode_default_delete_directory(IndexNode *indexNode, DirectoryEntry *dentry) {
   // todo
   return OK;
 }
 
-KernelStatus vfs_inode_default_hard_link(IndexNode *indexNode) {
-  // todo
+KernelStatus vfs_inode_default_rename(IndexNode *indexNode, char *newName) {
+  indexNode->dentry->fileName = newName;
+  indexNode->dentry->fileNameHash = indexNode->dentry->operations->hashOperation(indexNode->dentry);
+  // todo : change last modify time
+  return OK;
+}
+
+KernelStatus vfs_inode_default_link(IndexNode *indexNode, DirectoryEntry *dentry) {
+  dentry->indexNode = indexNode;
+  atomic_inc(&indexNode->linkCount);
+  return OK;
+}
+
+KernelStatus vfs_inode_default_unlink(IndexNode *indexNode, DirectoryEntry *dentry) {
+  if (atomic_get(&dentry->indexNode->linkCount) > 1) {
+    atomic_dec(&dentry->indexNode->linkCount);
+    dentry->operations->deleteOperation(dentry);
+  }
   return OK;
 }

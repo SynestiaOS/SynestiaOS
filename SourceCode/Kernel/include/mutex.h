@@ -4,9 +4,9 @@
 
 #ifndef __KERNEL_MUTEX_H__
 #define __KERNEL_MUTEX_H__
-#include <spinlock.h>
 #include <atomic.h>
 #include <kqueue.h>
+#include <spinlock.h>
 #include <stdbool.h>
 #include <stdint.h>
 

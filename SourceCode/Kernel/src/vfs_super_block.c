@@ -3,11 +3,11 @@
 //
 
 #include <log.h>
+#include <mutex.h>
+#include <spinlock.h>
 #include <vfs_dentry.h>
 #include <vfs_inode.h>
 #include <vfs_super_block.h>
-#include <spinlock.h>
-#include <mutex.h>
 
 DirectoryEntry *vfs_super_block_default_create_directory_entry(struct SuperBlock *superBlock, const char *fileName) {
   DirectoryEntry *directoryEntry = (DirectoryEntry *)kheap_alloc(sizeof(DirectoryEntry));
@@ -43,8 +43,10 @@ IndexNode *vfs_super_block_default_create_index_node(struct SuperBlock *superBlo
 
   indexNode->operations->createOperation = vfs_inode_default_create;
   indexNode->operations->deleteOperation = vfs_inode_default_delete;
-  indexNode->operations->hardLinkOperation = vfs_inode_default_hard_link;
+  indexNode->operations->linkOperation = vfs_inode_default_link;
+  indexNode->operations->unLinkOperation = vfs_inode_default_unlink;
   indexNode->operations->makeDirectoryOperation = vfs_inode_default_make_directory;
+  indexNode->operations->deleteDirectoryOperation = vfs_inode_default_delete_directory;
   indexNode->operations->releaseOperation = vfs_inode_default_release;
   indexNode->operations->renameOperation = vfs_inode_default_rename;
 
@@ -62,6 +64,14 @@ IndexNode *vfs_super_block_default_create_index_node(struct SuperBlock *superBlo
   return indexNode;
 }
 
+KernelStatus vfs_super_block_default_destroy_dentry(struct SuperBlock *superBlock, struct DirectoryEntry *dentry) {
+  return kheap_free(dentry);
+}
+
+KernelStatus vfs_super_block_default_destroy_inode(struct SuperBlock *superBlock, struct IndexNode *indexNode) {
+  return kheap_free(indexNode);
+}
+
 SuperBlock *vfs_create_super_block() {
   SuperBlock *superBlock = (SuperBlock *)kheap_alloc(sizeof(SuperBlock));
   if (superBlock == nullptr) {
@@ -70,4 +80,6 @@ SuperBlock *vfs_create_super_block() {
   }
   superBlock->operations->createDirectoryEntry = vfs_super_block_default_create_directory_entry;
   superBlock->operations->createIndexNode = vfs_super_block_default_create_index_node;
+  superBlock->operations->destroyDirectoryEntry = vfs_super_block_default_destroy_dentry;
+  superBlock->operations->destroyIndexNode = vfs_super_block_default_destroy_inode;
 }

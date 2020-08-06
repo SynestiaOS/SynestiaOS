@@ -24,18 +24,22 @@ typedef enum IndexNodeMode {
 typedef KernelStatus (*IndexNodeDeleteOperation)(struct IndexNode *indexNode);
 typedef KernelStatus (*IndexNodeReleaseOperation)(struct IndexNode *indexNode);
 typedef KernelStatus (*IndexNodeCreateOperation)(struct IndexNode *indexNode);
-typedef KernelStatus (*IndexNodeMakeDirectotyOperation)(struct IndexNode *indexNode, const char *fileName,
+typedef KernelStatus (*IndexNodeMakeDirectotyOperation)(struct IndexNode *indexNode, char *fileName,
                                                         uint16_t mode);
-typedef KernelStatus (*IndexNodeRenameOperation)(struct IndexNode *indexNode);
-typedef KernelStatus (*IndexNodeHardLinkOperation)(struct IndexNode *indexNode);
+typedef KernelStatus (*IndexNodeDeleteDirectotyOperation)(struct IndexNode *indexNode, struct DirectoryEntry *dentry);
+typedef KernelStatus (*IndexNodeRenameOperation)(struct IndexNode *indexNode, char *newName);
+typedef KernelStatus (*IndexNodeLinkOperation)(struct IndexNode *indexNode, struct DirectoryEntry *dentry);
+typedef KernelStatus (*IndexNodeUnLinkOperation)(struct IndexNode *indexNode, struct DirectoryEntry *dentry);
 
 typedef struct IndexNodeOpeations {
   IndexNodeCreateOperation createOperation;
   IndexNodeReleaseOperation releaseOperation;
   IndexNodeDeleteOperation deleteOperation;
   IndexNodeMakeDirectotyOperation makeDirectoryOperation;
+  IndexNodeDeleteDirectotyOperation deleteDirectoryOperation;
   IndexNodeRenameOperation renameOperation;
-  IndexNodeHardLinkOperation hardLinkOperation;
+  IndexNodeLinkOperation linkOperation;
+  IndexNodeUnLinkOperation unLinkOperation;
 } IndexNodeOpeations;
 
 typedef struct IndexNode {
@@ -54,6 +58,7 @@ typedef struct IndexNode {
   uint32_t fileSize;
 
   Atomic readCount;
+  Atomic linkCount;
 
   IndexNodeOpeations *operations;
 
@@ -62,16 +67,20 @@ typedef struct IndexNode {
   uint64_t lastUpdateTimestamp;
 } IndexNode;
 
-KernelStatus vfs_inode_default_delete(IndexNode *indexNode);
-
 KernelStatus vfs_inode_default_release(IndexNode *indexNode);
 
 KernelStatus vfs_inode_default_create(IndexNode *indexNode);
 
-KernelStatus vfs_inode_default_make_directory(IndexNode *indexNode, const char *fileName, uint16_t mode);
+KernelStatus vfs_inode_default_delete(IndexNode *indexNode);
 
-KernelStatus vfs_inode_default_rename(IndexNode *indexNode);
+KernelStatus vfs_inode_default_make_directory(IndexNode *indexNode, char *fileName, uint16_t mode);
 
-KernelStatus vfs_inode_default_hard_link(IndexNode *indexNode);
+KernelStatus vfs_inode_default_delete_directory(IndexNode *indexNode, struct DirectoryEntry *dentry);
+
+KernelStatus vfs_inode_default_rename(IndexNode *indexNode, char *newName);
+
+KernelStatus vfs_inode_default_link(IndexNode *indexNode, struct DirectoryEntry *dentry);
+
+KernelStatus vfs_inode_default_unlink(IndexNode *indexNode, struct DirectoryEntry *dentry);
 
 #endif // __KERNEL_VFS_INDEX_NODE_H__

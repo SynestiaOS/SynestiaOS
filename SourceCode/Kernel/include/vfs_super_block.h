@@ -20,9 +20,15 @@ typedef enum FileSystemType {
 
 typedef DirectoryEntry *(*SuperBlockCreateDirectoryEntry)(struct SuperBlock *superBlock, const char *fileName);
 typedef IndexNode *(*SuperBlockCreateIndexNode)(struct SuperBlock *superBlock, struct DirectoryEntry *dentry);
+typedef KernelStatus (*SuperBlockDestroyDirectoryEntry)(struct SuperBlock *superBlock, struct DirectoryEntry *dentry);
+typedef KernelStatus (*SuperBlockDestroyIndexNode)(struct SuperBlock *superBlock, struct IndexNode *indexNode);
+
 typedef struct SuperBlockOperations {
   SuperBlockCreateDirectoryEntry createDirectoryEntry;
   SuperBlockCreateIndexNode createIndexNode;
+
+  SuperBlockDestroyDirectoryEntry destroyDirectoryEntry;
+  SuperBlockDestroyIndexNode destroyIndexNode;
 } SuperBlockOperations;
 
 typedef struct SuperBlock {
