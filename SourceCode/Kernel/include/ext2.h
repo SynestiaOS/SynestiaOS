@@ -103,4 +103,88 @@ typedef struct BlockGroupDescriptor {
   uint16_t directorirsNum;              // Number of directories in group
 } BlockGroupDescriptor;
 
+typedef enum InodeType {                          // top 16 bits
+  EXT2_INDEX_NODE_TYPE_FIFO = 0x1000,             //	FIFO
+  EXT2_INDEX_NODE_TYPE_CHARACTER_DEVIDE = 0x2000, //	Character device
+  EXT2_INDEX_NODE_TYPE_DIRECTORY = 0x4000,        //	Directory
+  EXT2_INDEX_NODE_TYPE_BLOCK_DEVICE = 0x6000,     //	Block device
+  EXT2_INDEX_NODE_TYPE_REGULAR_FILE = 0x8000,     //	Regular file
+  EXT2_INDEX_NODE_TYPE_SYMBOLIC_LINK = 0xA000,    //	Symbolic link
+  EXT2_INDEX_NODE_TYPE_UNIX_SOCKET = 0xC000,      //	Unix socket
+} InodeType;
+
+typedef enum InodePermission {           // bottom 12 bits
+  EXT2_INDEX_NODE_OTHER_EXECUTE = 0x001, //	00001	Other—execute permission
+  EXT2_INDEX_NODE_OTHER_WRITE = 0x002,   //	00002	Other—write permission
+  EXT2_INDEX_NODE_OTHER_READ = 0x004,    //	00004	Other—read permission
+  EXT2_INDEX_NODE_GROUP_EXECUTE = 0x008, //	00010	Group—execute permission
+  EXT2_INDEX_NODE_GROUP_WRITE = 0x010,   //	00020	Group—write permission
+  EXT2_INDEX_NODE_GROUP_READ = 0x020,    //	00040	Group—read permission
+  EXT2_INDEX_NODE_USER_EXECUTE = 0x040,  //	00100	User—execute permission
+  EXT2_INDEX_NODE_USER_WRITE = 0x080,    //	00200	User—write permission
+  EXT2_INDEX_NODE_USER_READ = 0x100,     //	00400	User—read permission
+  EXT2_INDEX_NODE_STICKY_BIT = 0x200,    //	01000	Sticky Bit
+  EXT2_INDEX_NODE_SET_GROUP_ID = 0x400,  //	02000	Set group ID
+  EXT2_INDEX_NODE_SET_USER_ID = 0x800,   //	04000	Set user ID
+} InodePermission;
+
+typedef struct InodeDataStructure {
+  uint16_t typeAndPermissions;  // Type and Permissions (see below)
+  uint16_t userId;              // User ID
+  uint32_t sizeLower32Bits;     // Lower 32 bits of size in bytes
+  uint32_t lastAccessTime;      // Last Access Time (in POSIX time)
+  uint32_t createTime;          // Creation Time (in POSIX time)
+  uint32_t lastModficationTime; // Last Modification time (in POSIX time)
+  uint32_t deleteTime;          // Deletion time (in POSIX time)
+  uint16_t groupId;             // Group ID
+  uint16_t hardLinksCount;      // Count of hard links (directory entries) to this inode. When this reaches 0, the data
+                                // blocks are marked as unallocated.
+  uint32_t diskSectorsCount;    // Count of disk sectors (not Ext2 blocks) in use by this inode, not counting the actual
+                                // inode structure nor directory entries linking to the inode.
+
+  /**
+   * Flags (see below)
+   *
+   * 0x00000001	Secure deletion (not used)
+   * 0x00000002	Keep a copy of data when deleted (not used)
+   * 0x00000004	File compression (not used)
+   * 0x00000008	Synchronous updates—new data is written immediately to disk
+   * 0x00000010	Immutable file (content cannot be changed)
+   * 0x00000020	Append only
+   * 0x00000040	File is not included in 'dump' command
+   * 0x00000080	Last accessed time should not updated
+   * ...	(Reserved)
+   * 0x00010000	Hash indexed directory
+   * 0x00020000	AFS directory
+   * 0x00040000	Journal file data
+   */
+  uint32_t flags;
+  uint32_t operatingSystemSpecificValue1; // Operating System Specific value #1
+  uint32_t directBlockPointer0;           // Direct Block Pointer 0
+  uint32_t directBlockPointer1;           // Direct Block Pointer 1
+  uint32_t directBlockPointer2;           // Direct Block Pointer 2
+  uint32_t directBlockPointer3;           // Direct Block Pointer 3
+  uint32_t directBlockPointer4;           // Direct Block Pointer 4
+  uint32_t directBlockPointer5;           // Direct Block Pointer 5
+  uint32_t directBlockPointer6;           // Direct Block Pointer 6
+  uint32_t directBlockPointer7;           // Direct Block Pointer 7
+  uint32_t directBlockPointer8;           // Direct Block Pointer 8
+  uint32_t directBlockPointer9;           // Direct Block Pointer 9
+  uint32_t directBlockPointer10;          // Direct Block Pointer 10
+  uint32_t directBlockPointer11;          // Direct Block Pointer 11
+  uint32_t singlyIndirectBlockPointer;    // Singly Indirect Block Pointer (Points to a block that is a list of block
+                                          // pointers to data)
+  uint32_t doublyIndirectBlockPointer;    // Doubly Indirect Block Pointer (Points to a block that is a list of block
+                                          // pointers to Singly Indirect Blocks)
+  uint32_t triplyIndirectBlockPointer;    // Triply Indirect Block Pointer (Points to a block that is a list of block
+                                          // pointers to Doubly Indirect Blocks)
+  uint32_t generationNumer;               // Generation number (Primarily used for NFS)
+  uint32_t extendedAttributeBlock; // In Ext2 version 0, this field is reserved. In version >= 1, Extended attribute
+                                   // block (File ACL).
+  uint32_t sizeUpper32Bits; // In Ext2 version 0, this field is reserved. In version >= 1, Upper 32 bits of file size
+                            // (if feature bit set) if it's a file, Directory ACL if it's a directory
+  uint32_t fragmentBlockAddress;             // Block address of fragment
+  uint8_t operatingSystemSpecificValue2[12]; // 	Operating System Specific Value #2
+} InodeDataStructure;
+
 #endif // __KERNEL_FS_EXT2_H__
