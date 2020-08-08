@@ -58,20 +58,18 @@ typedef struct Ext2SuperBlock {
   uint32_t firstIndexNode;         // First non-reserved inode in file system. (In versions < 1.0, this is fixed as 11)
   uint16_t indexNodeStructureSize; // Size of each inode structure in bytes. (In versions < 1.0, this is fixed as 128)
   uint16_t blockGrousp;            // Block group that this superblock is part of (if backup copy)
-  
+
   /**
-   * Optional features present (features that are not required to read or write, but usually  
+   * Optional features present (features that are not required to read or write, but usually
    * result in a performance increase. see below)
    *
-   * 0x0001	Preallocate some number of (contiguous?) blocks (see byte 205 in the superblock) to a directory when creating a new one (to reduce fragmentation?)
-   * 0x0002	AFS server inodes exist
-   * 0x0004	File system has a journal (Ext3)
-   * 0x0008	Inodes have extended attributes
-   * 0x0010	File system can resize itself for larger partitions
-   * 0x0020	Directories use hash index
+   * 0x0001	Preallocate some number of (contiguous?) blocks (see byte 205 in the superblock) to a directory when
+   * creating a new one (to reduce fragmentation?) 0x0002	AFS server inodes exist 0x0004	File system has a
+   * journal (Ext3) 0x0008	Inodes have extended attributes 0x0010	File system can resize itself for larger
+   * partitions 0x0020	Directories use hash index
    */
-  int32_t optionalFeatures; 
-  
+  int32_t optionalFeatures;
+
   /**
    * Required features present (features that are required to be supported to read or write.
    * see below)
@@ -81,7 +79,7 @@ typedef struct Ext2SuperBlock {
    * 0x0004	File system needs to replay its journal
    * 0x0008	File system uses a journal device
    */
-  uint32_t requiredFeatures; 
+  uint32_t requiredFeatures;
   uint32_t notSupportedFeatures;  // Features that if not supported, the volume must be mounted read-only see below)
   uint32_t fileSystemID[4];       // File system ID (what is output by blkid)
   uint8_t volumaName[16];         // Volume name (C-style string: characters terminated by a 0 byte)
@@ -94,6 +92,15 @@ typedef struct Ext2SuperBlock {
   uint32_t journalIndexNode;               // Journal inode
   uint32_t journalDevice;                  // Journal device
   uint32_t orphanIndexNodeListHead;        // Head of orphan inode list
-};
+} Ext2SuperBlock;
+
+typedef struct BlockGroupDescriptor {
+  uint32_t blockUsageBitMapAddress;     // Block address of block usage bitmap
+  uint32_t indexNodeUsageBitMapAddress; // Block address of inode usage bitmap
+  uint32_t indexNodeTableBlockAddress;  // Starting block address of inode table
+  uint16_t unallocatedBlocksNums;       // Number of unallocated blocks in group
+  uint16_t unallocatedIndexNodeNums;    // Number of unallocated inodes in group
+  uint16_t directorirsNum;              // Number of directories in group
+} BlockGroupDescriptor;
 
 #endif // __KERNEL_FS_EXT2_H__
