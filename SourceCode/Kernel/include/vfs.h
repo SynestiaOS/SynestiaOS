@@ -11,10 +11,6 @@
 #include <spinlock.h>
 #include <vfs_super_block.h>
 
-extern char _binary_initrd_img_start[];
-extern char _binary_initrd_img_end[];
-extern char _binary_initrd_img_size[];
-
 KernelStatus vfs_init();
 
 SuperBlock *vfs_mount(const char *name, FileSystemType type);
