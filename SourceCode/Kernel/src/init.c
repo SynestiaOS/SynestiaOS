@@ -152,6 +152,7 @@ TimerHandler gpuHandler;
 SpinLock bootSpinLock = SpinLockCreate();
 void kernel_main(void) {
   if (read_cpuid() == 0) {
+    led_init();
     bootSpinLock.operations.acquire(&bootSpinLock);
     init_bsp();
     print_splash();
@@ -174,7 +175,7 @@ void kernel_main(void) {
 
     Thread *window1Thread = thread_create("window1", &window_thread1, 1, 1);
     schd_add_thread(window1Thread, 1);
-    
+
     Thread *window3Thread = thread_create("window3", &window_thread3, 1, 3);
     schd_add_thread(window3Thread, 1);
 
@@ -186,7 +187,6 @@ void kernel_main(void) {
 
     Thread *window2Thread = thread_create("window2", &window_thread2, 1, 2);
     schd_add_thread(window2Thread, 1);
-
 
     bootSpinLock.operations.release(&bootSpinLock);
     schd_schedule();
