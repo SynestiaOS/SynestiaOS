@@ -14,13 +14,12 @@ extern char _binary_initrd_img_size[];
 #define EXT2_BLOCK_GROUP_DESCRIPTOR_SIZE 32
 #define EXT2_INDEX_NODE_STRUCTURE_SIZE 128
 
-
 uint32_t EXT2_ADDRESS = _binary_initrd_img_start;
 
 KernelStatus ext2_init() {
   Ext2SuperBlock *ext2SuperBlock = (Ext2SuperBlock *)(EXT2_ADDRESS + 1024);
 
-  if(ext2SuperBlock->signature != EXT2_SIGNATURE){
+  if (ext2SuperBlock->signature != EXT2_SIGNATURE) {
     LogError("[Ext2]: not a ext2 file system.\n");
     return ERROR;
   }
@@ -64,37 +63,42 @@ KernelStatus ext2_init() {
 
   // Block Group Descriptor numbers , other words, this is super block numbers or block group number
   uint32_t blockGroupNums =
-  ext2SuperBlock->blockNums / blockNumsInEachBlockGroup +
-     (ext2SuperBlock->blockNums % blockNumsInEachBlockGroup) > 0 ? 1 : 0;
+      ext2SuperBlock->blockNums / blockNumsInEachBlockGroup + (ext2SuperBlock->blockNums % blockNumsInEachBlockGroup) >
+              0
+          ? 1
+          : 0;
 
   uint32_t blockGroupDescriptorNumsInEachBlock = blockSize / EXT2_BLOCK_GROUP_DESCRIPTOR_SIZE;
   // block nums for all block group descriptor
   uint32_t blockForBlockGroupDescriptor = blockGroupNums / blockGroupDescriptorNumsInEachBlock;
-  uint32_t blockForBlockGroupDescriptorMod =  (blockGroupNums % blockGroupDescriptorNumsInEachBlock) > 0 ? 1 : 0;
+  uint32_t blockForBlockGroupDescriptorMod = (blockGroupNums % blockGroupDescriptorNumsInEachBlock) > 0 ? 1 : 0;
   blockForBlockGroupDescriptor += blockForBlockGroupDescriptorMod;
-  LogInfo("[Ext2]: block group descriptor blocks: %d .\n",blockForBlockGroupDescriptor);
+  LogInfo("[Ext2]: block group descriptor blocks: %d .\n", blockForBlockGroupDescriptor);
 
   uint32_t indexNodeStructureNumsInEachBlock = blockSize / EXT2_INDEX_NODE_STRUCTURE_SIZE;
   uint32_t blockForIndexNodeTable = ext2SuperBlock->indexNodeNums / indexNodeStructureNumsInEachBlock;
-  uint32_t blockForIndexNodeTableMod =   ((ext2SuperBlock->indexNodeNums % indexNodeStructureNumsInEachBlock) > 0) ? 1 : 0;
+  uint32_t blockForIndexNodeTableMod =
+      ((ext2SuperBlock->indexNodeNums % indexNodeStructureNumsInEachBlock) > 0) ? 1 : 0;
   blockForIndexNodeTable += blockForIndexNodeTableMod;
-  LogInfo("[Ext2]: index node table  blocks: %d .\n",blockForIndexNodeTable);
+  LogInfo("[Ext2]: index node table  blocks: %d .\n", blockForIndexNodeTable);
 
   Ext2BlockGroup blockGroup;
-  blockGroup.superBlock = (Ext2SuperBlock*)(EXT2_ADDRESS + 1024);
-  blockGroup.blockGroupDescriptor = (Ext2BlockGroupDescriptor*) ((uint32_t)blockGroup.superBlock + blockSize);
-  blockGroup.dataBlockBitmap = (Ext2DataBlockBitmap*)((uint32_t)blockGroup.blockGroupDescriptor + blockForBlockGroupDescriptor * blockSize);
-  blockGroup.indexNodeBitmap = (Ext2IndexNodeBlockBitmap*)((uint32_t)blockGroup.dataBlockBitmap + blockSize);
-  blockGroup.indexNodeDataStructure = (Ext2IndexNodeDataStructure*)((uint32_t)blockGroup.indexNodeBitmap + blockSize);
-  blockGroup.dataBlock = (Ext2DataBlock*)((uint32_t)blockGroup.indexNodeDataStructure + blockForIndexNodeTable * blockSize);
+  blockGroup.superBlock = (Ext2SuperBlock *)(EXT2_ADDRESS + 1024);
+  blockGroup.blockGroupDescriptor = (Ext2BlockGroupDescriptor *)((uint32_t)blockGroup.superBlock + blockSize);
+  blockGroup.dataBlockBitmap =
+      (Ext2DataBlockBitmap *)(EXT2_ADDRESS + blockGroup.blockGroupDescriptor->blockUsageBitMapBlock * blockSize);
+  blockGroup.indexNodeBitmap = (Ext2IndexNodeBlockBitmap *)(EXT2_ADDRESS + blockGroup.blockGroupDescriptor->indexNodeUsageBitMapBlock * blockSize);
+  blockGroup.indexNodeDataStructure = (Ext2IndexNodeDataStructure *)(EXT2_ADDRESS + blockGroup.blockGroupDescriptor->indexNodeTableBlockBlock * blockSize);
+  blockGroup.dataBlock =
+      (Ext2DataBlock *)((uint32_t)blockGroup.indexNodeDataStructure + blockForIndexNodeTable * blockSize);
 
-  for(uint32_t i = 0;i<ext2SuperBlock->indexNodeNums;i++){
-      Ext2IndexNodeDataStructure* inode = (Ext2IndexNodeDataStructure*)(EXT2_ADDRESS + 0x3800 + i * EXT2_INDEX_NODE_STRUCTURE_SIZE);
-      if(((inode->typeAndPermissions & 0xF000) == EXT2_INDEX_NODE_TYPE_DIRECTORY
-      )|| ((inode->typeAndPermissions & 0xF000) == EXT2_INDEX_NODE_TYPE_REGULAR_FILE)){
-        LogInfo("[Ext2]: inode type : %d .\n",inode->typeAndPermissions & 0xF000);
-        LogInfo("[Ext2]: inode create time : %d .\n",inode->createTime);
-      }
+  for (uint32_t i = 0; i < ext2SuperBlock->indexNodeNums; i++) {
+    Ext2IndexNodeDataStructure *inode =
+        (Ext2IndexNodeDataStructure *)((uint32_t)blockGroup.indexNodeDataStructure + i * EXT2_INDEX_NODE_STRUCTURE_SIZE);
+    if (((inode->typeAndPermissions & 0xF000) == EXT2_INDEX_NODE_TYPE_DIRECTORY) ||
+        ((inode->typeAndPermissions & 0xF000) == EXT2_INDEX_NODE_TYPE_REGULAR_FILE)) {
+      LogInfo("[Ext2]: inode type : %d .\n", inode->typeAndPermissions & 0xF000);
+      LogInfo("[Ext2]: inode create time : %d .\n", inode->createTime);
+    }
   }
-
 }

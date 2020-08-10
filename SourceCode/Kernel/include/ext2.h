@@ -96,9 +96,9 @@ typedef struct Ext2SuperBlock {
 } Ext2SuperBlock;
 
 typedef struct Ext2BlockGroupDescriptor {
-  uint32_t blockUsageBitMapAddress;     // Block address of block usage bitmap
-  uint32_t indexNodeUsageBitMapAddress; // Block address of inode usage bitmap
-  uint32_t indexNodeTableBlockAddress;  // Starting block address of inode table
+  uint32_t blockUsageBitMapBlock;     // Block address of block usage bitmap
+  uint32_t indexNodeUsageBitMapBlock; // Block address of inode usage bitmap
+  uint32_t indexNodeTableBlockBlock;  // Starting block address of inode table
   uint16_t unallocatedBlocksNums;       // Number of unallocated blocks in group
   uint16_t unallocatedIndexNodeNums;    // Number of unallocated inodes in group
   uint16_t directorirsNum;              // Number of directories in group
@@ -241,24 +241,23 @@ typedef struct Ext2DirectoryEntry {
   uint8_t nameCharacters[255]; // Name characters
 } Ext2DirectoryEntry;
 
-
 typedef uint32_t Ext2DataBlockBitmap;
 typedef uint32_t Ext2IndexNodeBlockBitmap;
 typedef uint32_t Ext2DataBlock;
 typedef uint32_t Ext2BootBlock;
 
 typedef struct Ext2BlockGroup {
-    Ext2SuperBlock* superBlock;
-    Ext2BlockGroupDescriptor* blockGroupDescriptor;
-    Ext2DataBlockBitmap* dataBlockBitmap;
-    Ext2IndexNodeBlockBitmap* indexNodeBitmap;
-    Ext2IndexNodeDataStructure* indexNodeDataStructure;
-    Ext2DataBlock* dataBlock;
+  Ext2SuperBlock *superBlock;
+  Ext2BlockGroupDescriptor *blockGroupDescriptor;
+  Ext2DataBlockBitmap *dataBlockBitmap;
+  Ext2IndexNodeBlockBitmap *indexNodeBitmap;
+  Ext2IndexNodeDataStructure *indexNodeDataStructure;
+  Ext2DataBlock *dataBlock;
 } Ext2BlockGroup;
 
 typedef struct Ext2FileSystem {
-    Ext2BootBlock* bootBlock;
-    Ext2BlockGroup* blockGroups;
+  Ext2BootBlock *bootBlock;
+  Ext2BlockGroup *blockGroups;
 } Ext2FileSystem;
 
 KernelStatus ext2_init();
