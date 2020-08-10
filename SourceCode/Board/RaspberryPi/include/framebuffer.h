@@ -1,13 +1,12 @@
 //
 // Created by XingfengYang on 2020/7/7.
 //
-
 #ifndef __BOARD_RASP_FRAMEBUFFER_H__
 #define __BOARD_RASP_FRAMEBUFFER_H__
 
 #include <stdint.h>
 
-int framebuffer_init(void);
+uint32_t framebuffer_init(void);
 
 void framebuffer_draw_pixel(uint32_t x, uint32_t y, char r, char g, char b);
 

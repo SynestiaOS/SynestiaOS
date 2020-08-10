@@ -20,6 +20,7 @@
 #include <string.h>
 #include <synestia_os_hal.h>
 #include <vmm.h>
+#include <ext2.h>
 
 extern uint32_t *gpu_flush(int args);
 extern uint32_t GFX2D_BUFFER[1024 * 768];
@@ -165,6 +166,8 @@ void kernel_main(void) {
     gfx2d_draw_bitmap(context, 0, 0, 1024, 768, desktop());
     draw_task_bar();
 
+    ext2_init();
+
     gpuHandler.node.next = nullptr;
     gpuHandler.node.prev = nullptr;
     gpuHandler.timer_interrupt_handler = &gpu_flush;
@@ -191,7 +194,7 @@ void kernel_main(void) {
     schd_schedule();
   }
 
-  if(read_cpuid()==1){
+  if (read_cpuid() == 1) {
     led_init();
   }
 

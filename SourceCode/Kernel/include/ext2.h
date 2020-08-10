@@ -5,6 +5,7 @@
 #ifndef __KERNEL_FS_EXT2_H__
 #define __KERNEL_FS_EXT2_H__
 #include <stdint.h>
+#include <type.h>
 
 typedef enum Ext2FileSystemStates {
   FILE_SYSTEM_CLEAN = 1,
@@ -239,5 +240,7 @@ typedef struct Ext2DirectoryEntry {
                          // else this is the most-significant 8 bits of the Name Length)
   uint8_t nameCharacters[255]; // Name characters
 } Ext2DirectoryEntry;
+
+KernelStatus ext2_init();
 
 #endif // __KERNEL_FS_EXT2_H__

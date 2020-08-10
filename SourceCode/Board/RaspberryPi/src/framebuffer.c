@@ -6,15 +6,14 @@
 #include <kheap.h>
 #include <log.h>
 #include <mailbox.h>
-#include <stdlib.h>
 
 uint32_t pitch;
-unsigned char *lfb;
+uint8_t *lfb;
 
 uint32_t framebufferWidth;
 uint32_t framebufferHeight;
 
-int framebuffer_init(void) {
+uint32_t framebuffer_init(void) {
   PropertySetPhysicalDisplayWHMail *setPhysicalDisplayWHMail =
       kheap_alloc_aligned(sizeof(PropertySetPhysicalDisplayWHMail), 16);
   setPhysicalDisplayWHMail->size = sizeof(PropertySetPhysicalDisplayWHMail);
