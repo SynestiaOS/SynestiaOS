@@ -11,10 +11,14 @@ extern char _binary_initrd_img_end[];
 extern char _binary_initrd_img_size[];
 
 #define EXT2_SIGNATURE 0xef53
-#define EXT2_BLOCK_GROUP_DESCRIPTOR 32
+#define EXT2_BLOCK_GROUP_DESCRIPTOR_SIZE 32
+#define EXT2_INDEX_NODE_STRUCTURE_SIZE 128
+
+
+uint32_t EXT2_ADDRESS = _binary_initrd_img_start;
 
 KernelStatus ext2_init() {
-  Ext2SuperBlock *ext2SuperBlock = (Ext2SuperBlock *)(_binary_initrd_img_start + 1024);
+  Ext2SuperBlock *ext2SuperBlock = (Ext2SuperBlock *)(EXT2_ADDRESS + 1024);
 
   if(ext2SuperBlock->signature != EXT2_SIGNATURE){
     LogError("[Ext2]: not a ext2 file system.\n");
@@ -56,28 +60,33 @@ KernelStatus ext2_init() {
   // Block size
   uint32_t blockSize = 1 << (ext2SuperBlock->log2BlockSizeSub10 + 10);
 
-
   uint32_t blockNumsInEachBlockGroup = (blockSize * 8);
-  
+
   // Block Group Descriptor numbers , other words, this is super block numbers or block group number
-  uint32_t blockGroupNums = ext2SuperBlock->blockNums / blockNumsInEachBlockGroup;
-  uint32_t blockGroupNumsMod = (ext2SuperBlock->blockNums % blockNumsInEachBlockGroup) > 0 ? 1 : 0;
-  blockGroupNums += blockGroupNumsMod;
+  uint32_t blockGroupNums =
+  ext2SuperBlock->blockNums / blockNumsInEachBlockGroup +
+     (ext2SuperBlock->blockNums % blockNumsInEachBlockGroup) > 0 ? 1 : 0;
 
-  
-  uint32_t blockGroupDescriptorNumsInEachBlock = blockSize / EXT2_BLOCK_GROUP_DESCRIPTOR;
-  
+  uint32_t blockGroupDescriptorNumsInEachBlock = blockSize / EXT2_BLOCK_GROUP_DESCRIPTOR_SIZE;
   // block nums for all block group descriptor
-  uint32_t blockForBlockGroupDescriptor =
-      blockGroupNums / blockGroupDescriptorNumsInEachBlock  +
-    ((blockGroupNums % blockGroupDescriptorNumsInEachBlock) > 0) ? 1 : 0;
+  uint32_t blockForBlockGroupDescriptor = blockGroupNums / blockGroupDescriptorNumsInEachBlock;
+  uint32_t blockForBlockGroupDescriptorMod =  (blockGroupNums % blockGroupDescriptorNumsInEachBlock) > 0 ? 1 : 0;
+  blockForBlockGroupDescriptor += blockForBlockGroupDescriptorMod;
+  LogError("[Ext2]: block group descriptor blocks: %d .\n",blockForBlockGroupDescriptor);
 
-  // data block bit map
+  uint32_t indexNodeStructureNumsInEachBlock = blockSize / EXT2_INDEX_NODE_STRUCTURE_SIZE;
+  uint32_t blockForIndexNodeTable = ext2SuperBlock->indexNodeNums / indexNodeStructureNumsInEachBlock;
+  uint32_t blockForIndexNodeTableMod =   ((ext2SuperBlock->indexNodeNums % indexNodeStructureNumsInEachBlock) > 0) ? 1 : 0;
+  blockForIndexNodeTable += blockForIndexNodeTableMod;
+  LogError("[Ext2]: index node table  blocks: %d .\n",blockForIndexNodeTable);
 
-  // index node bit map
+  Ext2BlockGroup blockGroup;
+  blockGroup.superBlock = (Ext2SuperBlock*)(EXT2_ADDRESS + 1024);
+  blockGroup.blockGroupDescriptor = (Ext2BlockGroupDescriptor*) ((uint32_t)blockGroup.superBlock + blockSize);
+  blockGroup.dataBlockBitmap = (Ext2DataBlockBitmap*)((uint32_t)blockGroup.blockGroupDescriptor + blockForBlockGroupDescriptor * blockSize);
+  blockGroup.indexNodeBitmap = (Ext2IndexNodeBlockBitmap*)((uint32_t)blockGroup.dataBlockBitmap + blockSize);
+  blockGroup.indexNodeDataStructure = (Ext2IndexNodeDataStructure*)((uint32_t)blockGroup.indexNodeBitmap + blockSize);
+  blockGroup.dataBlock = (Ext2DataBlock*)((uint32_t)blockGroup.indexNodeDataStructure + blockForIndexNodeTable * blockSize);
 
-  // index nodes
-
-  // data blocks
-
+  
 }
