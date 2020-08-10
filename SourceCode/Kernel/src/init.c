@@ -152,7 +152,6 @@ TimerHandler gpuHandler;
 SpinLock bootSpinLock = SpinLockCreate();
 void kernel_main(void) {
   if (read_cpuid() == 0) {
-    led_init();
     bootSpinLock.operations.acquire(&bootSpinLock);
     init_bsp();
     print_splash();
@@ -190,6 +189,10 @@ void kernel_main(void) {
 
     bootSpinLock.operations.release(&bootSpinLock);
     schd_schedule();
+  }
+
+  if(read_cpuid()==1){
+    led_init();
   }
 
   // schd_switch_next();
