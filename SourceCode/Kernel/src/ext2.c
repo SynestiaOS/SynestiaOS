@@ -72,13 +72,13 @@ KernelStatus ext2_init() {
   uint32_t blockForBlockGroupDescriptor = blockGroupNums / blockGroupDescriptorNumsInEachBlock;
   uint32_t blockForBlockGroupDescriptorMod =  (blockGroupNums % blockGroupDescriptorNumsInEachBlock) > 0 ? 1 : 0;
   blockForBlockGroupDescriptor += blockForBlockGroupDescriptorMod;
-  LogError("[Ext2]: block group descriptor blocks: %d .\n",blockForBlockGroupDescriptor);
+  LogInfo("[Ext2]: block group descriptor blocks: %d .\n",blockForBlockGroupDescriptor);
 
   uint32_t indexNodeStructureNumsInEachBlock = blockSize / EXT2_INDEX_NODE_STRUCTURE_SIZE;
   uint32_t blockForIndexNodeTable = ext2SuperBlock->indexNodeNums / indexNodeStructureNumsInEachBlock;
   uint32_t blockForIndexNodeTableMod =   ((ext2SuperBlock->indexNodeNums % indexNodeStructureNumsInEachBlock) > 0) ? 1 : 0;
   blockForIndexNodeTable += blockForIndexNodeTableMod;
-  LogError("[Ext2]: index node table  blocks: %d .\n",blockForIndexNodeTable);
+  LogInfo("[Ext2]: index node table  blocks: %d .\n",blockForIndexNodeTable);
 
   Ext2BlockGroup blockGroup;
   blockGroup.superBlock = (Ext2SuperBlock*)(EXT2_ADDRESS + 1024);
@@ -88,5 +88,13 @@ KernelStatus ext2_init() {
   blockGroup.indexNodeDataStructure = (Ext2IndexNodeDataStructure*)((uint32_t)blockGroup.indexNodeBitmap + blockSize);
   blockGroup.dataBlock = (Ext2DataBlock*)((uint32_t)blockGroup.indexNodeDataStructure + blockForIndexNodeTable * blockSize);
 
-  
+  for(uint32_t i = 0;i<ext2SuperBlock->indexNodeNums;i++){
+      Ext2IndexNodeDataStructure* inode = (Ext2IndexNodeDataStructure*)(EXT2_ADDRESS + 0x3800 + i * EXT2_INDEX_NODE_STRUCTURE_SIZE);
+      if(((inode->typeAndPermissions & 0xF000) == EXT2_INDEX_NODE_TYPE_DIRECTORY
+      )|| ((inode->typeAndPermissions & 0xF000) == EXT2_INDEX_NODE_TYPE_REGULAR_FILE)){
+        LogInfo("[Ext2]: inode type : %d .\n",inode->typeAndPermissions & 0xF000);
+        LogInfo("[Ext2]: inode create time : %d .\n",inode->createTime);
+      }
+  }
+
 }
