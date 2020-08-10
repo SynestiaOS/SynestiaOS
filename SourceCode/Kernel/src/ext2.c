@@ -10,10 +10,16 @@ extern char _binary_initrd_img_start[];
 extern char _binary_initrd_img_end[];
 extern char _binary_initrd_img_size[];
 
+#define EXT2_SIGNATURE 0xef53
 #define EXT2_BLOCK_GROUP_DESCRIPTOR 32
 
 KernelStatus ext2_init() {
   Ext2SuperBlock *ext2SuperBlock = (Ext2SuperBlock *)(_binary_initrd_img_start + 1024);
+
+  if(ext2SuperBlock->signature != EXT2_SIGNATURE){
+    LogError("[Ext2]: not a ext2 file system.\n");
+    return ERROR;
+  }
 
   LogInfo("[Ext2]: %d inodes in file system.\n", ext2SuperBlock->indexNodeNums);
   LogInfo("[Ext2]: %d blocks in file system.\n", ext2SuperBlock->blockNums);
@@ -49,15 +55,25 @@ KernelStatus ext2_init() {
 
   // Block Group Descriptor
   uint32_t blockSize = 1 << (ext2SuperBlock->log2BlockSizeSub10 + 10);
+  
+  // Block Group Descriptor numbers
   uint32_t blockGroupDescripterNums = ext2SuperBlock->blockNums / (blockSize * 8);
   uint32_t blockGroupDescripterNumsMod = (ext2SuperBlock->blockNums % (blockSize * 8)) > 0 ? 1 : 0;
   blockGroupDescripterNums += blockGroupDescripterNumsMod;
 
   uint32_t blockGroupDescriptorNumsInEachBlock = blockSize / EXT2_BLOCK_GROUP_DESCRIPTOR;
+  
+  // block nums for all block group descriptor
   uint32_t blockForBlockGroupDescriptor =
       blockGroupDescripterNums / blockGroupDescriptorNumsInEachBlock  +
     ((blockGroupDescripterNums % blockGroupDescriptorNumsInEachBlock) > 0) ? 1 : 0;
 
-    
+  // data block bit map
+
+  // index node bit map
+
+  // index nodes
+
+  // data blocks
 
 }
