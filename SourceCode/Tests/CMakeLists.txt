@@ -38,6 +38,11 @@ add_executable(${KernelUnitTestsImg}
         $<TARGET_OBJECTS:LibGUI>
         $<TARGET_OBJECTS:Console>
 	$<TARGET_OBJECTS:${boardObj}>)
+
+target_sources(${KernelUnitTestsImg}
+        PRIVATE
+        ${SYNESTIAOS_FS_DIR}/initrd.o)
+
 target_include_tests_header_files(${KernelUnitTestsImg})
 target_include_libc_header_files(${KernelUnitTestsImg})
 target_include_raspberry_pi_header_files(${KernelUnitTestsImg})

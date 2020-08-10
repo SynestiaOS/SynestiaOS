@@ -14,13 +14,13 @@ target_include_kernel_header_files(${PROJECT_NAME})
 target_include_libc_header_files(${PROJECT_NAME})
 
 if (SynestiaPlatform STREQUAL pi2)
-	set(boardObj BoardRaspberryPi)
+    set(boardObj BoardRaspberryPi)
 elseif (SynestiaPlatform STREQUAL pi3)
-	set(boardObj BoardRaspberryPi)
+    set(boardObj BoardRaspberryPi)
 elseif (SynestiaPlatform STREQUAL pi4)
-	set(boardObj BoardRaspberryPi)
+    set(boardObj BoardRaspberryPi)
 else ()
-	message(ERROR "unexpected PLATFORM ${PLATFORM}")
+    message(ERROR "unexpected PLATFORM ${PLATFORM}")
 endif ()
 
 add_executable(${KernelName}
@@ -31,7 +31,7 @@ add_executable(${KernelName}
         $<TARGET_OBJECTS:LibGfx>
         $<TARGET_OBJECTS:LibGUI>
         $<TARGET_OBJECTS:Console>
-	$<TARGET_OBJECTS:${boardObj}>)
+        $<TARGET_OBJECTS:${boardObj}>)
 
 target_sources(${KernelName}
         PRIVATE
