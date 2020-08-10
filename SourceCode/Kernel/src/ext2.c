@@ -56,9 +56,12 @@ KernelStatus ext2_init() {
   // Block size
   uint32_t blockSize = 1 << (ext2SuperBlock->log2BlockSizeSub10 + 10);
 
+
+  uint32_t blockNumsInEachBlockGroup = (blockSize * 8);
+  
   // Block Group Descriptor numbers , other words, this is super block numbers or block group number
-  uint32_t blockGroupNums = ext2SuperBlock->blockNums / (blockSize * 8);
-  uint32_t blockGroupNumsMod = (ext2SuperBlock->blockNums % (blockSize * 8)) > 0 ? 1 : 0;
+  uint32_t blockGroupNums = ext2SuperBlock->blockNums / blockNumsInEachBlockGroup;
+  uint32_t blockGroupNumsMod = (ext2SuperBlock->blockNums % blockNumsInEachBlockGroup) > 0 ? 1 : 0;
   blockGroupNums += blockGroupNumsMod;
 
   
