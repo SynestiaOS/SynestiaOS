@@ -53,10 +53,10 @@ KernelStatus ext2_init() {
   LogInfo("[Ext2]: Voluma Name %s .\n", (char *)ext2SuperBlock->volumaName);
   LogInfo("[Ext2]: Path volume was last mounted to %s .\n", (char *)ext2SuperBlock->lastMountPath);
 
-  // Block Group Descriptor
+  // Block size
   uint32_t blockSize = 1 << (ext2SuperBlock->log2BlockSizeSub10 + 10);
   
-  // Block Group Descriptor numbers
+  // Block Group Descriptor numbers , other words, this is super block numbers
   uint32_t blockGroupDescripterNums = ext2SuperBlock->blockNums / (blockSize * 8);
   uint32_t blockGroupDescripterNumsMod = (ext2SuperBlock->blockNums % (blockSize * 8)) > 0 ? 1 : 0;
   blockGroupDescripterNums += blockGroupDescripterNumsMod;
