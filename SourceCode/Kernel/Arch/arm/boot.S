@@ -1,6 +1,24 @@
 .section ".text.boot"
 .globl _start
+
+.macro safe_svcmode_maskall reg:req
+	mrs	\reg , cpsr
+	eor	\reg, \reg, #0x1A		/* test for HYP mode */
+	tst	\reg, #0x1F
+	bic	\reg , \reg , #0x1F		/* clear mode bits */
+	orr	\reg , \reg , #0xC0 | 0x13	/* mask IRQ/FIQ bits and set SVC mode */
+	bne	1f				/* branch if not HYP mode */
+	orr	\reg, \reg, #0x100		/* mask Abort bit */
+	adr	lr, 2f
+	msr	spsr_cxsf, \reg
+	.word	0xE12EF30E			/* msr ELR_hyp, lr */
+	.word	0xE160006E			/* eret */
+1:	msr	cpsr_c, \reg
+2:
+.endm
+
 _start:
+    safe_svcmode_maskall r0
     mov	r0, #0
 	mcr	p15, 0, r0, c12, c0, 0	
 
@@ -28,115 +46,60 @@ _init_cpu0:
     ldr r1, =__bss_end
     bl  memclean // call memclean(r0, r1)
 
-    mrs r0, cpsr // move coprocessor register cpsr to ARM register r0
+    cps	#0x11				/* change mode to fiq */
+    ldr	sp, =__fiq_stack
+    cps	#0x12				/* change mode to irq */
+    ldr	sp, =__irq_stack
+    // cps	#0x17				/* change mode to abort */
+    // ldr	sp, =MEM_ABORT_STACK
+    // cps	#0x1B				/* change mode to 'undefined' */
+    // ldr	sp, =MEM_ABORT_STACK
+    cps	#0x1F				/* set system mode */
+    ldr	sp, =__sys_stack
 
-    bic r0,     #0x1F // set r0[4:0] to bit 0
-    orr r0,     #0x13 // set r0[4], r0[1:0] to bit 1, 0b10011
-    msr cpsr_c, r0 // enter SVC (supervisor) mode
-    ldr r1,=__svc_stack
-    bic sp, r1, #0x7
-
-    bic r0,     #0x1F
-    orr r0,     #0x12 // set r0[4], r0[1] to bit 1, 0b10010
-    msr cpsr_c, r0 // enter IRQ mode
-    ldr r1,=__irq_stack
-    bic sp, r1, #0x7
-
-    bic r0,     #0x1F
-    orr r0,     #0x11 // set r0[4], r0[0] to bit 1, 0b10001
-    msr cpsr_c, r0 // enter FIQ mode
-    ldr r1,=__fiq_stack
-    bic sp, r1, #0x7
-
-    bic r0,     #0x1F
-    orr r0,     #0x13
-    msr cpsr_c, r0 // enter SVC (supervisor) mode
     ldr pc, =_goto_kernel_main
 
 _init_cpu1:
-    ldr sp, =__sys_stack-0x8000
+    cps	#0x11				/* change mode to fiq */
+    ldr	sp, =__fiq_stack-0x8000
+    cps	#0x12				/* change mode to irq */
+    ldr	sp, =__irq_stack-0x8000
+    // cps	#0x17				/* change mode to abort */
+    // ldr	sp, =MEM_ABORT_STACK
+    // cps	#0x1B				/* change mode to 'undefined' */
+    // ldr	sp, =MEM_ABORT_STACK
+    cps	#0x1F				/* set system mode */
+    ldr	sp, =__sys_stack-0x8000
 
-    mrs r0, cpsr // move coprocessor register cpsr to ARM register r0
-
-    bic r0,     #0x1F // set r0[4:0] to bit 0
-    orr r0,     #0x13 // set r0[4], r0[1:0] to bit 1, 0b10011
-    msr cpsr_c, r0 // enter SVC (supervisor) mode
-    ldr r1,=__svc_stack-0x8000
-    bic sp, r1, #0x7
-
-    bic r0,     #0x1F
-    orr r0,     #0x12 // set r0[4], r0[1] to bit 1, 0b10010
-    msr cpsr_c, r0 // enter IRQ mode
-    ldr r1,=__irq_stack-0x8000
-    bic sp, r1, #0x7
-
-    bic r0,     #0x1F
-    orr r0,     #0x11 // set r0[4], r0[0] to bit 1, 0b10001
-    msr cpsr_c, r0 // enter FIQ mode
-    ldr r1,=__fiq_stack-0x8000
-    bic sp, r1, #0x7
-
-    bic r0,     #0x1F
-    orr r0,     #0x13
-    msr cpsr_c, r0 // enter SVC (supervisor) mode
     wfe
     ldr pc, =_goto_kernel_main
 
 _init_cpu2:
-    ldr sp, =__sys_stack-0x8000-0x8000
+    cps	#0x11				/* change mode to fiq */
+    ldr	sp, =__fiq_stack-0x8000-0x8000
+    cps	#0x12				/* change mode to irq */
+    ldr	sp, =__irq_stack-0x8000-0x8000
+    // cps	#0x17				/* change mode to abort */
+    // ldr	sp, =MEM_ABORT_STACK
+    // cps	#0x1B				/* change mode to 'undefined' */
+    // ldr	sp, =MEM_ABORT_STACK
+    cps	#0x1F				/* set system mode */
+    ldr	sp, =__sys_stack-0x8000-0x8000
 
-    mrs r0, cpsr // move coprocessor register cpsr to ARM register r0
-
-    bic r0,     #0x1F // set r0[4:0] to bit 0
-    orr r0,     #0x13 // set r0[4], r0[1:0] to bit 1, 0b10011
-    msr cpsr_c, r0 // enter SVC (supervisor) mode
-    ldr r1,=__svc_stack-0x8000-0x8000
-    bic sp, r1, #0x7
-
-    bic r0,     #0x1F
-    orr r0,     #0x12 // set r0[4], r0[1] to bit 1, 0b10010
-    msr cpsr_c, r0 // enter IRQ mode
-    ldr r1,=__irq_stack-0x8000-0x8000
-    bic sp, r1, #0x7
-
-    bic r0,     #0x1F
-    orr r0,     #0x11 // set r0[4], r0[0] to bit 1, 0b10001
-    msr cpsr_c, r0 // enter FIQ mode
-    ldr r1,=__fiq_stack-0x8000-0x8000
-    bic sp, r1, #0x7
-
-    bic r0,     #0x1F
-    orr r0,     #0x13
-    msr cpsr_c, r0 // enter SVC (supervisor) mode
     wfe
     ldr pc, =_goto_kernel_main
 
 _init_cpu3:
-    ldr sp, =__sys_stack-0x8000-0x8000-0x8000
-
-    mrs r0, cpsr // move coprocessor register cpsr to ARM register r0
-
-    bic r0,     #0x1F // set r0[4:0] to bit 0
-    orr r0,     #0x13 // set r0[4], r0[1:0] to bit 1, 0b10011
-    msr cpsr_c, r0 // enter SVC (supervisor) mode
-    ldr r1,=__svc_stack-0x8000-0x8000-0x8000
-    bic sp, r1, #0x7
-
-    bic r0,     #0x1F
-    orr r0,     #0x12 // set r0[4], r0[1] to bit 1, 0b10010
-    msr cpsr_c, r0 // enter IRQ mode
-    ldr r1,=__irq_stack-0x8000-0x8000-0x8000
-    bic sp, r1, #0x7
-
-    bic r0,     #0x1F
-    orr r0,     #0x11 // set r0[4], r0[0] to bit 1, 0b10001
-    msr cpsr_c, r0 // enter FIQ mode
-    ldr r1,=__fiq_stack-0x8000-0x8000-0x8000
-    bic sp, r1, #0x7
-
-    bic r0,     #0x1F
-    orr r0,     #0x13
-    msr cpsr_c, r0 // enter SVC (supervisor) mode
+    cps	#0x11				/* change mode to fiq */
+    ldr	sp, =__fiq_stack-0x8000-0x8000-0x8000
+    cps	#0x12				/* change mode to irq */
+    ldr	sp, =__irq_stack-0x8000-0x8000-0x8000
+    // cps	#0x17				/* change mode to abort */
+    // ldr	sp, =MEM_ABORT_STACK
+    // cps	#0x1B				/* change mode to 'undefined' */
+    // ldr	sp, =MEM_ABORT_STACK
+    cps	#0x1F				/* set system mode */
+    ldr	sp, =__sys_stack-0x8000-0x8000-0x8000
     wfe
     ldr pc, =_goto_kernel_main
 
