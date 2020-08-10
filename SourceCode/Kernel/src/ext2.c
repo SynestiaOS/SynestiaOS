@@ -10,6 +10,8 @@ extern char _binary_initrd_img_start[];
 extern char _binary_initrd_img_end[];
 extern char _binary_initrd_img_size[];
 
+#define EXT2_BLOCK_GROUP_DESCRIPTOR 32
+
 KernelStatus ext2_init() {
   Ext2SuperBlock *ext2SuperBlock = (Ext2SuperBlock *)(_binary_initrd_img_start + 1024);
 
@@ -19,8 +21,8 @@ KernelStatus ext2_init() {
   LogInfo("[Ext2]: %d unallocated blocks.\n", ext2SuperBlock->unallocatedBlockNums);
   LogInfo("[Ext2]: %d unallocated inodes.\n", ext2SuperBlock->unallocatedIndexNodeNums);
   LogInfo("[Ext2]: %d block containing the superblock.\n", ext2SuperBlock->blockContainingSuperblockNums);
-  LogInfo("[Ext2]: BlockSize: %d .\n", 2 << (ext2SuperBlock->log2BlockSizeSub10 + 10));
-  LogInfo("[Ext2]: FragmentSize: %d .\n", 2 << (ext2SuperBlock->log2FragmentSizeSub10 + 10));
+  LogInfo("[Ext2]: BlockSize: %d .\n", 1 << (ext2SuperBlock->log2BlockSizeSub10 + 10));
+  LogInfo("[Ext2]: FragmentSize: %d .\n", 1 << (ext2SuperBlock->log2FragmentSizeSub10 + 10));
   LogInfo("[Ext2]: %d blocks in each block group.\n", ext2SuperBlock->eachBlockGroupBlockNums);
   LogInfo("[Ext2]: %d fragments in each block group.\n", ext2SuperBlock->eachBlockGroupFragmentNums);
   LogInfo("[Ext2]: %d inodes in each block group.\n", ext2SuperBlock->eachBlockGroupIndexNodeNums);
@@ -42,6 +44,20 @@ KernelStatus ext2_init() {
   LogInfo("[Ext2]: First non-reserved inode in file system: %d .\n", ext2SuperBlock->firstIndexNode);
   LogInfo("[Ext2]: Size of each inode structure in bytes: %d .\n", ext2SuperBlock->indexNodeStructureSize);
   LogInfo("[Ext2]: Superblock is part of Block group: %d .\n", ext2SuperBlock->blockGrousp);
-  LogInfo("[Ext2]: Voluma Name %s .\n",(char*)ext2SuperBlock->volumaName);
-  LogInfo("[Ext2]: Path volume was last mounted to %s .\n",(char*)ext2SuperBlock->lastMountPath);
+  LogInfo("[Ext2]: Voluma Name %s .\n", (char *)ext2SuperBlock->volumaName);
+  LogInfo("[Ext2]: Path volume was last mounted to %s .\n", (char *)ext2SuperBlock->lastMountPath);
+
+  // Block Group Descriptor
+  uint32_t blockSize = 1 << (ext2SuperBlock->log2BlockSizeSub10 + 10);
+  uint32_t blockGroupDescripterNums = ext2SuperBlock->blockNums / (blockSize * 8);
+  uint32_t blockGroupDescripterNumsMod = (ext2SuperBlock->blockNums % (blockSize * 8)) > 0 ? 1 : 0;
+  blockGroupDescripterNums += blockGroupDescripterNumsMod;
+
+  uint32_t blockGroupDescriptorNumsInEachBlock = blockSize / EXT2_BLOCK_GROUP_DESCRIPTOR;
+  uint32_t blockForBlockGroupDescriptor =
+      blockGroupDescripterNums / blockGroupDescriptorNumsInEachBlock  +
+    ((blockGroupDescripterNums % blockGroupDescriptorNumsInEachBlock) > 0) ? 1 : 0;
+
+    
+
 }

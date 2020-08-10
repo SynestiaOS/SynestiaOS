@@ -129,7 +129,7 @@ typedef enum Ext2IndexNodePermission {   // bottom 12 bits
   EXT2_INDEX_NODE_SET_USER_ID = 0x800,   //	04000	Set user ID
 } Ext2IndexNodePermission;
 
-typedef struct Ext3IndexNodeDataStructure {
+typedef struct Ext2IndexNodeDataStructure {
   uint16_t typeAndPermissions;  // Type and Permissions (see below)
   uint16_t userId;              // User ID
   uint32_t sizeLower32Bits;     // Lower 32 bits of size in bytes
@@ -219,7 +219,7 @@ typedef struct Ext3IndexNodeDataStructure {
    * X	(reserved)
    */
   uint8_t operatingSystemSpecificValue2[12];
-} Ext3IndexNodeDataStructure;
+} Ext2IndexNodeDataStructure;
 
 typedef enum Ext2DirectoryEntryType {
   EXT2_DIRECTORY_ENTRY_TYPE_KNOWN = 0,            // Unknown type
@@ -240,6 +240,26 @@ typedef struct Ext2DirectoryEntry {
                          // else this is the most-significant 8 bits of the Name Length)
   uint8_t nameCharacters[255]; // Name characters
 } Ext2DirectoryEntry;
+
+
+typedef uint32_t Ext2DataBlockBitmap;
+typedef uint32_t Ext2IndexNodeBlockBitmap;
+typedef uint32_t Ext2DataBlock;
+typedef uint32_t Ext2BootBlock;
+
+typedef struct Ext2BlockGroup {
+    Ext2SuperBlock* superBlock;
+    Ext2BlockGroupDescriptor* blockGroupDescriptor;
+    Ext2DataBlockBitmap* dataBlockBitmap;
+    Ext2IndexNodeBlockBitmap* indexNodeBitmap;
+    Ext2IndexNodeDataStructure* indexNodeDataStructure;
+    Ext2DataBlock* dataBlock;
+} Ext2BlockGroup;
+
+typedef struct Ext2FileSystem {
+    Ext2BootBlock* bootBlock;
+    Ext2BlockGroup* blockGroups;
+} Ext2FileSystem;
 
 KernelStatus ext2_init();
 
