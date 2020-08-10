@@ -31,15 +31,17 @@ add_executable(${KernelName}
         $<TARGET_OBJECTS:LibGfx>
         $<TARGET_OBJECTS:LibGUI>
         $<TARGET_OBJECTS:Console>
-	$<TARGET_OBJECTS:${boardObj}>)
+	$<TARGET_OBJECTS:${boardObj}>
+        ${SYNESTIAOS_FS_DIR}/initrd.ld)
 
 target_link_options(${KernelName} PRIVATE -T ${KernelArch_SOURCE_DIR}/${SynestiaArch}/kernel.ld)
+# target_link_options(${KernelName} PRIVATE -T ${SYNESTIAOS_FS_DIR}/initrd.ld)
 
 target_link_libraries(${KernelName} PRIVATE gcc)
 
-#add_custom_command(TARGET ${KernelName} POST_BUILD
+# add_custom_command(TARGET ${KernelName} POST_BUILD
 #        COMMAND ${CMAKE_COMMAND} -E echo making Kernel7.img, wait a moment
-#        WORKING_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
+#        WORKING_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
 #        COMMAND ${CMAKE_OBJCOPY} ${KernelName} -O binary Kernel7.img)
 # TODO: ${CMAKE_OBJCOPY} not working here within docker env, find a better way to objcopy the kernel images
 #add_custom_target(Objcopy ALL
