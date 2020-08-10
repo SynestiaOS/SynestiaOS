@@ -65,8 +65,9 @@ int led_init(void) {
   REG32(GPPUD) = GPPUD_PULL_UP;
 
   /* Loop to wait until GPPUD assignment persists. */
-  for (i = 0; i < TOGGLE_LOOP_CNT / 1000; ++i)
+  for (i = 0; i < TOGGLE_LOOP_CNT / 1000; ++i) {
     select = REG32(GPFSEL4);
+  }
 
 #if defined(RASPI4)
   /* Push GPPUD settings to GPPUDCLK1 GPIO 42. */
@@ -80,8 +81,9 @@ int led_init(void) {
 #endif
 
   /* Loop to wait until GPPUD clock assignment persists. */
-  for (i = 0; i < TOGGLE_LOOP_CNT / 1000; ++i)
+  for (i = 0; i < TOGGLE_LOOP_CNT / 1000; ++i) {
     select = REG32(GPFSEL4);
+  }
 
   /*
    * Enable the JTAG GPIOs
@@ -91,15 +93,17 @@ int led_init(void) {
   REG32(GPPUD) = GPPUD_OFF;
 
   /* Loop to wait until GPPUD assignment persists. */
-  for (i = 0; i < TOGGLE_LOOP_CNT / 1000; ++i)
+  for (i = 0; i < TOGGLE_LOOP_CNT / 1000; ++i) {
     select = REG32(GPFSEL4);
+  }
 
   // Apply to all the JTAG GPIO pins
   REG32(GPPUDCLK0) = (1 << 22) | (1 << 23) | (1 << 24) | (1 << 25) | (1 << 26) | (1 << 27);
 
   /* Loop to wait until GPPUD clock assignment persists. */
-  for (i = 0; i < TOGGLE_LOOP_CNT / 1000; ++i)
+  for (i = 0; i < TOGGLE_LOOP_CNT / 1000; ++i) {
     select = REG32(GPFSEL4);
+  }
 
   // Select level alternate 4 to enable JTAG
   select = REG32(GPFSEL2);
@@ -132,10 +136,11 @@ int led_init(void) {
 #endif
 
     // Loop to wait a bit
-    for (i = 0; i < TOGGLE_LOOP_CNT; ++i) /* loop to pause LED on */
+    for (i = 0; i < TOGGLE_LOOP_CNT; ++i) { /* loop to pause LED on */
       select = REG32(GPFSEL4);
+    }
 
-      /* Turn off the activity LED. */
+    /* Turn off the activity LED. */
 #if defined(RASPI4)
     /* RPI 4 has LED at GPIO 42, so clear GPIO 42. */
     REG32(GPCLR1) = 1 << (42 - 32);
@@ -148,8 +153,9 @@ int led_init(void) {
 #endif
 
     // Loop to wait a bit
-    for (i = 0; i < TOGGLE_LOOP_CNT; ++i) /* loop to pause LED off */
+    for (i = 0; i < TOGGLE_LOOP_CNT; ++i) { /* loop to pause LED off */
       select = REG32(GPFSEL4);
+    }
   }
   return select;
 }
