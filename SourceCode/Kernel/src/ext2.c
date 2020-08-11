@@ -96,11 +96,11 @@ KernelStatus ext2_fs_default_mount(Ext2FileSystem *ext2FileSystem, struct SuperB
     Ext2IndexNodeDataStructure *inode = (Ext2IndexNodeDataStructure *)((uint32_t)blockGroup.indexNodeDataStructure +
                                                                        i * EXT2_INDEX_NODE_STRUCTURE_SIZE);
     if ((inode->typeAndPermissions & 0xF000) == EXT2_INDEX_NODE_TYPE_DIRECTORY) {
-      Ext2DirectoryEntry *dentry = (Ext2DirectoryEntry *)((uint32_t)data + inode->directBlockPointer0 * blockSize);
-      LogInfo("[Ext2]: dir : %s\n", dentry->nameCharacters);
+      Ext2DirectoryEntry *dEntry = (Ext2DirectoryEntry *)((uint32_t)data + inode->directBlockPointer0 * blockSize);
+      LogInfo("[Ext2]: dir : %s\n", dEntry->nameCharacters);
       for (uint32_t hardlink = 0; hardlink < inode->hardLinksCount; hardlink++) {
-        dentry = (Ext2DirectoryEntry *)((uint32_t)dentry + dentry->sizeOfThisEntry);
-        LogInfo("[Ext2]: dir : %s\n", dentry->nameCharacters);
+        dEntry = (Ext2DirectoryEntry *)((uint32_t)dEntry + dEntry->sizeOfThisEntry);
+        LogInfo("[Ext2]: dir : %s\n", dEntry->nameCharacters);
       }
     } else if ((inode->typeAndPermissions & 0xF000) == EXT2_INDEX_NODE_TYPE_REGULAR_FILE) {
       LogInfo("[Ext2]: file : %s\n", (char *)((uint32_t)data + inode->directBlockPointer0 * blockSize));

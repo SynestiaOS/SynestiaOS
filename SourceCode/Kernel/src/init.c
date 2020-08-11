@@ -166,13 +166,12 @@ void kernel_main(void) {
     gfx2d_draw_bitmap(context, 0, 0, 1024, 768, desktop());
     draw_task_bar();
 
-    vfs_init();
-
     gpuHandler.node.next = nullptr;
     gpuHandler.node.prev = nullptr;
     gpuHandler.timer_interrupt_handler = &gpu_flush;
     register_time_interrupt(&gpuHandler);
 
+    vfs_init();
     schd_init();
 
     Thread *window1Thread = thread_create("window1", &window_thread1, 1, 1);
