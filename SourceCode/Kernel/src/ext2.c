@@ -31,8 +31,8 @@ KernelStatus ext2_fs_default_mount(Ext2FileSystem *ext2FileSystem, struct SuperB
   LogInfo("[Ext2]: %d blocks in each block group.\n", ext2SuperBlock->eachBlockGroupBlockNums);
   LogInfo("[Ext2]: %d fragments in each block group.\n", ext2SuperBlock->eachBlockGroupFragmentNums);
   LogInfo("[Ext2]: %d inodes in each block group.\n", ext2SuperBlock->eachBlockGroupIndexNodeNums);
-  LogInfo("[Ext2]: LastMountTime: %d .\n", ext2SuperBlock->lastMountTime);
-  LogInfo("[Ext2]: LastWrittenTime: %d .\n", ext2SuperBlock->lastWrittenTime);
+//  LogInfo("[Ext2]: LastMountTime: %d .\n", ext2SuperBlock->lastMountTime);
+//  LogInfo("[Ext2]: LastWrittenTime: %d .\n", ext2SuperBlock->lastWrittenTime);
   LogInfo("[Ext2]: %d times the volume has been mounted since its last consistency check (fsck)\n",
           ext2SuperBlock->numberOfTimes);
   LogInfo("[Ext2]: %d mounts allowed before a consistency check (fsck) must be done\n", ext2SuperBlock->numberOfMounts);
@@ -44,9 +44,9 @@ KernelStatus ext2_fs_default_mount(Ext2FileSystem *ext2FileSystem, struct SuperB
           ext2SuperBlock->intervalBetweenForcedConsistencyChecks);
   LogInfo("[Ext2]: Operating system ID: %d .\n", ext2SuperBlock->operatingSystemID);
   LogInfo("[Ext2]: Major portion of version: %d .\n", ext2SuperBlock->majorPortionOfVersion);
-  LogInfo("[Ext2]: User ID: %d \n", ext2SuperBlock->userId);
-  LogInfo("[Ext2]: Group ID %d \n", ext2SuperBlock->groupId);
-  LogInfo("[Ext2]: First non-reserved inode in file system: %d .\n", ext2SuperBlock->firstIndexNode);
+//   LogInfo("[Ext2]: User ID: %d \n", ext2SuperBlock->userId);
+//   LogInfo("[Ext2]: Group ID %d \n", ext2SuperBlock->groupId);
+//   LogInfo("[Ext2]: First non-reserved inode in file system: %d .\n", ext2SuperBlock->firstIndexNode);
   LogInfo("[Ext2]: Size of each inode structure in bytes: %d .\n", ext2SuperBlock->indexNodeStructureSize);
   LogInfo("[Ext2]: Superblock is part of Block group: %d .\n", ext2SuperBlock->blockGrousp);
   LogInfo("[Ext2]: Voluma Name %s .\n", (char *)ext2SuperBlock->volumaName);
