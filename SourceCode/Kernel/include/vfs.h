@@ -13,6 +13,6 @@
 
 KernelStatus vfs_init();
 
-SuperBlock *vfs_mount(const char *name, FileSystemType type);
+SuperBlock *vfs_mount(const char *name, FileSystemType type, void *data);
 
 #endif // __KERNEL_VFS_H__

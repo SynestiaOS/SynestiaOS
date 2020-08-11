@@ -85,4 +85,5 @@ SuperBlock *vfs_create_super_block() {
   superBlock->operations->createIndexNode = vfs_super_block_default_create_index_node;
   superBlock->operations->destroyDirectoryEntry = vfs_super_block_default_destroy_dentry;
   superBlock->operations->destroyIndexNode = vfs_super_block_default_destroy_inode;
+  return superBlock;
 }

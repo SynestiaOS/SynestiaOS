@@ -255,11 +255,18 @@ typedef struct Ext2BlockGroup {
   Ext2DataBlock *dataBlock;
 } Ext2BlockGroup;
 
+typedef KernelStatus (*Ext2FileSystemMountOperation)(struct Ext2FileSystem *ext2FileSystem,
+                                                     struct SuperBlock *vfsSuperBlock, char *mountName, void *data);
+typedef struct Ext2FileSystemOperations {
+  Ext2FileSystemMountOperation mount;
+} Ext2FileSystemOperations;
+
 typedef struct Ext2FileSystem {
   Ext2BootBlock *bootBlock;
   Ext2BlockGroup *blockGroups;
+  Ext2FileSystemOperations operations;
 } Ext2FileSystem;
 
-KernelStatus ext2_init();
+KernelStatus ext2_init(Ext2FileSystem *ext2FileSystem);
 
 #endif // __KERNEL_FS_EXT2_H__

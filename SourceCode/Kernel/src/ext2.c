@@ -5,19 +5,15 @@
 #include <ext2.h>
 #include <log.h>
 #include <stdint.h>
-
-extern char _binary_initrd_img_start[];
-extern char _binary_initrd_img_end[];
-extern char _binary_initrd_img_size[];
+#include <vfs_super_block.h>
 
 #define EXT2_SIGNATURE 0xef53
 #define EXT2_BLOCK_GROUP_DESCRIPTOR_SIZE 32
 #define EXT2_INDEX_NODE_STRUCTURE_SIZE 128
 
-uint32_t EXT2_ADDRESS = _binary_initrd_img_start;
-
-KernelStatus ext2_init() {
-  Ext2SuperBlock *ext2SuperBlock = (Ext2SuperBlock *)(EXT2_ADDRESS + 1024);
+KernelStatus ext2_fs_default_mount(Ext2FileSystem *ext2FileSystem, struct SuperBlock *vfsSuperBlock, char *mountName,
+                                   void *data) {
+  Ext2SuperBlock *ext2SuperBlock = (Ext2SuperBlock *)((uint32_t)data + 1024);
 
   if (ext2SuperBlock->signature != EXT2_SIGNATURE) {
     LogError("[Ext2]: not a ext2 file system.\n");
@@ -83,15 +79,15 @@ KernelStatus ext2_init() {
   LogInfo("[Ext2]: index node table  blocks: %d .\n", blockForIndexNodeTable);
 
   Ext2BlockGroup blockGroup;
-  blockGroup.superBlock = (Ext2SuperBlock *)(EXT2_ADDRESS + 1024);
+  blockGroup.superBlock = (Ext2SuperBlock *)((uint32_t)data + 1024);
   blockGroup.blockGroupDescriptor = (Ext2BlockGroupDescriptor *)((uint32_t)blockGroup.superBlock + blockSize);
   blockGroup.dataBlockBitmap =
-      (Ext2DataBlockBitmap *)(EXT2_ADDRESS + blockGroup.blockGroupDescriptor->blockUsageBitMapBlock * blockSize);
+      (Ext2DataBlockBitmap *)((uint32_t)data + blockGroup.blockGroupDescriptor->blockUsageBitMapBlock * blockSize);
   blockGroup.indexNodeBitmap =
-      (Ext2IndexNodeBlockBitmap *)(EXT2_ADDRESS +
+      (Ext2IndexNodeBlockBitmap *)((uint32_t)data +
                                    blockGroup.blockGroupDescriptor->indexNodeUsageBitMapBlock * blockSize);
   blockGroup.indexNodeDataStructure =
-      (Ext2IndexNodeDataStructure *)(EXT2_ADDRESS +
+      (Ext2IndexNodeDataStructure *)((uint32_t)data +
                                      blockGroup.blockGroupDescriptor->indexNodeTableBlockBlock * blockSize);
   blockGroup.dataBlock =
       (Ext2DataBlock *)((uint32_t)blockGroup.indexNodeDataStructure + blockForIndexNodeTable * blockSize);
@@ -100,14 +96,16 @@ KernelStatus ext2_init() {
     Ext2IndexNodeDataStructure *inode = (Ext2IndexNodeDataStructure *)((uint32_t)blockGroup.indexNodeDataStructure +
                                                                        i * EXT2_INDEX_NODE_STRUCTURE_SIZE);
     if ((inode->typeAndPermissions & 0xF000) == EXT2_INDEX_NODE_TYPE_DIRECTORY) {
-      Ext2DirectoryEntry *dentry = (Ext2DirectoryEntry *)(EXT2_ADDRESS + inode->directBlockPointer0 * blockSize);
+      Ext2DirectoryEntry *dentry = (Ext2DirectoryEntry *)((uint32_t)data + inode->directBlockPointer0 * blockSize);
       LogInfo("[Ext2]: dir : %s\n", dentry->nameCharacters);
       for (uint32_t hardlink = 0; hardlink < inode->hardLinksCount; hardlink++) {
         dentry = (Ext2DirectoryEntry *)((uint32_t)dentry + dentry->sizeOfThisEntry);
         LogInfo("[Ext2]: dir : %s\n", dentry->nameCharacters);
       }
     } else if ((inode->typeAndPermissions & 0xF000) == EXT2_INDEX_NODE_TYPE_REGULAR_FILE) {
-      LogInfo("[Ext2]: file : %s\n", (char *)(EXT2_ADDRESS + inode->directBlockPointer0 * blockSize));
+      LogInfo("[Ext2]: file : %s\n", (char *)((uint32_t)data + inode->directBlockPointer0 * blockSize));
     }
   }
 }
+
+KernelStatus ext2_init(Ext2FileSystem *ext2FileSystem) { ext2FileSystem->operations.mount = ext2_fs_default_mount; }

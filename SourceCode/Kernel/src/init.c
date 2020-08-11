@@ -166,7 +166,7 @@ void kernel_main(void) {
     gfx2d_draw_bitmap(context, 0, 0, 1024, 768, desktop());
     draw_task_bar();
 
-    ext2_init();
+    vfs_init();
 
     gpuHandler.node.next = nullptr;
     gpuHandler.node.prev = nullptr;

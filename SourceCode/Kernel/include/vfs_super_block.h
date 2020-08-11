@@ -16,6 +16,7 @@
 
 typedef enum FileSystemType {
   FILESYSTEM_FAT32,
+  FILESYSTEM_EXT2,
 } FileSystemType;
 
 typedef DirectoryEntry *(*SuperBlockCreateDirectoryEntry)(struct SuperBlock *superBlock, const char *fileName);
