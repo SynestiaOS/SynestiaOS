@@ -99,9 +99,9 @@ typedef struct Ext2BlockGroupDescriptor {
   uint32_t blockUsageBitMapBlock;     // Block address of block usage bitmap
   uint32_t indexNodeUsageBitMapBlock; // Block address of inode usage bitmap
   uint32_t indexNodeTableBlockBlock;  // Starting block address of inode table
-  uint16_t unallocatedBlocksNums;       // Number of unallocated blocks in group
-  uint16_t unallocatedIndexNodeNums;    // Number of unallocated inodes in group
-  uint16_t directorirsNum;              // Number of directories in group
+  uint16_t unallocatedBlocksNums;     // Number of unallocated blocks in group
+  uint16_t unallocatedIndexNodeNums;  // Number of unallocated inodes in group
+  uint16_t directorirsNum;            // Number of directories in group
 } Ext2BlockGroupDescriptor;
 
 typedef enum Ext2IndexNodeType {                  // top 16 bits
@@ -238,7 +238,7 @@ typedef struct Ext2DirectoryEntry {
   uint8_t nameLength;       // Name Length least-significant 8 bits
   uint8_t typeIndicator; // Type indicator (only if the feature bit for "directory entries have file type byte" is set,
                          // else this is the most-significant 8 bits of the Name Length)
-  uint8_t nameCharacters[255]; // Name characters
+  uint8_t nameCharacters[]; // Name characters
 } Ext2DirectoryEntry;
 
 typedef uint32_t Ext2DataBlockBitmap;

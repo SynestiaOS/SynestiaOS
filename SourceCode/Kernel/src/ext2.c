@@ -87,18 +87,27 @@ KernelStatus ext2_init() {
   blockGroup.blockGroupDescriptor = (Ext2BlockGroupDescriptor *)((uint32_t)blockGroup.superBlock + blockSize);
   blockGroup.dataBlockBitmap =
       (Ext2DataBlockBitmap *)(EXT2_ADDRESS + blockGroup.blockGroupDescriptor->blockUsageBitMapBlock * blockSize);
-  blockGroup.indexNodeBitmap = (Ext2IndexNodeBlockBitmap *)(EXT2_ADDRESS + blockGroup.blockGroupDescriptor->indexNodeUsageBitMapBlock * blockSize);
-  blockGroup.indexNodeDataStructure = (Ext2IndexNodeDataStructure *)(EXT2_ADDRESS + blockGroup.blockGroupDescriptor->indexNodeTableBlockBlock * blockSize);
+  blockGroup.indexNodeBitmap =
+      (Ext2IndexNodeBlockBitmap *)(EXT2_ADDRESS +
+                                   blockGroup.blockGroupDescriptor->indexNodeUsageBitMapBlock * blockSize);
+  blockGroup.indexNodeDataStructure =
+      (Ext2IndexNodeDataStructure *)(EXT2_ADDRESS +
+                                     blockGroup.blockGroupDescriptor->indexNodeTableBlockBlock * blockSize);
   blockGroup.dataBlock =
       (Ext2DataBlock *)((uint32_t)blockGroup.indexNodeDataStructure + blockForIndexNodeTable * blockSize);
 
   for (uint32_t i = 0; i < ext2SuperBlock->indexNodeNums; i++) {
-    Ext2IndexNodeDataStructure *inode =
-        (Ext2IndexNodeDataStructure *)((uint32_t)blockGroup.indexNodeDataStructure + i * EXT2_INDEX_NODE_STRUCTURE_SIZE);
-    if (((inode->typeAndPermissions & 0xF000) == EXT2_INDEX_NODE_TYPE_DIRECTORY) ||
-        ((inode->typeAndPermissions & 0xF000) == EXT2_INDEX_NODE_TYPE_REGULAR_FILE)) {
-      LogInfo("[Ext2]: inode type : %d .\n", inode->typeAndPermissions & 0xF000);
-      LogInfo("[Ext2]: inode create time : %d .\n", inode->createTime);
+    Ext2IndexNodeDataStructure *inode = (Ext2IndexNodeDataStructure *)((uint32_t)blockGroup.indexNodeDataStructure +
+                                                                       i * EXT2_INDEX_NODE_STRUCTURE_SIZE);
+    if ((inode->typeAndPermissions & 0xF000) == EXT2_INDEX_NODE_TYPE_DIRECTORY) {
+      Ext2DirectoryEntry *dentry = (Ext2DirectoryEntry *)(EXT2_ADDRESS + inode->directBlockPointer0 * blockSize);
+      LogInfo("[Ext2]: dir : %s\n", dentry->nameCharacters);
+      for (uint32_t hardlink = 0; hardlink < inode->hardLinksCount; hardlink++) {
+        dentry = (Ext2DirectoryEntry *)((uint32_t)dentry + dentry->sizeOfThisEntry);
+        LogInfo("[Ext2]: dir : %s\n", dentry->nameCharacters);
+      }
+    } else if ((inode->typeAndPermissions & 0xF000) == EXT2_INDEX_NODE_TYPE_REGULAR_FILE) {
+      LogInfo("[Ext2]: file : %s\n", (char *)(EXT2_ADDRESS + inode->directBlockPointer0 * blockSize));
     }
   }
 }
