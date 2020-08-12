@@ -3,8 +3,8 @@
 //
 #ifndef __LIBRARY_LIBC_STRING_H__
 #define __LIBRARY_LIBC_STRING_H__
-#include <stdint.h>
 #include <stdbool.h>
+#include <stdint.h>
 
 char *strcpy(char *des, char *source);
 

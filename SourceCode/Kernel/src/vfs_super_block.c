@@ -60,8 +60,8 @@ IndexNode *vfs_super_block_default_create_index_node(struct SuperBlock *superBlo
                     (INDEX_NODE_MODE_WRITEABLE | INDEX_NODE_MODE_READABLE);
   Mutex mutex = MutexCreate();
   indexNode->mutex = mutex;
-//  indexNode->lastAccessTimestamp = 0;
-//  indexNode->lastUpdateTimestamp = 0;
+  //  indexNode->lastAccessTimestamp = 0;
+  //  indexNode->lastUpdateTimestamp = 0;
   dentry->indexNode = indexNode;
 
   return indexNode;

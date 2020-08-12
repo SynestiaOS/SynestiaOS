@@ -20,7 +20,7 @@ typedef KernelStatus (*DirectoryEntryInitOperation)(struct DirectoryEntry *direc
 typedef struct DirectoryEntryOperations {
   DirectoryEntryInitOperation initOperation;
   DirectoryEntryHashOperation hashOperation;
-    DirectoryEntryGetNameOperation getNameOperation;
+  DirectoryEntryGetNameOperation getNameOperation;
   DirectoryEntryDeleteOperation deleteOperation;
   DirectoryEntryReleaseOperation releaseOperation;
 } DirectoryEntryOperations;
