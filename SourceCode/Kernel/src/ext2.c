@@ -5,11 +5,51 @@
 #include <ext2.h>
 #include <log.h>
 #include <stdint.h>
+#include <vfs_dentry.h>
+#include <vfs_inode.h>
 #include <vfs_super_block.h>
 
 #define EXT2_SIGNATURE 0xef53
 #define EXT2_BLOCK_GROUP_DESCRIPTOR_SIZE 32
 #define EXT2_INDEX_NODE_STRUCTURE_SIZE 128
+#define EXT2_SUPERBLOCK_OFFSET 1024
+
+void ext2_recursively_fill_superblock(Ext2IndexNode *ext2IndexNode, SuperBlock *vfsSuperBlock,
+                                    DirectoryEntry *vfsDirectoryEntry, uint32_t blockSize, void *data){
+  if ((ext2IndexNode->typeAndPermissions & 0xF000) == EXT2_INDEX_NODE_TYPE_DIRECTORY) {
+    // create directory vfs inode, and dentry, and fill them
+    DirectoryEntry *directoryEntry = vfsSuperBlock->operations->createDirectoryEntry(vfsSuperBlock, "");
+    IndexNode *indexNode = vfsSuperBlock->operations->createIndexNode(vfsSuperBlock, directoryEntry);
+    directoryEntry->operations->initOperation(directoryEntry, nullptr, indexNode);
+    // TODO: fill them/
+
+    // inode is a empty directory
+    if (ext2IndexNode->hardLinksCount == 2) {
+      // just return
+      return;
+    }
+
+    Ext2DirectoryEntry *dEntry = (Ext2DirectoryEntry *)((uint32_t)data + ext2IndexNode->directBlockPointer0 * blockSize);
+    for (uint32_t hardlink = 0; hardlink < ext2IndexNode->hardLinksCount; hardlink++) {
+      dEntry = (Ext2DirectoryEntry *)((uint32_t)dEntry + dEntry->sizeOfThisEntry);
+      LogInfo("[Ext2]: dir : %s\n", dEntry->nameCharacters);
+      if (dEntry->nameCharacters == ".." || dEntry->nameCharacters == ".") { // TODO: should use strcmp instead
+        // ignore
+        continue;
+      }
+      // inode is diectory , it's means should recursion
+      ext2_recursively_fill_superblock(dEntry->indexNode, vfsSuperBlock, directoryEntry, blockSize,  data);
+    }
+  } else if ((ext2IndexNode->typeAndPermissions & 0xF000) == EXT2_INDEX_NODE_TYPE_REGULAR_FILE) {
+    // create vfs inode, create vfs dentry , and fill them
+    DirectoryEntry *directoryEntry = vfsSuperBlock->operations->createDirectoryEntry(vfsSuperBlock, "");
+    IndexNode *indexNode = vfsSuperBlock->operations->createIndexNode(vfsSuperBlock, directoryEntry);
+    directoryEntry->operations->initOperation(directoryEntry, nullptr, indexNode);
+    // TODO: fill them
+
+    return;
+  }
+}
 
 KernelStatus ext2_fs_default_mount(Ext2FileSystem *ext2FileSystem, struct SuperBlock *vfsSuperBlock, char *mountName,
                                    void *data) {
@@ -19,6 +59,11 @@ KernelStatus ext2_fs_default_mount(Ext2FileSystem *ext2FileSystem, struct SuperB
     LogError("[Ext2]: not a ext2 file system.\n");
     return ERROR;
   }
+
+  // make root
+  DirectoryEntry *rootDirectoryEntry = vfsSuperBlock->operations->createDirectoryEntry(vfsSuperBlock, "root");
+  IndexNode *rootIndexNode = vfsSuperBlock->operations->createIndexNode(vfsSuperBlock, rootDirectoryEntry);
+  rootDirectoryEntry->operations->initOperation(rootDirectoryEntry, nullptr, rootIndexNode);
 
   LogInfo("[Ext2]: %d inodes in file system.\n", ext2SuperBlock->indexNodeNums);
   LogInfo("[Ext2]: %d blocks in file system.\n", ext2SuperBlock->blockNums);
@@ -31,26 +76,6 @@ KernelStatus ext2_fs_default_mount(Ext2FileSystem *ext2FileSystem, struct SuperB
   LogInfo("[Ext2]: %d blocks in each block group.\n", ext2SuperBlock->eachBlockGroupBlockNums);
   LogInfo("[Ext2]: %d fragments in each block group.\n", ext2SuperBlock->eachBlockGroupFragmentNums);
   LogInfo("[Ext2]: %d inodes in each block group.\n", ext2SuperBlock->eachBlockGroupIndexNodeNums);
-//  LogInfo("[Ext2]: LastMountTime: %d .\n", ext2SuperBlock->lastMountTime);
-//  LogInfo("[Ext2]: LastWrittenTime: %d .\n", ext2SuperBlock->lastWrittenTime);
-  LogInfo("[Ext2]: %d times the volume has been mounted since its last consistency check (fsck)\n",
-          ext2SuperBlock->numberOfTimes);
-  LogInfo("[Ext2]: %d mounts allowed before a consistency check (fsck) must be done\n", ext2SuperBlock->numberOfMounts);
-  LogInfo("[Ext2]: Ext2Signature: %d .\n", ext2SuperBlock->signature);
-  LogInfo("[Ext2]: File system state %d .\n", ext2SuperBlock->state);
-  LogInfo("[Ext2]: Minor portion of version %d .\n", ext2SuperBlock->minorPortionOfVersion);
-  LogInfo("[Ext2]: POSIX time of last consistency check: %d .\n", ext2SuperBlock->lastConsistencyCheckTime);
-  LogInfo("[Ext2]: Interval between forced consistency checks: %d .\n",
-          ext2SuperBlock->intervalBetweenForcedConsistencyChecks);
-  LogInfo("[Ext2]: Operating system ID: %d .\n", ext2SuperBlock->operatingSystemID);
-  LogInfo("[Ext2]: Major portion of version: %d .\n", ext2SuperBlock->majorPortionOfVersion);
-//   LogInfo("[Ext2]: User ID: %d \n", ext2SuperBlock->userId);
-//   LogInfo("[Ext2]: Group ID %d \n", ext2SuperBlock->groupId);
-//   LogInfo("[Ext2]: First non-reserved inode in file system: %d .\n", ext2SuperBlock->firstIndexNode);
-  LogInfo("[Ext2]: Size of each inode structure in bytes: %d .\n", ext2SuperBlock->indexNodeStructureSize);
-  LogInfo("[Ext2]: Superblock is part of Block group: %d .\n", ext2SuperBlock->blockGrousp);
-  LogInfo("[Ext2]: Voluma Name %s .\n", (char *)ext2SuperBlock->volumaName);
-  LogInfo("[Ext2]: Path volume was last mounted to %s .\n", (char *)ext2SuperBlock->lastMountPath);
 
   // Block size
   uint32_t blockSize = 1 << (ext2SuperBlock->log2BlockSizeSub10 + 10);
@@ -71,41 +96,81 @@ KernelStatus ext2_fs_default_mount(Ext2FileSystem *ext2FileSystem, struct SuperB
   blockForBlockGroupDescriptor += blockForBlockGroupDescriptorMod;
   LogInfo("[Ext2]: block group descriptor blocks: %d .\n", blockForBlockGroupDescriptor);
 
-  uint32_t indexNodeStructureNumsInEachBlock = blockSize / EXT2_INDEX_NODE_STRUCTURE_SIZE;
-  uint32_t blockForIndexNodeTable = ext2SuperBlock->indexNodeNums / indexNodeStructureNumsInEachBlock;
+  uint32_t indexNodeNumsInEachBlock = blockSize / EXT2_INDEX_NODE_STRUCTURE_SIZE;
+  uint32_t blockForIndexNodeTable = ext2SuperBlock->indexNodeNums / indexNodeNumsInEachBlock;
   uint32_t blockForIndexNodeTableMod =
-      ((ext2SuperBlock->indexNodeNums % indexNodeStructureNumsInEachBlock) > 0) ? 1 : 0;
+      ((ext2SuperBlock->indexNodeNums % indexNodeNumsInEachBlock) > 0) ? 1 : 0;
   blockForIndexNodeTable += blockForIndexNodeTableMod;
   LogInfo("[Ext2]: index node table  blocks: %d .\n", blockForIndexNodeTable);
 
   Ext2BlockGroup blockGroup;
-  blockGroup.superBlock = (Ext2SuperBlock *)((uint32_t)data + 1024);
+  blockGroup.superBlock = (Ext2SuperBlock *)((uint32_t)data + EXT2_SUPERBLOCK_OFFSET);
   blockGroup.blockGroupDescriptor = (Ext2BlockGroupDescriptor *)((uint32_t)blockGroup.superBlock + blockSize);
   blockGroup.dataBlockBitmap =
       (Ext2DataBlockBitmap *)((uint32_t)data + blockGroup.blockGroupDescriptor->blockUsageBitMapBlock * blockSize);
   blockGroup.indexNodeBitmap =
       (Ext2IndexNodeBlockBitmap *)((uint32_t)data +
                                    blockGroup.blockGroupDescriptor->indexNodeUsageBitMapBlock * blockSize);
-  blockGroup.indexNodeDataStructure =
-      (Ext2IndexNodeDataStructure *)((uint32_t)data +
+  blockGroup.indexNode =
+      (Ext2IndexNode *)((uint32_t)data +
                                      blockGroup.blockGroupDescriptor->indexNodeTableBlockBlock * blockSize);
   blockGroup.dataBlock =
-      (Ext2DataBlock *)((uint32_t)blockGroup.indexNodeDataStructure + blockForIndexNodeTable * blockSize);
+      (Ext2DataBlock *)((uint32_t)blockGroup.indexNode + blockForIndexNodeTable * blockSize);
 
-  for (uint32_t i = 0; i < ext2SuperBlock->indexNodeNums; i++) {
-    Ext2IndexNodeDataStructure *inode = (Ext2IndexNodeDataStructure *)((uint32_t)blockGroup.indexNodeDataStructure +
-                                                                       i * EXT2_INDEX_NODE_STRUCTURE_SIZE);
-    if ((inode->typeAndPermissions & 0xF000) == EXT2_INDEX_NODE_TYPE_DIRECTORY) {
-      Ext2DirectoryEntry *dEntry = (Ext2DirectoryEntry *)((uint32_t)data + inode->directBlockPointer0 * blockSize);
-      LogInfo("[Ext2]: dir : %s\n", dEntry->nameCharacters);
-      for (uint32_t hardlink = 0; hardlink < inode->hardLinksCount; hardlink++) {
-        dEntry = (Ext2DirectoryEntry *)((uint32_t)dEntry + dEntry->sizeOfThisEntry);
-        LogInfo("[Ext2]: dir : %s\n", dEntry->nameCharacters);
-      }
-    } else if ((inode->typeAndPermissions & 0xF000) == EXT2_INDEX_NODE_TYPE_REGULAR_FILE) {
-      LogInfo("[Ext2]: file : %s\n", (char *)((uint32_t)data + inode->directBlockPointer0 * blockSize));
-    }
-  }
+  // assume that the root directory is in second inode, because the first inode is
+  Ext2IndexNode *root =
+      (Ext2IndexNode *)((uint32_t)blockGroup.indexNode + EXT2_INDEX_NODE_STRUCTURE_SIZE);
+  Ext2DirectoryEntry *ext2RootDirectoryEntry =
+      (Ext2DirectoryEntry *)((uint32_t)data + root->directBlockPointer0 * blockSize);
+
+//   LogInfo("[root]: dir : %s\n", ext2RootDirectoryEntry->nameCharacters);
+//   for (uint32_t hardlink = 0; hardlink < root->hardLinksCount; hardlink++) {
+//     ext2RootDirectoryEntry =
+//         (Ext2DirectoryEntry *)((uint32_t)ext2RootDirectoryEntry + ext2RootDirectoryEntry->sizeOfThisEntry);
+//     LogInfo("[root]: dir : %s\n", ext2RootDirectoryEntry->nameCharacters);
+//   }
+
+  // let's recursion
+  ext2_recursively_fill_superblock(root, vfsSuperBlock, rootDirectoryEntry, blockSize, data);
+
+  LogInfo("[Ext2]: mounted.\n");
 }
 
 KernelStatus ext2_init(Ext2FileSystem *ext2FileSystem) { ext2FileSystem->operations.mount = ext2_fs_default_mount; }
+
+char *ext2_get_data(Ext2IndexNode *ext2IndexNode, uint32_t blockSize, void *date) {
+  uint64_t fileSize = ext2IndexNode->sizeUpper32Bits << 32 | ext2IndexNode->sizeLower32Bits;
+
+  uint64_t blocksNeedForFile = fileSize / blockSize;
+
+  if (ext2IndexNode->directBlockPointer0 != 0) {
+  }
+  if (ext2IndexNode->directBlockPointer1 != 0) {
+  }
+  if (ext2IndexNode->directBlockPointer2 != 0) {
+  }
+  if (ext2IndexNode->directBlockPointer3 != 0) {
+  }
+  if (ext2IndexNode->directBlockPointer4 != 0) {
+  }
+  if (ext2IndexNode->directBlockPointer5 != 0) {
+  }
+  if (ext2IndexNode->directBlockPointer6 != 0) {
+  }
+  if (ext2IndexNode->directBlockPointer7 != 0) {
+  }
+  if (ext2IndexNode->directBlockPointer8 != 0) {
+  }
+  if (ext2IndexNode->directBlockPointer9 != 0) {
+  }
+  if (ext2IndexNode->directBlockPointer10 != 0) {
+  }
+  if (ext2IndexNode->directBlockPointer11 != 0) {
+  }
+  if (ext2IndexNode->singlyIndirectBlockPointer != 0) {
+  }
+  if (ext2IndexNode->doublyIndirectBlockPointer != 0) {
+  }
+  if (ext2IndexNode->triplyIndirectBlockPointer != 0) {
+  }
+}

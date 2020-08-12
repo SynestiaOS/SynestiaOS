@@ -129,7 +129,7 @@ typedef enum Ext2IndexNodePermission {   // bottom 12 bits
   EXT2_INDEX_NODE_SET_USER_ID = 0x800,   //	04000	Set user ID
 } Ext2IndexNodePermission;
 
-typedef struct Ext2IndexNodeDataStructure {
+typedef struct Ext2IndexNode {
   uint16_t typeAndPermissions;  // Type and Permissions (see below)
   uint16_t userId;              // User ID
   uint32_t sizeLower32Bits;     // Lower 32 bits of size in bytes
@@ -219,7 +219,7 @@ typedef struct Ext2IndexNodeDataStructure {
    * X	(reserved)
    */
   uint8_t operatingSystemSpecificValue2[12];
-} Ext2IndexNodeDataStructure;
+} Ext2IndexNode;
 
 typedef enum Ext2DirectoryEntryType {
   EXT2_DIRECTORY_ENTRY_TYPE_KNOWN = 0,            // Unknown type
@@ -251,7 +251,7 @@ typedef struct Ext2BlockGroup {
   Ext2BlockGroupDescriptor *blockGroupDescriptor;
   Ext2DataBlockBitmap *dataBlockBitmap;
   Ext2IndexNodeBlockBitmap *indexNodeBitmap;
-  Ext2IndexNodeDataStructure *indexNodeDataStructure;
+  Ext2IndexNode *indexNode;
   Ext2DataBlock *dataBlock;
 } Ext2BlockGroup;
 

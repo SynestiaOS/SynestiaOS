@@ -30,7 +30,7 @@ typedef KernelStatus (*IndexNodeRenameOperation)(struct IndexNode *indexNode, ch
 typedef KernelStatus (*IndexNodeLinkOperation)(struct IndexNode *indexNode, struct DirectoryEntry *dentry);
 typedef KernelStatus (*IndexNodeUnLinkOperation)(struct IndexNode *indexNode, struct DirectoryEntry *dentry);
 
-typedef struct IndexNodeOpeations {
+typedef struct IndexNodeOperations {
   IndexNodeCreateOperation createOperation;
   IndexNodeReleaseOperation releaseOperation;
   IndexNodeDeleteOperation deleteOperation;
@@ -39,7 +39,7 @@ typedef struct IndexNodeOpeations {
   IndexNodeRenameOperation renameOperation;
   IndexNodeLinkOperation linkOperation;
   IndexNodeUnLinkOperation unLinkOperation;
-} IndexNodeOpeations;
+} IndexNodeOperations;
 
 typedef struct IndexNode {
   IndexNodeType type;
@@ -54,12 +54,13 @@ typedef struct IndexNode {
   uint16_t mode;
 
   uint32_t startAddress;
+  uint32_t indexNodePrivate;
   uint32_t fileSize;
 
   Atomic readCount;
   Atomic linkCount;
 
-  IndexNodeOpeations *operations;
+  IndexNodeOperations *operations;
 
   uint64_t createTimestamp;
   uint64_t lastAccessTimestamp;

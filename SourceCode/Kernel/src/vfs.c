@@ -24,10 +24,6 @@ SuperBlock *vfs_mount(const char *name, FileSystemType type, void *data) {
   superBlock->fileName = name;
   superBlock->type = type;
 
-  DirectoryEntry *rootDirectoryEntry = superBlock->operations->createDirectoryEntry(superBlock, "/root");
-  IndexNode *rootIndexNode = superBlock->operations->createIndexNode(superBlock, rootDirectoryEntry);
-  rootDirectoryEntry->operations->initOperation(rootDirectoryEntry, nullptr, rootIndexNode);
-
   switch (type) {
   case FILESYSTEM_EXT2: {
     Ext2FileSystem ext2FileSystem;
