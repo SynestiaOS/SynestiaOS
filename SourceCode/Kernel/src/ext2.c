@@ -23,7 +23,7 @@ void ext2_recursively_fill_superblock(Ext2FileSystem *ext2FileSystem, Ext2IndexN
     // create directory vfs inode, and dentry, and fill them
     DirectoryEntry *directoryEntry = vfsSuperBlock->operations.createDirectoryEntry(vfsSuperBlock, name);
     IndexNode *indexNode = vfsSuperBlock->operations.createIndexNode(vfsSuperBlock, directoryEntry);
-    directoryEntry->operations.initOperation(directoryEntry, nullptr, indexNode);
+    directoryEntry->operations.initOperation(directoryEntry, vfsDirectoryEntry, indexNode);
 
     directoryEntry->fileName = name;
     //    atomic_set(&directoryEntry->refCount,1);
@@ -60,7 +60,7 @@ void ext2_recursively_fill_superblock(Ext2FileSystem *ext2FileSystem, Ext2IndexN
     // create vfs inode, create vfs dentry , and fill them
     DirectoryEntry *directoryEntry = vfsSuperBlock->operations.createDirectoryEntry(vfsSuperBlock, name);
     IndexNode *indexNode = vfsSuperBlock->operations.createIndexNode(vfsSuperBlock, directoryEntry);
-    directoryEntry->operations.initOperation(directoryEntry, nullptr, indexNode);
+    directoryEntry->operations.initOperation(directoryEntry, vfsDirectoryEntry, indexNode);
 
     indexNode->type = INDEX_NODE_FILE;
     indexNode->id = (uint32_t)(ext2IndexNode - ext2FileSystem->blockGroups->indexNode) / EXT2_INDEX_NODE_STRUCTURE_SIZE;
