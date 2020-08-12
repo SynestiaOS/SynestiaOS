@@ -129,13 +129,6 @@ KernelStatus ext2_fs_default_mount(Ext2FileSystem *ext2FileSystem, struct SuperB
   Ext2DirectoryEntry *ext2RootDirectoryEntry =
       (Ext2DirectoryEntry *)((uint32_t)data + root->directBlockPointer0 * blockSize);
 
-  //   LogInfo("[root]: dir : %s\n", ext2RootDirectoryEntry->nameCharacters);
-  //   for (uint32_t hardlink = 0; hardlink < root->hardLinksCount; hardlink++) {
-  //     ext2RootDirectoryEntry =
-  //         (Ext2DirectoryEntry *)((uint32_t)ext2RootDirectoryEntry + ext2RootDirectoryEntry->sizeOfThisEntry);
-  //     LogInfo("[root]: dir : %s\n", ext2RootDirectoryEntry->nameCharacters);
-  //   }
-
   // let's recursion
   ext2_recursively_fill_superblock(ext2FileSystem, root, vfsSuperBlock, rootDirectoryEntry, blockSize, data, "initrd");
 
