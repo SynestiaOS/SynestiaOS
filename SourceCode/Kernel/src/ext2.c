@@ -53,7 +53,7 @@ void ext2_recursively_fill_superblock(Ext2IndexNode *ext2IndexNode, SuperBlock *
 
 KernelStatus ext2_fs_default_mount(Ext2FileSystem *ext2FileSystem, struct SuperBlock *vfsSuperBlock, char *mountName,
                                    void *data) {
-  Ext2SuperBlock *ext2SuperBlock = (Ext2SuperBlock *)((uint32_t)data + 1024);
+  Ext2SuperBlock *ext2SuperBlock = (Ext2SuperBlock *)((uint32_t)data + EXT2_SUPERBLOCK_OFFSET);
 
   if (ext2SuperBlock->signature != EXT2_SIGNATURE) {
     LogError("[Ext2]: not a ext2 file system.\n");
