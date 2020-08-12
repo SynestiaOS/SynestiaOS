@@ -27,8 +27,10 @@ typedef struct DirectoryEntryOperations {
 
 typedef struct DirectoryEntry {
   struct DirectoryEntry *parent;
+  struct DirectoryEntry *children;
   struct IndexNode *indexNode;
   struct SuperBlock *superBlock;
+
   ListNode list;
 
   Atomic refCount;

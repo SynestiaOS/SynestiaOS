@@ -27,6 +27,7 @@ DirectoryEntry *vfs_super_block_default_create_directory_entry(struct SuperBlock
   directoryEntry->fileNameHash = directoryEntry->operations.hashOperation(directoryEntry);
   directoryEntry->indexNode = nullptr;
   directoryEntry->parent = nullptr;
+  directoryEntry->children = nullptr;
   SpinLock parallelLock = SpinLockCreate();
   directoryEntry->parallelLock = parallelLock;
   Atomic atomic = {
