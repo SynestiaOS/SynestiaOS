@@ -43,13 +43,13 @@ typedef struct IndexNodeOperations {
 
 typedef struct IndexNode {
   IndexNodeType type;
-  uint64_t id;
+  uint32_t id;
 
   struct SuperBlock *superBlock;
   struct DirectoryEntry *dentry;
 
   Mutex mutex;
-  uint64_t state;
+  uint32_t state;
 
   uint16_t mode;
 
@@ -62,9 +62,9 @@ typedef struct IndexNode {
 
   IndexNodeOperations operations;
 
-  uint64_t createTimestamp;
-  uint64_t lastAccessTimestamp;
-  uint64_t lastUpdateTimestamp;
+  uint32_t createTimestamp;
+  uint32_t lastAccessTimestamp;
+  uint32_t lastUpdateTimestamp;
 } IndexNode;
 
 KernelStatus vfs_inode_default_release(IndexNode *indexNode);
