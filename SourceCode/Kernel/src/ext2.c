@@ -15,13 +15,13 @@
 #define EXT2_SUPERBLOCK_OFFSET 1024
 
 void ext2_recursively_fill_superblock(Ext2IndexNode *ext2IndexNode, SuperBlock *vfsSuperBlock,
-                                    DirectoryEntry *vfsDirectoryEntry, uint32_t blockSize, void *data){
+                                    DirectoryEntry *vfsDirectoryEntry, uint32_t blockSize, void *data, char* name){
   if ((ext2IndexNode->typeAndPermissions & 0xF000) == EXT2_INDEX_NODE_TYPE_DIRECTORY) {
     // create directory vfs inode, and dentry, and fill them
-    DirectoryEntry *directoryEntry = vfsSuperBlock->operations->createDirectoryEntry(vfsSuperBlock, "");
+    DirectoryEntry *directoryEntry = vfsSuperBlock->operations->createDirectoryEntry(vfsSuperBlock, name);
     IndexNode *indexNode = vfsSuperBlock->operations->createIndexNode(vfsSuperBlock, directoryEntry);
     directoryEntry->operations->initOperation(directoryEntry, nullptr, indexNode);
-    // TODO: fill them/
+    // TODO: fill them
 
     // inode is a empty directory
     if (ext2IndexNode->hardLinksCount == 2) {
@@ -37,12 +37,12 @@ void ext2_recursively_fill_superblock(Ext2IndexNode *ext2IndexNode, SuperBlock *
         // ignore
         continue;
       }
-      // inode is diectory , it's means should recursion
-      ext2_recursively_fill_superblock(dEntry->indexNode, vfsSuperBlock, directoryEntry, blockSize,  data);
+      // inode is directory , it's means should recursion
+      ext2_recursively_fill_superblock((Ext2IndexNode*)((uint32_t)(data + dEntry->indexNode * blockSize)), vfsSuperBlock, directoryEntry, blockSize,  data, name);
     }
   } else if ((ext2IndexNode->typeAndPermissions & 0xF000) == EXT2_INDEX_NODE_TYPE_REGULAR_FILE) {
     // create vfs inode, create vfs dentry , and fill them
-    DirectoryEntry *directoryEntry = vfsSuperBlock->operations->createDirectoryEntry(vfsSuperBlock, "");
+    DirectoryEntry *directoryEntry = vfsSuperBlock->operations->createDirectoryEntry(vfsSuperBlock, name);
     IndexNode *indexNode = vfsSuperBlock->operations->createIndexNode(vfsSuperBlock, directoryEntry);
     directoryEntry->operations->initOperation(directoryEntry, nullptr, indexNode);
     // TODO: fill them
@@ -83,11 +83,8 @@ KernelStatus ext2_fs_default_mount(Ext2FileSystem *ext2FileSystem, struct SuperB
   uint32_t blockNumsInEachBlockGroup = (blockSize * 8);
 
   // Block Group Descriptor numbers , other words, this is super block numbers or block group number
-  uint32_t blockGroupNums =
-      ext2SuperBlock->blockNums / blockNumsInEachBlockGroup + (ext2SuperBlock->blockNums % blockNumsInEachBlockGroup) >
-              0
-          ? 1
-          : 0;
+  uint32_t blockGroupNums = ext2SuperBlock->blockNums / blockNumsInEachBlockGroup +
+          (ext2SuperBlock->blockNums % blockNumsInEachBlockGroup) > 0? 1 : 0;
 
   uint32_t blockGroupDescriptorNumsInEachBlock = blockSize / EXT2_BLOCK_GROUP_DESCRIPTOR_SIZE;
   // block nums for all block group descriptor
@@ -131,7 +128,7 @@ KernelStatus ext2_fs_default_mount(Ext2FileSystem *ext2FileSystem, struct SuperB
 //   }
 
   // let's recursion
-  ext2_recursively_fill_superblock(root, vfsSuperBlock, rootDirectoryEntry, blockSize, data);
+  ext2_recursively_fill_superblock(root, vfsSuperBlock, rootDirectoryEntry, blockSize, data,"initrd");
 
   LogInfo("[Ext2]: mounted.\n");
 }
