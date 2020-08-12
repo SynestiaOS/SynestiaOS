@@ -36,7 +36,7 @@ void ext2_recursively_fill_superblock(Ext2FileSystem *ext2FileSystem, Ext2IndexN
         (Ext2DirectoryEntry *)((uint32_t)data + ext2IndexNode->directBlockPointer0 * blockSize);
     for (uint32_t hardlink = 0; hardlink < ext2IndexNode->hardLinksCount + 1; hardlink++) {
       LogInfo("[Ext2]: dir : %s\n", dEntry->nameCharacters);
-      if (strcmp(dEntry->nameCharacters, "..") || strcmp(dEntry->nameCharacters, ".")) {
+      if (strcmp(dEntry->nameCharacters, "..") || strcmp(dEntry->nameCharacters, ".") || strcmp(dEntry->nameCharacters, "lost+found")) {
         // ignore
         dEntry = (Ext2DirectoryEntry *)((uint32_t)dEntry + dEntry->sizeOfThisEntry);
         continue;
