@@ -36,7 +36,7 @@ typedef struct DirectoryEntry {
 
   char *fileName;
   uint64_t fileNameHash;
-  DirectoryEntryOperations *operations;
+  DirectoryEntryOperations operations;
 } DirectoryEntry;
 
 uint64_t vfs_directory_entry_default_hash(DirectoryEntry *DirectoryEntry);

@@ -27,7 +27,6 @@ typedef KernelStatus (*SuperBlockDestroyIndexNode)(struct SuperBlock *superBlock
 typedef struct SuperBlockOperations {
   SuperBlockCreateDirectoryEntry createDirectoryEntry;
   SuperBlockCreateIndexNode createIndexNode;
-
   SuperBlockDestroyDirectoryEntry destroyDirectoryEntry;
   SuperBlockDestroyIndexNode destroyIndexNode;
 } SuperBlockOperations;
@@ -37,7 +36,7 @@ typedef struct SuperBlock {
   FileSystemType type;
   ListNode node;
   struct DirectoryEntry *rootDirectoryEntry;
-  SuperBlockOperations *operations;
+  SuperBlockOperations operations;
 } SuperBlock;
 
 SuperBlock *vfs_create_super_block();

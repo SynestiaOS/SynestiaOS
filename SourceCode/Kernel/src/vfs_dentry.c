@@ -20,7 +20,7 @@ char *vfs_directory_entry_default_get_name(DirectoryEntry *directoryEntry) {
 
 KernelStatus vfs_directory_entry_default_delete(DirectoryEntry *directory) {
   if (directory->indexNode->type == INDEX_NODE_FILE) {
-    directory->superBlock->operations->destroyDirectoryEntry(directory->superBlock, directory);
+    directory->superBlock->operations.destroyDirectoryEntry(directory->superBlock, directory);
   } else {
   }
   // TODO

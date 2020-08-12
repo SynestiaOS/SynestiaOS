@@ -17,14 +17,14 @@ DirectoryEntry *vfs_super_block_default_create_directory_entry(struct SuperBlock
   }
   directoryEntry->superBlock = superBlock;
 
-  directoryEntry->operations->initOperation = vfs_directory_entry_default_init;
-  directoryEntry->operations->deleteOperation = vfs_directory_entry_default_delete;
-  directoryEntry->operations->getNameOperation = vfs_directory_entry_default_get_name;
-  directoryEntry->operations->releaseOperation = vfs_directory_entry_default_release;
-  directoryEntry->operations->hashOperation = vfs_directory_entry_default_hash;
+  directoryEntry->operations.initOperation = vfs_directory_entry_default_init;
+  directoryEntry->operations.deleteOperation = vfs_directory_entry_default_delete;
+  directoryEntry->operations.getNameOperation = vfs_directory_entry_default_get_name;
+  directoryEntry->operations.releaseOperation = vfs_directory_entry_default_release;
+  directoryEntry->operations.hashOperation = vfs_directory_entry_default_hash;
 
   directoryEntry->fileName = fileName;
-  directoryEntry->fileNameHash = directoryEntry->operations->hashOperation(directoryEntry);
+  directoryEntry->fileNameHash = directoryEntry->operations.hashOperation(directoryEntry);
   directoryEntry->indexNode = nullptr;
   directoryEntry->parent = nullptr;
   SpinLock parallelLock = SpinLockCreate();
@@ -44,14 +44,14 @@ IndexNode *vfs_super_block_default_create_index_node(struct SuperBlock *superBlo
   }
   indexNode->superBlock = superBlock;
 
-  indexNode->operations->createOperation = vfs_inode_default_create;
-  indexNode->operations->deleteOperation = vfs_inode_default_delete;
-  indexNode->operations->linkOperation = vfs_inode_default_link;
-  indexNode->operations->unLinkOperation = vfs_inode_default_unlink;
-  indexNode->operations->makeDirectoryOperation = vfs_inode_default_make_directory;
-  indexNode->operations->deleteDirectoryOperation = vfs_inode_default_delete_directory;
-  indexNode->operations->releaseOperation = vfs_inode_default_release;
-  indexNode->operations->renameOperation = vfs_inode_default_rename;
+  indexNode->operations.createOperation = vfs_inode_default_create;
+  indexNode->operations.deleteOperation = vfs_inode_default_delete;
+  indexNode->operations.linkOperation = vfs_inode_default_link;
+  indexNode->operations.unLinkOperation = vfs_inode_default_unlink;
+  indexNode->operations.makeDirectoryOperation = vfs_inode_default_make_directory;
+  indexNode->operations.deleteDirectoryOperation = vfs_inode_default_delete_directory;
+  indexNode->operations.releaseOperation = vfs_inode_default_release;
+  indexNode->operations.renameOperation = vfs_inode_default_rename;
 
   indexNode->dentry = dentry;
   indexNode->fileSize = 0;
@@ -60,8 +60,8 @@ IndexNode *vfs_super_block_default_create_index_node(struct SuperBlock *superBlo
                     (INDEX_NODE_MODE_WRITEABLE | INDEX_NODE_MODE_READABLE);
   Mutex mutex = MutexCreate();
   indexNode->mutex = mutex;
-  indexNode->lastAccessTimestamp = 0;
-  indexNode->lastUpdateTimestamp = 0;
+//  indexNode->lastAccessTimestamp = 0;
+//  indexNode->lastUpdateTimestamp = 0;
   dentry->indexNode = indexNode;
 
   return indexNode;
@@ -81,10 +81,11 @@ SuperBlock *vfs_create_super_block() {
     LogError("[VFS]: root fs mount failed,cause heap alloc failed.\n");
     return nullptr;
   }
-  superBlock->operations->createDirectoryEntry = vfs_super_block_default_create_directory_entry;
-  superBlock->operations->createIndexNode = vfs_super_block_default_create_index_node;
-  superBlock->operations->destroyDirectoryEntry = vfs_super_block_default_destroy_dentry;
-  superBlock->operations->destroyIndexNode = vfs_super_block_default_destroy_inode;
+
+  superBlock->operations.createDirectoryEntry = vfs_super_block_default_create_directory_entry;
+  superBlock->operations.createIndexNode = vfs_super_block_default_create_index_node;
+  superBlock->operations.destroyDirectoryEntry = vfs_super_block_default_destroy_dentry;
+  superBlock->operations.destroyIndexNode = vfs_super_block_default_destroy_inode;
 
   return superBlock;
 }

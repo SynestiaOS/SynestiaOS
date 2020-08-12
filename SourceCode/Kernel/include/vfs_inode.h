@@ -60,7 +60,7 @@ typedef struct IndexNode {
   Atomic readCount;
   Atomic linkCount;
 
-  IndexNodeOperations *operations;
+  IndexNodeOperations operations;
 
   uint64_t createTimestamp;
   uint64_t lastAccessTimestamp;

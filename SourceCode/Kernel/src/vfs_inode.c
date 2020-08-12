@@ -24,9 +24,9 @@ KernelStatus vfs_inode_default_delete(IndexNode *indexNode) {
 }
 
 KernelStatus vfs_inode_default_make_directory(IndexNode *indexNode, char *fileName, uint16_t mode) {
-  DirectoryEntry *newDir = indexNode->superBlock->operations->createDirectoryEntry(indexNode->superBlock, fileName);
+  DirectoryEntry *newDir = indexNode->superBlock->operations.createDirectoryEntry(indexNode->superBlock, fileName);
   newDir->parent = indexNode->dentry;
-  IndexNode *newNode = indexNode->superBlock->operations->createIndexNode(indexNode->superBlock, newDir);
+  IndexNode *newNode = indexNode->superBlock->operations.createIndexNode(indexNode->superBlock, newDir);
   newDir->indexNode->type = INDEX_NODE_DIRECTORY;
   newDir->indexNode->mode = mode;
   return OK;
@@ -44,7 +44,7 @@ KernelStatus vfs_inode_default_delete_directory(IndexNode *indexNode, DirectoryE
 
 KernelStatus vfs_inode_default_rename(IndexNode *indexNode, char *newName) {
   indexNode->dentry->fileName = newName;
-  indexNode->dentry->fileNameHash = indexNode->dentry->operations->hashOperation(indexNode->dentry);
+  indexNode->dentry->fileNameHash = indexNode->dentry->operations.hashOperation(indexNode->dentry);
   // TODO : change last modify time
   return OK;
 }
@@ -59,7 +59,7 @@ KernelStatus vfs_inode_default_link(IndexNode *indexNode, DirectoryEntry *dentry
 KernelStatus vfs_inode_default_unlink(IndexNode *indexNode, DirectoryEntry *dentry) {
   if (atomic_get(&dentry->indexNode->linkCount) > 1) {
     atomic_dec(&dentry->indexNode->linkCount);
-    dentry->operations->deleteOperation(dentry);
+    dentry->operations.deleteOperation(dentry);
   }
   return OK;
 }
