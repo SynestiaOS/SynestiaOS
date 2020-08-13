@@ -32,7 +32,7 @@ typedef struct SuperBlockOperations {
 } SuperBlockOperations;
 
 typedef struct SuperBlock {
-  char *fileName;
+  char *name;
   FileSystemType type;
   ListNode node;
   struct DirectoryEntry *rootDirectoryEntry;

@@ -7,10 +7,11 @@
 #include <vfs.h>
 #include <vfs_dentry.h>
 #include <vfs_inode.h>
+#include <string.h>
 
 SuperBlock *vfs_default_mount(VFS *vfs, const char *name, FileSystemType type, void *data) {
   SuperBlock *superBlock = vfs_create_super_block();
-  superBlock->fileName = name;
+  superBlock->name = name;
   superBlock->type = type;
 
   switch (type) {
@@ -29,9 +30,34 @@ SuperBlock *vfs_default_mount(VFS *vfs, const char *name, FileSystemType type, v
   return superBlock;
 }
 
+uint32_t vfs_default_open(VFS *vfs, const char *name, uint32_t mode){
+  
+}
+
+uint32_t vfs_default_read(VFS *vfs, uint32_t fd, char* buffer, uint32_t pos){
+
+}
+
+DirectoryEntry* vfs_default_lookup(VFS *vfs, const char *name){
+  // str_split(name,'/')
+  SuperBlock* tmpFs = vfs->fileSystems;
+  while(tmpFs!=nullptr){
+    if(strcmp(tmpFs->name,name)){
+      
+    }
+    if(tmpFs->node.next!=nullptr){
+      tmpFs = getNode(&tmpFs->node.next,SuperBlock,node);
+    }
+    return nullptr;
+  }
+}
+
 VFS *vfs_create() {
   VFS *vfs = (VFS *)kheap_alloc(sizeof(VFS));
   vfs->fileSystems = nullptr;
   vfs->operations.mount = vfs_default_mount;
+  vfs->operations.open = vfs_default_open;
+  vfs->operations.read = vfs_default_read;
+  vfs->operations.lookup = vfs_default_lookup;
   return vfs;
 }
