@@ -59,7 +59,7 @@ DirectoryEntry* vfs_default_lookup(VFS *vfs, const char *name){
   uint32_t index = 0;
   uint32_t length = strlen(name);
 
-  while(index<length){
+  while(index < length){
     char currentChr = consume(name, index);
     switch(lookupState){
       case PATH_LOOKUP_START:{
@@ -76,7 +76,12 @@ DirectoryEntry* vfs_default_lookup(VFS *vfs, const char *name){
         if(currentChr=='/'){
           lookupState = PATH_LOOKUP_SLASH;
         }else if(currentChr =='.'){
-          lookupState = PATH_LOOKUP_DOT;
+          if(peek(name,index,0)=='/'){
+            lookupState = PATH_LOOKUP_SLASH;
+            index++;
+          }else{
+            // illegal path
+          }
         }else{
           lookupState = PATH_LOOKUP_NAME;
         }
