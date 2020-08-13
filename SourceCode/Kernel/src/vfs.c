@@ -51,6 +51,8 @@ DirectoryEntry *vfs_default_lookup(VFS *vfs, const char *name) {
   uint32_t index = 0;
   uint32_t length = strlen(name);
 
+  DirectoryEntry *currentDirectory = vfs->fileSystems->rootDirectoryEntry;
+
   while (index <= length) {
     char currentChr = peek(name, index, 0);
     index++;
@@ -60,7 +62,8 @@ DirectoryEntry *vfs_default_lookup(VFS *vfs, const char *name) {
         lookupState = PATH_LOOKUP_DOT;
       } else if (currentChr == '/') {
         lookupState = PATH_LOOKUP_SLASH; // /
-        LogWarn("[LOOKUP] root\n");
+        LogWarn("[LookUp]: root\n");
+        currentDirectory = vfs->fileSystems->rootDirectoryEntry;
       } else {
         lookupState = PATH_LOOKUP_NAME; // name
         bufStart = index - 1;
@@ -70,11 +73,17 @@ DirectoryEntry *vfs_default_lookup(VFS *vfs, const char *name) {
     case PATH_LOOKUP_DOT: {
       if (currentChr == '/') {
         lookupState = PATH_LOOKUP_SLASH; // ./
-        LogWarn("[LOOKUP] current\n");
+        LogWarn("[LookUp]: current\n");
+        currentDirectory = currentDirectory;
       } else if (currentChr == '.') {
         if (peek(name, index, 0) == '/') {
           lookupState = PATH_LOOKUP_SLASH; // ../
-          LogWarn("[LOOKUP] up\n");
+          LogWarn("[LookUp]: up\n");
+          if(currentDirectory->parent!=nullptr){
+            currentDirectory = currentDirectory->parent;
+          }else{
+            currentDirectory = vfs->fileSystems->rootDirectoryEntry;
+          }
           index++;
         } else {
           // illegal path
@@ -87,7 +96,8 @@ DirectoryEntry *vfs_default_lookup(VFS *vfs, const char *name) {
     case PATH_LOOKUP_SLASH: {
       if (currentChr == '/') {
         lookupState = PATH_LOOKUP_SLASH; // //
-        LogWarn("[LOOKUP] root\n");
+        LogWarn("[LookUp]: root\n");
+        currentDirectory = vfs->fileSystems->rootDirectoryEntry;
       } else if (currentChr == '.') {
         lookupState = PATH_LOOKUP_DOT;
       } else {
@@ -104,7 +114,32 @@ DirectoryEntry *vfs_default_lookup(VFS *vfs, const char *name) {
           path[i] = name[bufStart + i];
         }
         path[index - bufStart] = '\0';
-        LogWarn("[LOOKUP] %s \n", path);
+        LogWarn("[LookUp]: %s \n", path);
+        ListNode* tmpNode = &(currentDirectory->children->list);
+        bool isFound = false;
+        while(tmpNode!=nullptr){
+          DirectoryEntry *tmpDirectoryEntry = getNode(tmpNode,DirectoryEntry,list);
+          LogInfo("[LookUp]: %s \n",tmpDirectoryEntry->fileName);
+          if(strcmp(tmpDirectoryEntry->fileName,path)){
+            currentDirectory = tmpDirectoryEntry;
+            isFound = true;
+          }
+          if(currentDirectory->children->list.prev != nullptr){
+            tmpNode = currentDirectory->children->list.prev;
+          }else{
+            break;
+          }
+        }
+        if(!isFound){
+          // not found 
+          char path[index];
+          for (uint32_t i = 0; i < index; i++) {
+            path[i] = name[i];
+          }
+          path[index]='\0';
+          LogError("[LookUp]: %s not found.\n",path);
+          return nullptr;
+        }
       } else {
         // illegal path
       }
@@ -116,16 +151,7 @@ DirectoryEntry *vfs_default_lookup(VFS *vfs, const char *name) {
     }
   }
 
-  // SuperBlock* tmpFs = vfs->fileSystems;
-  // while(tmpFs!=nullptr){
-  //   if(strcmp(tmpFs->name,name)){
-
-  //   }
-  //   if(tmpFs->node.next!=nullptr){
-  //     tmpFs = getNode(&tmpFs->node.next,SuperBlock,node);
-  //   }
-  //   return nullptr;
-  // }
+  return currentDirectory;
 }
 
 VFS *vfs_create() {
