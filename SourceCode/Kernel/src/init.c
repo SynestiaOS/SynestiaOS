@@ -179,9 +179,7 @@ void kernel_main(void) {
 
     VFS *vfs = vfs_create();
     vfs->operations.mount(vfs, "root", FILESYSTEM_EXT2, (void *)EXT2_ADDRESS);
-    // vfs->operations.lookup(vfs, "./../.././home/bin/../bin/bin.txt");
-    vfs->operations.lookup(vfs, "/./.././home/.././bin/../bin/.././bin.txt");
-    // vfs->operations.lookup(vfs, ".././bin.txt");
+    struct DirectoryEntry *dentry = vfs->operations.lookup(vfs, "/initrd/bin/bin.txt");
 
     schd_init();
 

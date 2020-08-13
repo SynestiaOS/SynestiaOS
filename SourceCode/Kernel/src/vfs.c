@@ -18,6 +18,7 @@ SuperBlock *vfs_default_mount(VFS *vfs, const char *name, FileSystemType type, v
   switch (type) {
   case FILESYSTEM_EXT2: {
     Ext2FileSystem *ext2FileSystem = ext2_create();
+    superBlock->type = FILESYSTEM_EXT2;
     ext2FileSystem->operations.mount(ext2FileSystem, superBlock, name, data);
     break;
   }
@@ -31,7 +32,35 @@ SuperBlock *vfs_default_mount(VFS *vfs, const char *name, FileSystemType type, v
   return superBlock;
 }
 
-uint32_t vfs_default_open(VFS *vfs, const char *name, uint32_t mode) {}
+uint32_t vfs_default_open(VFS *vfs, const char *name, uint32_t mode) {
+  DirectoryEntry *directoryEntry = vfs->operations.lookup(vfs, name);
+  if (directoryEntry == nullptr) {
+    LogError("[VFS]: file '%s' not found.\n", name);
+    return 0;
+  }
+  //    atomic_inc(&directoryEntry->indexNode->readCount);
+  directoryEntry->indexNode->state = INDEX_NODE_STATE_OPENED;
+
+  // allocat a open file item
+  OpenFile *openFile = (OpenFile *)kheap_alloc(sizeof(OpenFile));
+  openFile->node.next = nullptr;
+  openFile->node.prev = nullptr;
+  openFile->indexNode = (uint32_t)directoryEntry->indexNode;
+  openFile->state = 0;
+  openFile->offset = 0;
+
+  // add to vfs's open table
+  kvector_add(vfs->openFileTable, &openFile->node);
+
+  if (directoryEntry->superBlock->type == FILESYSTEM_EXT2) {
+
+    Ext2IndexNode *ext2IndexNode = (Ext2IndexNode *)directoryEntry->indexNode->indexNodePrivate;
+
+    return ext2IndexNode->sizeUpper32Bits << 32 | ext2IndexNode->sizeLower32Bits;
+  }
+
+  return 0;
+}
 
 uint32_t vfs_default_read(VFS *vfs, uint32_t fd, char *buffer, uint32_t pos) {}
 
@@ -79,9 +108,9 @@ DirectoryEntry *vfs_default_lookup(VFS *vfs, const char *name) {
         if (peek(name, index, 0) == '/') {
           lookupState = PATH_LOOKUP_SLASH; // ../
           LogWarn("[LookUp]: up\n");
-          if(currentDirectory->parent!=nullptr){
+          if (currentDirectory->parent != nullptr) {
             currentDirectory = currentDirectory->parent;
-          }else{
+          } else {
             currentDirectory = vfs->fileSystems->rootDirectoryEntry;
           }
           index++;
@@ -107,37 +136,72 @@ DirectoryEntry *vfs_default_lookup(VFS *vfs, const char *name) {
       break;
     }
     case PATH_LOOKUP_NAME: {
-      if (currentChr == '/' || index == length) {
+      if (currentChr == '/') {
         lookupState = PATH_LOOKUP_SLASH; // name/
-        char path[index - bufStart + 1];
+        char path[index - bufStart];
+        for (uint32_t i = 0; i < index - bufStart; i++) {
+          path[i] = name[bufStart + i];
+        }
+        path[index - bufStart - 1] = '\0';
+        LogWarn("[LookUp]: %s \n", path);
+        ListNode *tmpNode = &(currentDirectory->children->list);
+        bool isFound = false;
+        while (tmpNode != nullptr) {
+          DirectoryEntry *tmpDirectoryEntry = getNode(tmpNode, DirectoryEntry, list);
+          LogInfo("[LookUp]: %s \n", tmpDirectoryEntry->fileName);
+          if (strcmp(tmpDirectoryEntry->fileName, path)) {
+            currentDirectory = tmpDirectoryEntry;
+            isFound = true;
+            break;
+          }
+          if (tmpNode->prev != nullptr) {
+            tmpNode = tmpNode->prev;
+          } else {
+            break;
+          }
+        }
+        if (!isFound) {
+          // not found
+          char path[index];
+          for (uint32_t i = 0; i < index; i++) {
+            path[i] = name[i];
+          }
+          path[index] = '\0';
+          LogError("[LookUp]: %s not found.\n", path);
+          return nullptr;
+        }
+      } else if (index == length) {
+        lookupState = PATH_LOOKUP_SLASH; // name/
+        char path[index - bufStart];
         for (uint32_t i = 0; i < index - bufStart; i++) {
           path[i] = name[bufStart + i];
         }
         path[index - bufStart] = '\0';
         LogWarn("[LookUp]: %s \n", path);
-        ListNode* tmpNode = &(currentDirectory->children->list);
+        ListNode *tmpNode = &(currentDirectory->children->list);
         bool isFound = false;
-        while(tmpNode!=nullptr){
-          DirectoryEntry *tmpDirectoryEntry = getNode(tmpNode,DirectoryEntry,list);
-          LogInfo("[LookUp]: %s \n",tmpDirectoryEntry->fileName);
-          if(strcmp(tmpDirectoryEntry->fileName,path)){
+        while (tmpNode != nullptr) {
+          DirectoryEntry *tmpDirectoryEntry = getNode(tmpNode, DirectoryEntry, list);
+          LogInfo("[LookUp]: %s \n", tmpDirectoryEntry->fileName);
+          if (strcmp(tmpDirectoryEntry->fileName, path)) {
             currentDirectory = tmpDirectoryEntry;
             isFound = true;
+            break;
           }
-          if(currentDirectory->children->list.prev != nullptr){
-            tmpNode = currentDirectory->children->list.prev;
-          }else{
+          if (tmpNode->prev != nullptr) {
+            tmpNode = tmpNode->prev;
+          } else {
             break;
           }
         }
-        if(!isFound){
-          // not found 
+        if (!isFound) {
+          // not found
           char path[index];
           for (uint32_t i = 0; i < index; i++) {
             path[i] = name[i];
           }
-          path[index]='\0';
-          LogError("[LookUp]: %s not found.\n",path);
+          path[index] = '\0';
+          LogError("[LookUp]: %s not found.\n", path);
           return nullptr;
         }
       } else {
@@ -145,9 +209,6 @@ DirectoryEntry *vfs_default_lookup(VFS *vfs, const char *name) {
       }
       break;
     }
-    default:
-      // illegal path
-      break;
     }
   }
 
@@ -157,6 +218,7 @@ DirectoryEntry *vfs_default_lookup(VFS *vfs, const char *name) {
 VFS *vfs_create() {
   VFS *vfs = (VFS *)kheap_alloc(sizeof(VFS));
   vfs->fileSystems = nullptr;
+  vfs->openFileTable = kvector_allocate();
   vfs->operations.mount = vfs_default_mount;
   vfs->operations.open = vfs_default_open;
   vfs->operations.read = vfs_default_read;

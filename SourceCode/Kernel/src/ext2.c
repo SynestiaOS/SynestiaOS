@@ -168,8 +168,17 @@ KernelStatus ext2_fs_default_mount(Ext2FileSystem *ext2FileSystem, struct SuperB
   LogInfo("[Ext2]: mounted.\n");
 }
 
+char *ext2_fs_default_read(Ext2FileSystem *ext2FileSystem, Ext2IndexNode *ext2IndexNode) {
+  uint32_t fileSize = ext2IndexNode->sizeUpper32Bits << 32 | ext2IndexNode->sizeLower32Bits;
+  uint32_t blockNeed = fileSize / ext2FileSystem->blockSize;
+
+  // TODO: read from blocks
+  return (char *)ext2FileSystem->data + ext2IndexNode->directBlockPointer1 * ext2FileSystem->blockSize;
+}
+
 Ext2FileSystem *ext2_create() {
   Ext2FileSystem *ext2FileSystem = (Ext2FileSystem *)kheap_alloc(sizeof(Ext2FileSystem));
   ext2FileSystem->operations.mount = ext2_fs_default_mount;
+  ext2FileSystem->operations.read = ext2_fs_default_read;
   return ext2FileSystem;
 }

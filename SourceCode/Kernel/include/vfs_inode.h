@@ -41,6 +41,9 @@ typedef struct IndexNodeOperations {
   IndexNodeUnLinkOperation unLinkOperation;
 } IndexNodeOperations;
 
+typedef enum IndexNodeState {
+  INDEX_NODE_STATE_OPENED,
+} IndexNodeState;
 typedef struct IndexNode {
   IndexNodeType type;
   uint32_t id;
