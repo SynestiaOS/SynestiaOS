@@ -4,10 +4,11 @@
 
 #include <ext2.h>
 #include <kheap.h>
+#include <log.h>
+#include <string.h>
 #include <vfs.h>
 #include <vfs_dentry.h>
 #include <vfs_inode.h>
-#include <string.h>
 
 SuperBlock *vfs_default_mount(VFS *vfs, const char *name, FileSystemType type, void *data) {
   SuperBlock *superBlock = vfs_create_super_block();
@@ -15,11 +16,11 @@ SuperBlock *vfs_default_mount(VFS *vfs, const char *name, FileSystemType type, v
   superBlock->type = type;
 
   switch (type) {
-    case FILESYSTEM_EXT2: {
-      Ext2FileSystem* ext2FileSystem = ext2_create();
-      ext2FileSystem->operations.mount(ext2FileSystem, superBlock, name, data);
-      break;
-    }
+  case FILESYSTEM_EXT2: {
+    Ext2FileSystem *ext2FileSystem = ext2_create();
+    ext2FileSystem->operations.mount(ext2FileSystem, superBlock, name, data);
+    break;
+  }
   }
 
   if (vfs->fileSystems == nullptr) {
@@ -30,25 +31,15 @@ SuperBlock *vfs_default_mount(VFS *vfs, const char *name, FileSystemType type, v
   return superBlock;
 }
 
-uint32_t vfs_default_open(VFS *vfs, const char *name, uint32_t mode){
-  
-}
+uint32_t vfs_default_open(VFS *vfs, const char *name, uint32_t mode) {}
 
-uint32_t vfs_default_read(VFS *vfs, uint32_t fd, char* buffer, uint32_t pos){
+uint32_t vfs_default_read(VFS *vfs, uint32_t fd, char *buffer, uint32_t pos) {}
 
-}
+char peek(char *src, uint32_t index, uint32_t offset) { return src[index + offset]; }
 
-char peek(char *src,uint32_t index, uint32_t offset){
-  return src[index + offset];
-}
+DirectoryEntry *vfs_default_lookup(VFS *vfs, const char *name) {
 
-char consume(char *src, uint32_t index){
-  return src[index++];
-}
-
-DirectoryEntry* vfs_default_lookup(VFS *vfs, const char *name){
-  
-  typedef enum PathLookUpState{
+  typedef enum PathLookUpState {
     PATH_LOOKUP_START,
     PATH_LOOKUP_DOT,
     PATH_LOOKUP_SLASH,
@@ -56,71 +47,84 @@ DirectoryEntry* vfs_default_lookup(VFS *vfs, const char *name){
   } PathLookUpState;
 
   PathLookUpState lookupState = PATH_LOOKUP_START;
+  uint32_t bufStart = 0;
   uint32_t index = 0;
   uint32_t length = strlen(name);
 
-  while(index < length){
-    char currentChr = consume(name, index);
-    switch(lookupState){
-      case PATH_LOOKUP_START:{
-        if(currentChr=='.'){
-          lookupState = PATH_LOOKUP_DOT;
-        }else if(currentChr=='/'){
-          lookupState = PATH_LOOKUP_SLASH;
-        }else{
-          lookupState = PATH_LOOKUP_NAME;
-        }
-        break;
+  while (index <= length) {
+    char currentChr = peek(name, index, 0);
+    index++;
+    switch (lookupState) {
+    case PATH_LOOKUP_START: {
+      if (currentChr == '.') {
+        lookupState = PATH_LOOKUP_DOT;
+      } else if (currentChr == '/') {
+        lookupState = PATH_LOOKUP_SLASH; // /
+        LogWarn("[LOOKUP] root\n");
+      } else {
+        lookupState = PATH_LOOKUP_NAME; // name
+        bufStart = index - 1;
       }
-      case PATH_LOOKUP_DOT:{
-        if(currentChr=='/'){
-          lookupState = PATH_LOOKUP_SLASH;
-        }else if(currentChr =='.'){
-          if(peek(name,index,0)=='/'){
-            lookupState = PATH_LOOKUP_SLASH;
-            index++;
-          }else{
-            // illegal path
-          }
-        }else{
-          lookupState = PATH_LOOKUP_NAME;
-        }
-        break;
-      }
-      case PATH_LOOKUP_SLASH:{
-        if(currentChr=='/'){
-          lookupState = PATH_LOOKUP_SLASH;
-        }else if(currentChr =='.'){
-          lookupState = PATH_LOOKUP_DOT;
-        }else{
-          lookupState = PATH_LOOKUP_NAME;
-        }
-        break;
-      }
-      case PATH_LOOKUP_NAME:{
-        if(currentChr=='/'){
-          lookupState = PATH_LOOKUP_SLASH;
-        }else{
+      break;
+    }
+    case PATH_LOOKUP_DOT: {
+      if (currentChr == '/') {
+        lookupState = PATH_LOOKUP_SLASH; // ./
+        LogWarn("[LOOKUP] current\n");
+      } else if (currentChr == '.') {
+        if (peek(name, index, 0) == '/') {
+          lookupState = PATH_LOOKUP_SLASH; // ../
+          LogWarn("[LOOKUP] up\n");
+          index++;
+        } else {
           // illegal path
         }
-        break;
-      } 
-      default:
+      } else {
+        lookupState = PATH_LOOKUP_NAME;
+      }
+      break;
+    }
+    case PATH_LOOKUP_SLASH: {
+      if (currentChr == '/') {
+        lookupState = PATH_LOOKUP_SLASH; // //
+      } else if (currentChr == '.') {
+        lookupState = PATH_LOOKUP_DOT;
+      } else {
+        lookupState = PATH_LOOKUP_NAME;
+        bufStart = index - 1;
+      }
+      break;
+    }
+    case PATH_LOOKUP_NAME: {
+      if (currentChr == '/' || index == length) {
+        lookupState = PATH_LOOKUP_SLASH; // name/
+        char path[index - bufStart + 1];
+        for (uint32_t i = 0; i < index - bufStart; i++) {
+          path[i] = name[bufStart + i];
+        }
+        path[index - bufStart] = '\0';
+        LogWarn("[LOOKUP] %s \n", path);
+      } else {
         // illegal path
-        break;
+      }
+      break;
+    }
+    default:
+      // illegal path
+      break;
     }
   }
 
-  SuperBlock* tmpFs = vfs->fileSystems;
-  while(tmpFs!=nullptr){
-    if(strcmp(tmpFs->name,name)){
-      
-    }
-    if(tmpFs->node.next!=nullptr){
-      tmpFs = getNode(&tmpFs->node.next,SuperBlock,node);
-    }
-    return nullptr;
-  }  
+  // SuperBlock* tmpFs = vfs->fileSystems;
+  // while(tmpFs!=nullptr){
+  //   if(strcmp(tmpFs->name,name)){
+
+  //   }
+  //   if(tmpFs->node.next!=nullptr){
+  //     tmpFs = getNode(&tmpFs->node.next,SuperBlock,node);
+  //   }
+  //   return nullptr;
+  // }
 }
 
 VFS *vfs_create() {

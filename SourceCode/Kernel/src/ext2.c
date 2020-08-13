@@ -44,8 +44,8 @@ void ext2_recursively_fill_superblock(Ext2FileSystem *ext2FileSystem, Ext2IndexN
       return;
     }
 
-    Ext2DirectoryEntry *dEntry =
-        (Ext2DirectoryEntry *)((uint32_t)ext2FileSystem->data + ext2IndexNode->directBlockPointer0 * ext2FileSystem->blockSize);
+    Ext2DirectoryEntry *dEntry = (Ext2DirectoryEntry *)((uint32_t)ext2FileSystem->data +
+                                                        ext2IndexNode->directBlockPointer0 * ext2FileSystem->blockSize);
     for (uint32_t hardlink = 0; hardlink < ext2IndexNode->hardLinksCount + 1; hardlink++) {
       if (strcmp(dEntry->nameCharacters, "..") || strcmp(dEntry->nameCharacters, ".") ||
           strcmp(dEntry->nameCharacters, "lost+found")) {
@@ -96,7 +96,7 @@ KernelStatus ext2_fs_default_mount(Ext2FileSystem *ext2FileSystem, struct SuperB
     LogError("[Ext2]: not a ext2 file system.\n");
     return ERROR;
   }
-  
+
   // make root
   DirectoryEntry *rootDirectoryEntry = vfsSuperBlock->operations.createDirectoryEntry(vfsSuperBlock, "root");
   IndexNode *rootIndexNode = vfsSuperBlock->operations.createIndexNode(vfsSuperBlock, rootDirectoryEntry);
@@ -159,7 +159,7 @@ KernelStatus ext2_fs_default_mount(Ext2FileSystem *ext2FileSystem, struct SuperB
       (Ext2DirectoryEntry *)((uint32_t)data + root->directBlockPointer0 * blockSize);
 
   // let's recursion
-  
+
   ext2FileSystem->data = data;
   ext2FileSystem->blockSize = blockSize;
   ext2_recursively_fill_superblock(ext2FileSystem, root, vfsSuperBlock, rootDirectoryEntry, "initrd");
@@ -167,8 +167,8 @@ KernelStatus ext2_fs_default_mount(Ext2FileSystem *ext2FileSystem, struct SuperB
   LogInfo("[Ext2]: mounted.\n");
 }
 
-Ext2FileSystem* ext2_create(){
-    Ext2FileSystem* ext2FileSystem = (Ext2FileSystem*)kheap_alloc(sizeof(Ext2FileSystem));
-    ext2FileSystem->operations.mount = ext2_fs_default_mount;
-    return ext2FileSystem;
+Ext2FileSystem *ext2_create() {
+  Ext2FileSystem *ext2FileSystem = (Ext2FileSystem *)kheap_alloc(sizeof(Ext2FileSystem));
+  ext2FileSystem->operations.mount = ext2_fs_default_mount;
+  return ext2FileSystem;
 }

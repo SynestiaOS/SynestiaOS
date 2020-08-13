@@ -20,8 +20,8 @@ typedef struct OpenFile {
 
 typedef SuperBlock *(*VFSOperationMount)(struct VFS *vfs, const char *name, FileSystemType type, void *data);
 typedef uint32_t (*VFSOperationOpen)(struct VFS *vfs, const char *name, uint32_t mode);
-typedef DirectoryEntry* (*VFSOperationLookUp)(struct VFS *vfs, const char *name);
-typedef uint32_t (*VFSOperationRead)(struct VFS *vfs, uint32_t fd, char* buffer, uint32_t pos);
+typedef DirectoryEntry *(*VFSOperationLookUp)(struct VFS *vfs, const char *name);
+typedef uint32_t (*VFSOperationRead)(struct VFS *vfs, uint32_t fd, char *buffer, uint32_t pos);
 typedef struct VFSOperations {
   VFSOperationMount mount;
   VFSOperationOpen open;

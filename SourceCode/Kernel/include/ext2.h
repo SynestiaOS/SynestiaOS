@@ -269,6 +269,6 @@ typedef struct Ext2FileSystem {
   Ext2FileSystemOperations operations;
 } Ext2FileSystem;
 
-Ext2FileSystem* ext2_create();
+Ext2FileSystem *ext2_create();
 
 #endif // __KERNEL_FS_EXT2_H__
