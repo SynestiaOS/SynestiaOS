@@ -178,7 +178,7 @@ void kernel_main(void) {
     register_time_interrupt(&gpuHandler);
 
     VFS *vfs = vfs_create();
-    vfs->operations.mount(vfs, "/root", FILESYSTEM_EXT2, (void *)EXT2_ADDRESS);
+    vfs->operations.mount(vfs, "root", FILESYSTEM_EXT2, (void *)EXT2_ADDRESS);
 
     schd_init();
 
@@ -199,10 +199,6 @@ void kernel_main(void) {
 
     bootSpinLock.operations.release(&bootSpinLock);
     schd_schedule();
-  }
-
-  if (read_cpuid() == 1) {
-    led_init();
   }
 
   // schd_switch_next();

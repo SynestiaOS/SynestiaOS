@@ -264,9 +264,11 @@ typedef struct Ext2FileSystemOperations {
 typedef struct Ext2FileSystem {
   Ext2BootBlock *bootBlock;
   Ext2BlockGroup *blockGroups;
+  void *data;
+  uint32_t blockSize;
   Ext2FileSystemOperations operations;
 } Ext2FileSystem;
 
-KernelStatus ext2_init(Ext2FileSystem *ext2FileSystem);
+Ext2FileSystem* ext2_create();
 
 #endif // __KERNEL_FS_EXT2_H__

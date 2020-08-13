@@ -18,8 +18,7 @@
 #define EXT2_SUPER_BLOCK_OFFSET 1024
 
 void ext2_recursively_fill_superblock(Ext2FileSystem *ext2FileSystem, Ext2IndexNode *ext2IndexNode,
-                                      SuperBlock *vfsSuperBlock, DirectoryEntry *vfsDirectoryEntry, uint32_t blockSize,
-                                      void *data, char *name) {
+                                      SuperBlock *vfsSuperBlock, DirectoryEntry *vfsDirectoryEntry, char *name) {
   if ((ext2IndexNode->typeAndPermissions & 0xF000) == EXT2_INDEX_NODE_TYPE_DIRECTORY) {
     // create directory vfs inode, and dentry, and fill them
     DirectoryEntry *directoryEntry = vfsSuperBlock->operations.createDirectoryEntry(vfsSuperBlock, name);
@@ -46,7 +45,7 @@ void ext2_recursively_fill_superblock(Ext2FileSystem *ext2FileSystem, Ext2IndexN
     }
 
     Ext2DirectoryEntry *dEntry =
-        (Ext2DirectoryEntry *)((uint32_t)data + ext2IndexNode->directBlockPointer0 * blockSize);
+        (Ext2DirectoryEntry *)((uint32_t)ext2FileSystem->data + ext2IndexNode->directBlockPointer0 * ext2FileSystem->blockSize);
     for (uint32_t hardlink = 0; hardlink < ext2IndexNode->hardLinksCount + 1; hardlink++) {
       if (strcmp(dEntry->nameCharacters, "..") || strcmp(dEntry->nameCharacters, ".") ||
           strcmp(dEntry->nameCharacters, "lost+found")) {
@@ -58,8 +57,7 @@ void ext2_recursively_fill_superblock(Ext2FileSystem *ext2FileSystem, Ext2IndexN
       // inode is directory , it's means should recursion
       Ext2IndexNode *nextNode = (Ext2IndexNode *)((uint32_t)ext2FileSystem->blockGroups->indexNode +
                                                   ((uint32_t)dEntry->indexNode - 1) * EXT2_INDEX_NODE_STRUCTURE_SIZE);
-      ext2_recursively_fill_superblock(ext2FileSystem, nextNode, vfsSuperBlock, directoryEntry, blockSize, data,
-                                       dEntry->nameCharacters);
+      ext2_recursively_fill_superblock(ext2FileSystem, nextNode, vfsSuperBlock, directoryEntry, dEntry->nameCharacters);
       dEntry = (Ext2DirectoryEntry *)((uint32_t)dEntry + dEntry->sizeOfThisEntry);
     }
   } else if ((ext2IndexNode->typeAndPermissions & 0xF000) == EXT2_INDEX_NODE_TYPE_REGULAR_FILE) {
@@ -98,7 +96,7 @@ KernelStatus ext2_fs_default_mount(Ext2FileSystem *ext2FileSystem, struct SuperB
     LogError("[Ext2]: not a ext2 file system.\n");
     return ERROR;
   }
-
+  
   // make root
   DirectoryEntry *rootDirectoryEntry = vfsSuperBlock->operations.createDirectoryEntry(vfsSuperBlock, "root");
   IndexNode *rootIndexNode = vfsSuperBlock->operations.createIndexNode(vfsSuperBlock, rootDirectoryEntry);
@@ -161,9 +159,16 @@ KernelStatus ext2_fs_default_mount(Ext2FileSystem *ext2FileSystem, struct SuperB
       (Ext2DirectoryEntry *)((uint32_t)data + root->directBlockPointer0 * blockSize);
 
   // let's recursion
-  ext2_recursively_fill_superblock(ext2FileSystem, root, vfsSuperBlock, rootDirectoryEntry, blockSize, data, "initrd");
+  
+  ext2FileSystem->data = data;
+  ext2FileSystem->blockSize = blockSize;
+  ext2_recursively_fill_superblock(ext2FileSystem, root, vfsSuperBlock, rootDirectoryEntry, "initrd");
 
   LogInfo("[Ext2]: mounted.\n");
 }
 
-KernelStatus ext2_init(Ext2FileSystem *ext2FileSystem) { ext2FileSystem->operations.mount = ext2_fs_default_mount; }
+Ext2FileSystem* ext2_create(){
+    Ext2FileSystem* ext2FileSystem = (Ext2FileSystem*)kheap_alloc(sizeof(Ext2FileSystem));
+    ext2FileSystem->operations.mount = ext2_fs_default_mount;
+    return ext2FileSystem;
+}

@@ -14,12 +14,11 @@ SuperBlock *vfs_default_mount(VFS *vfs, const char *name, FileSystemType type, v
   superBlock->type = type;
 
   switch (type) {
-  case FILESYSTEM_EXT2: {
-    Ext2FileSystem ext2FileSystem;
-    ext2_init(&ext2FileSystem);
-    ext2FileSystem.operations.mount(&ext2FileSystem, superBlock, name, data);
-    break;
-  }
+    case FILESYSTEM_EXT2: {
+      Ext2FileSystem* ext2FileSystem = ext2_create();
+      ext2FileSystem->operations.mount(ext2FileSystem, superBlock, name, data);
+      break;
+    }
   }
 
   if (vfs->fileSystems == nullptr) {

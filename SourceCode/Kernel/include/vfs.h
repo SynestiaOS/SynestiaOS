@@ -19,8 +19,12 @@ typedef struct OpenFile {
 } OpenFile;
 
 typedef SuperBlock *(*VFSOperationMount)(struct VFS *vfs, const char *name, FileSystemType type, void *data);
+typedef SuperBlock *(*VFSOperationOpen)(struct VFS *vfs, const char *name, uint32_t mode);
+typedef SuperBlock *(*VFSOperationRead)(struct VFS *vfs, uint32_t fd, char* buffer, uint32_t pos);
 typedef struct VFSOperations {
   VFSOperationMount mount;
+  VFSOperationOpen open;
+  VFSOperationRead read;
 } VFSOperations;
 
 typedef struct VFS {
