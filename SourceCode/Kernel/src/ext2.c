@@ -4,6 +4,7 @@
 
 #include <ext2.h>
 #include <kheap.h>
+#include <list.h>
 #include <log.h>
 #include <stdint.h>
 #include <string.h>
@@ -23,10 +24,16 @@ void ext2_recursively_fill_superblock(Ext2FileSystem *ext2FileSystem, Ext2IndexN
     // create directory vfs inode, and dentry, and fill them
     DirectoryEntry *directoryEntry = vfsSuperBlock->operations.createDirectoryEntry(vfsSuperBlock, name);
     IndexNode *indexNode = vfsSuperBlock->operations.createIndexNode(vfsSuperBlock, directoryEntry);
+
+    if (vfsDirectoryEntry->children != nullptr) {
+      // connect this dentry to parent's children 's node
+      klist_append(&vfsDirectoryEntry->children->list, &directoryEntry->list);
+    }
+
     directoryEntry->operations.initOperation(directoryEntry, vfsDirectoryEntry, indexNode);
 
     directoryEntry->fileName = name;
-    //    atomic_set(&directoryEntry->refCount,1);
+    // atomic_set(&directoryEntry->refCount,1);
     directoryEntry->operations.hashOperation(directoryEntry);
     directoryEntry->indexNode->type = INDEX_NODE_DIRECTORY;
 
@@ -41,7 +48,6 @@ void ext2_recursively_fill_superblock(Ext2FileSystem *ext2FileSystem, Ext2IndexN
     Ext2DirectoryEntry *dEntry =
         (Ext2DirectoryEntry *)((uint32_t)data + ext2IndexNode->directBlockPointer0 * blockSize);
     for (uint32_t hardlink = 0; hardlink < ext2IndexNode->hardLinksCount + 1; hardlink++) {
-      LogInfo("[Ext2]: dir : %s\n", dEntry->nameCharacters);
       if (strcmp(dEntry->nameCharacters, "..") || strcmp(dEntry->nameCharacters, ".") ||
           strcmp(dEntry->nameCharacters, "lost+found")) {
         // TODO: lost+found
@@ -60,13 +66,19 @@ void ext2_recursively_fill_superblock(Ext2FileSystem *ext2FileSystem, Ext2IndexN
     // create vfs inode, create vfs dentry , and fill them
     DirectoryEntry *directoryEntry = vfsSuperBlock->operations.createDirectoryEntry(vfsSuperBlock, name);
     IndexNode *indexNode = vfsSuperBlock->operations.createIndexNode(vfsSuperBlock, directoryEntry);
+
+    if (vfsDirectoryEntry->children != nullptr) {
+      // connect this dentry to parent's children 's node
+      klist_append(&vfsDirectoryEntry->children->list, &directoryEntry->list);
+    }
+
     directoryEntry->operations.initOperation(directoryEntry, vfsDirectoryEntry, indexNode);
 
     indexNode->type = INDEX_NODE_FILE;
     indexNode->id = (uint32_t)(ext2IndexNode - ext2FileSystem->blockGroups->indexNode) / EXT2_INDEX_NODE_STRUCTURE_SIZE;
     indexNode->mode = ext2IndexNode->typeAndPermissions & 0xFFF;
     indexNode->fileSize = ext2IndexNode->sizeUpper32Bits << 32 | ext2IndexNode->sizeLower32Bits;
-    //    atomic_set(&indexNode->linkCount,1);
+    // atomic_set(&indexNode->linkCount,1);
     indexNode->createTimestamp = ext2IndexNode->createTime;
     indexNode->lastAccessTimestamp = ext2IndexNode->lastAccessTime;
     indexNode->lastUpdateTimestamp = ext2IndexNode->lastModficationTime;

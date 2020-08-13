@@ -8,19 +8,7 @@
 #include <vfs_dentry.h>
 #include <vfs_inode.h>
 
-extern char _binary_initrd_img_start[];
-extern char _binary_initrd_img_end[];
-extern char _binary_initrd_img_size[];
-uint32_t EXT2_ADDRESS = _binary_initrd_img_start;
-
-SuperBlock *fileSystems = nullptr;
-
-KernelStatus vfs_init() {
-  SuperBlock *root = vfs_mount("/root", FILESYSTEM_EXT2, (void *)EXT2_ADDRESS);
-  return OK;
-}
-
-SuperBlock *vfs_mount(const char *name, FileSystemType type, void *data) {
+SuperBlock *vfs_default_mount(VFS *vfs, const char *name, FileSystemType type, void *data) {
   SuperBlock *superBlock = vfs_create_super_block();
   superBlock->fileName = name;
   superBlock->type = type;
@@ -30,9 +18,21 @@ SuperBlock *vfs_mount(const char *name, FileSystemType type, void *data) {
     Ext2FileSystem ext2FileSystem;
     ext2_init(&ext2FileSystem);
     ext2FileSystem.operations.mount(&ext2FileSystem, superBlock, name, data);
+    break;
   }
   }
 
-  //    klist_append(&fileSystems->node, &superBlock->node);
+  if (vfs->fileSystems == nullptr) {
+    vfs->fileSystems = superBlock;
+  } else {
+    klist_append(&vfs->fileSystems->node, &superBlock->node);
+  }
   return superBlock;
+}
+
+VFS *vfs_create() {
+  VFS *vfs = (VFS *)kheap_alloc(sizeof(VFS));
+  vfs->fileSystems = nullptr;
+  vfs->operations.mount = vfs_default_mount;
+  return vfs;
 }

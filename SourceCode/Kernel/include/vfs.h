@@ -6,13 +6,29 @@
 #define __KERNEL_VFS_H__
 
 #include <atomic.h>
+#include <kvector.h>
 #include <list.h>
 #include <mutex.h>
 #include <spinlock.h>
 #include <vfs_super_block.h>
 
-KernelStatus vfs_init();
+typedef struct OpenFile {
+  uint32_t offset;
+  uint32_t state;
+  uint32_t indexNode;
+} OpenFile;
 
-SuperBlock *vfs_mount(const char *name, FileSystemType type, void *data);
+typedef SuperBlock *(*VFSOperationMount)(struct VFS *vfs, const char *name, FileSystemType type, void *data);
+typedef struct VFSOperations {
+  VFSOperationMount mount;
+} VFSOperations;
+
+typedef struct VFS {
+  struct SuperBlock *fileSystems;
+  KernelVector *openFileTable;
+  VFSOperations operations;
+} VFS;
+
+VFS *vfs_create();
 
 #endif // __KERNEL_VFS_H__

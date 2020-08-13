@@ -20,7 +20,13 @@
 #include <stdlib.h>
 #include <string.h>
 #include <synestia_os_hal.h>
+#include <vfs.h>
 #include <vmm.h>
+
+extern char _binary_initrd_img_start[];
+extern char _binary_initrd_img_end[];
+extern char _binary_initrd_img_size[];
+uint32_t EXT2_ADDRESS = _binary_initrd_img_start;
 
 extern uint32_t *gpu_flush(int args);
 extern uint32_t GFX2D_BUFFER[1024 * 768];
@@ -171,7 +177,9 @@ void kernel_main(void) {
     gpuHandler.timer_interrupt_handler = &gpu_flush;
     register_time_interrupt(&gpuHandler);
 
-    vfs_init();
+    VFS *vfs = vfs_create();
+    vfs->operations.mount(vfs, "/root", FILESYSTEM_EXT2, (void *)EXT2_ADDRESS);
+
     schd_init();
 
     Thread *window1Thread = thread_create("window1", &window_thread1, 1, 1);
