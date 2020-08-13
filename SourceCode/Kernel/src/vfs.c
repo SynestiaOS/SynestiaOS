@@ -38,8 +38,74 @@ uint32_t vfs_default_read(VFS *vfs, uint32_t fd, char* buffer, uint32_t pos){
 
 }
 
+char peek(char *src,uint32_t index, uint32_t offset){
+  return src[index + offset];
+}
+
+char consume(char *src, uint32_t index){
+  return src[index++];
+}
+
 DirectoryEntry* vfs_default_lookup(VFS *vfs, const char *name){
-  // str_split(name,'/')
+  
+  typedef enum PathLookUpState{
+    PATH_LOOKUP_START,
+    PATH_LOOKUP_DOT,
+    PATH_LOOKUP_SLASH,
+    PATH_LOOKUP_NAME,
+  } PathLookUpState;
+
+  PathLookUpState lookupState = PATH_LOOKUP_START;
+  uint32_t index = 0;
+  uint32_t length = strlen(name);
+
+  while(index<length){
+    char currentChr = consume(name, index);
+    switch(lookupState){
+      case PATH_LOOKUP_START:{
+        if(currentChr=='.'){
+          lookupState = PATH_LOOKUP_DOT;
+        }else if(currentChr=='/'){
+          lookupState = PATH_LOOKUP_SLASH;
+        }else{
+          lookupState = PATH_LOOKUP_NAME;
+        }
+        break;
+      }
+      case PATH_LOOKUP_DOT:{
+        if(currentChr=='/'){
+          lookupState = PATH_LOOKUP_SLASH;
+        }else if(currentChr =='.'){
+          lookupState = PATH_LOOKUP_DOT;
+        }else{
+          lookupState = PATH_LOOKUP_NAME;
+        }
+        break;
+      }
+      case PATH_LOOKUP_SLASH:{
+        if(currentChr=='/'){
+          lookupState = PATH_LOOKUP_SLASH;
+        }else if(currentChr =='.'){
+          lookupState = PATH_LOOKUP_DOT;
+        }else{
+          lookupState = PATH_LOOKUP_NAME;
+        }
+        break;
+      }
+      case PATH_LOOKUP_NAME:{
+        if(currentChr=='/'){
+          lookupState = PATH_LOOKUP_SLASH;
+        }else{
+          // illegal path
+        }
+        break;
+      } 
+      default:
+        // illegal path
+        break;
+    }
+  }
+
   SuperBlock* tmpFs = vfs->fileSystems;
   while(tmpFs!=nullptr){
     if(strcmp(tmpFs->name,name)){
@@ -49,7 +115,7 @@ DirectoryEntry* vfs_default_lookup(VFS *vfs, const char *name){
       tmpFs = getNode(&tmpFs->node.next,SuperBlock,node);
     }
     return nullptr;
-  }
+  }  
 }
 
 VFS *vfs_create() {
