@@ -87,6 +87,7 @@ DirectoryEntry *vfs_default_lookup(VFS *vfs, const char *name) {
     case PATH_LOOKUP_SLASH: {
       if (currentChr == '/') {
         lookupState = PATH_LOOKUP_SLASH; // //
+        LogWarn("[LOOKUP] root\n");
       } else if (currentChr == '.') {
         lookupState = PATH_LOOKUP_DOT;
       } else {

@@ -98,9 +98,10 @@ KernelStatus ext2_fs_default_mount(Ext2FileSystem *ext2FileSystem, struct SuperB
   }
 
   // make root
-  DirectoryEntry *rootDirectoryEntry = vfsSuperBlock->operations.createDirectoryEntry(vfsSuperBlock, "root");
+  DirectoryEntry *rootDirectoryEntry = vfsSuperBlock->operations.createDirectoryEntry(vfsSuperBlock, mountName);
   IndexNode *rootIndexNode = vfsSuperBlock->operations.createIndexNode(vfsSuperBlock, rootDirectoryEntry);
   rootDirectoryEntry->operations.initOperation(rootDirectoryEntry, nullptr, rootIndexNode);
+  vfsSuperBlock->rootDirectoryEntry = rootDirectoryEntry;
 
   LogInfo("[Ext2]: %d inodes in file system.\n", ext2SuperBlock->indexNodeNums);
   LogInfo("[Ext2]: %d blocks in file system.\n", ext2SuperBlock->blockNums);
