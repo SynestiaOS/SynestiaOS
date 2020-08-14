@@ -4,8 +4,10 @@
 
 #ifndef __KERNEL_FS_EXT2_H__
 #define __KERNEL_FS_EXT2_H__
+
 #include <stdint.h>
 #include <type.h>
+#include <vfs_super_block.h>
 
 typedef enum Ext2FileSystemStates {
   FILE_SYSTEM_CLEAN = 1,
@@ -34,10 +36,10 @@ typedef struct Ext2SuperBlock {
   uint32_t unallocatedIndexNodeNums;      // Total number of unallocated inodes
   uint32_t blockContainingSuperblockNums; // Block number of the block containing the superblock
   uint32_t log2BlockSizeSub10; // log2 (block size) - 10. (In other words, the number to shift 1,024 to the left by to
-                               // obtain the block size)
-  uint32_t log2FragmentSizeSub10;   // log2 (fragment size) - 10. (In other words, the number to shift 1,024 to the left
-                                    // by to obtain the fragment size)
-  uint32_t eachBlockGroupBlockNums; // Number of blocks in each block group
+  // obtain the block size)
+  uint32_t log2FragmentSizeSub10; // log2 (fragment size) - 10. (In other words, the number to shift 1,024 to the left
+  // by to obtain the fragment size)
+  uint32_t eachBlockGroupBlockNums;     // Number of blocks in each block group
   uint32_t eachBlockGroupFragmentNums;  // Number of fragments in each block group
   uint32_t eachBlockGroupIndexNodeNums; // Number of inodes in each block group
   uint32_t lastMountTime;               // Last mount time (in POSIX time)
@@ -48,12 +50,12 @@ typedef struct Ext2SuperBlock {
   uint16_t state;                 // File system state (see below)
   uint16_t errorHandlingMethods;  // What to do when an error is detected (see below)
   uint16_t minorPortionOfVersion; // Minor portion of version (combine with Major portion below to construct full
-                                  // version field)
+  // version field)
   uint32_t lastConsistencyCheckTime;               // POSIX time of last consistency check (fsck)
   uint32_t intervalBetweenForcedConsistencyChecks; // Interval (in POSIX time) between forced consistency checks (fsck)
   uint32_t operatingSystemID; // Operating system ID from which the filesystem on this volume was created (see below)
-  uint32_t majorPortionOfVersion;  // Major portion of version (combine with Minor portion above to construct full
-                                   // version field)
+  uint32_t majorPortionOfVersion; // Major portion of version (combine with Minor portion above to construct full
+  // version field)
   uint16_t userId;                 // User ID that can use reserved blocks
   uint16_t groupId;                // Group ID that can use reserved blocks
   uint32_t firstIndexNode;         // First non-reserved inode in file system. (In versions < 1.0, this is fixed as 11)
@@ -139,9 +141,9 @@ typedef struct Ext2IndexNode {
   uint32_t deleteTime;          // Deletion time (in POSIX time)
   uint16_t groupId;             // Group ID
   uint16_t hardLinksCount;      // Count of hard links (directory entries) to this inode. When this reaches 0, the data
-                                // blocks are marked as unallocated.
-  uint32_t diskSectorsCount;    // Count of disk sectors (not Ext2 blocks) in use by this inode, not counting the actual
-                                // inode structure nor directory entries linking to the inode.
+  // blocks are marked as unallocated.
+  uint32_t diskSectorsCount; // Count of disk sectors (not Ext2 blocks) in use by this inode, not counting the actual
+  // inode structure nor directory entries linking to the inode.
 
   /**
    * Flags (see below)
@@ -182,16 +184,16 @@ typedef struct Ext2IndexNode {
   uint32_t directBlockPointer10;       // Direct Block Pointer 10
   uint32_t directBlockPointer11;       // Direct Block Pointer 11
   uint32_t singlyIndirectBlockPointer; // Singly Indirect Block Pointer (Points to a block that is a list of block
-                                       // pointers to data)
+  // pointers to data)
   uint32_t doublyIndirectBlockPointer; // Doubly Indirect Block Pointer (Points to a block that is a list of block
-                                       // pointers to Singly Indirect Blocks)
+  // pointers to Singly Indirect Blocks)
   uint32_t triplyIndirectBlockPointer; // Triply Indirect Block Pointer (Points to a block that is a list of block
-                                       // pointers to Doubly Indirect Blocks)
-  uint32_t generationNumer;            // Generation number (Primarily used for NFS)
-  uint32_t extendedAttributeBlock;     // In Ext2 version 0, this field is reserved. In version >= 1, Extended attribute
-                                       // block (File ACL).
+  // pointers to Doubly Indirect Blocks)
+  uint32_t generationNumer;        // Generation number (Primarily used for NFS)
+  uint32_t extendedAttributeBlock; // In Ext2 version 0, this field is reserved. In version >= 1, Extended attribute
+  // block (File ACL).
   uint32_t sizeUpper32Bits; // In Ext2 version 0, this field is reserved. In version >= 1, Upper 32 bits of file size
-                            // (if feature bit set) if it's a file, Directory ACL if it's a directory
+  // (if feature bit set) if it's a file, Directory ACL if it's a directory
   uint32_t fragmentBlockAddress; // Block address of fragment
 
   /**
@@ -237,7 +239,7 @@ typedef struct Ext2DirectoryEntry {
   uint16_t sizeOfThisEntry; // Total size of this entry (Including all subfields)
   uint8_t nameLength;       // Name Length least-significant 8 bits
   uint8_t typeIndicator; // Type indicator (only if the feature bit for "directory entries have file type byte" is set,
-                         // else this is the most-significant 8 bits of the Name Length)
+  // else this is the most-significant 8 bits of the Name Length)
   uint8_t nameCharacters[]; // Name characters
 } Ext2DirectoryEntry;
 
@@ -255,8 +257,8 @@ typedef struct Ext2BlockGroup {
   Ext2DataBlock *dataBlock;
 } Ext2BlockGroup;
 
-typedef KernelStatus (*Ext2FileSystemMountOperation)(struct Ext2FileSystem *ext2FileSystem,
-                                                     struct SuperBlock *vfsSuperBlock, char *mountName, void *data);
+typedef KernelStatus (*Ext2FileSystemMountOperation)(struct Ext2FileSystem *ext2FileSystem, char *mountName,
+                                                     void *data);
 
 typedef char *(*Ext2FileSystemReadOperation)(struct Ext2FileSystem *ext2FileSystem, Ext2IndexNode *indexNode);
 
@@ -266,6 +268,7 @@ typedef struct Ext2FileSystemOperations {
 } Ext2FileSystemOperations;
 
 typedef struct Ext2FileSystem {
+  struct SuperBlock superblock;
   Ext2BootBlock *bootBlock;
   Ext2BlockGroup *blockGroups;
   void *data;

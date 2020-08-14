@@ -9,27 +9,28 @@
 #include <vfs.h>
 #include <vfs_dentry.h>
 #include <vfs_inode.h>
+#include <vfs_super_block.h>
 
 SuperBlock *vfs_default_mount(VFS *vfs, const char *name, FileSystemType type, void *data) {
-  SuperBlock *superBlock = vfs_create_super_block();
-  superBlock->name = name;
-  superBlock->type = type;
-
   switch (type) {
   case FILESYSTEM_EXT2: {
     Ext2FileSystem *ext2FileSystem = ext2_create();
-    superBlock->type = FILESYSTEM_EXT2;
-    ext2FileSystem->operations.mount(ext2FileSystem, superBlock, name, data);
-    break;
-  }
-  }
+    ext2FileSystem->superblock.name = name;
+    ext2FileSystem->superblock.type = type;
+    ext2FileSystem->superblock.operations.createDirectoryEntry = vfs_super_block_default_create_directory_entry;
+    ext2FileSystem->superblock.operations.createIndexNode = vfs_super_block_default_create_index_node;
+    ext2FileSystem->superblock.operations.destroyDirectoryEntry = vfs_super_block_default_destroy_dentry;
+    ext2FileSystem->superblock.operations.destroyIndexNode = vfs_super_block_default_destroy_inode;
+    ext2FileSystem->operations.mount(ext2FileSystem, name, data);
 
-  if (vfs->fileSystems == nullptr) {
-    vfs->fileSystems = superBlock;
-  } else {
-    klist_append(&vfs->fileSystems->node, &superBlock->node);
+    if (vfs->fileSystems == nullptr) {
+      vfs->fileSystems = &ext2FileSystem->superblock;
+    } else {
+      klist_append(&vfs->fileSystems->node, &ext2FileSystem->superblock.node);
+    }
+    return &ext2FileSystem->superblock;
   }
-  return superBlock;
+  }
 }
 
 uint32_t vfs_default_open(VFS *vfs, const char *name, uint32_t mode) {
@@ -42,19 +43,19 @@ uint32_t vfs_default_open(VFS *vfs, const char *name, uint32_t mode) {
   directoryEntry->indexNode->state = INDEX_NODE_STATE_OPENED;
 
   // allocat a open file item
-  OpenFile *openFile = (OpenFile *)kheap_alloc(sizeof(OpenFile));
-  openFile->node.next = nullptr;
-  openFile->node.prev = nullptr;
-  openFile->indexNode = (uint32_t)directoryEntry->indexNode;
-  openFile->state = 0;
-  openFile->offset = 0;
+  GlobalOpenFile *globalOpenFIle = (GlobalOpenFile *)kheap_alloc(sizeof(GlobalOpenFile));
+  globalOpenFIle->node.next = nullptr;
+  globalOpenFIle->node.prev = nullptr;
+  globalOpenFIle->indexNode = (uint32_t)directoryEntry->indexNode;
+  globalOpenFIle->state = 0;
+  globalOpenFIle->offset = 0;
 
   // add to vfs's open table
-  kvector_add(vfs->openFileTable, &openFile->node);
+  kvector_add(vfs->openFileTable, &globalOpenFIle->node);
 
   if (directoryEntry->superBlock->type == FILESYSTEM_EXT2) {
-
     Ext2IndexNode *ext2IndexNode = (Ext2IndexNode *)directoryEntry->indexNode->indexNodePrivate;
+    // TODO: status change for ext2 index node.
 
     return ext2IndexNode->sizeUpper32Bits << 32 | ext2IndexNode->sizeLower32Bits;
   }

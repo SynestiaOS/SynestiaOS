@@ -172,14 +172,10 @@ void kernel_main(void) {
     gfx2d_draw_bitmap(context, 0, 0, 1024, 768, desktop());
     draw_task_bar();
 
-    gpuHandler.node.next = nullptr;
-    gpuHandler.node.prev = nullptr;
-    gpuHandler.timer_interrupt_handler = &gpu_flush;
-    register_time_interrupt(&gpuHandler);
-
     VFS *vfs = vfs_create();
     vfs->operations.mount(vfs, "root", FILESYSTEM_EXT2, (void *)EXT2_ADDRESS);
-    struct DirectoryEntry *dentry = vfs->operations.lookup(vfs, "/initrd/bin/bin.txt");
+    vfs->operations.lookup(vfs, "/initrd/bin/bin.txt");
+    vfs->operations.open(vfs, "/initrd/bin/bin.txt", 1);
 
     schd_init();
 
@@ -198,6 +194,10 @@ void kernel_main(void) {
     Thread *window2Thread = thread_create("window2", &window_thread2, 1, 2);
     schd_add_thread(window2Thread, 1);
 
+    gpuHandler.node.next = nullptr;
+    gpuHandler.node.prev = nullptr;
+    gpuHandler.timer_interrupt_handler = &gpu_flush;
+    register_time_interrupt(&gpuHandler);
     bootSpinLock.operations.release(&bootSpinLock);
     schd_schedule();
   }

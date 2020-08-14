@@ -12,12 +12,18 @@
 #include <spinlock.h>
 #include <vfs_super_block.h>
 
-typedef struct OpenFile {
+typedef struct GlobalOpenFile {
   uint32_t offset;
   uint32_t state;
   uint32_t indexNode;
   ListNode node;
-} OpenFile;
+} GlobalOpenFile;
+
+typedef struct LocalOpenFile {
+  uint32_t fd;
+  uint32_t globalOpenFileTableIndex;
+  ListNode node;
+} LocalOpenFile;
 
 typedef SuperBlock *(*VFSOperationMount)(struct VFS *vfs, const char *name, FileSystemType type, void *data);
 typedef uint32_t (*VFSOperationOpen)(struct VFS *vfs, const char *name, uint32_t mode);
