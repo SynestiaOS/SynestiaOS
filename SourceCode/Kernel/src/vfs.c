@@ -50,20 +50,29 @@ uint32_t vfs_default_open(VFS *vfs, const char *name, uint32_t mode) {
   globalOpenFIle->state = 0;
   globalOpenFIle->offset = 0;
 
+  // allocate a local open file item
+  LocalOpenFile *localOpenFile = (LocalOpenFile *)kheap_alloc(sizeof(LocalOpenFile));
+
+  // add to current thread's open table
+  // TODO:
+
   // add to vfs's open table
   kvector_add(vfs->openFileTable, &globalOpenFIle->node);
 
-  if (directoryEntry->superBlock->type == FILESYSTEM_EXT2) {
-    Ext2IndexNode *ext2IndexNode = (Ext2IndexNode *)directoryEntry->indexNode->indexNodePrivate;
-    // TODO: status change for ext2 index node.
-
-    return ext2IndexNode->sizeUpper32Bits << 32 | ext2IndexNode->sizeLower32Bits;
-  }
-
+  // TODO:
+  // return fd
   return 0;
 }
 
-uint32_t vfs_default_read(VFS *vfs, uint32_t fd, char *buffer, uint32_t pos) {}
+uint32_t vfs_default_close(struct VFS *vfs, uint32_t fd) {
+  // TODO:
+  return 0;
+}
+
+uint32_t vfs_default_read(VFS *vfs, uint32_t fd, char *buffer, uint32_t pos, uint32_t count) {
+  // TODO:
+  return 0;
+}
 
 char peek(char *src, uint32_t index, uint32_t offset) { return src[index + offset]; }
 
@@ -222,6 +231,7 @@ VFS *vfs_create() {
   vfs->openFileTable = kvector_allocate();
   vfs->operations.mount = vfs_default_mount;
   vfs->operations.open = vfs_default_open;
+  vfs->operations.close = vfs_default_close;
   vfs->operations.read = vfs_default_read;
   vfs->operations.lookup = vfs_default_lookup;
   return vfs;

@@ -27,6 +27,7 @@ extern char _binary_initrd_img_start[];
 extern char _binary_initrd_img_end[];
 extern char _binary_initrd_img_size[];
 uint32_t EXT2_ADDRESS = _binary_initrd_img_start;
+VFS *vfs;
 
 extern uint32_t *gpu_flush(int args);
 extern uint32_t GFX2D_BUFFER[1024 * 768];
@@ -172,7 +173,7 @@ void kernel_main(void) {
     gfx2d_draw_bitmap(context, 0, 0, 1024, 768, desktop());
     draw_task_bar();
 
-    VFS *vfs = vfs_create();
+    vfs = vfs_create();
     vfs->operations.mount(vfs, "root", FILESYSTEM_EXT2, (void *)EXT2_ADDRESS);
     vfs->operations.lookup(vfs, "/initrd/bin/bin.txt");
     vfs->operations.open(vfs, "/initrd/bin/bin.txt", 1);

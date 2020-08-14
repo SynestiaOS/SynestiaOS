@@ -3,11 +3,23 @@
 //
 #ifndef __KERNEL_SYSCALL_H__
 #define __KERNEL_SYSCALL_H__
+
 #include <stdint.h>
 #include <type.h>
 
 uint32_t sys_getpid(void);
 
-SysCall sys_call_table[] = {sys_getpid};
+uint32_t sys_open(const char *name, uint32_t flags, uint32_t mode);
+
+uint32_t sys_read(uint32_t fd, char *buf, uint32_t count);
+
+uint32_t sys_close(uint32_t fd);
+
+SysCall sys_call_table[] = {
+    sys_getpid,
+    sys_open,
+    sys_read,
+    sys_close,
+};
 
 #endif // __KERNEL_SYSCALL_H__

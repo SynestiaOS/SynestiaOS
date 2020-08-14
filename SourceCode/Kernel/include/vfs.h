@@ -27,12 +27,14 @@ typedef struct LocalOpenFile {
 
 typedef SuperBlock *(*VFSOperationMount)(struct VFS *vfs, const char *name, FileSystemType type, void *data);
 typedef uint32_t (*VFSOperationOpen)(struct VFS *vfs, const char *name, uint32_t mode);
+typedef uint32_t (*VFSOperationClose)(struct VFS *vfs, uint32_t fd);
 typedef DirectoryEntry *(*VFSOperationLookUp)(struct VFS *vfs, const char *name);
-typedef uint32_t (*VFSOperationRead)(struct VFS *vfs, uint32_t fd, char *buffer, uint32_t pos);
+typedef uint32_t (*VFSOperationRead)(struct VFS *vfs, uint32_t fd, char *buffer, uint32_t pos, uint32_t count);
 
 typedef struct VFSOperations {
   VFSOperationMount mount;
   VFSOperationOpen open;
+  VFSOperationClose close;
   VFSOperationRead read;
   VFSOperationLookUp lookup;
 } VFSOperations;
