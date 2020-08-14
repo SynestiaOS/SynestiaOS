@@ -49,6 +49,7 @@ void draw_task_bar() {
   gfx2d_draw_logo(context, 8, 8, 0xFFFFFF);
 }
 
+extern uint32_t open(const char *name, uint32_t flags, uint32_t mode);
 uint32_t *window_thread1(int args) {
   uint32_t count = 0;
   GUIWindow window;
@@ -65,12 +66,15 @@ uint32_t *window_thread1(int args) {
     char str[10] = {'\0'};
     gui_label_init(&label, 0, 0, itoa(count, &str, 10));
     disable_interrupt();
+    uint32_t fd = open("/initrd/bin/bin.txt", 1, 3);
+    LogWarn("[Thread3] fd: %d .\n", fd);
     gui_window_draw(&window);
     enable_interrupt();
     count += 2;
   }
 }
 
+extern uint32_t getpid();
 uint32_t *window_thread2(int args) {
   uint32_t count = 0;
   GUIWindow window;
@@ -87,13 +91,14 @@ uint32_t *window_thread2(int args) {
     char str[10] = {'\0'};
     gui_label_init(&label, 0, 0, itoa(count, &str, 10));
     disable_interrupt();
+    uint32_t pid = getpid();
+    LogWarn("[Thread3] pid: %d .\n", pid);
     gui_window_draw(&window);
     enable_interrupt();
     count++;
   }
 }
 
-extern uint32_t getpid();
 uint32_t *window_thread3(int args) {
   GUIWindow window;
   gui_window_create(&window);
@@ -113,8 +118,6 @@ uint32_t *window_thread3(int args) {
     gui_animation_update(&translation);
     disable_interrupt();
     gui_window_draw(&window);
-    uint32_t pid = getpid();
-    LogWarn("[Thread3] pid: %d .\n", pid);
     enable_interrupt();
   }
 }
@@ -173,12 +176,10 @@ void kernel_main(void) {
     gfx2d_draw_bitmap(context, 0, 0, 1024, 768, desktop());
     draw_task_bar();
 
+    schd_init();
+
     vfs = vfs_create();
     vfs->operations.mount(vfs, "root", FILESYSTEM_EXT2, (void *)EXT2_ADDRESS);
-    vfs->operations.lookup(vfs, "/initrd/bin/bin.txt");
-    vfs->operations.open(vfs, "/initrd/bin/bin.txt", 1);
-
-    schd_init();
 
     Thread *window1Thread = thread_create("window1", &window_thread1, 1, 1);
     schd_add_thread(window1Thread, 1);

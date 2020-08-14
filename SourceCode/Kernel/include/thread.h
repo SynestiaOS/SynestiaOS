@@ -80,6 +80,17 @@ typedef struct VMMAssociatedSpace {
   uint32_t bssSectionAddr;
 } __attribute__((packed)) VMMAssociatedSpace;
 
+typedef uint32_t (*FilesStructOperationOpenFile)(struct FilesStruct *filesStruct,
+                                                 struct DirectoryEntry *directoryEntry);
+typedef struct FilesStructOperations {
+  FilesStructOperationOpenFile openFile;
+} FilesStructOperations;
+
+typedef struct FilesStruct {
+  KernelVector *fileDescriptorTable;
+  FilesStructOperations operations;
+} FilesStruct;
+
 typedef KernelStatus (*ThreadOperationSuspend)(struct Thread *thread);
 typedef KernelStatus (*ThreadOperationResume)(struct Thread *thread);
 typedef KernelStatus (*ThreadOperationSleep)(struct Thread *thread, uint32_t deadline);
@@ -132,6 +143,8 @@ typedef struct Thread {
   uint32_t returnCode;
 
   ThreadOperations operations;
+
+  FilesStruct filesStruct;
 
 } __attribute__((packed)) Thread;
 

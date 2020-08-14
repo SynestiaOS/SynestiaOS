@@ -4,10 +4,12 @@
 
 #include <kheap.h>
 #include <kstack.h>
+#include <kvector.h>
 #include <log.h>
 #include <stdlib.h>
 #include <string.h>
 #include <thread.h>
+#include <vfs_dentry.h>
 
 extern uint64_t ktimer_sys_runtime();
 uint32_t pidMap[2048] = {0};
@@ -64,6 +66,11 @@ KernelStatus thread_default_exit(struct Thread *thread, uint32_t returnCode) {
 KernelStatus thread_default_kill(struct Thread *thread) {
   // TODO:
   return OK;
+}
+
+uint32_t filestruct_default_openfile(FilesStruct *filesStruct, DirectoryEntry *directoryEntry) {
+  // TODO:
+  return 1;
 }
 
 Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uint32_t priority) {
@@ -126,6 +133,9 @@ Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uin
     thread->operations.join = thread_default_join;
     thread->operations.exit = thread_default_exit;
     thread->operations.kill = thread_default_kill;
+
+    thread->filesStruct.operations.openFile = filestruct_default_openfile;
+    thread->filesStruct.fileDescriptorTable = kvector_allocate();
 
     LogInfo("[Thread]: thread '%s' created.\n", name);
     return thread;
