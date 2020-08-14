@@ -6,6 +6,7 @@
 #include <kstack.h>
 #include <log.h>
 #include <stdlib.h>
+#include <string.h>
 #include <thread.h>
 
 extern uint64_t ktimer_sys_runtime();
@@ -28,6 +29,41 @@ uint32_t thread_free_pid(uint32_t pid) {
   uint32_t index = pid / BITS_IN_UINT32;
   uint8_t bitIndex = pid % BITS_IN_UINT32;
   pidMap[index] ^= (uint32_t)0x1 << bitIndex;
+}
+
+KernelStatus thread_default_suspend(struct Thread *thread) {
+  // TODO:
+  return OK;
+}
+
+KernelStatus thread_default_resume(struct Thread *thread) {
+  // TODO:
+  return OK;
+}
+
+KernelStatus thread_default_sleep(struct Thread *thread, uint32_t deadline) {
+  // TODO:
+  return OK;
+}
+
+KernelStatus thread_default_detach(struct Thread *thread) {
+  // TODO:
+  return OK;
+}
+
+KernelStatus thread_default_join(struct Thread *thread, int *returnCode, uint32_t deadline) {
+  // TODO:
+  return OK;
+}
+
+KernelStatus thread_default_exit(struct Thread *thread, uint32_t returnCode) {
+  // TODO:
+  return OK;
+}
+
+KernelStatus thread_default_kill(struct Thread *thread) {
+  // TODO:
+  return OK;
 }
 
 Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uint32_t priority) {
@@ -83,6 +119,14 @@ Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uin
     thread->rbNode.color = NODE_RED;
     // TODO : other properties, like list
 
+    thread->operations.suspend = thread_default_suspend;
+    thread->operations.resume = thread_default_resume;
+    thread->operations.sleep = thread_default_sleep;
+    thread->operations.detach = thread_default_detach;
+    thread->operations.join = thread_default_join;
+    thread->operations.exit = thread_default_exit;
+    thread->operations.kill = thread_default_kill;
+
     LogInfo("[Thread]: thread '%s' created.\n", name);
     return thread;
   }
@@ -110,40 +154,7 @@ Thread *thread_create_idle_thread(uint32_t cpuNum) {
   return idleThread;
 }
 
-KernelStatus thread_reschedule(void) {
-  // TODO
-  return OK;
-}
-
-KernelStatus thread_sleep(uint32_t deadline) {
-  // TODO
-  return OK;
-}
-
-KernelStatus thread_detach(Thread *thread) {
-  // TODO
-  return OK;
-}
-
-KernelStatus thread_join(Thread *thread, int *retcode, uint32_t deadline) {
-  // TODO
-  return OK;
-}
-
-KernelStatus init_thread_struct(Thread *thread, const char *name) {
-  strcpy(thread->name, name);
-  thread->threadStatus = THREAD_INITIAL;
-  // TODO : other properties, like list
-  LogInfo("[Thread]: thread: '%s' initialed.\n", name);
-  return OK;
-}
-
-KernelStatus thread_exit(uint32_t returnCode) {
-  // TODO
-  return OK;
-}
-
-KernelStatus thread_kill(Thread *thread) {
+KernelStatus thread_reschedule() {
   // TODO
   return OK;
 }

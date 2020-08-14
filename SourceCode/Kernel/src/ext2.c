@@ -10,7 +10,6 @@
 #include <string.h>
 #include <vfs_dentry.h>
 #include <vfs_inode.h>
-#include <vfs_super_block.h>
 
 #define EXT2_SIGNATURE 0xef53
 #define EXT2_BLOCK_GROUP_DESCRIPTOR_SIZE 32

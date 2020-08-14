@@ -80,6 +80,24 @@ typedef struct VMMAssociatedSpace {
   uint32_t bssSectionAddr;
 } __attribute__((packed)) VMMAssociatedSpace;
 
+typedef KernelStatus (*ThreadOperationSuspend)(struct Thread *thread);
+typedef KernelStatus (*ThreadOperationResume)(struct Thread *thread);
+typedef KernelStatus (*ThreadOperationSleep)(struct Thread *thread, uint32_t deadline);
+typedef KernelStatus (*ThreadOperationDetach)(struct Thread *thread);
+typedef KernelStatus (*ThreadOperationJoin)(struct Thread *thread, int *returnCode, uint32_t deadline);
+typedef KernelStatus (*ThreadOperationExit)(struct Thread *thread, uint32_t returnCode);
+typedef KernelStatus (*ThreadOperationKill)(struct Thread *thread);
+
+typedef struct ThreadOperations {
+  ThreadOperationSuspend suspend;
+  ThreadOperationResume resume;
+  ThreadOperationSleep sleep;
+  ThreadOperationDetach detach;
+  ThreadOperationJoin join;
+  ThreadOperationExit exit;
+  ThreadOperationKill kill;
+} ThreadOperations;
+
 typedef struct Thread {
   uint32_t magic;
   CpuContextSave cpuContextSave;
@@ -112,28 +130,15 @@ typedef struct Thread {
   void *arg;
 
   uint32_t returnCode;
+
+  ThreadOperations operations;
+
 } __attribute__((packed)) Thread;
 
 Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uint32_t priority);
 
 Thread *thread_create_idle_thread(uint32_t cpuNum);
 
-KernelStatus thread_suspend(Thread *thread);
-
-KernelStatus thread_resume(Thread *thread);
-
-KernelStatus thread_reschedule(void);
-
-KernelStatus thread_sleep(uint32_t deadline);
-
-KernelStatus thread_detach(Thread *thread);
-
-KernelStatus thread_join(Thread *thread, int *retcode, uint32_t deadline);
-
-KernelStatus init_thread_struct(Thread *thread, const char *name);
-
-KernelStatus thread_exit(uint32_t returnCode);
-
-KernelStatus thread_kill(Thread *thread);
+KernelStatus thread_reschedule();
 
 #endif //__KERNEL_THREAD_H__

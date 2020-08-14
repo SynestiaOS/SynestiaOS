@@ -2,9 +2,11 @@
 // Created by XingfengYang on 2020/7/30.
 //
 
+#include <cache.h>
 #include <ext2.h>
 #include <kheap.h>
 #include <log.h>
+#include <percpu.h>
 #include <string.h>
 #include <vfs.h>
 #include <vfs_dentry.h>
@@ -40,28 +42,12 @@ uint32_t vfs_default_open(VFS *vfs, const char *name, uint32_t mode) {
     return 0;
   }
   //    atomic_inc(&directoryEntry->indexNode->readCount);
+
   directoryEntry->indexNode->state = INDEX_NODE_STATE_OPENED;
 
-  // allocat a open file item
-  GlobalOpenFile *globalOpenFIle = (GlobalOpenFile *)kheap_alloc(sizeof(GlobalOpenFile));
-  globalOpenFIle->node.next = nullptr;
-  globalOpenFIle->node.prev = nullptr;
-  globalOpenFIle->indexNode = (uint32_t)directoryEntry->indexNode;
-  globalOpenFIle->state = 0;
-  globalOpenFIle->offset = 0;
-
-  // allocate a local open file item
-  LocalOpenFile *localOpenFile = (LocalOpenFile *)kheap_alloc(sizeof(LocalOpenFile));
-
-  // add to current thread's open table
-  // TODO:
-
-  // add to vfs's open table
-  kvector_add(vfs->openFileTable, &globalOpenFIle->node);
-
-  // TODO:
-  // return fd
-  return 0;
+  uint32_t cpuId = read_cpuid();
+  PerCpu *perCpu = percpu_get(cpuId);
+  //  return perCpu->currentThread->operations.openFile(perCpu->currentThread,directoryEntry);
 }
 
 uint32_t vfs_default_close(struct VFS *vfs, uint32_t fd) {
@@ -228,7 +214,6 @@ DirectoryEntry *vfs_default_lookup(VFS *vfs, const char *name) {
 VFS *vfs_create() {
   VFS *vfs = (VFS *)kheap_alloc(sizeof(VFS));
   vfs->fileSystems = nullptr;
-  vfs->openFileTable = kvector_allocate();
   vfs->operations.mount = vfs_default_mount;
   vfs->operations.open = vfs_default_open;
   vfs->operations.close = vfs_default_close;
