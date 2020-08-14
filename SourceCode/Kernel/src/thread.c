@@ -69,8 +69,18 @@ KernelStatus thread_default_kill(struct Thread *thread) {
 }
 
 uint32_t filestruct_default_openfile(FilesStruct *filesStruct, DirectoryEntry *directoryEntry) {
-  // TODO:
-  return 1;
+  FileDescriptor *fileDescriptor = (FileDescriptor *)kheap_alloc(sizeof(FileDescriptor));
+  fileDescriptor->directoryEntry = directoryEntry;
+  fileDescriptor->node.prev = nullptr;
+  fileDescriptor->node.next = nullptr;
+  fileDescriptor->pos = 0;
+
+  KernelStatus status = kvector_add(filesStruct->fileDescriptorTable, &fileDescriptor->node);
+  if (status != OK) {
+    LogError("[Open]: file open failed, cause add fd table failed.\n");
+    return 0;
+  }
+  return filesStruct->fileDescriptorTable->index - 1;
 }
 
 Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uint32_t priority) {

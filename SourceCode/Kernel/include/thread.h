@@ -10,6 +10,7 @@
 #include <list.h>
 #include <rbtree.h>
 #include <stdint.h>
+#include <vfs_dentry.h>
 
 typedef uint8_t CpuNum;
 typedef uint8_t CpuMask;
@@ -79,6 +80,12 @@ typedef struct VMMAssociatedSpace {
   uint32_t dataSectionAddr;
   uint32_t bssSectionAddr;
 } __attribute__((packed)) VMMAssociatedSpace;
+
+typedef struct FileDescriptor {
+  uint32_t pos;
+  DirectoryEntry *directoryEntry;
+  ListNode node;
+} FileDescriptor;
 
 typedef uint32_t (*FilesStructOperationOpenFile)(struct FilesStruct *filesStruct,
                                                  struct DirectoryEntry *directoryEntry);

@@ -62,11 +62,11 @@ uint32_t *window_thread1(int args) {
   label.component.colorMode = TRANSPARENT;
   label.component.size.width = 100;
   gui_window_add_children(&window, &(label.component));
+  uint32_t fd = open("/initrd/bin/bin.txt", 1, 3);
   while (1) {
     char str[10] = {'\0'};
     gui_label_init(&label, 0, 0, itoa(count, &str, 10));
     disable_interrupt();
-    uint32_t fd = open("/initrd/bin/bin.txt", 1, 3);
     LogWarn("[Thread3] fd: %d .\n", fd);
     gui_window_draw(&window);
     enable_interrupt();

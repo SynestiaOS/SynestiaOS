@@ -12,12 +12,6 @@
 #include <spinlock.h>
 #include <vfs_super_block.h>
 
-typedef struct FileDescriptor {
-  uint32_t pos;
-  DirectoryEntry directoryEntry;
-  ListNode node;
-} FileDescriptor;
-
 typedef SuperBlock *(*VFSOperationMount)(struct VFS *vfs, const char *name, FileSystemType type, void *data);
 typedef uint32_t (*VFSOperationOpen)(struct VFS *vfs, const char *name, uint32_t mode);
 typedef uint32_t (*VFSOperationClose)(struct VFS *vfs, uint32_t fd);

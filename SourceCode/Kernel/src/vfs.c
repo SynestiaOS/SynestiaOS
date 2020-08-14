@@ -48,7 +48,7 @@ uint32_t vfs_default_open(VFS *vfs, const char *name, uint32_t mode) {
   uint32_t cpuId = read_cpuid();
   PerCpu *perCpu = percpu_get(cpuId);
 
-  return perCpu->currentThread->filesStruct.operations.openFile(&perCpu->currentThread->filesStruct, directoryEntry);
+  return perCpu->currentThread->filesStruct.operations.openFile(&(perCpu->currentThread->filesStruct), directoryEntry);
 }
 
 uint32_t vfs_default_close(struct VFS *vfs, uint32_t fd) {
