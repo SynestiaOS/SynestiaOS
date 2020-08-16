@@ -13,10 +13,12 @@
 #include <vfs_inode.h>
 #include <vfs_super_block.h>
 
+Ext2FileSystem *ext2FileSystem = nullptr;
+
 SuperBlock *vfs_default_mount(VFS *vfs, const char *name, FileSystemType type, void *data) {
   switch (type) {
   case FILESYSTEM_EXT2: {
-    Ext2FileSystem *ext2FileSystem = ext2_create();
+    ext2FileSystem = ext2_create();
     ext2FileSystem->superblock.name = name;
     ext2FileSystem->superblock.type = type;
     ext2FileSystem->superblock.operations.createDirectoryEntry = vfs_super_block_default_create_directory_entry;
@@ -58,7 +60,37 @@ uint32_t vfs_default_close(struct VFS *vfs, uint32_t fd) {
 
 uint32_t vfs_default_read(VFS *vfs, uint32_t fd, char *buffer, uint32_t pos, uint32_t count) {
   // TODO:
+
+  // read data from fs
+
+  // caculate the physical address of buffer
+
+  // map the buffer
+
+  // copy to buffer
+
+  // return size
+
   return 0;
+}
+
+uint32_t vfs_kernel_read(VFS *vfs, const char *name, char *buf, uint32_t count) {
+  DirectoryEntry *directoryEntry = vfs->operations.lookup(vfs, name);
+  if (directoryEntry == nullptr) {
+    LogError("[VFS]: file '%s' not found.\n", name);
+    return 0;
+  }
+  switch (directoryEntry->superBlock->type) {
+  case FILESYSTEM_EXT2: {
+    Ext2IndexNode *ext2Node = (Ext2IndexNode *)directoryEntry->indexNode->indexNodePrivate;
+    char *data = ext2FileSystem->operations.read(ext2FileSystem, ext2Node);
+    memcpy(buf, data, count);
+    return count;
+  }
+  default:
+    LogError("[VFS]: unsupported file system.\n");
+    return 0;
+  }
 }
 
 char peek(char *src, uint32_t index, uint32_t offset) { return src[index + offset]; }

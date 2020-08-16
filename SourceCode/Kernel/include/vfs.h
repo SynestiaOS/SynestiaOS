@@ -33,4 +33,6 @@ typedef struct VFS {
 
 VFS *vfs_create();
 
+uint32_t vfs_kernel_read(VFS *vfs, const char *name, char *buf, uint32_t count);
+
 #endif // __KERNEL_VFS_H__
