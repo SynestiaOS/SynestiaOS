@@ -13,12 +13,10 @@
 #include <vfs_inode.h>
 #include <vfs_super_block.h>
 
-Ext2FileSystem *ext2FileSystem = nullptr;
-
 SuperBlock *vfs_default_mount(VFS *vfs, const char *name, FileSystemType type, void *data) {
   switch (type) {
   case FILESYSTEM_EXT2: {
-    ext2FileSystem = ext2_create();
+    Ext2FileSystem *ext2FileSystem = ext2_create();
     ext2FileSystem->superblock.name = name;
     ext2FileSystem->superblock.type = type;
     ext2FileSystem->superblock.operations.createDirectoryEntry = vfs_super_block_default_create_directory_entry;
@@ -82,6 +80,7 @@ uint32_t vfs_kernel_read(VFS *vfs, const char *name, char *buf, uint32_t count) 
   }
   switch (directoryEntry->superBlock->type) {
   case FILESYSTEM_EXT2: {
+    Ext2FileSystem *ext2FileSystem = getNode(directoryEntry->superBlock, Ext2FileSystem, superblock);
     Ext2IndexNode *ext2Node = (Ext2IndexNode *)directoryEntry->indexNode->indexNodePrivate;
     char *data = ext2FileSystem->operations.read(ext2FileSystem, ext2Node);
     memcpy(buf, data, count);
