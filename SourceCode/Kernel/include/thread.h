@@ -98,13 +98,12 @@ typedef struct FilesStruct {
   FilesStructOperations operations;
 } FilesStruct;
 
-
-typedef struct MemoryStructOperations{
+typedef struct MemoryStructOperations {
 
 } MemoryStructOperations;
 typedef struct MemoryStruct {
-    VMMAssociatedSpace vmmSpace;
-    MemoryStructOperations operations;
+  VMMAssociatedSpace vmmSpace;
+  MemoryStructOperations operations;
 } MemoryStruct;
 
 typedef KernelStatus (*ThreadOperationSuspend)(struct Thread *thread);
