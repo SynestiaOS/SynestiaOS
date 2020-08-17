@@ -61,7 +61,7 @@ uint32_t vfs_default_read(VFS *vfs, uint32_t fd, char *buffer, uint32_t pos, uin
 
   // read data from fs
 
-  // caculate the physical address of buffer
+  // calculate the physical address of buffer
 
   // map the buffer
 
