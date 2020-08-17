@@ -98,6 +98,15 @@ typedef struct FilesStruct {
   FilesStructOperations operations;
 } FilesStruct;
 
+
+typedef struct MemoryStructOperations{
+
+} MemoryStructOperations;
+typedef struct MemoryStruct {
+    VMMAssociatedSpace vmmSpace;
+    MemoryStructOperations operations;
+} MemoryStruct;
+
 typedef KernelStatus (*ThreadOperationSuspend)(struct Thread *thread);
 typedef KernelStatus (*ThreadOperationResume)(struct Thread *thread);
 typedef KernelStatus (*ThreadOperationSleep)(struct Thread *thread, uint32_t deadline);
@@ -124,7 +133,6 @@ typedef struct Thread {
   char name[THREAD_NAME_LENGTH];
   KernelStack *stack;
   ThreadStartRoutine entry;
-  VMMAssociatedSpace vmmSpace;
 
   uint32_t flags;
   uint32_t signals;
@@ -151,6 +159,7 @@ typedef struct Thread {
 
   ThreadOperations operations;
 
+  MemoryStruct memoryStruct;
   FilesStruct filesStruct;
 
 } __attribute__((packed)) Thread;
