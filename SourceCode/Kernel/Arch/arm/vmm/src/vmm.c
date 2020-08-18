@@ -65,6 +65,8 @@ void map_kernel_l2pt(uint64_t l2ptPhysicalAddress, uint64_t ptPhysicalAddress) {
   secondL2PT->pte[0].base = ((KERNEL_PHYSICAL_START + physicalPageNumber * PAGE_SIZE) & 0x000FFFFF000) >> VA_OFFSET;
 }
 
+void (*processHockFunc)(uint32_t process);
+void vmm_add_map_hook(void (*func)(uint32_t process)) { processHockFunc = func; }
 void map_kernel_pt(uint64_t ptPhysicalAddress) {
   kernelVMMPT = (PT *)ptPhysicalAddress;
   uint32_t index = 0;
@@ -78,6 +80,8 @@ void map_kernel_pt(uint64_t ptPhysicalAddress) {
           ((KERNEL_PHYSICAL_START + physicalPageNumber * PAGE_SIZE) & 0x000FFFFF000) >> VA_OFFSET;
       index++;
     }
+    processHockFunc((i * 100) / KERNEL_L2PT_NUMBER);
+    LogWarn("[boot]: %d/100\n", (i * 100) / KERNEL_L2PT_NUMBER);
   }
 }
 

@@ -36,6 +36,7 @@ KernelStatus kheap_init() {
   uint32_t heapAddress = (uint32_t)&__HEAP_BEGIN;
   LogInfo("[KHeap] end bss at: %d. \n", heapAddress);
 
+  // allocate physical page for kernel heap
   uint32_t heapPhysicalPage =
       (uint32_t)page_alloc_huge_at(USAGE_KERNEL_HEAP, (heapAddress | 4 * KB) >> VA_OFFSET, 128 * MB - heapAddress);
   LogInfo("[KHeap] alloc heap page: %d. \n", (uint32_t)heapPhysicalPage);

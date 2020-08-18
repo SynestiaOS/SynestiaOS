@@ -7,8 +7,10 @@
 
 #include <stdint.h>
 
+#define PAHE_TABLE_SIZE 0x805000
+
 #define KERNEL_L1PT_NUMBER 4
-#define KERNEL_L2PT_NUMBER 64
+#define KERNEL_L2PT_NUMBER 512
 #define KERNEL_PTE_NUMBER 512
 
 #define VA_OFFSET 12
