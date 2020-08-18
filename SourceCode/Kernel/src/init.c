@@ -171,7 +171,7 @@ uint32_t *gpu(int args) {
 
 void initProcessUpdate(uint32_t process) {
   Gfx2DContext context = {.width = 1024, .height = 768, .buffer = GFX2D_BUFFER};
-  gfx2d_fill_rect(context, 120, 350, 120 + process * ((1024 - 240) / 100), 360, 0xaaaaaa);
+  gfx2d_fill_rect(context, 120, 350, 120 + process * (((1024 - 240) / 100)+1), 360, 0xaaaaaa);
 
   gfx2d_fill_rect(context, 120 - 10, 370, 1024 - 120, 400, FLUENT_PRIMARY_BACK_COLOR);
   GUILabel label;
