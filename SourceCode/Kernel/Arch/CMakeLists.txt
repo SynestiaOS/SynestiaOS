@@ -30,8 +30,10 @@ add_executable(${KernelName}
         $<TARGET_OBJECTS:LibMath>
         $<TARGET_OBJECTS:LibGfx>
         $<TARGET_OBJECTS:LibGUI>
-        $<TARGET_OBJECTS:Console>
         $<TARGET_OBJECTS:${boardObj}>)
+
+
+
 
 target_sources(${KernelName}
         PRIVATE

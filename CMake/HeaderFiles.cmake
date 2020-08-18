@@ -2,6 +2,10 @@ function(target_include_libc_header_files Target)
     target_include_directories(${Target} PRIVATE ${SYNESTIAOS_SOURCE_CODE_DIR}/Libraries/LibC/include)
 endfunction()
 
+function(target_include_application_testapp_header_files Target)
+    target_include_directories(${Target} PRIVATE ${SYNESTIAOS_SOURCE_CODE_DIR}/Applications/TestApp/include)
+endfunction()
+
 function(target_include_libelf_header_files Target)
     target_include_directories(${Target} PRIVATE ${SYNESTIAOS_SOURCE_CODE_DIR}/Libraries/LibElf/include)
 endfunction()
