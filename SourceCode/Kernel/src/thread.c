@@ -12,6 +12,7 @@
 #include <vfs_dentry.h>
 
 extern uint64_t ktimer_sys_runtime();
+
 uint32_t pidMap[2048] = {0};
 
 uint32_t thread_alloc_pid() {
@@ -124,6 +125,12 @@ Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uin
     strcpy(thread->name, name);
     thread->arg = arg;
 
+    thread->memoryStruct.vmmSpace.pageTableAddr = 0;
+    thread->memoryStruct.vmmSpace.codeSectionAddr = 0;
+    thread->memoryStruct.vmmSpace.roDataSectionAddr = 0;
+    thread->memoryStruct.vmmSpace.dataSectionAddr = 0;
+    thread->memoryStruct.vmmSpace.bssSectionAddr = 0;
+
     thread->threadList.prev = nullptr;
     thread->threadList.next = nullptr;
 
@@ -134,7 +141,6 @@ Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uin
     thread->rbNode.left = nullptr;
     thread->rbNode.right = nullptr;
     thread->rbNode.color = NODE_RED;
-    // TODO : other properties, like list
 
     thread->operations.suspend = thread_default_suspend;
     thread->operations.resume = thread_default_resume;

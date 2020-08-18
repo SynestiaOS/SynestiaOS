@@ -30,6 +30,7 @@ uint32_t EXT2_ADDRESS = _binary_initrd_img_start;
 VFS *vfs;
 
 extern uint32_t *gpu_flush(int args);
+
 extern uint32_t GFX2D_BUFFER[1024 * 768];
 
 void print_splash() {
@@ -50,6 +51,7 @@ void draw_task_bar() {
 }
 
 extern uint32_t open(const char *name, uint32_t flags, uint32_t mode);
+
 uint32_t *window_thread1(int args) {
   uint32_t count = 0;
   GUIWindow window;
@@ -80,6 +82,7 @@ uint32_t *window_thread1(int args) {
 }
 
 extern uint32_t getpid();
+
 uint32_t *window_thread2(int args) {
   uint32_t count = 0;
   GUIWindow window;
@@ -164,8 +167,17 @@ uint32_t *window_thread5(int args) {
   }
 }
 
+uint32_t *gpu(int args) {
+  while (1) {
+    disable_interrupt();
+    gpu_flush(0);
+    enable_interrupt();
+  }
+}
+
 TimerHandler gpuHandler;
 SpinLock bootSpinLock = SpinLockCreate();
+
 void kernel_main(void) {
   if (read_cpuid() == 0) {
     bootSpinLock.operations.acquire(&bootSpinLock);
@@ -175,7 +187,6 @@ void kernel_main(void) {
     vmm_init();
     kheap_init();
     init_interrupt();
-    gpu_init();
 
     Gfx2DContext context = {.width = 1024, .height = 768, .buffer = GFX2D_BUFFER};
     gfx2d_draw_bitmap(context, 0, 0, 1024, 768, desktop());
@@ -198,13 +209,17 @@ void kernel_main(void) {
     Thread *window5Thread = thread_create("window5", &window_thread5, 1, 5);
     schd_add_thread(window5Thread, 5);
 
-    Thread *window2Thread = thread_create("window2", &window_thread2, 1, 2);
-    schd_add_thread(window2Thread, 1);
+    Thread *window2Thread = thread_create("window2", &window_thread2, 1, 0);
+    schd_add_thread(window2Thread, 0);
 
-    gpuHandler.node.next = nullptr;
-    gpuHandler.node.prev = nullptr;
-    gpuHandler.timer_interrupt_handler = &gpu_flush;
-    register_time_interrupt(&gpuHandler);
+    Thread *gpuThread = thread_create("gpu", &gpu, 1, 0);
+    schd_add_thread(gpuThread, 0);
+
+    gpu_init();
+    //    gpuHandler.node.next = nullptr;
+    //    gpuHandler.node.prev = nullptr;
+    //    gpuHandler.timer_interrupt_handler = &gpu_flush;
+    //    register_time_interrupt(&gpuHandler);
     bootSpinLock.operations.release(&bootSpinLock);
     schd_schedule();
   }

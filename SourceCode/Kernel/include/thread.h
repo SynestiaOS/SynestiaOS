@@ -76,7 +76,7 @@ typedef uint32_t (*ThreadStartRoutine)(void *arg);
 typedef struct VMMAssociatedSpace {
   uint32_t pageTableAddr;
   uint32_t codeSectionAddr;
-  uint32_t rodataSectionAddr;
+  uint32_t roDataSectionAddr;
   uint32_t dataSectionAddr;
   uint32_t bssSectionAddr;
 } __attribute__((packed)) VMMAssociatedSpace;
@@ -89,6 +89,7 @@ typedef struct FileDescriptor {
 
 typedef uint32_t (*FilesStructOperationOpenFile)(struct FilesStruct *filesStruct,
                                                  struct DirectoryEntry *directoryEntry);
+
 typedef struct FilesStructOperations {
   FilesStructOperationOpenFile openFile;
 } FilesStructOperations;
@@ -107,11 +108,17 @@ typedef struct MemoryStruct {
 } MemoryStruct;
 
 typedef KernelStatus (*ThreadOperationSuspend)(struct Thread *thread);
+
 typedef KernelStatus (*ThreadOperationResume)(struct Thread *thread);
+
 typedef KernelStatus (*ThreadOperationSleep)(struct Thread *thread, uint32_t deadline);
+
 typedef KernelStatus (*ThreadOperationDetach)(struct Thread *thread);
+
 typedef KernelStatus (*ThreadOperationJoin)(struct Thread *thread, int *returnCode, uint32_t deadline);
+
 typedef KernelStatus (*ThreadOperationExit)(struct Thread *thread, uint32_t returnCode);
+
 typedef KernelStatus (*ThreadOperationKill)(struct Thread *thread);
 
 typedef struct ThreadOperations {
