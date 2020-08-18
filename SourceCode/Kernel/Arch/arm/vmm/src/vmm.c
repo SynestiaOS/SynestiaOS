@@ -81,7 +81,6 @@ void map_kernel_pt(uint64_t ptPhysicalAddress) {
       index++;
     }
     processHockFunc((i * 100) / KERNEL_L2PT_NUMBER);
-    LogWarn("[boot]: %d/100\n", (i * 100) / KERNEL_L2PT_NUMBER);
   }
 }
 

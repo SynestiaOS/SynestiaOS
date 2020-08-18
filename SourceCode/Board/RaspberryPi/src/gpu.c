@@ -31,7 +31,6 @@ void gpu_write_pixel_color(uint32_t x, uint32_t y, uint32_t c) {
 }
 
 uint32_t *gpu_flush(int arg) {
-  LogInfo("[GPU]: flush.\n");
   int index = 0;
   for (uint32_t i = 0; i < 768; i++) {
     for (uint32_t j = 0; j < 1024; j++) {

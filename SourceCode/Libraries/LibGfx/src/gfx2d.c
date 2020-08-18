@@ -433,7 +433,9 @@ void gfx2d_draw_bitmap(Gfx2DContext context, int x, int y, int width, int height
   int index = 0;
   for (uint32_t i = 0; i < height; i++) {
     for (uint32_t j = 0; j < width; j++) {
-      gfx2d_write_pixel_color(context, x + j, y + i, bitmap[index]);
+      if (bitmap[index] >> 24 != 0xFF) {
+        gfx2d_write_pixel_color(context, x + j, y + i, bitmap[index]);
+      }
       index++;
     }
   }

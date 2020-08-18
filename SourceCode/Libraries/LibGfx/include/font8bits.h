@@ -13,6 +13,8 @@ uint32_t *logo_32_bits();
 
 uint32_t *desktop();
 
+uint32_t *bootLogo();
+
 uint8_t *logo_minize_8_bits();
 
 uint8_t *logo_max_8_bits();

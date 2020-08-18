@@ -171,16 +171,16 @@ uint32_t *gpu(int args) {
 
 void initProcessUpdate(uint32_t process) {
   Gfx2DContext context = {.width = 1024, .height = 768, .buffer = GFX2D_BUFFER};
-  gfx2d_fill_rect(context, 120, 350, 120 + process * (((1024 - 240) / 100)+1), 360, 0xaaaaaa);
+  gfx2d_fill_rect(context, 120, 520, 120 + process * (((1024 - 240) / 100) + 1), 530, 0xaaaaaa);
 
-  gfx2d_fill_rect(context, 120 - 10, 370, 1024 - 120, 400, FLUENT_PRIMARY_BACK_COLOR);
+  gfx2d_fill_rect(context, 120 - 10, 540, 1024 - 120, 570, FLUENT_PRIMARY_BACK_COLOR);
   GUILabel label;
   gui_label_create(&label);
   char str[10] = {'\0'};
-  gui_label_init(&label, 120 + process * ((1024 - 240) / 100) - 8, 370, itoa(process, &str, 10));
+  gui_label_init(&label, 120 + process * (((1024 - 240) / 100) + 1) - 8, 550, itoa(process, &str, 10));
   GUILabel labelPercent;
   gui_label_create(&labelPercent);
-  gui_label_init(&labelPercent, 120 + process * ((1024 - 240) / 100) + 8, 370, "%");
+  gui_label_init(&labelPercent, 120 + process * (((1024 - 240) / 100) + 1) + 8, 550, "%");
   gui_label_draw(&label);
   gui_label_draw(&labelPercent);
   gpu_flush(1);
@@ -202,12 +202,14 @@ void kernel_main(void) {
 
     Gfx2DContext context = {.width = 1024, .height = 768, .buffer = GFX2D_BUFFER};
     gfx2d_fill_rect(context, 0, 0, 1024, 768, FLUENT_PRIMARY_BACK_COLOR);
-    gfx2d_fill_rect(context, 120, 350, 1024 - 120, 360, FLUENT_PRIMARY_FORE_COLOR);
+    gfx2d_fill_rect(context, 120, 520, 1024 - 120, 530, FLUENT_PRIMARY_FORE_COLOR);
+    gfx2d_draw_bitmap(context, 384, 150, 256, 256, bootLogo());
+
     GUILabel label;
     gui_label_create(&label);
     label.component.colorMode = TRANSPARENT;
     label.component.size.width = 100;
-    gui_label_init(&label, 120, 330, "Booting...");
+    gui_label_init(&label, 120, 500, "Booting...");
     gui_label_draw(&label);
 
     GUILabel labelCopyright;
