@@ -145,12 +145,6 @@ void gui_window_draw(GUIWindow *window) {
       }
     }
 
-    // 5. draw border
-    gfx2d_draw_rect(context, window->component.position.x, window->component.position.y,
-                    window->component.position.x + window->component.size.width,
-                    window->component.position.y + window->component.size.height + DEFAULT_WINDOW_HEADER_HEIGHT,
-                    FLUENT_PRIMARY_COLOR);
-
     // 6. draw children
     gui_window_draw_children(window);
 

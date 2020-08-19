@@ -433,8 +433,23 @@ void gfx2d_draw_bitmap(Gfx2DContext context, int x, int y, int width, int height
   int index = 0;
   for (uint32_t i = 0; i < height; i++) {
     for (uint32_t j = width; j > 0; j--) {
-      if (bitmap[index] >> 24 != 0xFF) {
-        gfx2d_write_pixel_color(context, x + j, y + i, bitmap[index]);
+      uint32_t color = bitmap[index];
+      uint32_t alpha = (color >> 24) & 0xFF;
+      uint32_t r = (color >> 16) & 0xFF;
+      uint32_t g = (color >> 8) & 0xFF;
+      uint32_t b = (color) & 0xFF;
+
+      uint32_t backColor = context.buffer[( y + i)* context.height + x + j];
+      uint32_t backR = (backColor >> 16) & 0xFF;
+      uint32_t backG = (backColor >> 8) & 0xFF;
+      uint32_t backB = (backColor) & 0xFF;
+
+      uint32_t mixedR = ((0xFF - alpha) * r) / 0xFF + (alpha * backR) / 0xFF;
+      uint32_t mixedG = ((0xFF - alpha) * g) / 0xFF + (alpha * backG) / 0xFF;
+      uint32_t mixedB = ((0xFF - alpha) * b) / 0xFF + (alpha * backB) / 0xFF;
+
+      if (color >> 24 != 0xFF) {
+        gfx2d_write_pixel_color(context, x + j, y + i, mixedR<<16 | mixedG << 8 | mixedB);
       }
       index++;
     }

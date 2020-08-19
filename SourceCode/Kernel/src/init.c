@@ -173,7 +173,7 @@ void initProcessUpdate(uint32_t process) {
   Gfx2DContext context = {.width = 1024, .height = 768, .buffer = GFX2D_BUFFER};
   gfx2d_fill_rect(context, 120, 520, 120 + process * (((1024 - 240) / 100) + 1), 530, 0xf25a29);
 
-  gfx2d_fill_rect(context, 120 - 10, 540, 1024 - 120, 570, FLUENT_PRIMARY_BACK_COLOR);
+  gfx2d_fill_rect(context, 120 - 10, 540, 1024 - 120, 570, 0x1E1C2A);
   GUILabel label;
   gui_label_create(&label);
   char str[10] = {'\0'};
@@ -201,7 +201,7 @@ void kernel_main(void) {
     vmm_add_map_hook(initProcessUpdate);
 
     Gfx2DContext context = {.width = 1024, .height = 768, .buffer = GFX2D_BUFFER};
-    gfx2d_fill_rect(context, 0, 0, 1024, 768, FLUENT_PRIMARY_BACK_COLOR);
+    gfx2d_fill_rect(context, 0, 0, 1024, 768, 0x1E1C2A);
     gfx2d_fill_rect(context, 120, 520, 1024 - 120, 530, 0xf7941d);
     gfx2d_draw_bitmap(context, 384, 150, 256, 256, bootLogo());
 
@@ -223,6 +223,7 @@ void kernel_main(void) {
 
     gfx2d_draw_bitmap(context, 0, 0, 1024, 768, desktop());
     gfx2d_fill_rect(context, 0, 0, 1024, 48, FLUENT_PRIMARY_COLOR);
+
     gfx2d_draw_logo(context, 8, 8, 0xFFFFFF);
 
     schd_init();
