@@ -120,7 +120,10 @@ KernelStatus ext2_fs_default_mount(Ext2FileSystem *ext2FileSystem, char *mountNa
 
   // Block Group Descriptor numbers , other words, this is super block numbers or block group number
   uint32_t blockGroupNums = ext2SuperBlock->blockNums / ext2SuperBlock->eachBlockGroupBlockNums +
-          (ext2SuperBlock->blockNums % ext2SuperBlock->eachBlockGroupBlockNums) > 0 ? 1 : 0;
+                                        (ext2SuperBlock->blockNums % ext2SuperBlock->eachBlockGroupBlockNums) >
+                                    0
+                                ? 1
+                                : 0;
   LogInfo("[Ext2]: block groups: %d .\n", blockGroupNums);
 
   uint32_t indexNodeNumsInEachBlock = blockSize / EXT2_INDEX_NODE_STRUCTURE_SIZE;
