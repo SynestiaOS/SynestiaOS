@@ -37,6 +37,4 @@ void gfx2d_draw_ascii(Gfx2DContext context, int x, int y, uint8_t ch, uint32_t c
 
 void gfx2d_draw_bitmap(Gfx2DContext context, int x, int y, int width, int height, uint32_t *bitmap);
 
-void gfx2d_draw_logo(Gfx2DContext context, int x, int y, uint32_t c);
-
 #endif //__LIBRARY_LIBGFX_GL2D_H__

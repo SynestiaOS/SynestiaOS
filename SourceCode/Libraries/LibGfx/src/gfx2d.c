@@ -418,17 +418,6 @@ void gfx2d_draw_ascii(Gfx2DContext context, int x, int y, uint8_t ch, uint32_t c
   }
 }
 
-void gfx2d_draw_logo(Gfx2DContext context, int x, int y, uint32_t c) {
-  uint32_t *bitmap = logo_32_bits();
-  for (uint32_t i = 0; i < 32; i++) {
-    for (uint32_t j = 0; j < 32; j++) {
-      if ((bitmap[i] & (0x1 << j)) > 0) {
-        gfx2d_write_pixel_color(context, x + j, y + i, c);
-      }
-    }
-  }
-}
-
 void gfx2d_draw_bitmap(Gfx2DContext context, int x, int y, int width, int height, uint32_t *bitmap) {
   int index = 0;
   for (uint32_t i = 0; i < height; i++) {

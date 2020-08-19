@@ -224,8 +224,6 @@ void kernel_main(void) {
     gfx2d_draw_bitmap(context, 0, 0, 1024, 768, desktop());
     gfx2d_fill_rect(context, 0, 0, 1024, 48, FLUENT_PRIMARY_COLOR);
 
-    gfx2d_draw_logo(context, 8, 8, 0xFFFFFF);
-
     schd_init();
 
     vfs = vfs_create();
