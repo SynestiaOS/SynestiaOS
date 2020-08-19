@@ -118,21 +118,10 @@ KernelStatus ext2_fs_default_mount(Ext2FileSystem *ext2FileSystem, char *mountNa
   // Block size
   uint32_t blockSize = 1 << (ext2SuperBlock->log2BlockSizeSub10 + 10);
 
-  uint32_t blockNumsInEachBlockGroup = (blockSize * 8);
-
   // Block Group Descriptor numbers , other words, this is super block numbers or block group number
-  uint32_t blockGroupNums =
-      ext2SuperBlock->blockNums / blockNumsInEachBlockGroup + (ext2SuperBlock->blockNums % blockNumsInEachBlockGroup) >
-              0
-          ? 1
-          : 0;
-
-  uint32_t blockGroupDescriptorNumsInEachBlock = blockSize / EXT2_BLOCK_GROUP_DESCRIPTOR_SIZE;
-  // block nums for all block group descriptor
-  uint32_t blockForBlockGroupDescriptor = blockGroupNums / blockGroupDescriptorNumsInEachBlock;
-  uint32_t blockForBlockGroupDescriptorMod = (blockGroupNums % blockGroupDescriptorNumsInEachBlock) > 0 ? 1 : 0;
-  blockForBlockGroupDescriptor += blockForBlockGroupDescriptorMod;
-  LogInfo("[Ext2]: block group descriptor blocks: %d .\n", blockForBlockGroupDescriptor);
+  uint32_t blockGroupNums = ext2SuperBlock->blockNums / ext2SuperBlock->eachBlockGroupBlockNums +
+          (ext2SuperBlock->blockNums % ext2SuperBlock->eachBlockGroupBlockNums) > 0 ? 1 : 0;
+  LogInfo("[Ext2]: block groups: %d .\n", blockGroupNums);
 
   uint32_t indexNodeNumsInEachBlock = blockSize / EXT2_INDEX_NODE_STRUCTURE_SIZE;
   uint32_t blockForIndexNodeTable = ext2SuperBlock->indexNodeNums / indexNodeNumsInEachBlock;
