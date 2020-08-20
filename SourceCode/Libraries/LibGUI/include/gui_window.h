@@ -15,6 +15,8 @@ typedef struct GUIWindow {
   GUIComponent component;
   char *title;
   KernelVector *children;
+  bool isWindowNeedUpdate;
+  bool isShadowNeedUpdate;
 } GUIWindow;
 
 void gui_window_create(GUIWindow *window);

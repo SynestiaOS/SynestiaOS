@@ -52,7 +52,7 @@ uint32_t *window_thread1(int args) {
   gui_window_create(&window);
   window.component.size.width = 300;
   window.component.size.height = 200;
-  gui_window_init(&window, 20, 70, "window1");
+  gui_window_init(&window, 100, 100, "window1");
   GUILabel label;
   gui_label_create(&label);
   label.component.colorMode = TRANSPARENT;
@@ -83,11 +83,11 @@ uint32_t *window_thread2(int args) {
   gui_window_create(&window);
   window.component.size.width = 300;
   window.component.size.height = 200;
-  gui_window_init(&window, 340, 70, "window2");
+  gui_window_init(&window, 500, 100, "window2");
   GUILabel label;
   gui_label_create(&label);
-  label.component.colorMode = TRANSPARENT;
   label.component.size.width = 100;
+  label.component.colorMode = TRANSPARENT;
   gui_window_add_children(&window, &(label.component));
   while (1) {
     char str[10] = {'\0'};
@@ -207,7 +207,7 @@ void kernel_main(void) {
 
     GUILabel label;
     gui_label_create(&label);
-    label.component.colorMode = TRANSPARENT;
+    label.component.colorMode = RGB;
     label.component.size.width = 100;
     gui_label_init(&label, 120, 500, "Booting...");
     gui_label_draw(&label);

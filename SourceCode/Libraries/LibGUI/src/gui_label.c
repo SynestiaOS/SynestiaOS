@@ -83,8 +83,8 @@ void gui_label_draw(GUILabel *label) {
                       label->component.position.y + label->component.margin.top,
                       label->component.position.x + label->component.size.width,
                       label->component.position.y + label->component.size.height,
-                      label->component.background.r << 16 | label->component.background.g << 8 |
-                          label->component.background.b);
+                      label->component.background.a << 24 | label->component.background.r << 16 |
+                          label->component.background.g << 8 | label->component.background.b);
     }
 
     // 2. draw_font

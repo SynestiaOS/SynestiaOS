@@ -66,6 +66,11 @@ typedef enum ColorMode {
   RGB,
 } ColorMode;
 
+typedef struct BoxShadow {
+  Color color;
+  uint32_t width;
+} BoxShadow;
+
 typedef struct GUIComponent {
   ComponentType type;
   bool visable;
@@ -77,5 +82,6 @@ typedef struct GUIComponent {
   Color foreground;
   Padding padding;
   Margin margin;
+  BoxShadow boxShadow;
 } GUIComponent;
 #endif //__LIBRARY_LIBGUI_COMPONENT_H__
