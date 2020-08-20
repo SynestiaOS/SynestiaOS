@@ -60,7 +60,7 @@ typedef struct Ext2SuperBlock {
   uint16_t groupId;                // Group ID that can use reserved blocks
   uint32_t firstIndexNode;         // First non-reserved inode in file system. (In versions < 1.0, this is fixed as 11)
   uint16_t indexNodeStructureSize; // Size of each inode structure in bytes. (In versions < 1.0, this is fixed as 128)
-  uint16_t blockGrousp;            // Block group that this superblock is part of (if backup copy)
+  uint16_t blockGroups;            // Block group that this superblock is part of (if backup copy)
 
   /**
    * Optional features present (features that are not required to read or write, but usually
@@ -268,11 +268,13 @@ typedef struct Ext2FileSystemOperations {
 } Ext2FileSystemOperations;
 
 typedef struct Ext2FileSystem {
+  Ext2SuperBlock *ext2SuperBlock;
   struct SuperBlock superblock;
   Ext2BootBlock *bootBlock;
   Ext2BlockGroup *blockGroups;
   void *data;
   uint32_t blockSize;
+  uint32_t blockGroupNums;
   Ext2FileSystemOperations operations;
 } Ext2FileSystem;
 

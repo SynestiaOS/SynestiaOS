@@ -45,7 +45,8 @@ void ext2_recursively_fill_superblock(Ext2FileSystem *ext2FileSystem, Ext2IndexN
 
     Ext2DirectoryEntry *dEntry = (Ext2DirectoryEntry *)((uint32_t)ext2FileSystem->data +
                                                         ext2IndexNode->directBlockPointer0 * ext2FileSystem->blockSize);
-    for (uint32_t hardlink = 0; hardlink < ext2IndexNode->hardLinksCount + 1; hardlink++) {
+
+    while (*(uint32_t *)((uint32_t)dEntry + dEntry->sizeOfThisEntry) != 0) {
       if (strcmp(dEntry->nameCharacters, "..") || strcmp(dEntry->nameCharacters, ".") ||
           strcmp(dEntry->nameCharacters, "lost+found")) {
         // TODO: lost+found
@@ -54,8 +55,12 @@ void ext2_recursively_fill_superblock(Ext2FileSystem *ext2FileSystem, Ext2IndexN
         continue;
       }
       // inode is directory , it's means should recursion
-      Ext2IndexNode *nextNode = (Ext2IndexNode *)((uint32_t)ext2FileSystem->blockGroups->indexNode +
-                                                  ((uint32_t)dEntry->indexNode - 1) * EXT2_INDEX_NODE_STRUCTURE_SIZE);
+      uint32_t blockGroup = (dEntry->indexNode - 1) / ext2FileSystem->ext2SuperBlock->eachBlockGroupIndexNodeNums;
+
+      Ext2IndexNode *nextNode = (Ext2IndexNode *)((uint32_t)ext2FileSystem->blockGroups[blockGroup].indexNode +
+                                                  (((uint32_t)dEntry->indexNode - 1) %
+                                                   ext2FileSystem->ext2SuperBlock->eachBlockGroupIndexNodeNums) *
+                                                      EXT2_INDEX_NODE_STRUCTURE_SIZE);
       ext2_recursively_fill_superblock(ext2FileSystem, nextNode, directoryEntry, dEntry->nameCharacters);
       dEntry = (Ext2DirectoryEntry *)((uint32_t)dEntry + dEntry->sizeOfThisEntry);
     }
@@ -103,6 +108,8 @@ KernelStatus ext2_fs_default_mount(Ext2FileSystem *ext2FileSystem, char *mountNa
   rootDirectoryEntry->operations.initOperation(rootDirectoryEntry, nullptr, rootIndexNode);
   ext2FileSystem->superblock.rootDirectoryEntry = rootDirectoryEntry;
 
+  ext2FileSystem->ext2SuperBlock = ext2SuperBlock;
+
   LogInfo("[Ext2]: %d inodes in file system.\n", ext2SuperBlock->indexNodeNums);
   LogInfo("[Ext2]: %d blocks in file system.\n", ext2SuperBlock->blockNums);
   LogInfo("[Ext2]: %d blocks reserved for superuser.\n", ext2SuperBlock->blockReservedForSuperuserNums);
@@ -114,16 +121,16 @@ KernelStatus ext2_fs_default_mount(Ext2FileSystem *ext2FileSystem, char *mountNa
   LogInfo("[Ext2]: %d blocks in each block group.\n", ext2SuperBlock->eachBlockGroupBlockNums);
   LogInfo("[Ext2]: %d fragments in each block group.\n", ext2SuperBlock->eachBlockGroupFragmentNums);
   LogInfo("[Ext2]: %d inodes in each block group.\n", ext2SuperBlock->eachBlockGroupIndexNodeNums);
+  LogInfo("[Ext2]: superblock in %d block group.\n", ext2SuperBlock->blockGroups);
 
   // Block size
   uint32_t blockSize = 1 << (ext2SuperBlock->log2BlockSizeSub10 + 10);
 
   // Block Group Descriptor numbers , other words, this is super block numbers or block group number
-  uint32_t blockGroupNums = ext2SuperBlock->blockNums / ext2SuperBlock->eachBlockGroupBlockNums +
-                                        (ext2SuperBlock->blockNums % ext2SuperBlock->eachBlockGroupBlockNums) >
-                                    0
-                                ? 1
-                                : 0;
+  uint32_t blockGroupNums = ext2SuperBlock->indexNodeNums / ext2SuperBlock->eachBlockGroupIndexNodeNums;
+  if (ext2SuperBlock->indexNodeNums % ext2SuperBlock->eachBlockGroupIndexNodeNums > 0) {
+    blockGroupNums++;
+  }
   LogInfo("[Ext2]: block groups: %d .\n", blockGroupNums);
 
   uint32_t indexNodeNumsInEachBlock = blockSize / EXT2_INDEX_NODE_STRUCTURE_SIZE;
@@ -132,19 +139,38 @@ KernelStatus ext2_fs_default_mount(Ext2FileSystem *ext2FileSystem, char *mountNa
   blockForIndexNodeTable += blockForIndexNodeTableMod;
   LogInfo("[Ext2]: index node table  blocks: %d .\n", blockForIndexNodeTable);
 
-  Ext2BlockGroup *blockGroup = (Ext2BlockGroup *)kheap_alloc(sizeof(Ext2BlockGroup));
-  blockGroup->superBlock = (Ext2SuperBlock *)((uint32_t)data + EXT2_SUPER_BLOCK_OFFSET);
-  blockGroup->blockGroupDescriptor = (Ext2BlockGroupDescriptor *)((uint32_t)blockGroup->superBlock + blockSize);
-  blockGroup->dataBlockBitmap =
-      (Ext2DataBlockBitmap *)((uint32_t)data + blockGroup->blockGroupDescriptor->blockUsageBitMapBlock * blockSize);
-  blockGroup->indexNodeBitmap =
-      (Ext2IndexNodeBlockBitmap *)((uint32_t)data +
-                                   blockGroup->blockGroupDescriptor->indexNodeUsageBitMapBlock * blockSize);
-  blockGroup->indexNode =
-      (Ext2IndexNode *)((uint32_t)data + blockGroup->blockGroupDescriptor->indexNodeTableBlockBlock * blockSize);
-  blockGroup->dataBlock = (Ext2DataBlock *)((uint32_t)blockGroup->indexNode + blockForIndexNodeTable * blockSize);
+  Ext2BlockGroup *blockGroup = (Ext2BlockGroup *)kheap_alloc(blockGroupNums * sizeof(Ext2BlockGroup));
+
+  for (uint32_t blockGroupDescriptorIndex = 0; blockGroupDescriptorIndex < blockGroupNums;
+       blockGroupDescriptorIndex++) {
+    blockGroup[blockGroupDescriptorIndex].superBlock = (Ext2SuperBlock *)((uint32_t)data + EXT2_SUPER_BLOCK_OFFSET);
+
+    blockGroup[blockGroupDescriptorIndex].blockGroupDescriptor =
+        (Ext2BlockGroupDescriptor *)((uint32_t)blockGroup[blockGroupDescriptorIndex].superBlock + blockSize +
+                                     blockGroupDescriptorIndex * EXT2_BLOCK_GROUP_DESCRIPTOR_SIZE);
+
+    blockGroup[blockGroupDescriptorIndex].dataBlockBitmap =
+        (Ext2DataBlockBitmap *)((uint32_t)data +
+                                blockGroup[blockGroupDescriptorIndex].blockGroupDescriptor->blockUsageBitMapBlock *
+                                    blockSize);
+
+    blockGroup[blockGroupDescriptorIndex].indexNodeBitmap =
+        (Ext2IndexNodeBlockBitmap *)((uint32_t)data + blockGroup[blockGroupDescriptorIndex]
+                                                              .blockGroupDescriptor->indexNodeUsageBitMapBlock *
+                                                          blockSize);
+
+    blockGroup[blockGroupDescriptorIndex].indexNode =
+        (Ext2IndexNode *)((uint32_t)data +
+                          blockGroup[blockGroupDescriptorIndex].blockGroupDescriptor->indexNodeTableBlockBlock *
+                              blockSize);
+
+    blockGroup[blockGroupDescriptorIndex].dataBlock =
+        (Ext2DataBlock *)((uint32_t)blockGroup[blockGroupDescriptorIndex].indexNode +
+                          blockForIndexNodeTable * blockSize);
+  }
 
   ext2FileSystem->blockGroups = blockGroup;
+  ext2FileSystem->blockGroupNums = blockGroupNums;
 
   // assume that the root directory is in second inode, because the first inode is
   Ext2IndexNode *root = (Ext2IndexNode *)((uint32_t)blockGroup->indexNode + EXT2_INDEX_NODE_STRUCTURE_SIZE);

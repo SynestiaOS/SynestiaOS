@@ -160,9 +160,9 @@ void gui_window_draw(GUIWindow *window) {
 
     if (window->isShadowNeedUpdate) {
       for (uint32_t i = 1; i < window->component.boxShadow.width; i++) {
-        uint32_t alpha = (0xff / window->component.boxShadow.width) * i + i*i;
-        if(alpha > 0xFF){
-            alpha = 0xFF;
+        uint32_t alpha = (0xff / window->component.boxShadow.width) * i + i * i;
+        if (alpha > 0xFF) {
+          alpha = 0xFF;
         }
         gfx2d_fill_rect(context, window->component.position.x - i, window->component.position.y - i,
                         window->component.position.x - (i - 1),
@@ -172,10 +172,10 @@ void gui_window_draw(GUIWindow *window) {
       }
 
       for (uint32_t i = 0; i < window->component.boxShadow.width; i++) {
-        uint32_t alpha = (0xff / window->component.boxShadow.width) * i + i*i;
-          if(alpha > 0xFF){
-              alpha = 0xFF;
-          }
+        uint32_t alpha = (0xff / window->component.boxShadow.width) * i + i * i;
+        if (alpha > 0xFF) {
+          alpha = 0xFF;
+        }
         gfx2d_fill_rect(context, window->component.position.x + window->component.size.width + i,
                         window->component.position.y - i,
                         window->component.position.x + window->component.size.width + i + 1,
@@ -185,10 +185,10 @@ void gui_window_draw(GUIWindow *window) {
       }
 
       for (uint32_t i = 0; i < window->component.boxShadow.width; i++) {
-        uint32_t alpha = (0xff / window->component.boxShadow.width) * i + i*i;
-          if(alpha > 0xFF){
-              alpha = 0xFF;
-          }
+        uint32_t alpha = (0xff / window->component.boxShadow.width) * i + i * i;
+        if (alpha > 0xFF) {
+          alpha = 0xFF;
+        }
         gfx2d_fill_rect(context, window->component.position.x - i,
                         window->component.position.y + window->component.size.height + DEFAULT_WINDOW_HEADER_HEIGHT + i,
                         window->component.position.x + window->component.size.width + i,
@@ -199,10 +199,10 @@ void gui_window_draw(GUIWindow *window) {
       }
 
       for (uint32_t i = 1; i < window->component.boxShadow.width; i++) {
-        uint32_t alpha = (0xff / window->component.boxShadow.width) * i + i*i;
-          if(alpha > 0xFF){
-              alpha = 0xFF;
-          }
+        uint32_t alpha = (0xff / window->component.boxShadow.width) * i + i * i;
+        if (alpha > 0xFF) {
+          alpha = 0xFF;
+        }
         gfx2d_fill_rect(context, window->component.position.x - i, window->component.position.y - i,
                         window->component.position.x + window->component.size.width + i,
                         window->component.position.y - (i - 1),
