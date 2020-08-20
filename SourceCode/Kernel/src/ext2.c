@@ -189,10 +189,11 @@ KernelStatus ext2_fs_default_mount(Ext2FileSystem *ext2FileSystem, char *mountNa
 uint32_t ext2_get_data_block(Ext2FileSystem *ext2FileSystem, Ext2IndexNode *ext2IndexNode, uint32_t blockIndex) {
   LogWarn("[READ]: %d \n", blockIndex);
   uint32_t directBlockMax = 12;
-  uint32_t indirectBlocks = ext2FileSystem->blockSize / sizeof(uint32_t);
-  uint32_t singlyIndirectBlocksMax = directBlockMax + indirectBlocks;
-  uint32_t doublyIndirectBlocksMax = directBlockMax + indirectBlocks * indirectBlocks;
-  uint32_t triplyIndirectBlocksMax = directBlockMax + indirectBlocks * indirectBlocks * indirectBlocks;
+  uint32_t blockPointerNumsInEachBlock = ext2FileSystem->blockSize / sizeof(uint32_t);
+  uint32_t singlyIndirectBlocksMax = directBlockMax + blockPointerNumsInEachBlock;
+  uint32_t doublyIndirectBlocksMax = directBlockMax + blockPointerNumsInEachBlock * blockPointerNumsInEachBlock;
+  uint32_t triplyIndirectBlocksMax =
+      directBlockMax + blockPointerNumsInEachBlock * blockPointerNumsInEachBlock * blockPointerNumsInEachBlock;
 
   switch (blockIndex) {
   case 0:
@@ -221,15 +222,19 @@ uint32_t ext2_get_data_block(Ext2FileSystem *ext2FileSystem, Ext2IndexNode *ext2
     return ext2IndexNode->directBlockPointer11;
   default:
     if (blockIndex > directBlockMax - 1 && blockIndex < singlyIndirectBlocksMax) {
-      return ((uint32_t *)ext2IndexNode->singlyIndirectBlockPointer)[blockIndex - directBlockMax - 1];
-    } else if (blockIndex > singlyIndirectBlocksMax - 1 && blockIndex < doublyIndirectBlocksMax) {
-      uint32_t singleIndex = (blockIndex - directBlockMax) / indirectBlocks;
       uint32_t singlyIndirectBlock =
           (uint32_t)(ext2FileSystem->data + ext2IndexNode->singlyIndirectBlockPointer * ext2FileSystem->blockSize);
-      uint32_t doublePtr = ((uint32_t *)singlyIndirectBlock)[singleIndex - 1];
-      uint32_t singleMod = (blockIndex - directBlockMax) % indirectBlocks;
 
-      return ((uint32_t *)doublePtr)[singleMod];
+      return ((uint32_t *)singlyIndirectBlock)[blockIndex - directBlockMax - 1];
+    } else if (blockIndex > singlyIndirectBlocksMax - 1 && blockIndex < doublyIndirectBlocksMax) {
+      uint32_t *level1DataBlock =
+          (uint32_t *)(ext2FileSystem->data + ext2IndexNode->doublyIndirectBlockPointer * ext2FileSystem->blockSize);
+      uint32_t level1Index = (blockIndex - singlyIndirectBlocksMax) / blockPointerNumsInEachBlock;
+
+      uint32_t level2DataBlockPtr = (level1DataBlock)[level1Index];
+      uint32_t level2Index = (blockIndex - singlyIndirectBlocksMax) % blockPointerNumsInEachBlock;
+
+      return ((uint32_t *)(ext2FileSystem->data + level2DataBlockPtr * ext2FileSystem->blockSize))[level2Index];
     } else if (blockIndex > doublyIndirectBlocksMax - 1 && blockIndex < triplyIndirectBlocksMax) {
       return 0;
     } else {
@@ -241,11 +246,11 @@ uint32_t ext2_get_data_block(Ext2FileSystem *ext2FileSystem, Ext2IndexNode *ext2
 
 void ext2_read_direct_data_block(Ext2FileSystem *ext2FileSystem, Ext2IndexNode *ext2IndexNode, char *buf,
                                  uint32_t blockIndex) {
-  uint32_t blockPtr = ext2_get_data_block(ext2FileSystem, ext2IndexNode, blockIndex);
+  uint32_t dataBlock = ext2_get_data_block(ext2FileSystem, ext2IndexNode, blockIndex);
 
   for (uint32_t i = 0; i < ext2FileSystem->blockSize; i++) {
     buf[blockIndex * ext2FileSystem->blockSize + i] =
-        ((char *)(ext2FileSystem->data + blockPtr * ext2FileSystem->blockSize))[i];
+        ((char *)(ext2FileSystem->data + dataBlock * ext2FileSystem->blockSize))[i];
   }
 }
 
