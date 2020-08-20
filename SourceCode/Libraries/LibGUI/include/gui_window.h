@@ -11,12 +11,18 @@
 #define DEFAULT_WINDOW_WIDTH 640
 #define DEFAULT_WINDOW_HEIGHT 480
 
+typedef struct GUIWindowHeader {
+  Color background;
+  Color foreground;
+} GUIWindowHeader;
 typedef struct GUIWindow {
   GUIComponent component;
   char *title;
+  GUIWindowHeader header;
   KernelVector *children;
   bool isWindowNeedUpdate;
   bool isShadowNeedUpdate;
+
 } GUIWindow;
 
 void gui_window_create(GUIWindow *window);

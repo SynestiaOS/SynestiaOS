@@ -84,10 +84,6 @@ uint32_t *window_thread2(int args) {
   window.component.size.width = 300;
   window.component.size.height = 200;
   gui_window_init(&window, 500, 100, "window2");
-  window.component.boxShadow.color.r = 0x99;
-  window.component.boxShadow.color.g = 0x99;
-  window.component.boxShadow.color.b = 0x99;
-  window.component.boxShadow.width = 10;
   GUILabel label;
   gui_label_create(&label);
   label.component.size.width = 100;
@@ -226,7 +222,7 @@ void kernel_main(void) {
     kheap_init();
 
     gfx2d_draw_bitmap(context, 0, 0, 1024, 768, desktop());
-    gfx2d_fill_rect(context, 0, 0, 1024, 48, FLUENT_PRIMARY_COLOR);
+    gfx2d_fill_rect(context, 0, 0, 1024, 48, 0xd3d3d3);
 
     schd_init();
 
