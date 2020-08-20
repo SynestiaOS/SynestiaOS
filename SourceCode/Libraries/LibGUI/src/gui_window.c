@@ -181,6 +181,7 @@ void gui_window_draw(GUIWindow *window) {
     }
 
     if (window->isShadowNeedUpdate) {
+      // left
       for (uint32_t i = 1; i < window->component.boxShadow.width; i++) {
         uint32_t alpha = (0xff / window->component.boxShadow.width) * i + i * i;
         if (alpha > 0xFF) {
@@ -193,6 +194,7 @@ void gui_window_draw(GUIWindow *window) {
                             window->component.boxShadow.color.b | alpha << 24);
       }
 
+      // right
       for (uint32_t i = 0; i < window->component.boxShadow.width; i++) {
         uint32_t alpha = (0xff / window->component.boxShadow.width) * i + i * i;
         if (alpha > 0xFF) {
@@ -206,6 +208,7 @@ void gui_window_draw(GUIWindow *window) {
                             window->component.boxShadow.color.b | alpha << 24);
       }
 
+      // bottom
       for (uint32_t i = 0; i < window->component.boxShadow.width; i++) {
         uint32_t alpha = (0xff / window->component.boxShadow.width) * i + i * i;
         if (alpha > 0xFF) {
@@ -220,6 +223,7 @@ void gui_window_draw(GUIWindow *window) {
                             window->component.boxShadow.color.b | alpha << 24);
       }
 
+      // top
       for (uint32_t i = 1; i < window->component.boxShadow.width; i++) {
         uint32_t alpha = (0xff / window->component.boxShadow.width) * i + i * i;
         if (alpha > 0xFF) {

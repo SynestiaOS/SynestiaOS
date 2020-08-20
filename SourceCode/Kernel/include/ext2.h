@@ -260,7 +260,8 @@ typedef struct Ext2BlockGroup {
 typedef KernelStatus (*Ext2FileSystemMountOperation)(struct Ext2FileSystem *ext2FileSystem, char *mountName,
                                                      void *data);
 
-typedef char *(*Ext2FileSystemReadOperation)(struct Ext2FileSystem *ext2FileSystem, Ext2IndexNode *indexNode);
+typedef uint32_t (*Ext2FileSystemReadOperation)(struct Ext2FileSystem *ext2FileSystem, Ext2IndexNode *indexNode,
+                                                char *buf, uint32_t count);
 
 typedef struct Ext2FileSystemOperations {
   Ext2FileSystemMountOperation mount;

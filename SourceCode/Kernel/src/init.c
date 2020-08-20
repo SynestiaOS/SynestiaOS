@@ -221,13 +221,16 @@ void kernel_main(void) {
     init_interrupt();
     kheap_init();
 
-    gfx2d_draw_bitmap(context, 0, 0, 1024, 768, desktop());
+    vfs = vfs_create();
+    vfs->operations.mount(vfs, "root", FILESYSTEM_EXT2, (void *)EXT2_ADDRESS);
+
+    uint32_t *background = (uint32_t *)kheap_alloc(768 * 1024 * 4);
+
+    uint32_t size = vfs_kernel_read(vfs, "/initrd/init\f/bg1024_768.dat", background, 768 * 1024 * 4);
+    gfx2d_draw_bitmap(context, 0, 0, 1024, 768, background);
     gfx2d_fill_rect(context, 0, 0, 1024, 48, 0xd3d3d3);
 
     schd_init();
-
-    vfs = vfs_create();
-    vfs->operations.mount(vfs, "root", FILESYSTEM_EXT2, (void *)EXT2_ADDRESS);
 
     Thread *window1Thread = thread_create("window1", &window_thread1, 1, 1);
     schd_add_thread(window1Thread, 1);

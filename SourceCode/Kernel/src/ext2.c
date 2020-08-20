@@ -186,12 +186,82 @@ KernelStatus ext2_fs_default_mount(Ext2FileSystem *ext2FileSystem, char *mountNa
   LogInfo("[Ext2]: mounted.\n");
 }
 
-char *ext2_fs_default_read(Ext2FileSystem *ext2FileSystem, Ext2IndexNode *ext2IndexNode) {
+uint32_t ext2_fs_default_read(Ext2FileSystem *ext2FileSystem, Ext2IndexNode *ext2IndexNode, char *buf, uint32_t count) {
   uint32_t fileSize = ext2IndexNode->sizeUpper32Bits << 32 | ext2IndexNode->sizeLower32Bits;
+
   uint32_t blockNeed = fileSize / ext2FileSystem->blockSize;
 
-  // TODO: read from blocks
-  return (char *)((uint32_t)ext2FileSystem->data + ext2IndexNode->directBlockPointer0 * ext2FileSystem->blockSize);
+  if (fileSize > count) {
+    // just read count bytes.
+    blockNeed = count / ext2FileSystem->blockSize;
+  }
+
+  LogInfo("[Ext2]: need %d blocks, read %d bytes.\n", blockNeed + 1, count);
+
+  uint32_t restBytes = count - blockNeed * ext2FileSystem->blockSize;
+
+  uint32_t directBlockMax = 12;
+  uint32_t indirectBlocks = ext2FileSystem->blockSize / sizeof(uint32_t);
+  uint32_t singlyIndirectBlocksMax = directBlockMax + indirectBlocks;
+  uint32_t doublyIndirectBlocksMax = directBlockMax + indirectBlocks * indirectBlocks;
+  uint32_t triplyIndirectBlocksMax = directBlockMax + indirectBlocks * indirectBlocks * indirectBlocks;
+
+  uint32_t alreadyReadBytes = 0;
+  if (blockNeed == 0) {
+    for (uint32_t i = 0; i < restBytes; i++) {
+      buf[i] = ((char *)(ext2FileSystem->data + ext2IndexNode->directBlockPointer0 * ext2FileSystem->blockSize))[i];
+    }
+    return restBytes;
+  } else if (blockNeed == 1) {
+    // TODO:
+    return 0;
+  } else if (blockNeed == 2) {
+    // TODO:
+    return 0;
+  } else if (blockNeed == 3) {
+    // TODO:
+    return 0;
+  } else if (blockNeed == 4) {
+    // TODO:
+    return 0;
+  } else if (blockNeed == 5) {
+    // TODO:
+    return 0;
+  } else if (blockNeed == 6) {
+    // TODO:
+    return 0;
+  } else if (blockNeed == 7) {
+    // TODO:
+    return 0;
+  } else if (blockNeed == 8) {
+    // TODO:
+    return 0;
+  } else if (blockNeed == 9) {
+    // TODO:
+    return 0;
+  } else if (blockNeed == 10) {
+    // TODO:
+    return 0;
+  } else if (blockNeed == 11) {
+    // TODO:
+    return 0;
+  } else if (blockNeed == 12) {
+    // TODO:
+    return 0;
+  } else if (blockNeed > directBlockMax && blockNeed < doublyIndirectBlocksMax) {
+    // TODO:
+    return 0;
+  } else if (blockNeed > singlyIndirectBlocksMax && blockNeed < triplyIndirectBlocksMax) {
+    // TODO:
+    return 0;
+  } else if (blockNeed > doublyIndirectBlocksMax) {
+    // TODO:
+    return 0;
+  } else {
+    // file is too large.
+    // TODO:
+    return 0;
+  }
 }
 
 Ext2FileSystem *ext2_create() {
