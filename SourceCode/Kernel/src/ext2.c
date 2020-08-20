@@ -186,6 +186,47 @@ KernelStatus ext2_fs_default_mount(Ext2FileSystem *ext2FileSystem, char *mountNa
   LogInfo("[Ext2]: mounted.\n");
 }
 
+uint32_t ext2_get_data_block(Ext2FileSystem *ext2FileSystem, Ext2IndexNode *ext2IndexNode, uint32_t blockIndex) {
+  switch (blockIndex) {
+  case 0:
+    return ext2IndexNode->directBlockPointer0;
+  case 1:
+    return ext2IndexNode->directBlockPointer1;
+  case 2:
+    return ext2IndexNode->directBlockPointer2;
+  case 3:
+    return ext2IndexNode->directBlockPointer3;
+  case 4:
+    return ext2IndexNode->directBlockPointer4;
+  case 5:
+    return ext2IndexNode->directBlockPointer5;
+  case 6:
+    return ext2IndexNode->directBlockPointer6;
+  case 7:
+    return ext2IndexNode->directBlockPointer7;
+  case 8:
+    return ext2IndexNode->directBlockPointer8;
+  case 9:
+    return ext2IndexNode->directBlockPointer9;
+  case 10:
+    return ext2IndexNode->directBlockPointer10;
+  case 11:
+    return ext2IndexNode->directBlockPointer11;
+  default:
+    return 0;
+  }
+}
+
+void ext2_read_direct_data_block(Ext2FileSystem *ext2FileSystem, Ext2IndexNode *ext2IndexNode, char *buf,
+                                 uint32_t blockIndex) {
+  uint32_t blockPtr = ext2_get_data_block(ext2FileSystem, ext2IndexNode, blockIndex);
+
+  for (uint32_t i = 0; i < ext2FileSystem->blockSize; i++) {
+    buf[blockIndex * ext2FileSystem->blockSize + i] =
+        ((char *)(ext2FileSystem->data + blockPtr * ext2FileSystem->blockSize))[i];
+  }
+}
+
 uint32_t ext2_fs_default_read(Ext2FileSystem *ext2FileSystem, Ext2IndexNode *ext2IndexNode, char *buf, uint32_t count) {
   uint32_t fileSize = ext2IndexNode->sizeUpper32Bits << 32 | ext2IndexNode->sizeLower32Bits;
 
@@ -206,48 +247,30 @@ uint32_t ext2_fs_default_read(Ext2FileSystem *ext2FileSystem, Ext2IndexNode *ext
   uint32_t doublyIndirectBlocksMax = directBlockMax + indirectBlocks * indirectBlocks;
   uint32_t triplyIndirectBlocksMax = directBlockMax + indirectBlocks * indirectBlocks * indirectBlocks;
 
-  uint32_t alreadyReadBytes = 0;
   if (blockNeed == 0) {
     for (uint32_t i = 0; i < restBytes; i++) {
       buf[i] = ((char *)(ext2FileSystem->data + ext2IndexNode->directBlockPointer0 * ext2FileSystem->blockSize))[i];
     }
-    return restBytes;
-  } else if (blockNeed == 1) {
-    // TODO:
-    return 0;
-  } else if (blockNeed == 2) {
-    // TODO:
-    return 0;
-  } else if (blockNeed == 3) {
-    // TODO:
-    return 0;
-  } else if (blockNeed == 4) {
-    // TODO:
-    return 0;
-  } else if (blockNeed == 5) {
-    // TODO:
-    return 0;
-  } else if (blockNeed == 6) {
-    // TODO:
-    return 0;
-  } else if (blockNeed == 7) {
-    // TODO:
-    return 0;
-  } else if (blockNeed == 8) {
-    // TODO:
-    return 0;
-  } else if (blockNeed == 9) {
-    // TODO:
-    return 0;
-  } else if (blockNeed == 10) {
-    // TODO:
-    return 0;
+    return count;
+  } else if (blockNeed > 0 && blockNeed < 11) {
+    for (uint32_t i = 0; i < blockNeed; i++) {
+      ext2_read_direct_data_block(ext2FileSystem, ext2IndexNode, buf, i);
+    }
+
+    for (uint32_t i = 0; i < restBytes; i++) {
+      buf[blockNeed * ext2FileSystem->blockSize + i] =
+          ((char *)(ext2FileSystem->data +
+                    ext2_get_data_block(ext2FileSystem, ext2IndexNode, blockNeed) * ext2FileSystem->blockSize))[i];
+    }
+    return count;
   } else if (blockNeed == 11) {
-    // TODO:
-    return 0;
-  } else if (blockNeed == 12) {
-    // TODO:
-    return 0;
+    for (uint32_t i = 0; i < blockNeed; i++) {
+      ext2_read_direct_data_block(ext2FileSystem, ext2IndexNode, buf, i);
+    }
+
+    // TODO: get data from first indirect block's first block
+
+    return count;
   } else if (blockNeed > directBlockMax && blockNeed < doublyIndirectBlocksMax) {
     // TODO:
     return 0;
