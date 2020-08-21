@@ -17,4 +17,6 @@ float fmax(float x, float y);
 
 float powf(float x, float y);
 
+float q_rsqrt(float number);
+
 #endif //__LIBRARY_LIBMATH_MATH_H__

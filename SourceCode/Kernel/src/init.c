@@ -186,9 +186,9 @@ void initProcessUpdate(uint32_t process) {
   gpu_flush(1);
 }
 
+
 TimerHandler gpuHandler;
 SpinLock bootSpinLock = SpinLockCreate();
-
 void kernel_main(void) {
   if (read_cpuid() == 0) {
     bootSpinLock.operations.acquire(&bootSpinLock);

@@ -225,7 +225,7 @@ uint32_t ext2_get_data_block(Ext2FileSystem *ext2FileSystem, Ext2IndexNode *ext2
       uint32_t singlyIndirectBlock =
           (uint32_t)(ext2FileSystem->data + ext2IndexNode->singlyIndirectBlockPointer * ext2FileSystem->blockSize);
 
-      return ((uint32_t *)singlyIndirectBlock)[blockIndex - directBlockMax - 1];
+      return ((uint32_t *)singlyIndirectBlock)[blockIndex - directBlockMax];
     } else if (blockIndex > singlyIndirectBlocksMax - 1 && blockIndex < doublyIndirectBlocksMax) {
       uint32_t *level1DataBlock =
           (uint32_t *)(ext2FileSystem->data + ext2IndexNode->doublyIndirectBlockPointer * ext2FileSystem->blockSize);
@@ -236,6 +236,7 @@ uint32_t ext2_get_data_block(Ext2FileSystem *ext2FileSystem, Ext2IndexNode *ext2
 
       return ((uint32_t *)(ext2FileSystem->data + level2DataBlockPtr * ext2FileSystem->blockSize))[level2Index];
     } else if (blockIndex > doublyIndirectBlocksMax - 1 && blockIndex < triplyIndirectBlocksMax) {
+        //TODO:
       return 0;
     } else {
       // over,
@@ -262,6 +263,8 @@ uint32_t ext2_fs_default_read(Ext2FileSystem *ext2FileSystem, Ext2IndexNode *ext
   if (fileSize > count) {
     // just read count bytes.
     blockNeed = count / ext2FileSystem->blockSize;
+  }else{
+      count = fileSize;
   }
 
   LogInfo("[Ext2]: need %d blocks, read %d bytes.\n", blockNeed + 1, count);

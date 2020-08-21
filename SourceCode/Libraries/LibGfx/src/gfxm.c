@@ -54,29 +54,7 @@ Vec3D gfxm_vector_div_vector(Vec3D v1, Vec3D v2) {
 
 float gfxm_vector_dot_product(Vec3D v1, Vec3D v2) { return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z; }
 
-/**
- * This Q_rsqrt code is from JohnCarmark
- * https://en.wikipedia.org/wiki/John_Carmack
- * @param number
- * @return
- */
-float Q_rsqrt(float number) {
-  long i = 0;
-  float x2 = 0;
-  float y = 0;
-  const float threehalfs = 1.5F;
-
-  x2 = number * 0.5F;
-  y = number;
-  i = *(long *)&y;           // evil floating point bit level hacking
-  i = 0x5f3759df - (i >> 1); // what the fuck?
-  y = *(float *)&i;
-  y = y * (threehalfs - (x2 * y * y)); // 1st iteration
-  //    y  = y * ( threehalfs - ( x2 * y * y ) );   // 2nd iteration, this can be removed
-  return y;
-}
-
-float gfxm_vector_length(Vec3D v) { return Q_rsqrt(gfxm_vector_dot_product(v, v)); }
+float gfxm_vector_length(Vec3D v) { return q_rsqrt(gfxm_vector_dot_product(v, v)); }
 
 Vec3D gfxm_vector_normalise(Vec3D v1) {
   Vec3D vec;
