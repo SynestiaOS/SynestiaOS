@@ -228,6 +228,7 @@ void kernel_main(void) {
     uint32_t size = vfs_kernel_read(vfs, "/initrd/init/bg1024_768.dat", background, 768 * 1024 * 4);
     gfx2d_draw_bitmap(context, 0, 0, 1024, 768, background);
     gfx2d_fill_rect(context, 0, 0, 1024, 48, 0xd3d3d3);
+    kheap_free(background);
 
     schd_init();
 
