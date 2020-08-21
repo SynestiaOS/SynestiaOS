@@ -36,21 +36,19 @@ void ext2_recursively_fill_superblock(Ext2FileSystem *ext2FileSystem, Ext2IndexN
     directoryEntry->operations.hashOperation(directoryEntry);
     directoryEntry->indexNode->type = INDEX_NODE_DIRECTORY;
 
-    // inode is a empty directory
-    if (ext2IndexNode->hardLinksCount == 1) {
-      // just return
-      return;
-    }
-
     Ext2DirectoryEntry *dEntry = (Ext2DirectoryEntry *)((uint32_t)ext2FileSystem->data +
                                                         ext2IndexNode->directBlockPointer0 * ext2FileSystem->blockSize);
 
-    while (*(uint32_t *)((uint32_t)dEntry + dEntry->sizeOfThisEntry) != 0) {
+    while (*(uint32_t *)((uint32_t)dEntry) != 0) {
       if (strcmp(dEntry->nameCharacters, "..") || strcmp(dEntry->nameCharacters, ".") ||
           strcmp(dEntry->nameCharacters, "lost+found")) {
         // TODO: lost+found
         // ignore
-        dEntry = (Ext2DirectoryEntry *)((uint32_t)dEntry + dEntry->sizeOfThisEntry);
+
+        uint32_t dEntryNameAlignment = dEntry->nameLength / 4;
+        dEntryNameAlignment = dEntryNameAlignment * 4 + (dEntry->nameLength % 4 > 0 ? 4 : 0);
+        uint32_t nextDEntryAddr = dEntry->nameCharacters + dEntryNameAlignment;
+        dEntry = (Ext2DirectoryEntry *)(nextDEntryAddr);
         continue;
       }
       // inode is directory , it's means should recursion
@@ -65,7 +63,12 @@ void ext2_recursively_fill_superblock(Ext2FileSystem *ext2FileSystem, Ext2IndexN
         name[i] = dEntry->nameCharacters[i];
       }
       ext2_recursively_fill_superblock(ext2FileSystem, nextNode, directoryEntry, name);
-      dEntry = (Ext2DirectoryEntry *)((uint32_t)dEntry + dEntry->sizeOfThisEntry);
+
+      uint32_t dEntryNameAlignment = dEntry->nameLength / 4;
+      dEntryNameAlignment = dEntryNameAlignment * 4 + (dEntry->nameLength % 4 > 0 ? 4 : 0);
+      uint32_t nextDEntryAddr = dEntry->nameCharacters + dEntryNameAlignment;
+
+      dEntry = (Ext2DirectoryEntry *)(nextDEntryAddr);
     }
   } else if ((ext2IndexNode->typeAndPermissions & 0xF000) == EXT2_INDEX_NODE_TYPE_REGULAR_FILE) {
     // create vfs inode, create vfs dentry , and fill them
@@ -190,7 +193,6 @@ KernelStatus ext2_fs_default_mount(Ext2FileSystem *ext2FileSystem, char *mountNa
 }
 
 uint32_t ext2_get_data_block(Ext2FileSystem *ext2FileSystem, Ext2IndexNode *ext2IndexNode, uint32_t blockIndex) {
-  LogWarn("[READ]: %d \n", blockIndex);
   uint32_t directBlockMax = 12;
   uint32_t blockPointerNumsInEachBlock = ext2FileSystem->blockSize / sizeof(uint32_t);
   uint32_t singlyIndirectBlocksMax = directBlockMax + blockPointerNumsInEachBlock;
