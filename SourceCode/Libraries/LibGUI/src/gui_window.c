@@ -11,9 +11,9 @@
 #include <gui_view3d.h>
 #include <gui_window.h>
 #include <log.h>
+#include <math.h>
 #include <stdbool.h>
 #include <stdlib.h>
-#include <math.h>
 
 extern uint32_t GFX2D_BUFFER[1024 * 768];
 void gui_window_create(GUIWindow *window) {
@@ -185,7 +185,7 @@ void gui_window_draw(GUIWindow *window) {
       // left
       for (uint32_t i = 1; i < window->component.boxShadow.width; i++) {
 
-//         y=sqrt({250^{2}-({x-250})^{2}})
+        //         y=sqrt({250^{2}-({x-250})^{2}})
         uint32_t alpha = (0xff / window->component.boxShadow.width) * i + i * i;
         if (alpha > 0xFF) {
           alpha = 0xFF;

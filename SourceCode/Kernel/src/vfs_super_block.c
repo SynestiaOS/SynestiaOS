@@ -5,11 +5,12 @@
 #include <log.h>
 #include <mutex.h>
 #include <spinlock.h>
+#include <string.h>
 #include <vfs_dentry.h>
 #include <vfs_inode.h>
 #include <vfs_super_block.h>
 
-DirectoryEntry *vfs_super_block_default_create_directory_entry(struct SuperBlock *superBlock, const char *fileName) {
+DirectoryEntry *vfs_super_block_default_create_directory_entry(struct SuperBlock *superBlock, char *fileName) {
   DirectoryEntry *directoryEntry = (DirectoryEntry *)kheap_alloc(sizeof(DirectoryEntry));
   if (directoryEntry == nullptr) {
     LogError("[VFS]: root dentry create failed,cause heap alloc failed.\n");
@@ -23,7 +24,7 @@ DirectoryEntry *vfs_super_block_default_create_directory_entry(struct SuperBlock
   directoryEntry->operations.releaseOperation = vfs_directory_entry_default_release;
   directoryEntry->operations.hashOperation = vfs_directory_entry_default_hash;
 
-  directoryEntry->fileName = fileName;
+  memcpy(directoryEntry->fileName, fileName, 0xFF);
   directoryEntry->fileNameHash = directoryEntry->operations.hashOperation(directoryEntry);
   directoryEntry->indexNode = nullptr;
   directoryEntry->parent = nullptr;

@@ -4,7 +4,7 @@
 
 #include <atomic.h>
 #include <list.h>
-#include <log.h>
+#include <string.h>
 #include <vfs_inode.h>
 #include <vfs_super_block.h>
 
@@ -43,7 +43,7 @@ KernelStatus vfs_inode_default_delete_directory(IndexNode *indexNode, DirectoryE
 }
 
 KernelStatus vfs_inode_default_rename(IndexNode *indexNode, char *newName) {
-  indexNode->dentry->fileName = newName;
+  memcpy(indexNode->dentry->fileName, newName, 0xFF);
   indexNode->dentry->fileNameHash = indexNode->dentry->operations.hashOperation(indexNode->dentry);
   // TODO : change last modify time
   return OK;

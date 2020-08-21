@@ -36,7 +36,7 @@ typedef struct DirectoryEntry {
   Atomic refCount;
   SpinLock parallelLock;
 
-  char *fileName;
+  char fileName[0xFF];
   uint64_t fileNameHash;
   DirectoryEntryOperations operations;
 } DirectoryEntry;

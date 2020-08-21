@@ -186,7 +186,6 @@ void initProcessUpdate(uint32_t process) {
   gpu_flush(1);
 }
 
-
 TimerHandler gpuHandler;
 SpinLock bootSpinLock = SpinLockCreate();
 void kernel_main(void) {
@@ -226,7 +225,7 @@ void kernel_main(void) {
 
     uint32_t *background = (uint32_t *)kheap_alloc(768 * 1024 * 4);
 
-    uint32_t size = vfs_kernel_read(vfs, "/initrd/init\f/bg1024_768.dat", background, 768 * 1024 * 4);
+    uint32_t size = vfs_kernel_read(vfs, "/initrd/init/bg1024_768.dat", background, 768 * 1024 * 4);
     gfx2d_draw_bitmap(context, 0, 0, 1024, 768, background);
     gfx2d_fill_rect(context, 0, 0, 1024, 48, 0xd3d3d3);
 

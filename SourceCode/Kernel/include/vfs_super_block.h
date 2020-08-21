@@ -19,7 +19,7 @@ typedef enum FileSystemType {
   FILESYSTEM_EXT2,
 } FileSystemType;
 
-typedef DirectoryEntry *(*SuperBlockCreateDirectoryEntry)(struct SuperBlock *superBlock, const char *fileName);
+typedef DirectoryEntry *(*SuperBlockCreateDirectoryEntry)(struct SuperBlock *superBlock, char *fileName);
 typedef IndexNode *(*SuperBlockCreateIndexNode)(struct SuperBlock *superBlock, struct DirectoryEntry *dentry);
 typedef KernelStatus (*SuperBlockDestroyDirectoryEntry)(struct SuperBlock *superBlock, struct DirectoryEntry *dentry);
 typedef KernelStatus (*SuperBlockDestroyIndexNode)(struct SuperBlock *superBlock, struct IndexNode *indexNode);
@@ -41,7 +41,7 @@ typedef struct SuperBlock {
 
 SuperBlock *vfs_create_super_block();
 
-DirectoryEntry *vfs_super_block_default_create_directory_entry(struct SuperBlock *superBlock, const char *fileName);
+DirectoryEntry *vfs_super_block_default_create_directory_entry(struct SuperBlock *superBlock, char *fileName);
 
 IndexNode *vfs_super_block_default_create_index_node(struct SuperBlock *superBlock, struct DirectoryEntry *dentry);
 
