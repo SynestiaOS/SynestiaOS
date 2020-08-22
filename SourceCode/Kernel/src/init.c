@@ -115,7 +115,7 @@ uint32_t *window_filesystem(int args) {
     size = klist_size(&directoryEntry->children->list);
     labels = kheap_alloc(size * sizeof(GUILabel));
     struct DirectoryEntry *pEntry = directoryEntry->children;
-    uint32_t y = 1;
+    uint32_t y = 0;
     for (uint32_t i = 1; i < size; i++) {
       gui_label_create(&labels[i]);
       gui_label_init(&labels[i], (i % 4) * 80, y * 20, pEntry->fileName);
@@ -131,7 +131,7 @@ uint32_t *window_filesystem(int args) {
 
   while (1) {
     disable_interrupt();
-    uint32_t y = 1;
+    uint32_t y = 0;
     for (uint32_t i = 1; i < size; i++) {
       labels[i].component.position.x = (i % 4) * 80;
       labels[i].component.position.y = y * 20;
