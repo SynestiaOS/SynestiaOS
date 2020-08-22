@@ -67,6 +67,7 @@ typedef enum ColorMode {
 } ColorMode;
 
 typedef struct BoxShadow {
+  bool enable;
   Color color;
   uint32_t width;
 } BoxShadow;

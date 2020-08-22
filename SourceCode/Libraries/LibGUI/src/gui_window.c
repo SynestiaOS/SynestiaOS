@@ -66,6 +66,7 @@ void gui_window_create(GUIWindow *window) {
   window->header.foreground.g = (FLUENT_PRIMARY_FORE_COLOR >> 8) & 0xFF;
   window->header.foreground.b = FLUENT_PRIMARY_FORE_COLOR & 0xFF;
 
+  window->component.boxShadow.enable = false;
   window->isWindowNeedUpdate = true;
   window->isShadowNeedUpdate = true;
 
@@ -82,13 +83,6 @@ void gui_window_init(GUIWindow *window, uint32_t x, uint32_t y, const char *titl
   window->component.position.y = y;
 
   window->title = title;
-
-  char *tmp = title;
-  uint32_t length = 0;
-  while (*tmp) {
-    length++;
-    tmp++;
-  }
 }
 
 void gui_window_add_children(GUIWindow *window, GUIComponent *component) {
@@ -181,7 +175,7 @@ void gui_window_draw(GUIWindow *window) {
       }
     }
 
-    if (window->isShadowNeedUpdate) {
+    if (window->component.boxShadow.enable && window->isShadowNeedUpdate) {
       // left
       for (uint32_t i = 1; i < window->component.boxShadow.width; i++) {
 

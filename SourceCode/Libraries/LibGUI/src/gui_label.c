@@ -5,6 +5,8 @@
 #include <gfx2d.h>
 #include <gui_label.h>
 #include <stdbool.h>
+#include <stdlib.h>
+#include <string.h>
 
 extern uint32_t GFX2D_BUFFER[1024 * 768];
 void gui_label_create(GUILabel *label) {
@@ -30,7 +32,9 @@ void gui_label_create(GUILabel *label) {
   label->component.margin.bottom = 0;
   label->component.margin.left = 0;
   label->component.margin.right = 0;
-  label->text = "";
+  for (uint32_t i = 0; i < 0xFF; i++) {
+    label->text[i] = '\0';
+  }
 
   label->component.background.a = (FLUENT_PRIMARY_BACK_COLOR >> 24) & 0xFF;
   label->component.background.r = (FLUENT_PRIMARY_BACK_COLOR >> 16) & 0xFF;
@@ -44,10 +48,9 @@ void gui_label_create(GUILabel *label) {
 }
 
 void gui_label_init(GUILabel *label, uint32_t x, uint32_t y, const char *text) {
+  memcpy(label->text, text, strlen(text));
   label->component.position.x = x;
   label->component.position.y = y;
-
-  label->text = text;
 
   char *tmp = text;
   uint32_t length = 0;
@@ -88,25 +91,19 @@ void gui_label_draw(GUILabel *label) {
     }
 
     // 2. draw_font
-    char *tmp = label->text;
     uint32_t xOffset = 0;
-    uint32_t length = 0;
-    while (*tmp) {
-      length++;
-      tmp++;
-    }
+    uint32_t length = strlen(label->text);
     uint32_t lineFonts =
         (label->component.size.width - label->component.padding.left - label->component.padding.right) /
         label->fontSize;
 
-    tmp = label->text;
     uint32_t column = 0;
     uint32_t row = 0;
-    while (*tmp) {
-      gfx2d_draw_ascii(context, label->component.position.x + xOffset * label->fontSize + label->component.padding.left,
-                       label->component.position.y + row * label->fontSize + label->component.padding.top, *tmp,
-                       label->component.foreground.r << 16 | label->component.foreground.g << 8 |
-                           label->component.foreground.b);
+    for (uint32_t i = 0; i < length; i++) {
+      gfx2d_draw_ascii(
+          context, label->component.position.x + xOffset * label->fontSize + label->component.padding.left,
+          label->component.position.y + row * label->fontSize + label->component.padding.top, label->text[i],
+          label->component.foreground.r << 16 | label->component.foreground.g << 8 | label->component.foreground.b);
       column++;
       if (column == lineFonts) {
         row++;
@@ -115,7 +112,6 @@ void gui_label_draw(GUILabel *label) {
       }
 
       xOffset++;
-      tmp++;
     }
   }
 }

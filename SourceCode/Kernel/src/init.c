@@ -50,9 +50,9 @@ uint32_t *window_thread1(int args) {
   uint32_t count = 0;
   GUIWindow window;
   gui_window_create(&window);
-  window.component.size.width = 300;
+  window.component.size.width = 340;
   window.component.size.height = 200;
-  gui_window_init(&window, 100, 100, "window1");
+  gui_window_init(&window, 20, 20, "window1");
   GUILabel label;
   gui_label_create(&label);
   label.component.colorMode = TRANSPARENT;
@@ -81,9 +81,9 @@ uint32_t *window_thread2(int args) {
   uint32_t count = 0;
   GUIWindow window;
   gui_window_create(&window);
-  window.component.size.width = 300;
+  window.component.size.width = 340;
   window.component.size.height = 200;
-  gui_window_init(&window, 500, 100, "window2");
+  gui_window_init(&window, 380, 20, "window2");
   GUILabel label;
   gui_label_create(&label);
   label.component.size.width = 100;
@@ -98,6 +98,49 @@ uint32_t *window_thread2(int args) {
     gui_window_draw(&window);
     enable_interrupt();
     count++;
+  }
+}
+
+uint32_t *window_filesystem(int args) {
+  GUIWindow window;
+  gui_window_create(&window);
+  window.component.size.width = 340;
+  window.component.size.height = 200;
+  gui_window_init(&window, 20, 300, "FileManager");
+  DirectoryEntry *directoryEntry = vfs->operations.lookup(vfs, "/initrd");
+  struct GUILabel *labels;
+  uint32_t size = 0;
+  disable_interrupt();
+  if (directoryEntry->children != nullptr) {
+    size = klist_size(&directoryEntry->children->list);
+    labels = kheap_alloc(size * sizeof(GUILabel));
+    struct DirectoryEntry *pEntry = directoryEntry->children;
+    uint32_t y = 1;
+    for (uint32_t i = 1; i < size; i++) {
+      gui_label_create(&labels[i]);
+      gui_label_init(&labels[i], (i % 4) * 80, y * 20, pEntry->fileName);
+      labels[i].component.colorMode = TRANSPARENT;
+      gui_window_add_children(&window, &(labels[i].component));
+      pEntry = getNode(pEntry->list.prev, DirectoryEntry, list);
+      if (i % 4 == 0) {
+        y++;
+      }
+    }
+  }
+  enable_interrupt();
+
+  while (1) {
+    disable_interrupt();
+    uint32_t y = 1;
+    for (uint32_t i = 1; i < size; i++) {
+      labels[i].component.position.x = (i % 4) * 80;
+      labels[i].component.position.y = y * 20;
+      if (i % 4 == 0) {
+        y++;
+      }
+    }
+    gui_window_draw(&window);
+    enable_interrupt();
   }
 }
 
@@ -224,10 +267,8 @@ void kernel_main(void) {
     vfs->operations.mount(vfs, "root", FILESYSTEM_EXT2, (void *)EXT2_ADDRESS);
 
     uint32_t *background = (uint32_t *)kheap_alloc(768 * 1024 * 4);
-
     uint32_t size = vfs_kernel_read(vfs, "/initrd/init/bg1024_768.dat", background, 768 * 1024 * 4);
     gfx2d_draw_bitmap(context, 0, 0, 1024, 768, background);
-    gfx2d_fill_rect(context, 0, 0, 1024, 48, 0xd3d3d3);
     kheap_free(background);
 
     schd_init();
@@ -247,13 +288,12 @@ void kernel_main(void) {
     Thread *window2Thread = thread_create("window2", &window_thread2, 1, 0);
     schd_add_thread(window2Thread, 0);
 
+    Thread *windowFileSystemThread = thread_create("window fs", &window_filesystem, 1, 0);
+    schd_add_thread(windowFileSystemThread, 0);
+
     Thread *gpuProcess = thread_create("gpu", &gpu, 1, 0);
     schd_add_thread(gpuProcess, 0);
 
-    //    gpuHandler.node.next = nullptr;
-    //    gpuHandler.node.prev = nullptr;
-    //    gpuHandler.timer_interrupt_handler = &gpu_flush;
-    //    register_time_interrupt(&gpuHandler);
     bootSpinLock.operations.release(&bootSpinLock);
     schd_schedule();
   }

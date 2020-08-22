@@ -10,7 +10,7 @@
 
 typedef struct GUILabel {
   GUIComponent component;
-  char *text;
+  char text[0xFF];
   uint32_t fontSize;
 } GUILabel;
 
