@@ -204,6 +204,37 @@ uint32_t *window_thread5(int args) {
   }
 }
 
+uint32_t *window_mandelbrot(int args) {
+    uint32_t count = 0;
+    GUIWindow window;
+    gui_window_create(&window);
+    window.component.size.width = 340;
+    window.component.size.height = 200;
+    gui_window_init(&window, 380, 300, "Clock");
+    GUICanvas canvas;
+    gui_canvas_create(&canvas);
+    gui_canvas_init(&canvas, 0, 0);
+    canvas.component.size.width = 320;
+    canvas.component.size.height = 180;
+    gui_window_add_children(&window, &(canvas.component));
+
+    gui_canvas_fill_circle(&canvas,160,90,80,0xAAAAAA);
+    gui_canvas_fill_circle(&canvas,160,90,70,0xFFFFFF);
+    gui_canvas_fill_rect(&canvas,160,87,250,93,0xAAAAAA);
+    gui_canvas_fill_circle(&canvas,160,90,20,0xAAAAAA);
+    gui_canvas_fill_rect(&canvas,156,90,164,150,0x777777);
+    gui_canvas_fill_circle(&canvas,160,90,10,0x777777);
+
+
+
+
+    while (1) {
+        disable_interrupt();
+        gui_window_draw(&window);
+        enable_interrupt();
+    }
+}
+
 uint32_t *gpu(int args) {
   while (1) {
     disable_interrupt();
@@ -290,6 +321,10 @@ void kernel_main(void) {
 
     Thread *windowFileSystemThread = thread_create("window fs", &window_filesystem, 1, 0);
     schd_add_thread(windowFileSystemThread, 0);
+
+
+      Thread *windowMandelbrotThread = thread_create("window fs", &window_mandelbrot, 1, 0);
+      schd_add_thread(windowMandelbrotThread, 0);
 
     Thread *gpuProcess = thread_create("gpu", &gpu, 1, 0);
     schd_add_thread(gpuProcess, 0);
