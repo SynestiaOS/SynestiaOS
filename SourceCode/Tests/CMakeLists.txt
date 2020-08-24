@@ -33,10 +33,10 @@ add_executable(${KernelUnitTestsImg}
         $<TARGET_OBJECTS:${KernelArchUnitTests}>
         $<TARGET_OBJECTS:Kernel>
         $<TARGET_OBJECTS:LibC>
+		$<TARGET_OBJECTS:LibElf>
         $<TARGET_OBJECTS:LibMath>
         $<TARGET_OBJECTS:LibGfx>
         $<TARGET_OBJECTS:LibGUI>
-        $<TARGET_OBJECTS:Console>
 	$<TARGET_OBJECTS:${boardObj}>)
 
 target_sources(${KernelUnitTestsImg}

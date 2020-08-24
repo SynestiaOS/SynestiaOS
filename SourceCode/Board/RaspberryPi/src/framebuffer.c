@@ -31,6 +31,7 @@ uint32_t framebuffer_init(void) {
       setPhysicalDisplayWHMail->property.code == CODE_RESPONSE_FAILURE) {
     LogError("[Framebuffer]: Unable to set physical WH\n");
   }
+  kheap_free(setPhysicalDisplayWHMail);
 
   PropertySetVirtualBufferWHMail *setVirtualBufferWHMail =
       kheap_alloc_aligned(sizeof(PropertySetVirtualBufferWHMail), 16);

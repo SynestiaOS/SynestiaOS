@@ -22,6 +22,9 @@
 #include <synestia_os_hal.h>
 #include <vfs.h>
 #include <vmm.h>
+#include <elf.h>
+#include <elf.h>
+#include <elf.h>
 
 extern char _binary_initrd_img_start[];
 extern char _binary_initrd_img_end[];
@@ -59,7 +62,6 @@ uint32_t *window_thread1(int args) {
   label.component.size.width = 100;
   gui_window_add_children(&window, &(label.component));
   uint32_t fd = open("/initrd/bin/bin.txt", 1, 3);
-
   char *buffer = (char *)kheap_alloc(4);
   uint32_t size = vfs_kernel_read(vfs, "/initrd/bin/bin.txt", buffer, 3);
   buffer[3] = '\0';
@@ -204,7 +206,7 @@ uint32_t *window_thread5(int args) {
   }
 }
 
-uint32_t *window_mandelbrot(int args) {
+uint32_t *window_clock(int args) {
     uint32_t count = 0;
     GUIWindow window;
     gui_window_create(&window);
@@ -225,9 +227,14 @@ uint32_t *window_mandelbrot(int args) {
     gui_canvas_fill_rect(&canvas,156,90,164,150,0x777777);
     gui_canvas_fill_circle(&canvas,160,90,10,0x777777);
 
-
-
-
+    char *buffer = (char *)kheap_alloc(34972);
+    uint32_t size = vfs_kernel_read(vfs, "/initrd/bin/TestApp.elf", buffer, 34972);
+    Elf elf;
+    KernelStatus elfStatus = elf_init(&elf, buffer);
+    if(elfStatus!=OK){
+        LogError("[Elf]: load failed.\n");
+    }
+    elf.operations.parse(&elf);
     while (1) {
         disable_interrupt();
         gui_window_draw(&window);
@@ -323,8 +330,8 @@ void kernel_main(void) {
     schd_add_thread(windowFileSystemThread, 0);
 
 
-      Thread *windowMandelbrotThread = thread_create("window fs", &window_mandelbrot, 1, 0);
-      schd_add_thread(windowMandelbrotThread, 0);
+    Thread *windowMandelbrotThread = thread_create("window fs", &window_clock, 1, 0);
+    schd_add_thread(windowMandelbrotThread, 0);
 
     Thread *gpuProcess = thread_create("gpu", &gpu, 1, 0);
     schd_add_thread(gpuProcess, 0);

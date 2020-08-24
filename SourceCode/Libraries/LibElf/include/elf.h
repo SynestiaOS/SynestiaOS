@@ -8,7 +8,7 @@
 #include <stdint.h>
 #include <type.h>
 
-enum ObjectFileType {
+typedef enum ObjectFileType {
   ET_NONE = 0x00,
   ET_REL = 0x01,
   ET_EXEC = 0x02,
@@ -18,9 +18,9 @@ enum ObjectFileType {
   ET_HIOS = 0xfeff,
   ET_LOPROC = 0xff00,
   ET_HIPROC = 0xffff,
-};
+} ObjectFileType;
 
-enum InstructionSet {
+typedef enum InstructionSet {
   ARCH_Unknown = 0x00,
   ARCH_AT_T_WE_32100 = 0x01,
   ARCH_SPARC = 0x02,
@@ -45,7 +45,7 @@ enum InstructionSet {
   ARCH_TMS320C6000 = 0x8C,
   ARCH_ARM_64 = 0xB7,
   ARCH_RISC_V = 0xF3,
-};
+} InstructionSet;
 
 typedef struct ElfFileHeader {
   uint8_t magic[4]; // .elf
@@ -58,8 +58,8 @@ typedef struct ElfFileHeader {
                       // (after at least 2.6) has no definition of it[5], so it is ignored for statically-linked
                       // executables. In that case, offset and size of EI_PAD are 8.
   uint8_t pad;        // currently unused, should be filled with zeros.
-  uint8_t type[2];    // Identifies object file type.
-  uint8_t machine[2]; // Specifies target instruction set architecture.
+  uint16_t type;    // Identifies object file type.
+  uint16_t machine; // Specifies target instruction set architecture.
   uint32_t originalVersion; // Set to 1 for the original version of ELF.
   uint32_t entry; // This is the memory address of the entry point from where the process starts executing. This field
                   // is either 32 or 64 bits long depending on the format defined earlier.
@@ -78,7 +78,7 @@ typedef struct ElfFileHeader {
 
 } ElfFileHeader;
 
-enum SegmentType {
+typedef enum SegmentType {
   PT_NULL = 0x00000000,    //		Program header table entry unused
   PT_LOAD = 0x00000001,    //		Loadable segment
   PT_DYNAMIC = 0x00000002, //		Dynamic linking information
@@ -91,7 +91,7 @@ enum SegmentType {
   PT_HIOS = 0x6FFFFFFF,    //
   PT_LOPROC = 0x70000000,  //
   PT_HIPROC = 0x7FFFFFFF,  //
-};
+} SegmentType;
 typedef struct ElfProgramHeader {
   uint32_t type;                  // Identifies the type of the segment.
   uint32_t segmentOffset;         // Offset of the segment in the file image.
@@ -105,7 +105,7 @@ typedef struct ElfProgramHeader {
                       // equating p_offset modulus p_align.
 } ElfProgramHeader;
 
-enum HeaderType {
+typedef enum HeaderType {
   SHT_NULL = 0x0,           //		Section header table entry unused
   SHT_PROGBITS = 0x1,       //		Program data
   SHT_SYMTAB = 0x2,         //		Symbol table
@@ -125,8 +125,9 @@ enum HeaderType {
   SHT_SYMTAB_SHNDX = 0x12,  //		Extended section indices
   SHT_NUM = 0x13,           //		Number of defined types.
   SHT_LOOS = 0x60000000,    //		Start OS-specific.
-};
-enum HeaderAttribute {
+} HeaderType;
+
+typedef enum HeaderAttribute {
   SHF_WRITE = 0x1,              //		Writable
   SHF_ALLOC = 0x2,              //		Occupies memory during execution
   SHF_EXECINSTR = 0x4,          //		Executable
@@ -141,7 +142,7 @@ enum HeaderAttribute {
   SHF_MASKPROC = 0xf0000000,    //		Processor-specific
   SHF_ORDERED = 0x4000000,      //		Special ordering requirement (Solaris)
   SHF_EXCLUDE = 0x8000000,      //		Section is excluded unless referenced or allocated (Solaris)
-};
+} HeaderAttribute;
 
 typedef struct ElfSectionHeader {
   uint32_t name;           // An offset to a string in the .shstrtab section that represents the name of this section.
