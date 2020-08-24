@@ -13,6 +13,8 @@
 #include <vfs_inode.h>
 #include <vfs_super_block.h>
 
+extern Heap kernelHeap;
+
 SuperBlock *vfs_default_mount(VFS *vfs, const char *name, FileSystemType type, void *data) {
   switch (type) {
   case FILESYSTEM_EXT2: {
@@ -242,7 +244,7 @@ DirectoryEntry *vfs_default_lookup(VFS *vfs, const char *name) {
 }
 
 VFS *vfs_create() {
-  VFS *vfs = (VFS *)kheap_alloc(sizeof(VFS));
+  VFS *vfs = (VFS *)kernelHeap.operations.alloc(&kernelHeap, sizeof(VFS));
   vfs->fileSystems = nullptr;
   vfs->operations.mount = vfs_default_mount;
   vfs->operations.open = vfs_default_open;

@@ -7,9 +7,12 @@
 #include <stdbool.h>
 #include <stdlib.h>
 
+extern Heap kernelHeap;
+
 KernelStack *kstack_allocate() {
   // 1. allocate stack memory block from virtual memory (heap), and align.
-  KernelStack *stack = (KernelStack *)kheap_alloc_aligned(DEFAULT_KERNEL_STACK_SIZE + sizeof(KernelStack), 16);
+  KernelStack *stack = (KernelStack *)kernelHeap.operations.allocAligned(
+      &kernelHeap, DEFAULT_KERNEL_STACK_SIZE + sizeof(KernelStack), 16);
   if (stack == nullptr) {
     LogError("[KStack] kStack allocate failed.\n");
     return nullptr;
@@ -26,7 +29,7 @@ KernelStatus kstack_free(KernelStack *stack) {
   stack->size = 0;
   stack->base = 0;
   stack->top = 0;
-  KernelStatus freeStatus = kheap_free(stack);
+  KernelStatus freeStatus = kernelHeap.operations.free(&kernelHeap, stack);
   if (freeStatus != OK) {
     LogError("[KStack] kStack free failed.\n");
     return freeStatus;

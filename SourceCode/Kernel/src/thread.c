@@ -11,6 +11,8 @@
 #include <thread.h>
 #include <vfs_dentry.h>
 
+extern Heap kernelHeap;
+
 extern uint64_t ktimer_sys_runtime();
 
 uint32_t pidMap[2048] = {0};
@@ -70,7 +72,7 @@ KernelStatus thread_default_kill(struct Thread *thread) {
 }
 
 uint32_t filestruct_default_openfile(FilesStruct *filesStruct, DirectoryEntry *directoryEntry) {
-  FileDescriptor *fileDescriptor = (FileDescriptor *)kheap_alloc(sizeof(FileDescriptor));
+  FileDescriptor *fileDescriptor = (FileDescriptor *)kernelHeap.operations.alloc(&kernelHeap, sizeof(FileDescriptor));
   fileDescriptor->directoryEntry = directoryEntry;
   fileDescriptor->node.prev = nullptr;
   fileDescriptor->node.next = nullptr;
@@ -108,7 +110,7 @@ Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uin
     kstack_push(kernelStack, arg);        // R00
     kstack_push(kernelStack, 0x600001d3); // cpsr
 
-    Thread *thread = (Thread *)kheap_alloc(sizeof(Thread));
+    Thread *thread = (Thread *)kernelHeap.operations.alloc(&kernelHeap, sizeof(Thread));
     thread->magic = THREAD_MAGIC;
     thread->threadStatus = THREAD_INITIAL;
     thread->stack = kernelStack;
@@ -121,6 +123,7 @@ Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uin
     thread->runtimVirtualNs = 0;
     thread->startTime = ktimer_sys_runtime();
 
+    thread->parentThread = nullptr;
     thread->pid = thread_alloc_pid();
     strcpy(thread->name, name);
     thread->arg = arg;

@@ -1,4 +1,5 @@
 #include <cache.h>
+#include <elf.h>
 #include <ext2.h>
 #include <font8bits.h>
 #include <gfx2d.h>
@@ -22,15 +23,15 @@
 #include <synestia_os_hal.h>
 #include <vfs.h>
 #include <vmm.h>
-#include <elf.h>
-#include <elf.h>
-#include <elf.h>
 
+extern uint32_t __HEAP_BEGIN;
 extern char _binary_initrd_img_start[];
 extern char _binary_initrd_img_end[];
 extern char _binary_initrd_img_size[];
 uint32_t EXT2_ADDRESS = _binary_initrd_img_start;
+
 VFS *vfs;
+Heap kernelHeap;
 
 extern uint32_t *gpu_flush(int args);
 
@@ -62,7 +63,7 @@ uint32_t *window_thread1(int args) {
   label.component.size.width = 100;
   gui_window_add_children(&window, &(label.component));
   uint32_t fd = open("/initrd/bin/bin.txt", 1, 3);
-  char *buffer = (char *)kheap_alloc(4);
+  char *buffer = (char *)kernelHeap.operations.alloc(&kernelHeap, 4);
   uint32_t size = vfs_kernel_read(vfs, "/initrd/bin/bin.txt", buffer, 3);
   buffer[3] = '\0';
   while (1) {
@@ -115,7 +116,7 @@ uint32_t *window_filesystem(int args) {
   disable_interrupt();
   if (directoryEntry->children != nullptr) {
     size = klist_size(&directoryEntry->children->list);
-    labels = kheap_alloc(size * sizeof(GUILabel));
+    labels = kernelHeap.operations.alloc(&kernelHeap, size * sizeof(GUILabel));
     struct DirectoryEntry *pEntry = directoryEntry->children;
     uint32_t y = 0;
     for (uint32_t i = 1; i < size; i++) {
@@ -207,39 +208,39 @@ uint32_t *window_thread5(int args) {
 }
 
 uint32_t *window_clock(int args) {
-    uint32_t count = 0;
-    GUIWindow window;
-    gui_window_create(&window);
-    window.component.size.width = 340;
-    window.component.size.height = 200;
-    gui_window_init(&window, 380, 300, "Clock");
-    GUICanvas canvas;
-    gui_canvas_create(&canvas);
-    gui_canvas_init(&canvas, 0, 0);
-    canvas.component.size.width = 320;
-    canvas.component.size.height = 180;
-    gui_window_add_children(&window, &(canvas.component));
+  uint32_t count = 0;
+  GUIWindow window;
+  gui_window_create(&window);
+  window.component.size.width = 340;
+  window.component.size.height = 200;
+  gui_window_init(&window, 380, 300, "Clock");
+  GUICanvas canvas;
+  gui_canvas_create(&canvas);
+  gui_canvas_init(&canvas, 0, 0);
+  canvas.component.size.width = 320;
+  canvas.component.size.height = 180;
+  gui_window_add_children(&window, &(canvas.component));
 
-    gui_canvas_fill_circle(&canvas,160,90,80,0xAAAAAA);
-    gui_canvas_fill_circle(&canvas,160,90,70,0xFFFFFF);
-    gui_canvas_fill_rect(&canvas,160,87,250,93,0xAAAAAA);
-    gui_canvas_fill_circle(&canvas,160,90,20,0xAAAAAA);
-    gui_canvas_fill_rect(&canvas,156,90,164,150,0x777777);
-    gui_canvas_fill_circle(&canvas,160,90,10,0x777777);
+  gui_canvas_fill_circle(&canvas, 160, 90, 80, 0xAAAAAA);
+  gui_canvas_fill_circle(&canvas, 160, 90, 70, 0xFFFFFF);
+  gui_canvas_fill_rect(&canvas, 160, 87, 250, 93, 0xAAAAAA);
+  gui_canvas_fill_circle(&canvas, 160, 90, 20, 0xAAAAAA);
+  gui_canvas_fill_rect(&canvas, 156, 90, 164, 150, 0x777777);
+  gui_canvas_fill_circle(&canvas, 160, 90, 10, 0x777777);
 
-    char *buffer = (char *)kheap_alloc(34972);
-    uint32_t size = vfs_kernel_read(vfs, "/initrd/bin/TestApp.elf", buffer, 34972);
-    Elf elf;
-    KernelStatus elfStatus = elf_init(&elf, buffer);
-    if(elfStatus!=OK){
-        LogError("[Elf]: load failed.\n");
-    }
-    elf.operations.parse(&elf);
-    while (1) {
-        disable_interrupt();
-        gui_window_draw(&window);
-        enable_interrupt();
-    }
+  char *buffer = (char *)kernelHeap.operations.alloc(&kernelHeap, 34972);
+  uint32_t size = vfs_kernel_read(vfs, "/initrd/bin/TestApp.elf", buffer, 34972);
+  Elf elf;
+  KernelStatus elfStatus = elf_init(&elf, buffer);
+  if (elfStatus != OK) {
+    LogError("[Elf]: load failed.\n");
+  }
+  elf.operations.parse(&elf);
+  while (1) {
+    disable_interrupt();
+    gui_window_draw(&window);
+    enable_interrupt();
+  }
 }
 
 uint32_t *gpu(int args) {
@@ -275,7 +276,7 @@ void kernel_main(void) {
     init_bsp();
     print_splash();
 
-    kheap_init();
+    heap_create(&kernelHeap, &__HEAP_BEGIN, 64 * MB);
     gpu_init();
 
     vmm_add_map_hook(initProcessUpdate);
@@ -299,15 +300,16 @@ void kernel_main(void) {
 
     vmm_init();
     init_interrupt();
-    kheap_init();
+
+    heap_create(&kernelHeap, &__HEAP_BEGIN, 64 * MB);
 
     vfs = vfs_create();
     vfs->operations.mount(vfs, "root", FILESYSTEM_EXT2, (void *)EXT2_ADDRESS);
 
-    uint32_t *background = (uint32_t *)kheap_alloc(768 * 1024 * 4);
+    uint32_t *background = (uint32_t *)kernelHeap.operations.alloc(&kernelHeap, 768 * 1024 * 4);
     uint32_t size = vfs_kernel_read(vfs, "/initrd/init/bg1024_768.dat", background, 768 * 1024 * 4);
     gfx2d_draw_bitmap(context, 0, 0, 1024, 768, background);
-    kheap_free(background);
+    kernelHeap.operations.free(&kernelHeap, background);
 
     schd_init();
 
@@ -328,7 +330,6 @@ void kernel_main(void) {
 
     Thread *windowFileSystemThread = thread_create("window fs", &window_filesystem, 1, 0);
     schd_add_thread(windowFileSystemThread, 0);
-
 
     Thread *windowMandelbrotThread = thread_create("window fs", &window_clock, 1, 0);
     schd_add_thread(windowMandelbrotThread, 0);

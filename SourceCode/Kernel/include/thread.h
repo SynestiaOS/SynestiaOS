@@ -26,6 +26,12 @@ typedef uint8_t CpuMask;
 #define DEFAULT_PRIORITY (NUM_PRIORITIES / 2)
 #define HIGH_PRIORITY ((NUM_PRIORITIES / 4) * 3)
 
+typedef enum CloneFlags {
+  CLONE_VM = 0x1,
+  CLONE_FS = 0x1 << 1,
+  CLONE_FILES = 0x1 << 2,
+} CloneFlags;
+
 typedef enum CPU {
   CPU_0 = 0,
   CPU_1,
@@ -121,6 +127,8 @@ typedef KernelStatus (*ThreadOperationExit)(struct Thread *thread, uint32_t retu
 
 typedef KernelStatus (*ThreadOperationKill)(struct Thread *thread);
 
+typedef struct Thread *(*ThreadOperationClone)(struct Thread *thread, CloneFlags cloneFlags, uint32_t heapStart);
+
 typedef struct ThreadOperations {
   ThreadOperationSuspend suspend;
   ThreadOperationResume resume;
@@ -129,12 +137,14 @@ typedef struct ThreadOperations {
   ThreadOperationJoin join;
   ThreadOperationExit exit;
   ThreadOperationKill kill;
+  ThreadOperationClone clone;
 } ThreadOperations;
 
 typedef struct Thread {
   uint32_t magic;
   CpuContextSave cpuContextSave;
 
+  struct Thread *parentThread;
   uint64_t pid;
   char name[THREAD_NAME_LENGTH];
   KernelStack *stack;

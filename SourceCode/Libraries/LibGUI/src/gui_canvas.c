@@ -9,6 +9,8 @@
 #include <stdbool.h>
 #include <stdlib.h>
 
+extern Heap kernelHeap;
+
 extern uint32_t GFX2D_BUFFER[1024 * 768];
 void gui_canvas_create(GUICanvas *canvas) {
   canvas->component.type = CANVAS;
@@ -42,7 +44,8 @@ void gui_canvas_create(GUICanvas *canvas) {
   canvas->component.foreground.g = 0x00;
   canvas->component.foreground.b = 0x00;
 
-  canvas->buffer = (unsigned char *)kheap_alloc(canvas->component.size.width * canvas->component.size.height * 4);
+  canvas->buffer = (unsigned char *)kernelHeap.operations.alloc(&kernelHeap, canvas->component.size.width *
+                                                                                 canvas->component.size.height * 4);
   if (canvas->buffer == nullptr) {
     LogError("[GUI]: canvas create failed, unable to allocate buffer memory\n");
   }

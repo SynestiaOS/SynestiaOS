@@ -14,8 +14,10 @@
 #include <atomic_test.h>
 #include <libmath_test.h>
 
+extern uint32_t __HEAP_BEGIN;
+Heap testHeap;
 void kernel_main_tests() {
-  kheap_init();
+  heap_create(&testHeap, __HEAP_BEGIN, 64 * MB);
 
   TEST_CASE("should_klist_insert", should_klist_insert);
   TEST_CASE("should_klist_append", should_klist_append);

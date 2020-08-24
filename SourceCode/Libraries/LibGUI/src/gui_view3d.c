@@ -8,7 +8,7 @@
 #include <log.h>
 #include <stdbool.h>
 #include <stdlib.h>
-
+extern Heap kernelHeap;
 extern uint32_t GFX2D_BUFFER[1024 * 768];
 void gui_view3d_create(GUIView3D *view) {
   view->component.type = VIEW3D;
@@ -42,7 +42,8 @@ void gui_view3d_create(GUIView3D *view) {
   view->component.foreground.g = 0x00;
   view->component.foreground.b = 0x00;
 
-  view->buffer = kheap_alloc(view->component.size.width * view->component.size.height * sizeof(uint32_t));
+  view->buffer = kernelHeap.operations.alloc(&kernelHeap, view->component.size.width * view->component.size.height *
+                                                              sizeof(uint32_t));
   if (view->buffer == nullptr) {
     LogError("[GUI]: canvas create failed, unable to allocate buffer memory\n");
   }

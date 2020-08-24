@@ -6,9 +6,12 @@
 #include <log.h>
 #include <stdlib.h>
 
+extern Heap kernelHeap;
+
 KernelVector *kvector_allocate() {
   // 1. allocate vector memory block from virtual memory (heap), and align.
-  KernelVector *vector = (KernelVector *)kheap_alloc(DEFAULT_VECTOR_SIZE * sizeof(ListNode *) + sizeof(KernelVector));
+  KernelVector *vector = (KernelVector *)kernelHeap.operations.alloc(
+      &kernelHeap, DEFAULT_VECTOR_SIZE * sizeof(ListNode *) + sizeof(KernelVector));
   if (vector == nullptr) {
     LogError("[KVector] kVector allocate failed.\n");
     return nullptr;
@@ -20,7 +23,7 @@ KernelVector *kvector_allocate() {
 }
 
 KernelStatus kvector_resize(KernelVector *vector, uint32_t newSize) {
-  vector = kheap_realloc(vector, newSize);
+  vector = kernelHeap.operations.realloc(&kernelHeap, vector, newSize);
   if (vector == nullptr) {
     return ERROR;
   }
@@ -29,7 +32,7 @@ KernelStatus kvector_resize(KernelVector *vector, uint32_t newSize) {
 }
 
 KernelStatus kvector_free(KernelVector *vector) {
-  KernelStatus status = kheap_free(vector);
+  KernelStatus status = kernelHeap.operations.free(&kernelHeap, vector);
   if (status != OK) {
     LogError("[KVector] kVector free failed.\n");
     return status;

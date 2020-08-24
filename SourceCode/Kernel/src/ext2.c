@@ -11,6 +11,8 @@
 #include <vfs_dentry.h>
 #include <vfs_inode.h>
 
+extern Heap kernelHeap;
+
 #define EXT2_SIGNATURE 0xef53
 #define EXT2_BLOCK_GROUP_DESCRIPTOR_SIZE 32
 #define EXT2_INDEX_NODE_STRUCTURE_SIZE 128
@@ -145,7 +147,8 @@ KernelStatus ext2_fs_default_mount(Ext2FileSystem *ext2FileSystem, char *mountNa
   blockForIndexNodeTable += blockForIndexNodeTableMod;
   LogInfo("[Ext2]: index node table  blocks: %d .\n", blockForIndexNodeTable);
 
-  Ext2BlockGroup *blockGroup = (Ext2BlockGroup *)kheap_alloc(blockGroupNums * sizeof(Ext2BlockGroup));
+  Ext2BlockGroup *blockGroup =
+      (Ext2BlockGroup *)kernelHeap.operations.alloc(&kernelHeap, blockGroupNums * sizeof(Ext2BlockGroup));
 
   for (uint32_t blockGroupDescriptorIndex = 0; blockGroupDescriptorIndex < blockGroupNums;
        blockGroupDescriptorIndex++) {
@@ -296,7 +299,7 @@ uint32_t ext2_fs_default_read(Ext2FileSystem *ext2FileSystem, Ext2IndexNode *ext
 }
 
 Ext2FileSystem *ext2_create() {
-  Ext2FileSystem *ext2FileSystem = (Ext2FileSystem *)kheap_alloc(sizeof(Ext2FileSystem));
+  Ext2FileSystem *ext2FileSystem = (Ext2FileSystem *)kernelHeap.operations.alloc(&kernelHeap, sizeof(Ext2FileSystem));
   ext2FileSystem->operations.mount = ext2_fs_default_mount;
   ext2FileSystem->operations.read = ext2_fs_default_read;
   return ext2FileSystem;

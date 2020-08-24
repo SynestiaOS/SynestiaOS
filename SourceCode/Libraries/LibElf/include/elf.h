@@ -58,8 +58,8 @@ typedef struct ElfFileHeader {
                       // (after at least 2.6) has no definition of it[5], so it is ignored for statically-linked
                       // executables. In that case, offset and size of EI_PAD are 8.
   uint8_t pad;        // currently unused, should be filled with zeros.
-  uint16_t type;    // Identifies object file type.
-  uint16_t machine; // Specifies target instruction set architecture.
+  uint16_t type;      // Identifies object file type.
+  uint16_t machine;   // Specifies target instruction set architecture.
   uint32_t originalVersion; // Set to 1 for the original version of ELF.
   uint32_t entry; // This is the memory address of the entry point from where the process starts executing. This field
                   // is either 32 or 64 bits long depending on the format defined earlier.
