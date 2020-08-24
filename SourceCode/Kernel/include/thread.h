@@ -127,7 +127,7 @@ typedef KernelStatus (*ThreadOperationExit)(struct Thread *thread, uint32_t retu
 
 typedef KernelStatus (*ThreadOperationKill)(struct Thread *thread);
 
-typedef struct Thread *(*ThreadOperationClone)(struct Thread *thread, CloneFlags cloneFlags, uint32_t heapStart);
+typedef struct Thread *(*ThreadOperationCopy)(struct Thread *thread, CloneFlags cloneFlags, uint32_t heapStart);
 
 typedef struct ThreadOperations {
   ThreadOperationSuspend suspend;
@@ -137,7 +137,7 @@ typedef struct ThreadOperations {
   ThreadOperationJoin join;
   ThreadOperationExit exit;
   ThreadOperationKill kill;
-  ThreadOperationClone clone;
+  ThreadOperationCopy copy;
 } ThreadOperations;
 
 typedef struct Thread {

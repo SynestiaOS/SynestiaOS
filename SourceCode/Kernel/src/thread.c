@@ -67,6 +67,8 @@ KernelStatus thread_default_exit(struct Thread *thread, uint32_t returnCode) {
 }
 
 KernelStatus thread_default_kill(struct Thread *thread) {
+  thread_free_pid(thread->pid);
+  kstack_free(thread->stack);
   // TODO:
   return OK;
 }
@@ -85,6 +87,8 @@ uint32_t filestruct_default_openfile(FilesStruct *filesStruct, DirectoryEntry *d
   }
   return filesStruct->fileDescriptorTable->index - 1;
 }
+
+Thread *thread_default_copy(Thread *thread, CloneFlags cloneFlags, uint32_t heapStart) {}
 
 Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uint32_t priority) {
   // 1. allocate stack memory from kernel heap for idle task
@@ -152,6 +156,7 @@ Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uin
     thread->operations.join = thread_default_join;
     thread->operations.exit = thread_default_exit;
     thread->operations.kill = thread_default_kill;
+    thread->operations.copy = thread_default_copy;
 
     thread->filesStruct.operations.openFile = filestruct_default_openfile;
     thread->filesStruct.fileDescriptorTable = kvector_allocate();
