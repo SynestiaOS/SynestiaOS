@@ -68,7 +68,7 @@ KernelStatus thread_default_exit(struct Thread *thread, uint32_t returnCode) {
 
 KernelStatus thread_default_kill(struct Thread *thread) {
   thread_free_pid(thread->pid);
-  kstack_free(thread->stack);
+  thread->stack->operations.free(thread->stack);
   // TODO:
   return OK;
 }
@@ -95,24 +95,24 @@ Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uin
   KernelStack *kernelStack = kstack_allocate(kernelStack);
   if (kernelStack != nullptr && kernelStack != nullptr) {
     // 1. init kernel stack
-    kstack_clear(kernelStack);
+    kernelStack->operations.clear(kernelStack);
 
-    kstack_push(kernelStack, entry);      // R15 PC
-    kstack_push(kernelStack, entry);      // R14 LR
-    kstack_push(kernelStack, 0x12121212); // R12
-    kstack_push(kernelStack, 0x11111111); // R11
-    kstack_push(kernelStack, 0x10101010); // R10
-    kstack_push(kernelStack, 0x09090909); // R09
-    kstack_push(kernelStack, 0x08080808); // R08
-    kstack_push(kernelStack, 0x07070707); // R07
-    kstack_push(kernelStack, 0x06060606); // R06
-    kstack_push(kernelStack, 0x05050505); // R05
-    kstack_push(kernelStack, 0x04040404); // R04
-    kstack_push(kernelStack, 0x03030303); // R03
-    kstack_push(kernelStack, 0x02020202); // R02
-    kstack_push(kernelStack, 0x01010101); // R01
-    kstack_push(kernelStack, arg);        // R00
-    kstack_push(kernelStack, 0x600001d3); // cpsr
+    kernelStack->operations.push(kernelStack, entry);      // R15 PC
+    kernelStack->operations.push(kernelStack, entry);      // R14 LR
+    kernelStack->operations.push(kernelStack, 0x12121212); // R12
+    kernelStack->operations.push(kernelStack, 0x11111111); // R11
+    kernelStack->operations.push(kernelStack, 0x10101010); // R10
+    kernelStack->operations.push(kernelStack, 0x09090909); // R09
+    kernelStack->operations.push(kernelStack, 0x08080808); // R08
+    kernelStack->operations.push(kernelStack, 0x07070707); // R07
+    kernelStack->operations.push(kernelStack, 0x06060606); // R06
+    kernelStack->operations.push(kernelStack, 0x05050505); // R05
+    kernelStack->operations.push(kernelStack, 0x04040404); // R04
+    kernelStack->operations.push(kernelStack, 0x03030303); // R03
+    kernelStack->operations.push(kernelStack, 0x02020202); // R02
+    kernelStack->operations.push(kernelStack, 0x01010101); // R01
+    kernelStack->operations.push(kernelStack, arg);        // R00
+    kernelStack->operations.push(kernelStack, 0x600001d3); // cpsr
 
     Thread *thread = (Thread *)kernelHeap.operations.alloc(&kernelHeap, sizeof(Thread));
     thread->magic = THREAD_MAGIC;
