@@ -12,11 +12,13 @@
 #define ALL_KERNEL_HEAP_MEM_SIZE 96 * MB
 
 void heap_default_alloc_callback(struct Heap *heap, void *ptr, uint32_t size) {
+  heap->statistics.allocatedSize += size;
   LogInfo("[Heap]: alloc %d bytes at %d.\n", size, (uint32_t)ptr);
 }
 
 void heap_default_free_callback(struct Heap *heap, void *ptr) {
   HeapArea *heapArea = (HeapArea *)(ptr - sizeof(HeapArea));
+  heap->statistics.allocatedSize -= heapArea->size;
   LogInfo("[Heap]: free %d bytes at %d.\n", heapArea->size, (uint32_t)ptr);
 }
 
@@ -154,10 +156,11 @@ KernelStatus heap_default_free(struct Heap *heap, void *ptr) {
         secondFreeArea->list.prev = nullptr;
         secondFreeArea->list.next = nullptr;
         secondFreeArea->size = 0;
+
+        heap->statistics.mergeCounts++;
       }
     }
   }
-
   heap->freeCallback(heap, ptr);
   ptr = nullptr;
   return OK;
@@ -176,7 +179,7 @@ uint32_t heap_create(Heap *heap, uint32_t addr, uint32_t size) {
 
   // allocate physical page for kernel heap
   uint32_t heapPhysicalPage =
-      (uint32_t)page_alloc_huge_at(USAGE_KERNEL_HEAP, (heap->address | 4 * KB) >> VA_OFFSET, 128 * MB - heap->address);
+      (uint32_t)page_alloc_huge_at(USAGE_KERNEL_HEAP, (heap->address | 4 * KB) >> VA_OFFSET, size - heap->address);
   LogInfo("[KHeap] alloc heap page: %d. \n", (uint32_t)heapPhysicalPage);
 
   heap->address = KERNEL_PHYSICAL_START + heapPhysicalPage * PAGE_SIZE;
@@ -206,6 +209,11 @@ uint32_t heap_create(Heap *heap, uint32_t addr, uint32_t size) {
   heap->operations.calloc = heap_default_count_alloc;
   heap->operations.realloc = heap_default_realloc;
   heap->operations.free = heap_default_free;
+
+  heap->statistics.allocatedBlockCount = 0;
+  heap->statistics.allocatedSize = 0;
+  heap->statistics.mergeCounts = 0;
+
   LogInfo("[KHeap] kheap created. \n");
   return OK;
 }

@@ -35,6 +35,12 @@ typedef struct HeapArea {
   ListNode list;
 } __attribute__((packed)) HeapArea;
 
+typedef struct HeapStatistics {
+  uint32_t allocatedBlockCount;
+  uint32_t allocatedSize;
+  uint32_t mergeCounts;
+} HeapStatistics;
+
 typedef struct Heap {
   uint32_t address;
   uint32_t maxSizeLimit;
@@ -43,6 +49,8 @@ typedef struct Heap {
   HeapAllocCallback allocCallback;
   HeapFreeCallback freeCallback;
   HeapOperations operations;
+
+  HeapStatistics statistics;
 } Heap;
 
 uint32_t heap_create(Heap *heap, uint32_t addr, uint32_t size);
