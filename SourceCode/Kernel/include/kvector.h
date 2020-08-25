@@ -5,7 +5,7 @@
 #ifndef __KERNEL_VECTOR_H__
 #define __KERNEL_VECTOR_H__
 
-#include "list.h"
+#include <list.h>
 #include <stdbool.h>
 #include <type.h>
 
@@ -33,13 +33,14 @@ typedef struct KernelVectorOperations {
   KernelVectorOperationIsEmpty isEmpty;
   KernelVectorOperationIsFull isFull;
   KernelVectorOperationClear clear;
-} KernelVectorOperations;
+}  KernelVectorOperations;
 
 typedef struct KernelVector {
+  uint32_t index;
   uint32_t size;
   ListNode **node;
-  uint32_t index;
-} __attribute__((packed)) KernelVector;
+//  KernelVectorOperations operations;
+} KernelVector;
 
 KernelVector *kvector_allocate();
 

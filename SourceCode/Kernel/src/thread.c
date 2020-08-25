@@ -88,7 +88,23 @@ uint32_t filestruct_default_openfile(FilesStruct *filesStruct, DirectoryEntry *d
   return filesStruct->fileDescriptorTable->index - 1;
 }
 
-Thread *thread_default_copy(Thread *thread, CloneFlags cloneFlags, uint32_t heapStart) {}
+Thread *thread_default_copy(Thread *thread, CloneFlags cloneFlags, uint32_t heapStart) {
+    Thread* p = thread_create(thread->name,thread->entry,thread->arg,thread->priority);
+    if(cloneFlags & CLONE_VM){
+        // TODO
+    }
+
+    if(cloneFlags & CLONE_FILES){
+        // TODO
+    }
+
+    if(cloneFlags & CLONE_FS){
+        // TODO
+    }
+
+    // TODO
+    return p;
+}
 
 Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uint32_t priority) {
   // 1. allocate stack memory from kernel heap for idle task
