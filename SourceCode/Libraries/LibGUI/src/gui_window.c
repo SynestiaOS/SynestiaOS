@@ -87,7 +87,7 @@ void gui_window_init(GUIWindow *window, uint32_t x, uint32_t y, const char *titl
 
 void gui_window_add_children(GUIWindow *window, GUIComponent *component) {
   if (window->children != nullptr) {
-      kvector_add(window->children, &(component->node));
+    kvector_add(window->children, &(component->node));
   }
 }
 
@@ -248,7 +248,7 @@ void gui_window_draw_children(GUIWindow *window) {
   KernelVector *children = window->children;
   if (children != nullptr) {
     for (uint32_t i = 0; i < children->index; i++) {
-      ListNode *listNode = kvector_get(children,i);
+      ListNode *listNode = kvector_get(children, i);
       GUIComponent *component = getNode(listNode, GUIComponent, node);
       switch (component->type) {
       case BUTTON: {

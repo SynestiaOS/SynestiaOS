@@ -5,12 +5,14 @@
 #ifndef __KERNEL_THREAD_H__
 #define __KERNEL_THREAD_H__
 
+#include <kheap.h>
 #include <kqueue.h>
 #include <kstack.h>
 #include <list.h>
 #include <rbtree.h>
 #include <stdint.h>
 #include <vfs_dentry.h>
+#include <vmm.h>
 
 typedef uint8_t CpuNum;
 typedef uint8_t CpuMask;
@@ -79,13 +81,12 @@ typedef struct CpuContextSave {
 
 typedef uint32_t (*ThreadStartRoutine)(void *arg);
 
-typedef struct VMMAssociatedSpace {
-  uint32_t pageTableAddr;
+typedef struct SectionInfo {
   uint32_t codeSectionAddr;
   uint32_t roDataSectionAddr;
   uint32_t dataSectionAddr;
   uint32_t bssSectionAddr;
-} __attribute__((packed)) VMMAssociatedSpace;
+} __attribute__((packed)) SectionInfo;
 
 typedef struct FileDescriptor {
   uint32_t pos;
@@ -109,7 +110,9 @@ typedef struct MemoryStructOperations {
 
 } MemoryStructOperations;
 typedef struct MemoryStruct {
-  VMMAssociatedSpace vmmSpace;
+  VMM vmm;
+  Heap heap;
+  SectionInfo sectionInfo;
   MemoryStructOperations operations;
 } MemoryStruct;
 

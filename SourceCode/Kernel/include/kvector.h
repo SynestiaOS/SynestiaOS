@@ -33,13 +33,13 @@ typedef struct KernelVectorOperations {
   KernelVectorOperationIsEmpty isEmpty;
   KernelVectorOperationIsFull isFull;
   KernelVectorOperationClear clear;
-}  KernelVectorOperations;
+} KernelVectorOperations;
 
 typedef struct KernelVector {
   uint32_t index;
   uint32_t size;
   ListNode **node;
-//  KernelVectorOperations operations;
+  //  KernelVectorOperations operations;
 } KernelVector;
 
 KernelVector *kvector_allocate();

@@ -89,21 +89,21 @@ uint32_t filestruct_default_openfile(FilesStruct *filesStruct, DirectoryEntry *d
 }
 
 Thread *thread_default_copy(Thread *thread, CloneFlags cloneFlags, uint32_t heapStart) {
-    Thread* p = thread_create(thread->name,thread->entry,thread->arg,thread->priority);
-    if(cloneFlags & CLONE_VM){
-        // TODO
-    }
-
-    if(cloneFlags & CLONE_FILES){
-        // TODO
-    }
-
-    if(cloneFlags & CLONE_FS){
-        // TODO
-    }
-
+  Thread *p = thread_create(thread->name, thread->entry, thread->arg, thread->priority);
+  if (cloneFlags & CLONE_VM) {
     // TODO
-    return p;
+  }
+
+  if (cloneFlags & CLONE_FILES) {
+    // TODO
+  }
+
+  if (cloneFlags & CLONE_FS) {
+    // TODO
+  }
+
+  // TODO
+  return p;
 }
 
 Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uint32_t priority) {
@@ -148,11 +148,10 @@ Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uin
     strcpy(thread->name, name);
     thread->arg = arg;
 
-    thread->memoryStruct.vmmSpace.pageTableAddr = 0;
-    thread->memoryStruct.vmmSpace.codeSectionAddr = 0;
-    thread->memoryStruct.vmmSpace.roDataSectionAddr = 0;
-    thread->memoryStruct.vmmSpace.dataSectionAddr = 0;
-    thread->memoryStruct.vmmSpace.bssSectionAddr = 0;
+    thread->memoryStruct.sectionInfo.codeSectionAddr = 0;
+    thread->memoryStruct.sectionInfo.roDataSectionAddr = 0;
+    thread->memoryStruct.sectionInfo.dataSectionAddr = 0;
+    thread->memoryStruct.sectionInfo.bssSectionAddr = 0;
 
     thread->threadList.prev = nullptr;
     thread->threadList.next = nullptr;

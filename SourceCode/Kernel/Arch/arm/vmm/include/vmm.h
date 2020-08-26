@@ -5,6 +5,10 @@
 #ifndef __KERNEL_VMM_H__
 #define __KERNEL_VMM_H__
 
+typedef struct VMM {
+
+} VMM;
+
 void vmm_init();
 
 void vmm_enable();
