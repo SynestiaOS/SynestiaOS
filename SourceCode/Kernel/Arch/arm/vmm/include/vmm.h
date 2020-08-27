@@ -22,6 +22,8 @@ void vmm_enable();
 
 void vmm_add_map_hook(void (*func)(uint32_t process));
 
+void do_page_fault(uint32_t address);
+
 extern int __PAGE_TABLE;
 
 #endif //__KERNEL_VMM_H__

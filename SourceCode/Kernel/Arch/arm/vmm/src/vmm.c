@@ -125,3 +125,16 @@ void vmm_enable() {
   mmu_enable();
   LogInfo("[vmm]: vmm enabled\n");
 }
+
+void do_page_fault(uint32_t address){
+    LogError("[vmm]: page fault at: %d .\n",address);
+    uint32_t l1Offset = address >> 30 & 0b11;
+    uint32_t l2Offset = address >> 21 & 0b111111111;
+    uint32_t l3Offset = address >> 12 & 0b111111111;
+    uint32_t pageOffset = address & 0xFFF;
+
+    LogError("[vmm]: l1Offset: %d .\n", l1Offset);
+    LogError("[vmm]: l2Offset: %d .\n", l2Offset);
+    LogError("[vmm]: l3Offset: %d .\n", l3Offset);
+    LogError("[vmm]: pageOffset: %d .\n", pageOffset);
+}
