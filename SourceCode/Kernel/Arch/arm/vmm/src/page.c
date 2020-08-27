@@ -5,8 +5,6 @@
 #include <page.h>
 #include <type.h>
 
-#define PHYSICAL_PAGE_NUMBERS (1 << 20)
-
 PhysicalPage physicalPages[PHYSICAL_PAGE_NUMBERS] = {'\0'};
 uint32_t physicalPagesUsedBitMap[PHYSICAL_PAGE_NUMBERS / BITS_IN_UINT32] = {'\0'};
 
@@ -68,4 +66,26 @@ uint64_t page_free_huge(uint64_t page, uint64_t size) {
     page_free(pageIndex);
   }
   return page;
+}
+
+////////////////////////
+uint64_t physical_page_allocator_default_alloc_page_4k(PhysicalPageAllocator *pageAllocator, PhysicalPageUsage usage) {}
+uint64_t physical_page_allocator_default_free_page_4k(PhysicalPageAllocator *pageAllocator, uint64_t page) {}
+uint64_t physical_page_allocator_default_alloc_page_2m(PhysicalPageAllocator *pageAllocator, PhysicalPageUsage usage) {}
+uint64_t physical_page_allocator_default_free_page_2m(PhysicalPageAllocator *pageAllocator, uint64_t page) {}
+uint64_t physical_page_allocator_default_alloc_page_4k_at(PhysicalPageAllocator *pageAllocator, PhysicalPageUsage usage,
+                                                          uint64_t page) {}
+uint64_t physical_page_allocator_default_alloc_page_2m_at(PhysicalPageAllocator *pageAllocator, PhysicalPageUsage usage,
+                                                          uint64_t page) {}
+
+void page_allocator_create(PhysicalPageAllocator *pageAllocator, uint32_t base, uint32_t size) {
+  pageAllocator->size = size;
+  pageAllocator->base = base;
+
+  pageAllocator->operations.allocPage4K = physical_page_allocator_default_alloc_page_4k;
+  pageAllocator->operations.allocPage2M = physical_page_allocator_default_alloc_page_2m;
+  pageAllocator->operations.freePage4K = physical_page_allocator_default_free_page_4k;
+  pageAllocator->operations.freePage2M = physical_page_allocator_default_free_page_2m;
+  pageAllocator->operations.allocPage4KAt = physical_page_allocator_default_alloc_page_4k_at;
+  pageAllocator->operations.allocPage2MAt = physical_page_allocator_default_alloc_page_2m_at;
 }

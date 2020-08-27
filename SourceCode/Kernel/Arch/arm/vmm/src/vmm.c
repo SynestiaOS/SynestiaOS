@@ -32,7 +32,8 @@ void map_kernel_l2pt(uint64_t l2ptPhysicalAddress, uint64_t ptPhysicalAddress) {
     kernelVMML2PT->pte[i].valid = 1;
     kernelVMML2PT->pte[i].table = 1;
     kernelVMML2PT->pte[i].af = 1;
-    kernelVMML2PT->pte[i].base = (uint64_t)(ptPhysicalAddress + i * KERNEL_PTE_NUMBER * sizeof(PageTableEntry)) >> VA_OFFSET;
+    kernelVMML2PT->pte[i].base =
+        (uint64_t)(ptPhysicalAddress + i * KERNEL_PTE_NUMBER * sizeof(PageTableEntry)) >> VA_OFFSET;
   }
   // Peripheral 16MB 0x3F000000
   for (uint32_t i = 0; i < 8; i++) {
@@ -126,51 +127,36 @@ void vmm_enable() {
   LogInfo("[vmm]: vmm enabled\n");
 }
 
-
-
 ////////////////////////////////////////
 
-void virtual_memory_default_context_switch(VirtualMemory *old, VirtualMemory* new){
+void virtual_memory_default_context_switch(VirtualMemory *old, VirtualMemory *new) {}
+void virtual_memory_default_allocate_page(VirtualMemory *virtualMemory, uint32_t virtualAddress) {}
+void virtual_memory_default_mapping_page(VirtualMemory *virtualMemory, uint32_t virtualAddress,
+                                         uint32_t physicalAddress) {}
+void virtual_memory_default_release(VirtualMemory *virtualMemory) {}
+void virtual_memory_default_enable(VirtualMemory *virtualMemory) {}
 
-}
-void virtual_memory_default_allocate_page(VirtualMemory *virtualMemory, uint32_t virtualAddress){
+void vmm_create(VirtualMemory *virtualMemory) {
+  virtualMemory->operations.mappingPage = virtual_memory_default_mapping_page;
+  virtualMemory->operations.contextSwitch = virtual_memory_default_context_switch;
+  virtualMemory->operations.allocatePage = virtual_memory_default_allocate_page;
+  virtualMemory->operations.release = virtual_memory_default_release;
+  virtualMemory->operations.enable = virtual_memory_default_enable;
 
-}
-void virtual_memory_default_mapping_page(VirtualMemory *virtualMemory, uint32_t virtualAddress, uint32_t physicalAddress){
-
-}
-void virtual_memory_default_release(VirtualMemory *virtualMemory){
-
-}
-void virtual_memory_default_enable(VirtualMemory *virtualMemory){
-
-}
-
-
-void vmm_create(VirtualMemory* virtualMemory){
-    virtualMemory->operations.mappingPage = virtual_memory_default_mapping_page;
-    virtualMemory->operations.contextSwitch = virtual_memory_default_context_switch;
-    virtualMemory->operations.allocatePage = virtual_memory_default_allocate_page;
-    virtualMemory->operations.release = virtual_memory_default_release;
-    virtualMemory->operations.enable = virtual_memory_default_enable;
-
-    // TODO:
+  virtualMemory->pageTable = page_alloc(USAGE_PAGETABLE);
 }
 
+void do_page_fault(uint32_t address) {
+  LogError("[vmm]: page fault at: %d .\n", address);
+  uint32_t l1Offset = address >> 30 & 0b11;
+  uint32_t l2Offset = address >> 21 & 0b111111111;
+  uint32_t l3Offset = address >> 12 & 0b111111111;
+  uint32_t pageOffset = address & 0xFFF;
 
-void do_page_fault(uint32_t address){
-    LogError("[vmm]: page fault at: %d .\n",address);
-    uint32_t l1Offset = address >> 30 & 0b11;
-    uint32_t l2Offset = address >> 21 & 0b111111111;
-    uint32_t l3Offset = address >> 12 & 0b111111111;
-    uint32_t pageOffset = address & 0xFFF;
+  // check is thread not map vm
 
-    // check is thread not map vm
-
-
-    LogError("[vmm]: l1Offset: %d .\n", l1Offset);
-    LogError("[vmm]: l2Offset: %d .\n", l2Offset);
-    LogError("[vmm]: l3Offset: %d .\n", l3Offset);
-    LogError("[vmm]: pageOffset: %d .\n", pageOffset);
-
+  LogError("[vmm]: l1Offset: %d .\n", l1Offset);
+  LogError("[vmm]: l2Offset: %d .\n", l2Offset);
+  LogError("[vmm]: l3Offset: %d .\n", l3Offset);
+  LogError("[vmm]: pageOffset: %d .\n", pageOffset);
 }

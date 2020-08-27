@@ -6,8 +6,10 @@
 #define __KERNEL_PAGE_H__
 
 #include <stdint.h>
+#include <type.h>
 
 #define PAHE_TABLE_SIZE 0x805000
+#define PHYSICAL_PAGE_NUMBERS (1 << 20)
 
 #define KERNEL_L1PT_NUMBER 4
 #define KERNEL_L2PT_NUMBER 64
@@ -92,5 +94,44 @@ uint64_t page_alloc_huge(PhysicalPageUsage usage);
 uint64_t page_alloc_huge_at(PhysicalPageUsage usage, uint64_t page, uint64_t size);
 
 uint64_t page_free_huge(uint64_t page, uint64_t size);
+
+///////////////////////////
+
+typedef uint64_t (*PhysicalPageAllocatorOperationAllocPage4K)(struct PhysicalPageAllocator *pageAllocator,
+                                                              PhysicalPageUsage usage);
+
+typedef uint64_t (*PhysicalPageAllocatorOperationFreePage4K)(struct PhysicalPageAllocator *pageAllocator,
+                                                             uint64_t page);
+
+typedef uint64_t (*PhysicalPageAllocatorOperationAllocPage2M)(struct PhysicalPageAllocator *pageAllocator,
+                                                              PhysicalPageUsage usage);
+
+typedef uint64_t (*PhysicalPageAllocatorOperationFreePage2M)(struct PhysicalPageAllocator *pageAllocator,
+                                                             uint64_t page);
+
+typedef uint64_t (*PhysicalPageAllocatorOperationAllocPage4KAt)(struct PhysicalPageAllocator *pageAllocator,
+                                                                PhysicalPageUsage usage, uint64_t page);
+
+typedef uint64_t (*PhysicalPageAllocatorOperationAllocPage2MAt)(struct PhysicalPageAllocator *pageAllocator,
+                                                                PhysicalPageUsage usage, uint64_t page);
+
+typedef struct PhysicalPageAllocatorOperations {
+  PhysicalPageAllocatorOperationAllocPage4K allocPage4K;
+  PhysicalPageAllocatorOperationAllocPage2M allocPage2M;
+  PhysicalPageAllocatorOperationFreePage4K freePage4K;
+  PhysicalPageAllocatorOperationFreePage2M freePage2M;
+  PhysicalPageAllocatorOperationAllocPage4KAt allocPage4KAt;
+  PhysicalPageAllocatorOperationAllocPage2MAt allocPage2MAt;
+} PhysicalPageAllocatorOperations;
+
+typedef struct PhysicalPageAllocator {
+  uint32_t base;
+  uint32_t size;
+  PhysicalPage physicalPages[PHYSICAL_PAGE_NUMBERS]; // TODO: should be size/pagesize
+  uint32_t physicalPagesUsedBitMap[PHYSICAL_PAGE_NUMBERS / BITS_IN_UINT32];
+  PhysicalPageAllocatorOperations operations;
+} PhysicalPageAllocator;
+
+void page_allocator_create(PhysicalPageAllocator *pageAllocator, uint32_t base, uint32_t size);
 
 #endif // __KERNEL_PAGE_H__

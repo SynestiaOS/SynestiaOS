@@ -6,26 +6,27 @@
 #define __KERNEL_VMM_H__
 #include <page.h>
 
-typedef void (*VirtualMemoryOperationContextSwitch)(struct VirtualMemory *old, struct VirtualMemory* new);
+typedef void (*VirtualMemoryOperationContextSwitch)(struct VirtualMemory *old, struct VirtualMemory *new);
 typedef void (*VirtualMemoryOperationAllocatePage)(struct VirtualMemory *virtualMemory, uint32_t virtualAddress);
-typedef void (*VirtualMemoryOperationMappingPage)(struct VirtualMemory *virtualMemory, uint32_t virtualAddress, uint32_t physicalAddress);
+typedef void (*VirtualMemoryOperationMappingPage)(struct VirtualMemory *virtualMemory, uint32_t virtualAddress,
+                                                  uint32_t physicalAddress);
 typedef void (*VirtualMemoryOperationRelease)(struct VirtualMemory *virtualMemory);
 typedef void (*VirtualMemoryOperationEnable)(struct VirtualMemory *virtualMemory);
 
-typedef struct VirtualMemoryOperations{
-    VirtualMemoryOperationContextSwitch contextSwitch;
-    VirtualMemoryOperationAllocatePage allocatePage;
-    VirtualMemoryOperationMappingPage mappingPage;
-    VirtualMemoryOperationRelease release;
-    VirtualMemoryOperationEnable enable;
+typedef struct VirtualMemoryOperations {
+  VirtualMemoryOperationContextSwitch contextSwitch;
+  VirtualMemoryOperationAllocatePage allocatePage;
+  VirtualMemoryOperationMappingPage mappingPage;
+  VirtualMemoryOperationRelease release;
+  VirtualMemoryOperationEnable enable;
 } VirtualMemoryOperations;
 
 typedef struct VirtualMemory {
-    PageTableEntry *pageTable;
-    VirtualMemoryOperations operations;
+  PageTableEntry *pageTable;
+  VirtualMemoryOperations operations;
 } VirtualMemory;
 
-void vmm_create(VirtualMemory* virtualMemory);
+void vmm_create(VirtualMemory *virtualMemory);
 
 void vmm_init();
 
