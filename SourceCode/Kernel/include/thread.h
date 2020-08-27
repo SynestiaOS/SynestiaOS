@@ -110,7 +110,7 @@ typedef struct MemoryStructOperations {
 
 } MemoryStructOperations;
 typedef struct MemoryStruct {
-  VMM vmm;
+  VirtualMemeory virtualMemeory;
   Heap heap;
   SectionInfo sectionInfo;
   MemoryStructOperations operations;
