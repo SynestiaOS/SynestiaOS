@@ -58,8 +58,9 @@ uint32_t strlen(const char *str) {
 
 void *memset(char *s, int c, uint32_t n) {
   char *tmpS = (char *)s;
-  while (n-- > 0)
+  while (n-- > 0) {
     *tmpS++ = c;
+  }
   return s;
 }
 

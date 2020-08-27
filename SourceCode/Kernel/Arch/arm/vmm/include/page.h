@@ -110,10 +110,16 @@ typedef uint64_t (*PhysicalPageAllocatorOperationFreePage2M)(struct PhysicalPage
                                                              uint64_t page);
 
 typedef uint64_t (*PhysicalPageAllocatorOperationAllocPage4KAt)(struct PhysicalPageAllocator *pageAllocator,
-                                                                PhysicalPageUsage usage, uint64_t page);
+                                                                PhysicalPageUsage usage, uint64_t address);
 
 typedef uint64_t (*PhysicalPageAllocatorOperationAllocPage2MAt)(struct PhysicalPageAllocator *pageAllocator,
-                                                                PhysicalPageUsage usage, uint64_t page);
+                                                                PhysicalPageUsage usage, uint64_t address);
+
+typedef uint64_t (*PhysicalPageAllocatorOperationPage4KMarkAsUsed)(struct PhysicalPageAllocator *pageAllocator,
+                                                                   uint64_t page);
+
+typedef uint64_t (*PhysicalPageAllocatorOperationPage4KMarkAsFree)(struct PhysicalPageAllocator *pageAllocator,
+                                                                   uint64_t page);
 
 typedef struct PhysicalPageAllocatorOperations {
   PhysicalPageAllocatorOperationAllocPage4K allocPage4K;
@@ -122,6 +128,8 @@ typedef struct PhysicalPageAllocatorOperations {
   PhysicalPageAllocatorOperationFreePage2M freePage2M;
   PhysicalPageAllocatorOperationAllocPage4KAt allocPage4KAt;
   PhysicalPageAllocatorOperationAllocPage2MAt allocPage2MAt;
+  PhysicalPageAllocatorOperationPage4KMarkAsUsed page4KMarkAsUsed;
+  PhysicalPageAllocatorOperationPage4KMarkAsFree page4KMarkAsFree;
 } PhysicalPageAllocatorOperations;
 
 typedef struct PhysicalPageAllocator {
