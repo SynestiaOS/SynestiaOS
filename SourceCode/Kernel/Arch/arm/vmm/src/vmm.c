@@ -126,6 +126,38 @@ void vmm_enable() {
   LogInfo("[vmm]: vmm enabled\n");
 }
 
+
+
+////////////////////////////////////////
+
+void virtual_memory_default_context_switch(VirtualMemory *old, VirtualMemory* new){
+
+}
+void virtual_memory_default_allocate_page(VirtualMemory *virtualMemory, uint32_t virtualAddress){
+
+}
+void virtual_memory_default_mapping_page(VirtualMemory *virtualMemory, uint32_t virtualAddress, uint32_t physicalAddress){
+
+}
+void virtual_memory_default_release(VirtualMemory *virtualMemory){
+
+}
+void virtual_memory_default_enable(VirtualMemory *virtualMemory){
+
+}
+
+
+void vmm_create(VirtualMemory* virtualMemory){
+    virtualMemory->operations.mappingPage = virtual_memory_default_mapping_page;
+    virtualMemory->operations.contextSwitch = virtual_memory_default_context_switch;
+    virtualMemory->operations.allocatePage = virtual_memory_default_allocate_page;
+    virtualMemory->operations.release = virtual_memory_default_release;
+    virtualMemory->operations.enable = virtual_memory_default_enable;
+
+    // TODO:
+}
+
+
 void do_page_fault(uint32_t address){
     LogError("[vmm]: page fault at: %d .\n",address);
     uint32_t l1Offset = address >> 30 & 0b11;
