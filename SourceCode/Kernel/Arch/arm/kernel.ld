@@ -39,16 +39,22 @@ SECTIONS
     __bss_end = .;
 
     . = 0x20000 + __bss_end;
-    __svc_stack = .;
+    __sys_stack = .;
 
-    . = 0x20000 + __svc_stack;
+    . = 0x20000 + __sys_stack;
     __irq_stack = .;
 
     . = 0x20000 + __irq_stack;
     __fiq_stack = .;
 
     . = 0x20000 + __fiq_stack;
-    __sys_stack = .;
+    __svc_stack = .;
+
+    . = 0x20000 + __svc_stack;
+    __abort_stack = .;
+
+    . = 0x20000 + __abort_stack;
+    __undefined_stack = .;
 
     __end_stack = .;
     . = ALIGN(4096);

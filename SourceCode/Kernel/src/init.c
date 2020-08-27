@@ -303,6 +303,8 @@ void kernel_main(void) {
 
     heap_create(&kernelHeap, &__HEAP_BEGIN, 64 * MB);
 
+    uint32_t i  = *(uint32_t*)(0xFFee0f3e);
+
     vfs = vfs_create();
     vfs->operations.mount(vfs, "root", FILESYSTEM_EXT2, (void *)EXT2_ADDRESS);
 

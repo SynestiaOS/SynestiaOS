@@ -20,7 +20,7 @@
 _start:
     safe_svcmode_maskall r0
     mov	r0, #0
-	mcr	p15, 0, r0, c12, c0, 0	
+	mcr	p15, 0, r0, c12, c0, 0
 
     // there are 4 cores within rasberry pi 3, and 4 cores will execute the following code at the same time
     mrc p15, #0, r0, c0, c0, #5 // Move to ARM Register r0 from Coprocessor c0. Read ID Code Register
@@ -40,7 +40,7 @@ _start:
     ldr pc, =_halt_smp // else, go to _halt_smp, it means only core with id 0,1,2,3 will execute the following code
 
 _init_cpu0:
-    ldr sp, =__sys_stack
+    ldr sp, =__svc_stack
 
     ldr r0, =__bss_start
     ldr r1, =__bss_end
@@ -50,10 +50,10 @@ _init_cpu0:
     ldr	sp, =__fiq_stack
     cps	#0x12				/* change mode to irq */
     ldr	sp, =__irq_stack
-    // cps	#0x17				/* change mode to abort */
-    // ldr	sp, =MEM_ABORT_STACK
-    // cps	#0x1B				/* change mode to 'undefined' */
-    // ldr	sp, =MEM_ABORT_STACK
+    cps	#0x17				/* change mode to abort */
+    ldr	sp, =__abort_stack
+    cps	#0x1B				/* change mode to 'undefined' */
+    ldr	sp, =__undefined_stack
     cps	#0x1F				/* set system mode */
     ldr	sp, =__sys_stack
 
@@ -64,10 +64,10 @@ _init_cpu1:
     ldr	sp, =__fiq_stack-0x8000
     cps	#0x12				/* change mode to irq */
     ldr	sp, =__irq_stack-0x8000
-    // cps	#0x17				/* change mode to abort */
-    // ldr	sp, =MEM_ABORT_STACK
-    // cps	#0x1B				/* change mode to 'undefined' */
-    // ldr	sp, =MEM_ABORT_STACK
+    cps	#0x17				/* change mode to abort */
+    ldr	sp, =__abort_stack-0x8000
+    cps	#0x1B				/* change mode to 'undefined' */
+    ldr	sp, =__undefined_stack-0x8000
     cps	#0x1F				/* set system mode */
     ldr	sp, =__sys_stack-0x8000
 
@@ -79,10 +79,10 @@ _init_cpu2:
     ldr	sp, =__fiq_stack-0x8000-0x8000
     cps	#0x12				/* change mode to irq */
     ldr	sp, =__irq_stack-0x8000-0x8000
-    // cps	#0x17				/* change mode to abort */
-    // ldr	sp, =MEM_ABORT_STACK
-    // cps	#0x1B				/* change mode to 'undefined' */
-    // ldr	sp, =MEM_ABORT_STACK
+    cps	#0x17				/* change mode to abort */
+    ldr	sp, =__abort_stack-0x8000-0x8000
+    cps	#0x1B				/* change mode to 'undefined' */
+    ldr	sp, =__undefined_stack-0x8000-0x8000
     cps	#0x1F				/* set system mode */
     ldr	sp, =__sys_stack-0x8000-0x8000
 
@@ -94,10 +94,10 @@ _init_cpu3:
     ldr	sp, =__fiq_stack-0x8000-0x8000-0x8000
     cps	#0x12				/* change mode to irq */
     ldr	sp, =__irq_stack-0x8000-0x8000-0x8000
-    // cps	#0x17				/* change mode to abort */
-    // ldr	sp, =MEM_ABORT_STACK
-    // cps	#0x1B				/* change mode to 'undefined' */
-    // ldr	sp, =MEM_ABORT_STACK
+    cps	#0x17				/* change mode to abort */
+    ldr	sp, =__abort_stack-0x8000-0x8000-0x8000
+    cps	#0x1B				/* change mode to 'undefined' */
+    ldr	sp, =__undefined_stack-0x8000-0x8000-0x8000
     cps	#0x1F				/* set system mode */
     ldr	sp, =__sys_stack-0x8000-0x8000-0x8000
     wfe

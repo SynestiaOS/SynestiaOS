@@ -18,7 +18,7 @@ _software_interrupt_addr:
 _prefetch_abort_addr:
     .word prefetch_abort_handler
 _data_abort_addr:
-    .word data_abort_handler
+    .word data_abort_isp
 _unused_addr:
     .word unused_handler
 _interrupt_addr:
@@ -113,7 +113,7 @@ _reset_cpu3:
 .global  switch_to_signal;
 
 halt_cpu:
-    wfi // wait for interrup coming
+    wfi // wait for interrupt coming
     b halt_cpu
 
 software_interrupt_isp:
@@ -126,13 +126,23 @@ software_interrupt_isp:
     subs    pc,  lr, #0
     nop
 
+data_abort_isp:
+    //cpsr
+    stmfd   sp!, {r1-r12,lr}
+
+	bl    data_abort_handler
+
+	ldmfd   sp!, {r1-r12,lr}
+    subs    pc,  lr, #0
+    nop
+
 interrupt_isp:
     //cpsr
     stmfd   sp!, {r0-r12,lr}
 
     bl interrupt_handler
 
-    //R0: swithch_to_signal Address
+    //R0: switch_to_signal Address
     ldr r0, =switch_to_signal
     ldr r1, [r0]
 
