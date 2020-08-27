@@ -5,16 +5,18 @@
 #ifndef __KERNEL_VMM_H__
 #define __KERNEL_VMM_H__
 
-typedef void (*VirtualMemeoryOperationContextSwitch)(struct VirtualMemeory *old, struct VirtualMemeory* new);
+typedef void (*VirtualMemoryOperationContextSwitch)(struct VirtualMemory *old, struct VirtualMemory* new);
 
-typedef struct VirtualMemeoryOperations{
-    VirtualMemeoryOperationContextSwitch contextSwitch;
-} VirtualMemeoryOperations;
+typedef struct VirtualMemoryOperations{
+    VirtualMemoryOperationContextSwitch contextSwitch;
+} VirtualMemoryOperations;
 
-typedef struct VirtualMemeory {
+typedef struct VirtualMemory {
     uint32_t address;
-    VirtualMemeoryOperations operations;
-} VirtualMemeory;
+
+
+    VirtualMemoryOperations operations;
+} VirtualMemory;
 
 void vmm_init();
 

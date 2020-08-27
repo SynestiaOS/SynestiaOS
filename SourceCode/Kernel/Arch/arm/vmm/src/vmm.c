@@ -9,12 +9,12 @@
 #include <type.h>
 #include <vmm.h>
 
-L1PT *kernelVMML1PT;
-L2PT *kernelVMML2PT;
-PT *kernelVMMPT;
+Level1PageTable *kernelVMML1PT;
+Level2PageTable *kernelVMML2PT;
+PageTable *kernelVMMPT;
 
 void map_kernel_l1pt(uint64_t l1ptPhysicalAddress, uint64_t l2ptPhysicalAddress) {
-  kernelVMML1PT = (L1PT *)l1ptPhysicalAddress;
+  kernelVMML1PT = (Level1PageTable *)l1ptPhysicalAddress;
   kernelVMML1PT->pte[0].valid = 1;
   kernelVMML1PT->pte[0].table = 1;
   kernelVMML1PT->pte[0].af = 1;
@@ -27,12 +27,12 @@ void map_kernel_l1pt(uint64_t l1ptPhysicalAddress, uint64_t l2ptPhysicalAddress)
 }
 
 void map_kernel_l2pt(uint64_t l2ptPhysicalAddress, uint64_t ptPhysicalAddress) {
-  kernelVMML2PT = (L2PT *)l2ptPhysicalAddress;
+  kernelVMML2PT = (Level2PageTable *)l2ptPhysicalAddress;
   for (uint32_t i = 0; i < KERNEL_PTE_NUMBER; i++) {
     kernelVMML2PT->pte[i].valid = 1;
     kernelVMML2PT->pte[i].table = 1;
     kernelVMML2PT->pte[i].af = 1;
-    kernelVMML2PT->pte[i].base = (uint64_t)(ptPhysicalAddress + i * KERNEL_PTE_NUMBER * sizeof(PTE)) >> VA_OFFSET;
+    kernelVMML2PT->pte[i].base = (uint64_t)(ptPhysicalAddress + i * KERNEL_PTE_NUMBER * sizeof(PageTableEntry)) >> VA_OFFSET;
   }
   // Peripheral 16MB 0x3F000000
   for (uint32_t i = 0; i < 8; i++) {
@@ -57,7 +57,7 @@ void map_kernel_l2pt(uint64_t l2ptPhysicalAddress, uint64_t ptPhysicalAddress) {
   }
 
   // 2 level page table for second first page table
-  L2PT *secondL2PT = (L2PT *)(l2ptPhysicalAddress + 4 * KB);
+  Level2PageTable *secondL2PT = (Level2PageTable *)(l2ptPhysicalAddress + 4 * KB);
   secondL2PT->pte[0].valid = 1;
   secondL2PT->pte[0].table = 0;
   secondL2PT->pte[0].af = 1;
@@ -68,7 +68,7 @@ void map_kernel_l2pt(uint64_t l2ptPhysicalAddress, uint64_t ptPhysicalAddress) {
 void (*processHockFunc)(uint32_t process);
 void vmm_add_map_hook(void (*func)(uint32_t process)) { processHockFunc = func; }
 void map_kernel_pt(uint64_t ptPhysicalAddress) {
-  kernelVMMPT = (PT *)ptPhysicalAddress;
+  kernelVMMPT = (PageTable *)ptPhysicalAddress;
   uint32_t index = 0;
   for (uint32_t i = 0; i < KERNEL_L2PT_NUMBER; i++) {
     for (uint32_t j = 0; j < KERNEL_PTE_NUMBER; j++) {
@@ -133,8 +133,12 @@ void do_page_fault(uint32_t address){
     uint32_t l3Offset = address >> 12 & 0b111111111;
     uint32_t pageOffset = address & 0xFFF;
 
+    // check is thread not map vm
+
+
     LogError("[vmm]: l1Offset: %d .\n", l1Offset);
     LogError("[vmm]: l2Offset: %d .\n", l2Offset);
     LogError("[vmm]: l3Offset: %d .\n", l3Offset);
     LogError("[vmm]: pageOffset: %d .\n", pageOffset);
+
 }

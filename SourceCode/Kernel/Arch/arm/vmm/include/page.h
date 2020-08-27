@@ -46,19 +46,19 @@ typedef struct PageTableEntry {
   uint64_t xnt : 1;  /* eXecute-Never */
   uint64_t apt : 2;  /* Access Permissions */
   uint64_t nst : 1;  /* Not-Secure */
-} __attribute__((packed)) PTE;
+} __attribute__((packed)) PageTableEntry;
 
 typedef struct PageTable {
-  PTE pte[KERNEL_PTE_NUMBER * KERNEL_PTE_NUMBER];
-} PT;
+  PageTableEntry pte[KERNEL_PTE_NUMBER * KERNEL_PTE_NUMBER];
+} PageTable;
 
 typedef struct Level2PageTable {
-  PTE pte[KERNEL_PTE_NUMBER];
-} L2PT;
+  PageTableEntry pte[KERNEL_PTE_NUMBER];
+} Level2PageTable;
 
 typedef struct Level1PageTable {
-  PTE pte[KERNEL_L1PT_NUMBER];
-} L1PT;
+  PageTableEntry pte[KERNEL_L1PT_NUMBER];
+} Level1PageTable;
 
 typedef enum PhysicalPageType {
   PAGE_UNKNOWD = 0,
