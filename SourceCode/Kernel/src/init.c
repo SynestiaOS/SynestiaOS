@@ -13,9 +13,11 @@
 #include <gui_view3d.h>
 #include <gui_window.h>
 #include <interrupt.h>
+#include <kernel_vmm.h>
 #include <kheap.h>
 #include <log.h>
 #include <mutex.h>
+#include <page.h>
 #include <sched.h>
 #include <spinlock.h>
 #include <stdlib.h>
@@ -32,6 +34,7 @@ uint32_t EXT2_ADDRESS = _binary_initrd_img_start;
 
 VFS *vfs;
 Heap kernelHeap;
+PhysicalPageAllocator kernelPageAllocator;
 
 extern uint32_t *gpu_flush(int args);
 
@@ -270,39 +273,51 @@ void initProcessUpdate(uint32_t process) {
 
 TimerHandler gpuHandler;
 SpinLock bootSpinLock = SpinLockCreate();
+
+Gfx2DContext renderBootScreen() {
+  heap_create(&kernelHeap, &__HEAP_BEGIN, 64 * MB);
+  gpu_init();
+
+  kernel_vmm_add_map_hook(initProcessUpdate);
+
+  Gfx2DContext context = {.width = 1024, .height = 768, .buffer = GFX2D_BUFFER};
+  gfx2d_fill_rect(context, 0, 0, 1024, 768, 0x171520);
+  gfx2d_fill_rect(context, 120, 520, 1024 - 120, 530, 0xf7941d);
+  gfx2d_draw_bitmap(context, 384, 150, 256, 256, bootLogo());
+
+  GUILabel label;
+  gui_label_create(&label);
+  label.component.colorMode = RGB;
+  label.component.size.width = 100;
+  gui_label_init(&label, 120, 500, "Booting...");
+  gui_label_draw(&label);
+
+  GUILabel labelCopyright;
+  gui_label_create(&labelCopyright);
+  gui_label_init(&labelCopyright, 450, 720, "@ZionLab 2020");
+  gui_label_draw(&labelCopyright);
+  return context;
+}
+
 void kernel_main(void) {
   if (read_cpuid() == 0) {
     bootSpinLock.operations.acquire(&bootSpinLock);
     init_bsp();
     print_splash();
 
-    heap_create(&kernelHeap, &__HEAP_BEGIN, 64 * MB);
-    gpu_init();
+    // create kernel physical page allocator
+    page_allocator_create(&kernelPageAllocator, KERNEL_PHYSICAL_START, KERNEL_PHYSICAL_SIZE);
 
-    vmm_add_map_hook(initProcessUpdate);
+    Gfx2DContext context = renderBootScreen();
 
-    Gfx2DContext context = {.width = 1024, .height = 768, .buffer = GFX2D_BUFFER};
-    gfx2d_fill_rect(context, 0, 0, 1024, 768, 0x171520);
-    gfx2d_fill_rect(context, 120, 520, 1024 - 120, 530, 0xf7941d);
-    gfx2d_draw_bitmap(context, 384, 150, 256, 256, bootLogo());
+    kernel_vmm_init();
 
-    GUILabel label;
-    gui_label_create(&label);
-    label.component.colorMode = RGB;
-    label.component.size.width = 100;
-    gui_label_init(&label, 120, 500, "Booting...");
-    gui_label_draw(&label);
-
-    GUILabel labelCopyright;
-    gui_label_create(&labelCopyright);
-    gui_label_init(&labelCopyright, 450, 720, "@ZionLab 2020");
-    gui_label_draw(&labelCopyright);
-
-    vmm_init();
     init_interrupt();
 
-    heap_create(&kernelHeap, &__HEAP_BEGIN, 64 * MB);
+    // create kernel heap
+    heap_create(&kernelHeap, &__HEAP_BEGIN, KERNEL_PHYSICAL_SIZE - (uint32_t)(&__HEAP_BEGIN));
 
+    // TODO: it'a test to trigger page fault
     uint32_t i = *(uint32_t *)(0xFFee0f3e);
 
     vfs = vfs_create();

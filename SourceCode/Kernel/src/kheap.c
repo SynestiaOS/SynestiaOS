@@ -5,11 +5,14 @@
 #include <kheap.h>
 #include <log.h>
 #include <page.h>
+#include <sched.h>
 #include <stdlib.h>
 #include <string.h>
 
 #define ALL_PHYSICAL_MEM_SIZE 0xFFFFFFFF
 #define ALL_KERNEL_HEAP_MEM_SIZE 96 * MB
+
+extern PhysicalPageAllocator kernelPageAllocator;
 
 void heap_default_alloc_callback(struct Heap *heap, void *ptr, uint32_t size) {
   heap->statistics.allocatedSize += size;
@@ -170,16 +173,20 @@ void heap_default_set_alloc_callback(struct Heap *heap, HeapAllocCallback callba
 
 void heap_default_set_free_callback(struct Heap *heap, HeapFreeCallback callback) { heap->freeCallback = callback; }
 
-uint32_t heap_create(Heap *heap, uint32_t addr, uint32_t size) {
+KernelStatus heap_create(Heap *heap, uint32_t addr, uint32_t size) {
   heap->allocCallback = heap_default_alloc_callback;
   heap->freeCallback = heap_default_free_callback;
 
   heap->address = addr;
   LogInfo("[KHeap] at: %d. \n", heap->address);
 
+  PhysicalPageAllocator *physicalPageAllocator;
+  if (schd_get_current_thread() == nullptr) {
+    physicalPageAllocator = &kernelPageAllocator;
+  }
   // allocate physical page for kernel heap
-  uint32_t heapPhysicalPage =
-      (uint32_t)page_alloc_huge_at(USAGE_KERNEL_HEAP, (heap->address | 4 * KB) >> VA_OFFSET, size - heap->address);
+  uint32_t heapPhysicalPage = (uint32_t)physicalPageAllocator->operations.allocHugeAt(
+      physicalPageAllocator, USAGE_KERNEL_HEAP, (heap->address | 4 * KB) >> VA_OFFSET, size - heap->address);
   LogInfo("[KHeap] alloc heap page: %d. \n", (uint32_t)heapPhysicalPage);
 
   heap->address = KERNEL_PHYSICAL_START + heapPhysicalPage * PAGE_SIZE;

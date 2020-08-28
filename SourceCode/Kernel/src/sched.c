@@ -138,3 +138,5 @@ uint32_t schd_getpid() {
   PerCpu *perCpu = percpu_get(cpuid);
   return perCpu->currentThread->pid;
 }
+
+Thread *schd_get_current_thread(void) { return currentThread; }

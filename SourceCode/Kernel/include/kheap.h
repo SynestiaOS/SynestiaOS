@@ -53,6 +53,6 @@ typedef struct Heap {
   HeapStatistics statistics;
 } Heap;
 
-uint32_t heap_create(Heap *heap, uint32_t addr, uint32_t size);
+KernelStatus heap_create(Heap *heap, uint32_t addr, uint32_t size);
 
 #endif //__KERNEL_KHEAP_H__

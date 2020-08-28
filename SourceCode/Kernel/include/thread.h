@@ -109,6 +109,7 @@ typedef struct FilesStruct {
 typedef struct MemoryStructOperations {
 
 } MemoryStructOperations;
+
 typedef struct MemoryStruct {
   VirtualMemory virtualMemory;
   Heap heap;
