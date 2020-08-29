@@ -92,19 +92,29 @@ uint32_t filestruct_default_openfile(FilesStruct *filesStruct, DirectoryEntry *d
 
 Thread *thread_default_copy(Thread *thread, CloneFlags cloneFlags, uint32_t heapStart) {
   Thread *p = thread_create(thread->name, thread->entry, thread->arg, thread->priority);
-  if(p==nullptr){
-      LogError("[Thread]: copy failed.\n");
-      return nullptr;
+  if (p == nullptr) {
+    LogError("[Thread]: copy failed.\n");
+    return nullptr;
   }
 
-  KernelStatus vmmCreateStatus = vmm_create(&p->memoryStruct.virtualMemory, &userspacePageAllocator);
-  if(vmmCreateStatus!=OK){
-      LogError("[Thread]: vmm create failed for thread: '%s'.\n",p->name);
-      // TODO: free thread.
-      return nullptr;
-  }
   if (cloneFlags & CLONE_VM) {
     // TODO
+  } else {
+    KernelStatus vmmCreateStatus = vmm_create(&p->memoryStruct.virtualMemory, &userspacePageAllocator);
+    if (vmmCreateStatus != OK) {
+      LogError("[Thread]: vmm create failed for thread: '%s'.\n", p->name);
+      // TODO: free thread.
+      return nullptr;
+    }
+
+    KernelStatus heapCreateStatus =
+        heap_create(&p->memoryStruct.heap, p->memoryStruct.sectionInfo.bssSectionAddr, 16 * MB);
+    if (heapCreateStatus != OK) {
+      LogError("[Thread]: heap create failed for thread: '%s'.\n", p->name);
+      // TODO: free thread.
+      // TODO: free vmm.
+      return nullptr;
+    }
   }
 
   if (cloneFlags & CLONE_FILES) {
