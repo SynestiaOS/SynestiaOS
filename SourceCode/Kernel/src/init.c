@@ -33,6 +33,7 @@ uint32_t EXT2_ADDRESS = _binary_initrd_img_start;
 VFS *vfs;
 Heap kernelHeap;
 PhysicalPageAllocator kernelPageAllocator;
+PhysicalPageAllocator userspacePageAllocator;
 
 extern uint32_t *gpu_flush(int args);
 
@@ -313,6 +314,9 @@ void kernel_main(void) {
 
     // create kernel heap
     heap_create(&kernelHeap, &__HEAP_BEGIN, KERNEL_PHYSICAL_SIZE - (uint32_t)(&__HEAP_BEGIN));
+
+    // create userspace physical page allocator
+    page_allocator_create(&userspacePageAllocator, USER_PHYSICAL_START, USER_PHYSICAL_SIZE);
 
     init_interrupt();
 
