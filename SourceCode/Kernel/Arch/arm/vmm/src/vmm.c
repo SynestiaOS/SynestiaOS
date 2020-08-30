@@ -43,6 +43,20 @@ void virtual_memory_default_context_switch(VirtualMemory *old, VirtualMemory *ne
 }
 
 void *virtual_memory_default_copy_to_kernel(struct VirtualMemory *virtualMemory, char *buffer, uint32_t size) {
+  // calculate the physical address of buffer
+  uint32_t l1Offset = (uint32_t)buffer >> 30 & 0b11;
+  uint32_t l2Offset = (uint32_t)buffer >> 21 & 0b111111111;
+  uint32_t l3Offset = (uint32_t)buffer >> 12 & 0b111111111;
+  uint32_t pageOffset = (uint32_t)buffer & 0xFFF;
+
+  PageTableEntry l1pte = virtualMemory->pageTable[l1Offset];
+  PageTableEntry* level2PageTable = (PageTableEntry*)(l1pte.base<<VA_OFFSET);
+  PageTableEntry l2pte = level2PageTable[l2Offset];
+  PageTableEntry* pageTable = (PageTableEntry*)(l2pte.base<<VA_OFFSET);
+  PageTableEntry pageTableEntry = pageTable[l3Offset];
+
+  uint32_t physicalPageAddress = pageTableEntry.base;
+
   // TODO: copy buffer from user space vmm to kernel space
 }
 
