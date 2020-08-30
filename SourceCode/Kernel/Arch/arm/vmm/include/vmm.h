@@ -44,6 +44,7 @@ typedef void (*VirtualMemoryOperationMappingPage)(struct VirtualMemory *virtualM
 typedef void (*VirtualMemoryOperationRelease)(struct VirtualMemory *virtualMemory);
 typedef void (*VirtualMemoryOperationEnable)(struct VirtualMemory *virtualMemory);
 typedef void (*VirtualMemoryOperationDisable)(struct VirtualMemory *virtualMemory);
+typedef void *(*VirtualMemoryOperationCopyToKernel)(struct VirtualMemory *virtualMemory, char *buffer, uint32_t size);
 
 typedef struct VirtualMemoryOperations {
   VirtualMemoryOperationContextSwitch contextSwitch;
@@ -52,6 +53,7 @@ typedef struct VirtualMemoryOperations {
   VirtualMemoryOperationRelease release;
   VirtualMemoryOperationEnable enable;
   VirtualMemoryOperationDisable disable;
+  VirtualMemoryOperationCopyToKernel copyToKernel;
 } VirtualMemoryOperations;
 
 typedef struct VirtualMemory {

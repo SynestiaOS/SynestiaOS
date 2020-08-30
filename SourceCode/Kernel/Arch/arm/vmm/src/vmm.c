@@ -42,6 +42,10 @@ void virtual_memory_default_context_switch(VirtualMemory *old, VirtualMemory *ne
   // TODO: switch page table when thread switch
 }
 
+void *virtual_memory_default_copy_to_kernel(struct VirtualMemory *virtualMemory, char *buffer, uint32_t size) {
+  // TODO: copy buffer from user space vmm to kernel space
+}
+
 KernelStatus vmm_create(VirtualMemory *virtualMemory, PhysicalPageAllocator *physicalPageAllocator) {
   virtualMemory->operations.mappingPage = virtual_memory_default_mapping_page;
   virtualMemory->operations.contextSwitch = virtual_memory_default_context_switch;
@@ -49,6 +53,7 @@ KernelStatus vmm_create(VirtualMemory *virtualMemory, PhysicalPageAllocator *phy
   virtualMemory->operations.release = virtual_memory_default_release;
   virtualMemory->operations.enable = virtual_memory_default_enable;
   virtualMemory->operations.disable = virtual_memory_default_disable;
+  virtualMemory->operations.copyToKernel = virtual_memory_default_copy_to_kernel;
 
   virtualMemory->physicalPageAllocator = physicalPageAllocator;
 

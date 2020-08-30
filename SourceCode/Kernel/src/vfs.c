@@ -59,8 +59,12 @@ uint32_t vfs_default_close(struct VFS *vfs, uint32_t fd) {
 }
 
 uint32_t vfs_default_read(VFS *vfs, uint32_t fd, char *buffer, uint32_t pos, uint32_t count) {
-  // TODO:
+  PerCpu *perCpu = percpu_get(read_cpuid());
+  Thread *currThread = perCpu->currentThread;
 
+  char *bufferKernel = (char *)currThread->memoryStruct.virtualMemory.operations.copyToKernel(
+      &currThread->memoryStruct.virtualMemory, buffer, strlen(buffer));
+  // TODO:
   // read data from fs
 
   // calculate the physical address of buffer
