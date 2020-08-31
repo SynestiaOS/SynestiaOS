@@ -10,6 +10,7 @@
 #include <string.h>
 #include <thread.h>
 #include <vfs_dentry.h>
+#include <kernel_vmm.h>
 
 extern Heap kernelHeap;
 extern PhysicalPageAllocator kernelPageAllocator;
@@ -171,11 +172,6 @@ Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uin
     strcpy(thread->name, name);
     thread->arg = arg;
 
-    thread->memoryStruct.sectionInfo.codeSectionAddr = 0;
-    thread->memoryStruct.sectionInfo.roDataSectionAddr = 0;
-    thread->memoryStruct.sectionInfo.dataSectionAddr = 0;
-    thread->memoryStruct.sectionInfo.bssSectionAddr = 0;
-
     thread->threadList.prev = nullptr;
     thread->threadList.next = nullptr;
 
@@ -198,6 +194,15 @@ Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uin
 
     thread->filesStruct.operations.openFile = filestruct_default_openfile;
     thread->filesStruct.fileDescriptorTable = kvector_allocate();
+
+    thread->memoryStruct.sectionInfo.codeSectionAddr = 0;
+    thread->memoryStruct.sectionInfo.roDataSectionAddr = 0;
+    thread->memoryStruct.sectionInfo.dataSectionAddr = 0;
+    thread->memoryStruct.sectionInfo.bssSectionAddr = 0;
+
+    thread->memoryStruct.virtualMemory.physicalPageAllocator = &kernelPageAllocator;
+    thread->memoryStruct.virtualMemory.pageTable = kernel_vmm_get_page_table();
+    thread->memoryStruct.heap = kernelHeap;
 
     LogInfo("[Thread]: thread '%s' created.\n", name);
     return thread;

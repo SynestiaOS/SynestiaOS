@@ -132,3 +132,7 @@ void kernel_vmm_enable() {
   mmu_enable();
   LogInfo("[vmm]: vmm enabled\n");
 }
+
+PageTableEntry *kernel_vmm_get_page_table(){
+    return (PageTableEntry*) kernelVMML1PT;
+}
