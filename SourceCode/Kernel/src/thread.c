@@ -99,7 +99,7 @@ Thread *thread_default_copy(Thread *thread, CloneFlags cloneFlags, uint32_t heap
   }
 
   if (cloneFlags & CLONE_VM) {
-    // TODO
+    // TODO: copy vmm struct
   } else {
     KernelStatus vmmCreateStatus = vmm_create(&p->memoryStruct.virtualMemory, &userspacePageAllocator);
     if (vmmCreateStatus != OK) {
@@ -119,7 +119,7 @@ Thread *thread_default_copy(Thread *thread, CloneFlags cloneFlags, uint32_t heap
   }
 
   if (cloneFlags & CLONE_FILES) {
-    // TODO
+    // TODO, copy file descriptor
   }
 
   if (cloneFlags & CLONE_FS) {
@@ -127,6 +127,7 @@ Thread *thread_default_copy(Thread *thread, CloneFlags cloneFlags, uint32_t heap
   }
 
   // TODO
+  p->parentThread = thread;
   return p;
 }
 

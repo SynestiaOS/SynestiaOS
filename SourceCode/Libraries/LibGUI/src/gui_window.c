@@ -100,6 +100,7 @@ void gui_window_draw(GUIWindow *window) {
         gfx2d_fill_rect(context, window->component.position.x, window->component.position.y,
                         window->component.position.x + window->component.size.width,
                         window->component.position.y + window->component.size.height + DEFAULT_WINDOW_HEADER_HEIGHT,
+                        window->header.foreground.a << 24 |
                         window->component.background.r << 16 | window->component.background.g << 8 |
                             window->component.background.b);
       }
@@ -108,6 +109,7 @@ void gui_window_draw(GUIWindow *window) {
       gfx2d_fill_rect(context, window->component.position.x, window->component.position.y,
                       window->component.position.x + window->component.size.width,
                       window->component.position.y + DEFAULT_WINDOW_HEADER_HEIGHT,
+                      window->header.foreground.a << 24 |
                       window->header.background.r << 16 | window->header.background.g << 8 |
                           window->header.background.b);
 
@@ -123,7 +125,6 @@ void gui_window_draw(GUIWindow *window) {
         }
       }
 
-      // draw shadow
 
       // 3. draw_font
       char *tmp = window->title;
@@ -144,7 +145,7 @@ void gui_window_draw(GUIWindow *window) {
           if ((minBitmap[i] & (0x1 << j)) > 0) {
             gfx2d_write_pixel_color(context, window->component.position.x + j + window->component.size.width - 24 * 3,
                                     window->component.position.y + i + DEFAULT_PADDING + 4,
-                                    window->header.foreground.r << 16 | window->header.foreground.g << 8 |
+                                            window->header.foreground.r << 16 | window->header.foreground.g << 8 |
                                         window->header.foreground.b);
           }
         }
@@ -156,7 +157,7 @@ void gui_window_draw(GUIWindow *window) {
           if ((maxBitmap[i] & (0x1 << j)) > 0) {
             gfx2d_write_pixel_color(context, window->component.position.x + j + window->component.size.width - 24 * 2,
                                     window->component.position.y + i + DEFAULT_PADDING + 4,
-                                    window->header.foreground.r << 16 | window->header.foreground.g << 8 |
+                                            window->header.foreground.r << 16 | window->header.foreground.g << 8 |
                                         window->header.foreground.b);
           }
         }
@@ -168,7 +169,7 @@ void gui_window_draw(GUIWindow *window) {
           if ((closeBitmap[i] & (0x1 << j)) > 0) {
             gfx2d_write_pixel_color(context, window->component.position.x + j + window->component.size.width - 24,
                                     window->component.position.y + i + DEFAULT_PADDING + 4,
-                                    window->header.foreground.r << 16 | window->header.foreground.g << 8 |
+                                            window->header.foreground.r << 16 | window->header.foreground.g << 8 |
                                         window->header.foreground.b);
           }
         }
