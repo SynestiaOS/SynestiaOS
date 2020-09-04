@@ -181,8 +181,11 @@ KernelStatus heap_create(Heap *heap, uint32_t addr, uint32_t size) {
   LogInfo("[KHeap] at: %d. \n", heap->address);
 
   PhysicalPageAllocator *physicalPageAllocator;
-  if (schd_get_current_thread() == nullptr) {
+  Thread *currThread = schd_get_current_thread();
+  if (currThread == nullptr) {
     physicalPageAllocator = &kernelPageAllocator;
+  } else {
+    physicalPageAllocator = currThread->memoryStruct.virtualMemory.physicalPageAllocator;
   }
   // allocate physical page for kernel heap
   uint32_t heapPhysicalPage = (uint32_t)physicalPageAllocator->operations.allocHugeAt(
