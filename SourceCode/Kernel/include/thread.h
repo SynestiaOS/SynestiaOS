@@ -83,9 +83,13 @@ typedef uint32_t (*ThreadStartRoutine)(void *arg);
 
 typedef struct SectionInfo {
   uint32_t codeSectionAddr;
+  uint32_t codeEndSectionAddr;
   uint32_t roDataSectionAddr;
+  uint32_t roDataEndSectionAddr;
   uint32_t dataSectionAddr;
+  uint32_t dataEndSectionAddr;
   uint32_t bssSectionAddr;
+  uint32_t bssEndSectionAddr;
 } __attribute__((packed)) SectionInfo;
 
 typedef struct FileDescriptor {

@@ -109,7 +109,7 @@ Thread *thread_default_copy(Thread *thread, CloneFlags cloneFlags, uint32_t heap
     }
 
     KernelStatus heapCreateStatus =
-        heap_create(&p->memoryStruct.heap, p->memoryStruct.sectionInfo.bssSectionAddr, 16 * MB);
+        heap_create(&p->memoryStruct.heap, p->memoryStruct.sectionInfo.bssEndSectionAddr, 16 * MB);
     if (heapCreateStatus != OK) {
       LogError("[Thread]: heap create failed for thread: '%s'.\n", p->name);
       // TODO: free thread.
