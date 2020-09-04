@@ -50,9 +50,9 @@ void *virtual_memory_default_copy_to_kernel(struct VirtualMemory *virtualMemory,
   uint32_t pageOffset = (uint32_t)buffer & 0xFFF;
 
   PageTableEntry l1pte = virtualMemory->pageTable[l1Offset];
-  PageTableEntry* level2PageTable = (PageTableEntry*)(l1pte.base<<VA_OFFSET);
+  PageTableEntry *level2PageTable = (PageTableEntry *)(l1pte.base << VA_OFFSET);
   PageTableEntry l2pte = level2PageTable[l2Offset];
-  PageTableEntry* pageTable = (PageTableEntry*)(l2pte.base<<VA_OFFSET);
+  PageTableEntry *pageTable = (PageTableEntry *)(l2pte.base << VA_OFFSET);
   PageTableEntry pageTableEntry = pageTable[l3Offset];
 
   uint32_t physicalPageAddress = pageTableEntry.base;

@@ -13,7 +13,7 @@
 #define BITS_IN_UINT32 32
 #define MAX_UINT_32 0xFFFFFFFF
 
-#define nullptr (void *)0
+#define nullptr(void *) 0
 
 typedef int (*SysCall)(int arg1, int arg2, int arg3, int arg4, int arg5);
 

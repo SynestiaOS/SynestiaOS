@@ -2,6 +2,7 @@
 // Created by XingfengYang on 2020/6/26.
 //
 
+#include <kernel_vmm.h>
 #include <kheap.h>
 #include <kstack.h>
 #include <kvector.h>
@@ -10,7 +11,6 @@
 #include <string.h>
 #include <thread.h>
 #include <vfs_dentry.h>
-#include <kernel_vmm.h>
 
 extern Heap kernelHeap;
 extern PhysicalPageAllocator kernelPageAllocator;
