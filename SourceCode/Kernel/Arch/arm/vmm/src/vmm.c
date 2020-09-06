@@ -124,22 +124,65 @@ void do_page_fault(uint32_t address) {
   Thread *currThread = schd_get_current_thread();
   if (currThread != nullptr) {
     // may be user triggered this
-    PageTableEntry *level1PageTable = currThread->memoryStruct.virtualMemory.pageTable;
+
+    VirtualMemory virtualMemory = currThread->memoryStruct.virtualMemory;
+    PageTableEntry *level1PageTable = virtualMemory.pageTable;
     PageTableEntry level1PageTableEntry = level1PageTable[l1Offset];
     if (level1PageTableEntry.valid == 0) {
       // level 1 page table entry not set.
-      // TODO:
+      uint64_t l2ptPage = virtualMemory.physicalPageAllocator->operations.allocPage4K(
+          virtualMemory.physicalPageAllocator, USAGE_PAGE_TABLE);
+      PageTableEntry *l2pt = (PageTableEntry *)virtualMemory.physicalPageAllocator->base + l2ptPage * PAGE_SIZE;
+
+      uint64_t ptPage = virtualMemory.physicalPageAllocator->operations.allocPage4K(virtualMemory.physicalPageAllocator,
+                                                                                    USAGE_PAGE_TABLE);
+      PageTableEntry *pt = (PageTableEntry *)virtualMemory.physicalPageAllocator->base + ptPage * PAGE_SIZE;
+
+      pt[0].valid = 1;
+      pt[0].table = 1;
+      pt[0].af = 1;
+      pt[0].base = (uint64_t)(virtualMemory.physicalPageAllocator->operations.allocPage4K(
+          virtualMemory.physicalPageAllocator, USAGE_NORMAL));
+
+      l2pt[0].valid = 1;
+      l2pt[0].table = 1;
+      l2pt[0].af = 1;
+      l2pt[0].base = ptPage;
+
+      level1PageTableEntry.valid = 1;
+      level1PageTableEntry.table = 1;
+      level1PageTableEntry.af = 1;
+      level1PageTableEntry.base = l2ptPage;
     } else {
       PageTableEntry *level2PageTable = (PageTableEntry *)(level1PageTableEntry.base >> VA_OFFSET);
-      if (level2PageTable[l2Offset].valid == 0) {
-        // level 2 page table entry not set.
-        // TODO:
+      PageTableEntry level2PageTableEntry = level2PageTable[l2Offset];
+      if (level2PageTableEntry.valid == 0) {
+        //   level 2 page table entry not set.
+        uint64_t ptPage = virtualMemory.physicalPageAllocator->operations.allocPage4K(
+            virtualMemory.physicalPageAllocator, USAGE_PAGE_TABLE);
+        PageTableEntry *pt = (PageTableEntry *)virtualMemory.physicalPageAllocator->base + ptPage * PAGE_SIZE;
+
+        pt[0].valid = 1;
+        pt[0].table = 1;
+        pt[0].af = 1;
+        pt[0].base = (uint64_t)(virtualMemory.physicalPageAllocator->operations.allocPage4K(
+            virtualMemory.physicalPageAllocator, USAGE_NORMAL));
+
+        level2PageTableEntry.valid = 1;
+        level2PageTableEntry.table = 1;
+        level2PageTableEntry.af = 1;
+        level2PageTableEntry.base = ptPage;
       } else {
         PageTableEntry *pageTable = (PageTableEntry *)(level2PageTable->base >> VA_OFFSET);
         PageTableEntry pageTableEntry = pageTable[l3Offset];
         if (pageTableEntry.valid == 0) {
           // page table entry not set
-          // TODO:
+          pageTableEntry.valid = 1;
+          pageTableEntry.table = 1;
+          pageTableEntry.af = 1;
+          pageTableEntry.base = (uint64_t)(virtualMemory.physicalPageAllocator->operations.allocPage4K(
+              virtualMemory.physicalPageAllocator, USAGE_NORMAL));
+
         } else {
           // should not be there, if goto there, means it not a page fault exception
         }
