@@ -21,10 +21,22 @@ void virtual_memory_default_allocate_page(VirtualMemory *virtualMemory, uint32_t
     // level 1 page table entry not set.
     uint64_t l2ptPage = virtualMemory->physicalPageAllocator->operations.allocPage4K(
         virtualMemory->physicalPageAllocator, USAGE_PAGE_TABLE);
-    PageTableEntry *l2pt = (PageTableEntry *)virtualMemory->physicalPageAllocator->base + l2ptPage * PAGE_SIZE;
+
+    level1PageTableEntry.valid = 1;
+    level1PageTableEntry.table = 1;
+    level1PageTableEntry.af = 1;
+    level1PageTableEntry.base = l2ptPage;
 
     uint64_t ptPage = virtualMemory->physicalPageAllocator->operations.allocPage4K(virtualMemory->physicalPageAllocator,
                                                                                    USAGE_PAGE_TABLE);
+
+    PageTableEntry *l2pt = (PageTableEntry *)virtualMemory->physicalPageAllocator->base + l2ptPage * PAGE_SIZE;
+
+    l2pt[0].valid = 1;
+    l2pt[0].table = 1;
+    l2pt[0].af = 1;
+    l2pt[0].base = ptPage;
+
     PageTableEntry *pt = (PageTableEntry *)virtualMemory->physicalPageAllocator->base + ptPage * PAGE_SIZE;
 
     pt[0].valid = 1;
@@ -33,15 +45,6 @@ void virtual_memory_default_allocate_page(VirtualMemory *virtualMemory, uint32_t
     pt[0].base = (uint64_t)(virtualMemory->physicalPageAllocator->operations.allocPage4K(
         virtualMemory->physicalPageAllocator, USAGE_NORMAL));
 
-    l2pt[0].valid = 1;
-    l2pt[0].table = 1;
-    l2pt[0].af = 1;
-    l2pt[0].base = ptPage;
-
-    level1PageTableEntry.valid = 1;
-    level1PageTableEntry.table = 1;
-    level1PageTableEntry.af = 1;
-    level1PageTableEntry.base = l2ptPage;
   } else {
     PageTableEntry *level2PageTable = (PageTableEntry *)(level1PageTableEntry.base >> VA_OFFSET);
     PageTableEntry level2PageTableEntry = level2PageTable[l2Offset];
@@ -49,6 +52,12 @@ void virtual_memory_default_allocate_page(VirtualMemory *virtualMemory, uint32_t
       //   level 2 page table entry not set.
       uint64_t ptPage = virtualMemory->physicalPageAllocator->operations.allocPage4K(
           virtualMemory->physicalPageAllocator, USAGE_PAGE_TABLE);
+
+      level2PageTableEntry.valid = 1;
+      level2PageTableEntry.table = 1;
+      level2PageTableEntry.af = 1;
+      level2PageTableEntry.base = ptPage;
+
       PageTableEntry *pt = (PageTableEntry *)virtualMemory->physicalPageAllocator->base + ptPage * PAGE_SIZE;
 
       pt[0].valid = 1;
@@ -56,11 +65,6 @@ void virtual_memory_default_allocate_page(VirtualMemory *virtualMemory, uint32_t
       pt[0].af = 1;
       pt[0].base = (uint64_t)(virtualMemory->physicalPageAllocator->operations.allocPage4K(
           virtualMemory->physicalPageAllocator, USAGE_NORMAL));
-
-      level2PageTableEntry.valid = 1;
-      level2PageTableEntry.table = 1;
-      level2PageTableEntry.af = 1;
-      level2PageTableEntry.base = ptPage;
     } else {
       PageTableEntry *pageTable = (PageTableEntry *)(level2PageTable->base >> VA_OFFSET);
       PageTableEntry pageTableEntry = pageTable[l3Offset];
