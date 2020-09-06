@@ -5,6 +5,7 @@
 #include <cache.h>
 #include <log.h>
 #include <page.h>
+#include <sched.h>
 #include <stdlib.h>
 #include <type.h>
 #include <vmm.h>
@@ -117,6 +118,38 @@ void do_page_fault(uint32_t address) {
   uint32_t l2Offset = address >> 21 & 0b111111111;
   uint32_t l3Offset = address >> 12 & 0b111111111;
   uint32_t pageOffset = address & 0xFFF;
+
+  // check is there is a thread running, if it was, then map for thread's vmm:
+  // TODO: it not good, may be make some mistake when thread is running and kernel triggered this.
+  Thread *currThread = schd_get_current_thread();
+  if (currThread != nullptr) {
+    // may be user triggered this
+    PageTableEntry *level1PageTable = currThread->memoryStruct.virtualMemory.pageTable;
+    PageTableEntry level1PageTableEntry = level1PageTable[l1Offset];
+    if (level1PageTableEntry.valid == 0) {
+      // level 1 page table entry not set.
+      // TODO:
+    } else {
+      PageTableEntry *level2PageTable = (PageTableEntry *)(level1PageTableEntry.base >> VA_OFFSET);
+      if (level2PageTable[l2Offset].valid == 0) {
+        // level 2 page table entry not set.
+        // TODO:
+      } else {
+        PageTableEntry *pageTable = (PageTableEntry *)(level2PageTable->base >> VA_OFFSET);
+        PageTableEntry pageTableEntry = pageTable[l3Offset];
+        if (pageTableEntry.valid == 0) {
+          // page table entry not set
+          // TODO:
+        } else {
+          // should not be there, if goto there, means it not a page fault exception
+        }
+      }
+    }
+  } else {
+    // kernel triggered this
+  }
+
+  // or user address
 
   // check is thread not map vm
   LogError("[vmm]: l1Offset: %d .\n", l1Offset);
