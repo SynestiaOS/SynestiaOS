@@ -123,4 +123,6 @@ void do_page_fault(uint32_t address) {
   LogError("[vmm]: l2Offset: %d .\n", l2Offset);
   LogError("[vmm]: l3Offset: %d .\n", l3Offset);
   LogError("[vmm]: pageOffset: %d .\n", pageOffset);
+
+  // alloc physical for page table and map the address
 }
