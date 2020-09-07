@@ -3,6 +3,7 @@
 //
 
 #include <cache.h>
+#include <kernel_vmm.h>
 #include <log.h>
 #include <page.h>
 #include <sched.h>
@@ -32,6 +33,7 @@ void virtual_memory_default_allocate_page(VirtualMemory *virtualMemory, uint32_t
 
     PageTableEntry *l2pt = (PageTableEntry *)virtualMemory->physicalPageAllocator->base + l2ptPage * PAGE_SIZE;
 
+    // TODO: may cause page fault here.
     l2pt[0].valid = 1;
     l2pt[0].table = 1;
     l2pt[0].af = 1;
@@ -200,5 +202,6 @@ void do_page_fault(uint32_t address) {
     virtualMemory.operations.allocatePage(&virtualMemory, address);
   } else {
     // kernel triggered this
+    kernel_vmm_map(address);
   }
 }
