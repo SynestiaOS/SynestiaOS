@@ -16,6 +16,12 @@ void virtual_memory_default_allocate_page(VirtualMemory *virtualMemory, uint32_t
   uint32_t l2Offset = virtualAddress >> 21 & 0b111111111;
   uint32_t l3Offset = virtualAddress >> 12 & 0b111111111;
   uint32_t pageOffset = virtualAddress & 0xFFF;
+
+  LogError("[vmm]:usr l1Offset: %d .\n", l1Offset);
+  LogError("[vmm]:usr l2Offset: %d .\n", l2Offset);
+  LogError("[vmm]:usr l3Offset: %d .\n", l3Offset);
+  LogError("[vmm]:usr pageOffset: %d .\n", pageOffset);
+
   PageTableEntry *level1PageTable = virtualMemory->pageTable;
   PageTableEntry level1PageTableEntry = level1PageTable[l1Offset];
   if (level1PageTableEntry.valid == 0) {
@@ -184,15 +190,6 @@ KernelStatus vmm_create(VirtualMemory *virtualMemory, PhysicalPageAllocator *phy
 
 void do_page_fault(uint32_t address) {
   LogError("[vmm]: page fault at: %d .\n", address);
-  uint32_t l1Offset = address >> 30 & 0b11;
-  uint32_t l2Offset = address >> 21 & 0b111111111;
-  uint32_t l3Offset = address >> 12 & 0b111111111;
-  uint32_t pageOffset = address & 0xFFF;
-  LogError("[vmm]: l1Offset: %d .\n", l1Offset);
-  LogError("[vmm]: l2Offset: %d .\n", l2Offset);
-  LogError("[vmm]: l3Offset: %d .\n", l3Offset);
-  LogError("[vmm]: pageOffset: %d .\n", pageOffset);
-
   // check is there is a thread running, if it was, then map for thread's vmm:
   // TODO: it not good, may be make some mistake when thread is running and kernel triggered this.
   Thread *currThread = schd_get_current_thread();
