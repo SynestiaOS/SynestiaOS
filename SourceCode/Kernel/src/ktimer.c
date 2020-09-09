@@ -13,7 +13,7 @@ uint64_t ktimer_sys_runtime_tick(uint64_t tickIntreval) { sys_runtime_ms += tick
 uint64_t ktimer_sys_runtime() { return sys_runtime_ms; }
 
 typedef struct KernelTimer {
-  long time;
-  ListNode listNode;
-  Mutex *mutex;
+    long time;
+    ListNode listNode;
+    Mutex* mutex;
 } KernelTimer;

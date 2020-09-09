@@ -12,9 +12,9 @@
 #define FLUENT_PRIMARY_FORE_COLOR 0xFFFFFF
 
 typedef struct Gfx2DContext {
-  uint32_t width;
-  uint32_t height;
-  uint32_t *buffer;
+    uint32_t width;
+    uint32_t height;
+    uint32_t* buffer;
 } Gfx2DContext;
 
 void gfx2d_draw_pixel(Gfx2DContext context, int x, int y, uint32_t c);
@@ -35,6 +35,6 @@ void gfx2d_fill_circle(Gfx2DContext context, int xc, int yc, int r, uint32_t c);
 
 void gfx2d_draw_ascii(Gfx2DContext context, int x, int y, uint8_t ch, uint32_t color);
 
-void gfx2d_draw_bitmap(Gfx2DContext context, int x, int y, int width, int height, uint32_t *bitmap);
+void gfx2d_draw_bitmap(Gfx2DContext context, int x, int y, int width, int height, uint32_t* bitmap);
 
 #endif //__LIBRARY_LIBGFX_GL2D_H__

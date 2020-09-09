@@ -12,19 +12,19 @@
 #define DEFAULT_VIEW3D_HEIGHT 150
 
 typedef struct GUIView3D {
-  GUIComponent component;
-  Mesh mesh;
-  Mat4x4 matProjection;
-  Vec3D vCamera;
-  Vec3D vLookDir;
-  float fYaw;
-  uint32_t *buffer;
+    GUIComponent component;
+    Mesh mesh;
+    Mat4x4 matProjection;
+    Vec3D vCamera;
+    Vec3D vLookDir;
+    float fYaw;
+    uint32_t* buffer;
 } GUIView3D;
 
-void gui_view3d_create(GUIView3D *view);
+void gui_view3d_create(GUIView3D* view);
 
-void gui_view3d_init(GUIView3D *view, uint32_t x, uint32_t y);
+void gui_view3d_init(GUIView3D* view, uint32_t x, uint32_t y);
 
-void gui_view3d_draw(GUIView3D *view);
+void gui_view3d_draw(GUIView3D* view);
 
 #endif //__LIBRARY_LIBGUI_VIEW_3D_H__

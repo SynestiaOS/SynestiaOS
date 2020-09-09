@@ -9,9 +9,9 @@
 
 uint32_t sys_getpid(void);
 
-uint32_t sys_open(const char *name, uint32_t flags, uint32_t mode);
+uint32_t sys_open(const char* name, uint32_t flags, uint32_t mode);
 
-uint32_t sys_read(uint32_t fd, char *buf, uint32_t count);
+uint32_t sys_read(uint32_t fd, char* buf, uint32_t count);
 
 uint32_t sys_close(uint32_t fd);
 

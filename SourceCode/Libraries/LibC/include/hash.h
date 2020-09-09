@@ -5,6 +5,6 @@
 #define __LIBRARY_LIBC_HASH_H__
 #include <stdint.h>
 
-uint32_t adler32(const char *buf, uint32_t buflength);
+uint32_t adler32(const char* buf, uint32_t buflength);
 
 #endif // __LIBRARY_LIBC_HASH_H__

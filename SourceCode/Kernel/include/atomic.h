@@ -7,21 +7,21 @@
 #include <stdint.h>
 
 typedef struct Atomic {
-  volatile uint32_t counter;
+    volatile uint32_t counter;
 } Atomic;
 
-void atomic_create(Atomic *atomic);
+void atomic_create(Atomic* atomic);
 
-void atomic_set(Atomic *atomic, uint32_t val);
+void atomic_set(Atomic* atomic, uint32_t val);
 
-uint32_t atomic_get(Atomic *atomic);
+uint32_t atomic_get(Atomic* atomic);
 
-uint32_t atomic_inc(Atomic *atomic);
+uint32_t atomic_inc(Atomic* atomic);
 
-uint32_t atomic_dec(Atomic *atomic);
+uint32_t atomic_dec(Atomic* atomic);
 
-uint32_t atomic_add(Atomic *atomic, uint32_t val);
+uint32_t atomic_add(Atomic* atomic, uint32_t val);
 
-uint32_t atomic_sub(Atomic *atomic, uint32_t val);
+uint32_t atomic_sub(Atomic* atomic, uint32_t val);
 
 #endif // __KERNEL_ATOMIC_H__

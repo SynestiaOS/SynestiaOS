@@ -5,6 +5,7 @@
 #ifndef __KERNEL_FS_FILE_H__
 #define __KERNEL_FS_FILE_H__
 
-typedef struct File {}
+typedef struct File {
+}
 
 #endif // __KERNEL_FS_FILE_H__

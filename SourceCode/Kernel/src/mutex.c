@@ -8,19 +8,20 @@
 #include <stdbool.h>
 #include <thread.h>
 
-extern Thread *currentThread;
+extern Thread* currentThread;
 
-void mutex_default_acquire(Mutex *mutex) {
-  if (atomic_get(&mutex->val) == 0) {
-    atomic_set(&mutex->val, 1);
-    return true;
-  } else {
-    // can not get the lock, just add to lock wait list
+void mutex_default_acquire(Mutex* mutex)
+{
+    if (atomic_get(&mutex->val) == 0) {
+        atomic_set(&mutex->val, 1);
+        return true;
+    } else {
+        // can not get the lock, just add to lock wait list
 
-    // reomve from schd list
+        // reomve from schd list
 
-    // 2. switch to the next thread in scheduler
-  }
+        // 2. switch to the next thread in scheduler
+    }
 }
 
-void mutex_default_release(Mutex *mutex) {}
+void mutex_default_release(Mutex* mutex) {}

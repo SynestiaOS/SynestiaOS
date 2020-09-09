@@ -13,36 +13,34 @@
 #define STATE_FREE 0u
 #define STATE_CONTESTED 1u
 
-#define MutexCreate()                                                                                                  \
-  {                                                                                                                    \
-    .val =                                                                                                             \
-        {                                                                                                              \
-            .counter = 0,                                                                                              \
-        },                                                                                                             \
-    .operations =                                                                                                      \
-        {                                                                                                              \
-            .acquire = mutex_default_acquire,                                                                          \
-            .release = mutex_default_release,                                                                          \
-        },                                                                                                             \
-    .spinLock = SpinLockCreate(), .waitQueue = nullptr,                                                                \
-  }
+#define MutexCreate()                                       \
+    {                                                       \
+        .val = {                                            \
+            .counter = 0,                                   \
+        },                                                  \
+        .operations = {                                     \
+            .acquire = mutex_default_acquire,               \
+            .release = mutex_default_release,               \
+        },                                                  \
+        .spinLock = SpinLockCreate(), .waitQueue = nullptr, \
+    }
 
-typedef void (*MutexAcquire)(struct Mutex *mutex);
-typedef void (*MutexRelease)(struct Mutex *mutex);
+typedef void (*MutexAcquire)(struct Mutex* mutex);
+typedef void (*MutexRelease)(struct Mutex* mutex);
 
 typedef struct MutexOperations {
-  MutexAcquire acquire;
-  MutexRelease release;
+    MutexAcquire acquire;
+    MutexRelease release;
 } MutexOperations;
 
 typedef struct Mutex {
-  Atomic val;
-  SpinLock spinLock;
-  KQueue *waitQueue;
-  MutexOperations operations;
+    Atomic val;
+    SpinLock spinLock;
+    KQueue* waitQueue;
+    MutexOperations operations;
 } Mutex;
 
-void mutex_default_acquire(Mutex *mutex);
-void mutex_default_release(Mutex *mutex);
+void mutex_default_acquire(Mutex* mutex);
+void mutex_default_release(Mutex* mutex);
 
 #endif // __KERNEL_MUTEX_H__
