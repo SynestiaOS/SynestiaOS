@@ -148,5 +148,20 @@ void kernel_vmm_map(uint32_t virtualAddress)
     LogError("[vmm]:kernel l2Offset: %d .\n", l2Offset);
     LogError("[vmm]:kernel l3Offset: %d .\n", l3Offset);
     LogError("[vmm]:kernel pageOffset: %d .\n", pageOffset);
-    // TODO: map for kernel
+
+    if(kernelVMML1PT->pte[l1Offset].valid==0){
+
+    }else{
+        if(kernelVMML2PT->pte[l2Offset].valid==0){
+
+        }else{
+            if(kernelVMMPT->pte[l3Offset].valid==0){
+
+            }else{
+                // not be there, if goes there, means it's not a page fault
+            }
+        }
+    }
+
+
 }
