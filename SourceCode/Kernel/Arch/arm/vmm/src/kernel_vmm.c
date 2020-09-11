@@ -149,19 +149,45 @@ void kernel_vmm_map(uint32_t virtualAddress)
     LogError("[vmm]:kernel l3Offset: %d .\n", l3Offset);
     LogError("[vmm]:kernel pageOffset: %d .\n", pageOffset);
 
-    if(kernelVMML1PT->pte[l1Offset].valid==0){
+    if (kernelVMML1PT->pte[l1Offset].valid == 0) {
+        uint64_t l2ptPage = kernelPageAllocator.operations.allocPage4KAt(
+            &kernelPageAllocator,
+            USAGE_PAGE_TABLE,
+            ((uint32_t)kernelVMML2PT + l2Offset * sizeof(struct PageTableEntry)) >> VA_OFFSET);
 
-    }else{
-        if(kernelVMML2PT->pte[l2Offset].valid==0){
+        kernelVMML1PT->pte[l1Offset].valid = 1;
+        kernelVMML1PT->pte[l1Offset].table = 1;
+        kernelVMML1PT->pte[l1Offset].af = 1;
+        kernelVMML1PT->pte[l1Offset].base = l2ptPage;
 
-        }else{
-            if(kernelVMMPT->pte[l3Offset].valid==0){
+        uint64_t ptPage = kernelPageAllocator.operations.allocPage4KAt(
+            &kernelPageAllocator, USAGE_PAGE_TABLE,
+            ((uint32_t)kernelVMMPT + l2Offset * 4 * KB + l3Offset * sizeof(struct PageTableEntry)) >> VA_OFFSET);
 
-            }else{
+        PageTableEntry* l2pt = (PageTableEntry*)kernelPageAllocator.base + l2ptPage * PAGE_SIZE;
+
+        // TODO: may cause page fault here.
+        l2pt[0].valid = 1;
+        l2pt[0].table = 1;
+        l2pt[0].af = 1;
+        l2pt[0].base = ptPage;
+
+        PageTableEntry* pt = (PageTableEntry*)kernelPageAllocator.base + ptPage * PAGE_SIZE;
+
+        pt[0].valid = 1;
+        pt[0].table = 1;
+        pt[0].af = 1;
+        pt[0].base = (uint64_t)(kernelPageAllocator.operations.allocPage4KAt(
+            &kernelPageAllocator, USAGE_NORMAL, virtualAddress >> VA_OFFSET));
+    } else {
+        if (kernelVMML2PT->pte[l2Offset].valid == 0) {
+
+        } else {
+            if (kernelVMMPT->pte[l3Offset].valid == 0) {
+
+            } else {
                 // not be there, if goes there, means it's not a page fault
             }
         }
     }
-
-
 }
