@@ -1,4 +1,3 @@
-#include <cache.h>
 #include <elf.h>
 #include <ext2.h>
 #include <font8bits.h>
@@ -16,6 +15,7 @@
 #include <kernel_vmm.h>
 #include <kheap.h>
 #include <log.h>
+#include <mmu.h>
 #include <page.h>
 #include <sched.h>
 #include <spinlock.h>

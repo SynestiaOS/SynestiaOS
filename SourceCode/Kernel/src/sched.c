@@ -2,7 +2,7 @@
 // Created by XingfengYang on 2020/6/29.
 //
 
-#include <cache.h>
+#include "mmu.h"
 #include <interrupt.h>
 #include <log.h>
 #include <percpu.h>

@@ -1,19 +1,19 @@
 PROJECT(KernelUnitTests C ASM)
 
 set(KernelArchDir ${SynestiaOS_SOURCE_DIR}/SourceCode/Kernel/Arch/${SynestiaArch})
+
+find_asm_source_files(ASM_SOURCE_FILES ${KernelArchDir}/src)
 aux_source_directory(${KernelUnitTests_SOURCE_DIR}/src KernelUnitTestsSrc)
-aux_source_directory(${KernelArchDir} KernelArchSrc)
-aux_source_directory(${KernelArchDir}/vmm/src KernelArchVMMSrc)
+aux_source_directory(${KernelArchDir}/src KernelArchSrc)
 
 set(KernelArchUnitTests KernelArchUnitTests)
 add_library(${KernelArchUnitTests}
         OBJECT
         ${KernelArchSrc}
-        ${KernelArchVMMSrc}
-        ${KernelArchDir}/boot.S)
+        ${ASM_SOURCE_FILES})
 target_compile_definitions(${KernelArchUnitTests} PRIVATE "-DENV_KERNEL_UNIT_TESTS")
 
-target_include_vmm_header_files(${KernelArchUnitTests})
+target_include_kernel_arch_header_files(${KernelArchUnitTests})
 target_include_kernel_header_files(${KernelArchUnitTests})
 target_include_libc_header_files(${KernelArchUnitTests})
 
@@ -47,7 +47,6 @@ target_include_tests_header_files(${KernelUnitTestsImg})
 target_include_libc_header_files(${KernelUnitTestsImg})
 target_include_raspberry_pi_header_files(${KernelUnitTestsImg})
 target_include_kernel_header_files(${KernelUnitTestsImg})
-target_include_vmm_header_files(${KernelUnitTestsImg})
 
-target_link_options(${KernelUnitTestsImg} PRIVATE -T ${KernelArchDir}/kernel.ld)
+target_link_options(${KernelUnitTestsImg} PRIVATE -T ${KernelArchDir}/src/kernel.ld)
 target_link_libraries(${KernelUnitTestsImg} PRIVATE gcc)

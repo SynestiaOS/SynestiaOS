@@ -2,9 +2,9 @@
 // Created by XingfengYang on 2020/6/15.
 //
 
-#include <cache.h>
 #include <kernel_vmm.h>
 #include <log.h>
+#include <mmu.h>
 #include <page.h>
 #include <stdlib.h>
 #include <type.h>

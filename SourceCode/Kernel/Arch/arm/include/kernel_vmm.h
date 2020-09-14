@@ -4,8 +4,8 @@
 
 #ifndef __KERNEL_KVMM_H__
 #define __KERNEL_KVMM_H__
-#include <page.h>
-#include <vmm.h>
+#include "page.h"
+#include "vmm.h"
 
 typedef struct PageTable {
     PageTableEntry pte[KERNEL_PTE_NUMBER * KERNEL_PTE_NUMBER];

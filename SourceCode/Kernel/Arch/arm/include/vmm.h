@@ -4,7 +4,7 @@
 
 #ifndef __KERNEL_VMM_H__
 #define __KERNEL_VMM_H__
-#include <page.h>
+#include "page.h"
 
 typedef struct PageTableEntry {
     /* These are used in all kinds of entry. */

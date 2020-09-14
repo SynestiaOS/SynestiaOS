@@ -2,7 +2,7 @@
 // Created by XingfengYang on 2020/7/30.
 //
 
-#include <cache.h>
+#include "mmu.h"
 #include <ext2.h>
 #include <kheap.h>
 #include <log.h>

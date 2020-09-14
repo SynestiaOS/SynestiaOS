@@ -2,14 +2,14 @@
 // Created by XingfengYang on 2020/6/15.
 //
 
-#include <cache.h>
-#include <kernel_vmm.h>
+#include "kernel_vmm.h"
+#include "mmu.h"
+#include "page.h"
+#include "vmm.h"
 #include <log.h>
-#include <page.h>
 #include <sched.h>
 #include <stdlib.h>
 #include <type.h>
-#include <vmm.h>
 
 void virtual_memory_default_allocate_page(VirtualMemory* virtualMemory, uint32_t virtualAddress)
 {
