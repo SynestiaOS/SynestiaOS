@@ -144,8 +144,8 @@ Thread* thread_default_copy(Thread* thread, CloneFlags cloneFlags, uint32_t heap
 Thread* thread_create(const char* name, ThreadStartRoutine entry, void* arg, uint32_t priority)
 {
     // 1. allocate stack memory from kernel heap for idle task
-    KernelStack* kernelStack = kstack_allocate(kernelStack);
-    if (kernelStack != nullptr && kernelStack != nullptr) {
+    KernelStack* kernelStack = kstack_allocate();
+    if (kernelStack != nullptr) {
         // 1. init kernel stack
         kernelStack->operations.clear(kernelStack);
 
