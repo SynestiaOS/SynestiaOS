@@ -84,7 +84,7 @@ KernelStatus schd_switch_next(void)
     spinlock.operations.acquire(&spinlock);
 
     thread->runtimeNs += TIMER_TICK_MS;
-    thread->runtimVirtualNs += (PRIORITY_DEFAULT_WEIGHT / PRIORITY_2_WEIGHT[thread->priority]) * thread->runtimeNs;
+    thread->runtimeVirtualNs += (PRIORITY_DEFAULT_WEIGHT / PRIORITY_2_WEIGHT[thread->priority]) * thread->runtimeNs;
     schd_switch_to(thread);
 
     spinlock.operations.release(&spinlock);

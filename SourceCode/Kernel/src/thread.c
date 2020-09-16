@@ -176,7 +176,7 @@ Thread* thread_create(const char* name, ThreadStartRoutine entry, void* arg, uin
         thread->entry = (ThreadStartRoutine)entry;
 
         thread->runtimeNs = 0;
-        thread->runtimVirtualNs = 0;
+        thread->runtimeVirtualNs = 0;
         thread->startTime = ktimer_sys_runtime();
 
         thread->parentThread = nullptr;
