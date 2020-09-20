@@ -3,6 +3,7 @@
 //
 #ifndef __LIBRARY_LIBC_SYS_H__
 #define __LIBRARY_LIBC_SYS_H__
+
 #include <stdint.h>
 
 #define asmlinkage __attribute__((regparm(0)))
@@ -42,15 +43,19 @@
 #define _syscall0(type, name) _syscall1(type, name, int, arg1)
 
 #define __SYSCALL_getpid 0
+
 _syscall0(int, getpid)
 
 #define __SYSCALL_open 1
-    _syscall3(int, open, const char*, name, uint32_t, flags, uint32_t, mode);
+
+_syscall3(int, open, const char*, name, uint32_t, flags, uint32_t, mode);
 
 #define __SYSCALL_read 2
+
 _syscall3(int, read, uint32_t, fd, char*, buf, uint32_t, count);
 
 #define __SYSCALL_close 3
+
 _syscall1(int, close, uint32_t, fd);
 
 #endif // __LIBRARY_LIBC_SYS_H__

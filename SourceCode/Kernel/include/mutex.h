@@ -4,6 +4,7 @@
 
 #ifndef __KERNEL_MUTEX_H__
 #define __KERNEL_MUTEX_H__
+
 #include <atomic.h>
 #include <kqueue.h>
 #include <spinlock.h>
@@ -25,8 +26,9 @@
         .spinLock = SpinLockCreate(), .waitQueue = nullptr, \
     }
 
-typedef void (*MutexAcquire)(struct Mutex* mutex);
-typedef void (*MutexRelease)(struct Mutex* mutex);
+typedef void (*MutexAcquire)(struct Mutex *mutex);
+
+typedef void (*MutexRelease)(struct Mutex *mutex);
 
 typedef struct MutexOperations {
     MutexAcquire acquire;
@@ -36,11 +38,12 @@ typedef struct MutexOperations {
 typedef struct Mutex {
     Atomic val;
     SpinLock spinLock;
-    KQueue* waitQueue;
+    KQueue *waitQueue;
     MutexOperations operations;
 } Mutex;
 
-void mutex_default_acquire(Mutex* mutex);
-void mutex_default_release(Mutex* mutex);
+void mutex_default_acquire(Mutex *mutex);
+
+void mutex_default_release(Mutex *mutex);
 
 #endif // __KERNEL_MUTEX_H__

@@ -40,41 +40,41 @@ typedef enum PhysicalPageUsage {
 } PhysicalPageUsage;
 
 typedef struct PhysicalPage {
-    uint64_t ref_count : 8;
-    PhysicalPageType type : 8;
-    PhysicalPageUsage usage : 8;
-    uint64_t reserved : 8;
+    uint64_t ref_count: 8;
+    PhysicalPageType type: 8;
+    PhysicalPageUsage usage: 8;
+    uint64_t reserved: 8;
 } __attribute__((packed)) PhysicalPage;
 
-typedef uint64_t (*PhysicalPageAllocatorOperationAllocPage4K)(struct PhysicalPageAllocator* pageAllocator,
-    PhysicalPageUsage usage);
+typedef uint64_t (*PhysicalPageAllocatorOperationAllocPage4K)(struct PhysicalPageAllocator *pageAllocator,
+                                                              PhysicalPageUsage usage);
 
-typedef uint64_t (*PhysicalPageAllocatorOperationFreePage4K)(struct PhysicalPageAllocator* pageAllocator,
-    uint64_t page);
+typedef uint64_t (*PhysicalPageAllocatorOperationFreePage4K)(struct PhysicalPageAllocator *pageAllocator,
+                                                             uint64_t page);
 
-typedef uint64_t (*PhysicalPageAllocatorOperationAllocPage2M)(struct PhysicalPageAllocator* pageAllocator,
-    PhysicalPageUsage usage);
+typedef uint64_t (*PhysicalPageAllocatorOperationAllocPage2M)(struct PhysicalPageAllocator *pageAllocator,
+                                                              PhysicalPageUsage usage);
 
-typedef uint64_t (*PhysicalPageAllocatorOperationFreePage2M)(struct PhysicalPageAllocator* pageAllocator,
-    uint64_t page);
+typedef uint64_t (*PhysicalPageAllocatorOperationFreePage2M)(struct PhysicalPageAllocator *pageAllocator,
+                                                             uint64_t page);
 
-typedef uint64_t (*PhysicalPageAllocatorOperationAllocPage4KAt)(struct PhysicalPageAllocator* pageAllocator,
-    PhysicalPageUsage usage, uint64_t address);
+typedef uint64_t (*PhysicalPageAllocatorOperationAllocPage4KAt)(struct PhysicalPageAllocator *pageAllocator,
+                                                                PhysicalPageUsage usage, uint64_t address);
 
-typedef uint64_t (*PhysicalPageAllocatorOperationAllocPage2MAt)(struct PhysicalPageAllocator* pageAllocator,
-    PhysicalPageUsage usage, uint64_t address);
+typedef uint64_t (*PhysicalPageAllocatorOperationAllocPage2MAt)(struct PhysicalPageAllocator *pageAllocator,
+                                                                PhysicalPageUsage usage, uint64_t address);
 
-typedef uint64_t (*PhysicalPageAllocatorOperationPage4KMarkAsUsed)(struct PhysicalPageAllocator* pageAllocator,
-    uint64_t page);
+typedef uint64_t (*PhysicalPageAllocatorOperationPage4KMarkAsUsed)(struct PhysicalPageAllocator *pageAllocator,
+                                                                   uint64_t page);
 
-typedef uint64_t (*PhysicalPageAllocatorOperationPage4KMarkAsFree)(struct PhysicalPageAllocator* pageAllocator,
-    uint64_t page);
+typedef uint64_t (*PhysicalPageAllocatorOperationPage4KMarkAsFree)(struct PhysicalPageAllocator *pageAllocator,
+                                                                   uint64_t page);
 
-typedef uint64_t (*PhysicalPageAllocatorOperationAllocHugeAt)(struct PhysicalPageAllocator* pageAllocator,
-    PhysicalPageUsage usage, uint64_t page, uint32_t size);
+typedef uint64_t (*PhysicalPageAllocatorOperationAllocHugeAt)(struct PhysicalPageAllocator *pageAllocator,
+                                                              PhysicalPageUsage usage, uint64_t page, uint32_t size);
 
-typedef uint64_t (*PhysicalPageAllocatorOperationFreeHugeAt)(struct PhysicalPageAllocator* pageAllocator, uint64_t page,
-    uint32_t size);
+typedef uint64_t (*PhysicalPageAllocatorOperationFreeHugeAt)(struct PhysicalPageAllocator *pageAllocator, uint64_t page,
+                                                             uint32_t size);
 
 typedef struct PhysicalPageAllocatorOperations {
     PhysicalPageAllocatorOperationAllocPage4K allocPage4K;
@@ -97,6 +97,6 @@ typedef struct PhysicalPageAllocator {
     PhysicalPageAllocatorOperations operations;
 } PhysicalPageAllocator;
 
-KernelStatus page_allocator_create(PhysicalPageAllocator* pageAllocator, uint32_t base, uint32_t size);
+KernelStatus page_allocator_create(PhysicalPageAllocator *pageAllocator, uint32_t base, uint32_t size);
 
 #endif // __KERNEL_PAGE_H__

@@ -4,8 +4,7 @@
 #include <timer.h>
 #include <uart.h>
 
-void init_bsp(void)
-{
+void init_bsp(void) {
     LogInfo("[Device]: uart_init...\n");
     uart_init();
     LogInfo("[Device]: uart_init complete.\n");

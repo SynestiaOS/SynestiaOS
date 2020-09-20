@@ -7,8 +7,8 @@
 #include <stdbool.h>
 #include <thread.h>
 
-extern Thread* currentThread;
+extern Thread *currentThread;
 
-void semaphore_default_post(Semaphore* semaphore) { }
+void semaphore_default_post(Semaphore *semaphore) {}
 
-void semaphore_default_wait(Semaphore* semaphore) { }
+void semaphore_default_wait(Semaphore *semaphore) {}

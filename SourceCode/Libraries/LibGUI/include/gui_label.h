@@ -12,12 +12,13 @@ typedef struct GUILabel {
     GUIComponent component;
     char text[0xFF];
     uint32_t fontSize;
+    Gfx2DContext context;
 } GUILabel;
 
-void gui_label_create(GUILabel* label);
+void gui_label_create(GUILabel *label);
 
-void gui_label_init(GUILabel* label, uint32_t x, uint32_t y, const char* text);
+void gui_label_init(GUILabel *label, uint32_t x, uint32_t y, const char *text);
 
-void gui_label_draw(GUILabel* label);
+void gui_label_draw(GUILabel *label);
 
 #endif //__LIBRARY_LIBGUI_LABEL_H__

@@ -4,11 +4,10 @@
 
 #include <kqueue.h>
 
-KernelStatus kqueue_enqueue(KQueue* queue, KQueue* node)
-{
+KernelStatus kqueue_enqueue(KQueue *queue, KQueue *node) {
     klist_remove_node(node);
 
-    KQueue* last = queue;
+    KQueue *last = queue;
     if (last == nullptr) {
         queue = node;
         node->prev = nullptr;
@@ -24,9 +23,8 @@ KernelStatus kqueue_enqueue(KQueue* queue, KQueue* node)
     return OK;
 }
 
-KQueue* kqueue_dequeue(KQueue* queue)
-{
-    KQueue* first = queue;
+KQueue *kqueue_dequeue(KQueue *queue) {
+    KQueue *first = queue;
     while (first->prev != nullptr) {
         first = first->prev;
     }
@@ -36,4 +34,4 @@ KQueue* kqueue_dequeue(KQueue* queue)
     return first;
 }
 
-uint32_t kqueue_size(KQueue* queue) { return klist_size(queue); }
+uint32_t kqueue_size(KQueue *queue) { return klist_size(queue); }

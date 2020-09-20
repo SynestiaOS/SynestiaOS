@@ -9,10 +9,10 @@
  * Configure number of loops reading HW register to wait one second
  */
 #define TOGGLE_LOOP_CNT 5000000 /* 5MHz is about 1 second on B+ */
+
 /* and -O2 compiler optimizations. */
 
-int led_init(void)
-{
+int led_init(void) {
     unsigned int i, select;
 
 #if defined(RASPI4)

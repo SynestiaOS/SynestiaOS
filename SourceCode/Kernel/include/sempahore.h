@@ -4,6 +4,7 @@
 
 #ifndef __KERNEL_SEMAPHORE_H__
 #define __KERNEL_SEMAPHORE_H__
+
 #include <atomic.h>
 #include <kqueue.h>
 #include <spinlock.h>
@@ -21,8 +22,9 @@
         .spinLock = SpinLockCreate(), .waitQueue = nunllptr, \
     }
 
-typedef void (*SemaphorePost)(struct Semaphore* semaphore);
-typedef void (*SemaphoreWait)(struct Semaphore* semaphore);
+typedef void (*SemaphorePost)(struct Semaphore *semaphore);
+
+typedef void (*SemaphoreWait)(struct Semaphore *semaphore);
 
 typedef struct SemaphoreOperations {
     SemaphorePost post;

@@ -9,8 +9,8 @@
 #include <string.h>
 
 extern uint32_t GFX2D_BUFFER[1024 * 768];
-void gui_label_create(GUILabel* label)
-{
+
+void gui_label_create(GUILabel *label) {
     label->component.type = LABEL;
     label->component.visable = true;
     label->component.colorMode = RGB;
@@ -46,15 +46,16 @@ void gui_label_create(GUILabel* label)
     label->component.foreground.r = (FLUENT_PRIMARY_FORE_COLOR >> 16) & 0xFF;
     label->component.foreground.g = (FLUENT_PRIMARY_FORE_COLOR >> 8) & 0xFF;
     label->component.foreground.b = FLUENT_PRIMARY_FORE_COLOR & 0xFF;
+
+    gfx2d_create_context(&label->context, 1024, 768, GFX2D_BUFFER);
 }
 
-void gui_label_init(GUILabel* label, uint32_t x, uint32_t y, const char* text)
-{
+void gui_label_init(GUILabel *label, uint32_t x, uint32_t y, const char *text) {
     memcpy(label->text, text, strlen(text));
     label->component.position.x = x;
     label->component.position.y = y;
 
-    char* tmp = text;
+    char *tmp = text;
     uint32_t length = 0;
     while (*tmp) {
         length++;
@@ -62,44 +63,55 @@ void gui_label_init(GUILabel* label, uint32_t x, uint32_t y, const char* text)
     }
 
     if (label->component.size.width == 0) {
-        label->component.size.width = length * label->fontSize + label->component.padding.left + label->component.padding.right;
+        label->component.size.width =
+                length * label->fontSize + label->component.padding.left + label->component.padding.right;
         if (label->component.size.height == 0) {
-            label->component.size.height = label->fontSize + label->component.padding.top + label->component.padding.bottom;
+            label->component.size.height =
+                    label->fontSize + label->component.padding.top + label->component.padding.bottom;
         }
     } else {
         if (label->component.size.height == 0) {
-            uint32_t lineFonts = (label->component.size.width - label->component.padding.left - label->component.padding.right) / label->fontSize;
+            uint32_t lineFonts =
+                    (label->component.size.width - label->component.padding.left - label->component.padding.right) /
+                    label->fontSize;
             uint32_t lines = length / lineFonts;
-            label->component.size.height = lines * label->fontSize + label->component.padding.top + label->component.padding.bottom;
+            label->component.size.height =
+                    lines * label->fontSize + label->component.padding.top + label->component.padding.bottom;
         }
     }
 }
 
-void gui_label_draw(GUILabel* label)
-{
-    Gfx2DContext context = { .width = 1024, .height = 768, .buffer = GFX2D_BUFFER };
+void gui_label_draw(GUILabel *label) {
     if (label->component.visable) {
         // 1. draw_background
         if (label->component.colorMode == RGB) {
-            gfx2d_fill_rect(context, label->component.position.x + label->component.margin.left,
-                label->component.position.y + label->component.margin.top,
-                label->component.position.x + label->component.size.width,
-                label->component.position.y + label->component.size.height,
-                label->component.background.a << 24 | label->component.background.r << 16 | label->component.background.g << 8 | label->component.background.b);
+            label->context.operations.fillRect(&label->context,
+                                               label->component.position.x + label->component.margin.left,
+                                               label->component.position.y + label->component.margin.top,
+                                               label->component.position.x + label->component.size.width,
+                                               label->component.position.y + label->component.size.height,
+                                               label->component.background.a << 24 |
+                                               label->component.background.r << 16 |
+                                               label->component.background.g << 8 | label->component.background.b);
         }
 
         // 2. draw_font
         uint32_t xOffset = 0;
         uint32_t length = strlen(label->text);
-        uint32_t lineFonts = (label->component.size.width - label->component.padding.left - label->component.padding.right) / label->fontSize;
+        uint32_t lineFonts =
+                (label->component.size.width - label->component.padding.left - label->component.padding.right) /
+                label->fontSize;
 
         uint32_t column = 0;
         uint32_t row = 0;
         for (uint32_t i = 0; i < length; i++) {
-            gfx2d_draw_ascii(
-                context, label->component.position.x + xOffset * label->fontSize + label->component.padding.left,
-                label->component.position.y + row * label->fontSize + label->component.padding.top, label->text[i],
-                label->component.foreground.r << 16 | label->component.foreground.g << 8 | label->component.foreground.b);
+            label->context.operations.drawAscii(&label->context,
+                                                label->component.position.x + xOffset * label->fontSize +
+                                                label->component.padding.left,
+                                                label->component.position.y + row * label->fontSize +
+                                                label->component.padding.top, label->text[i],
+                                                label->component.foreground.r << 16 |
+                                                label->component.foreground.g << 8 | label->component.foreground.b);
             column++;
             if (column == lineFonts) {
                 row++;

@@ -18,15 +18,14 @@ extern PhysicalPageAllocator userspacePageAllocator;
 
 extern uint64_t ktimer_sys_runtime();
 
-uint32_t pidMap[2048] = { 0 };
+uint32_t pidMap[2048] = {0};
 
-uint32_t thread_alloc_pid()
-{
+uint32_t thread_alloc_pid() {
     for (uint32_t i = 0; i < 2048 / BITS_IN_UINT32; i++) {
         if (pidMap[i] != MAX_UINT_32) {
             for (uint8_t j = 0; j < BITS_IN_UINT32; j++) {
-                if ((pidMap[i] & ((uint32_t)0x1 << j)) == 0) {
-                    pidMap[i] |= (uint32_t)0x1 << j;
+                if ((pidMap[i] & ((uint32_t) 0x1 << j)) == 0) {
+                    pidMap[i] |= (uint32_t) 0x1 << j;
                     return i * BITS_IN_UINT32 + j;
                 }
             }
@@ -34,60 +33,52 @@ uint32_t thread_alloc_pid()
     }
 }
 
-uint32_t thread_free_pid(uint32_t pid)
-{
+uint32_t thread_free_pid(uint32_t pid) {
     uint32_t index = pid / BITS_IN_UINT32;
     uint8_t bitIndex = pid % BITS_IN_UINT32;
-    pidMap[index] ^= (uint32_t)0x1 << bitIndex;
+    pidMap[index] ^= (uint32_t) 0x1 << bitIndex;
 }
 
-KernelStatus thread_default_suspend(struct Thread* thread)
-{
+KernelStatus thread_default_suspend(struct Thread *thread) {
     // TODO:
     return OK;
 }
 
-KernelStatus thread_default_resume(struct Thread* thread)
-{
+KernelStatus thread_default_resume(struct Thread *thread) {
     // TODO:
     return OK;
 }
 
-KernelStatus thread_default_sleep(struct Thread* thread, uint32_t deadline)
-{
+KernelStatus thread_default_sleep(struct Thread *thread, uint32_t deadline) {
     // TODO:
     return OK;
 }
 
-KernelStatus thread_default_detach(struct Thread* thread)
-{
+KernelStatus thread_default_detach(struct Thread *thread) {
     // TODO:
     return OK;
 }
 
-KernelStatus thread_default_join(struct Thread* thread, int* returnCode, uint32_t deadline)
-{
+KernelStatus thread_default_join(struct Thread *thread, int *returnCode, uint32_t deadline) {
     // TODO:
     return OK;
 }
 
-KernelStatus thread_default_exit(struct Thread* thread, uint32_t returnCode)
-{
+KernelStatus thread_default_exit(struct Thread *thread, uint32_t returnCode) {
     // TODO:
     return OK;
 }
 
-KernelStatus thread_default_kill(struct Thread* thread)
-{
+KernelStatus thread_default_kill(struct Thread *thread) {
     thread_free_pid(thread->pid);
     thread->stack->operations.free(thread->stack);
     // TODO:
     return OK;
 }
 
-uint32_t filestruct_default_openfile(FilesStruct* filesStruct, DirectoryEntry* directoryEntry)
-{
-    FileDescriptor* fileDescriptor = (FileDescriptor*)kernelHeap.operations.alloc(&kernelHeap, sizeof(FileDescriptor));
+uint32_t filestruct_default_openfile(FilesStruct *filesStruct, DirectoryEntry *directoryEntry) {
+    FileDescriptor *fileDescriptor = (FileDescriptor *) kernelHeap.operations.alloc(&kernelHeap,
+                                                                                    sizeof(FileDescriptor));
     fileDescriptor->directoryEntry = directoryEntry;
     fileDescriptor->node.prev = nullptr;
     fileDescriptor->node.next = nullptr;
@@ -101,9 +92,8 @@ uint32_t filestruct_default_openfile(FilesStruct* filesStruct, DirectoryEntry* d
     return filesStruct->fileDescriptorTable->index - 1;
 }
 
-Thread* thread_default_copy(Thread* thread, CloneFlags cloneFlags, uint32_t heapStart)
-{
-    Thread* p = thread_create(thread->name, thread->entry, thread->arg, thread->priority);
+Thread *thread_default_copy(Thread *thread, CloneFlags cloneFlags, uint32_t heapStart) {
+    Thread *p = thread_create(thread->name, thread->entry, thread->arg, thread->priority);
     if (p == nullptr) {
         LogError("[Thread]: copy failed.\n");
         return nullptr;
@@ -119,7 +109,8 @@ Thread* thread_default_copy(Thread* thread, CloneFlags cloneFlags, uint32_t heap
             return nullptr;
         }
 
-        KernelStatus heapCreateStatus = heap_create(&p->memoryStruct.heap, p->memoryStruct.sectionInfo.bssEndSectionAddr, 16 * MB);
+        KernelStatus heapCreateStatus = heap_create(&p->memoryStruct.heap,
+                                                    p->memoryStruct.sectionInfo.bssEndSectionAddr, 16 * MB);
         if (heapCreateStatus != OK) {
             LogError("[Thread]: heap create failed for thread: '%s'.\n", p->name);
             // TODO: free thread.
@@ -141,10 +132,9 @@ Thread* thread_default_copy(Thread* thread, CloneFlags cloneFlags, uint32_t heap
     return p;
 }
 
-Thread* thread_create(const char* name, ThreadStartRoutine entry, void* arg, uint32_t priority)
-{
+Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uint32_t priority) {
     // 1. allocate stack memory from kernel heap for idle task
-    KernelStack* kernelStack = kstack_allocate();
+    KernelStack *kernelStack = kstack_allocate();
     if (kernelStack != nullptr) {
         // 1. init kernel stack
         kernelStack->operations.clear(kernelStack);
@@ -166,14 +156,14 @@ Thread* thread_create(const char* name, ThreadStartRoutine entry, void* arg, uin
         kernelStack->operations.push(kernelStack, arg); // R00
         kernelStack->operations.push(kernelStack, 0x600001d3); // cpsr
 
-        Thread* thread = (Thread*)kernelHeap.operations.alloc(&kernelHeap, sizeof(Thread));
+        Thread *thread = (Thread *) kernelHeap.operations.alloc(&kernelHeap, sizeof(Thread));
         thread->magic = THREAD_MAGIC;
         thread->threadStatus = THREAD_INITIAL;
         thread->stack = kernelStack;
         thread->priority = priority;
         thread->currCpu = INVALID_CPU;
         thread->lastCpu = INVALID_CPU;
-        thread->entry = (ThreadStartRoutine)entry;
+        thread->entry = (ThreadStartRoutine) entry;
 
         thread->runtimeNs = 0;
         thread->runtimeVirtualNs = 0;
@@ -225,30 +215,27 @@ Thread* thread_create(const char* name, ThreadStartRoutine entry, void* arg, uin
     return nullptr;
 }
 
-uint32_t* idle_thread_routine(int arg)
-{
+uint32_t *idle_thread_routine(int arg) {
     while (1) {
         LogInfo("[Thread]: IDLE: %d \n", arg);
         asm volatile("wfi");
     }
 }
 
-Thread* thread_create_idle_thread(uint32_t cpuNum)
-{
-    Thread* idleThread = thread_create("IDLE", idle_thread_routine, cpuNum, IDLE_PRIORITY);
+Thread *thread_create_idle_thread(uint32_t cpuNum) {
+    Thread *idleThread = thread_create("IDLE", idle_thread_routine, cpuNum, IDLE_PRIORITY);
     idleThread->cpuAffinity = cpuNum;
     // 2. idle thread
     idleThread->pid = 0;
 
-    char idleNameStr[10] = { '\0' };
+    char idleNameStr[10] = {'\0'};
     strcpy(idleThread->name, itoa(cpuNum, &idleNameStr, 10));
     // TODO : other properties, like list
     LogInfo("[Thread]: Idle thread for CPU '%d' created.\n", cpuNum);
     return idleThread;
 }
 
-KernelStatus thread_reschedule()
-{
+KernelStatus thread_reschedule() {
     // TODO
     return OK;
 }

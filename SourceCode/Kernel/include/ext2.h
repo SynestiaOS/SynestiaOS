@@ -249,19 +249,19 @@ typedef uint32_t Ext2DataBlock;
 typedef uint32_t Ext2BootBlock;
 
 typedef struct Ext2BlockGroup {
-    Ext2SuperBlock* superBlock;
-    Ext2BlockGroupDescriptor* blockGroupDescriptor;
-    Ext2DataBlockBitmap* dataBlockBitmap;
-    Ext2IndexNodeBlockBitmap* indexNodeBitmap;
-    Ext2IndexNode* indexNode;
-    Ext2DataBlock* dataBlock;
+    Ext2SuperBlock *superBlock;
+    Ext2BlockGroupDescriptor *blockGroupDescriptor;
+    Ext2DataBlockBitmap *dataBlockBitmap;
+    Ext2IndexNodeBlockBitmap *indexNodeBitmap;
+    Ext2IndexNode *indexNode;
+    Ext2DataBlock *dataBlock;
 } Ext2BlockGroup;
 
-typedef KernelStatus (*Ext2FileSystemMountOperation)(struct Ext2FileSystem* ext2FileSystem, char* mountName,
-    void* data);
+typedef KernelStatus (*Ext2FileSystemMountOperation)(struct Ext2FileSystem *ext2FileSystem, char *mountName,
+                                                     void *data);
 
-typedef uint32_t (*Ext2FileSystemReadOperation)(struct Ext2FileSystem* ext2FileSystem, Ext2IndexNode* indexNode,
-    char* buf, uint32_t count);
+typedef uint32_t (*Ext2FileSystemReadOperation)(struct Ext2FileSystem *ext2FileSystem, Ext2IndexNode *indexNode,
+                                                char *buf, uint32_t count);
 
 typedef struct Ext2FileSystemOperations {
     Ext2FileSystemMountOperation mount;
@@ -269,16 +269,16 @@ typedef struct Ext2FileSystemOperations {
 } Ext2FileSystemOperations;
 
 typedef struct Ext2FileSystem {
-    Ext2SuperBlock* ext2SuperBlock;
+    Ext2SuperBlock *ext2SuperBlock;
     struct SuperBlock superblock;
-    Ext2BootBlock* bootBlock;
-    Ext2BlockGroup* blockGroups;
-    void* data;
+    Ext2BootBlock *bootBlock;
+    Ext2BlockGroup *blockGroups;
+    void *data;
     uint32_t blockSize;
     uint32_t blockGroupNums;
     Ext2FileSystemOperations operations;
 } Ext2FileSystem;
 
-Ext2FileSystem* ext2_create();
+Ext2FileSystem *ext2_create();
 
 #endif // __KERNEL_FS_EXT2_H__

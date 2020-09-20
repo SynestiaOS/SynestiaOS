@@ -4,66 +4,59 @@
 #include <timer.h>
 #include <vmm.h>
 
-static rpi_irq_controller_t* rpiIRQController = (rpi_irq_controller_t*)RPI_INTERRUPT_CONTROLLER_BASE;
+static rpi_irq_controller_t *rpiIRQController = (rpi_irq_controller_t *) RPI_INTERRUPT_CONTROLLER_BASE;
 
-rpi_irq_controller_t* getIRQController(void) { return rpiIRQController; }
+rpi_irq_controller_t *getIRQController(void) { return rpiIRQController; }
 
-void init_interrupt()
-{
+void init_interrupt() {
     getIRQController()->Disable_Basic_IRQs = 0xffffffff;
     getIRQController()->Disable_IRQs_1 = 0xffffffff;
     getIRQController()->Disable_IRQs_2 = 0xffffffff;
     LogInfo("[Interrupt]: interrupt init\n");
 }
 
-void swi(uint32_t num)
-{
+void swi(uint32_t num) {
     __asm__ __volatile__("push {lr}\n\t"
                          "mov r0, %0\n\t"
                          "swi 0x0\n\t"
-                         "pop {pc}\n\t" ::"r"(num));
+                         "pop {pc}\n\t"::"r"(num));
 }
 
-uint32_t cpsr_value()
-{
+uint32_t cpsr_value() {
     uint32_t cpsr;
     __asm__ __volatile__("mrs %0, cpsr"
-                         : "=r"(cpsr)
-                         :);
+    : "=r"(cpsr)
+    :);
     return cpsr;
 }
 
-uint32_t is_interrupt_enabled()
-{
+uint32_t is_interrupt_enabled() {
     uint32_t cpsr;
     __asm__ __volatile__("mrs %0, cpsr"
-                         : "=r"(cpsr)
-                         :);
+    : "=r"(cpsr)
+    :);
     return ((cpsr >> 7) & 1) == 0;
 }
 
-void enable_interrupt()
-{
+void enable_interrupt() {
     if (!is_interrupt_enabled()) {
         __asm__ __volatile__("cpsie i");
         LogInfo("[Interrupt]: enable\n");
     }
 }
 
-void disable_interrupt()
-{
+void disable_interrupt() {
     if (is_interrupt_enabled()) {
         __asm__ __volatile__("cpsid i");
         LogInfo("[Interrupt]: disable\n");
     }
 }
 
-void __attribute__((interrupt("UNDEF"))) undefined_instruction_handler(void) { }
+void __attribute__((interrupt("UNDEF"))) undefined_instruction_handler(void) {}
 
 extern SysCall sys_call_table[];
 
-int software_interrupt_handler()
-{
+int software_interrupt_handler() {
     volatile int r0, r1, r2, r3, r4, sysCallNo;
     __asm__ volatile("mov %0,r1\n\t"
                      "mov %1,r2\n\t"
@@ -71,17 +64,16 @@ int software_interrupt_handler()
                      "mov %3,r5\n\t"
                      "mov %4,r6\n\t"
                      "mov %5,r7\n\t"
-                     : "=r"(r0), "=r"(r1), "=r"(r2), "=r"(r3), "=r"(r4), "=r"(sysCallNo)
-                     :
-                     : "r1", "r2", "r4", "r5", "r6", "r7");
+    : "=r"(r0), "=r"(r1), "=r"(r2), "=r"(r3), "=r"(r4), "=r"(sysCallNo)
+    :
+    : "r1", "r2", "r4", "r5", "r6", "r7");
 
     return sys_call_table[sysCallNo](r0, r1, r2, r3, r4);
 }
 
-void __attribute__((interrupt("ABORT"))) prefetch_abort_handler(void) { }
+void __attribute__((interrupt("ABORT"))) prefetch_abort_handler(void) {}
 
-void data_abort_handler()
-{
+void data_abort_handler() {
     volatile uint32_t r0, r1, r2, r3, r4, r5;
     __asm__ volatile("mov %0,r0\n\t"
                      "mov %1,r1\n\t"
@@ -89,15 +81,15 @@ void data_abort_handler()
                      "mov %3,r3\n\t"
                      "mov %4,r4\n\t"
                      "mov %5,r5\n\t"
-                     : "=r"(r0), "=r"(r1), "=r"(r2), "=r"(r3), "=r"(r4), "=r"(r5)
-                     :
-                     : "r0", "r1", "r2", "r3", "r4", "r5");
+    : "=r"(r0), "=r"(r1), "=r"(r2), "=r"(r3), "=r"(r4), "=r"(r5)
+    :
+    : "r0", "r1", "r2", "r3", "r4", "r5");
     // TODO: get page fault info from cp15
     LogError("[Interrupt]: data abort\n");
     do_page_fault(r3);
 }
 
-void unused_handler(void) { }
+void unused_handler(void) {}
 
 #define IRQ_IS_BASIC(x) ((x >= 64))
 #define IRQ_IS_GPU2(x) ((x >= 32 && x < 64))
@@ -120,8 +112,7 @@ typedef struct irq_handler {
 irq_handler_t irq_handlers[IRQ_NUMS];
 
 void register_interrupt_handler(uint32_t interrupt_no, void (*interrupt_handler_func)(void),
-    void (*interrupt_clear_func)(void))
-{
+                                void (*interrupt_clear_func)(void)) {
     irq_handlers[interrupt_no].interrupt_handler_func = interrupt_handler_func;
     irq_handlers[interrupt_no].interrupt_clear_func = interrupt_clear_func;
     irq_handlers[interrupt_no].registered = 1;
@@ -135,8 +126,7 @@ void register_interrupt_handler(uint32_t interrupt_no, void (*interrupt_handler_
     }
 }
 
-void interrupt_handler(void)
-{
+void interrupt_handler(void) {
     for (uint32_t interrupt_no = 0; interrupt_no < IRQ_NUMS; interrupt_no++) {
         if (irq_handlers[interrupt_no].registered == 1) {
             LogInfo("[Interrupt]: interrupt '%d' triggered.\n", interrupt_no);
@@ -151,12 +141,11 @@ void interrupt_handler(void)
     }
 }
 
-void __attribute__((interrupt("FIQ"))) fast_interrupt_handler(void) { }
+void __attribute__((interrupt("FIQ"))) fast_interrupt_handler(void) {}
 
-TimerHandler* timerHandler = nullptr;
+TimerHandler *timerHandler = nullptr;
 
-void register_time_interrupt(TimerHandler* handler)
-{
+void register_time_interrupt(TimerHandler *handler) {
     if (timerHandler == nullptr) {
         timerHandler = handler;
     } else {
@@ -164,4 +153,4 @@ void register_time_interrupt(TimerHandler* handler)
     }
 }
 
-TimerHandler* timer_get_handler(void) { return timerHandler; }
+TimerHandler *timer_get_handler(void) { return timerHandler; }

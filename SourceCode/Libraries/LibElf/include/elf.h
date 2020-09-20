@@ -51,21 +51,21 @@ typedef struct ElfFileHeader {
     uint8_t magic[4]; // .elf
     uint8_t arch; // This byte is set to either 1 or 2 to signify 32- or 64-bit format, respectively.
     uint8_t endian; // This byte is set to either 1 or 2 to signify little or big endianness, respectively. This affects
-        // interpretation of multi-byte fields starting with offset 0x10.
+    // interpretation of multi-byte fields starting with offset 0x10.
     uint8_t currentVersion; // Set to 1 for the original and current version of ELF.
     uint8_t osABI; // Identifies the target operating system ABI.
     uint8_t abiVersion; // Further specifies the ABI version. Its interpretation depends on the target ABI. Linux kernel
-        // (after at least 2.6) has no definition of it[5], so it is ignored for statically-linked
-        // executables. In that case, offset and size of EI_PAD are 8.
+    // (after at least 2.6) has no definition of it[5], so it is ignored for statically-linked
+    // executables. In that case, offset and size of EI_PAD are 8.
     uint8_t pad; // currently unused, should be filled with zeros.
     uint16_t type; // Identifies object file type.
     uint16_t machine; // Specifies target instruction set architecture.
     uint32_t originalVersion; // Set to 1 for the original version of ELF.
     uint32_t entry; // This is the memory address of the entry point from where the process starts executing. This field
-        // is either 32 or 64 bits long depending on the format defined earlier.
+    // is either 32 or 64 bits long depending on the format defined earlier.
     uint32_t programHeaderTableOffset; // Points to the start of the program header table. It usually follows the file
-        // header immediately, making the offset 0x34 or 0x40 for 32- and 64-bit ELF
-        // executables, respectively.
+    // header immediately, making the offset 0x34 or 0x40 for 32- and 64-bit ELF
+    // executables, respectively.
     uint32_t sectionHeaderTableOffset; // Points to the start of the section header table.
     uint32_t flags; // Interpretation of this field depends on the target architecture.
     uint16_t headerSize; // 64 for 64 bits machine, 54 for 32 bits machine;
@@ -74,7 +74,7 @@ typedef struct ElfFileHeader {
     uint16_t sectionHeaderEntryTableSize; // Contains the size of a section header table entry.
     uint16_t entryNumsInSectionHeaderTable; // Contains the number of entries in the section header table.
     uint16_t
-        indexOfSectionHeaderTable; // Contains index of the section header table entry that contains the section names.
+            indexOfSectionHeaderTable; // Contains index of the section header table entry that contains the section names.
 
 } ElfFileHeader;
 
@@ -97,12 +97,12 @@ typedef struct ElfProgramHeader {
     uint32_t segmentOffset; // Offset of the segment in the file image.
     uint32_t segmentVirtualAddress; // Virtual address of the segment in memory.
     uint32_t
-        segmentPhysicalAddress; // On systems where physical address is relevant, reserved for segment's physical address.
+            segmentPhysicalAddress; // On systems where physical address is relevant, reserved for segment's physical address.
     uint32_t segmentSizeInImage; // Size in bytes of the segment in the file image. May be 0.
     uint32_t segmentSizeInMemory; // Size in bytes of the segment in memory. May be 0.
     uint32_t flags; // Segment-dependent flags (position for 32-bit structure).
     uint32_t alignment; // 0 and 1 specify no alignment. Otherwise should be a positive, integral power of 2, with p_vaddr
-        // equating p_offset modulus p_align.
+    // equating p_offset modulus p_align.
 } ElfProgramHeader;
 
 typedef enum HeaderType {
@@ -152,21 +152,22 @@ typedef struct ElfSectionHeader {
     uint32_t offset; // Offset of the section in the file image.
     uint32_t size; // Size in bytes of the section in the file image. May be 0.
     uint32_t link; // Contains the section index of an associated section. This field is used for several purposes,
-        // depending on the type of section.
+    // depending on the type of section.
     uint32_t info; // Contains extra information about the section. This field is used for several purposes, depending on
-        // the type of section
+    // the type of section
     uint32_t addressAlignment; // Contains the required alignment of the section. This field must be a power of two.
     uint32_t entrySize; // Contains the size, in bytes, of each entry, for sections that contain fixed-size entries.
-        // Otherwise, this field contains zero.
+    // Otherwise, this field contains zero.
 } ElfSectionHeader;
 
-typedef void (*ElfOperationParse)(struct Elf* elf);
+typedef void (*ElfOperationParse)(struct Elf *elf);
+
 typedef struct ElfOperations {
     ElfOperationParse parse;
 } ElfOperations;
 
 typedef struct Elf {
-    char* data;
+    char *data;
     uint32_t size;
     ElfFileHeader fileHeader;
     ElfProgramHeader programHeader;
@@ -175,6 +176,6 @@ typedef struct Elf {
     ElfOperations operations;
 } Elf;
 
-KernelStatus elf_init(Elf* elf, char* data);
+KernelStatus elf_init(Elf *elf, char *data);
 
 #endif // __LIBRARY_LIBELF_ELF_H__

@@ -79,7 +79,7 @@ typedef struct CpuContextSave {
     uint32_t extra[2];
 } __attribute__((packed)) CpuContextSave;
 
-typedef uint32_t (*ThreadStartRoutine)(void* arg);
+typedef uint32_t (*ThreadStartRoutine)(void *arg);
 
 typedef struct SectionInfo {
     uint32_t codeSectionAddr;
@@ -94,19 +94,19 @@ typedef struct SectionInfo {
 
 typedef struct FileDescriptor {
     uint32_t pos;
-    DirectoryEntry* directoryEntry;
+    DirectoryEntry *directoryEntry;
     ListNode node;
 } FileDescriptor;
 
-typedef uint32_t (*FilesStructOperationOpenFile)(struct FilesStruct* filesStruct,
-    struct DirectoryEntry* directoryEntry);
+typedef uint32_t (*FilesStructOperationOpenFile)(struct FilesStruct *filesStruct,
+                                                 struct DirectoryEntry *directoryEntry);
 
 typedef struct FilesStructOperations {
     FilesStructOperationOpenFile openFile;
 } FilesStructOperations;
 
 typedef struct FilesStruct {
-    KernelVector* fileDescriptorTable;
+    KernelVector *fileDescriptorTable;
     FilesStructOperations operations;
 } FilesStruct;
 
@@ -121,21 +121,21 @@ typedef struct MemoryStruct {
     MemoryStructOperations operations;
 } MemoryStruct;
 
-typedef KernelStatus (*ThreadOperationSuspend)(struct Thread* thread);
+typedef KernelStatus (*ThreadOperationSuspend)(struct Thread *thread);
 
-typedef KernelStatus (*ThreadOperationResume)(struct Thread* thread);
+typedef KernelStatus (*ThreadOperationResume)(struct Thread *thread);
 
-typedef KernelStatus (*ThreadOperationSleep)(struct Thread* thread, uint32_t deadline);
+typedef KernelStatus (*ThreadOperationSleep)(struct Thread *thread, uint32_t deadline);
 
-typedef KernelStatus (*ThreadOperationDetach)(struct Thread* thread);
+typedef KernelStatus (*ThreadOperationDetach)(struct Thread *thread);
 
-typedef KernelStatus (*ThreadOperationJoin)(struct Thread* thread, int* returnCode, uint32_t deadline);
+typedef KernelStatus (*ThreadOperationJoin)(struct Thread *thread, int *returnCode, uint32_t deadline);
 
-typedef KernelStatus (*ThreadOperationExit)(struct Thread* thread, uint32_t returnCode);
+typedef KernelStatus (*ThreadOperationExit)(struct Thread *thread, uint32_t returnCode);
 
-typedef KernelStatus (*ThreadOperationKill)(struct Thread* thread);
+typedef KernelStatus (*ThreadOperationKill)(struct Thread *thread);
 
-typedef struct Thread* (*ThreadOperationCopy)(struct Thread* thread, CloneFlags cloneFlags, uint32_t heapStart);
+typedef struct Thread *(*ThreadOperationCopy)(struct Thread *thread, CloneFlags cloneFlags, uint32_t heapStart);
 
 typedef struct ThreadOperations {
     ThreadOperationSuspend suspend;
@@ -152,10 +152,10 @@ typedef struct Thread {
     uint32_t magic;
     CpuContextSave cpuContextSave;
 
-    struct Thread* parentThread;
+    struct Thread *parentThread;
     uint64_t pid;
     char name[THREAD_NAME_LENGTH];
-    KernelStack* stack;
+    KernelStack *stack;
     ThreadStartRoutine entry;
 
     uint32_t flags;
@@ -177,7 +177,7 @@ typedef struct Thread {
     CpuNum lastCpu;
     CpuNum currCpu;
     CpuMask cpuAffinity;
-    void* arg;
+    void *arg;
 
     uint32_t returnCode;
 
@@ -188,9 +188,9 @@ typedef struct Thread {
 
 } __attribute__((packed)) Thread;
 
-Thread* thread_create(const char* name, ThreadStartRoutine entry, void* arg, uint32_t priority);
+Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uint32_t priority);
 
-Thread* thread_create_idle_thread(uint32_t cpuNum);
+Thread *thread_create_idle_thread(uint32_t cpuNum);
 
 KernelStatus thread_reschedule();
 

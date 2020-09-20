@@ -4,8 +4,7 @@
 
 #include <tests_lib.h>
 
-void __assert_func_failed(const char* file, int line, const char* func, const char* failedexpr)
-{
+void __assert_func_failed(const char *file, int line, const char *func, const char *failedexpr) {
     __test_all_asserts++;
     __test_failed_asserts++;
     if (__test_all_asserts > 1) {
@@ -19,8 +18,7 @@ void __assert_func_failed(const char* file, int line, const char* func, const ch
     }
 }
 
-void __assert_func_success(const char* file, int line, const char* func, const char* failedexpr)
-{
+void __assert_func_success(const char *file, int line, const char *func, const char *failedexpr) {
     __test_all_asserts++;
     if (__test_all_asserts > 1) {
         printf("├──\033[32mAssertion \"%s\" true \033[0m\n", failedexpr);
