@@ -60,9 +60,9 @@ KernelStatus kvector_add(KernelVector* vector, ListNode* node)
 
 ListNode* kvector_get(KernelVector* vector, uint32_t index) { return vector->node[index]; }
 
-KernelStatus kvector_remove_index(KernelVector* vector, uint32_t index) {}
+KernelStatus kvector_remove_index(KernelVector* vector, uint32_t index) { }
 
-KernelStatus kvector_remove(KernelVector* vector, ListNode* index) {}
+KernelStatus kvector_remove(KernelVector* vector, ListNode* index) { }
 
 uint32_t kvector_size(KernelVector* vector) { return vector->index; }
 

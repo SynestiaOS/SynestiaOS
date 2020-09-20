@@ -2,10 +2,10 @@
 // Created by XingfengYang on 2020/6/15.
 //
 
+#include "vmm.h"
 #include "kernel_vmm.h"
 #include "mmu.h"
 #include "page.h"
-#include "vmm.h"
 #include <log.h>
 #include <sched.h>
 #include <stdlib.h>
@@ -13,9 +13,9 @@
 
 void virtual_memory_default_allocate_page(VirtualMemory* virtualMemory, uint32_t virtualAddress)
 {
-    uint32_t l1Offset = virtualAddress >> 30 & 0b11;
-    uint32_t l2Offset = virtualAddress >> 21 & 0b111111111;
-    uint32_t l3Offset = virtualAddress >> 12 & 0b111111111;
+    uint32_t l1Offset = (virtualAddress >> 30) & 0b11;
+    uint32_t l2Offset = (virtualAddress >> 21) & 0b111111111;
+    uint32_t l3Offset = (virtualAddress >> 12) & 0b111111111;
     uint32_t pageOffset = virtualAddress & 0xFFF;
 
     LogError("[vmm]:usr l1Offset: %d .\n", l1Offset);
@@ -35,12 +35,12 @@ void virtual_memory_default_allocate_page(VirtualMemory* virtualMemory, uint32_t
         level1PageTableEntry.af = 1;
         level1PageTableEntry.base = l2ptPage;
 
-        uint64_t ptPage = virtualMemory->physicalPageAllocator->operations.allocPage4K(virtualMemory->physicalPageAllocator,
+        uint64_t ptPage = virtualMemory->physicalPageAllocator->operations.allocPage4K(
+            virtualMemory->physicalPageAllocator,
             USAGE_PAGE_TABLE);
 
         PageTableEntry* l2pt = (PageTableEntry*)virtualMemory->physicalPageAllocator->base + l2ptPage * PAGE_SIZE;
 
-        // TODO: may cause page fault here.
         l2pt[0].valid = 1;
         l2pt[0].table = 1;
         l2pt[0].af = 1;
@@ -125,13 +125,13 @@ void virtual_memory_default_context_switch(VirtualMemory* old, VirtualMemory* ne
     // TODO: switch page table when thread switch
 }
 
-void* virtual_memory_default_copy_to_kernel(struct VirtualMemory* virtualMemory, char* buffer, uint32_t size)
+uint32_t virtual_memory_default_translate_to_physical(struct VirtualMemory* virtualMemory, uint32_t address)
 {
     // calculate the physical address of buffer
-    uint32_t l1Offset = (uint32_t)buffer >> 30 & 0b11;
-    uint32_t l2Offset = (uint32_t)buffer >> 21 & 0b111111111;
-    uint32_t l3Offset = (uint32_t)buffer >> 12 & 0b111111111;
-    uint32_t pageOffset = (uint32_t)buffer & 0xFFF;
+    uint32_t l1Offset = address >> 30 & 0b11;
+    uint32_t l2Offset = address >> 21 & 0b111111111;
+    uint32_t l3Offset = address >> 12 & 0b111111111;
+    uint32_t pageOffset = address & 0xFFF;
 
     PageTableEntry l1pte = virtualMemory->pageTable[l1Offset];
     PageTableEntry* level2PageTable = (PageTableEntry*)(l1pte.base << VA_OFFSET);
@@ -141,7 +141,27 @@ void* virtual_memory_default_copy_to_kernel(struct VirtualMemory* virtualMemory,
 
     uint32_t physicalPageAddress = pageTableEntry.base;
 
+    return physicalPageAddress + pageOffset;
+}
+
+uint32_t virtual_memory_default_get_user_str_len(struct VirtualMemory* virtualMemory, void* str)
+{
+    uint32_t len = 0;
+    uint32_t userAddress = (uint32_t)str;
+    while (*(char*)(virtualMemory->operations.translateToPhysical(virtualMemory, userAddress)) != '\0') {
+        len++;
+        userAddress++;
+    }
+    return len;
+}
+
+void* virtual_memory_default_copy_to_kernel(struct VirtualMemory* virtualMemory, char* src, char* dest, uint32_t size)
+{
+
     // TODO: copy buffer from user space vmm to kernel space
+    for (uint32_t i = 0; i < size; i++) {
+        dest[i] = *(char*)(virtualMemory->operations.translateToPhysical(virtualMemory, (uint32_t)src + i));
+    }
 }
 
 KernelStatus vmm_create(VirtualMemory* virtualMemory, PhysicalPageAllocator* physicalPageAllocator)
@@ -153,6 +173,8 @@ KernelStatus vmm_create(VirtualMemory* virtualMemory, PhysicalPageAllocator* phy
     virtualMemory->operations.enable = virtual_memory_default_enable;
     virtualMemory->operations.disable = virtual_memory_default_disable;
     virtualMemory->operations.copyToKernel = virtual_memory_default_copy_to_kernel;
+    virtualMemory->operations.translateToPhysical = virtual_memory_default_translate_to_physical;
+    virtualMemory->operations.getUserStrLen = virtual_memory_default_get_user_str_len;
 
     virtualMemory->physicalPageAllocator = physicalPageAllocator;
 
@@ -162,11 +184,13 @@ KernelStatus vmm_create(VirtualMemory* virtualMemory, PhysicalPageAllocator* phy
     uint32_t lpaeSupport = (read_mmfr0() & 0xF);
     LogWarn("[LPAE]: mmfr0: %d\n", lpaeSupport);
 
-    uint64_t l1ptPage = virtualMemory->physicalPageAllocator->operations.allocPage4K(virtualMemory->physicalPageAllocator,
+    uint64_t l1ptPage = virtualMemory->physicalPageAllocator->operations.allocPage4K(
+        virtualMemory->physicalPageAllocator,
         USAGE_PAGE_TABLE);
     PageTableEntry* l1pt = (PageTableEntry*)virtualMemory->physicalPageAllocator->base + l1ptPage * PAGE_SIZE;
 
-    uint64_t l2ptPage = virtualMemory->physicalPageAllocator->operations.allocPage4K(virtualMemory->physicalPageAllocator,
+    uint64_t l2ptPage = virtualMemory->physicalPageAllocator->operations.allocPage4K(
+        virtualMemory->physicalPageAllocator,
         USAGE_PAGE_TABLE);
     PageTableEntry* l2pt = (PageTableEntry*)virtualMemory->physicalPageAllocator->base + l2ptPage * PAGE_SIZE;
 
@@ -178,7 +202,8 @@ KernelStatus vmm_create(VirtualMemory* virtualMemory, PhysicalPageAllocator* phy
     pt[0].table = 1;
     pt[0].af = 1;
     pt[0].base = (uint64_t)(
-        virtualMemory->physicalPageAllocator->operations.allocPage4K(virtualMemory->physicalPageAllocator, USAGE_NORMAL));
+        virtualMemory->physicalPageAllocator->operations.allocPage4K(virtualMemory->physicalPageAllocator,
+            USAGE_NORMAL));
 
     l2pt[0].valid = 1;
     l2pt[0].table = 1;

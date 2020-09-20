@@ -58,7 +58,7 @@ void disable_interrupt()
     }
 }
 
-void __attribute__((interrupt("UNDEF"))) undefined_instruction_handler(void) {}
+void __attribute__((interrupt("UNDEF"))) undefined_instruction_handler(void) { }
 
 extern SysCall sys_call_table[];
 
@@ -78,7 +78,7 @@ int software_interrupt_handler()
     return sys_call_table[sysCallNo](r0, r1, r2, r3, r4);
 }
 
-void __attribute__((interrupt("ABORT"))) prefetch_abort_handler(void) {}
+void __attribute__((interrupt("ABORT"))) prefetch_abort_handler(void) { }
 
 void data_abort_handler()
 {
@@ -92,12 +92,12 @@ void data_abort_handler()
                      : "=r"(r0), "=r"(r1), "=r"(r2), "=r"(r3), "=r"(r4), "=r"(r5)
                      :
                      : "r0", "r1", "r2", "r3", "r4", "r5");
-
+    // TODO: get page fault info from cp15
     LogError("[Interrupt]: data abort\n");
     do_page_fault(r3);
 }
 
-void unused_handler(void) {}
+void unused_handler(void) { }
 
 #define IRQ_IS_BASIC(x) ((x >= 64))
 #define IRQ_IS_GPU2(x) ((x >= 32 && x < 64))
@@ -151,7 +151,7 @@ void interrupt_handler(void)
     }
 }
 
-void __attribute__((interrupt("FIQ"))) fast_interrupt_handler(void) {}
+void __attribute__((interrupt("FIQ"))) fast_interrupt_handler(void) { }
 
 TimerHandler* timerHandler = nullptr;
 

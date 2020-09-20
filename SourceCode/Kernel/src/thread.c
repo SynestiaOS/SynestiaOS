@@ -212,6 +212,8 @@ Thread* thread_create(const char* name, ThreadStartRoutine entry, void* arg, uin
         thread->memoryStruct.sectionInfo.dataSectionAddr = 0;
         thread->memoryStruct.sectionInfo.bssSectionAddr = 0;
 
+        vmm_create(&thread->memoryStruct.virtualMemory, &kernelPageAllocator);
+
         thread->memoryStruct.virtualMemory.physicalPageAllocator = &kernelPageAllocator;
         thread->memoryStruct.virtualMemory.pageTable = kernel_vmm_get_page_table();
         thread->memoryStruct.heap = kernelHeap;

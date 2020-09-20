@@ -43,6 +43,7 @@ typedef struct IndexNodeOperations {
 
 typedef enum IndexNodeState {
     INDEX_NODE_STATE_OPENED,
+    INDEX_NODE_STATE_CLOSED,
 } IndexNodeState;
 typedef struct IndexNode {
     IndexNodeType type;

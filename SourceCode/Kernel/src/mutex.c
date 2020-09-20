@@ -24,4 +24,4 @@ void mutex_default_acquire(Mutex* mutex)
     }
 }
 
-void mutex_default_release(Mutex* mutex) {}
+void mutex_default_release(Mutex* mutex) { }

@@ -40,24 +40,40 @@ SuperBlock* vfs_default_mount(VFS* vfs, const char* name, FileSystemType type, v
 
 uint32_t vfs_default_open(VFS* vfs, const char* name, uint32_t mode)
 {
-    DirectoryEntry* directoryEntry = vfs->operations.lookup(vfs, name);
+    PerCpu* perCpu = percpu_get(read_cpuid());
+    Thread* currThread = perCpu->currentThread;
+
+    uint32_t len = currThread->memoryStruct.virtualMemory.operations.getUserStrLen(&currThread->memoryStruct.virtualMemory, name);
+
+    void* dest = kernelHeap.operations.alloc(&kernelHeap, len + 1);
+
+    char* bufferKernel = (char*)currThread->memoryStruct.virtualMemory.operations.copyToKernel(
+        &currThread->memoryStruct.virtualMemory, name, dest, len + 1);
+
+    DirectoryEntry* directoryEntry = vfs->operations.lookup(vfs, dest);
     if (directoryEntry == nullptr) {
-        LogError("[VFS]: file '%s' not found.\n", name);
+        LogError("[VFS]: file '%s' not found.\n", dest);
         return 0;
     }
+
+    kernelHeap.operations.free(&kernelHeap, dest);
     //    atomic_inc(&directoryEntry->indexNode->readCount);
 
     directoryEntry->indexNode->state = INDEX_NODE_STATE_OPENED;
 
-    uint32_t cpuId = read_cpuid();
-    PerCpu* perCpu = percpu_get(cpuId);
-
-    return perCpu->currentThread->filesStruct.operations.openFile(&(perCpu->currentThread->filesStruct), directoryEntry);
+    return currThread->filesStruct.operations.openFile(&(currThread->filesStruct), directoryEntry);
 }
 
 uint32_t vfs_default_close(struct VFS* vfs, uint32_t fd)
 {
-    // TODO:
+    PerCpu* perCpu = percpu_get(read_cpuid());
+    Thread* currThread = perCpu->currentThread;
+
+    ListNode* pNode = kvector_get(&currThread->filesStruct.fileDescriptorTable, fd);
+    FileDescriptor* pDescriptor = getNode(pNode, FileDescriptor, node);
+    pDescriptor->directoryEntry->indexNode->state = INDEX_NODE_STATE_CLOSED;
+
+    kvector_remove_index(&currThread->filesStruct.fileDescriptorTable, fd);
     return 0;
 }
 
@@ -66,8 +82,6 @@ uint32_t vfs_default_read(VFS* vfs, uint32_t fd, char* buffer, uint32_t pos, uin
     PerCpu* perCpu = percpu_get(read_cpuid());
     Thread* currThread = perCpu->currentThread;
 
-    char* bufferKernel = (char*)currThread->memoryStruct.virtualMemory.operations.copyToKernel(
-        &currThread->memoryStruct.virtualMemory, buffer, strlen(buffer));
     // TODO:
     // read data from fs
 
