@@ -22,4 +22,4 @@ SysCall sys_call_table[] = {
         sys_close,
 };
 
-#endif // __KERNEL_SYSCALL_H__
+#endif// __KERNEL_SYSCALL_H__

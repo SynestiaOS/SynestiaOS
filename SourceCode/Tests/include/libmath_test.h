@@ -26,4 +26,4 @@ void should_math_powf() {
     ASSERT_TRUE(1 == 1);
 }
 
-#endif //__KERNEL_MATH_TEST_H__
+#endif//__KERNEL_MATH_TEST_H__

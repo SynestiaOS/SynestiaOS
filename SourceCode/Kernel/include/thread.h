@@ -194,4 +194,4 @@ Thread *thread_create_idle_thread(uint32_t cpuNum);
 
 KernelStatus thread_reschedule();
 
-#endif //__KERNEL_THREAD_H__
+#endif//__KERNEL_THREAD_H__

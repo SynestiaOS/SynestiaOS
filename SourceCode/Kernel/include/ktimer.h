@@ -11,4 +11,4 @@ uint64_t ktimer_sys_runtime_tick(uint64_t tickIntreval);
 
 uint64_t ktimer_sys_runtime();
 
-#endif // __KERNEL_KTIMER_H__
+#endif// __KERNEL_KTIMER_H__

@@ -137,23 +137,23 @@ DirectoryEntry *vfs_default_lookup(VFS *vfs, const char *name) {
                 if (currentChr == '.') {
                     lookupState = PATH_LOOKUP_DOT;
                 } else if (currentChr == '/') {
-                    lookupState = PATH_LOOKUP_SLASH; // /
+                    lookupState = PATH_LOOKUP_SLASH;// /
                     LogWarn("[LookUp]: root\n");
                     currentDirectory = vfs->fileSystems->rootDirectoryEntry;
                 } else {
-                    lookupState = PATH_LOOKUP_NAME; // name
+                    lookupState = PATH_LOOKUP_NAME;// name
                     bufStart = index - 1;
                 }
                 break;
             }
             case PATH_LOOKUP_DOT: {
                 if (currentChr == '/') {
-                    lookupState = PATH_LOOKUP_SLASH; // ./
+                    lookupState = PATH_LOOKUP_SLASH;// ./
                     LogWarn("[LookUp]: current\n");
                     currentDirectory = currentDirectory;
                 } else if (currentChr == '.') {
                     if (peek(name, index, 0) == '/') {
-                        lookupState = PATH_LOOKUP_SLASH; // ../
+                        lookupState = PATH_LOOKUP_SLASH;// ../
                         LogWarn("[LookUp]: up\n");
                         if (currentDirectory->parent != nullptr) {
                             currentDirectory = currentDirectory->parent;
@@ -171,7 +171,7 @@ DirectoryEntry *vfs_default_lookup(VFS *vfs, const char *name) {
             }
             case PATH_LOOKUP_SLASH: {
                 if (currentChr == '/') {
-                    lookupState = PATH_LOOKUP_SLASH; // //
+                    lookupState = PATH_LOOKUP_SLASH;// //
                     LogWarn("[LookUp]: root\n");
                     currentDirectory = vfs->fileSystems->rootDirectoryEntry;
                 } else if (currentChr == '.') {
@@ -184,7 +184,7 @@ DirectoryEntry *vfs_default_lookup(VFS *vfs, const char *name) {
             }
             case PATH_LOOKUP_NAME: {
                 if (currentChr == '/') {
-                    lookupState = PATH_LOOKUP_SLASH; // name/
+                    lookupState = PATH_LOOKUP_SLASH;// name/
                     char path[index - bufStart];
                     for (uint32_t i = 0; i < index - bufStart; i++) {
                         path[i] = name[bufStart + i];
@@ -218,7 +218,7 @@ DirectoryEntry *vfs_default_lookup(VFS *vfs, const char *name) {
                         return nullptr;
                     }
                 } else if (index == length) {
-                    lookupState = PATH_LOOKUP_SLASH; // name/
+                    lookupState = PATH_LOOKUP_SLASH;// name/
                     char path[index - bufStart];
                     for (uint32_t i = 0; i < index - bufStart; i++) {
                         path[i] = name[bufStart + i];

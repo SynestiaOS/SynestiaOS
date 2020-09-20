@@ -46,7 +46,7 @@ void gui_canvas_create(GUICanvas *canvas) {
     canvas->component.foreground.b = 0x00;
 
     canvas->buffer = (unsigned char *) kernelHeap.operations.alloc(&kernelHeap, canvas->component.size.width *
-                                                                                canvas->component.size.height * 4);
+                                                                                        canvas->component.size.height * 4);
     if (canvas->buffer == nullptr) {
         LogError("[GUI]: canvas create failed, unable to allocate buffer memory\n");
     }

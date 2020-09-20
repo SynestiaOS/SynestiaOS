@@ -28,4 +28,4 @@ void gui_view3d_init(GUIView3D *view, uint32_t x, uint32_t y);
 
 void gui_view3d_draw(GUIView3D *view);
 
-#endif //__LIBRARY_LIBGUI_VIEW_3D_H__
+#endif//__LIBRARY_LIBGUI_VIEW_3D_H__

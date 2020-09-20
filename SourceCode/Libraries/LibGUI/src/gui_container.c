@@ -209,8 +209,8 @@ void gui_container_draw(GUIContainer *container) {
                                                    container->component.position.x + container->component.size.width,
                                                    container->component.position.y + container->component.size.height,
                                                    container->component.background.r << 16 |
-                                                   container->component.background.g << 8 |
-                                                   container->component.background.b);
+                                                           container->component.background.g << 8 |
+                                                           container->component.background.b);
         }
 
         // 2. draw children

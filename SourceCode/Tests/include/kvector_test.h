@@ -154,4 +154,4 @@ void should_kvector_clear() {
     ASSERT_EQ(kernelVector->index, 0);
 }
 
-#endif //__KERNEL_KVECTOR_TEST_H__
+#endif//__KERNEL_KVECTOR_TEST_H__

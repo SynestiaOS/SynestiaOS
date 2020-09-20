@@ -113,4 +113,4 @@ void should_kheap_free() {
     ASSERT_EQ(heapFreeStatus, OK);
 }
 
-#endif //__KERNEL_KHEAP_TEST_H__
+#endif//__KERNEL_KHEAP_TEST_H__

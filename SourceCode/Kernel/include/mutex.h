@@ -17,11 +17,11 @@
 #define MutexCreate()                                       \
     {                                                       \
         .val = {                                            \
-            .counter = 0,                                   \
+                .counter = 0,                               \
         },                                                  \
         .operations = {                                     \
-            .acquire = mutex_default_acquire,               \
-            .release = mutex_default_release,               \
+                .acquire = mutex_default_acquire,           \
+                .release = mutex_default_release,           \
         },                                                  \
         .spinLock = SpinLockCreate(), .waitQueue = nullptr, \
     }
@@ -46,4 +46,4 @@ void mutex_default_acquire(Mutex *mutex);
 
 void mutex_default_release(Mutex *mutex);
 
-#endif // __KERNEL_MUTEX_H__
+#endif// __KERNEL_MUTEX_H__

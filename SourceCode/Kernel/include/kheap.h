@@ -62,4 +62,4 @@ typedef struct Heap {
 
 KernelStatus heap_create(Heap *heap, uint32_t addr, uint32_t size);
 
-#endif //__KERNEL_KHEAP_H__
+#endif//__KERNEL_KHEAP_H__

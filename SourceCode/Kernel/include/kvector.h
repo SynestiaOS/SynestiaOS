@@ -73,4 +73,4 @@ bool kvector_is_full(KernelVector *vector);
 
 KernelStatus kvector_clear(KernelVector *vector);
 
-#endif //__KERNEL_VECTOR_H__
+#endif//__KERNEL_VECTOR_H__

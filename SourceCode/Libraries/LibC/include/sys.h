@@ -9,8 +9,7 @@
 #define asmlinkage __attribute__((regparm(0)))
 
 #define _syscall5(type, name, type1, name1, type2, name2, type3, name3, type4, name4, type5, name5)              \
-    type name(type1 name1, type2 name2, type3 name3, type4 name4, type5 name5)                                   \
-    {                                                                                                            \
+    type name(type1 name1, type2 name2, type3 name3, type4 name4, type5 name5) {                                 \
         volatile uint32_t result;                                                                                \
         __asm__ __volatile__("push {lr}\n\t"                                                                     \
                              "mov r0, #0\n\t"                                                                    \
@@ -48,14 +47,14 @@ _syscall0(int, getpid)
 
 #define __SYSCALL_open 1
 
-_syscall3(int, open, const char*, name, uint32_t, flags, uint32_t, mode);
+        _syscall3(int, open, const char *, name, uint32_t, flags, uint32_t, mode);
 
 #define __SYSCALL_read 2
 
-_syscall3(int, read, uint32_t, fd, char*, buf, uint32_t, count);
+_syscall3(int, read, uint32_t, fd, char *, buf, uint32_t, count);
 
 #define __SYSCALL_close 3
 
 _syscall1(int, close, uint32_t, fd);
 
-#endif // __LIBRARY_LIBC_SYS_H__
+#endif// __LIBRARY_LIBC_SYS_H__

@@ -241,7 +241,7 @@ uint32_t *window_clock(int args) {
     elf.operations.parse(&elf);
     while (1) {
         disable_interrupt();
-//        gui_window_draw(&window);
+        //        gui_window_draw(&window);
         enable_interrupt();
     }
 }
@@ -313,7 +313,7 @@ void kernel_main(void) {
         kernel_vmm_init();
 
         // create kernel heap
-        heap_create(&kernelHeap, &__HEAP_BEGIN, KERNEL_PHYSICAL_SIZE - (uint32_t) (&__HEAP_BEGIN));
+        heap_create(&kernelHeap, &__HEAP_BEGIN, KERNEL_PHYSICAL_SIZE - (uint32_t)(&__HEAP_BEGIN));
 
         // create userspace physical page allocator
         page_allocator_create(&userspacePageAllocator, USER_PHYSICAL_START, USER_PHYSICAL_SIZE);

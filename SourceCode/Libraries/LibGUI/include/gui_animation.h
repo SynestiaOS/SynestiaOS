@@ -42,4 +42,4 @@ void gui_animation_translation_create(GUIAnimationTranslation *animation, GUICom
 
 void gui_animation_update(GUIAnimation *animation);
 
-#endif // __LIBRARY_LIBGUI_ANIMATION_H__
+#endif// __LIBRARY_LIBGUI_ANIMATION_H__

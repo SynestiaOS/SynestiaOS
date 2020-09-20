@@ -19,22 +19,22 @@ void swi(uint32_t num) {
     __asm__ __volatile__("push {lr}\n\t"
                          "mov r0, %0\n\t"
                          "swi 0x0\n\t"
-                         "pop {pc}\n\t"::"r"(num));
+                         "pop {pc}\n\t" ::"r"(num));
 }
 
 uint32_t cpsr_value() {
     uint32_t cpsr;
     __asm__ __volatile__("mrs %0, cpsr"
-    : "=r"(cpsr)
-    :);
+                         : "=r"(cpsr)
+                         :);
     return cpsr;
 }
 
 uint32_t is_interrupt_enabled() {
     uint32_t cpsr;
     __asm__ __volatile__("mrs %0, cpsr"
-    : "=r"(cpsr)
-    :);
+                         : "=r"(cpsr)
+                         :);
     return ((cpsr >> 7) & 1) == 0;
 }
 
@@ -64,9 +64,9 @@ int software_interrupt_handler() {
                      "mov %3,r5\n\t"
                      "mov %4,r6\n\t"
                      "mov %5,r7\n\t"
-    : "=r"(r0), "=r"(r1), "=r"(r2), "=r"(r3), "=r"(r4), "=r"(sysCallNo)
-    :
-    : "r1", "r2", "r4", "r5", "r6", "r7");
+                     : "=r"(r0), "=r"(r1), "=r"(r2), "=r"(r3), "=r"(r4), "=r"(sysCallNo)
+                     :
+                     : "r1", "r2", "r4", "r5", "r6", "r7");
 
     return sys_call_table[sysCallNo](r0, r1, r2, r3, r4);
 }
@@ -81,9 +81,9 @@ void data_abort_handler() {
                      "mov %3,r3\n\t"
                      "mov %4,r4\n\t"
                      "mov %5,r5\n\t"
-    : "=r"(r0), "=r"(r1), "=r"(r2), "=r"(r3), "=r"(r4), "=r"(r5)
-    :
-    : "r0", "r1", "r2", "r3", "r4", "r5");
+                     : "=r"(r0), "=r"(r1), "=r"(r2), "=r"(r3), "=r"(r4), "=r"(r5)
+                     :
+                     : "r0", "r1", "r2", "r3", "r4", "r5");
     // TODO: get page fault info from cp15
     LogError("[Interrupt]: data abort\n");
     do_page_fault(r3);

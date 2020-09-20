@@ -13,11 +13,11 @@
 #define SemaphoreCreate()                                    \
     {                                                        \
         .count = {                                           \
-            .counter = 0,                                    \
+                .counter = 0,                                \
         },                                                   \
         .operations = {                                      \
-            .post = semaphore_default_post,                  \
-            .wait = semaphore_default_wait,                  \
+                .post = semaphore_default_post,              \
+                .wait = semaphore_default_wait,              \
         },                                                   \
         .spinLock = SpinLockCreate(), .waitQueue = nunllptr, \
     }
@@ -38,4 +38,4 @@ typedef struct Semaphore {
     SemaphoreOperations operations;
 } Semaphore;
 
-#endif // __KERNEL_SEMAPHORE_H__
+#endif// __KERNEL_SEMAPHORE_H__

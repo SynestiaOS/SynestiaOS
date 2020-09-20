@@ -94,4 +94,4 @@ KernelStatus vfs_inode_default_link(IndexNode *indexNode, struct DirectoryEntry 
 
 KernelStatus vfs_inode_default_unlink(IndexNode *indexNode, struct DirectoryEntry *dentry);
 
-#endif // __KERNEL_VFS_INDEX_NODE_H__
+#endif// __KERNEL_VFS_INDEX_NODE_H__

@@ -33,4 +33,4 @@ void gui_container_draw_children(GUIContainer *container, Orientation orientatio
 
 void gui_container_draw(GUIContainer *container);
 
-#endif //__LIBRARY_LIBGUI_CONTAINER_H__
+#endif//__LIBRARY_LIBGUI_CONTAINER_H__

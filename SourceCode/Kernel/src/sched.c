@@ -146,10 +146,10 @@ KernelStatus schd_switch_to(Thread *thread) {
         // restore r0~r12
     } else {
         switch_to_signal = 1;
-        current_thread_stack = (uint32_t) (&currentThread->stack->top);
+        current_thread_stack = (uint32_t)(&currentThread->stack->top);
     }
 
-    switch_thread_stack = (uint32_t) (&thread->stack->top);
+    switch_thread_stack = (uint32_t)(&thread->stack->top);
     currentThread = thread;
     percpu_get(read_cpuid())->currentThread = thread;
     // pop r0~r3

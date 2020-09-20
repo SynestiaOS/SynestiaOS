@@ -25,4 +25,4 @@ void console_clear();
 
 void console_printf();
 
-#endif //__APPLICATIONS_CONSOLE_H__
+#endif//__APPLICATIONS_CONSOLE_H__

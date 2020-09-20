@@ -44,4 +44,4 @@ void gui_canvas_clear(GUICanvas *canvas, uint32_t color);
 
 void gui_canvas_draw(GUICanvas *canvas);
 
-#endif //__LIBRARY_LIBGUI_CANVAS_H__
+#endif//__LIBRARY_LIBGUI_CANVAS_H__

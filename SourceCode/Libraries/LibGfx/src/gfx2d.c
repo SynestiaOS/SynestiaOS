@@ -14,12 +14,12 @@ void gfx2d_default_write_pixel_color(Gfx2DContext *context, uint32_t x, uint32_t
     uint32_t alpha = (color >> 24) & 0xFF;
     uint32_t r = (color >> 16) & 0xFF;
     uint32_t g = (color >> 8) & 0xFF;
-    uint32_t b = (color) & 0xFF;
+    uint32_t b = (color) &0xFF;
 
     uint32_t backColor = context->buffer[y * context->width + x];
     uint32_t backR = (backColor >> 16) & 0xFF;
     uint32_t backG = (backColor >> 8) & 0xFF;
-    uint32_t backB = (backColor) & 0xFF;
+    uint32_t backB = (backColor) &0xFF;
 
     uint32_t mixedR = ((0xFF - alpha) * r) / 0xFF + (alpha * backR) / 0xFF;
     uint32_t mixedG = ((0xFF - alpha) * g) / 0xFF + (alpha * backG) / 0xFF;
@@ -174,7 +174,7 @@ void gfx2d_default_fill_triangle(Gfx2DContext *context, int x1, int y1, int x2, 
     }
 
     t1x = t2x = x1;
-    y = y1; // Starting points
+    y = y1;// Starting points
     dx1 = (x2 - x1);
     if (dx1 < 0) {
         dx1 = -dx1;
@@ -193,11 +193,11 @@ void gfx2d_default_fill_triangle(Gfx2DContext *context, int x1, int y1, int x2, 
     }
     dy2 = (y3 - y1);
 
-    if (dy1 > dx1) { // swap values
+    if (dy1 > dx1) {// swap values
         SWAP(&dx1, &dy1);
         changed1 = true;
     }
-    if (dy2 > dx2) { // swap values
+    if (dy2 > dx2) {// swap values
         SWAP(&dy2, &dx2);
         changed2 = true;
     }
@@ -226,7 +226,7 @@ void gfx2d_default_fill_triangle(Gfx2DContext *context, int x1, int y1, int x2, 
             while (e1 >= dx1) {
                 e1 -= dx1;
                 if (changed1) {
-                    t1xp = signx1; // t1x += signx1;
+                    t1xp = signx1;// t1x += signx1;
                 } else {
                     goto next1;
                 }
@@ -236,15 +236,15 @@ void gfx2d_default_fill_triangle(Gfx2DContext *context, int x1, int y1, int x2, 
             }
             t1x += signx1;
         }
-        // Move line
-        next1:
+    // Move line
+    next1:
         // process second line until y value is about to change
         while (1) {
             e2 += dy2;
             while (e2 >= dx2) {
                 e2 -= dx2;
                 if (changed2) {
-                    t2xp = signx2; // t2x += signx2;
+                    t2xp = signx2;// t2x += signx2;
                 } else {
                     goto next2;
                 }
@@ -254,7 +254,7 @@ void gfx2d_default_fill_triangle(Gfx2DContext *context, int x1, int y1, int x2, 
             }
             t2x += signx2;
         }
-        next2:
+    next2:
         if (minx > t1x) {
             minx = t1x;
         }
@@ -267,7 +267,7 @@ void gfx2d_default_fill_triangle(Gfx2DContext *context, int x1, int y1, int x2, 
         if (maxx < t2x) {
             maxx = t2x;
         }
-        drawline(context, minx, maxx, y, c); // Draw line from min to max points found on the y
+        drawline(context, minx, maxx, y, c);// Draw line from min to max points found on the y
         // Now increase y
         if (!changed1) {
             t1x += signx1;
@@ -282,7 +282,7 @@ void gfx2d_default_fill_triangle(Gfx2DContext *context, int x1, int y1, int x2, 
             break;
         }
     }
-    next:
+next:
     // Second half
     dx1 = (x3 - x2);
     if (dx1 < 0) {
@@ -294,7 +294,7 @@ void gfx2d_default_fill_triangle(Gfx2DContext *context, int x1, int y1, int x2, 
     dy1 = (y3 - y2);
     t1x = x2;
 
-    if (dy1 > dx1) { // swap values
+    if (dy1 > dx1) {// swap values
         SWAP(&dy1, &dx1);
         changed1 = true;
     } else {
@@ -321,7 +321,7 @@ void gfx2d_default_fill_triangle(Gfx2DContext *context, int x1, int y1, int x2, 
                 if (changed1) {
                     t1xp = signx1;
                     break;
-                } // t1x += signx1;
+                }// t1x += signx1;
                 goto next3;
             }
             if (changed1) {
@@ -332,7 +332,7 @@ void gfx2d_default_fill_triangle(Gfx2DContext *context, int x1, int y1, int x2, 
                 i++;
             }
         }
-        next3:
+    next3:
         // process second line until y value is about to change
         while (t2x != x3) {
             e2 += dy2;
@@ -349,7 +349,7 @@ void gfx2d_default_fill_triangle(Gfx2DContext *context, int x1, int y1, int x2, 
             }
             t2x += signx2;
         }
-        next4:
+    next4:
 
         if (minx > t1x) {
             minx = t1x;
@@ -387,15 +387,15 @@ void gfx2d_default_draw_circle(Gfx2DContext *context, int xc, int yc, int r, uin
         return;
     }
 
-    while (y >= x) { // only formulate 1/8 of circle
-        gfx2d_default_write_pixel_color(context, xc - x, yc - y, c); // upper left left
-        gfx2d_default_write_pixel_color(context, xc - y, yc - x, c); // upper upper left
-        gfx2d_default_write_pixel_color(context, xc + y, yc - x, c); // upper upper right
-        gfx2d_default_write_pixel_color(context, xc + x, yc - y, c); // upper right right
-        gfx2d_default_write_pixel_color(context, xc - x, yc + y, c); // lower left left
-        gfx2d_default_write_pixel_color(context, xc - y, yc + x, c); // lower lower left
-        gfx2d_default_write_pixel_color(context, xc + y, yc + x, c); // lower lower right
-        gfx2d_default_write_pixel_color(context, xc + x, yc + y, c); // lower right right
+    while (y >= x) {                                                // only formulate 1/8 of circle
+        gfx2d_default_write_pixel_color(context, xc - x, yc - y, c);// upper left left
+        gfx2d_default_write_pixel_color(context, xc - y, yc - x, c);// upper upper left
+        gfx2d_default_write_pixel_color(context, xc + y, yc - x, c);// upper upper right
+        gfx2d_default_write_pixel_color(context, xc + x, yc - y, c);// upper right right
+        gfx2d_default_write_pixel_color(context, xc - x, yc + y, c);// lower left left
+        gfx2d_default_write_pixel_color(context, xc - y, yc + x, c);// lower lower left
+        gfx2d_default_write_pixel_color(context, xc + y, yc + x, c);// lower lower right
+        gfx2d_default_write_pixel_color(context, xc + x, yc + y, c);// lower right right
         if (p < 0) {
             p += 4 * x++ + 6;
         } else {

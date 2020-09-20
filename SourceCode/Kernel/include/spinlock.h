@@ -7,15 +7,15 @@
 
 #include <atomic.h>
 
-#define SpinLockCreate()                         \
-    {                                            \
-        .lock = {                                \
-            .counter = 0,                        \
-        },                                       \
-        .operations = {                          \
-            .acquire = spinlock_default_acquire, \
-            .release = spinlock_default_release, \
-        },                                       \
+#define SpinLockCreate()                             \
+    {                                                \
+        .lock = {                                    \
+                .counter = 0,                        \
+        },                                           \
+        .operations = {                              \
+                .acquire = spinlock_default_acquire, \
+                .release = spinlock_default_release, \
+        },                                           \
     }
 
 typedef void (*SpinLockAcquire)(struct SpinLock *spinLock);
@@ -36,4 +36,4 @@ void spinlock_default_acquire(SpinLock *spinLock);
 
 void spinlock_default_release(SpinLock *spinLock);
 
-#endif // __KERNEL_SPINLOCK_H__
+#endif// __KERNEL_SPINLOCK_H__

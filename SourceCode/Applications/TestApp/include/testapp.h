@@ -7,4 +7,4 @@
 
 #include <stdint.h>
 
-#endif //__APPLICATIONS_TEST_APP_H__
+#endif//__APPLICATIONS_TEST_APP_H__

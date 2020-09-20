@@ -41,4 +41,4 @@ void uart_init(void);
 
 void uart_put_char(uint8_t ch);
 
-#endif // __BOARD_RASP_UART_H__
+#endif// __BOARD_RASP_UART_H__

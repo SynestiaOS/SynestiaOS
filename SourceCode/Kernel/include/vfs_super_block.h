@@ -52,4 +52,4 @@ KernelStatus vfs_super_block_default_destroy_dentry(struct SuperBlock *superBloc
 
 KernelStatus vfs_super_block_default_destroy_inode(struct SuperBlock *superBlock, struct IndexNode *indexNode);
 
-#endif // __KERNEL_VFS_SUPER_BLOCK_H__
+#endif// __KERNEL_VFS_SUPER_BLOCK_H__

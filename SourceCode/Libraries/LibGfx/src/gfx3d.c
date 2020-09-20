@@ -43,7 +43,7 @@ Vec3D gfx3d_color1i2v(uint32_t color) {
 }
 
 uint32_t gfx3d_colorv21i(Vec3D color) {
-    return gfx3d_color3i((uint32_t) (color.x * 255.0f), (uint32_t) (color.y * 255.0f), (uint32_t) (color.z * 255.0f));
+    return gfx3d_color3i((uint32_t)(color.x * 255.0f), (uint32_t)(color.y * 255.0f), (uint32_t)(color.z * 255.0f));
 }
 
 Mat4x4 gfx3d_matrix_make_identity() {
@@ -192,13 +192,13 @@ int gfx3d_triangle_clip_against_plane(Vec3D plane_p, Vec3D plane_n, Triangle *in
     }
 
     if (nInsidePointCount == 0) {
-        return 0; // No returned triangles are valid
+        return 0;// No returned triangles are valid
     }
 
     if (nInsidePointCount == 3) {
         out_tri1 = in_tri;
 
-        return 1; // Just the one returned original triangle is valid
+        return 1;// Just the one returned original triangle is valid
     }
 
     if (nInsidePointCount == 1 && nOutsidePointCount == 2) {
@@ -209,7 +209,7 @@ int gfx3d_triangle_clip_against_plane(Vec3D plane_p, Vec3D plane_n, Triangle *in
         out_tri1->p[1] = gfx3d_vector_intersect_plane(&plane_p, &plane_n, inside_points[0], outside_points[0]);
         out_tri1->p[2] = gfx3d_vector_intersect_plane(&plane_p, &plane_n, inside_points[0], outside_points[1]);
 
-        return 1; // Return the newly formed single triangle
+        return 1;// Return the newly formed single triangle
     }
 
     if (nInsidePointCount == 2 && nOutsidePointCount == 1) {
@@ -228,18 +228,18 @@ int gfx3d_triangle_clip_against_plane(Vec3D plane_p, Vec3D plane_n, Triangle *in
         out_tri2->p[1] = out_tri1->p[2];
         out_tri2->p[2] = gfx3d_vector_intersect_plane(&plane_p, &plane_n, inside_points[1], outside_points[0]);
 
-        return 2; // Return two newly formed triangles which form a quad
+        return 2;// Return two newly formed triangles which form a quad
     }
 }
 
 uint32_t gfx3d_get_lum_color(uint32_t color, float lum) {
     // liner light, color_vec * (n.l)
-    uint32_t r = (uint32_t) (((color >> 24) & 0xFF) * lum);
-    uint32_t g = (uint32_t) (((color >> 16) & 0xFF) * lum);
-    uint32_t b = (uint32_t) (((color >> 8) & 0xFF) * lum);
-    uint32_t a = (uint32_t) (((color >> 0) & 0xFF) * lum);
+    uint32_t r = (uint32_t)(((color >> 24) & 0xFF) * lum);
+    uint32_t g = (uint32_t)(((color >> 16) & 0xFF) * lum);
+    uint32_t b = (uint32_t)(((color >> 8) & 0xFF) * lum);
+    uint32_t a = (uint32_t)(((color >> 0) & 0xFF) * lum);
 
-    return (uint32_t) (r << 24 | g << 16 | b << 8 | a << 0);
+    return (uint32_t)(r << 24 | g << 16 | b << 8 | a << 0);
 }
 
 Vec3D gfx3d_get_specular_color(Vec3D mspec, Vec3D sspec, float lum) {

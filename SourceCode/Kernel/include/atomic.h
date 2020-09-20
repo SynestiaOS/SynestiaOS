@@ -25,4 +25,4 @@ uint32_t atomic_add(Atomic *atomic, uint32_t val);
 
 uint32_t atomic_sub(Atomic *atomic, uint32_t val);
 
-#endif // __KERNEL_ATOMIC_H__
+#endif// __KERNEL_ATOMIC_H__

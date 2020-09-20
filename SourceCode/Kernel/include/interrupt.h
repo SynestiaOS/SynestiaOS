@@ -72,4 +72,4 @@ void register_time_interrupt(TimerHandler *handler);
 
 TimerHandler *timer_get_handler(void);
 
-#endif // __KERNEL_INTERRUPT_H__
+#endif// __KERNEL_INTERRUPT_H__

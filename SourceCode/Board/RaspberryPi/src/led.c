@@ -108,18 +108,18 @@ int led_init(void) {
 
     // Select level alternate 4 to enable JTAG
     select = REG32(GPFSEL2);
-    select &= ~(7 << 6); // gpio22
+    select &= ~(7 << 6);      // gpio22
     select |= GPIO_ALT4 << 6; // alt4 ARM_TRST
-    select &= ~(7 << 9); // gpio23
+    select &= ~(7 << 9);      // gpio23
     select |= GPIO_ALT4 << 9; // alt4 ARM_RTCK
-    select &= ~(7 << 12); // gpio24
-    select |= GPIO_ALT4 << 12; // alt4 ARM_TDO
-    select &= ~(7 << 15); // gpio25
-    select |= GPIO_ALT4 << 15; // alt4 ARM_TCK
-    select &= ~(7 << 18); // gpio26
-    select |= GPIO_ALT4 << 18; // alt4 ARM_TDI
-    select &= ~(7 << 21); // gpio27
-    select |= GPIO_ALT4 << 21; // alt4 ARM_TMS
+    select &= ~(7 << 12);     // gpio24
+    select |= GPIO_ALT4 << 12;// alt4 ARM_TDO
+    select &= ~(7 << 15);     // gpio25
+    select |= GPIO_ALT4 << 15;// alt4 ARM_TCK
+    select &= ~(7 << 18);     // gpio26
+    select |= GPIO_ALT4 << 18;// alt4 ARM_TDI
+    select &= ~(7 << 21);     // gpio27
+    select |= GPIO_ALT4 << 21;// alt4 ARM_TMS
     REG32(GPFSEL2) = select;
 
     /* Loop turning the activity LED on and off. */

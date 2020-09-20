@@ -44,4 +44,4 @@ typedef struct RBTree {
 
 RBTree *rb_tree_init(RBTree *tree);
 
-#endif //__KERNEL_RBTREE_H__
+#endif//__KERNEL_RBTREE_H__

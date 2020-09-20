@@ -60,4 +60,4 @@ typedef struct Gfx2DContext {
 
 Gfx2DContext *gfx2d_create_context(Gfx2DContext *context, uint32_t width, uint32_t height, uint32_t *buffer);
 
-#endif //__LIBRARY_LIBGFX_GL2D_H__
+#endif//__LIBRARY_LIBGFX_GL2D_H__

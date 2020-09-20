@@ -50,4 +50,4 @@ PerCpu *percpu_get(CpuNum cpuNum);
 
 PerCpu *percpu_min_priority();
 
-#endif //__KERNEL_PRECPU_H__
+#endif//__KERNEL_PRECPU_H__

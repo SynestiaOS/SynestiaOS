@@ -26,7 +26,7 @@ void map_kernel_l1pt(uint64_t l1ptPhysicalAddress, uint64_t l2ptPhysicalAddress)
     kernelVMML1PT->pte[1].valid = 1;
     kernelVMML1PT->pte[1].table = 1;
     kernelVMML1PT->pte[1].af = 1;
-    kernelVMML1PT->pte[1].base = (uint32_t) ((l2ptPhysicalAddress + 4 * KB) >> VA_OFFSET);
+    kernelVMML1PT->pte[1].base = (uint32_t)((l2ptPhysicalAddress + 4 * KB) >> VA_OFFSET);
 }
 
 void map_kernel_l2pt(uint64_t l2ptPhysicalAddress, uint64_t ptPhysicalAddress) {
@@ -36,7 +36,7 @@ void map_kernel_l2pt(uint64_t l2ptPhysicalAddress, uint64_t ptPhysicalAddress) {
         kernelVMML2PT->pte[i].table = 1;
         kernelVMML2PT->pte[i].af = 1;
         kernelVMML2PT->pte[i].base =
-                (uint64_t) (ptPhysicalAddress + i * KERNEL_PTE_NUMBER * sizeof(PageTableEntry)) >> VA_OFFSET;
+                (uint64_t)(ptPhysicalAddress + i * KERNEL_PTE_NUMBER * sizeof(PageTableEntry)) >> VA_OFFSET;
     }
     // Peripheral 16MB 0x3F000000
     for (uint32_t i = 0; i < 8; i++) {

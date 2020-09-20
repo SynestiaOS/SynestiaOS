@@ -14,4 +14,4 @@ void gpu_init(void);
 
 void gpu_write_pixel_color(uint32_t x, uint32_t y, uint32_t color);
 
-#endif //__BOARD_RASP_GPU_H__
+#endif//__BOARD_RASP_GPU_H__

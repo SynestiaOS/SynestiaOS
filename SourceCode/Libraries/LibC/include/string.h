@@ -19,4 +19,4 @@ void *memset(char *s, int c, uint32_t n);
 
 void memcpy(void *dest, const void *src, uint32_t bytes);
 
-#endif // __LIBRARY_LIBC_STRING_H__
+#endif// __LIBRARY_LIBC_STRING_H__

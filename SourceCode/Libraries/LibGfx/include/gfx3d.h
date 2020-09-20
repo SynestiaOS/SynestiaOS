@@ -64,4 +64,4 @@ Vec3D gfx3d_vector_intersect_plane(Vec3D *plane_p, Vec3D *plane_n, Vec3D *lineSt
 int gfx3d_triangle_clip_against_plane(Vec3D plane_p, Vec3D plane_n, Triangle *in_tri, Triangle *out_tri1,
                                       Triangle *out_tri2);
 
-#endif //__LIBRARY_LIBGFX_GL3D_H__
+#endif//__LIBRARY_LIBGFX_GL3D_H__

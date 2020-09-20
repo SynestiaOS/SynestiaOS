@@ -19,4 +19,4 @@ uint8_t *logo_max_8_bits();
 
 uint8_t *logo_close_8_bits();
 
-#endif //__LIBRARY_LIBGFX_FONT_8BITS_H__
+#endif//__LIBRARY_LIBGFX_FONT_8BITS_H__

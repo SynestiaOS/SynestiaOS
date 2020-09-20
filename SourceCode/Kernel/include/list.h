@@ -8,8 +8,8 @@
 #include <stdint.h>
 #include <type.h>
 
-#define offsetOf(type, member) (char*)(&(((type*)0)->member))
-#define getNode(ptr, type, member) ((type*)((char*)(ptr) - (char*)(&(((type*)0)->member))))
+#define offsetOf(type, member) (char *) (&(((type *) 0)->member))
+#define getNode(ptr, type, member) ((type *) ((char *) (ptr) - (char *) (&(((type *) 0)->member))))
 
 typedef struct ListNode {
     struct ListNode *prev;
@@ -26,4 +26,4 @@ ListNode *klist_get_head(ListNode *node);
 
 uint32_t klist_size(ListNode *node);
 
-#endif //__KERNEL_LIST_H__
+#endif//__KERNEL_LIST_H__

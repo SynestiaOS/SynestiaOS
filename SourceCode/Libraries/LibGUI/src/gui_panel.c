@@ -131,7 +131,7 @@ void gui_panel_draw(GUIPanel *panel) {
                                                panel->component.position.x + panel->component.size.width,
                                                panel->component.position.y + panel->component.size.height,
                                                panel->component.background.r << 16 |
-                                               panel->component.background.g << 8 | panel->component.background.b);
+                                                       panel->component.background.g << 8 | panel->component.background.b);
         }
 
         // 2. draw children

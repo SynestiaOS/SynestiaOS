@@ -28,4 +28,4 @@ uint32_t schd_getpid();
 
 Thread *schd_get_current_thread(void);
 
-#endif //__KERNEL_SCHED_H__
+#endif//__KERNEL_SCHED_H__

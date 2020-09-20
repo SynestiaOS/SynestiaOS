@@ -21,4 +21,4 @@ void gui_label_init(GUILabel *label, uint32_t x, uint32_t y, const char *text);
 
 void gui_label_draw(GUILabel *label);
 
-#endif //__LIBRARY_LIBGUI_LABEL_H__
+#endif//__LIBRARY_LIBGUI_LABEL_H__

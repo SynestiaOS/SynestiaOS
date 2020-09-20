@@ -43,13 +43,13 @@
  * found it sufficient to read only from this address) 0-3(channel):	The mailbox channel number from which the data
  * originated 4-31(data):	The 28 bits of data sent to the CPU
  */
-#define MAIL0_READ ((volatile uint32_t*)(VIDEOCORE_MBOX + 0x0))
+#define MAIL0_READ ((volatile uint32_t *) (VIDEOCORE_MBOX + 0x0))
 
 // Read from the mailbox without removing data from it.
-#define MAIL0_PEAK ((volatile uint32_t*)(VIDEOCORE_MBOX + 0x10))
+#define MAIL0_PEAK ((volatile uint32_t *) (VIDEOCORE_MBOX + 0x10))
 
 // Sender ID (bottom 2 bits only)
-#define MAIL0_SENDER ((volatile uint32_t*)(VIDEOCORE_MBOX + 0x14))
+#define MAIL0_SENDER ((volatile uint32_t *) (VIDEOCORE_MBOX + 0x14))
 
 /**
  * The status register for mailbox 0
@@ -57,17 +57,17 @@
  * 30:	MAIL_EMPTY	Set if the mailbox is empty, and thus no more data is available to be read from it.
  * 31:	MAIL_FULL	Set if the mailbox is full, and thus no more data can be written to it.
  */
-#define MAIL0_STATUS ((volatile uint32_t*)(VIDEOCORE_MBOX + 0x18))
+#define MAIL0_STATUS ((volatile uint32_t *) (VIDEOCORE_MBOX + 0x18))
 
 // The configuration register for mailbox 0
-#define MAIL0_CONFIG ((volatile uint32_t*)(VIDEOCORE_MBOX + 0x1C))
+#define MAIL0_CONFIG ((volatile uint32_t *) (VIDEOCORE_MBOX + 0x1C))
 
 /**
  *  The write register for mailbox 0 (this is actually the read register for mailbox 1).
  *  0-3:	channel	The mailbox channel number to which the data is to be sent
  *  4-31:	data	The 28 bits of data to be sent to the destination
  */
-#define MAIL0_WRITE ((volatile uint32_t*)(VIDEOCORE_MBOX + 0x20))
+#define MAIL0_WRITE ((volatile uint32_t *) (VIDEOCORE_MBOX + 0x20))
 
 #define CODE_REQUEST 0x00000000
 #define CODE_RESPONSE_SUCCESS 0x80000000
@@ -205,7 +205,7 @@ typedef struct PropertyGetDMAChannels {
     uint32_t tag;
     uint32_t bufferSize;
     uint32_t code;
-    uint32_t mask; // Bits 0-15: DMA channels 0-15 (0=do not use, 1=usable),Bits 16-31: reserved for future use
+    uint32_t mask;// Bits 0-15: DMA channels 0-15 (0=do not use, 1=usable),Bits 16-31: reserved for future use
 } PropertyGetDMAChannels;
 
 #define DEVICE_ID_SD_Card 0x00000000
@@ -416,14 +416,14 @@ typedef struct PropertyGetMaxTemperature {
     uint32_t value;
 } PropertyGetMaxTemperature;
 
-#define MEM_FLAG_DISCARDABLE 1 << 0 //  can be resized to 0 at any time. Use for cached data
-#define MEM_FLAG_NORMAL 0 << 2 //  normal allocating alias. Don't use from ARM
-#define MEM_FLAG_DIRECT 1 << 2 //  0xC alias uncached
-#define MEM_FLAG_COHERENT 2 << 2 //  0x8 alias. Non-allocating in L2 but coherent
-#define MEM_FLAG_L1_NONALLOCATING (MEM_FLAG_DIRECT | MEM_FLAG_COHERENT) //  Allocating in L2
-#define MEM_FLAG_ZERO 1 << 4 //   initialise buffer to all zeros
-#define MEM_FLAG_NO_INIT 1 << 5 //  don't initialise (default is initialise to all ones
-#define MEM_FLAG_HINT_PERMALOCK 1 << 6 //  Likely to be locked for long periods of time.
+#define MEM_FLAG_DISCARDABLE 1 << 0                                    //  can be resized to 0 at any time. Use for cached data
+#define MEM_FLAG_NORMAL 0 << 2                                         //  normal allocating alias. Don't use from ARM
+#define MEM_FLAG_DIRECT 1 << 2                                         //  0xC alias uncached
+#define MEM_FLAG_COHERENT 2 << 2                                       //  0x8 alias. Non-allocating in L2 but coherent
+#define MEM_FLAG_L1_NONALLOCATING (MEM_FLAG_DIRECT | MEM_FLAG_COHERENT)//  Allocating in L2
+#define MEM_FLAG_ZERO 1 << 4                                           //   initialise buffer to all zeros
+#define MEM_FLAG_NO_INIT 1 << 5                                        //  don't initialise (default is initialise to all ones
+#define MEM_FLAG_HINT_PERMALOCK 1 << 6                                 //  Likely to be locked for long periods of time.
 
 #define PROPERTY_TAG_ALLOCATE_MEMORY 0x0003000c
 typedef struct PropertyAllocateMemory {
@@ -754,7 +754,7 @@ typedef struct PropertyTestPalette {
     uint32_t code;
     uint32_t first;
     uint32_t length;
-    uint32_t palette[256]; // (offset to offset+length-1)
+    uint32_t palette[256];// (offset to offset+length-1)
     /**
    * 0=valid,
    * 1=invalid
@@ -769,7 +769,7 @@ typedef struct PropertySetPalette {
     uint32_t code;
     uint32_t first;
     uint32_t length;
-    uint32_t palette[256]; // (offset to offset+length-1)
+    uint32_t palette[256];// (offset to offset+length-1)
     /**
    * 0=valid,
    * 1=invalid
@@ -1201,14 +1201,14 @@ typedef struct PropertySetCursorStateMail {
 } PropertySetCursorStateMail;
 
 typedef struct MailMessage {
-    uint8_t channel: 4;
-    uint32_t data: 28;
+    uint8_t channel : 4;
+    uint32_t data : 28;
 } MailMessage;
 
 typedef struct MailStatus {
-    uint32_t reserved: 30;
-    uint8_t empty: 1;
-    uint8_t full: 1;
+    uint32_t reserved : 30;
+    uint8_t empty : 1;
+    uint8_t full : 1;
 } MailStatus;
 
 MailMessage mailbox_call(MailMessage msg);
@@ -1217,4 +1217,4 @@ MailMessage mailbox_read(uint8_t channel);
 
 void mailbox_send(MailMessage msg);
 
-#endif //__BOARD_RASP_MAILBOX_H__
+#endif//__BOARD_RASP_MAILBOX_H__

@@ -40,10 +40,10 @@ typedef enum PhysicalPageUsage {
 } PhysicalPageUsage;
 
 typedef struct PhysicalPage {
-    uint64_t ref_count: 8;
-    PhysicalPageType type: 8;
-    PhysicalPageUsage usage: 8;
-    uint64_t reserved: 8;
+    uint64_t ref_count : 8;
+    PhysicalPageType type : 8;
+    PhysicalPageUsage usage : 8;
+    uint64_t reserved : 8;
 } __attribute__((packed)) PhysicalPage;
 
 typedef uint64_t (*PhysicalPageAllocatorOperationAllocPage4K)(struct PhysicalPageAllocator *pageAllocator,
@@ -92,11 +92,11 @@ typedef struct PhysicalPageAllocatorOperations {
 typedef struct PhysicalPageAllocator {
     uint32_t base;
     uint32_t size;
-    PhysicalPage physicalPages[PHYSICAL_PAGE_NUMBERS]; // TODO: should be size/pagesize
+    PhysicalPage physicalPages[PHYSICAL_PAGE_NUMBERS];// TODO: should be size/pagesize
     uint32_t physicalPagesUsedBitMap[PHYSICAL_PAGE_NUMBERS / BITS_IN_UINT32];
     PhysicalPageAllocatorOperations operations;
 } PhysicalPageAllocator;
 
 KernelStatus page_allocator_create(PhysicalPageAllocator *pageAllocator, uint32_t base, uint32_t size);
 
-#endif // __KERNEL_PAGE_H__
+#endif// __KERNEL_PAGE_H__

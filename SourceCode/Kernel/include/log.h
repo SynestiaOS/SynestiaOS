@@ -13,4 +13,4 @@
 
 #define LogWarn(fmt, arg...) printf("\033[33m" fmt "\033[0m", ##arg);
 
-#endif // __KERNEL_LOG_H__
+#endif// __KERNEL_LOG_H__

@@ -51,4 +51,4 @@ void __assert_func_success(const char *file, int line, const char *func, const c
         assert(abs((left) - (right)) < (sill)); \
     } while (0)
 
-#endif //__KERNEL_TEST_H__
+#endif//__KERNEL_TEST_H__

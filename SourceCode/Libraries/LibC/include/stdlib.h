@@ -17,4 +17,4 @@ void print(const char *str);
 
 int printf(const char *format, ...);
 
-#endif // __LIBRARY_LIBC_STDLIB_H__
+#endif// __LIBRARY_LIBC_STDLIB_H__

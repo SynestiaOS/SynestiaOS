@@ -56,4 +56,4 @@ KernelStatus vfs_directory_entry_default_release(DirectoryEntry *directory);
 KernelStatus vfs_directory_entry_default_init(DirectoryEntry *directory, DirectoryEntry *parent,
                                               struct IndexNode *inode);
 
-#endif // __KERNEL_VFS_DIRECTORY_ENTRY_H__
+#endif// __KERNEL_VFS_DIRECTORY_ENTRY_H__

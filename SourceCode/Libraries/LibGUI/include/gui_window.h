@@ -35,4 +35,4 @@ void gui_window_draw_children(GUIWindow *window);
 
 void gui_window_draw(GUIWindow *window);
 
-#endif //__LIBRARY_LIBGUI_WINDOW_H__
+#endif//__LIBRARY_LIBGUI_WINDOW_H__
