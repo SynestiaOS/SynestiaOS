@@ -65,7 +65,7 @@ uint32_t *window_thread1(int args) {
     label.component.colorMode = TRANSPARENT;
     label.component.size.width = 100;
     gui_window_add_children(&window, &(label.component));
-    uint32_t fd = open("/initrd/bin/bin.txt", 1, 3);
+//    uint32_t fd = open("/initrd/bin/bin.txt", 1, 3);
     uint32_t fd = 0;
     char *buffer = (char *) kernelHeap.operations.alloc(&kernelHeap, 4);
     uint32_t size = vfs_kernel_read(vfs, "/initrd/bin/bin.txt", buffer, 3);
@@ -306,7 +306,7 @@ uint32_t *window_thread_test(int args) {
     gui_window_init(&window, 720, 480, "window_test");
     while (1) {
         disable_interrupt();
-        LogError("window_thread_test\n");
+        LogInfo("window_thread_test\n");
         gui_window_draw(&window);
         enable_interrupt();
     }
@@ -373,11 +373,8 @@ void kernel_main(void) {
         schd_add_thread(gpuProcess, 0);
 
         Thread *windowThread_test = thread_create("window_t_t", &window_thread_test, 1, 0);
-        schd_add_thread(windowThread_test, 0);
-//        LogError("[Thread copy] heap.address: %d .\n", windowThread_test->memoryStruct.heap.address);
         Thread* copyThread_test = windowThread_test->operations.copy(windowThread_test, CLONE_VM, windowThread_test->memoryStruct.heap.address);
-//        LogError("[Thread copy] heap.address END: %d .\n", windowThread_test->memoryStruct.heap.address);
-//        schd_add_thread(copyThread_test, 0);
+        schd_add_thread(copyThread_test, 0);
 
         bootSpinLock.operations.release(&bootSpinLock);
         schd_schedule();

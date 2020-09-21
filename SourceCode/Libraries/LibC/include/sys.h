@@ -47,7 +47,7 @@ _syscall0(int, getpid)
 
 #define __SYSCALL_open 1
 
-        _syscall3(int, open, const char *, name, uint32_t, flags, uint32_t, mode);
+_syscall3(int, open, const char *, name, uint32_t, flags, uint32_t, mode);
 
 #define __SYSCALL_read 2
 
@@ -56,5 +56,9 @@ _syscall3(int, read, uint32_t, fd, char *, buf, uint32_t, count);
 #define __SYSCALL_close 3
 
 _syscall1(int, close, uint32_t, fd);
+
+#define __SYSCALL_fork 4
+
+_syscall0(int, fork);
 
 #endif// __LIBRARY_LIBC_SYS_H__
