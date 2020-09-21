@@ -351,8 +351,8 @@ void kernel_main(void) {
         Thread *windowFileSystemThread = thread_create("window fs", &window_filesystem, 1, 0);
         schd_add_thread(windowFileSystemThread, 0);
 
-        Thread *windowMandelbrotThread = thread_create("window fs", &window_clock, 1, 0);
-        schd_add_thread(windowMandelbrotThread, 0);
+        Thread *windowClockThread = thread_create("clock", &window_clock, 1, 0);
+        schd_add_thread(windowClockThread, 0);
 
         Thread *gpuProcess = thread_create("gpu", &gpu, 1, 0);
         schd_add_thread(gpuProcess, 0);
