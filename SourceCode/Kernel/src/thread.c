@@ -92,11 +92,12 @@ uint32_t filestruct_default_openfile(FilesStruct *filesStruct, DirectoryEntry *d
     return filesStruct->fileDescriptorTable->index - 1;
 }
 
-static int copy_mm(Thread* new_thread, Thread* old_thread, CloneFlags cloneFlags)
-{
-}
+//static int copy_mm(Thread* new_thread, Thread* old_thread, CloneFlags cloneFlags)
+//{
+//}
 
 Thread *thread_default_copy(Thread *thread, CloneFlags cloneFlags, uint32_t heapStart) {
+    LogError("[Thread copy]: heapStart: %d.\n", heapStart);
     Thread *p = thread_create(thread->name, thread->entry, thread->arg, thread->priority);
     if (p == nullptr) {
         LogError("[Thread]: copy failed: p==nullptr.\n");
@@ -106,10 +107,10 @@ Thread *thread_default_copy(Thread *thread, CloneFlags cloneFlags, uint32_t heap
     // TODO: 如果复制虚拟内存区域
     if (cloneFlags & CLONE_VM) {
         LogError("[Thread]: Clone VMM: '%s'.\n", p->name);
-        // TODO: copy vmm struct
-        // memcpy(p->memoryStruct.virtualMemory, thread->memoryStruct.virtualMemory, sizeof(VirtualMemory));
-
-
+//        p->memoryStruct.virtualMemory.pageTable = thread->memoryStruct.virtualMemory.pageTable;
+//        p->memoryStruct.virtualMemory.physicalPageAllocator = thread->memoryStruct.virtualMemory.physicalPageAllocator;
+//        p->memoryStruct.virtualMemory.operations = thread->memoryStruct.virtualMemory.operations;
+//        p->memoryStruct.heap =thread->memoryStruct.heap;
     } else {
         LogError("[Thread]: Create new vmm: '%s'.\n", p->name);
         KernelStatus vmmCreateStatus = vmm_create(&p->memoryStruct.virtualMemory, &userspacePageAllocator);
@@ -135,6 +136,7 @@ Thread *thread_default_copy(Thread *thread, CloneFlags cloneFlags, uint32_t heap
     if (cloneFlags & CLONE_FILES) {
         LogError("[Thread]: Clone FILES: '%s'.\n", p->name);
         // TODO, copy file descriptor
+
     }
 
     // TODO: File Struct?
@@ -142,8 +144,7 @@ Thread *thread_default_copy(Thread *thread, CloneFlags cloneFlags, uint32_t heap
         LogError("[Thread]: Clone FS: '%s'.\n", p->name);
         // TODO
     }
-
-    // TODO: 父进程
+    LogError("Copy\n");
     p->parentThread = thread;
     return p;
 }
