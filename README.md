@@ -5,4 +5,4 @@
 [Go to documents](https://github.com/SynestiaOS/Documentation)
 
 # Jira
-[Go to Jira](https://synestiaos.atlassian.net/)
+[Go to Jira](https://synestiaos.atlassian.net/) (if you want to join our jira board, just add wechat 15122372903)
