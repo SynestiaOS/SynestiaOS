@@ -17,22 +17,22 @@ typedef struct GUIWindowHeader {
 } GUIWindowHeader;
 typedef struct GUIWindow {
     GUIComponent component;
-    char* title;
+    char *title;
     GUIWindowHeader header;
-    ListNode* children;
+    ListNode *children;
     bool isWindowNeedUpdate;
     bool isShadowNeedUpdate;
-
+    Gfx2DContext context;
 } GUIWindow;
 
-void gui_window_create(GUIWindow* window);
+void gui_window_create(GUIWindow *window);
 
-void gui_window_init(GUIWindow* window, uint32_t x, uint32_t y, const char* title);
+void gui_window_init(GUIWindow *window, uint32_t x, uint32_t y, const char *title);
 
-void gui_window_add_children(GUIWindow* window, GUIComponent* component);
+void gui_window_add_children(GUIWindow *window, GUIComponent *component);
 
-void gui_window_draw_children(GUIWindow* window);
+void gui_window_draw_children(GUIWindow *window);
 
-void gui_window_draw(GUIWindow* window);
+void gui_window_draw(GUIWindow *window);
 
-#endif //__LIBRARY_LIBGUI_WINDOW_H__
+#endif//__LIBRARY_LIBGUI_WINDOW_H__

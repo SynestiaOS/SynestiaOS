@@ -24,7 +24,7 @@ typedef struct {
  * get interrupt controller from memory
  * @return
  */
-rpi_irq_controller_t* getIRQController(void);
+rpi_irq_controller_t *getIRQController(void);
 
 /**
  * init interrupt
@@ -56,7 +56,7 @@ void disable_interrupt();
  * @param interrupt_clear_f
  */
 void register_interrupt_handler(uint32_t interrupt_no, void (*interrupt_handler_func)(void),
-    void (*interrupt_clear_func)(void));
+                                void (*interrupt_clear_func)(void));
 
 typedef struct TimerHandler {
     void (*timer_interrupt_handler)(void);
@@ -68,8 +68,8 @@ typedef struct TimerHandler {
  * register timer interrupt handler
  * @param timer_interrupt_handler
  */
-void register_time_interrupt(TimerHandler* handler);
+void register_time_interrupt(TimerHandler *handler);
 
-TimerHandler* timer_get_handler(void);
+TimerHandler *timer_get_handler(void);
 
-#endif // __KERNEL_INTERRUPT_H__
+#endif// __KERNEL_INTERRUPT_H__

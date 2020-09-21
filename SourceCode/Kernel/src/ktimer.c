@@ -15,5 +15,5 @@ uint64_t ktimer_sys_runtime() { return sys_runtime_ms; }
 typedef struct KernelTimer {
     long time;
     ListNode listNode;
-    Mutex* mutex;
+    Mutex *mutex;
 } KernelTimer;

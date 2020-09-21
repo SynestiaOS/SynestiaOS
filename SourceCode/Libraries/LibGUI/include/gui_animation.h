@@ -14,7 +14,7 @@ typedef enum GUIAnimationType {
 
 typedef struct GUIAnimation {
     GUIAnimationType animationType;
-    GUIComponent* component;
+    GUIComponent *component;
     uint32_t time;
 } GUIAnimation;
 
@@ -37,9 +37,9 @@ typedef struct GUIAnimationRotateX {
     uint32_t angle;
 } GUIAnimationRotateX;
 
-void gui_animation_translation_create(GUIAnimationTranslation* animation, GUIComponent* component, uint32_t time,
-    uint32_t targetX, uint32_t targetY);
+void gui_animation_translation_create(GUIAnimationTranslation *animation, GUIComponent *component, uint32_t time,
+                                      uint32_t targetX, uint32_t targetY);
 
-void gui_animation_update(GUIAnimation* animation);
+void gui_animation_update(GUIAnimation *animation);
 
-#endif // __LIBRARY_LIBGUI_ANIMATION_H__
+#endif// __LIBRARY_LIBGUI_ANIMATION_H__

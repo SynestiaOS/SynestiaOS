@@ -78,4 +78,4 @@ typedef struct SPIRegister {
     SPIDCRegister dc;
 } SPIRegister;
 
-#endif // ! __BOARD_RASP_SPI_H__
+#endif// ! __BOARD_RASP_SPI_H__

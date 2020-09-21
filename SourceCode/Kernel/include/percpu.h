@@ -15,10 +15,14 @@ typedef struct CpuStatus {
     uint32_t idleTime;
 } CpuStatus;
 
-typedef KernelStatus (*PerCpuInit)(struct PerCpu* perCpu, uint32_t num, Thread* idleThread);
-typedef KernelStatus (*PerCpuInsertThread)(struct PerCpu* perCpu, Thread* thread);
-typedef Thread* (*PerCpuRemoveThread)(struct PerCpu* perCpu, Thread* thread);
-typedef Thread* (*PerCpuGetNextThread)(struct PerCpu* perCpu);
+typedef KernelStatus (*PerCpuInit)(struct PerCpu *perCpu, uint32_t num, Thread *idleThread);
+
+typedef KernelStatus (*PerCpuInsertThread)(struct PerCpu *perCpu, Thread *thread);
+
+typedef Thread *(*PerCpuRemoveThread)(struct PerCpu *perCpu, Thread *thread);
+
+typedef Thread *(*PerCpuGetNextThread)(struct PerCpu *perCpu);
+
 typedef struct PerCpuOperations {
     PerCpuInit init;
     PerCpuInsertThread insertThread;
@@ -33,8 +37,8 @@ typedef struct PerCpu {
     RBTree rbTree;
     KQueue waitThreadQueue;
 
-    Thread* idleThread;
-    Thread* currentThread;
+    Thread *idleThread;
+    Thread *currentThread;
     CpuStatus status;
 
     PerCpuOperations operations;
@@ -42,8 +46,8 @@ typedef struct PerCpu {
 
 KernelStatus percpu_create(uint32_t cpuNum);
 
-PerCpu* percpu_get(CpuNum cpuNum);
+PerCpu *percpu_get(CpuNum cpuNum);
 
-PerCpu* percpu_min_priority();
+PerCpu *percpu_min_priority();
 
-#endif //__KERNEL_PRECPU_H__
+#endif//__KERNEL_PRECPU_H__

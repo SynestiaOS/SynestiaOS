@@ -26,8 +26,8 @@ function(target_include_kernel_header_files Target)
     target_include_directories(${Target} PRIVATE ${SYNESTIAOS_SOURCE_CODE_DIR}/Kernel/include)
 endfunction()
 
-function(target_include_vmm_header_files Target)
-    target_include_directories(${Target} PRIVATE ${SYNESTIAOS_SOURCE_CODE_DIR}/Kernel/Arch/${SynestiaArch}/vmm/include)
+function(target_include_arch_header_files Target)
+    target_include_directories(${Target} PRIVATE ${SYNESTIAOS_SOURCE_CODE_DIR}/Arch/${SynestiaArch}/include)
 endfunction()
 
 function(target_include_tests_header_files Target)

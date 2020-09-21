@@ -13,9 +13,9 @@
 
 extern Heap kernelHeap;
 
-DirectoryEntry* vfs_super_block_default_create_directory_entry(struct SuperBlock* superBlock, char* fileName)
-{
-    DirectoryEntry* directoryEntry = (DirectoryEntry*)kernelHeap.operations.alloc(&kernelHeap, sizeof(DirectoryEntry));
+DirectoryEntry *vfs_super_block_default_create_directory_entry(struct SuperBlock *superBlock, char *fileName) {
+    DirectoryEntry *directoryEntry = (DirectoryEntry *) kernelHeap.operations.alloc(&kernelHeap,
+                                                                                    sizeof(DirectoryEntry));
     if (directoryEntry == nullptr) {
         LogError("[VFS]: root dentry create failed,cause heap alloc failed.\n");
         return nullptr;
@@ -36,7 +36,7 @@ DirectoryEntry* vfs_super_block_default_create_directory_entry(struct SuperBlock
     SpinLock parallelLock = SpinLockCreate();
     directoryEntry->parallelLock = parallelLock;
     Atomic atomic = {
-        .counter = 0,
+            .counter = 0,
     };
     directoryEntry->refCount = atomic;
     directoryEntry->list.next = nullptr;
@@ -45,9 +45,8 @@ DirectoryEntry* vfs_super_block_default_create_directory_entry(struct SuperBlock
     return directoryEntry;
 }
 
-IndexNode* vfs_super_block_default_create_index_node(struct SuperBlock* superBlock, struct DirectoryEntry* dentry)
-{
-    IndexNode* indexNode = (IndexNode*)kernelHeap.operations.alloc(&kernelHeap, sizeof(IndexNode));
+IndexNode *vfs_super_block_default_create_index_node(struct SuperBlock *superBlock, struct DirectoryEntry *dentry) {
+    IndexNode *indexNode = (IndexNode *) kernelHeap.operations.alloc(&kernelHeap, sizeof(IndexNode));
     if (indexNode == nullptr) {
         LogError("[VFS]: root inode create failed,cause heap alloc failed.\n");
         return nullptr;
@@ -65,12 +64,14 @@ IndexNode* vfs_super_block_default_create_index_node(struct SuperBlock* superBlo
 
     indexNode->dentry = dentry;
     indexNode->fileSize = 0;
-    indexNode->mode = (INDEX_NODE_MODE_WRITEABLE | INDEX_NODE_MODE_READABLE) << 6 | (INDEX_NODE_MODE_WRITEABLE | INDEX_NODE_MODE_READABLE) << 3 | (INDEX_NODE_MODE_WRITEABLE | INDEX_NODE_MODE_READABLE);
+    indexNode->mode = (INDEX_NODE_MODE_WRITEABLE | INDEX_NODE_MODE_READABLE) << 6 |
+                      (INDEX_NODE_MODE_WRITEABLE | INDEX_NODE_MODE_READABLE) << 3 |
+                      (INDEX_NODE_MODE_WRITEABLE | INDEX_NODE_MODE_READABLE);
     Mutex mutex = MutexCreate();
     indexNode->mutex = mutex;
 
     Atomic atomic = {
-        .counter = 0,
+            .counter = 0,
     };
     indexNode->linkCount = atomic;
     indexNode->readCount = atomic;
@@ -82,19 +83,16 @@ IndexNode* vfs_super_block_default_create_index_node(struct SuperBlock* superBlo
     return indexNode;
 }
 
-KernelStatus vfs_super_block_default_destroy_dentry(struct SuperBlock* superBlock, struct DirectoryEntry* dentry)
-{
+KernelStatus vfs_super_block_default_destroy_dentry(struct SuperBlock *superBlock, struct DirectoryEntry *dentry) {
     return kernelHeap.operations.free(&kernelHeap, dentry);
 }
 
-KernelStatus vfs_super_block_default_destroy_inode(struct SuperBlock* superBlock, struct IndexNode* indexNode)
-{
+KernelStatus vfs_super_block_default_destroy_inode(struct SuperBlock *superBlock, struct IndexNode *indexNode) {
     return kernelHeap.operations.free(&kernelHeap, indexNode);
 }
 
-SuperBlock* vfs_create_super_block()
-{
-    SuperBlock* superBlock = (SuperBlock*)kernelHeap.operations.alloc(&kernelHeap, sizeof(SuperBlock));
+SuperBlock *vfs_create_super_block() {
+    SuperBlock *superBlock = (SuperBlock *) kernelHeap.operations.alloc(&kernelHeap, sizeof(SuperBlock));
     if (superBlock == nullptr) {
         LogError("[VFS]: root fs mount failed,cause heap alloc failed.\n");
         return nullptr;

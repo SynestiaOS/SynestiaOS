@@ -19,4 +19,4 @@ typedef signed long s32;
 typedef signed long long int64_t;
 typedef signed long long s64;
 
-#endif // __LIBRARY_LIBC_STDINT_H__
+#endif// __LIBRARY_LIBC_STDINT_H__

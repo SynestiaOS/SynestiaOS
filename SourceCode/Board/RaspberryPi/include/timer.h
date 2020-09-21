@@ -15,11 +15,11 @@ void system_timer_init(void);
 
 void timer_set(uint32_t usecs);
 
-extern void io_writeb(uint8_t val, void* addr);
+extern void io_writeb(uint8_t val, void *addr);
 
-extern void io_writew(uint16_t val, void* addr);
+extern void io_writew(uint16_t val, void *addr);
 
-extern void io_writel(uint32_t val, void* addr);
+extern void io_writel(uint32_t val, void *addr);
 
 void generic_timer_init(void);
 
@@ -43,4 +43,4 @@ typedef struct {
     uint32_t timer3;
 } timer_registers_t;
 
-#endif // __BOARD_RASP_TIMER_H__
+#endif// __BOARD_RASP_TIMER_H__

@@ -12,11 +12,15 @@
 #include <spinlock.h>
 #include <vfs_super_block.h>
 
-typedef SuperBlock* (*VFSOperationMount)(struct VFS* vfs, const char* name, FileSystemType type, void* data);
-typedef uint32_t (*VFSOperationOpen)(struct VFS* vfs, const char* name, uint32_t mode);
-typedef uint32_t (*VFSOperationClose)(struct VFS* vfs, uint32_t fd);
-typedef DirectoryEntry* (*VFSOperationLookUp)(struct VFS* vfs, const char* name);
-typedef uint32_t (*VFSOperationRead)(struct VFS* vfs, uint32_t fd, char* buffer, uint32_t pos, uint32_t count);
+typedef SuperBlock *(*VFSOperationMount)(struct VFS *vfs, const char *name, FileSystemType type, void *data);
+
+typedef uint32_t (*VFSOperationOpen)(struct VFS *vfs, const char *name, uint32_t mode);
+
+typedef uint32_t (*VFSOperationClose)(struct VFS *vfs, uint32_t fd);
+
+typedef DirectoryEntry *(*VFSOperationLookUp)(struct VFS *vfs, const char *name);
+
+typedef uint32_t (*VFSOperationRead)(struct VFS *vfs, uint32_t fd, char *buffer, uint32_t pos, uint32_t count);
 
 typedef struct VFSOperations {
     VFSOperationMount mount;
@@ -27,12 +31,12 @@ typedef struct VFSOperations {
 } VFSOperations;
 
 typedef struct VFS {
-    struct SuperBlock* fileSystems;
+    struct SuperBlock *fileSystems;
     VFSOperations operations;
 } VFS;
 
-VFS* vfs_create();
+VFS *vfs_create();
 
-uint32_t vfs_kernel_read(VFS* vfs, const char* name, char* buf, uint32_t count);
+uint32_t vfs_kernel_read(VFS *vfs, const char *name, char *buf, uint32_t count);
 
-#endif // __KERNEL_VFS_H__
+#endif// __KERNEL_VFS_H__

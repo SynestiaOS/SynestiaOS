@@ -6,18 +6,16 @@
 #include <stdbool.h>
 #include <stdlib.h>
 
-MailMessage mailbox_call(MailMessage message)
-{
-    while (!((*(uint32_t*)(MAIL0_STATUS)) & MBOX_EMPTY)) {
-        *(uint32_t*)(MAIL0_READ);
+MailMessage mailbox_call(MailMessage message) {
+    while (!((*(uint32_t *) (MAIL0_STATUS)) & MBOX_EMPTY)) {
+        *(uint32_t *) (MAIL0_READ);
     }
     mailbox_send(message);
     MailMessage data = mailbox_read(message.channel);
     return data;
 }
 
-MailMessage mailbox_read(uint8_t channel)
-{
+MailMessage mailbox_read(uint8_t channel) {
     MailStatus stat;
     MailMessage res;
     do {
@@ -31,8 +29,7 @@ MailMessage mailbox_read(uint8_t channel)
     return res;
 }
 
-void mailbox_send(MailMessage msg)
-{
+void mailbox_send(MailMessage msg) {
     MailStatus stat;
     do {
         stat.empty = *MAIL0_STATUS & MBOX_EMPTY;

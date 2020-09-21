@@ -3,8 +3,7 @@
 //
 #include <list.h>
 
-KernelStatus klist_insert(ListNode* list, ListNode* node)
-{
+KernelStatus klist_insert(ListNode *list, ListNode *node) {
     if (list->next != nullptr) {
         list->next->prev = node;
         node->next = list->next;
@@ -13,9 +12,8 @@ KernelStatus klist_insert(ListNode* list, ListNode* node)
     list->next = node;
 }
 
-KernelStatus klist_append(ListNode* list, ListNode* node)
-{
-    ListNode* tmp = list;
+KernelStatus klist_append(ListNode *list, ListNode *node) {
+    ListNode *tmp = list;
     while (tmp->next != nullptr) {
         tmp = tmp->next;
     }
@@ -24,17 +22,15 @@ KernelStatus klist_append(ListNode* list, ListNode* node)
     return OK;
 }
 
-ListNode* klist_get_head(ListNode* node)
-{
-    ListNode* first = node;
+ListNode *klist_get_head(ListNode *node) {
+    ListNode *first = node;
     while (first->prev != nullptr) {
         first = first->prev;
     }
     return first;
 }
 
-ListNode* klist_remove_node(ListNode* node)
-{
+ListNode *klist_remove_node(ListNode *node) {
     if (node->next == nullptr && node->prev == nullptr) {
         return node;
     }
@@ -51,8 +47,8 @@ ListNode* klist_remove_node(ListNode* node)
         return node;
     }
 
-    ListNode* prev = node->prev;
-    ListNode* next = node->next;
+    ListNode *prev = node->prev;
+    ListNode *next = node->next;
 
     prev->next = next;
     next->prev = prev;
@@ -63,9 +59,8 @@ ListNode* klist_remove_node(ListNode* node)
     return node;
 }
 
-uint32_t klist_size(ListNode* node)
-{
-    ListNode* first = node;
+uint32_t klist_size(ListNode *node) {
+    ListNode *first = node;
     while (first->prev != nullptr) {
         first = first->prev;
     }

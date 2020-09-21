@@ -8,10 +8,9 @@
 #include <stdbool.h>
 #include <thread.h>
 
-extern Thread* currentThread;
+extern Thread *currentThread;
 
-void mutex_default_acquire(Mutex* mutex)
-{
+void mutex_default_acquire(Mutex *mutex) {
     if (atomic_get(&mutex->val) == 0) {
         atomic_set(&mutex->val, 1);
         return true;
@@ -24,4 +23,4 @@ void mutex_default_acquire(Mutex* mutex)
     }
 }
 
-void mutex_default_release(Mutex* mutex) {}
+void mutex_default_release(Mutex *mutex) {}

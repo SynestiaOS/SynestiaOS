@@ -7,8 +7,7 @@
 
 #include <list.h>
 
-void should_klist_insert()
-{
+void should_klist_insert() {
     ListNode list;
     list.prev = nullptr;
     list.next = nullptr;
@@ -23,8 +22,7 @@ void should_klist_insert()
     ASSERT_EQ(newNode.prev, &list);
 }
 
-void should_klist_append()
-{
+void should_klist_append() {
     ListNode list;
     list.prev = nullptr;
     list.next = nullptr;
@@ -49,8 +47,7 @@ void should_klist_append()
     ASSERT_EQ(newNode2.prev, &newNode);
 }
 
-void should_klist_remove_node()
-{
+void should_klist_remove_node() {
     ListNode list;
     list.prev = nullptr;
     list.next = nullptr;
@@ -76,8 +73,7 @@ void should_klist_remove_node()
     ASSERT_EQ(newNode2.prev, &list);
 }
 
-void should_klist_return_size()
-{
+void should_klist_return_size() {
     ListNode list;
     list.prev = nullptr;
     list.next = nullptr;
@@ -106,4 +102,4 @@ void should_klist_return_size()
     ASSERT_EQ(klist_size(&list), 2);
 }
 
-#endif //__KERNEL_KLIST_TEST_H__
+#endif//__KERNEL_KLIST_TEST_H__

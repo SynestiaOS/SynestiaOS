@@ -85,4 +85,4 @@ typedef struct GUIComponent {
     Margin margin;
     BoxShadow boxShadow;
 } GUIComponent;
-#endif //__LIBRARY_LIBGUI_COMPONENT_H__
+#endif//__LIBRARY_LIBGUI_COMPONENT_H__

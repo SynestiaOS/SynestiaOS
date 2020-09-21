@@ -23,19 +23,22 @@ include(${SynestiaOS_SOURCE_DIR}/CMake/ArchDetector.cmake)
 include(${SynestiaOS_SOURCE_DIR}/CMake/PlatformDetector.cmake)
 include(${SynestiaOS_SOURCE_DIR}/CMake/VarsDump.cmake)
 include(${SynestiaOS_SOURCE_DIR}/CMake/HeaderFiles.cmake)
+include(${SynestiaOS_SOURCE_DIR}/CMake/Utils.cmake)
 
 
 message(STATUS "PLATFORM is ${PLATFORM}")
 
 if (SynestiaArch STREQUAL arm)
     set(CMAKE_C_FLAGS "-O0 -mfpu=neon-vfpv4 -mfloat-abi=hard -march=armv7-a -mtune=cortex-a7")
-elseif (SynestiaArch STREQUAL aarch64)
-    set(CMAKE_C_FLAGS "-O0 -mfpu=crypto-neon-fp-armv8 -mfloat-abi=hard -march=armv8-a+crc -mcpu=cortex-a53")
+elseif (SynestiaArch STREQUAL arm64)
+    # todo: refactor macro definition
+    set(CMAKE_C_FLAGS "-march=armv8-a+crc -mcpu=cortex-a53 -DARM64")
 else ()
     message(FATAL_ERROR "unexpected ARCH ${SynestiaArch}")
 endif ()
 message(STATUS "ARCH is ${ARCH}")
 
+# todo: add -Werror flag
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -MD -fpic -ffreestanding -std=gnu11 -Wall -Wextra -g -nostdlib -D${SynestiaPlatformMacro}")
 set(CMAKE_ASM_FLAGS "${CMAKE_C_FLAGS}")
 

@@ -42,4 +42,4 @@ Mat4x4 gfxm_matrix_multiply_matrix(Mat4x4 m1, Mat4x4 m2);
 
 Mat4x4 gfxm_matrix_quick_inverse(Mat4x4 m);
 
-#endif //__LIBRARY_LIBGFX_GLMATH_H__
+#endif//__LIBRARY_LIBGFX_GLMATH_H__

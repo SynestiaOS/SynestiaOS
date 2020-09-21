@@ -1,0 +1,7 @@
+if (SynestiaArch STREQUAL arm)
+    add_subdirectory(arm)
+elseif (SynestiaArch STREQUAL arm64)
+    add_subdirectory(arm64)
+else ()
+    message(FATAL_ERROR "unexpected arch ${SynestiaArch}")
+endif ()

@@ -4,17 +4,15 @@
 #include <string.h>
 #include <uart.h>
 
-void memclean(uint8_t* start, const uint8_t* end)
-{
+void memclean(uint8_t *start, const uint8_t *end) {
     uint32_t i;
     for (i = 0; start + i < end; i++) {
         *(start + i) = '\0';
     }
 }
 
-void bzero(void* s1, uint32_t n)
-{
-    register char* t = s1;
+void bzero(void *s1, uint32_t n) {
+    register char *t = s1;
 
     while (n != 0) {
         *t++ = 0;
@@ -24,19 +22,17 @@ void bzero(void* s1, uint32_t n)
 
 void put_char(char c) { uart_put_char(c); }
 
-void print(const char* str)
-{
+void print(const char *str) {
     while (*str) {
         put_char(*str);
         str++;
     }
 }
 
-char getOffsetFromString(char* formatStr, int32_t offset) { return *(formatStr + offset); }
+char getOffsetFromString(char *formatStr, int32_t offset) { return *(formatStr + offset); }
 
-uint32_t getArgsNumFromFormatString(const char* formatStr)
-{
-    char* tmp = formatStr;
+uint32_t getArgsNumFromFormatString(const char *formatStr) {
+    char *tmp = formatStr;
     uint32_t num = 0;
     while (*tmp) {
         if (*tmp == '%') {
@@ -89,11 +85,10 @@ uint32_t getArgsNumFromFormatString(const char* formatStr)
     return num;
 }
 
-void reverse(char str[], int length)
-{
+void reverse(char str[], int length) {
     char t;
-    char* start = str;
-    char* end = &str[length - 1];
+    char *start = str;
+    char *end = &str[length - 1];
     while (start < end) {
         t = *start;
         *start = *end;
@@ -103,8 +98,7 @@ void reverse(char str[], int length)
     }
 }
 
-int printf(const char* format, ...)
-{
+int printf(const char *format, ...) {
     va_list valist;
 
     uint32_t num = getArgsNumFromFormatString(format);
@@ -113,10 +107,10 @@ int printf(const char* format, ...)
     for (int i = 0; i < DEFAULT_STRING_LEN; i++) {
         result[i] = '\0';
     }
-    char* resultPtr = &result;
+    char *resultPtr = &result;
     va_start(valist, num);
 
-    char* tmp = format;
+    char *tmp = format;
     while (*tmp) {
         if (*tmp == '%') {
             if (getOffsetFromString(tmp, 1) == 'd') {
@@ -124,8 +118,8 @@ int printf(const char* format, ...)
                 int value = va_arg(valist, int);
 
                 // 2. covert int to string and append at tail
-                char int32s[10] = { '\0' };
-                char* intStr = itoa(value, &int32s, 10);
+                char int32s[10] = {'\0'};
+                char *intStr = itoa(value, &int32s, 10);
                 while (*intStr) {
                     *resultPtr = *intStr;
                     intStr++;
@@ -142,7 +136,7 @@ int printf(const char* format, ...)
             }
             if (getOffsetFromString(tmp, 1) == 's') {
                 // 1. get argument from args
-                char* value = va_arg(valist, char*);
+                char *value = va_arg(valist, char *);
                 while (*value) {
                     *resultPtr = *value;
                     value++;

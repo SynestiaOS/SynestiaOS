@@ -8,8 +8,8 @@
 #include <stdint.h>
 
 typedef struct Console {
-    char* buffer;
-    char* videoBuffer;
+    char *buffer;
+    char *videoBuffer;
     uint32_t posX;
     uint32_t posY;
 
@@ -25,4 +25,4 @@ void console_clear();
 
 void console_printf();
 
-#endif //__APPLICATIONS_CONSOLE_H__
+#endif//__APPLICATIONS_CONSOLE_H__

@@ -10,9 +10,9 @@
 static uint32_t __test_all_asserts = 0;
 static uint32_t __test_failed_asserts = 0;
 
-void __assert_func_failed(const char* file, int line, const char* func, const char* failedexpr);
+void __assert_func_failed(const char *file, int line, const char *func, const char *failedexpr);
 
-void __assert_func_success(const char* file, int line, const char* func, const char* failedexpr);
+void __assert_func_success(const char *file, int line, const char *func, const char *failedexpr);
 
 #define assert(__e)                                                               \
     ((__e) ? __assert_func_success(__FILE__, __LINE__, __PRETTY_FUNCTION__, #__e) \
@@ -51,4 +51,4 @@ void __assert_func_success(const char* file, int line, const char* func, const c
         assert(abs((left) - (right)) < (sill)); \
     } while (0)
 
-#endif //__KERNEL_TEST_H__
+#endif//__KERNEL_TEST_H__

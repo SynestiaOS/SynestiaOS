@@ -7,18 +7,16 @@
 #include <stdlib.h>
 #include <string.h>
 
-char* strcpy(char* des, char* source)
-{
-    char* r = des;
+char *strcpy(char *des, char *source) {
+    char *r = des;
     while ((*r++ = *source++) != '\0')
         ;
     return des;
 }
 
-bool strcmp(char* str1, char* str2)
-{
-    char* tmpStr1 = str1;
-    char* tmpStr2 = str2;
+bool strcmp(char *str1, char *str2) {
+    char *tmpStr1 = str1;
+    char *tmpStr2 = str2;
     uint32_t str1Len = strlen(tmpStr1);
     uint32_t str2Len = strlen(tmpStr2);
     if (str1Len != str2Len) {
@@ -48,9 +46,8 @@ bool strcmp(char* str1, char* str2)
     }
 }
 
-uint32_t strlen(const char* str)
-{
-    const char* ptr = str;
+uint32_t strlen(const char *str) {
+    const char *ptr = str;
     uint32_t len = 0;
     while (*ptr) {
         len++;
@@ -59,26 +56,23 @@ uint32_t strlen(const char* str)
     return len;
 }
 
-void* memset(char* s, int c, uint32_t n)
-{
-    char* tmpS = (char*)s;
+void *memset(char *s, int c, uint32_t n) {
+    char *tmpS = (char *) s;
     while (n-- > 0) {
         *tmpS++ = c;
     }
     return s;
 }
 
-void memcpy(void* dest, const void* src, uint32_t bytes)
-{
-    char* d = dest;
-    const char* s = src;
+void memcpy(void *dest, const void *src, uint32_t bytes) {
+    char *d = dest;
+    const char *s = src;
     while (bytes--) {
         *d++ = *s++;
     }
 }
 
-char* itoa(int num, char* str, int base)
-{
+char *itoa(int num, char *str, int base) {
     int i = 0;
     _Bool isNegative = false;
 

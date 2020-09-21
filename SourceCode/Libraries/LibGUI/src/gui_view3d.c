@@ -8,10 +8,11 @@
 #include <log.h>
 #include <stdbool.h>
 #include <stdlib.h>
+
 extern Heap kernelHeap;
 extern uint32_t GFX2D_BUFFER[1024 * 768];
-void gui_view3d_create(GUIView3D* view)
-{
+
+void gui_view3d_create(GUIView3D *view) {
     view->component.type = VIEW3D;
     view->component.visable = true;
     view->component.colorMode = RGB;
@@ -43,14 +44,16 @@ void gui_view3d_create(GUIView3D* view)
     view->component.foreground.g = 0x00;
     view->component.foreground.b = 0x00;
 
-    view->buffer = kernelHeap.operations.alloc(&kernelHeap, view->component.size.width * view->component.size.height * sizeof(uint32_t));
+    view->buffer = kernelHeap.operations.alloc(&kernelHeap, view->component.size.width * view->component.size.height *
+                                                                    sizeof(uint32_t));
     if (view->buffer == nullptr) {
         LogError("[GUI]: canvas create failed, unable to allocate buffer memory\n");
     }
+
+    gfx2d_create_context(&view->context, 1024, 768, GFX2D_BUFFER);
 }
 
-void gui_view3d_init(GUIView3D* view, uint32_t x, uint32_t y)
-{
+void gui_view3d_init(GUIView3D *view, uint32_t x, uint32_t y) {
     view->component.position.x = x;
     view->component.position.y = y;
     // Mesh m = {
@@ -61,9 +64,8 @@ void gui_view3d_init(GUIView3D* view, uint32_t x, uint32_t y)
     // 0.1f, 1000.0f);
 }
 
-void gui_view3d_draw(GUIView3D* view)
-{
-    Gfx2DContext context = { .width = 1024, .height = 768, .buffer = GFX2D_BUFFER };
-    gfx2d_draw_bitmap(context, view->component.position.x, view->component.position.y, view->component.size.width,
-        view->component.size.height, view->buffer);
+void gui_view3d_draw(GUIView3D *view) {
+    view->context.operations.drawBitmap(&view->context, view->component.position.x, view->component.position.y,
+                                        view->component.size.width,
+                                        view->component.size.height, view->buffer);
 }

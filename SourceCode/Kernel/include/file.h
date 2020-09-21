@@ -8,4 +8,4 @@
 typedef struct File {
 }
 
-#endif // __KERNEL_FS_FILE_H__
+#endif// __KERNEL_FS_FILE_H__

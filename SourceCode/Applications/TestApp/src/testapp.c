@@ -4,8 +4,7 @@
 
 //#include <testapp.h>
 
-int main(int argc, char* argv[])
-{
+int main(int argc, char *argv[]) {
     int i = 10;
     while (1) {
         if (i < 1024) {
