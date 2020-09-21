@@ -3,3 +3,6 @@
 
 # Documents
 [Go to documents](https://github.com/SynestiaOS/Documentation)
+
+# Jira
+[Go to Jira](https://synestiaos.atlassian.net/)
