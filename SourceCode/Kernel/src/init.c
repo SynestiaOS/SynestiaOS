@@ -336,17 +336,17 @@ void kernel_main(void) {
         Thread *window1Thread = thread_create("window1", &window_thread1, 1, 1);
         schd_add_thread(window1Thread, 1);
 
-        Thread *window3Thread = thread_create("window3", &window_thread3, 1, 3);
-        schd_add_thread(window3Thread, 1);
-
-        Thread *window4Thread = thread_create("window4", &window_thread4, 1, 4);
-        schd_add_thread(window4Thread, 1);
-
-        Thread *window5Thread = thread_create("window5", &window_thread5, 1, 5);
-        schd_add_thread(window5Thread, 5);
-
-        Thread *window2Thread = thread_create("window2", &window_thread2, 1, 0);
-        schd_add_thread(window2Thread, 0);
+//        Thread *window3Thread = thread_create("window3", &window_thread3, 1, 3);
+//        schd_add_thread(window3Thread, 1);
+//
+//        Thread *window4Thread = thread_create("window4", &window_thread4, 1, 4);
+//        schd_add_thread(window4Thread, 1);
+//
+//        Thread *window5Thread = thread_create("window5", &window_thread5, 1, 5);
+//        schd_add_thread(window5Thread, 5);
+//
+//        Thread *window2Thread = thread_create("window2", &window_thread2, 1, 0);
+//        schd_add_thread(window2Thread, 0);
 
         Thread *windowFileSystemThread = thread_create("window fs", &window_filesystem, 1, 0);
         schd_add_thread(windowFileSystemThread, 0);
@@ -356,6 +356,11 @@ void kernel_main(void) {
 
         Thread *gpuProcess = thread_create("gpu", &gpu, 1, 0);
         schd_add_thread(gpuProcess, 0);
+
+        LogError("[Thread copy] heap.address: %d .\n", window1Thread->memoryStruct.heap.address);
+        Thread* copytestThread = window1Thread->operations.copy(window1Thread, 0, window1Thread->memoryStruct.heap.address);
+        LogError("[Thread copy] heap.address END: %d .\n", window1Thread->memoryStruct.heap.address);
+        schd_add_thread(copytestThread, 0);
 
         bootSpinLock.operations.release(&bootSpinLock);
         schd_schedule();

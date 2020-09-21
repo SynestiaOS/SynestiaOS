@@ -92,42 +92,58 @@ uint32_t filestruct_default_openfile(FilesStruct *filesStruct, DirectoryEntry *d
     return filesStruct->fileDescriptorTable->index - 1;
 }
 
+static int copy_mm(Thread* new_thread, Thread* old_thread, CloneFlags cloneFlags)
+{
+}
+
 Thread *thread_default_copy(Thread *thread, CloneFlags cloneFlags, uint32_t heapStart) {
     Thread *p = thread_create(thread->name, thread->entry, thread->arg, thread->priority);
     if (p == nullptr) {
-        LogError("[Thread]: copy failed.\n");
+        LogError("[Thread]: copy failed: p==nullptr.\n");
         return nullptr;
     }
 
+    // TODO: 如果复制虚拟内存区域
     if (cloneFlags & CLONE_VM) {
+        LogError("[Thread]: Clone VMM: '%s'.\n", p->name);
         // TODO: copy vmm struct
+        // memcpy(p->memoryStruct.virtualMemory, thread->memoryStruct.virtualMemory, sizeof(VirtualMemory));
+
+
     } else {
+        LogError("[Thread]: Create new vmm: '%s'.\n", p->name);
         KernelStatus vmmCreateStatus = vmm_create(&p->memoryStruct.virtualMemory, &userspacePageAllocator);
         if (vmmCreateStatus != OK) {
             LogError("[Thread]: vmm create failed for thread: '%s'.\n", p->name);
-            // TODO: free thread.
+            p->memoryStruct.virtualMemory.operations.release(&p->memoryStruct.virtualMemory);
+            thread_free(p);
             return nullptr;
         }
-
+        LogError("[Thread]: Create new heap: '%s'.\n", p->name);
         KernelStatus heapCreateStatus = heap_create(&p->memoryStruct.heap,
                                                     p->memoryStruct.sectionInfo.bssEndSectionAddr, 16 * MB);
         if (heapCreateStatus != OK) {
             LogError("[Thread]: heap create failed for thread: '%s'.\n", p->name);
-            // TODO: free thread.
-            // TODO: free vmm.
+            p->memoryStruct.virtualMemory.operations.release(&p->memoryStruct.virtualMemory);
+            p->memoryStruct.heap.operations.free(&p->memoryStruct.heap, &p->memoryStruct.heap);
+            thread_free(p);
             return nullptr;
         }
     }
 
+    // TODO: 文件
     if (cloneFlags & CLONE_FILES) {
+        LogError("[Thread]: Clone FILES: '%s'.\n", p->name);
         // TODO, copy file descriptor
     }
 
+    // TODO: File Struct?
     if (cloneFlags & CLONE_FS) {
+        LogError("[Thread]: Clone FS: '%s'.\n", p->name);
         // TODO
     }
 
-    // TODO
+    // TODO: 父进程
     p->parentThread = thread;
     return p;
 }
@@ -213,6 +229,34 @@ Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uin
     }
     LogError("[Thread]: thread '%s' created failed.\n", name);
     return nullptr;
+}
+
+// Delete created thread
+KernelStatus thread_free(Thread* thread)
+{
+    KernelStatus freeStatus = OK;
+    // Free stack
+    freeStatus = thread->stack->operations.free(thread->stack);
+    if (freeStatus != OK) {
+        LogError("[KStack] kStack free failed.\n");
+        return freeStatus;
+    }
+    // Free pid
+    thread_free_pid(thread->pid);
+    // Free FS
+    freeStatus = kvector_free(thread->filesStruct.fileDescriptorTable);
+    if (freeStatus != OK) {
+        LogError("[kVector] kVector free failed.\n");
+        return freeStatus;
+    }
+    // Free thread structure
+    freeStatus = kernelHeap.operations.free(&kernelHeap, thread);
+    if (freeStatus != OK) {
+        LogError("[KStack] kStack free failed.\n");
+        return freeStatus;
+    }
+    LogInfo("[Thread]: thread has been freed.\n");
+    return OK;
 }
 
 uint32_t *idle_thread_routine(int arg) {
