@@ -66,7 +66,6 @@ uint32_t *window_thread1(int args) {
     label.component.size.width = 100;
     gui_window_add_children(&window, &(label.component));
     uint32_t fd = open("/initrd/bin/bin.txt", 1, 3);
-    uint32_t fd = 0;
     char *buffer = (char *) kernelHeap.operations.alloc(&kernelHeap, 4);
     uint32_t size = vfs_kernel_read(vfs, "/initrd/bin/bin.txt", buffer, 3);
     buffer[3] = '\0';
