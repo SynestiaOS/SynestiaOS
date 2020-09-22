@@ -70,9 +70,28 @@ KernelStatus thread_default_exit(struct Thread *thread, uint32_t returnCode) {
 }
 
 KernelStatus thread_default_kill(struct Thread *thread) {
+    KernelStatus freeStatus = OK;
+    // Free stack
+    freeStatus = thread->stack->operations.free(thread->stack);
+    if (freeStatus != OK) {
+        LogError("[KStack]: kStack free failed.\n");
+        return freeStatus;
+    }
+    // Free pid
     thread_free_pid(thread->pid);
-    thread->stack->operations.free(thread->stack);
-    // TODO:
+    // Free FS
+    freeStatus = kvector_free(thread->filesStruct.fileDescriptorTable);
+    if (freeStatus != OK) {
+        LogError("[kVector]: kVector free failed.\n");
+        return freeStatus;
+    }
+    // Free thread structure
+    freeStatus = kernelHeap.operations.free(&kernelHeap, thread);
+    if (freeStatus != OK) {
+        LogError("[KStack]: kStack free failed.\n");
+        return freeStatus;
+    }
+    LogInfo("[Thread]: thread has been freed.\n");
     return OK;
 }
 
@@ -95,6 +114,7 @@ uint32_t filestruct_default_openfile(FilesStruct *filesStruct, DirectoryEntry *d
 Thread *thread_default_copy(Thread *thread, CloneFlags cloneFlags, uint32_t heapStart) {
     LogInfo("[Thread]: Copy Start.\n");
     Thread *p = thread_create(thread->name, thread->entry, thread->arg, thread->priority);
+    LogInfo("[Thread]: Clone VMM: '%s'.\n", p->name);
     if (p == nullptr) {
         LogError("[Thread]: copy failed: p == nullptr.\n");
         return nullptr;
@@ -110,7 +130,7 @@ Thread *thread_default_copy(Thread *thread, CloneFlags cloneFlags, uint32_t heap
         if (vmmCreateStatus != OK) {
             LogError("[Thread]: vmm create failed for thread: '%s'.\n", p->name);
             p->memoryStruct.virtualMemory.operations.release(&p->memoryStruct.virtualMemory);
-            thread_free(p);
+            p->operations.kill(p);
             return nullptr;
         }
         LogInfo("[Thread]: Create new heap: '%s'.\n", p->name);
@@ -120,7 +140,7 @@ Thread *thread_default_copy(Thread *thread, CloneFlags cloneFlags, uint32_t heap
             LogError("[Thread]: heap create failed for thread: '%s'.\n", p->name);
             p->memoryStruct.virtualMemory.operations.release(&p->memoryStruct.virtualMemory);
             p->memoryStruct.heap.operations.free(&p->memoryStruct.heap, &p->memoryStruct.heap);
-            thread_free(p);
+            p->operations.kill(p);
             return nullptr;
         }
     }
@@ -203,7 +223,6 @@ Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uin
 
         thread->filesStruct.operations.openFile = filestruct_default_openfile;
         thread->filesStruct.fileDescriptorTable = kvector_allocate();
-
         thread->memoryStruct.sectionInfo.codeSectionAddr = 0;
         thread->memoryStruct.sectionInfo.roDataSectionAddr = 0;
         thread->memoryStruct.sectionInfo.dataSectionAddr = 0;
@@ -215,38 +234,11 @@ Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uin
         thread->memoryStruct.virtualMemory.pageTable = kernel_vmm_get_page_table();
         thread->memoryStruct.heap = kernelHeap;
 
-        LogInfo("[Thread]: thread '%s' created.\n", name);
+        LogInfo("[Thread]: thread '%s' created.\n", thread->name);
         return thread;
     }
     LogError("[Thread]: thread '%s' created failed.\n", name);
     return nullptr;
-}
-
-// Delete created thread
-KernelStatus thread_free(Thread* thread) {
-    KernelStatus freeStatus = OK;
-    // Free stack
-    freeStatus = thread->stack->operations.free(thread->stack);
-    if (freeStatus != OK) {
-        LogError("[KStack]: kStack free failed.\n");
-        return freeStatus;
-    }
-    // Free pid
-    thread_free_pid(thread->pid);
-    // Free FS
-    freeStatus = kvector_free(thread->filesStruct.fileDescriptorTable);
-    if (freeStatus != OK) {
-        LogError("[kVector]: kVector free failed.\n");
-        return freeStatus;
-    }
-    // Free thread structure
-    freeStatus = kernelHeap.operations.free(&kernelHeap, thread);
-    if (freeStatus != OK) {
-        LogError("[KStack]: kStack free failed.\n");
-        return freeStatus;
-    }
-    LogInfo("[Thread]: thread has been freed.\n");
-    return OK;
 }
 
 uint32_t *idle_thread_routine(int arg) {

@@ -9,6 +9,7 @@
 #include <percpu.h>
 #include <thread.h>
 #include <mmu.h>
+#include <log.h>
 
 extern VFS *vfs;
 
@@ -23,6 +24,7 @@ uint32_t sys_close(uint32_t fd) { return vfs->operations.close(vfs, fd); }
 uint32_t sys_fork(void) {
     PerCpu *perCpu = percpu_get(read_cpuid());
     Thread *currThread = perCpu->currentThread;
+    currThread->memoryStruct.heap = currThread->memoryStruct.heap;
     Thread *child = currThread->operations.copy(currThread, CLONE_VM | CLONE_FILES | CLONE_FS,currThread->memoryStruct.heap.address);
     schd_add_thread(child, currThread->priority);
     return child->pid;
