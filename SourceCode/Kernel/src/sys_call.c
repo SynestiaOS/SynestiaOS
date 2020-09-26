@@ -14,10 +14,11 @@ uint32_t sys_exit(int error_code) {}
 
 uint32_t sys_fork() {}
 
-uint32_t sys_read(uint32_t fd, char *buf, uint32_t count) { return vfs->operations.read(vfs, fd, buf, 0, count); }
+uint32_t sys_read(uint32_t fd, char *buf, uint32_t count) {
+    return vfs->operations.read(vfs, fd, buf, 0, count); }
 
 uint32_t sys_write(uint32_t fd, const char *buf, uint32_t count) {
-    return vfs->operations.read(vfs, fd, buf, 0, count);
+    return vfs->operations.write(vfs, fd, buf, 0, count);
 }
 
 uint32_t sys_open(const char *filename, int flags, uint32_t mode) { return vfs->operations.open(vfs, filename, mode); }

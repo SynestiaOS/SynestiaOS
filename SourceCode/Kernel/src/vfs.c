@@ -79,16 +79,13 @@ uint32_t vfs_default_read(VFS *vfs, uint32_t fd, char *buffer, uint32_t pos, uin
     PerCpu *perCpu = percpu_get(read_cpuid());
     Thread *currThread = perCpu->currentThread;
 
-    // TODO:
-    // read data from fs
 
-    // calculate the physical address of buffer
+    return 0;
+}
 
-    // map the buffer
-
-    // copy to buffer
-
-    // return size
+uint32_t vfs_default_write(VFS *vfs, uint32_t fd, char *buffer, uint32_t pos, uint32_t count) {
+    PerCpu *perCpu = percpu_get(read_cpuid());
+    Thread *currThread = perCpu->currentThread;
 
     return 0;
 }
@@ -269,6 +266,7 @@ VFS *vfs_create() {
     vfs->operations.open = vfs_default_open;
     vfs->operations.close = vfs_default_close;
     vfs->operations.read = vfs_default_read;
+    vfs->operations.write = vfs_default_write;
     vfs->operations.lookup = vfs_default_lookup;
     return vfs;
 }
