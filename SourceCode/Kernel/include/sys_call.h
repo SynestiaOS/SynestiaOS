@@ -7,16 +7,6 @@
 #include <stdint.h>
 #include <type.h>
 
-//
-// Created by XingfengYang on 2020/7/17.
-//
-#include <log.h>
-#include <sched.h>
-#include <sys_call.h>
-#include <vfs.h>
-
-extern VFS *vfs;
-
 uint32_t sys_restart_syscall();
 
 uint32_t sys_exit(int error_code);
