@@ -89,7 +89,8 @@ uint32_t filestruct_default_openfile(FilesStruct *filesStruct, DirectoryEntry *d
         LogError("[Open]: file open failed, cause add fd table failed.\n");
         return 0;
     }
-    return filesStruct->fileDescriptorTable->index - 1;
+    // because 0,1,2 are std in, out, err use
+    return (filesStruct->fileDescriptorTable->index - 1) + 3;
 }
 
 Thread *thread_default_copy(Thread *thread, CloneFlags cloneFlags, uint32_t heapStart) {

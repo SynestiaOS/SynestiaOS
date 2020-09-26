@@ -1,7 +1,7 @@
-#include <stdarg.h>
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys.h>
 #include <uart.h>
 
 void memclean(uint8_t *start, const uint8_t *end) {
@@ -17,15 +17,6 @@ void bzero(void *s1, uint32_t n) {
     while (n != 0) {
         *t++ = 0;
         n--;
-    }
-}
-
-void put_char(char c) { uart_put_char(c); }
-
-void print(const char *str) {
-    while (*str) {
-        put_char(*str);
-        str++;
     }
 }
 
@@ -98,24 +89,21 @@ void reverse(char str[], int length) {
     }
 }
 
-int printf(const char *format, ...) {
-    va_list valist;
+char *printf(const char *format,...) {
+    va_list vaList;
 
-    uint32_t num = getArgsNumFromFormatString(format);
+    uint32_t  num = getArgsNumFromFormatString(format);
+
+    va_start(vaList,num);
 
     char result[DEFAULT_STRING_LEN];
-    for (int i = 0; i < DEFAULT_STRING_LEN; i++) {
-        result[i] = '\0';
-    }
-    char *resultPtr = &result;
-    va_start(valist, num);
-
     char *tmp = format;
+    char *resultPtr = &result;
     while (*tmp) {
         if (*tmp == '%') {
             if (getOffsetFromString(tmp, 1) == 'd') {
                 // 1. get argument from args
-                int value = va_arg(valist, int);
+                int value = va_arg(vaList, int);
 
                 // 2. covert int to string and append at tail
                 char int32s[10] = {'\0'};
@@ -136,7 +124,7 @@ int printf(const char *format, ...) {
             }
             if (getOffsetFromString(tmp, 1) == 's') {
                 // 1. get argument from args
-                char *value = va_arg(valist, char *);
+                char *value = va_arg(vaList, char *);
                 while (*value) {
                     *resultPtr = *value;
                     value++;
@@ -205,9 +193,7 @@ int printf(const char *format, ...) {
         }
         tmp++;
     }
-    va_end(valist);
+    va_end(vaList);
 
-    print(result);
-
-    return 0;
+    return result;
 }

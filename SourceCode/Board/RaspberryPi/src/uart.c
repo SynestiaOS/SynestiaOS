@@ -70,4 +70,11 @@ uint8_t do_uart_get_char(void) {
     return ((uint8_t)(io_readl((void *) (PERIPHERAL_BASE + UART0_OFFSET + UART_DR_OFFSET)) & 0xff));
 }
 
+void uart_print(const char *str) {
+    while (*str) {
+        uart_put_char(*str);
+        str++;
+    }
+}
+
 void uart_interrupt_handler(void) { uart_put_char(do_uart_get_char()); }

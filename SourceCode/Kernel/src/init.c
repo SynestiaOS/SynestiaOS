@@ -6,7 +6,6 @@
 #include <gui_animation.h>
 #include <gui_button.h>
 #include <gui_canvas.h>
-#include <gui_container.h>
 #include <gui_label.h>
 #include <gui_panel.h>
 #include <gui_view3d.h>
@@ -324,6 +323,7 @@ void kernel_main(void) {
         uint32_t i = *(uint32_t *) (0xFFee0f3e);
 
         vfs = vfs_create();
+
         vfs->operations.mount(vfs, "root", FILESYSTEM_EXT2, (void *) EXT2_ADDRESS);
 
         uint32_t *background = (uint32_t *) kernelHeap.operations.alloc(&kernelHeap, 768 * 1024 * 4);

@@ -92,6 +92,11 @@ typedef struct SectionInfo {
     uint32_t bssEndSectionAddr;
 } __attribute__((packed)) SectionInfo;
 
+
+#define FD_STDIN 0
+#define FD_STDOUT 1
+#define FD_STDERR 2
+
 typedef struct FileDescriptor {
     uint32_t pos;
     DirectoryEntry *directoryEntry;

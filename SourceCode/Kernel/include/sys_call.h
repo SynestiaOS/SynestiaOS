@@ -155,7 +155,7 @@ uint32_t sys_reboot(int magic1, int magic2, uint32_t cmd, void *arg);
 
 uint32_t sys_readdir(uint32_t fd, uint32_t *dirent, uint32_t count);
 
-uint32_t sys_mmap(uint32_targ);
+uint32_t sys_mmap(uint32_t *arg);
 
 uint32_t sys_munmap(unsigned long addr, uint32_t len);
 
