@@ -8,6 +8,7 @@
 #include <log.h>
 #include <percpu.h>
 #include <string.h>
+#include <uart.h>
 #include <vfs.h>
 #include <vfs_dentry.h>
 #include <vfs_inode.h>
@@ -76,20 +77,33 @@ uint32_t vfs_default_close(struct VFS *vfs, uint32_t fd) {
 }
 
 uint32_t vfs_default_read(VFS *vfs, uint32_t fd, char *buffer, uint32_t pos, uint32_t count) {
-    PerCpu *perCpu = percpu_get(read_cpuid());
-    Thread *currThread = perCpu->currentThread;
+    if (fd == FD_STDIN) {
 
-    // TODO:
-    // read data from fs
+    } else if (fd == FD_STDOUT) {
 
-    // calculate the physical address of buffer
+    } else if (fd == FD_STDERR) {
 
-    // map the buffer
+    } else {
+        PerCpu *perCpu = percpu_get(read_cpuid());
+        Thread *currThread = perCpu->currentThread;
 
-    // copy to buffer
 
-    // return size
+        return 0;
+    }
+}
 
+uint32_t vfs_default_write(VFS *vfs, uint32_t fd, char *buffer, uint32_t pos, uint32_t count) {
+    if (fd == FD_STDIN) {
+
+    } else if (fd == FD_STDOUT) {
+        uart_print(buffer);
+    } else if (fd == FD_STDERR) {
+
+    } else {
+
+        PerCpu *perCpu = percpu_get(read_cpuid());
+        Thread *currThread = perCpu->currentThread;
+    }
     return 0;
 }
 
@@ -269,6 +283,7 @@ VFS *vfs_create() {
     vfs->operations.open = vfs_default_open;
     vfs->operations.close = vfs_default_close;
     vfs->operations.read = vfs_default_read;
+    vfs->operations.write = vfs_default_write;
     vfs->operations.lookup = vfs_default_lookup;
     return vfs;
 }

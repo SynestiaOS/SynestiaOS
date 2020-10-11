@@ -22,11 +22,14 @@ typedef DirectoryEntry *(*VFSOperationLookUp)(struct VFS *vfs, const char *name)
 
 typedef uint32_t (*VFSOperationRead)(struct VFS *vfs, uint32_t fd, char *buffer, uint32_t pos, uint32_t count);
 
+typedef uint32_t (*VFSOperationWrite)(struct VFS *vfs, uint32_t fd, char *buffer, uint32_t pos, uint32_t count);
+
 typedef struct VFSOperations {
     VFSOperationMount mount;
     VFSOperationOpen open;
     VFSOperationClose close;
     VFSOperationRead read;
+    VFSOperationWrite write;
     VFSOperationLookUp lookup;
 } VFSOperations;
 
