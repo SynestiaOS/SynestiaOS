@@ -6,7 +6,6 @@
 #include <gui_animation.h>
 #include <gui_button.h>
 #include <gui_canvas.h>
-#include <gui_container.h>
 #include <gui_label.h>
 #include <gui_panel.h>
 #include <gui_view3d.h>
@@ -34,7 +33,7 @@ VFS *vfs;
 Heap kernelHeap;
 PhysicalPageAllocator kernelPageAllocator;
 PhysicalPageAllocator userspacePageAllocator;
-Gfx2DContext context;
+Gfx2DContext gfx;
 
 extern uint32_t *gpu_flush(int args);
 
@@ -256,9 +255,9 @@ uint32_t *gpu(int args) {
 }
 
 void initProcessUpdate(uint32_t process) {
-    context.operations.fillRect(&context, 120, 520, 120 + process * (((1024 - 240) / 100) + 1), 530, 0xf25a29);
+    gfx.operations.fillRect(&gfx, 120, 520, 120 + process * (((1024 - 240) / 100) + 1), 530, 0xf25a29);
 
-    context.operations.fillRect(&context, 120 - 10, 540, 1024 - 120, 570, 0x171520);
+    gfx.operations.fillRect(&gfx, 120 - 10, 540, 1024 - 120, 570, 0x171520);
     GUILabel label;
     gui_label_create(&label);
     char str[10] = {'\0'};
@@ -280,10 +279,10 @@ void renderBootScreen() {
 
     kernel_vmm_add_map_hook(initProcessUpdate);
 
-    context.operations.fillRect(&context, 0, 0, 1024, 768, 0x171520);
-    context.operations.fillRect(&context, 120, 520, 1024 - 120, 530, 0xf7941d);
+    gfx.operations.fillRect(&gfx, 0, 0, 1024, 768, 0x171520);
+    gfx.operations.fillRect(&gfx, 120, 520, 1024 - 120, 530, 0xf7941d);
 
-    context.operations.drawBitmap(&context, 384, 150, 256, 256, bootLogo());
+    gfx.operations.drawBitmap(&gfx, 384, 150, 256, 256, bootLogo());
 
     GUILabel label;
     gui_label_create(&label);
@@ -321,7 +320,7 @@ void kernel_main(void) {
         // create kernel physical page allocator
         page_allocator_create(&kernelPageAllocator, KERNEL_PHYSICAL_START, KERNEL_PHYSICAL_SIZE);
 
-        gfx2d_create_context(&context, 1024, 768, GFX2D_BUFFER);
+        gfx2d_create_context(&gfx, 1024, 768, GFX2D_BUFFER);
         renderBootScreen();
 
         // init kernel virtual memory mapping
@@ -339,11 +338,12 @@ void kernel_main(void) {
         uint32_t i = *(uint32_t *) (0xFFee0f3e);
 
         vfs = vfs_create();
+
         vfs->operations.mount(vfs, "root", FILESYSTEM_EXT2, (void *) EXT2_ADDRESS);
 
         uint32_t *background = (uint32_t *) kernelHeap.operations.alloc(&kernelHeap, 768 * 1024 * 4);
         uint32_t size = vfs_kernel_read(vfs, "/initrd/init/bg1024_768.dat", background, 768 * 1024 * 4);
-        context.operations.drawBitmap(&context, 0, 0, 1024, 768, background);
+        gfx.operations.drawBitmap(&gfx, 0, 0, 1024, 768, background);
         kernelHeap.operations.free(&kernelHeap, background);
 
         schd_init();
@@ -366,8 +366,8 @@ void kernel_main(void) {
         Thread *windowFileSystemThread = thread_create("window fs", &window_filesystem, 1, 0);
         schd_add_thread(windowFileSystemThread, 0);
 
-        Thread *windowMandelbrotThread = thread_create("window fs", &window_clock, 1, 0);
-        schd_add_thread(windowMandelbrotThread, 0);
+        Thread *windowClockThread = thread_create("clock", &window_clock, 1, 0);
+        schd_add_thread(windowClockThread, 0);
 
         Thread *gpuProcess = thread_create("gpu", &gpu, 1, 0);
         schd_add_thread(gpuProcess, 0);
