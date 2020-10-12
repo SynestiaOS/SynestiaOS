@@ -89,111 +89,15 @@ void reverse(char str[], int length) {
     }
 }
 
-char *printf(const char *format,...) {
-    va_list vaList;
+static char buf[1024] = {0};
 
-    uint32_t  num = getArgsNumFromFormatString(format);
-
-    va_start(vaList,num);
-
-    char result[DEFAULT_STRING_LEN];
-    char *tmp = format;
-    char *resultPtr = &result;
-    while (*tmp) {
-        if (*tmp == '%') {
-            if (getOffsetFromString(tmp, 1) == 'd') {
-                // 1. get argument from args
-                int value = va_arg(vaList, int);
-
-                // 2. covert int to string and append at tail
-                char int32s[10] = {'\0'};
-                char *intStr = itoa(value, &int32s, 10);
-                while (*intStr) {
-                    *resultPtr = *intStr;
-                    intStr++;
-                    resultPtr++;
-                }
-
-                tmp += 2;
-                continue;
-            }
-            if (getOffsetFromString(tmp, 1) == 'u') {
-
-                tmp += 2;
-                continue;
-            }
-            if (getOffsetFromString(tmp, 1) == 's') {
-                // 1. get argument from args
-                char *value = va_arg(vaList, char *);
-                while (*value) {
-                    *resultPtr = *value;
-                    value++;
-                    resultPtr++;
-                }
-                tmp += 2;
-                continue;
-            }
-            if (getOffsetFromString(tmp, 1) == 'f') {
-
-                tmp += 2;
-                continue;
-            }
-            if (getOffsetFromString(tmp, 1) == 'e') {
-
-                tmp += 2;
-                continue;
-            }
-            if (getOffsetFromString(tmp, 1) == 'x') {
-
-                tmp += 2;
-                continue;
-            }
-            if (getOffsetFromString(tmp, 1) == 'o') {
-
-                tmp += 2;
-                continue;
-            }
-            if (getOffsetFromString(tmp, 1) == 'g') {
-
-                tmp += 2;
-                continue;
-            }
-            if (getOffsetFromString(tmp, 1) == 'p') {
-
-                tmp += 2;
-                continue;
-            }
-            if (getOffsetFromString(tmp, 1) == 'l') {
-                if (getOffsetFromString(tmp, 2) == 'u') {
-
-                    tmp += 3;
-                    continue;
-                }
-                if (getOffsetFromString(tmp, 2) == 'x') {
-
-                    tmp += 3;
-                    continue;
-                }
-                if (getOffsetFromString(tmp, 2) == 'l') {
-                    if (getOffsetFromString(tmp, 3) == 'u') {
-
-                        tmp += 4;
-                        continue;
-                    }
-                    if (getOffsetFromString(tmp, 3) == 'x') {
-
-                        tmp += 4;
-                        continue;
-                    }
-                }
-            }
-        } else {
-            *resultPtr = *tmp;
-            resultPtr++;
-        }
-        tmp++;
-    }
-    va_end(vaList);
-
-    return result;
+int32_t printf(const char *fmt,...) {
+    va_list args;
+    int32_t i = 0;
+    va_start(args, fmt);
+    i = vsprintf(buf, fmt, args);
+    va_end(args);
+    uart_print(buf);
+    bzero(buf,1024);
+    return i;
 }
