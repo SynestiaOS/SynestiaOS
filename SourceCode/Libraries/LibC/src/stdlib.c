@@ -89,14 +89,15 @@ void reverse(char str[], int length) {
     }
 }
 
-static char buf[1024];
+static char buf[1024] = {0};
 
 int32_t printf(const char *fmt,...) {
     va_list args;
-    int     i;
+    int32_t i = 0;
     va_start(args, fmt);
     i = vsprintf(buf, fmt, args);
     va_end(args);
     uart_print(buf);
+    bzero(buf,1024);
     return i;
 }
