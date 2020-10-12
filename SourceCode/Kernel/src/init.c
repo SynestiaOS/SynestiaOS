@@ -64,7 +64,8 @@ uint32_t *window_thread1(int args) {
     label.component.colorMode = TRANSPARENT;
     label.component.size.width = 100;
     gui_window_add_children(&window, &(label.component));
-    uint32_t fd = open("/initrd/bin/bin.txt", 1, 3);
+//    uint32_t fd = open("/initrd/bin/bin.txt", 1, 3);
+    uint32_t fd = 0;
     char *buffer = (char *) kernelHeap.operations.alloc(&kernelHeap, 4);
     uint32_t size = vfs_kernel_read(vfs, "/initrd/bin/bin.txt", buffer, 3);
     buffer[3] = '\0';
@@ -296,6 +297,20 @@ void renderBootScreen() {
     gui_label_draw(&labelCopyright);
 }
 
+uint32_t *window_thread_test(int args) {
+    GUIWindow window;
+    gui_window_create(&window);
+    window.component.size.width = 240;
+    window.component.size.height = 360;
+    gui_window_init(&window, 720, 480, "window_test");
+    while (1) {
+        disable_interrupt();
+        LogInfo("window_thread_test\n");
+        gui_window_draw(&window);
+        enable_interrupt();
+    }
+}
+
 void kernel_main(void) {
     if (read_cpuid() == 0) {
         bootSpinLock.operations.acquire(&bootSpinLock);
@@ -356,6 +371,10 @@ void kernel_main(void) {
 
         Thread *gpuProcess = thread_create("gpu", &gpu, 1, 0);
         schd_add_thread(gpuProcess, 0);
+
+        Thread *windowThread_test = thread_create("window_t_t", &window_thread_test, 1, 0);
+        Thread* copyThread_test = windowThread_test->operations.copy(windowThread_test, CLONE_VM, windowThread_test->memoryStruct.heap.address);
+        schd_add_thread(copyThread_test, 0);
 
         bootSpinLock.operations.release(&bootSpinLock);
         schd_schedule();

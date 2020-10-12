@@ -70,9 +70,28 @@ KernelStatus thread_default_exit(struct Thread *thread, uint32_t returnCode) {
 }
 
 KernelStatus thread_default_kill(struct Thread *thread) {
+    KernelStatus freeStatus = OK;
+    // Free stack
+    freeStatus = thread->stack->operations.free(thread->stack);
+    if (freeStatus != OK) {
+        LogError("[KStack]: kStack free failed.\n");
+        return freeStatus;
+    }
+    // Free pid
     thread_free_pid(thread->pid);
-    thread->stack->operations.free(thread->stack);
-    // TODO:
+    // Free FS
+    freeStatus = kvector_free(thread->filesStruct.fileDescriptorTable);
+    if (freeStatus != OK) {
+        LogError("[kVector]: kVector free failed.\n");
+        return freeStatus;
+    }
+    // Free thread structure
+    freeStatus = kernelHeap.operations.free(&kernelHeap, thread);
+    if (freeStatus != OK) {
+        LogError("[KStack]: kStack free failed.\n");
+        return freeStatus;
+    }
+    LogInfo("[Thread]: thread has been freed.\n");
     return OK;
 }
 
@@ -94,42 +113,50 @@ uint32_t filestruct_default_openfile(FilesStruct *filesStruct, DirectoryEntry *d
 }
 
 Thread *thread_default_copy(Thread *thread, CloneFlags cloneFlags, uint32_t heapStart) {
+    LogInfo("[Thread]: Copy Start.\n");
     Thread *p = thread_create(thread->name, thread->entry, thread->arg, thread->priority);
+    LogInfo("[Thread]: Clone VMM: '%s'.\n", p->name);
     if (p == nullptr) {
-        LogError("[Thread]: copy failed.\n");
+        LogError("[Thread]: copy failed: p == nullptr.\n");
         return nullptr;
     }
-
     if (cloneFlags & CLONE_VM) {
-        // TODO: copy vmm struct
+        LogInfo("[Thread]: Clone VMM: '%s'.\n", p->name);
+        p->memoryStruct.virtualMemory.physicalPageAllocator = thread->memoryStruct.virtualMemory.physicalPageAllocator;
+        p->memoryStruct.virtualMemory.operations = thread->memoryStruct.virtualMemory.operations;
+        p->memoryStruct.heap =thread->memoryStruct.heap;
     } else {
+        LogInfo("[Thread]: Create new vmm: '%s'.\n", p->name);
         KernelStatus vmmCreateStatus = vmm_create(&p->memoryStruct.virtualMemory, &userspacePageAllocator);
         if (vmmCreateStatus != OK) {
             LogError("[Thread]: vmm create failed for thread: '%s'.\n", p->name);
-            // TODO: free thread.
+            p->memoryStruct.virtualMemory.operations.release(&p->memoryStruct.virtualMemory);
+            p->operations.kill(p);
             return nullptr;
         }
-
+        LogInfo("[Thread]: Create new heap: '%s'.\n", p->name);
         KernelStatus heapCreateStatus = heap_create(&p->memoryStruct.heap,
                                                     p->memoryStruct.sectionInfo.bssEndSectionAddr, 16 * MB);
         if (heapCreateStatus != OK) {
             LogError("[Thread]: heap create failed for thread: '%s'.\n", p->name);
-            // TODO: free thread.
-            // TODO: free vmm.
+            p->memoryStruct.virtualMemory.operations.release(&p->memoryStruct.virtualMemory);
+            p->memoryStruct.heap.operations.free(&p->memoryStruct.heap, &p->memoryStruct.heap);
+            p->operations.kill(p);
             return nullptr;
         }
     }
-
     if (cloneFlags & CLONE_FILES) {
-        // TODO, copy file descriptor
+        LogInfo("[Thread]: Clone FILES: '%s'.\n", p->name);
+        p->filesStruct.fileDescriptorTable->index = thread->filesStruct.fileDescriptorTable->index;
+        p->filesStruct.fileDescriptorTable->size = thread->filesStruct.fileDescriptorTable->size;
+        p->filesStruct.fileDescriptorTable->node = thread->filesStruct.fileDescriptorTable->node;
     }
-
     if (cloneFlags & CLONE_FS) {
+        LogInfo("[Thread]: Clone FS: '%s'.\n", p->name);
         // TODO
     }
-
-    // TODO
     p->parentThread = thread;
+    LogInfo("[Thread]: Copy Done.\n");
     return p;
 }
 
@@ -197,7 +224,6 @@ Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uin
 
         thread->filesStruct.operations.openFile = filestruct_default_openfile;
         thread->filesStruct.fileDescriptorTable = kvector_allocate();
-
         thread->memoryStruct.sectionInfo.codeSectionAddr = 0;
         thread->memoryStruct.sectionInfo.roDataSectionAddr = 0;
         thread->memoryStruct.sectionInfo.dataSectionAddr = 0;
@@ -209,7 +235,7 @@ Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uin
         thread->memoryStruct.virtualMemory.pageTable = kernel_vmm_get_page_table();
         thread->memoryStruct.heap = kernelHeap;
 
-        LogInfo("[Thread]: thread '%s' created.\n", name);
+        LogInfo("[Thread]: thread '%s' created.\n", thread->name);
         return thread;
     }
     LogError("[Thread]: thread '%s' created failed.\n", name);
