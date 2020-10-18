@@ -40,8 +40,11 @@ target_link_options(${KernelName} PRIVATE -T ${KernelArch_SOURCE_DIR}/src/kernel
 
 target_link_libraries(${KernelName} PRIVATE gcc)
 
-add_custom_target(kernel.img ALL
+add_custom_command(OUTPUT kernel.img
+	WORKING_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
+	COMMAND ${CMAKE_OBJCOPY} -O binary ${KernelName} kernel.img
 	DEPENDS ${KernelName}
-        COMMAND ${CMAKE_COMMAND} -E echo making kernel.img, wait a moment
-        WORKING_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
-        COMMAND ${CMAKE_OBJCOPY} ${KernelName} -O binary kernel.img)
+	COMMENT "objcopying ${KernelName} to kernel.img")
+add_custom_target(kernelImage ALL 
+	DEPENDS kernel.img)
+
