@@ -13,6 +13,7 @@
 #include <interrupt.h>
 #include <kernel_vmm.h>
 #include <kheap.h>
+#include <led.h>
 #include <log.h>
 #include <mmu.h>
 #include <page.h>
@@ -271,7 +272,7 @@ void initProcessUpdate(uint32_t process) {
 }
 
 TimerHandler gpuHandler;
-SpinLock bootSpinLock = SpinLockCreate();
+//SpinLock bootSpinLock = SpinLockCreate();
 
 void renderBootScreen() {
     heap_create(&kernelHeap, &__HEAP_BEGIN, 64 * MB);
@@ -313,7 +314,8 @@ uint32_t *window_thread_test(int args) {
 
 void kernel_main(void) {
     if (read_cpuid() == 0) {
-        bootSpinLock.operations.acquire(&bootSpinLock);
+        //bootSpinLock.operations.acquire(&bootSpinLock);
+	led_init();
         init_bsp();
         print_splash();
 
@@ -376,7 +378,7 @@ void kernel_main(void) {
         Thread* copyThread_test = windowThread_test->operations.copy(windowThread_test, CLONE_VM, windowThread_test->memoryStruct.heap.address);
         schd_add_thread(copyThread_test, 0);
 
-        bootSpinLock.operations.release(&bootSpinLock);
+        //bootSpinLock.operations.release(&bootSpinLock);
         schd_schedule();
     }
 
