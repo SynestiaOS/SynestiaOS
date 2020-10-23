@@ -52,67 +52,41 @@ void print_splash() {
 
 extern uint32_t open(const char *name, uint32_t flags, uint32_t mode);
 
-uint32_t *window_thread1(int args) {
-    uint32_t count = 0;
-    GUIWindow window;
-    gui_window_create(&window);
-    window.component.size.width = 340;
-    window.component.size.height = 200;
-    gui_window_init(&window, 20, 20, "window1");
-    GUILabel label;
-    gui_label_create(&label);
-    label.component.colorMode = TRANSPARENT;
-    label.component.size.width = 100;
-    gui_window_add_children(&window, &(label.component));
-//    uint32_t fd = open("/initrd/bin/bin.txt", 1, 3);
-    uint32_t fd = 0;
-    char *buffer = (char *) kernelHeap.operations.alloc(&kernelHeap, 4);
-    uint32_t size = vfs_kernel_read(vfs, "/initrd/bin/bin.txt", buffer, 3);
-    buffer[3] = '\0';
-    while (1) {
-        char str[10] = {'\0'};
-        gui_label_init(&label, 0, 0, itoa(count, &str, 10));
-        disable_interrupt();
-        LogWarn("[Thread3] fd: %d .\n", fd);
-        LogWarn("[Thread3] data: %s .\n", buffer);
-        gui_window_draw(&window);
-        enable_interrupt();
-        count += 2;
-    }
-}
-
 extern uint32_t getpid();
 
-uint32_t *window_thread2(int args) {
+uint32_t *window_dialog(int args) {
     uint32_t count = 0;
     GUIWindow window;
     gui_window_create(&window);
-    window.component.size.width = 340;
-    window.component.size.height = 200;
-    gui_window_init(&window, 380, 20, "window2");
+    window.component.size = SizeWH(340, 200);
+    gui_window_init(&window, 10, 100, "Welcome");
     GUILabel label;
     gui_label_create(&label);
-    label.component.size.width = 100;
+    label.component.size.width = 300;
     label.component.colorMode = TRANSPARENT;
+
+    GUIButton buttonYes, buttonNo;
+    gui_button_create(&buttonYes);
+    gui_button_create(&buttonNo);
+
     gui_window_add_children(&window, &(label.component));
+    gui_window_add_children(&window, &(buttonYes.component));
+    gui_window_add_children(&window, &(buttonNo.component));
     while (1) {
-        char str[10] = {'\0'};
-        gui_label_init(&label, 0, 0, itoa(count, &str, 10));
         disable_interrupt();
-        uint32_t pid = getpid();
-        LogWarn("[Thread3] pid: %d .\n", pid);
+        gui_label_init(&label, 0, 0, "hello, world! Is this cool?");
+        gui_button_init(&buttonYes, 20, 50, "YES");
+        gui_button_init(&buttonNo, 150, 50, "NO");
         gui_window_draw(&window);
         enable_interrupt();
-        count++;
     }
 }
 
 uint32_t *window_filesystem(int args) {
     GUIWindow window;
     gui_window_create(&window);
-    window.component.size.width = 340;
-    window.component.size.height = 200;
-    gui_window_init(&window, 20, 300, "FileManager");
+    window.component.size = SizeWH(340, 200);
+    gui_window_init(&window, 380, 100, "FileManager");
     DirectoryEntry *directoryEntry = vfs->operations.lookup(vfs, "/initrd");
     struct GUILabel *labels;
     uint32_t size = 0;
@@ -150,35 +124,12 @@ uint32_t *window_filesystem(int args) {
     }
 }
 
-uint32_t *window_thread3(int args) {
+
+uint32_t *window_canvas2D(int args) {
     GUIWindow window;
     gui_window_create(&window);
-    window.component.size.width = 620;
-    window.component.size.height = 200;
-    gui_window_init(&window, 20, 330, "Button Animation Test Window");
-    GUIButton button;
-    gui_button_create(&button);
-    gui_button_init(&button, 0, 0, "TEST");
-    gui_window_add_children(&window, &(button.component));
-
-    GUIAnimationTranslation translation;
-    gui_animation_translation_create(&translation, &(button.component), 10, 10, 0);
-
-    while (1) {
-        gui_button_init(&button, translation.currentX, translation.currentY, "TEST");
-        gui_animation_update(&translation);
-        disable_interrupt();
-        gui_window_draw(&window);
-        enable_interrupt();
-    }
-}
-
-uint32_t *window_thread4(int args) {
-    GUIWindow window;
-    gui_window_create(&window);
-    window.component.size.width = 340;
-    window.component.size.height = 200;
-    gui_window_init(&window, 660, 70, "Canvas 2D Test Window");
+    window.component.size = SizeWH(340, 200);
+    gui_window_init(&window, 380, 360, "Canvas 2D Test Window");
     GUICanvas canvas;
     gui_canvas_create(&canvas);
     gui_canvas_init(&canvas, 0, 0);
@@ -193,60 +144,8 @@ uint32_t *window_thread4(int args) {
     }
 }
 
-uint32_t *window_thread5(int args) {
-    GUIWindow window;
-    gui_window_create(&window);
-    window.component.size.width = 340;
-    window.component.size.height = 200;
-    gui_window_init(&window, 660, 330, "View 3D Test Window");
-    GUIView3D view;
-    gui_view3d_create(&view);
-    gui_view3d_init(&view, 0, 0);
-    gui_window_add_children(&window, &(view.component));
-    while (1) {
-        disable_interrupt();
-        gui_window_draw(&window);
-        enable_interrupt();
-    }
-}
 
-uint32_t *window_clock(int args) {
-    uint32_t count = 0;
-    GUIWindow window;
-    gui_window_create(&window);
-    window.component.size.width = 340;
-    window.component.size.height = 200;
-    gui_window_init(&window, 380, 300, "Clock");
-    GUICanvas canvas;
-    gui_canvas_create(&canvas);
-    gui_canvas_init(&canvas, 0, 0);
-    canvas.component.size.width = 320;
-    canvas.component.size.height = 180;
-    gui_window_add_children(&window, &(canvas.component));
-
-    gui_canvas_fill_circle(&canvas, 160, 90, 80, 0xAAAAAA);
-    gui_canvas_fill_circle(&canvas, 160, 90, 70, 0xFFFFFF);
-    gui_canvas_fill_rect(&canvas, 160, 87, 250, 93, 0xAAAAAA);
-    gui_canvas_fill_circle(&canvas, 160, 90, 20, 0xAAAAAA);
-    gui_canvas_fill_rect(&canvas, 156, 90, 164, 150, 0x777777);
-    gui_canvas_fill_circle(&canvas, 160, 90, 10, 0x777777);
-
-    char *buffer = (char *) kernelHeap.operations.alloc(&kernelHeap, 34972);
-    uint32_t size = vfs_kernel_read(vfs, "/initrd/bin/TestApp.elf", buffer, 34972);
-    Elf elf;
-    KernelStatus elfStatus = elf_init(&elf, buffer);
-    if (elfStatus != OK) {
-        LogError("[Elf]: load failed.\n");
-    }
-    elf.operations.parse(&elf);
-    while (1) {
-        disable_interrupt();
-        //        gui_window_draw(&window);
-        enable_interrupt();
-    }
-}
-
-uint32_t *gpu(int args) {
+uint32_t *GPU_FLUSH(int args) {
     while (1) {
         disable_interrupt();
         gpu_flush(0);
@@ -297,20 +196,6 @@ void renderBootScreen() {
     gui_label_draw(&labelCopyright);
 }
 
-uint32_t *window_thread_test(int args) {
-    GUIWindow window;
-    gui_window_create(&window);
-    window.component.size.width = 240;
-    window.component.size.height = 360;
-    gui_window_init(&window, 720, 480, "window_test");
-    while (1) {
-        disable_interrupt();
-        LogInfo("window_thread_test\n");
-        gui_window_draw(&window);
-        enable_interrupt();
-    }
-}
-
 void kernel_main(void) {
     if (read_cpuid() == 0) {
         bootSpinLock.operations.acquire(&bootSpinLock);
@@ -327,54 +212,49 @@ void kernel_main(void) {
         kernel_vmm_init();
 
         // create kernel heap
-        heap_create(&kernelHeap, &__HEAP_BEGIN, KERNEL_PHYSICAL_SIZE - (uint32_t)(&__HEAP_BEGIN));
+        heap_create(&kernelHeap, &__HEAP_BEGIN, KERNEL_PHYSICAL_SIZE - (uint32_t) (&__HEAP_BEGIN));
 
         // create userspace physical page allocator
         page_allocator_create(&userspacePageAllocator, USER_PHYSICAL_START, USER_PHYSICAL_SIZE);
 
         init_interrupt();
 
-        // TODO: it'a test to trigger page fault
-        uint32_t i = *(uint32_t *) (0xFFee0f3e);
-
         vfs = vfs_create();
 
         vfs->operations.mount(vfs, "root", FILESYSTEM_EXT2, (void *) EXT2_ADDRESS);
 
         uint32_t *background = (uint32_t *) kernelHeap.operations.alloc(&kernelHeap, 768 * 1024 * 4);
-        uint32_t size = vfs_kernel_read(vfs, "/initrd/init/bg1024_768.dat", background, 768 * 1024 * 4);
+        vfs_kernel_read(vfs, "/initrd/init/bg1024_768.dat", background, 768 * 1024 * 4);
         gfx.operations.drawBitmap(&gfx, 0, 0, 1024, 768, background);
         kernelHeap.operations.free(&kernelHeap, background);
 
+        gfx.operations.fillRect(&gfx, 0, 0, 1024, 64, FLUENT_PRIMARY_COLOR);
+        GUILabel logo;
+        logo.component.foreground = ColorRGB(0xFF, 0xFF, 0xFF);
+        logo.component.colorMode = TRANSPARENT;
+        gui_label_create(&logo);
+        gui_label_init(&logo, 480, 28, "SynestiaOS (alpha 0.1.3)");
+        gui_label_draw(&logo);
+
         schd_init();
 
-        Thread *window1Thread = thread_create("window1", &window_thread1, 1, 1);
-        schd_add_thread(window1Thread, 1);
+        Thread *gpuProcess = thread_create("gpu", &GPU_FLUSH, 0, 0);
+        schd_add_thread(gpuProcess, 1);
 
-        Thread *window3Thread = thread_create("window3", &window_thread3, 1, 3);
-        schd_add_thread(window3Thread, 1);
+        Thread *cpuHolder = thread_create("cpuholder", &GPU_FLUSH, 0, 5);
+        schd_add_thread(cpuHolder, 5);
+        schd_add_thread(cpuHolder, 5);
+        schd_add_thread(cpuHolder, 5);
 
-        Thread *window4Thread = thread_create("window4", &window_thread4, 1, 4);
-        schd_add_thread(window4Thread, 1);
+        Thread *windowDialogThread = thread_create("Welcome", &window_dialog, 0, 0);
+        schd_add_thread(windowDialogThread, 0);
 
-        Thread *window5Thread = thread_create("window5", &window_thread5, 1, 5);
-        schd_add_thread(window5Thread, 5);
+//        Thread *windowCanvas2DThread = thread_create("Canvas2D", &window_canvas2D, 1, 0);
+//        schd_add_thread(windowCanvas2DThread, 0);
 
-        Thread *window2Thread = thread_create("window2", &window_thread2, 1, 0);
-        schd_add_thread(window2Thread, 0);
-
-        Thread *windowFileSystemThread = thread_create("window fs", &window_filesystem, 1, 0);
+        Thread *windowFileSystemThread = thread_create("FileManager", &window_filesystem, 0, 0);
         schd_add_thread(windowFileSystemThread, 0);
 
-        Thread *windowClockThread = thread_create("clock", &window_clock, 1, 0);
-        schd_add_thread(windowClockThread, 0);
-
-        Thread *gpuProcess = thread_create("gpu", &gpu, 1, 0);
-        schd_add_thread(gpuProcess, 0);
-
-        Thread *windowThread_test = thread_create("window_t_t", &window_thread_test, 1, 0);
-        Thread* copyThread_test = windowThread_test->operations.copy(windowThread_test, CLONE_VM, windowThread_test->memoryStruct.heap.address);
-        schd_add_thread(copyThread_test, 0);
 
         bootSpinLock.operations.release(&bootSpinLock);
         schd_schedule();

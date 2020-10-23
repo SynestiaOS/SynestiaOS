@@ -20,10 +20,14 @@ typedef struct Position {
     uint32_t y;
 } Position;
 
+Position PositionXY(uint32_t x, uint32_t y);
+
 typedef struct Size {
     uint32_t width;
     uint32_t height;
 } Size;
+
+Size SizeWH(uint32_t width, uint32_t height);
 
 typedef struct Padding {
     uint32_t left;
@@ -32,12 +36,22 @@ typedef struct Padding {
     uint32_t bottom;
 } Padding;
 
+Padding Padding4(uint32_t left,
+                 uint32_t right,
+                 uint32_t top,
+                 uint32_t bottom);
+
 typedef struct Margin {
     uint32_t left;
     uint32_t right;
     uint32_t top;
     uint32_t bottom;
 } Margin;
+
+Margin Margin4(uint32_t left,
+               uint32_t right,
+               uint32_t top,
+               uint32_t bottom);
 
 typedef struct Color {
     uint8_t a;
@@ -46,10 +60,16 @@ typedef struct Color {
     uint8_t b;
 } Color;
 
+Color ColorARGB(uint8_t a, uint8_t r, uint8_t g, uint8_t b);
+
+Color ColorRGB(uint8_t r, uint8_t g, uint8_t b);
+
 typedef struct Pixel {
     Position pos;
     Color color;
 } Pixel;
+
+Pixel Pixel2D(Position pos, Color c);
 
 typedef enum ComponentType {
     BUTTON,
