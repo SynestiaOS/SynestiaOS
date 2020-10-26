@@ -10,5 +10,9 @@
 # WeChat Group
 `(void*)0`
 
+# Telegram Group
+[Telegram](https://t.me/synestiaos)
+
+
 # Google Chat
 [SynestiaOS](https://chat.google.com/u/1/room/AAAAFwvh97I)
