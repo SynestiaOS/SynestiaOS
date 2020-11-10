@@ -5,17 +5,19 @@
 #ifndef __LIBRARY_LIBMATH_MATH_H__
 #define __LIBRARY_LIBMATH_MATH_H__
 
-float fmod(float r, float mod);
+#include "macros.h"
 
-float cosf(float angle);
+EXTERN_C float fmod(float r, float mod);
 
-float sinf(float angle);
+EXTERN_C float cosf(float angle);
+
+EXTERN_C float sinf(float angle);
 
 float tanf(float angle);
 
 float fmax(float x, float y);
 
-float powf(float x, float y);
+EXTERN_C float powf(float x, float y);
 
 float q_rsqrt(float number);
 

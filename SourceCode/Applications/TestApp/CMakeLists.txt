@@ -1,4 +1,4 @@
-PROJECT(TestApp C ASM)
+PROJECT(TestApp CXX ASM)
 
 aux_source_directory(${TestApp_SOURCE_DIR}/src TestAppSrc)
 

@@ -6,6 +6,7 @@
 
 #include <stdbool.h>
 #include <stdint.h>
+#include "macros.h"
 
 char *strcpy(char *des, char *source);
 
@@ -15,7 +16,7 @@ uint32_t strlen(const char *str);
 
 char *itoa(int num, char *str, int base);
 
-void *memset(char *s, int c, uint32_t n);
+EXTERN_C void *memset(char *s, int c, uint32_t n);
 
 void memcpy(void *dest, const void *src, uint32_t bytes);
 

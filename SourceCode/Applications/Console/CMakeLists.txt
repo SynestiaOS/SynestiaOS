@@ -1,4 +1,4 @@
-PROJECT(Console C ASM)
+PROJECT(Console CXX ASM)
 
 aux_source_directory(${Console_SOURCE_DIR}/src ConsoleSrc)
 

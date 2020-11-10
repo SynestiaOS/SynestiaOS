@@ -5,7 +5,7 @@
 #ifndef __KERNEL_LOG_H__
 #define __KERNEL_LOG_H__
 
-#include <stdlib.h>
+#include "stdlib.h"
 
 #define LogError(fmt, arg...) printf("\033[31m" fmt "\033[0m", ##arg);
 

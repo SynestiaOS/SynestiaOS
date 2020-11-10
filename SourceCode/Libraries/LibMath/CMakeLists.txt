@@ -1,4 +1,4 @@
-PROJECT(LibMath C ASM)
+PROJECT(LibMath CXX ASM)
 
 aux_source_directory(${LibMath_SOURCE_DIR}/src LibMathSrc)
 

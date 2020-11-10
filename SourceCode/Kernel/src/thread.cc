@@ -250,13 +250,13 @@ uint32_t *idle_thread_routine(int arg) {
 }
 
 Thread *thread_create_idle_thread(uint32_t cpuNum) {
-    Thread *idleThread = thread_create("IDLE", idle_thread_routine, cpuNum, IDLE_PRIORITY);
+    Thread *idleThread = thread_create("IDLE", reinterpret_cast<ThreadStartRoutine>(idle_thread_routine), &cpuNum, IDLE_PRIORITY);
     idleThread->cpuAffinity = cpuNum;
     // 2. idle thread
     idleThread->pid = 0;
 
     char idleNameStr[10] = {'\0'};
-    strcpy(idleThread->name, itoa(cpuNum, &idleNameStr, 10));
+    strcpy(idleThread->name, itoa(cpuNum, reinterpret_cast<char *>(&idleNameStr), 10));
     // TODO : other properties, like list
     LogInfo("[Thread]: Idle thread for CPU '%d' created.\n", cpuNum);
     return idleThread;

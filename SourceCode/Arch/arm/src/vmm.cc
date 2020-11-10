@@ -116,7 +116,7 @@ void virtual_memory_default_release(VirtualMemory *virtualMemory) {
     // TODO: release physical pages for page table when thread was fucking killed.
 }
 
-void virtual_memory_default_context_switch(VirtualMemory *old, VirtualMemory *new) {
+void virtual_memory_default_context_switch(VirtualMemory *old, VirtualMemory *new_) {
     // TODO: switch page table when thread switch
 }
 

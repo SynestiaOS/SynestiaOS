@@ -2,6 +2,7 @@
 // Created by XingfengYang on 2020/7/5.
 //
 
+#include "macros.h"
 #include <kheap.h>
 
 #include <tests_lib.h>
@@ -15,9 +16,9 @@
 #include <libmath_test.h>
 
 extern uint32_t __HEAP_BEGIN;
-Heap testHeap;
+extern Heap testHeap;
 
-void kernel_main_tests() {
+EXTERN_C void kernel_main_tests() {
     heap_create(&testHeap, __HEAP_BEGIN, 64 * MB);
 
     TEST_CASE("should_klist_insert", should_klist_insert);

@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <timer.h>
 #include <vmm.h>
+#include "macros.h"
 
 static rpi_irq_controller_t *rpiIRQController = (rpi_irq_controller_t *) RPI_INTERRUPT_CONTROLLER_BASE;
 
@@ -52,11 +53,11 @@ void disable_interrupt() {
     }
 }
 
-void __attribute__((interrupt("UNDEF"))) undefined_instruction_handler(void) {}
+EXTERN_C void __attribute__((interrupt("UNDEF"))) undefined_instruction_handler(void) {}
 
 extern SysCall sys_call_table[];
 
-int software_interrupt_handler() {
+EXTERN_C int software_interrupt_handler() {
     volatile int r0, r1, r2, r3, r4, sysCallNo;
     __asm__ volatile("mov %0,r1\n\t"
                      "mov %1,r2\n\t"
@@ -71,9 +72,9 @@ int software_interrupt_handler() {
     return sys_call_table[sysCallNo](r0, r1, r2, r3, r4);
 }
 
-void __attribute__((interrupt("ABORT"))) prefetch_abort_handler(void) {}
+EXTERN_C void __attribute__((interrupt("ABORT"))) prefetch_abort_handler(void) {}
 
-void data_abort_handler() {
+EXTERN_C void data_abort_handler() {
     volatile uint32_t r0, r1, r2, r3, r4, r5;
     __asm__ volatile("mov %0,r0\n\t"
                      "mov %1,r1\n\t"
@@ -89,7 +90,7 @@ void data_abort_handler() {
     do_page_fault(r3);
 }
 
-void unused_handler(void) {}
+EXTERN_C void unused_handler(void) {}
 
 #define IRQ_IS_BASIC(x) ((x >= 64))
 #define IRQ_IS_GPU2(x) ((x >= 32 && x < 64))
@@ -126,7 +127,7 @@ void register_interrupt_handler(uint32_t interrupt_no, void (*interrupt_handler_
     }
 }
 
-void interrupt_handler(void) {
+EXTERN_C void interrupt_handler(void) {
     for (uint32_t interrupt_no = 0; interrupt_no < IRQ_NUMS; interrupt_no++) {
         if (irq_handlers[interrupt_no].registered == 1) {
             LogInfo("[Interrupt]: interrupt '%d' triggered.\n", interrupt_no);
@@ -141,7 +142,7 @@ void interrupt_handler(void) {
     }
 }
 
-void __attribute__((interrupt("FIQ"))) fast_interrupt_handler(void) {}
+EXTERN_C void __attribute__((interrupt("FIQ"))) fast_interrupt_handler(void) {}
 
 TimerHandler *timerHandler = nullptr;
 

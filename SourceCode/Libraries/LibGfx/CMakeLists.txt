@@ -1,4 +1,4 @@
-PROJECT(LibGfx C ASM)
+PROJECT(LibGfx CXX ASM)
 
 aux_source_directory(${LibGfx_SOURCE_DIR}/src LibGfxSrc)
 

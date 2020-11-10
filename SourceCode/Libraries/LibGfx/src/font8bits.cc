@@ -3,7 +3,7 @@
 //
 #include <font8bits.h>
 
-static const char f8[128][8] = {
+static constexpr const char f8[][8] = {
         {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00},// U+0000 (nul)
         {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00},// U+0001
         {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00},// U+0002
@@ -196,7 +196,7 @@ static const uint16_t winClose16Bits[16] = {
 
 uint16_t *win_close_16_bits() { return (uint16_t *) winClose16Bits; }
 
-static const uint32_t boot_logo_buffer[256 * 256] = {
+static const int32_t boot_logo_buffer[] = {
         -65536,
         1512736,
         1512736,

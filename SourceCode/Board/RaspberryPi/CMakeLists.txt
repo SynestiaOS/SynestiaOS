@@ -1,4 +1,4 @@
-project(BoardRaspberryPi C ASM)
+project(BoardRaspberryPi CXX ASM)
 
 aux_source_directory(${BoardRaspberryPi_SOURCE_DIR}/src BoardRaspberryPiSrc)
 

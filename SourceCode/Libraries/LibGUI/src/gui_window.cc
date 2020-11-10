@@ -73,7 +73,7 @@ void gui_window_create(GUIWindow *window) {
 
     window->title = "";
 
-    window->children = kvector_allocate();
+    window->children = reinterpret_cast<ListNode *>(kvector_allocate());
     if (window->children == nullptr) {
         LogError("[GUI]: window create failed, unable to allocate children vector\n");
     }
@@ -90,7 +90,7 @@ void gui_window_init(GUIWindow *window, uint32_t x, uint32_t y, const char *titl
 
 void gui_window_add_children(GUIWindow *window, GUIComponent *component) {
     if (window->children != nullptr) {
-        kvector_add(window->children, &(component->node));
+        kvector_add(reinterpret_cast<KernelVector *>(window->children), &(component->node));
     }
 }
 
@@ -118,6 +118,7 @@ void gui_window_draw(GUIWindow *window) {
                                                 window->header.foreground.a << 24 | window->header.background.r << 16 |
                                                         window->header.background.g << 8 | window->header.background.b);
 
+            extern uint16_t *win_app_16_bits();
             uint16_t *bitmap = win_app_16_bits();
             for (uint32_t i = 0; i < 16; i++) {
                 for (uint32_t j = 0; j < 16; j++) {
@@ -146,6 +147,7 @@ void gui_window_draw(GUIWindow *window) {
                 tmp++;
             }
 
+            extern uint16_t *win_min_16_bits();
             // 4. draw header window
             uint16_t *minBitmap = win_min_16_bits();
             for (uint32_t i = 0; i < 16; i++) {
@@ -160,6 +162,7 @@ void gui_window_draw(GUIWindow *window) {
                 }
             }
 
+            extern uint16_t *win_max_16_bits();
             uint16_t *maxBitmap = win_max_16_bits();
             for (uint32_t i = 0; i < 16; i++) {
                 for (uint32_t j = 0; j < 16; j++) {
@@ -172,7 +175,7 @@ void gui_window_draw(GUIWindow *window) {
                     }
                 }
             }
-
+            extern uint16_t *win_close_16_bits();
             uint16_t *closeBitmap = win_close_16_bits();
             for (uint32_t i = 0; i < 16; i++) {
                 for (uint32_t j = 0; j < 16; j++) {
@@ -267,7 +270,7 @@ void gui_window_draw(GUIWindow *window) {
 }
 
 void gui_window_draw_children(GUIWindow *window) {
-    KernelVector *children = window->children;
+    KernelVector *children = reinterpret_cast<KernelVector *>(window->children);
     if (children != nullptr) {
         for (uint32_t i = 0; i < children->index; i++) {
             ListNode *listNode = kvector_get(children, i);

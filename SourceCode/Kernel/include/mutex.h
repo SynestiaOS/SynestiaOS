@@ -19,11 +19,11 @@
         .val = {                                            \
                 .counter = 0,                               \
         },                                                  \
+        .spinLock = SpinLockCreate(), .waitQueue = nullptr, \
         .operations = {                                     \
                 .acquire = mutex_default_acquire,           \
                 .release = mutex_default_release,           \
         },                                                  \
-        .spinLock = SpinLockCreate(), .waitQueue = nullptr, \
     }
 
 typedef void (*MutexAcquire)(struct Mutex *mutex);

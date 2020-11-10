@@ -4,6 +4,7 @@
 
 #include <elf.h>
 #include <log.h>
+#include "stdlib.h"
 
 char *elf_get_target_machine_name(InstructionSet instructionSet) {
     switch (instructionSet) {
@@ -89,12 +90,12 @@ void elf_default_parse(Elf *elf) {
     elf->fileHeader = *(ElfFileHeader *) (elf->data);
     if (elf->fileHeader.magic[0] != 0x7F || elf->fileHeader.magic[1] != 0x45 || elf->fileHeader.magic[2] != 0x4c ||
         elf->fileHeader.magic[3] != 0x46) {
-        LogError("[Elf]: not an elf file.\n");
+//        LogError("[Elf]: not an elf file.\n");
         return ERROR;
     }
 
     if (elf->fileHeader.arch != 1) {
-        LogError("[Elf]: just support 32-bit.\n");
+//        LogError("[Elf]: just support 32-bit.\n");
         return ERROR;
     }
 
