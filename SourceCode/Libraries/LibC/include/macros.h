@@ -2,8 +2,8 @@
 // Created by Shifu Wu  on 2020/11/10.
 //
 
-#ifndef SYNESTIAOS_MACROS_H
-#define SYNESTIAOS_MACROS_H
+#ifndef __LIBRARY_LIBC_MACROS_H
+#define __LIBRARY_LIBC_MACROS_H
 
 #ifdef __cplusplus
 #ifndef EXTERN_C
@@ -11,9 +11,9 @@
 #endif
 #else
 #ifndef EXTERN_C
-#define EXTERN_C extern "C"
+#define EXTERN_C
 #endif
 #endif
 
 
-#endif //SYNESTIAOS_MACROS_H
+#endif //__LIBRARY_LIBC_MACROS_H
