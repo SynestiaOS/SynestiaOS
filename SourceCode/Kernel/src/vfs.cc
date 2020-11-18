@@ -13,6 +13,7 @@
 #include <vfs_dentry.h>
 #include <vfs_inode.h>
 #include <vfs_super_block.h>
+#include <cpu.h>
 
 extern Heap kernelHeap;
 

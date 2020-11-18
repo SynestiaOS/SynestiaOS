@@ -23,6 +23,7 @@
 #include <synestia_os_hal.h>
 #include <vfs.h>
 #include "macros.h"
+#include <cpu.h>
 
 extern uint32_t __HEAP_BEGIN;
 extern char _binary_initrd_img_start[];

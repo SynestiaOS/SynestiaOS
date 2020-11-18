@@ -2,8 +2,8 @@
 // Created by XingfengYang on 2020/6/22.
 //
 
-#ifndef __KERNEL_CACHE_H__
-#define __KERNEL_CACHE_H__
+#ifndef __KERNEL_MMU_H__
+#define __KERNEL_MMU_H__
 
 #define CONFIG_ARM_LPAE 1
 
@@ -17,15 +17,6 @@ static inline uint32_t read_mmfr0(void) {
     asm volatile("mrc p15, 0, %0, c0, c1, 4"
                  : "=r"(mmfr));
     return mmfr;
-}
-
-static inline uint32_t read_cpuid(void) {
-    uint32_t cpuid = 0;
-    asm volatile("mrc p15, #0, r0, c0, c0, #5\n\t"
-                 "and r0, r0, #0xFF\n\t"
-                 "mov %0, r0"
-                 : "=r"(cpuid));
-    return cpuid;
 }
 
 /**
@@ -86,4 +77,4 @@ static inline void write_dacr(uint32_t val) {
                  : "r"(val));
 }
 
-#endif//__KERNEL_CACHE_H__
+#endif//__KERNEL_MMU_H__
