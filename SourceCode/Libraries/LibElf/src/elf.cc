@@ -6,7 +6,7 @@
 #include <log.h>
 #include "stdlib.h"
 
-char *elf_get_target_machine_name(InstructionSet instructionSet) {
+const char *elf_get_target_machine_name(InstructionSet instructionSet) {
     switch (instructionSet) {
         case ARCH_Unknown: {
             return "No specific instruction set";
@@ -85,7 +85,7 @@ char *elf_get_target_machine_name(InstructionSet instructionSet) {
     }
 }
 
-void elf_default_parse(Elf *elf) {
+KernelStatus elf_default_parse(Elf *elf) {
     // because we are in 32 bits mode, so the header is 54 byte
     elf->fileHeader = *(ElfFileHeader *) (elf->data);
     if (elf->fileHeader.magic[0] != 0x7F || elf->fileHeader.magic[1] != 0x45 || elf->fileHeader.magic[2] != 0x4c ||

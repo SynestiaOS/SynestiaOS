@@ -95,7 +95,7 @@ uint32_t *window_filesystem(int args) {
     disable_interrupt();
     if (directoryEntry->children != nullptr) {
         size = klist_size(&directoryEntry->children->list);
-        labels = kernelHeap.operations.alloc(&kernelHeap, size * sizeof(GUILabel));
+        labels = (GUILabel*)kernelHeap.operations.alloc(&kernelHeap, size * sizeof(GUILabel));
         struct DirectoryEntry *pEntry = directoryEntry->children;
         uint32_t y = 0;
         for (uint32_t i = 1; i < size; i++) {

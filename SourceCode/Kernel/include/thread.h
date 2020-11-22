@@ -13,6 +13,7 @@
 #include <stdint.h>
 #include <vfs_dentry.h>
 #include <vmm.h>
+#include <kobject.h>
 
 typedef uint8_t CpuNum;
 typedef uint8_t CpuMask;
@@ -190,6 +191,8 @@ typedef struct Thread {
 
     MemoryStruct memoryStruct;
     FilesStruct filesStruct;
+
+    KernelObject object;
 
 } __attribute__((packed)) Thread;
 
