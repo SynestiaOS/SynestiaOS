@@ -35,14 +35,15 @@ typedef struct SlabOperations{
 
 
 /**
+ * kernelObjects struct:
  *
- * [ThreadObject,Mutex,Semaphore...]
- *     |          |        |
- *   thread1    mutex1  semaphore1
- *     |          |        |
- *   thread2    mutex2  semaphore2
- *     |          |        |
- *    ...        ...      ...
+ * [ThreadObject,   Mutex,    Semaphore   ...]
+ *     |              |           |
+ *   thread1       mutex1     semaphore1
+ *     |              |           |
+ *   thread2       mutex2     semaphore2
+ *     |              |           |
+ *    ...            ...         ...
  *
  *  We can use LRU here to cache our kernel Objects.
  *  Put the most recently released kernel object at the front of the corresponding linked list
@@ -55,6 +56,7 @@ typedef struct Slab {
 
     SlabAllocCallback allocCallback;
     SlabFreeCallback freeCallback;
+
     SlabOperations operations;
     SlabStatistics statistics;
 } Slab;
