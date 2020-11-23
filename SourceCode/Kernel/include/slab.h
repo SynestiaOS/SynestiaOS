@@ -33,11 +33,25 @@ typedef struct SlabOperations{
     SlabOperationSetFreeCallback setFreeCallback;
 } SlabOperations;
 
+
+/**
+ *
+ * [ThreadObject,Mutex,Semaphore...]
+ *     |          |        |
+ *   thread1    mutex1  semaphore1
+ *     |          |        |
+ *   thread2    mutex2  semaphore2
+ *     |          |        |
+ *    ...        ...      ...
+ *
+ *  We can use LRU here to cache our kernel Objects.
+ *  Put the most recently released kernel object at the front of the corresponding linked list
+ */
 typedef struct Slab {
     uint32_t address;
     uint32_t maxSizeLimit;
-    KernelObjectType type;
-    int lastFreed;
+
+    struct KernelObject* kernelObjects;
 
     SlabAllocCallback allocCallback;
     SlabFreeCallback freeCallback;
