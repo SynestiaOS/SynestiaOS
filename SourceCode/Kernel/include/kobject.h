@@ -14,9 +14,16 @@ typedef enum KernelObjectType{
     FILE_DESCRIPTOR,
 } KernelObjectType;
 
+
+typedef enum KernelObjectStatus{
+    USING,
+    FREE,
+} KernelObjectStatus;
+
 typedef struct KernelObject{
     KernelObjectType type;
-    int size;
+    KernelObjectStatus status;
+    struct KernelObject* next;
 } KernelObject;
 
 #endif //__SYNESTIAOS_KOBJECT_H__

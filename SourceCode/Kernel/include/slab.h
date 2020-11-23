@@ -42,7 +42,6 @@ typedef struct Slab {
     SlabAllocCallback allocCallback;
     SlabFreeCallback freeCallback;
     SlabOperations operations;
-
     SlabStatistics statistics;
 } Slab;
 
