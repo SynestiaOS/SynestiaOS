@@ -9,6 +9,8 @@
 #include <type.h>
 #include <kobject.h>
 
+#define SLAB_ARRAY_COUNT 64
+
 typedef void (*SlabAllocCallback)(struct Slab *slab, KernelObjectType type, void *ptr);
 
 typedef void (*SlabFreeCallback)(struct Slab *slab, KernelObjectType type, void *ptr);
@@ -22,8 +24,8 @@ typedef void (*SlabOperationSetAllocCallback)(struct Slab *slab, SlabAllocCallba
 typedef void (*SlabOperationSetFreeCallback)(struct Slab *slab, SlabFreeCallback callback);
 
 typedef struct SlabStatistics {
-    int usedCounts;
-    int restCounts;
+    int used[SLAB_ARRAY_COUNT];
+    int free[SLAB_ARRAY_COUNT];
 } SlabStatistics;
 
 typedef struct SlabOperations{
@@ -37,7 +39,7 @@ typedef struct SlabOperations{
 /**
  * kernelObjects struct:
  *
- * [ThreadObject,   Mutex,    Semaphore   ...]
+ * [ThreadObject,   Mutex,    Semaphore   ...64]
  *     |              |           |
  *   thread1       mutex1     semaphore1
  *     |              |           |
@@ -52,7 +54,7 @@ typedef struct Slab {
     uint32_t address;
     uint32_t maxSizeLimit;
 
-    struct KernelObject* kernelObjects;
+    struct KernelObject kernelObjects[SLAB_ARRAY_COUNT];
 
     SlabAllocCallback allocCallback;
     SlabFreeCallback freeCallback;

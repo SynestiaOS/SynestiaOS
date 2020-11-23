@@ -236,7 +236,6 @@ Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uin
         thread->memoryStruct.heap = kernelHeap;
 
         thread->object.type = KernelObjectType::THREAD;
-        thread->object.size = sizeof(struct Thread);
 
         LogInfo("[Thread]: thread '%s' created.\n", thread->name);
         return thread;
