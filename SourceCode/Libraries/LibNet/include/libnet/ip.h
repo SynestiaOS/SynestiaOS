@@ -7,7 +7,7 @@
 #define SYNESTIAOS_IP_H
 
 
-#include "stdint.h"
+#include "libc/stdint.h"
 
 #define ICMPV4 0x01
 #define IPV4 0x04
