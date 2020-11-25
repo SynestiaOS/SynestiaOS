@@ -8,3 +8,6 @@ mkdir "${BUILD_DIR}"
 cd "${BUILD_DIR}" || exit
 cmake -DCMAKE_TOOLCHAIN_FILE="${BASEDIR}"/../../CMake/ToolchainLinuxArm64.cmake -DARCH=arm64 -DPLATFORM=pi3 "${BASEDIR}/../.."
 VERBOSE=1 make
+
+echo ">>>>>>>>>>>>>>>> RUNNING KERNEL <<<<<<<<<<<<<<<<"
+qemu-system-aarch64 -M raspi3 -kernel ./bin/Kernel.elf -serial mon:stdio -nographic
