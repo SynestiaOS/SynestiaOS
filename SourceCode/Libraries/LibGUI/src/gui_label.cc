@@ -2,11 +2,10 @@
 // Created by XingfengYang on 2020/7/7.
 //
 
-#include <libgfx/gfx2d.h>
-#include <libgui/gui_label.h>
-#include <stdbool.h>
 #include <libc/stdlib.h>
 #include <libc/string.h>
+#include <libgfx/gfx2d.h>
+#include <libgui/gui_label.h>
 
 extern uint32_t GFX2D_BUFFER[1024 * 768];
 

@@ -2,6 +2,8 @@
 // Created by XingfengYang on 2020/7/7.
 //
 
+#include <kernel/log.h>
+#include <libc/stdlib.h>
 #include <libgfx/gfx2d.h>
 #include <libgui/gui_button.h>
 #include <libgui/gui_canvas.h>
@@ -10,10 +12,7 @@
 #include <libgui/gui_panel.h>
 #include <libgui/gui_view3d.h>
 #include <libgui/gui_window.h>
-#include <kernel/log.h>
-#include <math.h>
-#include <stdbool.h>
-#include <libc/stdlib.h>
+#include <libmath/math.h>
 
 extern uint32_t GFX2D_BUFFER[1024 * 768];
 

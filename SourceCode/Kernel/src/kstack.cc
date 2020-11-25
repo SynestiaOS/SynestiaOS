@@ -4,7 +4,6 @@
 #include <kernel/kheap.h>
 #include <kernel/kstack.h>
 #include <kernel/log.h>
-#include <stdbool.h>
 #include <libc/stdlib.h>
 
 extern Heap kernelHeap;

@@ -4,7 +4,6 @@
 
 #include <kernel/log.h>
 #include <kernel/sempahore.h>
-#include <stdbool.h>
 #include <kernel/thread.h>
 
 extern Thread *currentThread;

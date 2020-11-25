@@ -4,9 +4,9 @@
 
 #include <kernel/atomic.h>
 #include <kernel/list.h>
-#include <libc/string.h>
 #include <kernel/vfs_inode.h>
 #include <kernel/vfs_super_block.h>
+#include <libc/string.h>
 
 KernelStatus vfs_inode_default_release(IndexNode *indexNode) {
     // TODO

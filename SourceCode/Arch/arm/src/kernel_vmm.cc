@@ -3,11 +3,11 @@
 //
 
 #include <arm/kernel_vmm.h>
-#include <kernel/log.h>
 #include <arm/mmu.h>
 #include <arm/page.h>
-#include <libc/stdlib.h>
+#include <kernel/log.h>
 #include <kernel/type.h>
+#include <libc/stdlib.h>
 
 extern int __PAGE_TABLE;
 extern PhysicalPageAllocator kernelPageAllocator;

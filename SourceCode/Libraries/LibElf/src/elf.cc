@@ -3,8 +3,8 @@
 //
 
 #include "libc/stdlib.h"
-#include <libelf/elf.h>
 #include <kernel/log.h>
+#include <libelf/elf.h>
 
 const char *elf_get_target_machine_name(InstructionSet instructionSet) {
     switch (instructionSet) {

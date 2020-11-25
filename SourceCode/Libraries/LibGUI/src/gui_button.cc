@@ -3,7 +3,6 @@
 //
 #include <libgfx/gfx2d.h>
 #include <libgui/gui_button.h>
-#include <stdbool.h>
 
 extern uint32_t GFX2D_BUFFER[1024 * 768];
 

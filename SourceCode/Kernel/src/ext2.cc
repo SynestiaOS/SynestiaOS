@@ -6,10 +6,10 @@
 #include <kernel/kheap.h>
 #include <kernel/list.h>
 #include <kernel/log.h>
-#include <libc/stdint.h>
-#include <libc/string.h>
 #include <kernel/vfs_dentry.h>
 #include <kernel/vfs_inode.h>
+#include <libc/stdint.h>
+#include <libc/string.h>
 
 extern Heap kernelHeap;
 

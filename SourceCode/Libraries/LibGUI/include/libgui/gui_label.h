@@ -5,8 +5,8 @@
 #ifndef __LIBRARY_LIBGUI_LABEL_H__
 #define __LIBRARY_LIBGUI_LABEL_H__
 
-#include <libgui/gui_component.h>
 #include <libc/stdint.h>
+#include <libgui/gui_component.h>
 
 typedef struct GUILabel {
     GUIComponent component;

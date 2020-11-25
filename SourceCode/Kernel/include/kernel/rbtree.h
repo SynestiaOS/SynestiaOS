@@ -7,8 +7,8 @@
 
 #include <kernel/kvector.h>
 #include <kernel/list.h>
-#include <libc/stdint.h>
 #include <kernel/type.h>
+#include <libc/stdint.h>
 
 typedef enum NodeColor {
     NODE_RED,

@@ -4,8 +4,7 @@
 #ifndef __LIBRARY_LIBC_STRING_H__
 #define __LIBRARY_LIBC_STRING_H__
 
-#include "macros.h"
-#include <stdbool.h>
+#include "libc/macros.h"
 #include <libc/stdint.h>
 
 char *strcpy(char *des, char *source);

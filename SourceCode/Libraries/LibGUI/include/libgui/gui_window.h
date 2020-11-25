@@ -2,8 +2,8 @@
 // Created by XingfengYang on 2020/7/7.
 //
 
-#include <libgui/gui_component.h>
 #include <kernel/kvector.h>
+#include <libgui/gui_component.h>
 
 #ifndef __LIBRARY_LIBGUI_WINDOW_H__
 #define __LIBRARY_LIBGUI_WINDOW_H__

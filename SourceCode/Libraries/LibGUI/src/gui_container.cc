@@ -2,15 +2,14 @@
 // Created by XingfengYang on 2020/7/7.
 //
 
+#include <kernel/kvector.h>
+#include <kernel/log.h>
+#include <libc/stdlib.h>
 #include <libgfx/gfx2d.h>
 #include <libgui/gui_button.h>
 #include <libgui/gui_container.h>
 #include <libgui/gui_label.h>
 #include <libgui/gui_panel.h>
-#include <kernel/kvector.h>
-#include <kernel/log.h>
-#include <stdbool.h>
-#include <libc/stdlib.h>
 
 extern uint32_t GFX2D_BUFFER[1024 * 768];
 

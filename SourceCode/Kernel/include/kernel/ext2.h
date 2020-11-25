@@ -5,9 +5,9 @@
 #ifndef __KERNEL_FS_EXT2_H__
 #define __KERNEL_FS_EXT2_H__
 
-#include <libc/stdint.h>
 #include <kernel/type.h>
 #include <kernel/vfs_super_block.h>
+#include <libc/stdint.h>
 
 typedef enum Ext2FileSystemStates {
     FILE_SYSTEM_CLEAN = 1,

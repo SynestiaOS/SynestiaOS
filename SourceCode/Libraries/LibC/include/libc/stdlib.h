@@ -1,9 +1,9 @@
 #ifndef __LIBRARY_LIBC_STDLIB_H__
 #define __LIBRARY_LIBC_STDLIB_H__
 
-#include "macros.h"
-#include <stdarg.h>
+#include "libc/macros.h"
 #include <libc/stdint.h>
+#include <stdarg.h>
 
 #define DEFAULT_STRING_LEN 256
 

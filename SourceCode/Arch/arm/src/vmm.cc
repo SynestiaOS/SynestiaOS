@@ -8,8 +8,8 @@
 #include "arm/page.h"
 #include <kernel/log.h>
 #include <kernel/sched.h>
-#include <libc/stdlib.h>
 #include <kernel/type.h>
+#include <libc/stdlib.h>
 
 void virtual_memory_default_allocate_page(VirtualMemory *virtualMemory, uint32_t virtualAddress) {
     uint32_t l1Offset = (virtualAddress >> 30) & 0b11;

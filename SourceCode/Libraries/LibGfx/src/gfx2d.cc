@@ -4,7 +4,6 @@
 
 #include <libgfx/font8bits.h>
 #include <libgfx/gfx2d.h>
-#include <stdbool.h>
 
 uint32_t GFX2D_BUFFER[1024 * 768] = {0xFF};
 

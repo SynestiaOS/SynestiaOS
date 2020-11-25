@@ -8,7 +8,6 @@
 #include <kernel/mutex.h>
 #include <kernel/percpu.h>
 #include <kernel/sched.h>
-#include <stdbool.h>
 #include <kernel/thread.h>
 
 void mutex_default_acquire(Mutex *mutex) {

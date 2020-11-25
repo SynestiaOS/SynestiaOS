@@ -6,8 +6,8 @@
 #define __SYNESTIAOS_SLAB_H__
 
 #include <kernel/kobject.h>
-#include <libc/stdint.h>
 #include <kernel/type.h>
+#include <libc/stdint.h>
 
 #define SLAB_ARRAY_COUNT 64
 

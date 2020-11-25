@@ -17,6 +17,7 @@ target_compile_definitions(${KernelArchUnitTests} PRIVATE "-DENV_KERNEL_UNIT_TES
 target_include_arch_header_files(${KernelArchUnitTests})
 target_include_kernel_header_files(${KernelArchUnitTests})
 target_include_libc_header_files(${KernelArchUnitTests})
+target_include_libmath_header_files(${KernelArchUnitTests})
 
 if (SynestiaPlatform STREQUAL pi2)
     set(boardObj BoardRaspberryPi)
@@ -48,6 +49,7 @@ target_include_tests_header_files(${KernelUnitTestsImg})
 target_include_libc_header_files(${KernelUnitTestsImg})
 target_include_raspberry_pi_header_files(${KernelUnitTestsImg})
 target_include_kernel_header_files(${KernelUnitTestsImg})
+target_include_libmath_header_files(${KernelUnitTestsImg})
 
 target_link_options(${KernelUnitTestsImg} PRIVATE -T ${KernelArchDir}/src/kernel.ld)
 target_link_libraries(${KernelUnitTestsImg} PRIVATE gcc)

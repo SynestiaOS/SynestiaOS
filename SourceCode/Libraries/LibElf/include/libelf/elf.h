@@ -5,8 +5,8 @@
 #ifndef __LIBRARY_LIBELF_ELF_H__
 #define __LIBRARY_LIBELF_ELF_H__
 
-#include <libc/stdint.h>
 #include <kernel/type.h>
+#include <libc/stdint.h>
 
 typedef enum ObjectFileType {
     ET_NONE = 0x00,

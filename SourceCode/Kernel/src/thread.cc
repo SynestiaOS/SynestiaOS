@@ -7,10 +7,10 @@
 #include <kernel/kstack.h>
 #include <kernel/kvector.h>
 #include <kernel/log.h>
-#include <libc/stdlib.h>
-#include <libc/string.h>
 #include <kernel/thread.h>
 #include <kernel/vfs_dentry.h>
+#include <libc/stdlib.h>
+#include <libc/string.h>
 
 extern Heap kernelHeap;
 extern PhysicalPageAllocator kernelPageAllocator;

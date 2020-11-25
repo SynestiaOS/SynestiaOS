@@ -1,10 +1,20 @@
 #include "libc/macros.h"
 #include <arm/cpu.h>
-#include <libelf/elf.h>
+#include <arm/kernel_vmm.h>
+#include <arm/mmu.h>
+#include <arm/page.h>
 #include <kernel/ext2.h>
+#include <kernel/interrupt.h>
+#include <kernel/kheap.h>
+#include <kernel/log.h>
+#include <kernel/sched.h>
+#include <kernel/spinlock.h>
+#include <kernel/vfs.h>
+#include <libc/stdlib.h>
+#include <libc/string.h>
+#include <libelf/elf.h>
 #include <libgfx/font8bits.h>
 #include <libgfx/gfx2d.h>
-#include <raspi2/gpu.h>
 #include <libgui/gui_animation.h>
 #include <libgui/gui_button.h>
 #include <libgui/gui_canvas.h>
@@ -12,18 +22,8 @@
 #include <libgui/gui_panel.h>
 #include <libgui/gui_view3d.h>
 #include <libgui/gui_window.h>
-#include <kernel/interrupt.h>
-#include <arm/kernel_vmm.h>
-#include <kernel/kheap.h>
-#include <kernel/log.h>
-#include <arm/mmu.h>
-#include <arm/page.h>
-#include <kernel/sched.h>
-#include <kernel/spinlock.h>
-#include <libc/stdlib.h>
-#include <libc/string.h>
+#include <raspi2/gpu.h>
 #include <raspi2/synestia_os_hal.h>
-#include <kernel/vfs.h>
 
 extern uint32_t __HEAP_BEGIN;
 extern char _binary_initrd_img_start[];

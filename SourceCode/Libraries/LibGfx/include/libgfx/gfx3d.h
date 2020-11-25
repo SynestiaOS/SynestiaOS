@@ -5,9 +5,9 @@
 #ifndef __LIBRARY_LIBGFX_GL3D_H__
 #define __LIBRARY_LIBGFX_GL3D_H__
 
-#include <libgfx/gfxm.h>
 #include <kernel/kvector.h>
 #include <libc/stdint.h>
+#include <libgfx/gfxm.h>
 
 #define GL_CONSTANT_ATTENUATION 1.0f
 #define GL_LINEAR_ATTENUATION 0

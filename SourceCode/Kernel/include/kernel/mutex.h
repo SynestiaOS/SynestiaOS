@@ -8,7 +8,6 @@
 #include <kernel/atomic.h>
 #include <kernel/kqueue.h>
 #include <kernel/spinlock.h>
-#include <stdbool.h>
 #include <libc/stdint.h>
 
 #define STATE_FREE 0u

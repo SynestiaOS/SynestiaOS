@@ -5,8 +5,8 @@
 #ifndef __LIBRARY_LIBGUI_CONTAINER_H__
 #define __LIBRARY_LIBGUI_CONTAINER_H__
 
-#include <libgui/gui_component.h>
 #include <kernel/kvector.h>
+#include <libgui/gui_component.h>
 
 #define DEFAULT_CONTAINER_WIDTH 300
 #define DEFAULT_CONTAINER_HEIGHT 300

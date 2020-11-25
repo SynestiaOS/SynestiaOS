@@ -2,7 +2,6 @@
 // Created by XingfengYang on 2020/7/30.
 //
 
-#include <stdbool.h>
 #include <libc/stdint.h>
 #include <libc/stdlib.h>
 #include <libc/string.h>
@@ -74,7 +73,7 @@ void memcpy(void *dest, const void *src, uint32_t bytes) {
 
 char *itoa(int num, char *str, int base) {
     int i = 0;
-    _Bool isNegative = false;
+    bool isNegative = false;
 
     if (num == 0) {
         str[i] = '0';

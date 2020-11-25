@@ -5,15 +5,15 @@
 #ifndef __KERNEL_THREAD_H__
 #define __KERNEL_THREAD_H__
 
+#include <arm/vmm.h>
 #include <kernel/kheap.h>
 #include <kernel/kobject.h>
 #include <kernel/kqueue.h>
 #include <kernel/kstack.h>
 #include <kernel/list.h>
 #include <kernel/rbtree.h>
-#include <libc/stdint.h>
 #include <kernel/vfs_dentry.h>
-#include <arm/vmm.h>
+#include <libc/stdint.h>
 
 typedef uint8_t CpuNum;
 typedef uint8_t CpuMask;

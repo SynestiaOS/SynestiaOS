@@ -2,9 +2,9 @@
 // Created by XingfengYang on 2020/6/12.
 //
 
+#include <arm/page.h>
 #include <kernel/kheap.h>
 #include <kernel/log.h>
-#include <arm/page.h>
 #include <kernel/sched.h>
 #include <libc/stdlib.h>
 #include <libc/string.h>
