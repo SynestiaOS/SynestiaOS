@@ -2,7 +2,6 @@
 .DS_Store
 cmake-build-debug/
 Build/
-GenDocs/html/
-GenDocs/xml/
 SourceCode/Board/MaixGo/
 devlog/
+Scripts/build*
