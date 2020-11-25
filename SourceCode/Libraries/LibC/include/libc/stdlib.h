@@ -2,14 +2,14 @@
 #define __LIBRARY_LIBC_STDLIB_H__
 
 #include "libc/macros.h"
+#include "libc/stdarg.h"
 #include "libc/stdint.h"
-#include <stdarg.h>
 
 #define DEFAULT_STRING_LEN 256
 
 void reverse(char str[], int length);
 
-EXTERN_C void memclean(uint8_t *start, const uint8_t *end);
+extern_C void memclean(uint8_t *start, const uint8_t *end);
 
 void bzero(void *s1, uint32_t n);
 

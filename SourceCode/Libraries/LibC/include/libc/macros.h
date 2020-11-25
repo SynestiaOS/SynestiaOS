@@ -11,12 +11,12 @@
 #endif
 
 #ifdef __cplusplus
-#ifndef EXTERN_C
-#define EXTERN_C extern "C"
+#ifndef extern_C
+#define extern_C extern "C"
 #endif
 #else
-#ifndef EXTERN_C
-#define EXTERN_C
+#ifndef extern_C
+#define extern_C
 #endif
 #endif
 

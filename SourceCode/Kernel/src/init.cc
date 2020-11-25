@@ -198,7 +198,7 @@ void renderBootScreen() {
     gui_label_draw(&labelCopyright);
 }
 
-EXTERN_C void kernel_main(void) {
+extern_C void kernel_main(void) {
     if (read_cpuid() == 0) {
         bootSpinLock.operations.acquire(&bootSpinLock);
         init_bsp();

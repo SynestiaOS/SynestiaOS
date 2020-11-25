@@ -53,11 +53,11 @@ void disable_interrupt() {
     }
 }
 
-EXTERN_C void __attribute__((interrupt("UNDEF"))) undefined_instruction_handler(void) {}
+extern_C void __attribute__((interrupt("UNDEF"))) undefined_instruction_handler(void) {}
 
 extern SysCall sys_call_table[];
 
-EXTERN_C int software_interrupt_handler() {
+extern_C int software_interrupt_handler() {
     volatile int r0, r1, r2, r3, r4, sysCallNo;
     __asm__ volatile("mov %0,r1\n\t"
                      "mov %1,r2\n\t"
@@ -72,9 +72,9 @@ EXTERN_C int software_interrupt_handler() {
     return sys_call_table[sysCallNo](r0, r1, r2, r3, r4);
 }
 
-EXTERN_C void __attribute__((interrupt("ABORT"))) prefetch_abort_handler(void) {}
+extern_C void __attribute__((interrupt("ABORT"))) prefetch_abort_handler(void) {}
 
-EXTERN_C void data_abort_handler() {
+extern_C void data_abort_handler() {
     volatile uint32_t r0, r1, r2, r3, r4, r5;
     __asm__ volatile("mov %0,r0\n\t"
                      "mov %1,r1\n\t"
@@ -90,7 +90,7 @@ EXTERN_C void data_abort_handler() {
     do_page_fault(r3);
 }
 
-EXTERN_C void unused_handler(void) {}
+extern_C void unused_handler(void) {}
 
 #define IRQ_IS_BASIC(x) ((x >= 64))
 #define IRQ_IS_GPU2(x) ((x >= 32 && x < 64))
@@ -127,7 +127,7 @@ void register_interrupt_handler(uint32_t interrupt_no, void (*interrupt_handler_
     }
 }
 
-EXTERN_C void interrupt_handler(void) {
+extern_C void interrupt_handler(void) {
     for (uint32_t interrupt_no = 0; interrupt_no < IRQ_NUMS; interrupt_no++) {
         if (irq_handlers[interrupt_no].registered == 1) {
             LogInfo("[Interrupt]: interrupt '%d' triggered.\n", interrupt_no);
@@ -142,7 +142,7 @@ EXTERN_C void interrupt_handler(void) {
     }
 }
 
-EXTERN_C void __attribute__((interrupt("FIQ"))) fast_interrupt_handler(void) {}
+extern_C void __attribute__((interrupt("FIQ"))) fast_interrupt_handler(void) {}
 
 TimerHandler *timerHandler = nullptr;
 
