@@ -2,7 +2,7 @@
 // Created by XingfengYang on 2020/7/7.
 //
 
-#include <libgui/gui_component.h>
+#include "libgui/gui_component.h"
 
 Position PositionXY(uint32_t x, uint32_t y) {
     Position p = {x, y};

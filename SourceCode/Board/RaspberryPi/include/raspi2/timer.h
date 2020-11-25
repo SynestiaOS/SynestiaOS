@@ -1,8 +1,8 @@
 #ifndef __BOARD_RASP_TIMER_H__
 #define __BOARD_RASP_TIMER_H__
 
-#include <libc/stdint.h>
-#include <raspi2/raspi.h>
+#include "libc/stdint.h"
+#include "raspi2/raspi.h"
 
 #define SYSTEM_TIMER_BASE (SYSTEM_TIMER_OFFSET + PERIPHERAL_BASE)
 #define CORE0_TIMER_IRQCNTL 0x40000040

@@ -5,8 +5,8 @@
 #ifndef __BOARD_RASP_MAILBOX_H__
 #define __BOARD_RASP_MAILBOX_H__
 
-#include <libc/stdint.h>
-#include <raspi2/raspi.h>
+#include "libc/stdint.h"
+#include "raspi2/raspi.h"
 
 /**
  *        0       4       8      12      16      20      24      28      32

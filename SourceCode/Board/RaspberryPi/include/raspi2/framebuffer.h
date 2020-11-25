@@ -4,7 +4,7 @@
 #ifndef __BOARD_RASP_FRAMEBUFFER_H__
 #define __BOARD_RASP_FRAMEBUFFER_H__
 
-#include <libc/stdint.h>
+#include "libc/stdint.h"
 
 uint32_t framebuffer_init(void);
 

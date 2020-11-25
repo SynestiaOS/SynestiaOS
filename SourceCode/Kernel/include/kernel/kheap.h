@@ -5,9 +5,9 @@
 #ifndef __KERNEL_KHEAP_H__
 #define __KERNEL_KHEAP_H__
 
-#include <kernel/list.h>
-#include <kernel/type.h>
-#include <libc/stdint.h>
+#include "kernel/list.h"
+#include "kernel/type.h"
+#include "libc/stdint.h"
 
 typedef void (*HeapAllocCallback)(struct Heap *heap, void *ptr, uint32_t size);
 

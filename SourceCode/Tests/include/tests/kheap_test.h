@@ -5,7 +5,7 @@
 #ifndef __KERNEL_KHEAP_TEST_H__
 #define __KERNEL_KHEAP_TEST_H__
 
-#include <kernel/kheap.h>
+#include "kernel/kheap.h"
 
 extern uint32_t __HEAP_BEGIN;
 Heap testHeap;

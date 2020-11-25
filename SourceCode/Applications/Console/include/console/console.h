@@ -5,7 +5,7 @@
 #ifndef __APPLICATIONS_CONSOLE_H__
 #define __APPLICATIONS_CONSOLE_H__
 
-#include <libc/stdint.h>
+#include "libc/stdint.h"
 
 typedef struct Console {
     char *buffer;

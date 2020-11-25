@@ -5,10 +5,10 @@
 #ifndef __KERNEL_VFS_INDEX_NODE_H__
 #define __KERNEL_VFS_INDEX_NODE_H__
 
-#include <kernel/atomic.h>
-#include <kernel/list.h>
-#include <kernel/mutex.h>
-#include <kernel/spinlock.h>
+#include "kernel/atomic.h"
+#include "kernel/list.h"
+#include "kernel/mutex.h"
+#include "kernel/spinlock.h"
 
 typedef enum IndexNodeType {
     INDEX_NODE_DIRECTORY,

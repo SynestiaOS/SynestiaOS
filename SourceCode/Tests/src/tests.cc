@@ -3,17 +3,17 @@
 //
 
 #include "libc/macros.h"
-#include <kernel/kheap.h>
+#include "kernel/kheap.h"
 
-#include <tests/tests_lib.h>
+#include "tests/tests_lib.h"
 
-#include <tests/kheap_test.h>
-#include <tests/klist_test.h>
-#include <tests/kstack_test.h>
-#include <tests/kvector_test.h>
+#include "tests/kheap_test.h"
+#include "tests/klist_test.h"
+#include "tests/kstack_test.h"
+#include "tests/kvector_test.h"
 
-#include <tests/atomic_test.h>
-#include <tests/libmath_test.h>
+#include "tests/atomic_test.h"
+#include "tests/libmath_test.h"
 
 extern uint32_t __HEAP_BEGIN;
 extern Heap testHeap;

@@ -3,13 +3,13 @@
 //
 
 #include "arm/mmu.h"
-#include <arm/cpu.h>
-#include <kernel/interrupt.h>
-#include <kernel/log.h>
-#include <kernel/percpu.h>
-#include <kernel/sched.h>
-#include <kernel/spinlock.h>
-#include <libc/stdlib.h>
+#include "arm/cpu.h"
+#include "kernel/interrupt.h"
+#include "kernel/log.h"
+#include "kernel/percpu.h"
+#include "kernel/sched.h"
+#include "kernel/spinlock.h"
+#include "libc/stdlib.h"
 
 uint32_t PRIORITY_2_WEIGHT[40] = {
         88761,

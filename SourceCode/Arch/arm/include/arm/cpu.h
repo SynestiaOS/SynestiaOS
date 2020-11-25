@@ -5,7 +5,7 @@
 #ifndef KERNEL_CPU_H
 #define KERNEL_CPU_H
 
-#include <libc/stdint.h>
+#include "libc/stdint.h"
 
 static inline uint32_t read_cpuid(void) {
     uint32_t cpuid = 0;

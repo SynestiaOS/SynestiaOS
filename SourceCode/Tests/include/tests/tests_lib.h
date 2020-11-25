@@ -5,7 +5,7 @@
 #ifndef __KERNEL_TEST_H__
 #define __KERNEL_TEST_H__
 
-#include <libc/stdlib.h>
+#include "libc/stdlib.h"
 
 static uint32_t __test_all_asserts = 0;
 static uint32_t __test_failed_asserts = 0;

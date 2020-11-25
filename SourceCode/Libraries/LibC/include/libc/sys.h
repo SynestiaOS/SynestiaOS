@@ -4,7 +4,7 @@
 #ifndef __LIBRARY_LIBC_H__
 #define __LIBRARY_LIBC_H__
 
-#include <libc/stdint.h>
+#include "libc/stdint.h"
 
 #define asmlinkage __attribute__((regparm(0)))
 

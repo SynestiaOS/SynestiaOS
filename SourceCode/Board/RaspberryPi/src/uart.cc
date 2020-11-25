@@ -1,7 +1,7 @@
-#include <libc/stdint.h>
-#include <raspi2/uart.h>
+#include "libc/stdint.h"
+#include "raspi2/uart.h"
 
-#include <raspi2/raspi.h>
+#include "raspi2/raspi.h"
 
 void register_interrupt_handler(uint32_t interrupt_no, void (*interrupt_handler_func)(void),
                                 void (*interrupt_clear_func)(void));

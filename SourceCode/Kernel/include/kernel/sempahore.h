@@ -5,10 +5,10 @@
 #ifndef __KERNEL_SEMAPHORE_H__
 #define __KERNEL_SEMAPHORE_H__
 
-#include <kernel/atomic.h>
-#include <kernel/kqueue.h>
-#include <kernel/spinlock.h>
-#include <libc/stdint.h>
+#include "kernel/atomic.h"
+#include "kernel/kqueue.h"
+#include "kernel/spinlock.h"
+#include "libc/stdint.h"
 
 #define SemaphoreCreate()                                    \
     {                                                        \

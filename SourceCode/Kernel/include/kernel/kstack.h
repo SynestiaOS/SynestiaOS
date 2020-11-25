@@ -6,7 +6,7 @@
 #define __KERNEL_KSTACK_H__
 
 #include "kernel/type.h"
-#include <libc/stdint.h>
+#include "libc/stdint.h"
 
 #define DEFAULT_KERNEL_STACK_SIZE 32 * KB
 

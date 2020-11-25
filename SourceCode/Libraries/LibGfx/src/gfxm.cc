@@ -3,7 +3,7 @@
 //
 
 #include "libmath/math.h"
-#include <libgfx/gfxm.h>
+#include "libgfx/gfxm.h"
 
 Vec3D gfxm_vector_add(Vec3D v1, Vec3D v2) {
     Vec3D vec;

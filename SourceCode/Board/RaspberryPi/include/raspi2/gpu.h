@@ -5,7 +5,7 @@
 #ifndef __BOARD_RASP_GPU_H__
 #define __BOARD_RASP_GPU_H__
 
-#include <libc/stdint.h>
+#include "libc/stdint.h"
 
 #define CHAR_WIDTH 8
 #define CHAR_HEIGHT 8

@@ -3,17 +3,17 @@
 //
 
 #include "arm/mmu.h"
-#include <arm/cpu.h>
-#include <kernel/ext2.h>
-#include <kernel/kheap.h>
-#include <kernel/log.h>
-#include <kernel/percpu.h>
-#include <kernel/vfs.h>
-#include <kernel/vfs_dentry.h>
-#include <kernel/vfs_inode.h>
-#include <kernel/vfs_super_block.h>
-#include <libc/string.h>
-#include <raspi2/uart.h>
+#include "arm/cpu.h"
+#include "kernel/ext2.h"
+#include "kernel/kheap.h"
+#include "kernel/log.h"
+#include "kernel/percpu.h"
+#include "kernel/vfs.h"
+#include "kernel/vfs_dentry.h"
+#include "kernel/vfs_inode.h"
+#include "kernel/vfs_super_block.h"
+#include "libc/string.h"
+#include "raspi2/uart.h"
 
 extern Heap kernelHeap;
 

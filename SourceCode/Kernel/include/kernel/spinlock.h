@@ -5,7 +5,7 @@
 #ifndef __KERNEL_SPINLOCK_H__
 #define __KERNEL_SPINLOCK_H__
 
-#include <kernel/atomic.h>
+#include "kernel/atomic.h"
 
 #define SpinLockCreate()                             \
     {                                                \

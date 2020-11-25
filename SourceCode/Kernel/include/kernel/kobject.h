@@ -5,7 +5,7 @@
 #ifndef __SYNESTIAOS_KOBJECT_H__
 #define __SYNESTIAOS_KOBJECT_H__
 
-#include <libc/stdint.h>
+#include "libc/stdint.h"
 
 typedef enum KernelObjectType {
     THREAD,

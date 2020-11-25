@@ -5,7 +5,7 @@
 #ifndef __LIBRARY_LIBGUI_CANVAS_H__
 #define __LIBRARY_LIBGUI_CANVAS_H__
 
-#include <libgui/gui_component.h>
+#include "libgui/gui_component.h"
 
 #define DEFAULT_CANVAS_WIDTH 200
 #define DEFAULT_CANVAS_HEIGHT 150

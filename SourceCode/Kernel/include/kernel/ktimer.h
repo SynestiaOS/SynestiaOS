@@ -5,7 +5,7 @@
 #ifndef __KERNEL_KTIMER_H__
 #define __KERNEL_KTIMER_H__
 
-#include <libc/stdint.h>
+#include "libc/stdint.h"
 
 uint64_t ktimer_sys_runtime_tick(uint64_t tickIntreval);
 

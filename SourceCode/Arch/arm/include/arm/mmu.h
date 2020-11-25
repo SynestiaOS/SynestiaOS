@@ -7,7 +7,7 @@
 
 #define CONFIG_ARM_LPAE 1
 
-#include <libc/stdint.h>
+#include "libc/stdint.h"
 
 /**
  * read memory model feature register 0 (MMFR0)

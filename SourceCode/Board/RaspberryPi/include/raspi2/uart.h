@@ -1,7 +1,7 @@
 #ifndef __BOARD_RASP_UART_H__
 #define __BOARD_RASP_UART_H__
 
-#include <libc/stdint.h>
+#include "libc/stdint.h"
 
 #define DEFAULT_UART_CLK (3 * 1000000)
 #define DEFAULT_BAUD 115200

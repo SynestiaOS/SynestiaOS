@@ -2,10 +2,10 @@
 // Created by XingfengYang on 2020/7/7.
 //
 
-#include <kernel/kheap.h>
-#include <kernel/log.h>
-#include <raspi2/framebuffer.h>
-#include <raspi2/mailbox.h>
+#include "kernel/kheap.h"
+#include "kernel/log.h"
+#include "raspi2/framebuffer.h"
+#include "raspi2/mailbox.h"
 
 uint32_t pitch;
 uint8_t *lfb;

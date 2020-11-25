@@ -1,8 +1,8 @@
-#include <kernel/log.h>
-#include <libc/stdlib.h>
-#include <raspi2/synestia_os_hal.h>
-#include <raspi2/timer.h>
-#include <raspi2/uart.h>
+#include "kernel/log.h"
+#include "libc/stdlib.h"
+#include "raspi2/synestia_os_hal.h"
+#include "raspi2/timer.h"
+#include "raspi2/uart.h"
 
 void init_bsp(void) {
     LogInfo("[Device]: uart_init...\n");

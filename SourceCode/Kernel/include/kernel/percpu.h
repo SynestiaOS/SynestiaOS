@@ -5,9 +5,9 @@
 #ifndef __KERNEL_PRECPU_H__
 #define __KERNEL_PRECPU_H__
 
-#include <kernel/kqueue.h>
-#include <kernel/rbtree.h>
-#include <kernel/thread.h>
+#include "kernel/kqueue.h"
+#include "kernel/rbtree.h"
+#include "kernel/thread.h"
 
 #define CPU_EXISTS_NUM 4
 

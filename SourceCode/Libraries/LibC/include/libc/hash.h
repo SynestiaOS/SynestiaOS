@@ -4,7 +4,7 @@
 #ifndef __LIBRARY_LIBC_HASH_H__
 #define __LIBRARY_LIBC_HASH_H__
 
-#include <libc/stdint.h>
+#include "libc/stdint.h"
 
 uint32_t adler32(const char *buf, uint32_t buflength);
 

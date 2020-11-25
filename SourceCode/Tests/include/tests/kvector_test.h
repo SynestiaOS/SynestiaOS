@@ -5,7 +5,7 @@
 #ifndef __KERNEL_KVECTOR_TEST_H__
 #define __KERNEL_KVECTOR_TEST_H__
 
-#include <kernel/kvector.h>
+#include "kernel/kvector.h"
 
 extern uint32_t __HEAP_BEGIN;
 

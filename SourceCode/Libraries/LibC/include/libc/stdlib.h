@@ -2,7 +2,7 @@
 #define __LIBRARY_LIBC_STDLIB_H__
 
 #include "libc/macros.h"
-#include <libc/stdint.h>
+#include "libc/stdint.h"
 #include <stdarg.h>
 
 #define DEFAULT_STRING_LEN 256

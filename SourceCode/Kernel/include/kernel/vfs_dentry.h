@@ -5,10 +5,10 @@
 #ifndef __KERNEL_VFS_DIRECTORY_ENTRY_H__
 #define __KERNEL_VFS_DIRECTORY_ENTRY_H__
 
-#include <kernel/atomic.h>
-#include <kernel/list.h>
-#include <kernel/mutex.h>
-#include <kernel/spinlock.h>
+#include "kernel/atomic.h"
+#include "kernel/list.h"
+#include "kernel/mutex.h"
+#include "kernel/spinlock.h"
 
 typedef uint64_t (*DirectoryEntryHashOperation)(struct DirectoryEntry *directoryEntry);
 

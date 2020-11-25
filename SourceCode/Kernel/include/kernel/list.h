@@ -5,8 +5,8 @@
 #ifndef __KERNEL_LIST_H__
 #define __KERNEL_LIST_H__
 
-#include <kernel/type.h>
-#include <libc/stdint.h>
+#include "kernel/type.h"
+#include "libc/stdint.h"
 
 #define offsetOf(type, member) (char *) (&(((type *) 0)->member))
 #define getNode(ptr, type, member) ((type *) ((char *) (ptr) - (char *) (&(((type *) 0)->member))))

@@ -5,10 +5,10 @@
 #ifndef __KERNEL_MUTEX_H__
 #define __KERNEL_MUTEX_H__
 
-#include <kernel/atomic.h>
-#include <kernel/kqueue.h>
-#include <kernel/spinlock.h>
-#include <libc/stdint.h>
+#include "kernel/atomic.h"
+#include "kernel/kqueue.h"
+#include "kernel/spinlock.h"
+#include "libc/stdint.h"
 
 #define STATE_FREE 0u
 #define STATE_CONTESTED 1u

@@ -5,6 +5,6 @@
 #ifndef __APPLICATIONS_TEST_APP_H__
 #define __APPLICATIONS_TEST_APP_H__
 
-#include <libc/stdint.h>
+#include "libc/stdint.h"
 
 #endif//__APPLICATIONS_TEST_APP_H__

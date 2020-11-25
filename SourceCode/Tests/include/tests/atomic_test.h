@@ -1,7 +1,7 @@
 //
 // Created by XingfengYang on 2020/7/21.
 //
-#include <kernel/atomic.h>
+#include "kernel/atomic.h"
 
 Atomic atomic;
 

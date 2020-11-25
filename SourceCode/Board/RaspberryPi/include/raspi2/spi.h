@@ -5,7 +5,7 @@
 #ifndef __BOARD_RASP_SPI_H__
 #define __BOARD_RASP_SPI_H__
 
-#include <libc/stdint.h>
+#include "libc/stdint.h"
 
 #define SPI0 0x7E204000
 #define SPIO_CS SPI0 + 0x0

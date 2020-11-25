@@ -2,7 +2,7 @@
 // Created by XingfengYang on 2020/7/7.
 //
 
-#include <libc/stdint.h>
+#include "libc/stdint.h"
 
 #ifndef __LIBRARY_LIBGFX_GL2D_H__
 #define __LIBRARY_LIBGFX_GL2D_H__

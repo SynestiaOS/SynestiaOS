@@ -5,8 +5,8 @@
 #ifndef __KERNEL_SCHED_H__
 #define __KERNEL_SCHED_H__
 
-#include <kernel/thread.h>
-#include <libc/stdint.h>
+#include "kernel/thread.h"
+#include "libc/stdint.h"
 
 KernelStatus schd_init(void);
 

@@ -5,7 +5,7 @@
 #ifndef __KERNEL_ATOMIC_H__
 #define __KERNEL_ATOMIC_H__
 
-#include <libc/stdint.h>
+#include "libc/stdint.h"
 
 typedef struct Atomic {
     volatile uint32_t counter;

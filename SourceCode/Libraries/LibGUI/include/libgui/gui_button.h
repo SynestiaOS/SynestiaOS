@@ -5,7 +5,7 @@
 #ifndef __LIBRARY_LIBGUI_BUTTON_H__
 #define __LIBRARY_LIBGUI_BUTTON_H__
 
-#include <libgui/gui_component.h>
+#include "libgui/gui_component.h"
 
 typedef struct GUIButton {
     GUIComponent component;

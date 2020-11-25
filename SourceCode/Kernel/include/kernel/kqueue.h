@@ -1,9 +1,9 @@
 #ifndef __KERNEL_RINGBUFFER_H__
 #define __KERNEL_RINGBUFFER_H__
 
-#include <kernel/list.h>
-#include <kernel/type.h>
-#include <libc/stdint.h>
+#include "kernel/list.h"
+#include "kernel/type.h"
+#include "libc/stdint.h"
 
 typedef ListNode KQueue;
 

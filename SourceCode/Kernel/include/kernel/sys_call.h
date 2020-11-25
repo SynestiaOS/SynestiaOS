@@ -4,8 +4,8 @@
 #ifndef __KERNEL_SYSCALL_H__
 #define __KERNEL_SYSCALL_H__
 
-#include <kernel/type.h>
-#include <libc/stdint.h>
+#include "kernel/type.h"
+#include "libc/stdint.h"
 
 uint32_t sys_restart_syscall();
 

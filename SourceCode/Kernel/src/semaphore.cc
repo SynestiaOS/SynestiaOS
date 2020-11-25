@@ -2,9 +2,9 @@
 // Created by XingfengYang on 2020/7/17.
 //
 
-#include <kernel/log.h>
-#include <kernel/sempahore.h>
-#include <kernel/thread.h>
+#include "kernel/log.h"
+#include "kernel/sempahore.h"
+#include "kernel/thread.h"
 
 extern Thread *currentThread;
 

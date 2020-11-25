@@ -5,8 +5,8 @@
 #ifndef __LIBRARY_LIBGUI_VIEW_3D_H__
 #define __LIBRARY_LIBGUI_VIEW_3D_H__
 
-#include <libgfx/gfx3d.h>
-#include <libgui/gui_component.h>
+#include "libgfx/gfx3d.h"
+#include "libgui/gui_component.h"
 
 #define DEFAULT_VIEW3D_WIDTH 200
 #define DEFAULT_VIEW3D_HEIGHT 150

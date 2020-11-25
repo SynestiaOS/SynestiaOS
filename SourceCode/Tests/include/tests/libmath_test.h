@@ -4,7 +4,7 @@
 #ifndef __KERNEL_MATH_TEST_H__
 #define __KERNEL_MATH_TEST_H__
 
-#include <libmath/math.h>
+#include "libmath/math.h"
 
 void should_math_sinf() {
     float x = sinf(60);

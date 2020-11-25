@@ -5,7 +5,7 @@
 #ifndef __BOARD_RASP_GPIO_H__
 #define __BOARD_RASP_GPIO_H__
 
-#include <raspi2/raspi.h>
+#include "raspi2/raspi.h"
 
 #define GPIO_BASE (PERIPHERAL_BASE | GPIO_OFFSET)
 /*

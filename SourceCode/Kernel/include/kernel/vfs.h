@@ -5,12 +5,12 @@
 #ifndef __KERNEL_VFS_H__
 #define __KERNEL_VFS_H__
 
-#include <kernel/atomic.h>
-#include <kernel/kvector.h>
-#include <kernel/list.h>
-#include <kernel/mutex.h>
-#include <kernel/spinlock.h>
-#include <kernel/vfs_super_block.h>
+#include "kernel/atomic.h"
+#include "kernel/kvector.h"
+#include "kernel/list.h"
+#include "kernel/mutex.h"
+#include "kernel/spinlock.h"
+#include "kernel/vfs_super_block.h"
 
 typedef SuperBlock *(*VFSOperationMount)(struct VFS *vfs, const char *name, FileSystemType type, void *data);
 

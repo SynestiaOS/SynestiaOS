@@ -5,7 +5,7 @@
 #ifndef __KERNEL_KSTACK_TEST_H__
 #define __KERNEL_KSTACK_TEST_H__
 
-#include <kernel/kstack.h>
+#include "kernel/kstack.h"
 
 void should_kstack_create() {
     KernelStack *stack = kstack_allocate();

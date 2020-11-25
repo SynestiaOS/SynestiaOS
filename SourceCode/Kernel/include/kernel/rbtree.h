@@ -5,10 +5,10 @@
 #ifndef __KERNEL_RBTREE_H__
 #define __KERNEL_RBTREE_H__
 
-#include <kernel/kvector.h>
-#include <kernel/list.h>
-#include <kernel/type.h>
-#include <libc/stdint.h>
+#include "kernel/kvector.h"
+#include "kernel/list.h"
+#include "kernel/type.h"
+#include "libc/stdint.h"
 
 typedef enum NodeColor {
     NODE_RED,

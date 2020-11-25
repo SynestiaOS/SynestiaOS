@@ -5,8 +5,8 @@
 #ifndef __KERNEL_VECTOR_H__
 #define __KERNEL_VECTOR_H__
 
-#include <kernel/list.h>
-#include <kernel/type.h>
+#include "kernel/list.h"
+#include "kernel/type.h"
 
 #define DEFAULT_VECTOR_SIZE 12
 

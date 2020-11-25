@@ -1,7 +1,7 @@
 #ifndef __KERNEL_IO_H__
 #define __KERNEL_IO_H__
 
-#include <libc/stdint.h>
+#include "libc/stdint.h"
 
 void io_writeb(uint8_t val, void *addr);
 

@@ -5,7 +5,7 @@
 #define __LIBRARY_LIBC_STRING_H__
 
 #include "libc/macros.h"
-#include <libc/stdint.h>
+#include "libc/stdint.h"
 
 char *strcpy(char *des, char *source);
 

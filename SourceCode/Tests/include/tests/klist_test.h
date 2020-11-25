@@ -5,7 +5,7 @@
 #ifndef __KERNEL_KLIST_TEST_H__
 #define __KERNEL_KLIST_TEST_H__
 
-#include <kernel/list.h>
+#include "kernel/list.h"
 
 void should_klist_insert() {
     ListNode list;

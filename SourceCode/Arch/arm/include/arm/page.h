@@ -5,8 +5,8 @@
 #ifndef __KERNEL_PAGE_H__
 #define __KERNEL_PAGE_H__
 
-#include <kernel/type.h>
-#include <libc/stdint.h>
+#include "kernel/type.h"
+#include "libc/stdint.h"
 
 #define KERNEL_L1PT_NUMBER 4
 #define KERNEL_L2PT_NUMBER 512
