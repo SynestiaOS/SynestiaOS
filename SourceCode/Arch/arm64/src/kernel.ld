@@ -10,7 +10,7 @@ SECTIONS
         KEEP(*(.text.boot))
         *(.text)
     }
-    . = ALIGN(4096);
+    . = ALIGN(8);
     __text_end = .;
 
     __rodata_start = .;
@@ -18,7 +18,7 @@ SECTIONS
     {
         *(.rodata)
     }
-    . = ALIGN(4096);
+    . = ALIGN(8);
     __rodata_end = .;
 
     __data_start = .;
@@ -26,7 +26,7 @@ SECTIONS
     {
         *(.data)
     }
-    . = ALIGN(4096);
+    . = ALIGN(8);
     __data_end = .;
 
     __bss_start = .;
@@ -35,25 +35,6 @@ SECTIONS
         bss = .;
         *(.bss)
     }
-    . = ALIGN(4096);
+    . = ALIGN(8);
     __bss_end = .;
-
-    . = 0x8000 + __bss_end;
-    __svc_stack = .;
-
-    . = 0x8000 + __svc_stack;
-    __irq_stack = .;
-
-    . = 0x8000 + __irq_stack;
-    __fiq_stack = .;
-
-    . = 0x8000 + __fiq_stack;
-    __sys_stack = .;
-
-    __end_stack = .;
-
-    __PAGE_TABLE = .;
-    . = 0x805000 + __PAGE_TABLE;
-
-    __HEAP_BEGIN = .;
 }
