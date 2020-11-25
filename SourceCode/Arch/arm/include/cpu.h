@@ -12,9 +12,9 @@ static inline uint32_t read_cpuid(void) {
     asm volatile("mrc p15, #0, r0, c0, c0, #5\n\t"
                  "and r0, r0, #0xFF\n\t"
                  "mov %0, r0"
-    : "=r"(cpuid));
+                 : "=r"(cpuid));
     return cpuid;
 }
 
 
-#endif //KERNEL_CPU_H
+#endif//KERNEL_CPU_H

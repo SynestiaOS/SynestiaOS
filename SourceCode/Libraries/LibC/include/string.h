@@ -4,9 +4,9 @@
 #ifndef __LIBRARY_LIBC_STRING_H__
 #define __LIBRARY_LIBC_STRING_H__
 
+#include "macros.h"
 #include <stdbool.h>
 #include <stdint.h>
-#include "macros.h"
 
 char *strcpy(char *des, char *source);
 

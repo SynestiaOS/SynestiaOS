@@ -124,7 +124,7 @@ Thread *thread_default_copy(Thread *thread, CloneFlags cloneFlags, uint32_t heap
         LogInfo("[Thread]: Clone VMM: '%s'.\n", p->name);
         p->memoryStruct.virtualMemory.physicalPageAllocator = thread->memoryStruct.virtualMemory.physicalPageAllocator;
         p->memoryStruct.virtualMemory.operations = thread->memoryStruct.virtualMemory.operations;
-        p->memoryStruct.heap =thread->memoryStruct.heap;
+        p->memoryStruct.heap = thread->memoryStruct.heap;
     } else {
         LogInfo("[Thread]: Create new vmm: '%s'.\n", p->name);
         KernelStatus vmmCreateStatus = vmm_create(&p->memoryStruct.virtualMemory, &userspacePageAllocator);

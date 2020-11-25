@@ -5,9 +5,9 @@
 #ifndef __SYNESTIAOS_SLAB_H__
 #define __SYNESTIAOS_SLAB_H__
 
+#include <kobject.h>
 #include <stdint.h>
 #include <type.h>
-#include <kobject.h>
 
 #define SLAB_ARRAY_COUNT 64
 
@@ -28,7 +28,7 @@ typedef struct SlabStatistics {
     int free[SLAB_ARRAY_COUNT];
 } SlabStatistics;
 
-typedef struct SlabOperations{
+typedef struct SlabOperations {
     SlabOperationAlloc alloc;
     SlabOperationFree free;
     SlabOperationSetAllocCallback setAllocCallback;
@@ -65,4 +65,4 @@ typedef struct Slab {
 
 KernelStatus slab_create(Slab *slab, uint32_t addr, uint32_t size);
 
-#endif //__SYNESTIAOS_SLAB_H__
+#endif//__SYNESTIAOS_SLAB_H__

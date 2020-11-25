@@ -2,8 +2,8 @@
 // Created by XingfengYang on 2020/7/7.
 //
 
-#include <gfxm.h>
 #include "math.h"
+#include <gfxm.h>
 
 Vec3D gfxm_vector_add(Vec3D v1, Vec3D v2) {
     Vec3D vec;

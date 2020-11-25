@@ -32,21 +32,21 @@
  *  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
  */
 typedef struct IpHeader {
-    uint8_t version: 4;
-    uint8_t ihl: 4;
+    uint8_t version : 4;
+    uint8_t ihl : 4;
     int8_t tos;
     uint16_t length;
     uint16_t identification;
-    uint16_t flags: 3;
-    uint16_t fragmentOffset: 13;
+    uint16_t flags : 3;
+    uint16_t fragmentOffset : 13;
     uint8_t timeToLive;
     uint8_t protocol;
     uint16_t headerChecksum;
     uint32_t sourceAddress;
     uint32_t destinationAddress;
-    uint32_t options: 24;
-    uint32_t padding: 8;
+    uint32_t options : 24;
+    uint32_t padding : 8;
     uint8_t data[];
 } __attribute__((packed));
 
-#endif //SYNESTIAOS_IP_H
+#endif//SYNESTIAOS_IP_H

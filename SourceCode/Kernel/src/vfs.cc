@@ -3,6 +3,7 @@
 //
 
 #include "mmu.h"
+#include <cpu.h>
 #include <ext2.h>
 #include <kheap.h>
 #include <log.h>
@@ -13,7 +14,6 @@
 #include <vfs_dentry.h>
 #include <vfs_inode.h>
 #include <vfs_super_block.h>
-#include <cpu.h>
 
 extern Heap kernelHeap;
 

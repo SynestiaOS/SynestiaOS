@@ -6,6 +6,7 @@
 #define __KERNEL_THREAD_H__
 
 #include <kheap.h>
+#include <kobject.h>
 #include <kqueue.h>
 #include <kstack.h>
 #include <list.h>
@@ -13,7 +14,6 @@
 #include <stdint.h>
 #include <vfs_dentry.h>
 #include <vmm.h>
-#include <kobject.h>
 
 typedef uint8_t CpuNum;
 typedef uint8_t CpuMask;
@@ -198,7 +198,7 @@ typedef struct Thread {
 
 Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uint32_t priority);
 
-KernelStatus thread_free(Thread* thread);
+KernelStatus thread_free(Thread *thread);
 
 Thread *thread_create_idle_thread(uint32_t cpuNum);
 

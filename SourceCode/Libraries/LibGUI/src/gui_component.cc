@@ -16,8 +16,7 @@ Size SizeWH(uint32_t width, uint32_t height) {
 
 Color ColorARGB(uint8_t a, uint8_t r, uint8_t g, uint8_t b) {
     Color c = {
-            a, r, g, b
-    };
+            a, r, g, b};
     return c;
 }
 
@@ -31,8 +30,7 @@ Padding Padding4(uint32_t left,
                  uint32_t top,
                  uint32_t bottom) {
     Padding p = {
-            left, right, top, bottom
-    };
+            left, right, top, bottom};
     return p;
 }
 
@@ -41,8 +39,7 @@ Margin Margin4(uint32_t left,
                uint32_t top,
                uint32_t bottom) {
     Margin m = {
-            left, right, top, bottom
-    };
+            left, right, top, bottom};
     return m;
 }
 

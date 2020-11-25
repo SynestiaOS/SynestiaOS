@@ -5,7 +5,7 @@
 #ifndef SYNESTIAOS_ARP_H
 #define SYNESTIAOS_ARP_H
 
-typedef struct  ArpHeader{
+typedef struct ArpHeader {
     unsigned short hardwareType;
     unsigned short protocolType;
     unsigned char hardwareAddressLen;
@@ -14,11 +14,11 @@ typedef struct  ArpHeader{
     unsigned char data[];
 } __attribute__((packed)) ArpHeader;
 
-typedef struct ArpIpV4{
+typedef struct ArpIpV4 {
     unsigned char senderHardwareAddress[6];
-    unsigned int  senderIp;
+    unsigned int senderIp;
     unsigned char targetHardwareAddress[6];
-    unsigned int  targetIp;
+    unsigned int targetIp;
 } __attribute__((packed)) ArpIpV4;
 
-#endif //SYNESTIAOS_ARP_H
+#endif//SYNESTIAOS_ARP_H

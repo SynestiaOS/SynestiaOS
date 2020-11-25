@@ -92,7 +92,7 @@ typedef struct BoxShadow {
     uint32_t width;
 } BoxShadow;
 
-BoxShadow Shadow(Color color,uint32_t width);
+BoxShadow Shadow(Color color, uint32_t width);
 
 typedef struct GUIComponent {
     ComponentType type;

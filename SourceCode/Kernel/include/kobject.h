@@ -7,7 +7,7 @@
 
 #include <stdint.h>
 
-typedef enum KernelObjectType{
+typedef enum KernelObjectType {
     THREAD,
     MUTEX,
     SEMAPHORE,
@@ -15,15 +15,15 @@ typedef enum KernelObjectType{
 } KernelObjectType;
 
 
-typedef enum KernelObjectStatus{
+typedef enum KernelObjectStatus {
     USING,
     FREE,
 } KernelObjectStatus;
 
-typedef struct KernelObject{
+typedef struct KernelObject {
     KernelObjectType type;
     KernelObjectStatus status;
-    struct KernelObject* next;
+    struct KernelObject *next;
 } KernelObject;
 
-#endif //__SYNESTIAOS_KOBJECT_H__
+#endif//__SYNESTIAOS_KOBJECT_H__

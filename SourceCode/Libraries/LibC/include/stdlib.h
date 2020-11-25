@@ -1,9 +1,9 @@
 #ifndef __LIBRARY_LIBC_STDLIB_H__
 #define __LIBRARY_LIBC_STDLIB_H__
 
-#include <stdint.h>
-#include <stdarg.h>
 #include "macros.h"
+#include <stdarg.h>
+#include <stdint.h>
 
 #define DEFAULT_STRING_LEN 256
 
@@ -15,6 +15,6 @@ void bzero(void *s1, uint32_t n);
 
 int32_t vsprintf(char *buf, const char *fmt, va_list args);
 
-int32_t printf(const char *format,...);
+int32_t printf(const char *format, ...);
 
 #endif// __LIBRARY_LIBC_STDLIB_H__

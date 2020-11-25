@@ -14,16 +14,15 @@
 #define STATE_FREE 0u
 #define STATE_CONTESTED 1u
 
-#define MutexCreate()                                       \
-    {                                                       \
-        .val = {                                            \
-                .counter = 0,                               \
-        },                                                  \
-        .spinLock = SpinLockCreate(), .waitQueue = nullptr, \
-        .operations = {                                     \
-                .acquire = mutex_default_acquire,           \
-                .release = mutex_default_release,           \
-        },                                                  \
+#define MutexCreate()                                                                                 \
+    {                                                                                                 \
+        .val = {                                                                                      \
+                .counter = 0,                                                                         \
+        },                                                                                            \
+        .spinLock = SpinLockCreate(), .waitQueue = nullptr, .operations = {                           \
+                                                                    .acquire = mutex_default_acquire, \
+                                                                    .release = mutex_default_release, \
+                                                            },                                        \
     }
 
 typedef void (*MutexAcquire)(struct Mutex *mutex);

@@ -3,13 +3,13 @@
 //
 
 #include "mmu.h"
+#include <cpu.h>
 #include <interrupt.h>
 #include <log.h>
 #include <percpu.h>
 #include <sched.h>
 #include <spinlock.h>
 #include <stdlib.h>
-#include <cpu.h>
 
 uint32_t PRIORITY_2_WEIGHT[40] = {
         88761,
