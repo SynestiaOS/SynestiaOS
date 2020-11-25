@@ -42,14 +42,14 @@ extern uint32_t *gpu_flush(int args);
 extern uint32_t GFX2D_BUFFER[1024 * 768];
 
 void print_splash() {
-    LogWarn("   _____                       _   _       \n");
-    LogWarn("  / ____|                     | | (_)      \n");
-    LogWarn(" | (___  _   _ _ __   ___  ___| |_ _  __ _ \n");
-    LogWarn("  \\___ \\| | | | '_ \\ / _ \\/ __| __| |/ _` |\n");
-    LogWarn("  ____) | |_| | | | |  __/\\__ \\ |_| | (_| |\n");
-    LogWarn(" |_____/ \\__, |_| |_|\\___||___/\\__|_|\\__,_|\n");
-    LogWarn("          __/ |                            \n");
-    LogWarn("         |___/                          \n");
+    printf("   _____                       _   _       \n");
+    printf("  / ____|                     | | (_)      \n");
+    printf(" | (___  _   _ _ __   ___  ___| |_ _  __ _ \n");
+    printf("  \\___ \\| | | | '_ \\ / _ \\/ __| __| |/ _` |\n");
+    printf("  ____) | |_| | | | |  __/\\__ \\ |_| | (_| |\n");
+    printf(" |_____/ \\__, |_| |_|\\___||___/\\__|_|\\__,_|\n");
+    printf("          __/ |                            \n");
+    printf("         |___/                          \n");
 }
 
 extern uint32_t open(const char *name, uint32_t flags, uint32_t mode);

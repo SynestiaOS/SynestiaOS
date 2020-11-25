@@ -38,6 +38,9 @@ else ()
 endif ()
 message(STATUS "ARCH is ${ARCH}")
 
+# add macro __CURRENT_FILE_NAME__
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -D__CURRENT_FILE_NAME__='\"$(notdir $(abspath $<))\"'")
+
 # todo: add -Werror flag
 # todo: remove -fpermissive
 set(CMAKE_CXX_FLAGS "-fpermissive ${CMAKE_C_FLAGS} -MD -fpic -ffreestanding -std=c++2a -Wall -Wextra -g -nostdlib -nostartfiles -fno-exceptions -D${SynestiaPlatformMacro}")
