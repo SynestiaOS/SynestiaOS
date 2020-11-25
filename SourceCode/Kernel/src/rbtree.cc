@@ -1,9 +1,9 @@
 //
 // Created by XingfengYang on 2020/6/30.
 //
-#include <list.h>
-#include <rbtree.h>
-#include <thread.h>
+#include <kernel/list.h>
+#include <kernel/rbtree.h>
+#include <kernel/thread.h>
 
 /**
  * 1. Node is red or black

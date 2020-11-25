@@ -2,12 +2,12 @@
 // Created by XingfengYang on 2020/7/14.
 //
 
-#include <gfx2d.h>
-#include <gui_canvas.h>
-#include <kheap.h>
-#include <log.h>
+#include <libgfx/gfx2d.h>
+#include <libgui/gui_canvas.h>
+#include <kernel/kheap.h>
+#include <kernel/log.h>
 #include <stdbool.h>
-#include <stdlib.h>
+#include <libc/stdlib.h>
 
 extern Heap kernelHeap;
 

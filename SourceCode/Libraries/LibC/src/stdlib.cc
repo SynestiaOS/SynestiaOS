@@ -1,8 +1,8 @@
-#include <stdint.h>
-#include <stdlib.h>
-#include <string.h>
-#include <sys.h>
-#include <uart.h>
+#include <libc/stdint.h>
+#include <libc/stdlib.h>
+#include <libc/string.h>
+#include <libc/sys.h>
+#include <raspi2/uart.h>
 
 void memclean(uint8_t *start, const uint8_t *end) {
     uint32_t i;

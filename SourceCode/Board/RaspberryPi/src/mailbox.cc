@@ -2,9 +2,9 @@
 // Created by XingfengYang on 2020/7/7.
 //
 
-#include <mailbox.h>
+#include <raspi2/mailbox.h>
 #include <stdbool.h>
-#include <stdlib.h>
+#include <libc/stdlib.h>
 
 MailMessage mailbox_call(MailMessage message) {
     while (!((*(uint32_t *) (MAIL0_STATUS)) & MBOX_EMPTY)) {

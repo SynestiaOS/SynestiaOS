@@ -2,12 +2,12 @@
 // Created by XingfengYang on 2020/6/12.
 //
 
-#include <kheap.h>
-#include <log.h>
-#include <page.h>
-#include <sched.h>
-#include <stdlib.h>
-#include <string.h>
+#include <kernel/kheap.h>
+#include <kernel/log.h>
+#include <arm/page.h>
+#include <kernel/sched.h>
+#include <libc/stdlib.h>
+#include <libc/string.h>
 
 #define ALL_PHYSICAL_MEM_SIZE 0xFFFFFFFF
 #define ALL_KERNEL_HEAP_MEM_SIZE 96 * MB

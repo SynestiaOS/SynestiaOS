@@ -2,8 +2,8 @@
 // Created by XingfengYang on 2020/7/7.
 //
 
-#include <gfx3d.h>
-#include <math.h>
+#include <libgfx/gfx3d.h>
+#include <libmath/math.h>
 
 Vec3D gfx3d_vertex3f(float x, float y, float z) {
     Vec3D vec;

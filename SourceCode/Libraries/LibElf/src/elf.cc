@@ -2,9 +2,9 @@
 // Created by XingfengYang on 2020/8/17.
 //
 
-#include "stdlib.h"
-#include <elf.h>
-#include <log.h>
+#include "libc/stdlib.h"
+#include <libelf/elf.h>
+#include <kernel/log.h>
 
 const char *elf_get_target_machine_name(InstructionSet instructionSet) {
     switch (instructionSet) {

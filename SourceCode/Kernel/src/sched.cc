@@ -2,14 +2,14 @@
 // Created by XingfengYang on 2020/6/29.
 //
 
-#include "mmu.h"
-#include <cpu.h>
-#include <interrupt.h>
-#include <log.h>
-#include <percpu.h>
-#include <sched.h>
-#include <spinlock.h>
-#include <stdlib.h>
+#include "arm/mmu.h"
+#include <arm/cpu.h>
+#include <kernel/interrupt.h>
+#include <kernel/log.h>
+#include <kernel/percpu.h>
+#include <kernel/sched.h>
+#include <kernel/spinlock.h>
+#include <libc/stdlib.h>
 
 uint32_t PRIORITY_2_WEIGHT[40] = {
         88761,

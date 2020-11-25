@@ -2,15 +2,15 @@
 // Created by XingfengYang on 2020/6/26.
 //
 
-#include <kernel_vmm.h>
-#include <kheap.h>
-#include <kstack.h>
-#include <kvector.h>
-#include <log.h>
-#include <stdlib.h>
-#include <string.h>
-#include <thread.h>
-#include <vfs_dentry.h>
+#include <arm/kernel_vmm.h>
+#include <kernel/kheap.h>
+#include <kernel/kstack.h>
+#include <kernel/kvector.h>
+#include <kernel/log.h>
+#include <libc/stdlib.h>
+#include <libc/string.h>
+#include <kernel/thread.h>
+#include <kernel/vfs_dentry.h>
 
 extern Heap kernelHeap;
 extern PhysicalPageAllocator kernelPageAllocator;

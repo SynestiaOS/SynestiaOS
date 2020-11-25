@@ -3,9 +3,9 @@
 //
 
 #include <stdbool.h>
-#include <stdint.h>
-#include <stdlib.h>
-#include <string.h>
+#include <libc/stdint.h>
+#include <libc/stdlib.h>
+#include <libc/string.h>
 
 char *strcpy(char *des, char *source) {
     char *r = des;

@@ -2,18 +2,18 @@
 // Created by XingfengYang on 2020/7/30.
 //
 
-#include "mmu.h"
-#include <cpu.h>
-#include <ext2.h>
-#include <kheap.h>
-#include <log.h>
-#include <percpu.h>
-#include <string.h>
-#include <uart.h>
-#include <vfs.h>
-#include <vfs_dentry.h>
-#include <vfs_inode.h>
-#include <vfs_super_block.h>
+#include "arm/mmu.h"
+#include <arm/cpu.h>
+#include <kernel/ext2.h>
+#include <kernel/kheap.h>
+#include <kernel/log.h>
+#include <kernel/percpu.h>
+#include <kernel/vfs.h>
+#include <kernel/vfs_dentry.h>
+#include <kernel/vfs_inode.h>
+#include <kernel/vfs_super_block.h>
+#include <libc/string.h>
+#include <raspi2/uart.h>
 
 extern Heap kernelHeap;
 

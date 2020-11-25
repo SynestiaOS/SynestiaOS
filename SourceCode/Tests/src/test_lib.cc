@@ -2,7 +2,7 @@
 // Created by XingfengYang on 2020/7/6.
 //
 
-#include <tests_lib.h>
+#include <tests/tests_lib.h>
 
 void __assert_func_failed(const char *file, int line, const char *func, const char *failedexpr) {
     __test_all_asserts++;

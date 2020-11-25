@@ -1,10 +1,10 @@
 //
 // Created by XingfengYang on 2020/7/17.
 //
-#include <log.h>
-#include <sched.h>
-#include <sys_call.h>
-#include <vfs.h>
+#include <kernel/log.h>
+#include <kernel/sched.h>
+#include <kernel/sys_call.h>
+#include <kernel/vfs.h>
 
 extern VFS *vfs;
 

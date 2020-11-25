@@ -1,6 +1,6 @@
-#include <stdint.h>
-#include <stdlib.h>
-#include <string.h>
+#include <libc/stdint.h>
+#include <libc/stdlib.h>
+#include <libc/string.h>
 
 #define is_digit(c) ((c) >= '0' && (c) <= '9')
 

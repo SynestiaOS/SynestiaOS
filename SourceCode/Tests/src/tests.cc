@@ -2,18 +2,18 @@
 // Created by XingfengYang on 2020/7/5.
 //
 
-#include "macros.h"
-#include <kheap.h>
+#include "libc/macros.h"
+#include <kernel/kheap.h>
 
-#include <tests_lib.h>
+#include <tests/tests_lib.h>
 
-#include <kheap_test.h>
-#include <klist_test.h>
-#include <kstack_test.h>
-#include <kvector_test.h>
+#include <tests/kheap_test.h>
+#include <tests/klist_test.h>
+#include <tests/kstack_test.h>
+#include <tests/kvector_test.h>
 
-#include <atomic_test.h>
-#include <libmath_test.h>
+#include <tests/atomic_test.h>
+#include <tests/libmath_test.h>
 
 extern uint32_t __HEAP_BEGIN;
 extern Heap testHeap;

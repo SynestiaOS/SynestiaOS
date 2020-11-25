@@ -1,10 +1,10 @@
 //
 // Created by XingfengYang on 2020/7/10.
 //
-#include <kheap.h>
-#include <kvector.h>
-#include <log.h>
-#include <stdlib.h>
+#include <kernel/kheap.h>
+#include <kernel/kvector.h>
+#include <kernel/log.h>
+#include <libc/stdlib.h>
 
 extern Heap kernelHeap;
 
