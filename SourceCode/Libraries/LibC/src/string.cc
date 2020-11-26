@@ -2,9 +2,9 @@
 // Created by XingfengYang on 2020/7/30.
 //
 
-#include "libc/stdint.h"
-#include "libc/stdlib.h"
-#include "libc/string.h"
+#include "libc/stdint.hpp"
+#include "libc/stdlib.hpp"
+#include "libc/string.hpp"
 
 char *strcpy(char *des, char *source) {
     char *r = des;

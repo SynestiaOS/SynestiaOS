@@ -2,13 +2,13 @@
 // Created by XingfengYang on 2020/7/7.
 //
 
-#include "kernel/log.h"
-#include "libc/stdlib.h"
-#include "libgfx/gfx2d.h"
-#include "libgui/gui_button.h"
-#include "libgui/gui_container.h"
-#include "libgui/gui_label.h"
-#include "libgui/gui_panel.h"
+#include "kernel/log.hpp"
+#include "libc/stdlib.hpp"
+#include "libgfx/gfx2d.hpp"
+#include "libgui/gui_button.hpp"
+#include "libgui/gui_container.hpp"
+#include "libgui/gui_label.hpp"
+#include "libgui/gui_panel.hpp"
 
 extern uint32_t GFX2D_BUFFER[1024 * 768];
 

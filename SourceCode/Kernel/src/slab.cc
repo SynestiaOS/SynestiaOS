@@ -1,7 +1,7 @@
 //
 // Created by XingfengYang on 2020/11/23.
 //
-#include "kernel/slab.h"
+#include "kernel/slab.hpp"
 
 void slab_default_alloc_callback(struct Slab *slab, KernelObjectType type, void *ptr) {
 }

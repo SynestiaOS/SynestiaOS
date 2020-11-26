@@ -2,7 +2,7 @@
 // Created by XingfengYang on 2020/6/29.
 //
 
-#include "kernel/kqueue.h"
+#include "kernel/kqueue.hpp"
 
 KernelStatus kqueue_enqueue(KQueue *queue, KQueue *node) {
     klist_remove_node(node);

@@ -1,7 +1,7 @@
 //
 // Created by XingfengYang on 2020/7/17.
 //
-#include "kernel/atomic.h"
+#include "kernel/atomic.hpp"
 
 void atomic_create(Atomic *atomic) { atomic_set(atomic, 0); }
 

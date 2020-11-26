@@ -1,10 +1,10 @@
 //
 // Created by XingfengYang on 2020/7/15.
 //
-#include "arm/page.h"
-#include "kernel/log.h"
-#include "kernel/type.h"
-#include "libc/string.h"
+#include "arm/page.hpp"
+#include "kernel/log.hpp"
+#include "kernel/type.hpp"
+#include "libc/string.hpp"
 
 uint64_t physical_page_allocator_default_alloc_page_4k(PhysicalPageAllocator *pageAllocator, PhysicalPageUsage usage) {
     for (uint32_t i = 0; i < PHYSICAL_PAGE_NUMBERS / BITS_IN_UINT32; i++) {

@@ -2,12 +2,12 @@
 // Created by XingfengYang & ChengyuZhao on 2020/7/30.
 //
 
-#include "kernel/log.h"
-#include "kernel/vfs_dentry.h"
-#include "kernel/vfs_inode.h"
-#include "kernel/vfs_super_block.h"
-#include "libc/hash.h"
-#include "libc/string.h"
+#include "kernel/log.hpp"
+#include "kernel/vfs_dentry.hpp"
+#include "kernel/vfs_inode.hpp"
+#include "kernel/vfs_super_block.hpp"
+#include "libc/hash.hpp"
+#include "libc/string.hpp"
 
 uint64_t vfs_directory_entry_default_hash(DirectoryEntry *directoryEntry) {
     return adler32(directoryEntry->fileName, strlen(directoryEntry->fileName));

@@ -1,7 +1,7 @@
 //
 // Created by XingfengYang on 2020/7/30.
 //
-#include "libc/stdint.h"
+#include "libc/stdint.hpp"
 
 uint32_t adler32(const char *buf, uint32_t buflength) {
     const uint8_t *buffer = (const uint8_t *) buf;

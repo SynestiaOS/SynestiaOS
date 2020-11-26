@@ -2,8 +2,8 @@
 // Created by XingfengYang on 2020/7/7.
 //
 
-#include "libgfx/font8bits.h"
-#include "libgfx/gfx2d.h"
+#include "libgfx/font8bits.hpp"
+#include "libgfx/gfx2d.hpp"
 
 uint32_t GFX2D_BUFFER[1024 * 768] = {0xFF};
 

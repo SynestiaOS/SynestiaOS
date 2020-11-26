@@ -2,13 +2,13 @@
 // Created by XingfengYang on 2020/7/17.
 //
 
-#include "arm/cpu.h"
-#include "kernel/kqueue.h"
-#include "kernel/log.h"
-#include "kernel/mutex.h"
-#include "kernel/percpu.h"
-#include "kernel/sched.h"
-#include "kernel/thread.h"
+#include "arm/cpu.hpp"
+#include "kernel/kqueue.hpp"
+#include "kernel/log.hpp"
+#include "kernel/mutex.hpp"
+#include "kernel/percpu.hpp"
+#include "kernel/sched.hpp"
+#include "kernel/thread.hpp"
 
 void mutex_default_acquire(Mutex *mutex) {
     if (atomic_get(&mutex->val) == 0) {

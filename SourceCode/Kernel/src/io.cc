@@ -1,4 +1,4 @@
-#include "kernel/io.h"
+#include "kernel/io.hpp"
 
 void io_writeb(uint8_t val, void *addr) { *(uint8_t *) addr = val; }
 

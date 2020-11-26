@@ -2,14 +2,14 @@
 // Created by XingfengYang on 2020/8/7.
 //
 
-#include "kernel/ext2.h"
-#include "kernel/kheap.h"
-#include "kernel/list.h"
-#include "kernel/log.h"
-#include "kernel/vfs_dentry.h"
-#include "kernel/vfs_inode.h"
-#include "libc/stdint.h"
-#include "libc/string.h"
+#include "kernel/ext2.hpp"
+#include "kernel/kheap.hpp"
+#include "kernel/list.hpp"
+#include "kernel/log.hpp"
+#include "kernel/vfs_dentry.hpp"
+#include "kernel/vfs_inode.hpp"
+#include "libc/stdint.hpp"
+#include "libc/string.hpp"
 
 extern Heap kernelHeap;
 

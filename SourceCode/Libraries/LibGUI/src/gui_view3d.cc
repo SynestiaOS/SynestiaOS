@@ -2,11 +2,11 @@
 // Created by XingfengYang on 2020/7/29.
 //
 
-#include "kernel/kheap.h"
-#include "kernel/log.h"
-#include "libc/stdlib.h"
-#include "libgfx/gfx2d.h"
-#include "libgui/gui_view3d.h"
+#include "kernel/kheap.hpp"
+#include "kernel/log.hpp"
+#include "libc/stdlib.hpp"
+#include "libgfx/gfx2d.hpp"
+#include "libgui/gui_view3d.hpp"
 
 extern Heap kernelHeap;
 extern uint32_t GFX2D_BUFFER[1024 * 768];
