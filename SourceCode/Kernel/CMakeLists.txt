@@ -1,4 +1,4 @@
-project(Kernel CXX ASM)
+project(Kernel C ASM)
 
 
 aux_source_directory(${Kernel_SOURCE_DIR}/src KernelSrc)

@@ -1,4 +1,4 @@
-project(KernelArch CXX ASM)
+project(KernelArch C ASM)
 
 find_asm_source_files(ASM_SOURCE_FILES ${KernelArch_SOURCE_DIR}/src)
 aux_source_directory(${KernelArch_SOURCE_DIR}/src KernelArchSrc)

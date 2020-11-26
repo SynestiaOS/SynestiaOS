@@ -38,7 +38,7 @@ typedef struct PageTableEntry {
     uint64_t nst : 1;  /* Not-Secure */
 } __attribute__((packed)) PageTableEntry;
 
-typedef void (*VirtualMemoryOperationContextSwitch)(struct VirtualMemory *old, struct VirtualMemory *new_);
+typedef void (*VirtualMemoryOperationContextSwitch)(struct VirtualMemory *old, struct VirtualMemory *new);
 
 typedef void (*VirtualMemoryOperationAllocatePage)(struct VirtualMemory *virtualMemory, uint32_t virtualAddress);
 

@@ -7,17 +7,17 @@
 
 #include "libc/macros.h"
 
-extern_C float fmod(float r, float mod);
+float fmod(float r, float mod);
 
-extern_C float cosf(float angle);
+float cosf(float angle);
 
-extern_C float sinf(float angle);
+float sinf(float angle);
 
 float tanf(float angle);
 
 float fmax(float x, float y);
 
-extern_C float powf(float x, float y);
+float powf(float x, float y);
 
 float q_rsqrt(float number);
 

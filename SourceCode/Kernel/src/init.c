@@ -95,7 +95,7 @@ uint32_t *window_filesystem(int args) {
     disable_interrupt();
     if (directoryEntry->children != nullptr) {
         size = klist_size(&directoryEntry->children->list);
-        labels = (GUILabel *) kernelHeap.operations.alloc(&kernelHeap, size * sizeof(GUILabel));
+        labels = kernelHeap.operations.alloc(&kernelHeap, size * sizeof(GUILabel));
         struct DirectoryEntry *pEntry = directoryEntry->children;
         uint32_t y = 0;
         for (uint32_t i = 1; i < size; i++) {
@@ -162,7 +162,7 @@ void initProcessUpdate(uint32_t process) {
     GUILabel label;
     gui_label_create(&label);
     char str[10] = {'\0'};
-    gui_label_init(&label, 120 + process * (((1024 - 240) / 100) + 1) - 8, 550, itoa(process, reinterpret_cast<char *>(&str), 10));
+    gui_label_init(&label, 120 + process * (((1024 - 240) / 100) + 1) - 8, 550, itoa(process, &str, 10));
     GUILabel labelPercent;
     gui_label_create(&labelPercent);
     gui_label_init(&labelPercent, 120 + process * (((1024 - 240) / 100) + 1) + 8, 550, "%");
@@ -198,7 +198,7 @@ void renderBootScreen() {
     gui_label_draw(&labelCopyright);
 }
 
-extern_C void kernel_main(void) {
+void kernel_main(void) {
     if (read_cpuid() == 0) {
         bootSpinLock.operations.acquire(&bootSpinLock);
         init_bsp();
@@ -214,7 +214,7 @@ extern_C void kernel_main(void) {
         kernel_vmm_init();
 
         // create kernel heap
-        heap_create(&kernelHeap, &__HEAP_BEGIN, KERNEL_PHYSICAL_SIZE - (uint32_t)(&__HEAP_BEGIN));
+        heap_create(&kernelHeap, &__HEAP_BEGIN, KERNEL_PHYSICAL_SIZE - (uint32_t) (&__HEAP_BEGIN));
 
         // create userspace physical page allocator
         page_allocator_create(&userspacePageAllocator, USER_PHYSICAL_START, USER_PHYSICAL_SIZE);
@@ -226,7 +226,7 @@ extern_C void kernel_main(void) {
         vfs->operations.mount(vfs, "root", FILESYSTEM_EXT2, (void *) EXT2_ADDRESS);
 
         uint32_t *background = (uint32_t *) kernelHeap.operations.alloc(&kernelHeap, 768 * 1024 * 4);
-        vfs_kernel_read(vfs, "/initrd/init/bg1024_768.dat", reinterpret_cast<char *>(background), 768 * 1024 * 4);
+        vfs_kernel_read(vfs, "/initrd/init/bg1024_768.dat", background, 768 * 1024 * 4);
         gfx.operations.drawBitmap(&gfx, 0, 0, 1024, 768, background);
         kernelHeap.operations.free(&kernelHeap, background);
 
@@ -251,8 +251,8 @@ extern_C void kernel_main(void) {
         Thread *windowDialogThread = thread_create("Welcome", &window_dialog, 0, 0);
         schd_add_thread(windowDialogThread, 0);
 
-        //        Thread *windowCanvas2DThread = thread_create("Canvas2D", &window_canvas2D, 1, 0);
-        //        schd_add_thread(windowCanvas2DThread, 0);
+//        Thread *windowCanvas2DThread = thread_create("Canvas2D", &window_canvas2D, 1, 0);
+//        schd_add_thread(windowCanvas2DThread, 0);
 
         Thread *windowFileSystemThread = thread_create("FileManager", &window_filesystem, 0, 0);
         schd_add_thread(windowFileSystemThread, 0);

@@ -18,7 +18,7 @@
 extern uint32_t __HEAP_BEGIN;
 extern Heap testHeap;
 
-extern_C void kernel_main_tests() {
+void kernel_main_tests() {
     heap_create(&testHeap, __HEAP_BEGIN, 64 * MB);
 
     TEST_CASE("should_klist_insert", should_klist_insert);

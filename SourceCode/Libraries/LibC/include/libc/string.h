@@ -15,7 +15,7 @@ uint32_t strlen(const char *str);
 
 char *itoa(int num, char *str, int base);
 
-extern_C void *memset(char *s, int c, uint32_t n);
+void *memset(char *s, int c, uint32_t n);
 
 void memcpy(void *dest, const void *src, uint32_t bytes);
 

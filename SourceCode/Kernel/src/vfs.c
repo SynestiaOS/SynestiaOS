@@ -69,11 +69,11 @@ uint32_t vfs_default_close(struct VFS *vfs, uint32_t fd) {
     PerCpu *perCpu = percpu_get(read_cpuid());
     Thread *currThread = perCpu->currentThread;
 
-    ListNode *pNode = kvector_get(reinterpret_cast<KernelVector *>(&currThread->filesStruct.fileDescriptorTable), fd);
+    ListNode *pNode = kvector_get(&currThread->filesStruct.fileDescriptorTable, fd);
     FileDescriptor *pDescriptor = getNode(pNode, FileDescriptor, node);
     pDescriptor->directoryEntry->indexNode->state = INDEX_NODE_STATE_CLOSED;
 
-    kvector_remove_index(reinterpret_cast<KernelVector *>(&currThread->filesStruct.fileDescriptorTable), fd);
+    kvector_remove_index(&currThread->filesStruct.fileDescriptorTable, fd);
     return 0;
 }
 

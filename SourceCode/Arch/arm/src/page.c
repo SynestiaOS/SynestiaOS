@@ -90,7 +90,7 @@ uint64_t physical_page_allocator_default_alloc_huge_at(PhysicalPageAllocator *pa
         pageAllocator->physicalPages[pageIndex].type = PAGE_2M;
         pageAllocator->physicalPages[pageIndex].usage = usage;
 
-        pageAllocator->operations.page4KMarkAsUsed(pageAllocator, pageIndex);
+        pageAllocator->operations.page4KMarkAsUsed(&pageAllocator, pageIndex);
     }
     return page;
 }
@@ -119,8 +119,8 @@ KernelStatus page_allocator_create(PhysicalPageAllocator *pageAllocator, uint32_
     pageAllocator->operations.allocHugeAt = physical_page_allocator_default_alloc_huge_at;
     pageAllocator->operations.freeHugeAt = physical_page_allocator_default_free_huge_at;
 
-    memset(reinterpret_cast<char *>(&pageAllocator->physicalPages), 0, PHYSICAL_PAGE_NUMBERS * sizeof(uint32_t));
-    memset(reinterpret_cast<char *>(&pageAllocator->physicalPagesUsedBitMap), 0, (PHYSICAL_PAGE_NUMBERS / BITS_IN_UINT32) * sizeof(uint32_t));
+    memset(&pageAllocator->physicalPages, 0, PHYSICAL_PAGE_NUMBERS * sizeof(uint32_t));
+    memset(&pageAllocator->physicalPagesUsedBitMap, 0, (PHYSICAL_PAGE_NUMBERS / BITS_IN_UINT32) * sizeof(uint32_t));
 
     return OK;
 }

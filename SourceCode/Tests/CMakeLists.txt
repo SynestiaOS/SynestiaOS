@@ -1,4 +1,4 @@
-PROJECT(KernelUnitTests CXX ASM)
+PROJECT(KernelUnitTests C ASM)
 
 set(KernelArchDir ${SynestiaOS_SOURCE_DIR}/SourceCode/Arch/${SynestiaArch})
 
