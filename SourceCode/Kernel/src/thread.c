@@ -235,7 +235,7 @@ Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uin
         thread->memoryStruct.virtualMemory.pageTable = kernel_vmm_get_page_table();
         thread->memoryStruct.heap = kernelHeap;
 
-        thread->object.type = KernelObjectType::THREAD;
+        thread->object.type = THREAD;
 
         LogInfo("[Thread]: thread '%s' created.\n", thread->name);
         return thread;

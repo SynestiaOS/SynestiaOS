@@ -7,6 +7,7 @@
 
 #include "kernel/list.h"
 #include "libc/stdint.h"
+#include "libc/stdbool.h"
 
 #define DEFAULT_FONT_SIZE 8
 #define DEFAULT_PADDING 8

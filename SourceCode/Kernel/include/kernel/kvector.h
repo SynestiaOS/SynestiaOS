@@ -7,6 +7,7 @@
 
 #include "kernel/list.h"
 #include "kernel/type.h"
+#include "libc/stdbool.h"
 
 #define DEFAULT_VECTOR_SIZE 12
 
@@ -24,9 +25,9 @@ typedef KernelStatus (*KernelVectorOperationRemoveIndex)(struct KernelVector *ve
 
 typedef uint32_t (*KernelVectorOperationSize)(struct KernelVector *vector);
 
-typedef bool (*KernelVectorOperationIsEmpty)(struct KernelVector *vector);
+typedef _Bool (*KernelVectorOperationIsEmpty)(struct KernelVector *vector);
 
-typedef bool (*KernelVectorOperationIsFull)(struct KernelVector *vector);
+typedef _Bool (*KernelVectorOperationIsFull)(struct KernelVector *vector);
 
 typedef KernelStatus (*KernelVectorOperationClear)(struct KernelVector *vector);
 

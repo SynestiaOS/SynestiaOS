@@ -9,7 +9,7 @@
 
 char *strcpy(char *des, char *source);
 
-bool strcmp(char *str1, char *str2);
+_Bool strcmp(char *str1, char *str2);
 
 uint32_t strlen(const char *str);
 

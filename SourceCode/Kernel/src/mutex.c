@@ -19,7 +19,7 @@ void mutex_default_acquire(Mutex *mutex) {
         Thread *currentThread = perCpu->currentThread;
         // can not get the lock, just add to lock wait list
         kqueue_enqueue(mutex->waitQueue, &currentThread->threadReadyQueue);
-        currentThread->threadStatus = ThreadStatus::THREAD_BLOCKED;
+        currentThread->threadStatus = THREAD_BLOCKED;
         // remove from schd list
         perCpu->rbTree.operations.remove(&perCpu->rbTree, &currentThread->rbNode);
         // 2. switch to the next thread in scheduler
@@ -37,7 +37,7 @@ void mutex_default_release(Mutex *mutex) {
         PerCpu *perCpu = percpu_get(cpuid);
         Thread *th = getNode(node, Thread, threadReadyQueue);
         perCpu->rbTree.operations.insert(&perCpu->rbTree, &th->rbNode);
-        th->threadStatus = ThreadStatus::THREAD_READY;
+        th->threadStatus = THREAD_READY;
         atomic_set(&mutex->val, 0);
 
         // TODO: maybe should consider virtual runtime.

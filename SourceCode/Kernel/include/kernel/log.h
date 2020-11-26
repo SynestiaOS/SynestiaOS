@@ -7,13 +7,13 @@
 
 #include "libc/stdlib.h"
 
-constexpr int LOG_LEVEL_VERBOSE = 1;
-constexpr int LOG_LEVEL_DEBUG = 2;
-constexpr int LOG_LEVEL_INFO = 3;
-constexpr int LOG_LEVEL_WARNING = 4;
-constexpr int LOG_LEVEL_ERROR = 5;
-constexpr int LOG_LEVEL_FATAL = 6;
-constexpr int DEFAULT_LOG_LEVEL = LOG_LEVEL_VERBOSE;
+#define LOG_LEVEL_VERBOSE 1
+#define LOG_LEVEL_DEBUG  2
+#define LOG_LEVEL_INFO  3
+#define LOG_LEVEL_WARNING  4
+#define LOG_LEVEL_ERROR 5
+#define LOG_LEVEL_FATAL  6
+#define DEFAULT_LOG_LEVEL LOG_LEVEL_VERBOSE
 
 #ifndef LOG_LEVEL
 #define LOG_LEVEL DEFAULT_LOG_LEVEL

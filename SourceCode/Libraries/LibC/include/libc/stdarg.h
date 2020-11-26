@@ -10,7 +10,7 @@
 #define va_end(v)    __builtin_va_end(v)
 #define va_arg(v, l)    __builtin_va_arg(v,l)
 
-using va_list = __builtin_va_list;
+typedef __builtin_va_list va_list;
 
 #else
 #error "currently only gcc(g++) is supported, define your implementation of stdarg.h here"

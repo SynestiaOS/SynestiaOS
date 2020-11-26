@@ -7,6 +7,7 @@
 
 #include "kernel/type.h"
 #include "libc/stdint.h"
+#include "libc/stdbool.h"
 
 #define DEFAULT_KERNEL_STACK_SIZE 32 * KB
 

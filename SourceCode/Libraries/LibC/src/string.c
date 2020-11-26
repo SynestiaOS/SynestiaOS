@@ -5,6 +5,7 @@
 #include "libc/stdint.h"
 #include "libc/stdlib.h"
 #include "libc/string.h"
+#include "libc/stdbool.h"
 
 char *strcpy(char *des, char *source) {
     char *r = des;
@@ -13,7 +14,7 @@ char *strcpy(char *des, char *source) {
     return des;
 }
 
-bool strcmp(char *str1, char *str2) {
+_Bool strcmp(char *str1, char *str2) {
     char *tmpStr1 = str1;
     char *tmpStr2 = str2;
     uint32_t str1Len = strlen(tmpStr1);
