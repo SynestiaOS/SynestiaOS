@@ -1,7 +1,7 @@
 //
 // Created by XingfengYang on 2020/7/2.
 //
-#include "kernel/list.hpp"
+#include "kernel/list.h"
 
 KernelStatus klist_insert(ListNode *list, ListNode *node) {
     if (list->next != nullptr) {

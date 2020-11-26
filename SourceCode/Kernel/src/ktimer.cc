@@ -2,9 +2,9 @@
 // Created by XingfengYang on 2020/7/20.
 //
 
-#include "kernel/ktimer.hpp"
-#include "kernel/list.hpp"
-#include "kernel/mutex.hpp"
+#include "kernel/ktimer.h"
+#include "kernel/list.h"
+#include "kernel/mutex.h"
 
 uint64_t sys_runtime_ms = 0;
 

@@ -2,8 +2,8 @@
 // Created by XingfengYang on 2020/7/16.
 //
 
-#include "kernel/list.hpp"
-#include "libgui/gui_animation.hpp"
+#include "kernel/list.h"
+#include "libgui/gui_animation.h"
 
 void gui_animation_translation_create(GUIAnimationTranslation *animation, GUIComponent *component, uint32_t time,
                                       uint32_t targetX, uint32_t targetY) {

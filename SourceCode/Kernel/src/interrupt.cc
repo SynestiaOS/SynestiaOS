@@ -1,9 +1,9 @@
-#include "libc/macros.hpp"
-#include "arm/vmm.hpp"
-#include "kernel/interrupt.hpp"
-#include "kernel/log.hpp"
-#include "libc/stdlib.hpp"
-#include "raspi2/timer.hpp"
+#include "libc/macros.h"
+#include "arm/vmm.h"
+#include "kernel/interrupt.h"
+#include "kernel/log.h"
+#include "libc/stdlib.h"
+#include "raspi2/timer.h"
 
 static rpi_irq_controller_t *rpiIRQController = (rpi_irq_controller_t *) RPI_INTERRUPT_CONTROLLER_BASE;
 

@@ -1,7 +1,7 @@
 //
 // Created by XingfengYang on 2020/7/27.
 //
-#include "libc/sys.hpp"
+#include "libc/sys.h"
 
 
 _syscall0(int, restart_syscall);

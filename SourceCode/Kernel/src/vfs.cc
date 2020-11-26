@@ -2,18 +2,18 @@
 // Created by XingfengYang on 2020/7/30.
 //
 
-#include "arm/mmu.hpp"
-#include "arm/cpu.hpp"
-#include "kernel/ext2.hpp"
-#include "kernel/kheap.hpp"
-#include "kernel/log.hpp"
-#include "kernel/percpu.hpp"
-#include "kernel/vfs.hpp"
-#include "kernel/vfs_dentry.hpp"
-#include "kernel/vfs_inode.hpp"
-#include "kernel/vfs_super_block.hpp"
-#include "libc/string.hpp"
-#include "raspi2/uart.hpp"
+#include "arm/mmu.h"
+#include "arm/cpu.h"
+#include "kernel/ext2.h"
+#include "kernel/kheap.h"
+#include "kernel/log.h"
+#include "kernel/percpu.h"
+#include "kernel/vfs.h"
+#include "kernel/vfs_dentry.h"
+#include "kernel/vfs_inode.h"
+#include "kernel/vfs_super_block.h"
+#include "libc/string.h"
+#include "raspi2/uart.h"
 
 extern Heap kernelHeap;
 

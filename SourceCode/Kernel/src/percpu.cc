@@ -2,10 +2,10 @@
 // Created by XingfengYang on 2020/6/30.
 //
 
-#include "kernel/kheap.hpp"
-#include "kernel/log.hpp"
-#include "kernel/percpu.hpp"
-#include "kernel/thread.hpp"
+#include "kernel/kheap.h"
+#include "kernel/log.h"
+#include "kernel/percpu.h"
+#include "kernel/thread.h"
 
 extern Heap kernelHeap;
 PerCpu *perCpu = nullptr;

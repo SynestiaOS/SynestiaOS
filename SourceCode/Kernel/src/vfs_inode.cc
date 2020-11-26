@@ -2,11 +2,11 @@
 // Created by XingfengYang & ChengyuZhao on 2020/7/30.
 //
 
-#include "kernel/atomic.hpp"
-#include "kernel/list.hpp"
-#include "kernel/vfs_inode.hpp"
-#include "kernel/vfs_super_block.hpp"
-#include "libc/string.hpp"
+#include "kernel/atomic.h"
+#include "kernel/list.h"
+#include "kernel/vfs_inode.h"
+#include "kernel/vfs_super_block.h"
+#include "libc/string.h"
 
 KernelStatus vfs_inode_default_release(IndexNode *indexNode) {
     // TODO

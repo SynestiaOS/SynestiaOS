@@ -2,12 +2,12 @@
 // Created by XingfengYang on 2020/6/15.
 //
 
-#include "arm/kernel_vmm.hpp"
-#include "arm/mmu.hpp"
-#include "arm/page.hpp"
-#include "kernel/log.hpp"
-#include "kernel/type.hpp"
-#include "libc/stdlib.hpp"
+#include "arm/kernel_vmm.h"
+#include "arm/mmu.h"
+#include "arm/page.h"
+#include "kernel/log.h"
+#include "kernel/type.h"
+#include "libc/stdlib.h"
 
 extern int __PAGE_TABLE;
 extern PhysicalPageAllocator kernelPageAllocator;

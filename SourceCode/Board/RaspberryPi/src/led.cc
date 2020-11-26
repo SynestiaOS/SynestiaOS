@@ -2,8 +2,8 @@
 // Created by tcz001 on 2020/8/7.
 //
 
-#include "raspi2/gpio.hpp"
-#include "raspi2/led.hpp"
+#include "raspi2/gpio.h"
+#include "raspi2/led.h"
 
 /*
  * Configure number of loops reading HW register to wait one second

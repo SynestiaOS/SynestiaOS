@@ -2,7 +2,7 @@
 // Created by XingfengYang on 2020/10/19.
 //
 
-#include "libnet/ether.hpp"
+#include "libnet/ether.h"
 
 
 const char *getEtherTypeName(EtherType type) {
