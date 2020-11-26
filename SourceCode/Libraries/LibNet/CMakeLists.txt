@@ -1,4 +1,4 @@
-PROJECT(LibNet CXX ASM)
+PROJECT(LibNet C ASM)
 
 aux_source_directory(${LibNet_SOURCE_DIR}/src LibNetSrc)
 

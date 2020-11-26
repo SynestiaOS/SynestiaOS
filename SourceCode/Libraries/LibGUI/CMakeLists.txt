@@ -1,4 +1,4 @@
-PROJECT(LibGUI CXX ASM)
+PROJECT(LibGUI C ASM)
 
 aux_source_directory(${LibGUI_SOURCE_DIR}/src LibGUISrc)
 

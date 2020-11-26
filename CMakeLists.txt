@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 3.12 FATAL_ERROR)
 set(CMAKE_C_COMPILER_WORKS TRUE)
 set(CMAKE_CXX_COMPILER_WORKS TRUE)
 
-project(SynestiaOS LANGUAGES CXX ASM)
+project(SynestiaOS LANGUAGES C ASM)
 
 if(${SynestiaOS_SOURCE_DIR} STREQUAL ${SynestiaOS_BINARY_DIR})
     message(FATAL_ERROR "In-source builds not allowed. Please make a new directory (called a build directory) and run CMake from there.")
@@ -42,13 +42,10 @@ message(STATUS "ARCH is ${ARCH}")
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -D__CURRENT_FILE_NAME__='\"$(notdir $(abspath $<))\"'")
 
 # todo: add -Werror flag
-# todo: remove -fpermissive
-set(CMAKE_CXX_FLAGS "-fpermissive ${CMAKE_C_FLAGS} -MD -fpic -ffreestanding -std=c++2a -Wall -Wextra -g -nostdlib -nostartfiles -fno-exceptions -D${SynestiaPlatformMacro}")
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -MD -fpic -ffreestanding -std=gnu11 -Wall -Wextra -g -nostdlib -nostartfiles -D${SynestiaPlatformMacro}")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -MD -fpic -ffreestanding -std=gnu11 -Wall -Wextra -g -nostdlib -D${SynestiaPlatformMacro}")
 set(CMAKE_ASM_FLAGS "${CMAKE_C_FLAGS}")
 
 message(STATUS "CMAKE_C_FLAGS is ${CMAKE_C_FLAGS}")
-message(STATUS "CMAKE_CXX_FLAGS is ${CMAKE_CXX_FLAGS}")
 message(STATUS "CMAKE_ASM_FLAGS is ${CMAKE_ASM_FLAGS}")
 message(STATUS "TOOLCHAIN_PREFIX is ${TOOLCHAIN_PREFIX}")
 message(STATUS "CMAKE_OBJCOPY is ${CMAKE_OBJCOPY}")
