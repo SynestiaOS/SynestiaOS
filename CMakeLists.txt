@@ -43,7 +43,7 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -D__CURRENT_FILE_NAME__='\"$(notdir $(abspat
 
 # todo: add -Werror flag
 # todo: remove -fpermissive
-set(CMAKE_CXX_FLAGS "-fpermissive ${CMAKE_C_FLAGS} -MD -fpic -ffreestanding -std=c++2a -Wall -Wextra -g -nostdlib -nostartfiles -fno-exceptions -D${SynestiaPlatformMacro}")
+set(CMAKE_CXX_FLAGS "-fpermissive ${CMAKE_C_FLAGS} -MD -fpic -ffreestanding -std=c++17 -Wall -Wextra -g -nostdlib -nostartfiles -fno-exceptions -D${SynestiaPlatformMacro}")
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -MD -fpic -ffreestanding -std=gnu11 -Wall -Wextra -g -nostdlib -nostartfiles -D${SynestiaPlatformMacro}")
 set(CMAKE_ASM_FLAGS "${CMAKE_C_FLAGS}")
 
