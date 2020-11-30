@@ -102,6 +102,7 @@ typedef struct FileDescriptor {
     uint32_t pos;
     DirectoryEntry *directoryEntry;
     ListNode node;
+    KernelObject object;
 } FileDescriptor;
 
 typedef uint32_t (*FilesStructOperationOpenFile)(struct FilesStruct *filesStruct,
