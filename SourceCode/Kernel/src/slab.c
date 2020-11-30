@@ -14,6 +14,7 @@ void slab_default_free_callback(struct Slab *slab, KernelObjectType type, void *
 }
 
 void *slab_default_alloc(struct Slab *slab, KernelObjectType type) {
+
 }
 
 KernelStatus slab_default_free(struct Slab *slab, void *ptr) {

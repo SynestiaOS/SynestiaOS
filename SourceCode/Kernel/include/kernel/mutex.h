@@ -9,6 +9,7 @@
 #include "kernel/kqueue.h"
 #include "kernel/spinlock.h"
 #include "libc/stdint.h"
+#include "kernel/kobject.h"
 
 #define STATE_FREE 0u
 #define STATE_CONTESTED 1u
@@ -36,7 +37,8 @@ typedef struct MutexOperations {
 typedef struct Mutex {
     Atomic val;
     SpinLock spinLock;
-    KQueue *waitQueue;
+    KQueue waitQueue;
+    KernelObject object;
     MutexOperations operations;
 } Mutex;
 

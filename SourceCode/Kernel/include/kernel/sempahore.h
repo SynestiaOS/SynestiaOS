@@ -9,6 +9,7 @@
 #include "kernel/kqueue.h"
 #include "kernel/spinlock.h"
 #include "libc/stdint.h"
+#include "kernel/kobject.h"
 
 #define SemaphoreCreate()                                    \
     {                                                        \
@@ -35,6 +36,7 @@ typedef struct Semaphore {
     Atomic count;
     SpinLock spinLock;
     KQueue waitQueue;
+    KernelObject object;
     SemaphoreOperations operations;
 } Semaphore;
 
