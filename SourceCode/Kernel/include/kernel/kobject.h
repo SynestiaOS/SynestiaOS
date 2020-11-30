@@ -26,4 +26,6 @@ typedef struct KernelObject {
     struct KernelObject *next;
 } KernelObject;
 
+uint32_t kobject_size(KernelObjectType type);
+
 #endif//__SYNESTIAOS_KOBJECT_H__
