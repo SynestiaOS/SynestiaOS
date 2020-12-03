@@ -3,6 +3,3 @@
 //
 
 #include "kernel/kobject.h"
-#include "kernel/mutex.h"
-#include "kernel/semaphore.h"
-#include "kernel/Thread.h"

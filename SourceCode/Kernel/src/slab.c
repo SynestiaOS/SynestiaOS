@@ -4,8 +4,28 @@
 #include "arm/page.h"
 #include "kernel/slab.h"
 #include "kernel/log.h"
+#include "kernel/kobject.h"
+//#include "kernel/mutex.h"
+//#include "kernel/semaphore.h"
+//#include "kernel/Thread.h"
+#include "kernel/type.h"
 
 extern PhysicalPageAllocator kernelPageAllocator;
+
+//uint32_t get_kernel_object_size(KernelObjectType type){
+//    switch (type) {
+//        case KERNEL_OBJECT_THREAD:
+//            return sizeof(Thread);
+//        case KERNEL_OBJECT_MUTEX:
+//            return sizeof(Mutex);
+//        case KERNEL_OBJECT_SEMAPHORE:
+//            return sizeof(Semaphore);
+//        case KERNEL_OBJECT_FILE_DESCRIPTOR:
+//            return sizeof(FileDescriptor);
+//        default:
+//            return 0;
+//    }
+//}
 
 void slab_default_alloc_callback(struct Slab *slab, KernelObjectType type, void *ptr) {
 }
@@ -14,7 +34,8 @@ void slab_default_free_callback(struct Slab *slab, KernelObjectType type, void *
 }
 
 void *slab_default_alloc(struct Slab *slab, KernelObjectType type) {
-
+    // TODO
+    return nullptr;
 }
 
 KernelStatus slab_default_free(struct Slab *slab, void *ptr) {
