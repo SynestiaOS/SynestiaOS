@@ -54,7 +54,7 @@ typedef struct Slab {
     uint32_t address;
     uint32_t maxSizeLimit;
 
-    KernelObject* kernelObjects[SLAB_ARRAY_COUNT];
+    struct KernelObject kernelObjects[SLAB_ARRAY_COUNT];
 
     SlabAllocCallback allocCallback;
     SlabFreeCallback freeCallback;
