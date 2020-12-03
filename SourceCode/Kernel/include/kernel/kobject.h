@@ -8,10 +8,10 @@
 #include "libc/stdint.h"
 
 typedef enum KernelObjectType {
-    THREAD,
-    MUTEX,
-    SEMAPHORE,
-    FILE_DESCRIPTOR,
+    KERNEL_OBJECT_THREAD = 0,
+    KERNEL_OBJECT_MUTEX,
+    KERNEL_OBJECT_SEMAPHORE,
+    KERNEL_OBJECT_FILE_DESCRIPTOR,
 } KernelObjectType;
 
 

@@ -3,7 +3,7 @@
 //
 
 #include "kernel/log.h"
-#include "kernel/sempahore.h"
+#include "kernel/semaphore.h"
 #include "kernel/thread.h"
 
 extern Thread *currentThread;

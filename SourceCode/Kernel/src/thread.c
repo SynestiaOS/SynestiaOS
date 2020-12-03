@@ -3,6 +3,7 @@
 //
 
 #include "arm/kernel_vmm.h"
+#include "kernel/kobject.h"
 #include "kernel/kheap.h"
 #include "kernel/kstack.h"
 #include "kernel/kvector.h"
@@ -235,7 +236,7 @@ Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uin
         thread->memoryStruct.virtualMemory.pageTable = kernel_vmm_get_page_table();
         thread->memoryStruct.heap = kernelHeap;
 
-        thread->object.type = THREAD;
+        thread->object.type = KERNEL_OBJECT_THREAD;
 
         LogInfo("[Thread]: thread '%s' created.\n", thread->name);
         return thread;
