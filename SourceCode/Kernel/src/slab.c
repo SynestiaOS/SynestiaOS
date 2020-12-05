@@ -12,7 +12,7 @@
 
 extern PhysicalPageAllocator kernelPageAllocator;
 
-uint32_t get_kernel_object_size(KernelObjectType type){
+uint32_t get_kernel_object_size(KernelObjectType type) {
     switch (type) {
         case KERNEL_OBJECT_THREAD:
             return sizeof(Thread);
@@ -34,8 +34,33 @@ void slab_default_free_callback(struct Slab *slab, KernelObjectType type, void *
 }
 
 void *slab_default_alloc(struct Slab *slab, KernelObjectType type) {
-    // TODO
-    return nullptr;
+    // can not found any kernel object from kernel object lists
+    if (slab->kernelObjects[type] == nullptr) {
+        // alloc a new kernel object from heap and link it to kernel object list
+        // TODO:
+    } else {
+        KernelObject *kernelObject = slab->kernelObjects[type];
+
+        // the first of kernel object list is free
+        if (kernelObject->status == FREE) {
+            // just use it, and mark it as used
+            // TODO:
+
+        } else {
+            // let find the free kernel object from list
+            while (kernelObject->next != nullptr) {
+                if (kernelObject->next->status == FREE) {
+                    // just use it, and mark it as used
+                    // TODO:
+
+                }
+                kernelObject = kernelObject->next;
+            }
+
+            // oops, not found free kernel object, so let's alloc from heap.
+            // TODO:
+        }
+    }
 }
 
 KernelStatus slab_default_free(struct Slab *slab, void *ptr) {
