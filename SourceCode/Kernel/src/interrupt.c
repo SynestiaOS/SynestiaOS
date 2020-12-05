@@ -72,7 +72,9 @@ int software_interrupt_handler() {
     return sys_call_table[sysCallNo](r0, r1, r2, r3, r4);
 }
 
-void __attribute__((interrupt("ABORT"))) prefetch_abort_handler(void) {}
+void __attribute__((interrupt("ABORT"))) prefetch_abort_handler(void) {
+    LogError("[Interrupt]: abort panic\n");
+}
 
 void data_abort_handler() {
     volatile uint32_t r0, r1, r2, r3, r4, r5;
@@ -90,7 +92,9 @@ void data_abort_handler() {
     do_page_fault(r3);
 }
 
-void unused_handler(void) {}
+void unused_handler(void) {
+    LogError("[Interrupt]: unused panic\n");
+}
 
 #define IRQ_IS_BASIC(x) ((x >= 64))
 #define IRQ_IS_GPU2(x) ((x >= 32 && x < 64))
@@ -142,7 +146,9 @@ void interrupt_handler(void) {
     }
 }
 
-void __attribute__((interrupt("FIQ"))) fast_interrupt_handler(void) {}
+void __attribute__((interrupt("FIQ"))) fast_interrupt_handler(void) {
+    LogError("[Interrupt]: fast irq\n");
+}
 
 TimerHandler *timerHandler = nullptr;
 
