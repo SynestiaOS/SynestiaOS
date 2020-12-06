@@ -19,14 +19,24 @@ PageTable *kernelVMMPT;
 void map_kernel_l1pt(uint64_t l1ptPhysicalAddress, uint64_t l2ptPhysicalAddress) {
     kernelVMML1PT = (Level1PageTable *) l1ptPhysicalAddress;
     kernelVMML1PT->pte[0].valid = 1;
-    kernelVMML1PT->pte[0].table = 1;
+    kernelVMML1PT->pte[0].table = 0;
     kernelVMML1PT->pte[0].af = 1;
-    kernelVMML1PT->pte[0].base = (uint32_t) l2ptPhysicalAddress >> VA_OFFSET;
+    kernelVMML1PT->pte[0].base = (uint32_t) 0 >> VA_OFFSET;
 
     kernelVMML1PT->pte[1].valid = 1;
-    kernelVMML1PT->pte[1].table = 1;
+    kernelVMML1PT->pte[1].table = 0;
     kernelVMML1PT->pte[1].af = 1;
-    kernelVMML1PT->pte[1].base = (uint32_t)((l2ptPhysicalAddress + 4 * KB) >> VA_OFFSET);
+    kernelVMML1PT->pte[1].base = (uint32_t)((1*GB) >> VA_OFFSET);
+
+    kernelVMML1PT->pte[2].valid = 1;
+    kernelVMML1PT->pte[2].table = 0;
+    kernelVMML1PT->pte[2].af = 1;
+    kernelVMML1PT->pte[2].base = (uint32_t)((2*GB) >> VA_OFFSET);
+
+    kernelVMML1PT->pte[3].valid = 1;
+    kernelVMML1PT->pte[3].table = 0;
+    kernelVMML1PT->pte[3].af = 1;
+    kernelVMML1PT->pte[3].base = (uint32_t)((3*GB) >> VA_OFFSET);
 }
 
 void map_kernel_l2pt(uint64_t l2ptPhysicalAddress, uint64_t ptPhysicalAddress) {
@@ -101,9 +111,9 @@ void map_kernel_mm() {
 
     map_kernel_l1pt(l1ptPhysicalAddress, l2ptPhysicalAddress);
     LogInfo("[vmm]: level 1 page table done\n");
-    map_kernel_l2pt(l2ptPhysicalAddress, ptPhysicalAddress);
+//    map_kernel_l2pt(l2ptPhysicalAddress, ptPhysicalAddress);
     LogInfo("[vmm]: level 2 page table done\n");
-    map_kernel_pt(ptPhysicalAddress);
+//    map_kernel_pt(ptPhysicalAddress);
     LogInfo("[vmm]: page table done\n");
 }
 
