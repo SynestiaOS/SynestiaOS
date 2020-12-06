@@ -64,9 +64,6 @@ void kernel_vmm_enable() {
     write_ttbr0((uint32_t) kernelVMML1PT);
     LogInfo("[vmm]: ttbr0 writed\n");
 
-    write_dacr(0x55555555);
-    LogInfo("[vmm]: dacr writed\n");
-
     mmu_enable();
     LogInfo("[vmm]: vmm enabled\n");
 }
