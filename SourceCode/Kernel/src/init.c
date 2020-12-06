@@ -156,6 +156,7 @@ uint32_t *GPU_FLUSH(int args) {
 }
 
 void initProcessUpdate(uint32_t process) {
+    LogInfo("[VMM]: %d / 100 mapped\n", process);
     gfx.operations.fillRect(&gfx, 120, 520, 120 + process * (((1024 - 240) / 100) + 1), 530, 0xf25a29);
 
     gfx.operations.fillRect(&gfx, 120 - 10, 540, 1024 - 120, 570, 0x171520);
@@ -175,10 +176,9 @@ TimerHandler gpuHandler;
 SpinLock bootSpinLock = SpinLockCreate();
 
 void renderBootScreen() {
+    mmu_disable();
     heap_create(&kernelHeap, &__HEAP_BEGIN, 64 * MB);
     gpu_init();
-
-    kernel_vmm_add_map_hook(initProcessUpdate);
 
     gfx.operations.fillRect(&gfx, 0, 0, 1024, 768, 0x171520);
     gfx.operations.fillRect(&gfx, 120, 520, 1024 - 120, 530, 0xf7941d);
@@ -208,8 +208,10 @@ void kernel_main(void) {
         page_allocator_create(&kernelPageAllocator, KERNEL_PHYSICAL_START, KERNEL_PHYSICAL_SIZE);
 
         gfx2d_create_context(&gfx, 1024, 768, GFX2D_BUFFER);
+
         renderBootScreen();
 
+        kernel_vmm_add_map_hook(initProcessUpdate);
         // init kernel virtual memory mapping
         kernel_vmm_init();
 
