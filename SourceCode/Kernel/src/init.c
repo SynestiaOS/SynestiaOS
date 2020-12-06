@@ -194,7 +194,7 @@ void renderBootScreen() {
 
     GUILabel labelCopyright;
     gui_label_create(&labelCopyright);
-    gui_label_init(&labelCopyright, 450, 720, "@ZionLab 2020");
+    gui_label_init(&labelCopyright, 450, 720, "@WeijiLab 2020");
     gui_label_draw(&labelCopyright);
 }
 
