@@ -57,14 +57,14 @@ static inline void mmu_enable() {
     asm volatile("mrc p15, 0, r12, c1, c0, 0");
     asm volatile("orr r12, r12, #0x1");
     asm volatile("mcr p15, 0, r12, c1, c0, 0");
-    asm volatile("dsb");
+    asm volatile("isb");
 }
 
 static inline void mmu_disable() {
     asm volatile("mrc p15, 0, r12, c1, c0, 0");
     asm volatile("bic r12, r12, #0x1");
     asm volatile("mcr p15, 0, r12, c1, c0, 0");
-    asm volatile("dsb");
+    asm volatile("isb");
 }
 
 /**
