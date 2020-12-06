@@ -155,48 +155,8 @@ uint32_t *GPU_FLUSH(int args) {
     }
 }
 
-void initProcessUpdate(uint32_t process) {
-    LogInfo("[VMM]: %d / 100 mapped\n", process);
-    gfx.operations.fillRect(&gfx, 120, 520, 120 + process * (((1024 - 240) / 100) + 1), 530, 0xf25a29);
-
-    gfx.operations.fillRect(&gfx, 120 - 10, 540, 1024 - 120, 570, 0x171520);
-    GUILabel label;
-    gui_label_create(&label);
-    char str[10] = {'\0'};
-    gui_label_init(&label, 120 + process * (((1024 - 240) / 100) + 1) - 8, 550, itoa(process, &str, 10));
-    GUILabel labelPercent;
-    gui_label_create(&labelPercent);
-    gui_label_init(&labelPercent, 120 + process * (((1024 - 240) / 100) + 1) + 8, 550, "%");
-    gui_label_draw(&label);
-    gui_label_draw(&labelPercent);
-    gpu_flush(1);
-}
-
 TimerHandler gpuHandler;
 SpinLock bootSpinLock = SpinLockCreate();
-
-void renderBootScreen() {
-    mmu_disable();
-    heap_create(&kernelHeap, &__HEAP_BEGIN, 64 * MB);
-    gpu_init();
-
-    gfx.operations.fillRect(&gfx, 0, 0, 1024, 768, 0x171520);
-    gfx.operations.fillRect(&gfx, 120, 520, 1024 - 120, 530, 0xf7941d);
-
-    gfx.operations.drawBitmap(&gfx, 384, 150, 256, 256, bootLogo());
-
-    GUILabel label;
-    gui_label_create(&label);
-    label.component.colorMode = RGB;
-    label.component.size.width = 100;
-    gui_label_init(&label, 120, 500, "Booting...");
-    gui_label_draw(&label);
-
-    GUILabel labelCopyright;
-    gui_label_create(&labelCopyright);
-    gui_label_init(&labelCopyright, 450, 720, "@WeijiLab 2020");
-    gui_label_draw(&labelCopyright);
-}
 
 void kernel_main(void) {
     if (read_cpuid() == 0) {
@@ -207,11 +167,6 @@ void kernel_main(void) {
         // create kernel physical page allocator
         page_allocator_create(&kernelPageAllocator, KERNEL_PHYSICAL_START, KERNEL_PHYSICAL_SIZE);
 
-        gfx2d_create_context(&gfx, 1024, 768, GFX2D_BUFFER);
-
-        renderBootScreen();
-
-        kernel_vmm_add_map_hook(initProcessUpdate);
         // init kernel virtual memory mapping
         kernel_vmm_init();
 
@@ -227,6 +182,8 @@ void kernel_main(void) {
 
         vfs->operations.mount(vfs, "root", FILESYSTEM_EXT2, (void *) EXT2_ADDRESS);
 
+        gpu_init();
+        gfx2d_create_context(&gfx, 1024, 768, GFX2D_BUFFER);
         uint32_t *background = (uint32_t *) kernelHeap.operations.alloc(&kernelHeap, 768 * 1024 * 4);
         vfs_kernel_read(vfs, "/initrd/init/bg1024_768.dat", background, 768 * 1024 * 4);
         gfx.operations.drawBitmap(&gfx, 0, 0, 1024, 768, background);

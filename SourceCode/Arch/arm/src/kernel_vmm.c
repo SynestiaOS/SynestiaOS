@@ -37,10 +37,6 @@ void map_kernel_pt(uint64_t pageTablePhysicalAddress) {
     kernelVMML1PT->pte[3].base = (uint32_t)((3*GB) >> VA_OFFSET);
 }
 
-void (*processHockFunc)(uint32_t process);
-
-void kernel_vmm_add_map_hook(void (*func)(uint32_t process)) { processHockFunc = func; }
-
 void map_kernel_mm() {
     uint64_t pageTablePhysicalAddress = (uint64_t) &__PAGE_TABLE;
 
