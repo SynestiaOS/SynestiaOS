@@ -62,9 +62,10 @@ static inline void mmu_enable() {
 }
 
 static inline void mmu_disable() {
-    asm volatile("mrc p15, 0, r12, c1, c0, 0");
-    asm volatile("bic r12, r12, #0x1");
-    asm volatile("mcr p15, 0, r12, c1, c0, 0");
+    volatile uint32_t val;
+    asm volatile("mrc p15, 0, %0, c1, c0, 0":"=r"(val));
+    asm volatile("bic %0, %1, #0x1":"=r"(val):"r"(val));
+    asm volatile("mcr p15, 0, %0, c1, c0, 0"::"r"(val):"memory");
     asm volatile("isb");
 }
 
