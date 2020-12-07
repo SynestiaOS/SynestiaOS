@@ -15,7 +15,7 @@
 static inline uint32_t read_mmfr0(void) {
     uint32_t mmfr;
     asm volatile("mrc p15, 0, %0, c0, c1, 4"
-                 : "=r"(mmfr));
+    : "=r"(mmfr));
     return mmfr;
 }
 
@@ -25,9 +25,9 @@ static inline uint32_t read_mmfr0(void) {
  */
 static inline void write_ttbr0(uint32_t val) {
     asm volatile("mcr p15, 0, %0, c2, c0, 0"
-                 :
-                 : "r"(val)
-                 : "memory");
+    :
+    : "r"(val)
+    : "memory");
     asm volatile("dmb");
 }
 
@@ -38,7 +38,7 @@ static inline void write_ttbr0(uint32_t val) {
 static inline uint32_t read_ttbcr(void) {
     uint32_t val = 0;
     asm volatile("mrc p15, 0, %0, c2, c0, 2"
-                 : "=r"(val));
+    : "=r"(val));
     return val;
 }
 
@@ -48,15 +48,16 @@ static inline uint32_t read_ttbcr(void) {
  */
 static inline void write_ttbcr(uint32_t val) {
     asm volatile("mcr p15, 0, %0, c2, c0, 2"
-                 :
-                 : "r"(val)
-                 : "memory");
+    :
+    : "r"(val)
+    : "memory");
 }
 
 static inline void mmu_enable() {
-    asm volatile("mrc p15, 0, r12, c1, c0, 0");
-    asm volatile("orr r12, r12, #0x1");
-    asm volatile("mcr p15, 0, r12, c1, c0, 0");
+    volatile uint32_t val;
+    asm volatile("mrc p15, 0, %0, c1, c0, 0":"=r"(val));
+    asm volatile("orr %0, %1, #0x1":"=r"(val):"r"(val));
+    asm volatile("mcr p15, 0, %0, c1, c0, 0"::"r"(val):"memory");
     asm volatile("isb");
 }
 
@@ -73,8 +74,8 @@ static inline void mmu_disable() {
  */
 static inline void write_dacr(uint32_t val) {
     asm volatile("mcr p15, 0, %0, c3, c0, 0"
-                 :
-                 : "r"(val));
+    :
+    : "r"(val));
 }
 
 #endif//__KERNEL_MMU_H__
