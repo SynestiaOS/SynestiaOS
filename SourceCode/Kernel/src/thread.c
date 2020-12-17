@@ -10,6 +10,7 @@
 #include "kernel/log.h"
 #include "kernel/thread.h"
 #include "kernel/vfs_dentry.h"
+#include "kernel/percpu.h"
 #include "libc/stdlib.h"
 #include "libc/string.h"
 
@@ -197,6 +198,8 @@ Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uin
         thread->runtimeNs = 0;
         thread->runtimeVirtualNs = 0;
         thread->startTime = ktimer_sys_runtime();
+
+        thread->cpuAffinity = CPU_MASK_ALL;
 
         thread->parentThread = nullptr;
         thread->pid = thread_alloc_pid();

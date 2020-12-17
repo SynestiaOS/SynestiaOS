@@ -1,26 +1,19 @@
-#include "libc/macros.h"
+#include <libgfx/gfx2d.h>
 #include "arm/cpu.h"
 #include "arm/kernel_vmm.h"
-#include "arm/mmu.h"
 #include "arm/page.h"
 #include "kernel/ext2.h"
 #include "kernel/interrupt.h"
 #include "kernel/kheap.h"
-#include "kernel/log.h"
 #include "kernel/sched.h"
 #include "kernel/spinlock.h"
 #include "kernel/vfs.h"
+#include "kernel/percpu.h"
 #include "libc/stdlib.h"
-#include "libc/string.h"
-#include "libelf/elf.h"
-#include "libgfx/font8bits.h"
-#include "libgfx/gfx2d.h"
 #include "libgui/gui_animation.h"
 #include "libgui/gui_button.h"
 #include "libgui/gui_canvas.h"
 #include "libgui/gui_label.h"
-#include "libgui/gui_panel.h"
-#include "libgui/gui_view3d.h"
 #include "libgui/gui_window.h"
 #include "raspi2/gpu.h"
 #include "raspi2/synestia_os_hal.h"
@@ -200,20 +193,19 @@ void kernel_main(void) {
         schd_init();
 
         Thread *gpuProcess = thread_create("gpu", &GPU_FLUSH, 0, 0);
+        gpuProcess->cpuAffinity = CPU_0_MASK;
         schd_add_thread(gpuProcess, 1);
 
-        Thread *cpuHolder = thread_create("cpuholder", &GPU_FLUSH, 0, 5);
-        schd_add_thread(cpuHolder, 5);
-        schd_add_thread(cpuHolder, 5);
-        schd_add_thread(cpuHolder, 5);
-
         Thread *windowDialogThread = thread_create("Welcome", &window_dialog, 0, 0);
+        windowDialogThread->cpuAffinity = CPU_0_MASK;
         schd_add_thread(windowDialogThread, 0);
 
-//        Thread *windowCanvas2DThread = thread_create("Canvas2D", &window_canvas2D, 1, 0);
+//        Thread *windowCanvas2DThread = thread_create("Canvas2D", &window_canvas2D, 0, 0);
+//        windowCanvas2DThread->cpuAffinity = CPU_0_MASK;
 //        schd_add_thread(windowCanvas2DThread, 0);
 
         Thread *windowFileSystemThread = thread_create("FileManager", &window_filesystem, 0, 0);
+        windowFileSystemThread->cpuAffinity = CPU_0_MASK;
         schd_add_thread(windowFileSystemThread, 0);
 
 

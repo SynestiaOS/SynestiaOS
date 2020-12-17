@@ -114,7 +114,7 @@ KernelStatus schd_init() {
 
 KernelStatus schd_add_thread(Thread *thread, uint32_t priority) {
     thread->priority = priority;
-    PerCpu *perCpu = percpu_min_priority();
+    PerCpu *perCpu = percpu_min_priority(thread->cpuAffinity);
     KernelStatus threadAddStatus = perCpu->operations.insertThread(perCpu, thread);
     if (threadAddStatus != OK) {
         LogError("[Schd] thread %s add to schduler failed.\n", thread->name);
