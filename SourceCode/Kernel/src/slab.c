@@ -20,36 +20,40 @@ void slab_default_alloc_callback(struct Slab *slab, KernelObjectType type, void 
 void slab_default_free_callback(struct Slab *slab, KernelObjectType type, void *ptr) {
 }
 
+void *slab_default_alloc_kernel_object(struct Slab *slab, KernelObjectType type) {
+    switch (type) {
+        case KERNEL_OBJECT_THREAD: {
+            Thread *thread = kernelHeap.operations.alloc(&kernelHeap, sizeof(Thread));
+            slab->kernelObjects[type] = &thread->object;
+            thread->object.status = USING;
+            return thread;
+        }
+        case KERNEL_OBJECT_MUTEX: {
+            Mutex *mutex = kernelHeap.operations.alloc(&kernelHeap, sizeof(Mutex));
+            slab->kernelObjects[type] = &mutex->object;
+            mutex->object.status = USING;
+            return mutex;
+        }
+        case KERNEL_OBJECT_SEMAPHORE: {
+            Semaphore *semaphore = kernelHeap.operations.alloc(&kernelHeap, sizeof(Semaphore));
+            slab->kernelObjects[type] = &semaphore->object;
+            semaphore->object.status = USING;
+            return semaphore;
+        }
+        case KERNEL_OBJECT_FILE_DESCRIPTOR: {
+            FileDescriptor *fileDescriptor = kernelHeap.operations.alloc(&kernelHeap, sizeof(FileDescriptor));
+            slab->kernelObjects[type] = &fileDescriptor->object;
+            fileDescriptor->object.status = USING;
+            return fileDescriptor;
+        }
+    }
+}
+
 void *slab_default_alloc(struct Slab *slab, KernelObjectType type) {
     // can not found any kernel object from kernel object lists
     if (slab->kernelObjects[type] == nullptr) {
         // alloc a new kernel object from heap and link it to kernel object list
-        switch (type) {
-            case KERNEL_OBJECT_THREAD: {
-                Thread *thread = kernelHeap.operations.alloc(&kernelHeap, sizeof(Thread));
-                slab->kernelObjects[type] = &thread->object;
-                thread->object.status = USING;
-                return thread;
-            }
-            case KERNEL_OBJECT_MUTEX: {
-                Mutex *mutex = kernelHeap.operations.alloc(&kernelHeap, sizeof(Mutex));
-                slab->kernelObjects[type] = &mutex->object;
-                mutex->object.status = USING;
-                return mutex;
-            }
-            case KERNEL_OBJECT_SEMAPHORE: {
-                Semaphore *semaphore = kernelHeap.operations.alloc(&kernelHeap, sizeof(Semaphore));
-                slab->kernelObjects[type] = &semaphore->object;
-                semaphore->object.status = USING;
-                return semaphore;
-            }
-            case KERNEL_OBJECT_FILE_DESCRIPTOR: {
-                FileDescriptor *fileDescriptor = kernelHeap.operations.alloc(&kernelHeap, sizeof(FileDescriptor));
-                slab->kernelObjects[type] = &fileDescriptor->object;
-                fileDescriptor->object.status = USING;
-                return fileDescriptor;
-            }
-        }
+        return slab_default_alloc_kernel_object(slab, type);
     } else {
         KernelObject *kernelObject = slab->kernelObjects[type];
 
@@ -68,32 +72,7 @@ void *slab_default_alloc(struct Slab *slab, KernelObjectType type) {
                 kernelObject = kernelObject->next;
             }
             // oops, not found free kernel object, so let's alloc from heap.
-            switch (type) {
-                case KERNEL_OBJECT_THREAD: {
-                    Thread *thread = kernelHeap.operations.alloc(&kernelHeap, sizeof(Thread));
-                    slab->kernelObjects[type] = &thread->object;
-                    thread->object.status = USING;
-                    return thread;
-                }
-                case KERNEL_OBJECT_MUTEX: {
-                    Mutex *mutex = kernelHeap.operations.alloc(&kernelHeap, sizeof(Mutex));
-                    slab->kernelObjects[type] = &mutex->object;
-                    mutex->object.status = USING;
-                    return mutex;
-                }
-                case KERNEL_OBJECT_SEMAPHORE: {
-                    Semaphore *semaphore = kernelHeap.operations.alloc(&kernelHeap, sizeof(Semaphore));
-                    slab->kernelObjects[type] = &semaphore->object;
-                    semaphore->object.status = USING;
-                    return semaphore;
-                }
-                case KERNEL_OBJECT_FILE_DESCRIPTOR: {
-                    FileDescriptor *fileDescriptor = kernelHeap.operations.alloc(&kernelHeap, sizeof(FileDescriptor));
-                    slab->kernelObjects[type] = &fileDescriptor->object;
-                    fileDescriptor->object.status = USING;
-                    return fileDescriptor;
-                }
-            }
+            return slab_default_alloc_kernel_object(slab, type);
         }
     }
 }
