@@ -163,7 +163,6 @@ typedef struct Thread {
     CpuNum lastCpu;
     CpuNum currCpu;
     CpuMask cpuAffinity;
-    void *arg;
 
     uint32_t returnCode;
 
@@ -174,9 +173,10 @@ typedef struct Thread {
 
     KernelObject object;
 
-    bool interruptable;
+    uint32_t interruptable;
+    void *arg;
 
-} __attribute__((packed)) Thread;
+} /*__attribute__((packed))*/ Thread;
 
 Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uint32_t priority);
 

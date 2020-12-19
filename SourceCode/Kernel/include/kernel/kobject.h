@@ -20,10 +20,19 @@ typedef enum KernelObjectStatus {
     FREE,
 } KernelObjectStatus;
 
+typedef void *(*KernelObjectOperationGetObject)(struct KernelObject *object);
+typedef void (*KernelObjectOperationInit)(struct KernelObject *object, KernelObjectType type,KernelObjectStatus status);
+
+typedef struct KernelObjectOperations {
+    KernelObjectOperationGetObject getObject;
+    KernelObjectOperationInit init;
+} KernelObjectOperations;
+
 typedef struct KernelObject {
     KernelObjectType type;
     KernelObjectStatus status;
     struct KernelObject *next;
+    KernelObjectOperations operations;
 } KernelObject;
 
 #endif//__SYNESTIAOS_KOBJECT_H__
