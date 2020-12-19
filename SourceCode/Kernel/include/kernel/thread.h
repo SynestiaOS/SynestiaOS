@@ -176,7 +176,7 @@ typedef struct Thread {
     uint32_t interruptable;
     void *arg;
 
-} /*__attribute__((packed))*/ Thread;
+} Thread;
 
 Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uint32_t priority);
 

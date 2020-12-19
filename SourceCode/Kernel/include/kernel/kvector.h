@@ -47,8 +47,8 @@ typedef struct KernelVectorOperations {
 typedef struct KernelVector {
     uint32_t index;
     uint32_t size;
+//    KernelVectorOperations operations;
     ListNode **node;
-    //  KernelVectorOperations operations;
 } KernelVector;
 
 KernelVector *kvector_allocate();
