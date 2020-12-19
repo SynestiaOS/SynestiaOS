@@ -9,6 +9,7 @@
 #include "kernel/spinlock.h"
 #include "kernel/vfs.h"
 #include "kernel/percpu.h"
+#include "kernel/slab.h"
 #include "libc/stdlib.h"
 #include "libgui/gui_animation.h"
 #include "libgui/gui_button.h"
@@ -28,6 +29,7 @@ VFS *vfs;
 Heap kernelHeap;
 PhysicalPageAllocator kernelPageAllocator;
 PhysicalPageAllocator userspacePageAllocator;
+Slab kernelObjectSlab;
 Gfx2DContext gfx;
 
 extern uint32_t *gpu_flush(int args);
@@ -165,6 +167,7 @@ void kernel_main(void) {
 
         // create kernel heap
         heap_create(&kernelHeap, &__HEAP_BEGIN, KERNEL_PHYSICAL_SIZE - (uint32_t) (&__HEAP_BEGIN));
+        slab_create(&kernelObjectSlab, 0, 0);
 
         // create userspace physical page allocator
         page_allocator_create(&userspacePageAllocator, USER_PHYSICAL_START, USER_PHYSICAL_SIZE);
