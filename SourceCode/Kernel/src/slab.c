@@ -14,10 +14,16 @@
 extern PhysicalPageAllocator kernelPageAllocator;
 extern Heap kernelHeap;
 
-void slab_default_alloc_callback(struct Slab *slab, KernelObjectType type, void *ptr) {
+void slab_default_alloc_callback(struct Slab *slab, KernelObjectType type, void *ptr, uint32_t reUse) {
+    if(reUse) {
+        slab->statistics.free[type]--;
+    }else{
+        slab->statistics.count[type]++;
+    }
 }
 
 void slab_default_free_callback(struct Slab *slab, KernelObjectType type, void *ptr) {
+    slab->statistics.free[type]++;
 }
 
 void *slab_default_alloc_kernel_object(struct Slab *slab, KernelObjectType type) {
@@ -53,7 +59,9 @@ void *slab_default_alloc(struct Slab *slab, KernelObjectType type) {
     // can not found any kernel object from kernel object lists
     if (slab->kernelObjects[type] == nullptr) {
         // alloc a new kernel object from heap and link it to kernel object list
-        return slab_default_alloc_kernel_object(slab, type);
+        void *ptr = slab_default_alloc_kernel_object(slab, type);
+        slab->allocCallback(slab,type,ptr,0);
+        return ptr;
     } else {
         KernelObject *kernelObject = slab->kernelObjects[type];
 
@@ -61,7 +69,9 @@ void *slab_default_alloc(struct Slab *slab, KernelObjectType type) {
         if (kernelObject->status == FREE) {
             // just use it, and mark it as used
             kernelObject->status = USING;
-            return kernelObject->operations.getObject(&kernelObject);
+            void *ptr = kernelObject->operations.getObject(&kernelObject);
+            slab->allocCallback(slab,type,ptr,1);
+            return ptr;
         } else {
             // let find the free kernel object from list
             while (kernelObject->next != nullptr) {
@@ -72,7 +82,9 @@ void *slab_default_alloc(struct Slab *slab, KernelObjectType type) {
                 kernelObject = kernelObject->next;
             }
             // oops, not found free kernel object, so let's alloc from heap.
-            return slab_default_alloc_kernel_object(slab, type);
+            void *ptr = slab_default_alloc_kernel_object(slab, type);
+            slab->allocCallback(slab,type,ptr,0);
+            return ptr;
         }
     }
 }
@@ -81,9 +93,11 @@ KernelStatus slab_default_free(struct Slab *slab, void *ptr) {
 }
 
 void slab_default_set_alloc_callback(struct Slab *slab, SlabAllocCallback callback) {
+    slab->allocCallback = callback;
 }
 
 void slab_default_set_free_callback(struct Slab *slab, SlabFreeCallback callback) {
+    slab->freeCallback = callback;
 }
 
 KernelStatus slab_create(Slab *slab, uint32_t addr, uint32_t size) {

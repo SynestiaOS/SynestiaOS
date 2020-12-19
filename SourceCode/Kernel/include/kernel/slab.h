@@ -11,20 +11,20 @@
 
 #define SLAB_ARRAY_COUNT 64
 
-typedef void (*SlabAllocCallback)(struct Slab *slab, KernelObjectType type, void *ptr);
+typedef void (*SlabAllocCallback)(struct Slab *slab, KernelObjectType type, void *ptr, uint32_t reUse);
 
 typedef void (*SlabFreeCallback)(struct Slab *slab, KernelObjectType type, void *ptr);
-
-typedef void *(*SlabOperationAlloc)(struct Slab *slab, KernelObjectType type);
-
-typedef KernelStatus (*SlabOperationFree)(struct Slab *slab, void *ptr);
 
 typedef void (*SlabOperationSetAllocCallback)(struct Slab *slab, SlabAllocCallback callback);
 
 typedef void (*SlabOperationSetFreeCallback)(struct Slab *slab, SlabFreeCallback callback);
 
+typedef void *(*SlabOperationAlloc)(struct Slab *slab, KernelObjectType type);
+
+typedef KernelStatus (*SlabOperationFree)(struct Slab *slab, void *ptr);
+
 typedef struct SlabStatistics {
-    int used[SLAB_ARRAY_COUNT];
+    int count[SLAB_ARRAY_COUNT];
     int free[SLAB_ARRAY_COUNT];
 } SlabStatistics;
 
