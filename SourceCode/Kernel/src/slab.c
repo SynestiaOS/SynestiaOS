@@ -9,8 +9,10 @@
 #include "kernel/semaphore.h"
 #include "kernel/Thread.h"
 #include "kernel/type.h"
+#include "kernel/kheap.h"
 
 extern PhysicalPageAllocator kernelPageAllocator;
+extern Heap kernelHeap;
 
 uint32_t get_kernel_object_size(KernelObjectType type) {
     switch (type) {
@@ -37,7 +39,28 @@ void *slab_default_alloc(struct Slab *slab, KernelObjectType type) {
     // can not found any kernel object from kernel object lists
     if (slab->kernelObjects[type] == nullptr) {
         // alloc a new kernel object from heap and link it to kernel object list
-        // TODO:
+        switch (type) {
+            case KERNEL_OBJECT_THREAD:{
+                Thread * thread = kernelHeap.operations.alloc(&kernelHeap,sizeof (Thread));
+                slab->kernelObjects[type] = &thread->object;
+                return thread;
+            }
+            case KERNEL_OBJECT_MUTEX:{
+                Mutex * mutex = kernelHeap.operations.alloc(&kernelHeap,sizeof (Mutex));
+                slab->kernelObjects[type] = &mutex->object;
+                return mutex;
+            }
+            case KERNEL_OBJECT_SEMAPHORE:{
+                Semaphore * semaphore = kernelHeap.operations.alloc(&kernelHeap,sizeof (Semaphore));
+                slab->kernelObjects[type] = &semaphore->object;
+                return semaphore;
+            }
+            case KERNEL_OBJECT_FILE_DESCRIPTOR:{
+                FileDescriptor * fileDescriptor = kernelHeap.operations.alloc(&kernelHeap,sizeof (FileDescriptor));
+                slab->kernelObjects[type] = &fileDescriptor->object;
+                return fileDescriptor;
+            }
+        }
     } else {
         KernelObject *kernelObject = slab->kernelObjects[type];
 

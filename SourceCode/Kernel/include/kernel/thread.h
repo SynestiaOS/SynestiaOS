@@ -82,6 +82,7 @@ typedef struct FileDescriptor {
     uint32_t pos;
     DirectoryEntry *directoryEntry;
     ListNode node;
+    KernelObject object;
 } FileDescriptor;
 
 typedef uint32_t (*FilesStructOperationOpenFile)(struct FilesStruct *filesStruct,
@@ -158,7 +159,6 @@ typedef struct Thread {
     uint32_t runtimeNs;
     uint32_t runtimeVirtualNs;
 
-    bool interruptable;
 
     CpuNum lastCpu;
     CpuNum currCpu;
@@ -173,6 +173,8 @@ typedef struct Thread {
     FilesStruct filesStruct;
 
     KernelObject object;
+
+    bool interruptable;
 
 } __attribute__((packed)) Thread;
 
