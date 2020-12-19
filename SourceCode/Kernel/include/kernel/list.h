@@ -14,7 +14,7 @@
 typedef struct ListNode {
     struct ListNode *prev;
     struct ListNode *next;
-} __attribute__((packed)) ListNode;
+} ListNode;
 
 KernelStatus klist_insert(ListNode *list, ListNode *node);
 

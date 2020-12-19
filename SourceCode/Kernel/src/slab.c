@@ -30,25 +30,25 @@ void *slab_default_alloc_kernel_object(struct Slab *slab, KernelObjectType type)
     switch (type) {
         case KERNEL_OBJECT_THREAD: {
             Thread *thread = kernelHeap.operations.alloc(&kernelHeap, sizeof(Thread));
-            klist_append(slab->kernelObjects[type], &thread->object);
+            klist_append(slab->kernelObjects[type], &thread->object.list);
             thread->object.status = USING;
             return thread;
         }
         case KERNEL_OBJECT_MUTEX: {
             Mutex *mutex = kernelHeap.operations.alloc(&kernelHeap, sizeof(Mutex));
-            klist_append(slab->kernelObjects[type], &mutex->object);
+            klist_append(slab->kernelObjects[type], &mutex->object.list);
             mutex->object.status = USING;
             return mutex;
         }
         case KERNEL_OBJECT_SEMAPHORE: {
             Semaphore *semaphore = kernelHeap.operations.alloc(&kernelHeap, sizeof(Semaphore));
-            klist_append(slab->kernelObjects[type], &semaphore->object);
+            klist_append(slab->kernelObjects[type], &semaphore->object.list);
             semaphore->object.status = USING;
             return semaphore;
         }
         case KERNEL_OBJECT_FILE_DESCRIPTOR: {
             FileDescriptor *fileDescriptor = kernelHeap.operations.alloc(&kernelHeap, sizeof(FileDescriptor));
-            klist_append(slab->kernelObjects[type], &fileDescriptor->object);
+            klist_append(slab->kernelObjects[type], &fileDescriptor->object.list);
             fileDescriptor->object.status = USING;
             return fileDescriptor;
         }
@@ -74,12 +74,12 @@ void *slab_default_alloc(struct Slab *slab, KernelObjectType type) {
             return ptr;
         } else {
             // let find the free kernel object from list
-            while (kernelObject->next != nullptr) {
-                if (kernelObject->next->status == FREE) {
+            while (kernelObject->list.next != nullptr) {
+                if (getNode(kernelObject->list.next, KernelObject, list)->status == FREE) {
                     kernelObject->status = USING;
                     return kernelObject->operations.getObject(&kernelObject);
                 }
-                kernelObject = kernelObject->next;
+                kernelObject = kernelObject->list.next;
             }
             // oops, not found free kernel object, so let's alloc from heap.
             void *ptr = slab_default_alloc_kernel_object(slab, type);
@@ -90,7 +90,45 @@ void *slab_default_alloc(struct Slab *slab, KernelObjectType type) {
 }
 
 KernelStatus slab_default_free(struct Slab *slab, KernelObjectType type, void *ptr) {
-
+    // set kernel object free, then remove from kernel object list, at last insert the removed node to head of list.
+    switch (type) {
+        case KERNEL_OBJECT_THREAD: {
+            Thread *thread = kernelHeap.operations.alloc(&kernelHeap, sizeof(Thread));
+            klist_remove_node(&thread->object.list);
+            thread->object.list.next = slab->kernelObjects[type];
+            slab->kernelObjects[type] = &thread->object.list;
+            thread->object.status = FREE;
+            slab->freeCallback(slab, KERNEL_OBJECT_THREAD, thread);
+            return OK;
+        }
+        case KERNEL_OBJECT_MUTEX: {
+            Mutex *mutex = kernelHeap.operations.alloc(&kernelHeap, sizeof(Mutex));
+            klist_remove_node(&mutex->object.list);
+            mutex->object.list.next = slab->kernelObjects[type];
+            slab->kernelObjects[type] = &mutex->object.list;
+            mutex->object.status = USING;
+            slab->freeCallback(slab, KERNEL_OBJECT_THREAD, mutex);
+            return OK;
+        }
+        case KERNEL_OBJECT_SEMAPHORE: {
+            Semaphore *semaphore = kernelHeap.operations.alloc(&kernelHeap, sizeof(Semaphore));
+            klist_remove_node(&semaphore->object.list);
+            semaphore->object.list.next = slab->kernelObjects[type];
+            slab->kernelObjects[type] = &semaphore->object.list;
+            semaphore->object.status = USING;
+            slab->freeCallback(slab, KERNEL_OBJECT_THREAD, semaphore);
+            return OK;
+        }
+        case KERNEL_OBJECT_FILE_DESCRIPTOR: {
+            FileDescriptor *fileDescriptor = kernelHeap.operations.alloc(&kernelHeap, sizeof(FileDescriptor));
+            klist_remove_node(&fileDescriptor->object.list);
+            fileDescriptor->object.list.next = slab->kernelObjects[type];
+            slab->kernelObjects[type] = &fileDescriptor->object.list;
+            fileDescriptor->object.status = USING;
+            slab->freeCallback(slab, KERNEL_OBJECT_THREAD, fileDescriptor);
+            return OK;
+        }
+    }
 }
 
 void slab_default_set_alloc_callback(struct Slab *slab, SlabAllocCallback callback) {
