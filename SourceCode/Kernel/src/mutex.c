@@ -4,7 +4,6 @@
 
 #include "arm/cpu.h"
 #include "kernel/kqueue.h"
-#include "kernel/log.h"
 #include "kernel/mutex.h"
 #include "kernel/percpu.h"
 #include "kernel/sched.h"

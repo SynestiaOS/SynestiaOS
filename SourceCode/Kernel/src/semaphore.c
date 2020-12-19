@@ -2,7 +2,6 @@
 // Created by XingfengYang on 2020/7/17.
 //
 
-#include "kernel/log.h"
 #include "kernel/semaphore.h"
 #include "kernel/thread.h"
 

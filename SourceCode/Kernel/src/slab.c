@@ -7,7 +7,7 @@
 #include "kernel/kobject.h"
 #include "kernel/mutex.h"
 #include "kernel/semaphore.h"
-#include "kernel/Thread.h"
+#include "kernel/thread.h"
 #include "kernel/type.h"
 #include "kernel/kheap.h"
 
@@ -156,14 +156,12 @@ KernelStatus slab_create(Slab *slab, uint32_t addr, uint32_t size) {
     slab->address = KERNEL_PHYSICAL_START + slabPhysicalPage * PAGE_SIZE;
     LogInfo("[KHeap] kheap at: %d. \n", slab->address);
 
-
     slab->operations.setFreeCallback = slab_default_set_free_callback;
     slab->operations.setAllocCallback = slab_default_set_alloc_callback;
 
     slab->operations.alloc = slab_default_alloc;
     slab->operations.free = slab_default_free;
 
-
-    LogInfo("[KSlab] kslab created. \n");
+    LogInfo("[KSlab] kernel slab created. \n");
     return OK;
 }

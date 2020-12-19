@@ -2,7 +2,6 @@
 // Created by XingfengYang & ChengyuZhao on 2020/7/30.
 //
 
-#include "kernel/log.h"
 #include "kernel/vfs_dentry.h"
 #include "kernel/vfs_inode.h"
 #include "kernel/vfs_super_block.h"

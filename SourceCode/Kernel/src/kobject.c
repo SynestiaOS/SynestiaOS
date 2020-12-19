@@ -5,7 +5,7 @@
 #include "kernel/kobject.h"
 #include "kernel/mutex.h"
 #include "kernel/semaphore.h"
-#include "kernel/Thread.h"
+#include "kernel/thread.h"
 
 void *kernel_object_default_get(struct KernelObject *object) {
     switch (object->type) {

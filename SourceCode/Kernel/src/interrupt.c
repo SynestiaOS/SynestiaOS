@@ -1,4 +1,3 @@
-#include "libc/macros.h"
 #include "arm/vmm.h"
 #include "kernel/interrupt.h"
 #include "kernel/log.h"
