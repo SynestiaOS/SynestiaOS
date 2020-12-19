@@ -21,7 +21,7 @@ typedef void (*SlabOperationSetFreeCallback)(struct Slab *slab, SlabFreeCallback
 
 typedef void *(*SlabOperationAlloc)(struct Slab *slab, KernelObjectType type);
 
-typedef KernelStatus (*SlabOperationFree)(struct Slab *slab, void *ptr);
+typedef KernelStatus (*SlabOperationFree)(struct Slab *slab, KernelObjectType type, void *ptr);
 
 typedef struct SlabStatistics {
     int count[SLAB_ARRAY_COUNT];
