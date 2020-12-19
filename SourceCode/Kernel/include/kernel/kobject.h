@@ -22,7 +22,10 @@ typedef enum KernelObjectStatus {
 } KernelObjectStatus;
 
 typedef void *(*KernelObjectOperationGetObject)(struct KernelObject *object);
-typedef void (*KernelObjectOperationInit)(struct KernelObject *object, KernelObjectType type,KernelObjectStatus status);
+
+typedef void (*KernelObjectOperationInit)(struct KernelObject *object, KernelObjectType type,
+                                          KernelObjectStatus status);
+
 typedef uint32_t (*KernelObjectOperationGetSize)(struct KernelObject *object);
 
 typedef struct KernelObjectOperations {
