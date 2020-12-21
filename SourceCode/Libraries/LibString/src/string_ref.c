@@ -44,13 +44,11 @@ bool string_ref_equal(struct StringRef str1, struct StringRef str2) {
     if (str1.length != str2.length) {
         return false;
     }
-    bool isEqual = true;
     for (uint32_t i = 0; i < str1.length; i++) {
         if (str1.str[str1.pos + i] != str2.str[str2.pos + i]) {
-            isEqual = false;
-            break;
+            return false;
         }
     }
-    return isEqual;
+    return true;
 }
 

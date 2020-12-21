@@ -14,11 +14,32 @@ bool html_parser_parse_match_char(struct HTMLParser *parser, char ch) {
 }
 
 bool html_parser_parse_match_str(struct HTMLParser *parser, StringRef str) {
-    // TODO:
+    for (uint32_t i = 0; i < str.length; i++) {
+        if (!(parser->htmlStr[parser->pos + i]) || (parser->htmlStr[parser->pos + i] != str.str[str.pos + i])) {
+            return false;
+        }
+    }
+    return true;
+}
+
+bool isAlpha(char ch) {
+    if ((ch >= 65 && ch <= 90) || (ch >= 97 && ch <= 122)) {
+        return true;
+    }
+    return false;
 }
 
 StringRef html_parser_parse_name(struct HTMLParser *parser) {
-    // TODO:
+    uint32_t index = 0;
+    while (parser->htmlStr[parser->pos + index] && isAlpha(parser->htmlStr[parser->pos + index])) {
+        index++;
+    }
+    struct StringRef ref = {
+            .pos = parser->pos,
+            .length = index,
+            .str = parser->htmlStr,
+    };
+    return ref;
 }
 
 HTMLAttribute *html_parser_parse_attributes(struct HTMLParser *parser) {
@@ -29,18 +50,12 @@ StringRef html_parser_parse_str(struct HTMLParser *parser) {
     // TODO:
 }
 
-struct StringRef ref = {
-        .pos = 0,
-        .str ="</",
-        .length = 2,
-};
-
 HTMLElement *html_parser_parse_element(struct HTMLParser *parser) {
     if (html_parser_parse_match_char(parser, '<')) {
         StringRef name = html_parser_parse_name(parser);
         HTMLAttribute *attributes = html_parser_parse_attributes(parser);
         HTMLElement *children = html_parser_parse_element(parser);
-        html_parser_parse_match_str(parser, ref);
+        html_parser_parse_match_str(parser, string_ref("</"));
         html_parser_parse_match_str(parser, name);
         html_parser_parse_match_char(parser, '>');
 
