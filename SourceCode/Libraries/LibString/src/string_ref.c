@@ -4,6 +4,7 @@
 #include "libstring/string_ref.h"
 #include "libc/stdint.h"
 #include "libc/string.h"
+#include "libc/stdlib.h"
 
 StringRef string_ref(const char *str) {
     struct StringRef ref = {
@@ -50,5 +51,11 @@ bool string_ref_equal(struct StringRef str1, struct StringRef str2) {
         }
     }
     return true;
+}
+
+void string_ref_print(struct StringRef str) {
+    for (uint32_t i = 0; i < str.length; i++) {
+        printf("%c", str.str[str.pos + i]);
+    }
 }
 

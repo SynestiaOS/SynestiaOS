@@ -8,6 +8,7 @@
 
 #define nullptr ((void *) 0)
 
+
 bool html_parser_match_char(struct HTMLParser *parser, char ch) {
     if (parser->htmlStr[parser->pos] == ch) {
         return true;
@@ -32,9 +33,7 @@ bool html_parser_match_str(struct HTMLParser *parser, StringRef str) {
 
 void html_parser_consume_str(struct HTMLParser *parser, StringRef str) {
     for (uint32_t i = 0; i < str.length; i++) {
-        if (!(parser->htmlStr[parser->pos + i]) || (parser->htmlStr[parser->pos + i] != str.str[str.pos + i])) {
-            parser->pos++;
-        }
+        html_parser_consume_char(parser,str.str[str.pos + i]);
     }
 }
 
@@ -75,6 +74,10 @@ StringRef html_parser_parse_attribute_value(struct HTMLParser *parser){
 HTMLAttribute *html_parser_parse_attributes(struct HTMLParser *parser) {
     StringRef attrName = html_parser_parse_tag_name(parser);
 
+    printf("attrName: ");
+    string_ref_print(attrName);
+    printf("\n");
+
     html_parser_consume_whitespace(parser);
 
     html_parser_match_char(parser,'=');
@@ -103,9 +106,13 @@ HTMLDOM *html_parser_parse_element(struct HTMLParser *parser) {
         StringRef tagName = html_parser_parse_tag_name(parser);
         html_parser_consume_str(parser, tagName);
 
-        html_parser_consume_whitespace(parser);
-        HTMLAttribute *attributes = html_parser_parse_attributes(parser);
+        printf("tagName: ");
+        string_ref_print(tagName);
+        printf("\n");
 
+        html_parser_consume_whitespace(parser);
+
+        HTMLAttribute *attributes = html_parser_parse_attributes(parser);
         html_parser_match_char(parser, '>');
         html_parser_consume_char(parser, '>');
 
@@ -131,7 +138,7 @@ HTMLDOM *html_parser_parse_element(struct HTMLParser *parser) {
                 .element = element,
         };
         // TODO
-        // return htmlElementDOM;
+        // return htmlElement;
     } else {
         StringRef content = html_parser_parse_str(parser);
         struct HTMLDOM htmldom = {
@@ -139,7 +146,7 @@ HTMLDOM *html_parser_parse_element(struct HTMLParser *parser) {
                 .content = content,
         };
         // TODO
-        // return htmlTextDOM;
+        // return htmldom;
     }
 }
 
@@ -151,7 +158,7 @@ HTMLDOM *html_parser_default_parse(struct HTMLParser *parser) {
 
 void html_parser_default_print(struct HTMLParser *parser) {
     if (parser->root == nullptr) {
-        printf("root is null");
+//        printf("root is null");
     } else {
 
     }
