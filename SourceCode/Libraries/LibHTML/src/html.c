@@ -45,6 +45,16 @@ bool isAlpha(char ch) {
     return false;
 }
 
+void html_parser_consume_while_char(struct HTMLParser *parser, char ch) {
+    while (parser->htmlStr[parser->pos] && (parser->htmlStr[parser->pos] == ch)) {
+        parser->pos++;
+    }
+}
+
+void html_parser_consume_whitespace(struct HTMLParser *parser) {
+    html_parser_consume_while_char(parser, ' ');
+}
+
 StringRef html_parser_parse_tag_name(struct HTMLParser *parser) {
     uint32_t index = 0;
     while (parser->htmlStr[parser->pos + index] && isAlpha(parser->htmlStr[parser->pos + index])) {
@@ -58,17 +68,27 @@ StringRef html_parser_parse_tag_name(struct HTMLParser *parser) {
     return ref;
 }
 
-void html_parser_consume_while_char(struct HTMLParser *parser, char ch) {
-    while (parser->htmlStr[parser->pos] && (parser->htmlStr[parser->pos] == ch)) {
-        parser->pos++;
-    }
-}
-
-void html_parser_consume_whitespace(struct HTMLParser *parser) {
-    html_parser_consume_while_char(parser, ' ');
+StringRef html_parser_parse_attribute_value(struct HTMLParser *parser){
+    // TODO
 }
 
 HTMLAttribute *html_parser_parse_attributes(struct HTMLParser *parser) {
+    StringRef attrName = html_parser_parse_tag_name(parser);
+
+    html_parser_consume_whitespace(parser);
+
+    html_parser_match_char(parser,'=');
+    html_parser_consume_char(parser,'=');
+
+    html_parser_consume_whitespace(parser);
+
+    StringRef attrValue = html_parser_parse_attribute_value(parser);
+
+    struct HTMLAttribute attribute = {
+            .name = attrName,
+            .value = attrValue,
+    };
+
     // TODO:
 }
 
@@ -83,7 +103,9 @@ HTMLDOM *html_parser_parse_element(struct HTMLParser *parser) {
         StringRef tagName = html_parser_parse_tag_name(parser);
         html_parser_consume_str(parser, tagName);
 
+        html_parser_consume_whitespace(parser);
         HTMLAttribute *attributes = html_parser_parse_attributes(parser);
+
         html_parser_match_char(parser, '>');
         html_parser_consume_char(parser, '>');
 
@@ -109,7 +131,7 @@ HTMLDOM *html_parser_parse_element(struct HTMLParser *parser) {
                 .element = element,
         };
         // TODO
-        // return htmlElement;
+        // return htmlElementDOM;
     } else {
         StringRef content = html_parser_parse_str(parser);
         struct HTMLDOM htmldom = {
@@ -117,7 +139,7 @@ HTMLDOM *html_parser_parse_element(struct HTMLParser *parser) {
                 .content = content,
         };
         // TODO
-        // return htmldom;
+        // return htmlTextDOM;
     }
 }
 
