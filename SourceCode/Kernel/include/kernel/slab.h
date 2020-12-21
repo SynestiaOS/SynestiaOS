@@ -35,7 +35,6 @@ typedef struct SlabOperations {
     SlabOperationSetFreeCallback setFreeCallback;
 } SlabOperations;
 
-
 /**
  * kernelObjects struct:
  *
