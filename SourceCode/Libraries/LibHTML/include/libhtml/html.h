@@ -13,22 +13,39 @@ typedef struct HTMLAttribute {
     StringRef value;
 } HTMLAttribute;
 
+typedef enum HTMLNodeType {
+    HTMLNodeType_Text,
+    HTMLNodeType_Element,
+} HTMLNodeType;
+
+
 typedef struct HTMLElement {
     StringRef name;
     HTMLAttribute *attributes;
     struct HTMLElement *children;
 } HTMLElement;
 
+typedef struct HTMLDOM {
+    HTMLNodeType type;
+    union {
+        HTMLElement element;
+        StringRef content;
+    };
+} HTMLDOM;
 
-typedef HTMLElement *(*HTMLParserOperationParse)(struct HTMLParser *parser);
+
+typedef HTMLDOM *(*HTMLParserOperationParse)(struct HTMLParser *parser);
+
+typedef void (*HTMLParserOperationPrint)(struct HTMLParser *parser);
 
 typedef struct HTMLParserOperations {
     HTMLParserOperationParse parse;
+    HTMLParserOperationPrint print;
 } HTMLParserOperations;
 
 
 typedef struct HTMLParser {
-    struct HTMLElement *root;
+    struct HTMLDOM *root;
     HTMLParserOperations operations;
     uint32_t pos;
     const char *htmlStr;
