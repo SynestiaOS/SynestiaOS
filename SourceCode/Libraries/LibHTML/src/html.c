@@ -9,6 +9,7 @@
 #define nullptr ((void *) 0)
 
 
+
 bool html_parser_match_char(struct HTMLParser *parser, char ch) {
     if (parser->htmlStr[parser->pos] == ch) {
         return true;
@@ -158,27 +159,31 @@ HTMLDOM *html_parser_parse_element(struct HTMLParser *parser) {
 
         HTMLDOM *children = html_parser_parse_element(parser);
 
-        html_parser_match_str(parser, string_ref("</"));
-        html_parser_consume_str(parser, string_ref("</"));
 
-        html_parser_match_str(parser, tagName);
-        html_parser_consume_str(parser, tagName);
+        if(html_parser_match_str(parser, string_ref("</"))) {
+            html_parser_consume_str(parser, string_ref("</"));
 
-        html_parser_match_char(parser, '>');
-        html_parser_consume_char(parser, '>');
+            html_parser_match_str(parser, tagName);
+            html_parser_consume_str(parser, tagName);
 
-        HTMLElement element = {
-                .name = tagName,
-                .attributes = attributes,
-                .children = children,
-        };
+            html_parser_match_char(parser, '>');
+            html_parser_consume_char(parser, '>');
 
-        HTMLDOM htmlElement = {
-                .type = HTMLNodeType_Text,
-                .element = element,
-        };
-        // TODO
-        // return htmlElement;
+            HTMLElement element = {
+                    .name = tagName,
+                    .attributes = attributes,
+                    .children = children,
+            };
+
+            HTMLDOM htmlElement = {
+                    .type = HTMLNodeType_Text,
+                    .element = element,
+            };
+            // TODO
+            // return htmlElement;
+        }else{
+            html_parser_parse_element(parser);
+        }
     } else {
         StringRef content = html_parser_parse_content(parser);
         html_parser_consume_str(parser,content);
@@ -215,8 +220,8 @@ HTMLParser *html_parser_create(struct HTMLParser *parser) {
     parser->pos = 0;
     parser->root = nullptr;
     parser->htmlStr = "<root id=\"rootId\" class=\"root\">"
-                      "<div name=\"container\">"
-                      "<p>test</p>"
+                      "<div name=\"container\" style=\"color:rgb(12,12,12)\">"
+                      "<p disabled=false>test</p>"
                       "</div>"
                       "<ul>"
                       "<li>li1</li>"
