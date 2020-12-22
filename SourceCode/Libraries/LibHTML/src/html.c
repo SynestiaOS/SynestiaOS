@@ -54,7 +54,7 @@ void html_parser_consume_whitespace(struct HTMLParser *parser) {
     html_parser_consume_while_char(parser, ' ');
 }
 
-StringRef html_parser_parse_tag_name(struct HTMLParser *parser) {
+StringRef html_parser_parse_name(struct HTMLParser *parser) {
     uint32_t index = 0;
     while (parser->htmlStr[parser->pos + index] && isAlpha(parser->htmlStr[parser->pos + index])) {
         index++;
@@ -67,43 +67,83 @@ StringRef html_parser_parse_tag_name(struct HTMLParser *parser) {
     return ref;
 }
 
+StringRef html_parser_parse_str(struct HTMLParser *parser) {
+    uint32_t index = 0;
+    while (parser->htmlStr[parser->pos + index] && parser->htmlStr[parser->pos + index]!='"') {
+        index++;
+    }
+    struct StringRef ref = {
+            .pos = parser->pos,
+            .length = index,
+            .str = parser->htmlStr,
+    };
+    return ref;
+}
+
 StringRef html_parser_parse_attribute_value(struct HTMLParser *parser){
-    // TODO
+    if(html_parser_match_char(parser,'"')){
+        html_parser_consume_char(parser,'"');
+        StringRef attrValue = html_parser_parse_str(parser);
+        html_parser_consume_str(parser,attrValue);
+        html_parser_consume_char(parser,'"');
+        return attrValue;
+    }else{
+        StringRef attrValue = html_parser_parse_name(parser);
+        html_parser_consume_str(parser,attrValue);
+        return attrValue;
+    }
 }
 
 HTMLAttribute *html_parser_parse_attributes(struct HTMLParser *parser) {
-    StringRef attrName = html_parser_parse_tag_name(parser);
+    while(!html_parser_match_char(parser,'>')) {
+        StringRef attrName = html_parser_parse_name(parser);
+        html_parser_consume_str(parser, attrName);
 
-    printf("attrName: ");
-    string_ref_print(attrName);
-    printf("\n");
+        printf("attrName: ");
+        string_ref_print(attrName);
+        printf("\n");
 
-    html_parser_consume_whitespace(parser);
+        html_parser_consume_whitespace(parser);
 
-    html_parser_match_char(parser,'=');
-    html_parser_consume_char(parser,'=');
+        html_parser_match_char(parser, '=');
+        html_parser_consume_char(parser, '=');
 
-    html_parser_consume_whitespace(parser);
+        html_parser_consume_whitespace(parser);
 
-    StringRef attrValue = html_parser_parse_attribute_value(parser);
+        StringRef attrValue = html_parser_parse_attribute_value(parser);
+        html_parser_consume_str(parser, attrValue);
+        printf("attrValue: ");
+        string_ref_print(attrValue);
+        printf("\n");
 
-    struct HTMLAttribute attribute = {
-            .name = attrName,
-            .value = attrValue,
-    };
+        html_parser_consume_whitespace(parser);
 
+        struct HTMLAttribute attribute = {
+                .name = attrName,
+                .value = attrValue,
+        };
+    }
     // TODO:
 }
 
-StringRef html_parser_parse_str(struct HTMLParser *parser) {
-    // TODO:
+StringRef html_parser_parse_content(struct HTMLParser *parser) {
+    uint32_t index = 0;
+    while (parser->htmlStr[parser->pos + index] && parser->htmlStr[parser->pos + index]!='<') {
+        index++;
+    }
+    struct StringRef ref = {
+            .pos = parser->pos,
+            .length = index,
+            .str = parser->htmlStr,
+    };
+    return ref;
 }
 
 HTMLDOM *html_parser_parse_element(struct HTMLParser *parser) {
     if (html_parser_match_char(parser, '<')) {
         html_parser_consume_char(parser, '<');
 
-        StringRef tagName = html_parser_parse_tag_name(parser);
+        StringRef tagName = html_parser_parse_name(parser);
         html_parser_consume_str(parser, tagName);
 
         printf("tagName: ");
@@ -140,7 +180,12 @@ HTMLDOM *html_parser_parse_element(struct HTMLParser *parser) {
         // TODO
         // return htmlElement;
     } else {
-        StringRef content = html_parser_parse_str(parser);
+        StringRef content = html_parser_parse_content(parser);
+        html_parser_consume_str(parser,content);
+        printf("content: ");
+        string_ref_print(content);
+        printf("\n");
+
         struct HTMLDOM htmldom = {
                 .type =HTMLNodeType_Text,
                 .content = content,
