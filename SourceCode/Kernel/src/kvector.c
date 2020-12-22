@@ -35,6 +35,7 @@ KernelStatus kvector_operation_default_add(struct KernelVector *vector, ListNode
             return status;
         }
     }
+    vector->data = (ListNode **) (vector + sizeof(KernelVector));
     vector->data[vector->size] = node;
     vector->size++;
     return OK;
