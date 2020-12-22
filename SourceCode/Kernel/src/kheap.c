@@ -162,7 +162,9 @@ KernelStatus heap_default_free(struct Heap *heap, void *ptr) {
         }
     }
     heap->freeCallback(heap, ptr);
+    memset(ptr,0,currentArea->size);
     ptr = nullptr;
+
     return OK;
 }
 
