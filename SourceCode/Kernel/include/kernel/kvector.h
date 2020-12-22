@@ -8,6 +8,7 @@
 #include "kernel/list.h"
 #include "kernel/type.h"
 #include "libc/stdbool.h"
+#include "kernel/kobject.h"
 
 #define DEFAULT_VECTOR_SIZE 12
 
@@ -19,15 +20,13 @@ typedef KernelStatus (*KernelVectorOperationAdd)(struct KernelVector *vector, Li
 
 typedef ListNode *(*KernelVectorOperationGet)(struct KernelVector *vector, uint32_t index);
 
-typedef KernelStatus (*KernelVectorOperationRemove)(struct KernelVector *vector, ListNode *node);
-
-typedef KernelStatus (*KernelVectorOperationRemoveIndex)(struct KernelVector *vector, uint32_t index);
-
 typedef uint32_t (*KernelVectorOperationSize)(struct KernelVector *vector);
 
-typedef _Bool (*KernelVectorOperationIsEmpty)(struct KernelVector *vector);
+typedef uint32_t (*KernelVectorOperationCapacity)(struct KernelVector *vector);
 
-typedef _Bool (*KernelVectorOperationIsFull)(struct KernelVector *vector);
+typedef bool (*KernelVectorOperationIsEmpty)(struct KernelVector *vector);
+
+typedef bool (*KernelVectorOperationIsFull)(struct KernelVector *vector);
 
 typedef KernelStatus (*KernelVectorOperationClear)(struct KernelVector *vector);
 
@@ -36,41 +35,20 @@ typedef struct KernelVectorOperations {
     KernelVectorOperationFree free;
     KernelVectorOperationAdd add;
     KernelVectorOperationGet get;
-    KernelVectorOperationRemove remove;
-    KernelVectorOperationRemoveIndex removeIndex;
     KernelVectorOperationSize size;
+    KernelVectorOperationCapacity capacity;
     KernelVectorOperationIsEmpty isEmpty;
     KernelVectorOperationIsFull isFull;
     KernelVectorOperationClear clear;
 } KernelVectorOperations;
 
 typedef struct KernelVector {
-    uint32_t index;
     uint32_t size;
-//    KernelVectorOperations operations;
-    ListNode **node;
+    uint32_t capacity;
+    KernelVectorOperations operations;
+    ListNode **data;
 } KernelVector;
 
 KernelVector *kvector_allocate();
-
-KernelStatus kvector_resize(KernelVector *vector, uint32_t newSize);
-
-KernelStatus kvector_free(KernelVector *vector);
-
-KernelStatus kvector_add(KernelVector *vector, ListNode *node);
-
-ListNode *kvector_get(KernelVector *vector, uint32_t index);
-
-KernelStatus kvector_remove_index(KernelVector *vector, uint32_t index);
-
-KernelStatus kvector_remove(KernelVector *vector, ListNode *index);
-
-uint32_t kvector_size(KernelVector *vector);
-
-bool kvector_is_empty(KernelVector *vector);
-
-bool kvector_is_full(KernelVector *vector);
-
-KernelStatus kvector_clear(KernelVector *vector);
 
 #endif//__KERNEL_VECTOR_H__

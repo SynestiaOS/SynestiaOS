@@ -208,7 +208,7 @@ HTMLDOM *html_parser_default_parse(struct HTMLParser *parser) {
 
 void html_parser_default_print(struct HTMLParser *parser) {
     if (parser->root == nullptr) {
-//        printf("root is null");
+        printf("root is null");
     } else {
 
     }

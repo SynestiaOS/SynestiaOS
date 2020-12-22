@@ -61,15 +61,15 @@ void gui_panel_init(GUIPanel *panel, uint32_t x, uint32_t y) {
 
 void gui_panel_add_children(GUIPanel *panel, GUIComponent *component) {
     if (panel->children != nullptr) {
-        kvector_add(panel->children, &(component->node));
+        panel->children->operations.add(panel->children, &component->node);
     }
 }
 
 void gui_panel_draw_children(GUIPanel *panel) {
     KernelVector *children = panel->children;
     if (children != nullptr) {
-        for (uint32_t i = 0; i < children->index; i++) {
-            ListNode *listNode = children->node[i];
+        for (uint32_t i = 0; i < children->size; i++) {
+            ListNode *listNode = children->data[i];
             GUIComponent *component = getNode(listNode, GUIComponent, node);
             switch (component->type) {
                 case BUTTON: {
@@ -130,7 +130,7 @@ void gui_panel_draw(GUIPanel *panel) {
                                                panel->component.position.x + panel->component.size.width,
                                                panel->component.position.y + panel->component.size.height,
                                                panel->component.background.r << 16 |
-                                                       panel->component.background.g << 8 | panel->component.background.b);
+                                               panel->component.background.g << 8 | panel->component.background.b);
         }
 
         // 2. draw children

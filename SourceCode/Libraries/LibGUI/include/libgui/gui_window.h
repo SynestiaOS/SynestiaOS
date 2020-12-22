@@ -19,7 +19,7 @@ typedef struct GUIWindow {
     GUIComponent component;
     char *title;
     GUIWindowHeader header;
-    ListNode *children;
+    KernelVector *children;
     bool isWindowNeedUpdate;
     bool isShadowNeedUpdate;
     Gfx2DContext context;
