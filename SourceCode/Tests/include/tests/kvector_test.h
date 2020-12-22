@@ -14,8 +14,8 @@ void should_kvector_create() {
 
     KernelVector *kernelVector = kvector_allocate();
     ASSERT_NEQ(kernelVector, nullptr);
-    ASSERT_EQ(kernelVector->index, 0);
-    ASSERT_EQ(kernelVector->size, DEFAULT_VECTOR_SIZE);
+    ASSERT_EQ(kernelVector->size, 0);
+    ASSERT_EQ(kernelVector->capacity, DEFAULT_VECTOR_SIZE);
 }
 
 void should_kvector_resize() {
@@ -23,13 +23,13 @@ void should_kvector_resize() {
 
     KernelVector *kernelVector = kvector_allocate();
     ASSERT_NEQ(kernelVector, nullptr);
-    ASSERT_EQ(kernelVector->index, 0);
-    ASSERT_EQ(kernelVector->size, DEFAULT_VECTOR_SIZE);
+    ASSERT_EQ(kernelVector->size, 0);
+    ASSERT_EQ(kernelVector->capacity, DEFAULT_VECTOR_SIZE);
 
-    kvector_resize(kernelVector, DEFAULT_VECTOR_SIZE * 2);
+    kernelVector->operations.resize(kernelVector, DEFAULT_VECTOR_SIZE * 2);
     ASSERT_NEQ(kernelVector, nullptr);
-    ASSERT_EQ(kernelVector->index, 0);
-    ASSERT_EQ(kernelVector->size, DEFAULT_VECTOR_SIZE * 2);
+    ASSERT_EQ(kernelVector->size, 0);
+    ASSERT_EQ(kernelVector->capacity, DEFAULT_VECTOR_SIZE * 2);
 }
 
 void should_kvector_free() {
@@ -37,10 +37,10 @@ void should_kvector_free() {
 
     KernelVector *kernelVector = kvector_allocate();
     ASSERT_NEQ(kernelVector, nullptr);
-    ASSERT_EQ(kernelVector->index, 0);
-    ASSERT_EQ(kernelVector->size, DEFAULT_VECTOR_SIZE);
+    ASSERT_EQ(kernelVector->size, 0);
+    ASSERT_EQ(kernelVector->capacity, DEFAULT_VECTOR_SIZE);
 
-    kvector_free(kernelVector);
+    kernelVector->operations.free(kernelVector);
 }
 
 void should_kvector_add() {
@@ -48,13 +48,13 @@ void should_kvector_add() {
 
     KernelVector *kernelVector = kvector_allocate();
     ASSERT_NEQ(kernelVector, nullptr);
-    ASSERT_EQ(kernelVector->index, 0);
-    ASSERT_EQ(kernelVector->size, DEFAULT_VECTOR_SIZE);
+    ASSERT_EQ(kernelVector->size, 0);
+    ASSERT_EQ(kernelVector->capacity, DEFAULT_VECTOR_SIZE);
 
     ListNode node;
-    kvector_add(kernelVector, &node);
-    kvector_add(kernelVector, &node);
-    ASSERT_EQ(kernelVector->index, 2);
+    kernelVector->operations.add(kernelVector, &node);
+    kernelVector->operations.add(kernelVector, &node);
+    ASSERT_EQ(kernelVector->size, 2);
 }
 
 typedef struct TestElement {
@@ -69,8 +69,8 @@ void should_kvector_get() {
 
     KernelVector *kernelVector = kvector_allocate();
     ASSERT_NEQ(kernelVector, nullptr);
-    ASSERT_EQ(kernelVector->index, 0);
-    ASSERT_EQ(kernelVector->size, DEFAULT_VECTOR_SIZE);
+    ASSERT_EQ(kernelVector->size, 0);
+    ASSERT_EQ(kernelVector->capacity, DEFAULT_VECTOR_SIZE);
 
     t1.id = 1;
     t1.node.next = nullptr;
@@ -80,12 +80,12 @@ void should_kvector_get() {
     t2.node.next = nullptr;
     t2.node.prev = nullptr;
 
-    kvector_add(kernelVector, &(t1.node));
-    kvector_add(kernelVector, &(t2.node));
-    ASSERT_EQ(kernelVector->index, 2);
+    kernelVector->operations.add(kernelVector, &(t1.node));
+    kernelVector->operations.add(kernelVector, &(t2.node));
+    ASSERT_EQ(kernelVector->size, 2);
 
-    ASSERT_EQ(getNode(kvector_get(kernelVector, 0), TestElement, node)->id, 1);
-    ASSERT_EQ(getNode(kvector_get(kernelVector, 1), TestElement, node)->id, 2);
+    ASSERT_EQ(getNode(kernelVector->operations.get(kernelVector, 0), TestElement, node)->id, 1);
+    ASSERT_EQ(getNode(kernelVector->operations.get(kernelVector, 1), TestElement, node)->id, 2);
 }
 
 void should_kvector_remove_index() {
@@ -93,8 +93,8 @@ void should_kvector_remove_index() {
 
     KernelVector *kernelVector = kvector_allocate();
     ASSERT_NEQ(kernelVector, nullptr);
-    ASSERT_EQ(kernelVector->index, 0);
-    ASSERT_EQ(kernelVector->size, DEFAULT_VECTOR_SIZE);
+    ASSERT_EQ(kernelVector->size, 0);
+    ASSERT_EQ(kernelVector->capacity, DEFAULT_VECTOR_SIZE);
 
     // TODO:
 }
@@ -104,8 +104,8 @@ void should_kvector_remove() {
 
     KernelVector *kernelVector = kvector_allocate();
     ASSERT_NEQ(kernelVector, nullptr);
-    ASSERT_EQ(kernelVector->index, 0);
-    ASSERT_EQ(kernelVector->size, DEFAULT_VECTOR_SIZE);
+    ASSERT_EQ(kernelVector->size, 0);
+    ASSERT_EQ(kernelVector->capacity, DEFAULT_VECTOR_SIZE);
 
     // TODO:
 }
@@ -115,10 +115,10 @@ void should_kvector_is_empty() {
 
     KernelVector *kernelVector = kvector_allocate();
     ASSERT_NEQ(kernelVector, nullptr);
-    ASSERT_EQ(kernelVector->index, 0);
-    ASSERT_EQ(kernelVector->size, DEFAULT_VECTOR_SIZE);
+    ASSERT_EQ(kernelVector->size, 0);
+    ASSERT_EQ(kernelVector->capacity, DEFAULT_VECTOR_SIZE);
 
-    ASSERT_TRUE(kvector_is_empty(kernelVector));
+    ASSERT_TRUE(kernelVector->operations.isEmpty(kernelVector));
 }
 
 void should_kvector_is_full() {
@@ -126,14 +126,14 @@ void should_kvector_is_full() {
 
     KernelVector *kernelVector = kvector_allocate();
     ASSERT_NEQ(kernelVector, nullptr);
-    ASSERT_EQ(kernelVector->index, 0);
-    ASSERT_EQ(kernelVector->size, DEFAULT_VECTOR_SIZE);
+    ASSERT_EQ(kernelVector->size, 0);
+    ASSERT_EQ(kernelVector->capacity, DEFAULT_VECTOR_SIZE);
 
     ListNode node;
     for (uint32_t i = 0; i < DEFAULT_VECTOR_SIZE; i++) {
-        kvector_add(kernelVector, &node);
+        kernelVector->operations.add(kernelVector, &node);
     }
-    ASSERT_TRUE(kvector_is_full(kernelVector));
+    ASSERT_TRUE(kernelVector->operations.isFull(kernelVector));
 }
 
 void should_kvector_clear() {
@@ -141,17 +141,17 @@ void should_kvector_clear() {
 
     KernelVector *kernelVector = kvector_allocate();
     ASSERT_NEQ(kernelVector, nullptr);
-    ASSERT_EQ(kernelVector->index, 0);
-    ASSERT_EQ(kernelVector->size, DEFAULT_VECTOR_SIZE);
+    ASSERT_EQ(kernelVector->size, 0);
+    ASSERT_EQ(kernelVector->capacity, DEFAULT_VECTOR_SIZE);
 
     ListNode node;
     for (uint32_t i = 0; i < DEFAULT_VECTOR_SIZE; i++) {
-        kvector_add(kernelVector, &node);
+        kernelVector->operations.add(kernelVector, &node);
     }
 
-    kvector_clear(kernelVector);
-    ASSERT_TRUE(kvector_is_empty(kernelVector));
-    ASSERT_EQ(kernelVector->index, 0);
+    kernelVector->operations.clear(kernelVector);
+    ASSERT_TRUE(kernelVector->operations.isEmpty(kernelVector));
+    ASSERT_EQ(kernelVector->size, 0);
 }
 
 #endif//__KERNEL_KVECTOR_TEST_H__

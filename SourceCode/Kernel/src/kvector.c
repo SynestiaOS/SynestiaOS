@@ -11,9 +11,9 @@ extern Heap kernelHeap;
 KernelStatus kvector_operation_default_resize(struct KernelVector *vector, uint32_t newSize) {
     vector = kernelHeap.operations.realloc(&kernelHeap, vector, newSize);
     if (vector == nullptr) {
+        LogError("[KVector] kVector resize failed.\n");
         return ERROR;
     }
-    vector->capacity = newSize;
     return OK;
 }
 
