@@ -43,7 +43,7 @@ typedef struct KernelStack {
     VirtualAddress top;
     VirtualAddress *virtualMemoryAddress;
     StackOperations operations;
-} __attribute__((packed)) KernelStack;
+} KernelStack;
 
 KernelStack *kstack_allocate();
 

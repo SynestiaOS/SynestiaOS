@@ -58,7 +58,7 @@ typedef struct CpuContextSave {
     uint32_t sp;
     uint32_t pc;
     uint32_t extra[2];
-} __attribute__((packed)) CpuContextSave;
+} CpuContextSave;
 
 typedef uint32_t (*ThreadStartRoutine)(void *arg);
 
@@ -71,7 +71,7 @@ typedef struct SectionInfo {
     uint32_t dataEndSectionAddr;
     uint32_t bssSectionAddr;
     uint32_t bssEndSectionAddr;
-} __attribute__((packed)) SectionInfo;
+} SectionInfo;
 
 
 #define FD_STDIN 0

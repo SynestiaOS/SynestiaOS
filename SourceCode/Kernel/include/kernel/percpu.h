@@ -85,7 +85,7 @@ typedef struct PerCpu {
     struct ListNode node;
 
     PerCpuOperations operations;
-} __attribute__((packed)) PerCpu;
+} PerCpu;
 
 KernelStatus percpu_create(uint32_t cpuNum);
 

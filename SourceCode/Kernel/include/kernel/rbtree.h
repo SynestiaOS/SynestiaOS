@@ -13,14 +13,14 @@
 typedef enum NodeColor {
     NODE_RED,
     NODE_BLACK,
-} __attribute__((packed)) NodeColor;
+} NodeColor;
 
 typedef struct RBNode {
     struct RBNode *parent;
     struct RBNode *left;
     struct RBNode *right;
     NodeColor color;
-} __attribute__((packed)) RBNode;
+} RBNode;
 
 typedef RBNode *(*RBTreeInsertNode)(struct RBTree *tree, RBNode *node);
 

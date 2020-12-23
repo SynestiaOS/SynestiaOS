@@ -40,7 +40,7 @@ typedef struct HeapOperations {
 typedef struct HeapArea {
     uint32_t size;
     ListNode list;
-} __attribute__((packed)) HeapArea;
+} HeapArea;
 
 typedef struct HeapStatistics {
     uint32_t allocatedBlockCount;
