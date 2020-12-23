@@ -47,6 +47,7 @@ target_sources(${KernelUnitTestsImg}
 
 target_include_tests_header_files(${KernelUnitTestsImg})
 target_include_libc_header_files(${KernelUnitTestsImg})
+target_include_arch_header_files(${KernelUnitTestsImg})
 target_include_raspberry_pi_header_files(${KernelUnitTestsImg})
 target_include_kernel_header_files(${KernelUnitTestsImg})
 target_include_libmath_header_files(${KernelUnitTestsImg})
