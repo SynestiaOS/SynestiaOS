@@ -14,6 +14,7 @@ KernelStatus kqueue_default_operation_enqueue(struct KernelQueue *queue, KQueueN
         queue->tail->next = node;
         queue->tail = node;
     }
+    queue->size++;
 }
 
 KQueueNode *kqueue_default_operation_dequeue(struct KernelQueue *queue) {
@@ -22,6 +23,8 @@ KQueueNode *kqueue_default_operation_dequeue(struct KernelQueue *queue) {
 
         KQueueNode *head = queue->head;
         queue->head = head->next;
+
+        queue->size--;
 
         head->next->prev = nullptr;
         head->next = nullptr;
@@ -35,7 +38,7 @@ uint32_t kqueue_default_operation_size(struct KernelQueue *queue) {
 }
 
 bool kqueue_default_operation_is_empty(struct KernelQueue *queue) {
-    return queue->size == 0;
+    return queue->size == 0 && queue->head == queue->tail;
 }
 
 
