@@ -20,6 +20,17 @@
                 .post = semaphore_default_post,              \
                 .wait = semaphore_default_wait,              \
         },                                                   \
+        .waitQueue = {                                       \
+                .size = 0,                                      \
+                .head = nullptr,                                \
+                .tail = nullptr,                                    \
+                 .operations = {                                                                       \
+                        .enqueue = kqueue_default_operation_enqueue, \
+                        .dequeue = kqueue_default_operation_dequeue, \
+                        .size = kqueue_default_operation_size,          \
+                        .isEmpty = kqueue_default_operation_is_empty,                                         \
+                        }\
+        }                                                           \
         .spinLock = SpinLockCreate(), .waitQueue = nunllptr, \
     }
 
@@ -35,7 +46,7 @@ typedef struct SemaphoreOperations {
 typedef struct Semaphore {
     Atomic count;
     SpinLock spinLock;
-    KQueue waitQueue;
+    KernelQueue waitQueue;
     KernelObject object;
     SemaphoreOperations operations;
 } Semaphore;

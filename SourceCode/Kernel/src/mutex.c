@@ -23,7 +23,7 @@ void mutex_default_acquire(Mutex *mutex) {
         DEBUG_ASSERT(currentThread != nullptr);
 
         // can not get the lock, just add to lock wait list
-        kqueue_enqueue(&mutex->waitQueue, &currentThread->threadReadyQueue);
+        mutex->waitQueue.operations.enqueue(&mutex->waitQueue, &currentThread->threadReadyQueue);
         currentThread->threadStatus = THREAD_BLOCKED;
         // remove from schd list
         perCpu->rbTree.operations.remove(&perCpu->rbTree, &currentThread->rbNode);
@@ -40,7 +40,7 @@ void mutex_default_release(Mutex *mutex) {
     if (atomic_get(&mutex->val) == 0) {
         return;
     } else {
-        KQueue *node = kqueue_dequeue(&mutex->waitQueue);
+        KQueueNode *node = mutex->waitQueue.operations.dequeue(&mutex->waitQueue);
 
         uint32_t cpuid = read_cpuid();
         PerCpu *perCpu = percpu_get(cpuid);

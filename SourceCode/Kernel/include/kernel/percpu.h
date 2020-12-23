@@ -76,7 +76,7 @@ typedef struct PerCpu {
     uint32_t priority;
 
     RBTree rbTree;
-    KQueue waitThreadQueue;
+    KQueueNode waitThreadQueue;
 
     Thread *idleThread;
     Thread *currentThread;

@@ -15,7 +15,7 @@ void semaphore_default_post(Semaphore *semaphore) {
     semaphore->spinLock.operations.acquire(&semaphore->spinLock);
 
     atomic_inc(&semaphore->count);
-    KQueue *queueNode = kqueue_dequeue(&semaphore->waitQueue);
+    KQueueNode *queueNode = semaphore->waitQueue.operations.dequeue(&semaphore->waitQueue);
     Thread *releasedThread = getNode(queueNode, Thread, threadReadyQueue);
 
 
@@ -39,7 +39,7 @@ void semaphore_default_wait(Semaphore *semaphore) {
         DEBUG_ASSERT(currentThread != nullptr);
 
         // can not get the lock, just add to lock wait list
-        kqueue_enqueue(&semaphore->waitQueue, &currentThread->threadReadyQueue);
+        semaphore->waitQueue.operations.enqueue(&semaphore->waitQueue, &currentThread->threadReadyQueue);
         currentThread->threadStatus = THREAD_BLOCKED;
         // remove from schd list
         perCpu->rbTree.operations.remove(&perCpu->rbTree, &currentThread->rbNode);

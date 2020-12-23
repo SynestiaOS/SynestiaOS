@@ -150,7 +150,7 @@ typedef struct Thread {
 
     ThreadStatus threadStatus;
     ListNode threadList;
-    KQueue threadReadyQueue;
+    KQueueNode threadReadyQueue;
 
     uint32_t priority;
 

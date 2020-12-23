@@ -10,6 +10,7 @@
 #include "kernel/spinlock.h"
 #include "libc/stdint.h"
 #include "kernel/kobject.h"
+#include "kernel/kqueue.h"
 
 #define STATE_FREE 0u
 #define STATE_CONTESTED 1u
@@ -19,7 +20,19 @@
         .val = {                                                                                      \
                 .counter = 0,                                                                         \
         },                                                                                            \
-        .spinLock = SpinLockCreate(), .waitQueue = nullptr, .operations = {                           \
+        .spinLock = SpinLockCreate(),                                                                 \
+        .waitQueue = {                                       \
+                .size = 0,                                      \
+                .head = nullptr,                                \
+                .tail = nullptr,                                    \
+                .operations = {                                                                       \
+                        .enqueue = kqueue_default_operation_enqueue, \
+                        .dequeue = kqueue_default_operation_dequeue, \
+                        .size = kqueue_default_operation_size,          \
+                        .isEmpty = kqueue_default_operation_is_empty,                                         \
+                        }\
+        },                                                           \
+        .operations = {                                                 \
                                                                     .acquire = mutex_default_acquire, \
                                                                     .release = mutex_default_release, \
                                                             },                                        \
@@ -37,7 +50,7 @@ typedef struct MutexOperations {
 typedef struct Mutex {
     Atomic val;
     SpinLock spinLock;
-    KQueue waitQueue;
+    KernelQueue waitQueue;
     KernelObject object;
     MutexOperations operations;
 } Mutex;
