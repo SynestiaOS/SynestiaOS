@@ -8,14 +8,20 @@
 #include "kernel/percpu.h"
 #include "kernel/sched.h"
 #include "kernel/thread.h"
+#include "kernel/assert.h"
 
 void mutex_default_acquire(Mutex *mutex) {
+    mutex->spinLock.operations.acquire(&mutex->spinLock);
+
     if (atomic_get(&mutex->val) == 0) {
         atomic_set(&mutex->val, 1);
     } else {
         uint32_t cpuid = read_cpuid();
         PerCpu *perCpu = percpu_get(cpuid);
         Thread *currentThread = perCpu->currentThread;
+
+        DEBUG_ASSERT(currentThread != nullptr);
+
         // can not get the lock, just add to lock wait list
         kqueue_enqueue(&mutex->waitQueue, &currentThread->threadReadyQueue);
         currentThread->threadStatus = THREAD_BLOCKED;
@@ -24,9 +30,13 @@ void mutex_default_acquire(Mutex *mutex) {
         // 2. switch to the next thread in scheduler
         schd_switch_next();
     }
+
+    mutex->spinLock.operations.release(&mutex->spinLock);
 }
 
 void mutex_default_release(Mutex *mutex) {
+    mutex->spinLock.operations.acquire(&mutex->spinLock);
+
     if (atomic_get(&mutex->val) == 0) {
         return;
     } else {
@@ -34,11 +44,16 @@ void mutex_default_release(Mutex *mutex) {
 
         uint32_t cpuid = read_cpuid();
         PerCpu *perCpu = percpu_get(cpuid);
-        Thread *th = getNode(node, Thread, threadReadyQueue);
-        perCpu->rbTree.operations.insert(&perCpu->rbTree, &th->rbNode);
-        th->threadStatus = THREAD_READY;
+        Thread *currentThread = getNode(node, Thread, threadReadyQueue);
+
+        DEBUG_ASSERT(currentThread != nullptr);
+
+        perCpu->rbTree.operations.insert(&perCpu->rbTree, &currentThread->rbNode);
+        currentThread->threadStatus = THREAD_READY;
         atomic_set(&mutex->val, 0);
 
         // TODO: maybe should consider virtual runtime.
     }
+
+    mutex->spinLock.operations.release(&mutex->spinLock);
 }

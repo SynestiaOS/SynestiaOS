@@ -11,10 +11,10 @@
 #include "libc/stdint.h"
 #include "kernel/kobject.h"
 
-#define SemaphoreCreate()                                    \
+#define SemaphoreCreate(cc)                                  \
     {                                                        \
         .count = {                                           \
-                .counter = 0,                                \
+                .counter = cc,                               \
         },                                                   \
         .operations = {                                      \
                 .post = semaphore_default_post,              \
