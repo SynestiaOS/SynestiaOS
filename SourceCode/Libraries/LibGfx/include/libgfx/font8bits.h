@@ -19,4 +19,12 @@ uint8_t *logo_max_8_bits();
 
 uint8_t *logo_close_8_bits();
 
+uint16_t *win_close_16_bits();
+
+uint16_t *win_min_16_bits();
+
+uint16_t *win_max_16_bits();
+
+uint16_t *win_app_16_bits();
+
 #endif//__LIBRARY_LIBGFX_FONT_8BITS_H__
