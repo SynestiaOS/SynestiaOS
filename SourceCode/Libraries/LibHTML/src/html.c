@@ -9,7 +9,6 @@
 #define nullptr ((void *) 0)
 
 
-
 bool html_parser_match_char(struct HTMLParser *parser, char ch) {
     if (parser->htmlStr[parser->pos] == ch) {
         return true;
@@ -34,7 +33,7 @@ bool html_parser_match_str(struct HTMLParser *parser, StringRef str) {
 
 void html_parser_consume_str(struct HTMLParser *parser, StringRef str) {
     for (uint32_t i = 0; i < str.length; i++) {
-        html_parser_consume_char(parser,str.str[str.pos + i]);
+        html_parser_consume_char(parser, str.str[str.pos + i]);
     }
 }
 
@@ -70,7 +69,7 @@ StringRef html_parser_parse_name(struct HTMLParser *parser) {
 
 StringRef html_parser_parse_str(struct HTMLParser *parser) {
     uint32_t index = 0;
-    while (parser->htmlStr[parser->pos + index] && parser->htmlStr[parser->pos + index]!='"') {
+    while (parser->htmlStr[parser->pos + index] && parser->htmlStr[parser->pos + index] != '"') {
         index++;
     }
     struct StringRef ref = {
@@ -81,22 +80,22 @@ StringRef html_parser_parse_str(struct HTMLParser *parser) {
     return ref;
 }
 
-StringRef html_parser_parse_attribute_value(struct HTMLParser *parser){
-    if(html_parser_match_char(parser,'"')){
-        html_parser_consume_char(parser,'"');
+StringRef html_parser_parse_attribute_value(struct HTMLParser *parser) {
+    if (html_parser_match_char(parser, '"')) {
+        html_parser_consume_char(parser, '"');
         StringRef attrValue = html_parser_parse_str(parser);
-        html_parser_consume_str(parser,attrValue);
-        html_parser_consume_char(parser,'"');
+        html_parser_consume_str(parser, attrValue);
+        html_parser_consume_char(parser, '"');
         return attrValue;
-    }else{
+    } else {
         StringRef attrValue = html_parser_parse_name(parser);
-        html_parser_consume_str(parser,attrValue);
+        html_parser_consume_str(parser, attrValue);
         return attrValue;
     }
 }
 
 HTMLAttribute *html_parser_parse_attributes(struct HTMLParser *parser) {
-    while(!html_parser_match_char(parser,'>')) {
+    while (!html_parser_match_char(parser, '>')) {
         StringRef attrName = html_parser_parse_name(parser);
         html_parser_consume_str(parser, attrName);
 
@@ -129,7 +128,7 @@ HTMLAttribute *html_parser_parse_attributes(struct HTMLParser *parser) {
 
 StringRef html_parser_parse_content(struct HTMLParser *parser) {
     uint32_t index = 0;
-    while (parser->htmlStr[parser->pos + index] && parser->htmlStr[parser->pos + index]!='<') {
+    while (parser->htmlStr[parser->pos + index] && parser->htmlStr[parser->pos + index] != '<') {
         index++;
     }
     struct StringRef ref = {
@@ -160,7 +159,7 @@ HTMLDOM *html_parser_parse_element(struct HTMLParser *parser) {
         HTMLDOM *children = html_parser_parse_element(parser);
 
 
-        if(html_parser_match_str(parser, string_ref("</"))) {
+        if (html_parser_match_str(parser, string_ref("</"))) {
             html_parser_consume_str(parser, string_ref("</"));
 
             html_parser_match_str(parser, tagName);
@@ -181,18 +180,18 @@ HTMLDOM *html_parser_parse_element(struct HTMLParser *parser) {
             };
             // TODO
             // return htmlElement;
-        }else{
+        } else {
             html_parser_parse_element(parser);
         }
     } else {
         StringRef content = html_parser_parse_content(parser);
-        html_parser_consume_str(parser,content);
+        html_parser_consume_str(parser, content);
         printf("content: ");
         string_ref_print(content);
         printf("\n");
 
         struct HTMLDOM htmldom = {
-                .type =HTMLNodeType_Text,
+                .type = HTMLNodeType_Text,
                 .content = content,
         };
         // TODO
@@ -210,7 +209,6 @@ void html_parser_default_print(struct HTMLParser *parser) {
     if (parser->root == nullptr) {
         printf("root is null");
     } else {
-
     }
 }
 

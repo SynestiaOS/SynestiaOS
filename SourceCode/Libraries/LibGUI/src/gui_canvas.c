@@ -2,11 +2,11 @@
 // Created by XingfengYang on 2020/7/14.
 //
 
+#include "libgui/gui_canvas.h"
 #include "kernel/kheap.h"
 #include "kernel/log.h"
 #include "libc/stdlib.h"
 #include "libgfx/gfx2d.h"
-#include "libgui/gui_canvas.h"
 
 extern Heap kernelHeap;
 

@@ -39,7 +39,7 @@ typedef void (*Gfx2DContextOperationDrawBitmap)(struct Gfx2DContext *context, in
 
 typedef struct Gfx2DContextOperations {
     Gfx2DContextOperationDrawPixel drawPixel;
-    Gfx2DContextOperationDrawPixelColor drawPixeColor;
+    Gfx2DContextOperationDrawPixelColor drawPixelColor;
     Gfx2DContextOperationDrawRect drawRect;
     Gfx2DContextOperationFillRect fillRect;
     Gfx2DContextOperationDrawLine drawLine;
@@ -50,12 +50,12 @@ typedef struct Gfx2DContextOperations {
     Gfx2DContextOperationDrawAscii drawAscii;
     Gfx2DContextOperationDrawBitmap drawBitmap;
 } Gfx2DContextOperations;
+
 typedef struct Gfx2DContext {
     uint32_t width;
     uint32_t height;
-    uint32_t *buffer;
-
     Gfx2DContextOperations operations;
+    uint32_t *buffer;
 } Gfx2DContext;
 
 Gfx2DContext *gfx2d_create_context(Gfx2DContext *context, uint32_t width, uint32_t height, uint32_t *buffer);

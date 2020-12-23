@@ -5,8 +5,8 @@
 #ifndef __SYNESTIAOS_KOBJECT_H__
 #define __SYNESTIAOS_KOBJECT_H__
 
-#include "libc/stdint.h"
 #include "kernel/list.h"
+#include "libc/stdint.h"
 
 typedef enum KernelObjectType {
     KERNEL_OBJECT_THREAD = 0,

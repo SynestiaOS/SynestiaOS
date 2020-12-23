@@ -6,6 +6,7 @@
 #define __LIBRARY_LIBGUI_BUTTON_H__
 
 #include "libgui/gui_component.h"
+#include "libgfx/gfx2d.h"
 
 typedef struct GUIButton {
     GUIComponent component;

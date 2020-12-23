@@ -1,8 +1,8 @@
 //
 // Created by XingfengYang on 2020/7/17.
 //
-#include "kernel/sched.h"
 #include "kernel/sys_call.h"
+#include "kernel/sched.h"
 #include "kernel/vfs.h"
 
 extern VFS *vfs;

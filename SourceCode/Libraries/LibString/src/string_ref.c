@@ -3,8 +3,8 @@
 //
 #include "libstring/string_ref.h"
 #include "libc/stdint.h"
-#include "libc/string.h"
 #include "libc/stdlib.h"
+#include "libc/string.h"
 
 StringRef string_ref(const char *str) {
     struct StringRef ref = {
@@ -58,4 +58,3 @@ void string_ref_print(struct StringRef str) {
         printf("%c", str.str[str.pos + i]);
     }
 }
-

@@ -7,6 +7,7 @@
 
 #include "libgfx/gfx3d.h"
 #include "libgui/gui_component.h"
+#include "libgfx/gfx2d.h"
 
 #define DEFAULT_VIEW3D_WIDTH 200
 #define DEFAULT_VIEW3D_HEIGHT 150

@@ -1,6 +1,6 @@
+#include "raspi2/synestia_os_hal.h"
 #include "kernel/log.h"
 #include "libc/stdlib.h"
-#include "raspi2/synestia_os_hal.h"
 #include "raspi2/timer.h"
 #include "raspi2/uart.h"
 

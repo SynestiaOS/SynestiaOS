@@ -7,6 +7,7 @@
 
 #include "kernel/kvector.h"
 #include "libgui/gui_component.h"
+#include "libgfx/gfx2d.h"
 
 #define DEFAULT_CONTAINER_WIDTH 300
 #define DEFAULT_CONTAINER_HEIGHT 300

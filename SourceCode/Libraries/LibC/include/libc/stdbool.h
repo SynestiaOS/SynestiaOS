@@ -9,4 +9,4 @@
 #define true 1
 #define false 0
 
-#endif //SYNESTIAOS_STDBOOL_H
+#endif//SYNESTIAOS_STDBOOL_H

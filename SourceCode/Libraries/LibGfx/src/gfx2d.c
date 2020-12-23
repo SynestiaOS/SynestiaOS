@@ -2,9 +2,9 @@
 // Created by XingfengYang on 2020/7/7.
 //
 
-#include "libgfx/font8bits.h"
 #include "libgfx/gfx2d.h"
 #include "libc/stdbool.h"
+#include "libgfx/font8bits.h"
 
 uint32_t GFX2D_BUFFER[1024 * 768] = {0xFF};
 
@@ -455,7 +455,7 @@ Gfx2DContext *gfx2d_create_context(Gfx2DContext *context, uint32_t width, uint32
     context->width = width;
 
     context->operations.drawPixel = gfx2d_default_draw_pixel;
-    context->operations.drawPixeColor = gfx2d_default_write_pixel_color;
+    context->operations.drawPixelColor = gfx2d_default_write_pixel_color;
     context->operations.drawRect = gfx2d_default_draw_rect;
     context->operations.fillRect = gfx2d_default_fill_rect;
     context->operations.drawLine = gfx2d_default_draw_line;

@@ -2,12 +2,12 @@
 // Created by XingfengYang on 2020/6/29.
 //
 
-#include "arm/mmu.h"
+#include "kernel/sched.h"
 #include "arm/cpu.h"
+#include "arm/mmu.h"
 #include "kernel/interrupt.h"
 #include "kernel/log.h"
 #include "kernel/percpu.h"
-#include "kernel/sched.h"
 #include "kernel/spinlock.h"
 #include "libc/stdlib.h"
 

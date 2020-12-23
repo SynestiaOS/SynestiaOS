@@ -53,4 +53,4 @@ typedef struct HTMLParser {
 
 HTMLParser *html_parser_create(struct HTMLParser *parser);
 
-#endif //SYNESTIAOS_HTML_H
+#endif//SYNESTIAOS_HTML_H

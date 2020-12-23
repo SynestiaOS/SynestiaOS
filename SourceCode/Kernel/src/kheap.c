@@ -2,8 +2,8 @@
 // Created by XingfengYang on 2020/6/12.
 //
 
-#include "arm/page.h"
 #include "kernel/kheap.h"
+#include "arm/page.h"
 #include "kernel/log.h"
 #include "kernel/sched.h"
 #include "libc/stdlib.h"
@@ -36,7 +36,7 @@ void *heap_default_alloc(struct Heap *heap, uint32_t size) {
         // then just use it, and split a new block
         if (currentFreeArea->size >= allocSize) {
             // 1. split a rest free HeapArea
-            uint32_t newFreeHeapAreaAddress = (uint32_t) (void *) currentFreeArea + sizeof(HeapArea) + size;
+            uint32_t newFreeHeapAreaAddress = (uint32_t)(void *) currentFreeArea + sizeof(HeapArea) + size;
             uint32_t restSize = currentFreeArea->size - allocSize;
 
             HeapArea *newFreeArea = (HeapArea *) newFreeHeapAreaAddress;
@@ -115,7 +115,7 @@ void *heap_default_realloc(struct Heap *heap, void *ptr, uint32_t size) {
 
 KernelStatus heap_default_free(struct Heap *heap, void *ptr) {
     // 1. get HeapArea address
-    uint32_t address = (uint32_t) (ptr - sizeof(HeapArea));
+    uint32_t address = (uint32_t)(ptr - sizeof(HeapArea));
     HeapArea *currentArea = (HeapArea *) address;
 
     // 2. unlink from using list
@@ -162,7 +162,7 @@ KernelStatus heap_default_free(struct Heap *heap, void *ptr) {
         }
     }
     heap->freeCallback(heap, ptr);
-    memset(ptr,0,currentArea->size);
+    memset(ptr, 0, currentArea->size);
     ptr = nullptr;
 
     return OK;
@@ -196,7 +196,7 @@ KernelStatus heap_create(Heap *heap, uint32_t addr, uint32_t size) {
     freeHead->list.prev = nullptr;
 
     HeapArea *freeArea = (HeapArea *) (heap->address + sizeof(HeapArea));
-    freeArea->size = (size - (uint32_t) (char *) heap->address -
+    freeArea->size = (size - (uint32_t)(char *) heap->address -
                       2 * sizeof(HeapArea));// all memory
     freeHead->list.next = &freeArea->list;
     freeArea->list.next = nullptr;

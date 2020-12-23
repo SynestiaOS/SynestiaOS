@@ -2,12 +2,12 @@
 // Created by XingfengYang on 2020/7/7.
 //
 
+#include "libgui/gui_container.h"
 #include "kernel/kvector.h"
 #include "kernel/log.h"
 #include "libc/stdlib.h"
 #include "libgfx/gfx2d.h"
 #include "libgui/gui_button.h"
-#include "libgui/gui_container.h"
 #include "libgui/gui_label.h"
 #include "libgui/gui_panel.h"
 
@@ -208,8 +208,8 @@ void gui_container_draw(GUIContainer *container) {
                                                    container->component.position.x + container->component.size.width,
                                                    container->component.position.y + container->component.size.height,
                                                    container->component.background.r << 16 |
-                                                   container->component.background.g << 8 |
-                                                   container->component.background.b);
+                                                           container->component.background.g << 8 |
+                                                           container->component.background.b);
         }
 
         // 2. draw children

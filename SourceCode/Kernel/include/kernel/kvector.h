@@ -5,10 +5,10 @@
 #ifndef __KERNEL_VECTOR_H__
 #define __KERNEL_VECTOR_H__
 
+#include "kernel/kobject.h"
 #include "kernel/list.h"
 #include "kernel/type.h"
 #include "libc/stdbool.h"
-#include "kernel/kobject.h"
 
 #define DEFAULT_VECTOR_SIZE 12
 

@@ -2,13 +2,13 @@
 // Created by XingfengYang on 2020/7/17.
 //
 
-#include "arm/cpu.h"
-#include "kernel/kqueue.h"
 #include "kernel/mutex.h"
+#include "arm/cpu.h"
+#include "kernel/assert.h"
+#include "kernel/kqueue.h"
 #include "kernel/percpu.h"
 #include "kernel/sched.h"
 #include "kernel/thread.h"
-#include "kernel/assert.h"
 
 void mutex_default_acquire(Mutex *mutex) {
     mutex->spinLock.operations.acquire(&mutex->spinLock);

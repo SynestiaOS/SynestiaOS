@@ -1,5 +1,5 @@
-#include "libc/stdint.h"
 #include "libc/stdlib.h"
+#include "libc/stdint.h"
 #include "libc/string.h"
 #include "libc/sys.h"
 #include "raspi2/uart.h"

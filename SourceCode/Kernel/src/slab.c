@@ -1,15 +1,15 @@
 //
 // Created by XingfengYang on 2020/11/23.
 //
-#include "arm/page.h"
 #include "kernel/slab.h"
-#include "kernel/log.h"
+#include "arm/page.h"
+#include "kernel/kheap.h"
 #include "kernel/kobject.h"
+#include "kernel/log.h"
 #include "kernel/mutex.h"
 #include "kernel/semaphore.h"
 #include "kernel/thread.h"
 #include "kernel/type.h"
-#include "kernel/kheap.h"
 
 extern PhysicalPageAllocator kernelPageAllocator;
 extern Heap kernelHeap;

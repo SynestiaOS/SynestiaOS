@@ -7,6 +7,7 @@
 
 #include "kernel/kvector.h"
 #include "libgui/gui_component.h"
+#include "libgfx/gfx2d.h"
 
 #define DEFAULT_PANEL_WIDTH 200
 #define DEFAULT_PANEL_HEIGHT 200

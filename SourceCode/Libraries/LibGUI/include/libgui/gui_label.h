@@ -7,6 +7,7 @@
 
 #include "libc/stdint.h"
 #include "libgui/gui_component.h"
+#include "libgfx/gfx2d.h"
 
 typedef struct GUILabel {
     GUIComponent component;

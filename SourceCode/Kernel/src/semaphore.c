@@ -3,11 +3,11 @@
 //
 
 #include "kernel/semaphore.h"
-#include "kernel/thread.h"
 #include "arm/cpu.h"
+#include "kernel/assert.h"
 #include "kernel/percpu.h"
 #include "kernel/sched.h"
-#include "kernel/assert.h"
+#include "kernel/thread.h"
 
 extern Thread *currentThread;
 

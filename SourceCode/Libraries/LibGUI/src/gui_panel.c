@@ -2,13 +2,13 @@
 // Created by XingfengYang on 2020/7/7.
 //
 
+#include "libgui/gui_panel.h"
 #include "kernel/log.h"
 #include "libc/stdlib.h"
 #include "libgfx/gfx2d.h"
 #include "libgui/gui_button.h"
 #include "libgui/gui_container.h"
 #include "libgui/gui_label.h"
-#include "libgui/gui_panel.h"
 
 extern uint32_t GFX2D_BUFFER[1024 * 768];
 
@@ -130,7 +130,7 @@ void gui_panel_draw(GUIPanel *panel) {
                                                panel->component.position.x + panel->component.size.width,
                                                panel->component.position.y + panel->component.size.height,
                                                panel->component.background.r << 16 |
-                                               panel->component.background.g << 8 | panel->component.background.b);
+                                                       panel->component.background.g << 8 | panel->component.background.b);
         }
 
         // 2. draw children

@@ -2,8 +2,8 @@
 // Created by XingfengYang on 2020/7/5.
 //
 
-#include "libc/macros.h"
 #include "kernel/kheap.h"
+#include "libc/macros.h"
 
 #include "tests/tests_lib.h"
 

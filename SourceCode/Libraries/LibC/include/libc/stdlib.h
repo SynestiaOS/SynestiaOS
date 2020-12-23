@@ -15,6 +15,6 @@ void bzero(void *s1, uint32_t n);
 
 int32_t vsprintf(char *buf, const char *fmt, va_list args);
 
-int32_t printf(const char *format,...);
+int32_t printf(const char *format, ...);
 
 #endif// __LIBRARY_LIBC_STDLIB_H__

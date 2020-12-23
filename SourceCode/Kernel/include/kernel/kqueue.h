@@ -3,8 +3,8 @@
 
 #include "kernel/list.h"
 #include "kernel/type.h"
-#include "libc/stdint.h"
 #include "libc/stdbool.h"
+#include "libc/stdint.h"
 
 typedef ListNode KQueueNode;
 

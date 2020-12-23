@@ -2,13 +2,13 @@
 // Created by XingfengYang on 2020/7/30.
 //
 
-#include "arm/mmu.h"
+#include "kernel/vfs.h"
 #include "arm/cpu.h"
+#include "arm/mmu.h"
 #include "kernel/ext2.h"
 #include "kernel/kheap.h"
 #include "kernel/log.h"
 #include "kernel/percpu.h"
-#include "kernel/vfs.h"
 #include "kernel/vfs_dentry.h"
 #include "kernel/vfs_inode.h"
 #include "kernel/vfs_super_block.h"
@@ -75,7 +75,7 @@ uint32_t vfs_default_close(struct VFS *vfs, uint32_t fd) {
     pDescriptor->directoryEntry->indexNode->state = INDEX_NODE_STATE_CLOSED;
 
     // TODO
-//    kvector_remove_index(&currThread->filesStruct.fileDescriptorTable, fd);
+    //    kvector_remove_index(&currThread->filesStruct.fileDescriptorTable, fd);
     return 0;
 }
 

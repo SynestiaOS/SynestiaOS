@@ -5,8 +5,8 @@
 #ifndef SYNESTIAOS_STRING_REF_H
 #define SYNESTIAOS_STRING_REF_H
 
-#include "libc/stdint.h"
 #include "libc/stdbool.h"
+#include "libc/stdint.h"
 
 typedef struct StringRef {
     const char *str;
@@ -22,4 +22,4 @@ bool string_ref_equal(struct StringRef str1, struct StringRef str2);
 
 void string_ref_print(struct StringRef str);
 
-#endif //SYNESTIAOS_STRING_REF_H
+#endif//SYNESTIAOS_STRING_REF_H

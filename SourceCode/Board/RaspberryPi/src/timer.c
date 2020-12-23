@@ -1,7 +1,7 @@
+#include "raspi2/timer.h"
 #include "kernel/interrupt.h"
 #include "kernel/log.h"
 #include "libc/stdlib.h"
-#include "raspi2/timer.h"
 
 static timer_registers_t *timer_regs = (timer_registers_t *) SYSTEM_TIMER_BASE;
 

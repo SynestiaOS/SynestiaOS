@@ -6,8 +6,8 @@
 #define __LIBRARY_LIBGUI_COMPONENT_H__
 
 #include "kernel/list.h"
-#include "libc/stdint.h"
 #include "libc/stdbool.h"
+#include "libc/stdint.h"
 
 #define DEFAULT_FONT_SIZE 8
 #define DEFAULT_PADDING 8

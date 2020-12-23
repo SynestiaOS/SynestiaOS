@@ -1,8 +1,8 @@
 #ifndef __KERNEL_INTERRUPT_H__
 #define __KERNEL_INTERRUPT_H__
 
-#include "list.h"
 #include "libc/stdint.h"
+#include "list.h"
 
 #define ARM_INTERRUPT_REGISTER_BASE 0x3F00B000
 #define RPI_INTERRUPT_CONTROLLER_BASE (ARM_INTERRUPT_REGISTER_BASE + 0x0200)

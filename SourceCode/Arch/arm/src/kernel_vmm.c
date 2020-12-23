@@ -24,17 +24,17 @@ void map_kernel_pt(uint64_t pageTablePhysicalAddress) {
     kernelVMML1PT->pte[1].valid = 1;
     kernelVMML1PT->pte[1].table = 0;
     kernelVMML1PT->pte[1].af = 1;
-    kernelVMML1PT->pte[1].base = (uint32_t)((1*GB) >> 30);
+    kernelVMML1PT->pte[1].base = (uint32_t)((1 * GB) >> 30);
 
     kernelVMML1PT->pte[2].valid = 1;
     kernelVMML1PT->pte[2].table = 0;
     kernelVMML1PT->pte[2].af = 1;
-    kernelVMML1PT->pte[2].base = (uint32_t)((2*GB) >> 30);
+    kernelVMML1PT->pte[2].base = (uint32_t)((2 * GB) >> 30);
 
     kernelVMML1PT->pte[3].valid = 1;
     kernelVMML1PT->pte[3].table = 0;
     kernelVMML1PT->pte[3].af = 1;
-    kernelVMML1PT->pte[3].base = (uint32_t)((3*GB) >> 30);
+    kernelVMML1PT->pte[3].base = (uint32_t)((3 * GB) >> 30);
 }
 
 void map_kernel_mm() {
