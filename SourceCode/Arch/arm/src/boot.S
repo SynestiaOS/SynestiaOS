@@ -1,5 +1,3 @@
-#include <boot.h>
-
 .section ".text.boot"
 .globl _start
 
@@ -33,9 +31,6 @@ _start:
     safe_svcmode_maskall r0
     mov	r0, #0
     mcr p15, 0, r0, c12, c0, 0
-
-    //b _goto_kernel_main // init cpu0
-    //b _init_cpu0 // init cpu0
 
     // there are 4 cores within rasberry pi 3, and 4 cores will execute the following code at the same time
     mrc p15, #0, r0, c0, c0, #5 // Move to ARM Register r0 from Coprocessor c0. Read ID Code Register
