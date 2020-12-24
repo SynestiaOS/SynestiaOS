@@ -7,7 +7,6 @@
 #include "kernel/percpu.h"
 #include "kernel/sched.h"
 #include "kernel/slab.h"
-#include "kernel/spinlock.h"
 #include "kernel/vfs.h"
 #include "libc/stdlib.h"
 #include "libgui/gui_animation.h"

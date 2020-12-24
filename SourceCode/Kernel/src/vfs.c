@@ -4,7 +4,6 @@
 
 #include "kernel/vfs.h"
 #include "arm/cpu.h"
-#include "arm/mmu.h"
 #include "kernel/ext2.h"
 #include "kernel/kheap.h"
 #include "kernel/log.h"
