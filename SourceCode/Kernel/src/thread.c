@@ -2,15 +2,17 @@
 // Created by XingfengYang on 2020/6/26.
 //
 
-#include <kernel_vmm.h>
-#include <kheap.h>
-#include <kstack.h>
-#include <kvector.h>
-#include <log.h>
-#include <stdlib.h>
-#include <string.h>
-#include <thread.h>
-#include <vfs_dentry.h>
+#include "kernel/thread.h"
+#include "arm/kernel_vmm.h"
+#include "kernel/kheap.h"
+#include "kernel/kobject.h"
+#include "kernel/kstack.h"
+#include "kernel/kvector.h"
+#include "kernel/log.h"
+#include "kernel/percpu.h"
+#include "kernel/vfs_dentry.h"
+#include "libc/stdlib.h"
+#include "libc/string.h"
 
 extern Heap kernelHeap;
 extern PhysicalPageAllocator kernelPageAllocator;
@@ -80,7 +82,7 @@ KernelStatus thread_default_kill(struct Thread *thread) {
     // Free pid
     thread_free_pid(thread->pid);
     // Free FS
-    freeStatus = kvector_free(thread->filesStruct.fileDescriptorTable);
+    freeStatus = thread->filesStruct.fileDescriptorTable->operations.free(thread->filesStruct.fileDescriptorTable);
     if (freeStatus != OK) {
         LogError("[kVector]: kVector free failed.\n");
         return freeStatus;
@@ -103,13 +105,14 @@ uint32_t filestruct_default_openfile(FilesStruct *filesStruct, DirectoryEntry *d
     fileDescriptor->node.next = nullptr;
     fileDescriptor->pos = 0;
 
-    KernelStatus status = kvector_add(filesStruct->fileDescriptorTable, &fileDescriptor->node);
+    KernelStatus status = filesStruct->fileDescriptorTable->operations.add(filesStruct->fileDescriptorTable,
+                                                                           &fileDescriptor->node);
     if (status != OK) {
         LogError("[Open]: file open failed, cause add fd table failed.\n");
         return 0;
     }
     // because 0,1,2 are std in, out, err use
-    return (filesStruct->fileDescriptorTable->index - 1) + 3;
+    return (filesStruct->fileDescriptorTable->size - 1) + 3;
 }
 
 Thread *thread_default_copy(Thread *thread, CloneFlags cloneFlags, uint32_t heapStart) {
@@ -124,7 +127,7 @@ Thread *thread_default_copy(Thread *thread, CloneFlags cloneFlags, uint32_t heap
         LogInfo("[Thread]: Clone VMM: '%s'.\n", p->name);
         p->memoryStruct.virtualMemory.physicalPageAllocator = thread->memoryStruct.virtualMemory.physicalPageAllocator;
         p->memoryStruct.virtualMemory.operations = thread->memoryStruct.virtualMemory.operations;
-        p->memoryStruct.heap =thread->memoryStruct.heap;
+        p->memoryStruct.heap = thread->memoryStruct.heap;
     } else {
         LogInfo("[Thread]: Create new vmm: '%s'.\n", p->name);
         KernelStatus vmmCreateStatus = vmm_create(&p->memoryStruct.virtualMemory, &userspacePageAllocator);
@@ -147,9 +150,9 @@ Thread *thread_default_copy(Thread *thread, CloneFlags cloneFlags, uint32_t heap
     }
     if (cloneFlags & CLONE_FILES) {
         LogInfo("[Thread]: Clone FILES: '%s'.\n", p->name);
-        p->filesStruct.fileDescriptorTable->index = thread->filesStruct.fileDescriptorTable->index;
         p->filesStruct.fileDescriptorTable->size = thread->filesStruct.fileDescriptorTable->size;
-        p->filesStruct.fileDescriptorTable->node = thread->filesStruct.fileDescriptorTable->node;
+        p->filesStruct.fileDescriptorTable->capacity = thread->filesStruct.fileDescriptorTable->capacity;
+        p->filesStruct.fileDescriptorTable->data = thread->filesStruct.fileDescriptorTable->data;
     }
     if (cloneFlags & CLONE_FS) {
         LogInfo("[Thread]: Clone FS: '%s'.\n", p->name);
@@ -197,6 +200,8 @@ Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uin
         thread->runtimeVirtualNs = 0;
         thread->startTime = ktimer_sys_runtime();
 
+        thread->cpuAffinity = CPU_MASK_ALL;
+
         thread->parentThread = nullptr;
         thread->pid = thread_alloc_pid();
         strcpy(thread->name, name);
@@ -234,6 +239,8 @@ Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uin
         thread->memoryStruct.virtualMemory.physicalPageAllocator = &kernelPageAllocator;
         thread->memoryStruct.virtualMemory.pageTable = kernel_vmm_get_page_table();
         thread->memoryStruct.heap = kernelHeap;
+
+        thread->object.operations.init(&thread->object, KERNEL_OBJECT_THREAD, USING);
 
         LogInfo("[Thread]: thread '%s' created.\n", thread->name);
         return thread;

@@ -2,10 +2,10 @@
 // Created by XingfengYang on 2020/7/30.
 //
 
-#include <stdbool.h>
-#include <stdint.h>
-#include <stdlib.h>
-#include <string.h>
+#include "libc/string.h"
+#include "libc/stdbool.h"
+#include "libc/stdint.h"
+#include "libc/stdlib.h"
 
 char *strcpy(char *des, char *source) {
     char *r = des;
@@ -14,7 +14,7 @@ char *strcpy(char *des, char *source) {
     return des;
 }
 
-bool strcmp(char *str1, char *str2) {
+_Bool strcmp(char *str1, char *str2) {
     char *tmpStr1 = str1;
     char *tmpStr2 = str2;
     uint32_t str1Len = strlen(tmpStr1);
@@ -74,7 +74,7 @@ void memcpy(void *dest, const void *src, uint32_t bytes) {
 
 char *itoa(int num, char *str, int base) {
     int i = 0;
-    _Bool isNegative = false;
+    bool isNegative = false;
 
     if (num == 0) {
         str[i] = '0';

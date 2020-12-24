@@ -2,17 +2,18 @@
 // Created by XingfengYang on 2020/7/30.
 //
 
-#include "mmu.h"
-#include <ext2.h>
-#include <kheap.h>
-#include <log.h>
-#include <percpu.h>
-#include <string.h>
-#include <uart.h>
-#include <vfs.h>
-#include <vfs_dentry.h>
-#include <vfs_inode.h>
-#include <vfs_super_block.h>
+#include "kernel/vfs.h"
+#include "arm/cpu.h"
+#include "arm/mmu.h"
+#include "kernel/ext2.h"
+#include "kernel/kheap.h"
+#include "kernel/log.h"
+#include "kernel/percpu.h"
+#include "kernel/vfs_dentry.h"
+#include "kernel/vfs_inode.h"
+#include "kernel/vfs_super_block.h"
+#include "libc/string.h"
+#include "raspi2/uart.h"
 
 extern Heap kernelHeap;
 
@@ -68,11 +69,13 @@ uint32_t vfs_default_close(struct VFS *vfs, uint32_t fd) {
     PerCpu *perCpu = percpu_get(read_cpuid());
     Thread *currThread = perCpu->currentThread;
 
-    ListNode *pNode = kvector_get(&currThread->filesStruct.fileDescriptorTable, fd);
+    ListNode *pNode = currThread->filesStruct.fileDescriptorTable->operations.get(
+            currThread->filesStruct.fileDescriptorTable, fd);
     FileDescriptor *pDescriptor = getNode(pNode, FileDescriptor, node);
     pDescriptor->directoryEntry->indexNode->state = INDEX_NODE_STATE_CLOSED;
 
-    kvector_remove_index(&currThread->filesStruct.fileDescriptorTable, fd);
+    // TODO
+    //    kvector_remove_index(&currThread->filesStruct.fileDescriptorTable, fd);
     return 0;
 }
 

@@ -1,7 +1,7 @@
 //
 // Created by XingfengYang on 2020/7/17.
 //
-#include <spinlock.h>
+#include "kernel/spinlock.h"
 
 void spinlock_default_acquire(SpinLock *spinLock) {
     if (atomic_get(&spinLock->lock) == 0) {

@@ -2,14 +2,14 @@
 // Created by XingfengYang & ChengyuZhao on 2020/7/30.
 //
 
-#include <kheap.h>
-#include <log.h>
-#include <mutex.h>
-#include <spinlock.h>
-#include <string.h>
-#include <vfs_dentry.h>
-#include <vfs_inode.h>
-#include <vfs_super_block.h>
+#include "kernel/vfs_super_block.h"
+#include "kernel/kheap.h"
+#include "kernel/log.h"
+#include "kernel/mutex.h"
+#include "kernel/spinlock.h"
+#include "kernel/vfs_dentry.h"
+#include "kernel/vfs_inode.h"
+#include "libc/string.h"
 
 extern Heap kernelHeap;
 

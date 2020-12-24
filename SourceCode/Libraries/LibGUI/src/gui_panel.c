@@ -2,14 +2,13 @@
 // Created by XingfengYang on 2020/7/7.
 //
 
-#include <gfx2d.h>
-#include <gui_button.h>
-#include <gui_container.h>
-#include <gui_label.h>
-#include <gui_panel.h>
-#include <log.h>
-#include <stdbool.h>
-#include <stdlib.h>
+#include "libgui/gui_panel.h"
+#include "kernel/log.h"
+#include "libc/stdlib.h"
+#include "libgfx/gfx2d.h"
+#include "libgui/gui_button.h"
+#include "libgui/gui_container.h"
+#include "libgui/gui_label.h"
 
 extern uint32_t GFX2D_BUFFER[1024 * 768];
 
@@ -62,15 +61,15 @@ void gui_panel_init(GUIPanel *panel, uint32_t x, uint32_t y) {
 
 void gui_panel_add_children(GUIPanel *panel, GUIComponent *component) {
     if (panel->children != nullptr) {
-        kvector_add(panel->children, &(component->node));
+        panel->children->operations.add(panel->children, &component->node);
     }
 }
 
 void gui_panel_draw_children(GUIPanel *panel) {
     KernelVector *children = panel->children;
     if (children != nullptr) {
-        for (uint32_t i = 0; i < children->index; i++) {
-            ListNode *listNode = children->node[i];
+        for (uint32_t i = 0; i < children->size; i++) {
+            ListNode *listNode = children->data[i];
             GUIComponent *component = getNode(listNode, GUIComponent, node);
             switch (component->type) {
                 case BUTTON: {

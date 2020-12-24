@@ -1,7 +1,7 @@
-#include <stdint.h>
-#include <uart.h>
-#include <gpio.h>
-#include <raspi.h>
+#include "raspi2/uart.h"
+#include "libc/stdint.h"
+#include "raspi2/gpio.h"
+#include "raspi2/raspi.h"
 
 #define UART0_BASE       (PERIPHERAL_BASE + UART0_OFFSET)
 #define UART0_DATA       (UART0_BASE + 0x00)
@@ -61,7 +61,7 @@ void uart_init(void) {
 
   unsigned nClockRate = CLOCK_RATE;
   unsigned nBaudrate = BAUD_RATE;
-  
+
   unsigned nBaud16 = nBaudrate * 16;
   unsigned nIntDiv = nClockRate / nBaud16;
   unsigned nFractDiv2 = (nClockRate % nBaud16) * 8 / nBaudrate;

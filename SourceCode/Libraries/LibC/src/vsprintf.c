@@ -1,6 +1,6 @@
-#include <string.h>
-#include <stdint.h>
-#include <stdlib.h>
+#include "libc/stdint.h"
+#include "libc/stdlib.h"
+#include "libc/string.h"
 
 #define is_digit(c) ((c) >= '0' && (c) <= '9')
 
@@ -19,18 +19,18 @@ static int skip_atoi(const char **s) {
 #define SPECIAL 32
 #define SMALL 64
 
-int32_t do_div(int *n,int base){
+int32_t do_div(int *n, int base) {
     int32_t res = 0;
-    res = *n%base;
-    *n = *n/base;
+    res = *n % base;
+    *n = *n / base;
     return res;
 }
 
 static char *number(char *str, int num, int base, int size, int precision,
                     int type) {
-    char        c, sign, tmp[36];
+    char c, sign, tmp[36];
     const char *digits = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    int         i;
+    int i;
     if (type & SMALL)
         digits = "0123456789abcdefghijklmnopqrstuvwxyz";
     if (type & LEFT)
@@ -41,8 +41,7 @@ static char *number(char *str, int num, int base, int size, int precision,
     if (type & SIGN && num < 0) {
         sign = '-';
         num -= num;
-    }
-    else
+    } else
         sign = (type & PLUS) ? '+' : ((type & SPACE) ? ' ' : 0);
     if (sign)
         size--;
@@ -71,7 +70,7 @@ static char *number(char *str, int num, int base, int size, int precision,
             *str++ = '0';
         else if (base == 16) {
             *str++ = '0';
-            *str++ = digits[33]; // 'X' 或 'x'
+            *str++ = digits[33];// 'X' 或 'x'
         }
     }
     if (!(type & LEFT))
@@ -91,13 +90,13 @@ static char *number(char *str, int num, int base, int size, int precision,
 }
 
 int32_t vsprintf(char *buf, const char *fmt, va_list args) {
-    int32_t  len;
-    int32_t  i;
-    char *   str;
-    char *   s;
+    int32_t len;
+    int32_t i;
+    char *str;
+    char *s;
     int32_t *ip;
     uint32_t flags;
-    int32_t  field_width;
+    int32_t field_width;
     int32_t precision;
     int32_t qualifier
             __attribute__((unused));
@@ -108,7 +107,7 @@ int32_t vsprintf(char *buf, const char *fmt, va_list args) {
             continue;
         }
         flags = 0;
-        repeat:
+    repeat:
         ++fmt;
         switch (*fmt) {
             case '-':
@@ -159,12 +158,12 @@ int32_t vsprintf(char *buf, const char *fmt, va_list args) {
                 if (!(flags & LEFT))
                     while (--field_width > 0)
                         *str++ = ' ';
-                *str++ = (uint8_t)va_arg(args, int);
+                *str++ = (uint8_t) va_arg(args, int);
                 while (--field_width > 0)
                     *str++ = ' ';
                 break;
             case 's':
-                s   = va_arg(args, char *);
+                s = va_arg(args, char *);
                 len = strlen(s);
                 if (precision < 0)
                     precision = len;
@@ -187,12 +186,12 @@ int32_t vsprintf(char *buf, const char *fmt, va_list args) {
                     field_width = 8;
                     flags |= ZEROPAD;
                 }
-                str = number(str, (uint32_t)va_arg(args, void *), 16, field_width,
+                str = number(str, (uint32_t) va_arg(args, void *), 16, field_width,
                              precision, flags);
                 break;
             case 'x':
                 flags |= SMALL;
-                        __attribute__((fallthrough));
+                __attribute__((fallthrough));
             case 'X':
                 str = number(str, va_arg(args, uint32_t), 16, field_width,
                              precision, flags);
@@ -200,13 +199,13 @@ int32_t vsprintf(char *buf, const char *fmt, va_list args) {
             case 'd':
             case 'i':
                 flags |= SIGN;
-                        __attribute__((fallthrough));
+                __attribute__((fallthrough));
             case 'u':
                 str = number(str, va_arg(args, uint32_t), 10, field_width,
                              precision, flags);
                 break;
             case 'n':
-                ip  = va_arg(args, int *);
+                ip = va_arg(args, int *);
                 *ip = (str - buf);
                 break;
             default:

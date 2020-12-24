@@ -2,13 +2,14 @@
 // Created by XingfengYang on 2020/6/29.
 //
 
-#include "mmu.h"
-#include <interrupt.h>
-#include <log.h>
-#include <percpu.h>
-#include <sched.h>
-#include <spinlock.h>
-#include <stdlib.h>
+#include "kernel/sched.h"
+#include "arm/cpu.h"
+#include "arm/mmu.h"
+#include "kernel/interrupt.h"
+#include "kernel/log.h"
+#include "kernel/percpu.h"
+#include "kernel/spinlock.h"
+#include "libc/stdlib.h"
 
 uint32_t PRIORITY_2_WEIGHT[40] = {
         88761,
@@ -113,7 +114,7 @@ KernelStatus schd_init() {
 
 KernelStatus schd_add_thread(Thread *thread, uint32_t priority) {
     thread->priority = priority;
-    PerCpu *perCpu = percpu_min_priority();
+    PerCpu *perCpu = percpu_min_priority(thread->cpuAffinity);
     KernelStatus threadAddStatus = perCpu->operations.insertThread(perCpu, thread);
     if (threadAddStatus != OK) {
         LogError("[Schd] thread %s add to schduler failed.\n", thread->name);

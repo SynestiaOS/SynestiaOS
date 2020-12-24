@@ -6,3 +6,4 @@ add_library(${PROJECT_NAME}
         OBJECT
         ${LibNetSrc})
 target_include_libnet_header_files(${PROJECT_NAME})
+target_include_libc_header_files(${PROJECT_NAME})

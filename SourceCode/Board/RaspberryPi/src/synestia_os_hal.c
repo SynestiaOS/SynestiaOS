@@ -1,8 +1,8 @@
-#include <log.h>
-#include <stdlib.h>
-#include <synestia_os_hal.h>
-#include <timer.h>
-#include <uart.h>
+#include "raspi2/synestia_os_hal.h"
+#include "kernel/log.h"
+#include "libc/stdlib.h"
+#include "raspi2/timer.h"
+#include "raspi2/uart.h"
 
 void init_bsp(void) {
     // logger is based on uart now

@@ -2,36 +2,52 @@
 // Created by XingfengYang on 2020/6/29.
 //
 
-#include <kqueue.h>
+#include "kernel/kqueue.h"
+#include "kernel/assert.h"
 
-KernelStatus kqueue_enqueue(KQueue *queue, KQueue *node) {
-    klist_remove_node(node);
-
-    KQueue *last = queue;
-    if (last == nullptr) {
-        queue = node;
-        node->prev = nullptr;
-        node->next = nullptr;
+KernelStatus kqueue_default_operation_enqueue(struct KernelQueue *queue, KQueueNode *node) {
+    if (queue->operations.isEmpty(queue)) {
+        queue->head = node;
+        queue->tail = node;
+    } else {
+        node->prev = queue->tail;
+        queue->tail->next = node;
+        queue->tail = node;
     }
-    while (last->next != nullptr) {
-        last = last->next;
-    }
-    last->next = node;
-    node->prev = last;
-    node->next = nullptr;
-
-    return OK;
+    queue->size++;
 }
 
-KQueue *kqueue_dequeue(KQueue *queue) {
-    KQueue *first = queue;
-    while (first->prev != nullptr) {
-        first = first->prev;
+KQueueNode *kqueue_default_operation_dequeue(struct KernelQueue *queue) {
+    DEBUG_ASSERT(queue->head != nullptr);
+    if (!queue->operations.isEmpty(queue)) {
+
+        KQueueNode *head = queue->head;
+        queue->head = head->next;
+
+        queue->size--;
+
+        head->next->prev = nullptr;
+        head->next = nullptr;
+        head->prev = nullptr;
+        return head;
     }
-    first->next->prev = nullptr;
-    first->next = nullptr;
-    first->prev = nullptr;
-    return first;
 }
 
-uint32_t kqueue_size(KQueue *queue) { return klist_size(queue); }
+uint32_t kqueue_default_operation_size(struct KernelQueue *queue) {
+    return queue->size;
+}
+
+bool kqueue_default_operation_is_empty(struct KernelQueue *queue) {
+    return queue->size == 0 && queue->head == queue->tail;
+}
+
+
+KernelQueue *kqueue_create(KernelQueue *queue) {
+    queue->size = 0;
+    queue->head = nullptr;
+    queue->tail = nullptr;
+    queue->operations.enqueue = kqueue_default_operation_enqueue;
+    queue->operations.dequeue = kqueue_default_operation_dequeue;
+    queue->operations.size = kqueue_default_operation_size;
+    queue->operations.isEmpty = kqueue_default_operation_is_empty;
+}

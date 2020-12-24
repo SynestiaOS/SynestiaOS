@@ -2,13 +2,11 @@
 // Created by XingfengYang on 2020/7/7.
 //
 
-#include <framebuffer.h>
-#include <gpu.h>
-#include <interrupt.h>
-#include <kheap.h>
-#include <log.h>
-#include <stdint.h>
-#include <stdlib.h>
+#include "raspi2/gpu.h"
+#include "kernel/log.h"
+#include "libc/stdint.h"
+#include "libc/stdlib.h"
+#include "raspi2/framebuffer.h"
 
 extern uint32_t GFX2D_BUFFER[1024 * 768];
 

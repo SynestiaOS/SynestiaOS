@@ -2,15 +2,12 @@
 // Created by XingfengYang on 2020/6/12.
 //
 
-#include <kheap.h>
-#include <log.h>
-#include <page.h>
-#include <sched.h>
-#include <stdlib.h>
-#include <string.h>
-
-#define ALL_PHYSICAL_MEM_SIZE 0xFFFFFFFF
-#define ALL_KERNEL_HEAP_MEM_SIZE 96 * MB
+#include "kernel/kheap.h"
+#include "arm/page.h"
+#include "kernel/log.h"
+#include "kernel/sched.h"
+#include "libc/stdlib.h"
+#include "libc/string.h"
 
 extern PhysicalPageAllocator kernelPageAllocator;
 
@@ -165,7 +162,9 @@ KernelStatus heap_default_free(struct Heap *heap, void *ptr) {
         }
     }
     heap->freeCallback(heap, ptr);
+    memset(ptr, 0, currentArea->size);
     ptr = nullptr;
+
     return OK;
 }
 
@@ -174,9 +173,6 @@ void heap_default_set_alloc_callback(struct Heap *heap, HeapAllocCallback callba
 void heap_default_set_free_callback(struct Heap *heap, HeapFreeCallback callback) { heap->freeCallback = callback; }
 
 KernelStatus heap_create(Heap *heap, uint32_t addr, uint32_t size) {
-    heap->allocCallback = heap_default_alloc_callback;
-    heap->freeCallback = heap_default_free_callback;
-
     heap->address = addr;
     LogInfo("[KHeap] at: %d. \n", heap->address);
 
@@ -200,7 +196,7 @@ KernelStatus heap_create(Heap *heap, uint32_t addr, uint32_t size) {
     freeHead->list.prev = nullptr;
 
     HeapArea *freeArea = (HeapArea *) (heap->address + sizeof(HeapArea));
-    freeArea->size = (ALL_KERNEL_HEAP_MEM_SIZE - (uint32_t)(char *) heap->address -
+    freeArea->size = (size - (uint32_t)(char *) heap->address -
                       2 * sizeof(HeapArea));// all memory
     freeHead->list.next = &freeArea->list;
     freeArea->list.next = nullptr;
@@ -214,6 +210,9 @@ KernelStatus heap_create(Heap *heap, uint32_t addr, uint32_t size) {
     heap->maxSizeLimit = size;
     heap->operations.setFreeCallback = heap_default_set_free_callback;
     heap->operations.setAllocCallback = heap_default_set_alloc_callback;
+
+    heap->allocCallback = heap_default_alloc_callback;
+    heap->freeCallback = heap_default_free_callback;
 
     heap->operations.alloc = heap_default_alloc;
     heap->operations.allocAligned = heap_default_alloc_aligned;

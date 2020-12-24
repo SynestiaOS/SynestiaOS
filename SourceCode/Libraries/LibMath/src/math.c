@@ -1,7 +1,7 @@
 //
 // Created by XingfengYang on 2020/7/12.
 //
-#include <math.h>
+#include "libmath/math.h"
 
 float fmod(float x, float y) { return __builtin_fmod(x, y); }
 

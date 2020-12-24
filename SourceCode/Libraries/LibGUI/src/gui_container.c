@@ -2,15 +2,14 @@
 // Created by XingfengYang on 2020/7/7.
 //
 
-#include <gfx2d.h>
-#include <gui_button.h>
-#include <gui_container.h>
-#include <gui_label.h>
-#include <gui_panel.h>
-#include <kvector.h>
-#include <log.h>
-#include <stdbool.h>
-#include <stdlib.h>
+#include "libgui/gui_container.h"
+#include "kernel/kvector.h"
+#include "kernel/log.h"
+#include "libc/stdlib.h"
+#include "libgfx/gfx2d.h"
+#include "libgui/gui_button.h"
+#include "libgui/gui_label.h"
+#include "libgui/gui_panel.h"
 
 extern uint32_t GFX2D_BUFFER[1024 * 768];
 
@@ -65,7 +64,7 @@ void gui_container_init(GUIContainer *container, uint32_t x, uint32_t y, Orienta
 
 void gui_container_add_children(GUIContainer *container, GUIComponent *component) {
     if (container->children != nullptr) {
-        kvector_add(container->children, &(component->node));
+        container->children->operations.add(container->children, &component->node);
     }
 }
 
@@ -74,8 +73,8 @@ void gui_container_draw_children(GUIContainer *container, Orientation orientatio
     if (children != nullptr) {
         if (container->orientation == VERTICAL) {
             uint32_t yOffset = 0;
-            for (uint32_t i = 0; i < children->index; i++) {
-                ListNode *listNode = children->node[i];
+            for (uint32_t i = 0; i < children->size; i++) {
+                ListNode *listNode = children->data[i];
                 GUIComponent *component = getNode(listNode, GUIComponent, node);
                 switch (component->type) {
                     case BUTTON: {
@@ -136,8 +135,8 @@ void gui_container_draw_children(GUIContainer *container, Orientation orientatio
             }
         } else {
             uint32_t xOffset = 0;
-            for (uint32_t i = 0; i < children->index; i++) {
-                ListNode *listNode = children->node[i];
+            for (uint32_t i = 0; i < children->size; i++) {
+                ListNode *listNode = children->data[i];
                 GUIComponent *component = getNode(listNode, GUIComponent, node);
                 switch (component->type) {
                     case BUTTON: {

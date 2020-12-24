@@ -2,18 +2,17 @@
 // Created by XingfengYang on 2020/7/7.
 //
 
-#include <gfx2d.h>
-#include <gui_button.h>
-#include <gui_canvas.h>
-#include <gui_container.h>
-#include <gui_label.h>
-#include <gui_panel.h>
-#include <gui_view3d.h>
-#include <gui_window.h>
-#include <log.h>
-#include <math.h>
-#include <stdbool.h>
-#include <stdlib.h>
+#include "libgui/gui_window.h"
+#include "kernel/log.h"
+#include "libc/stdlib.h"
+#include "libgfx/gfx2d.h"
+#include "libgfx/font8bits.h"
+#include "libgui/gui_button.h"
+#include "libgui/gui_canvas.h"
+#include "libgui/gui_container.h"
+#include "libgui/gui_label.h"
+#include "libgui/gui_panel.h"
+#include "libgui/gui_view3d.h"
 
 extern uint32_t GFX2D_BUFFER[1024 * 768];
 
@@ -90,7 +89,7 @@ void gui_window_init(GUIWindow *window, uint32_t x, uint32_t y, const char *titl
 
 void gui_window_add_children(GUIWindow *window, GUIComponent *component) {
     if (window->children != nullptr) {
-        kvector_add(window->children, &(component->node));
+        window->children->operations.add(window->children, &component->node);
     }
 }
 
@@ -103,11 +102,11 @@ void gui_window_draw(GUIWindow *window) {
                                                     window->component.position.y,
                                                     window->component.position.x + window->component.size.width,
                                                     window->component.position.y + window->component.size.height +
-                                                            DEFAULT_WINDOW_HEADER_HEIGHT,
+                                                    DEFAULT_WINDOW_HEADER_HEIGHT,
                                                     window->header.foreground.a << 24 |
-                                                            window->component.background.r << 16 |
-                                                            window->component.background.g << 8 |
-                                                            window->component.background.b);
+                                                    window->component.background.r << 16 |
+                                                    window->component.background.g << 8 |
+                                                    window->component.background.b);
             }
 
             // 2. draw header
@@ -116,18 +115,19 @@ void gui_window_draw(GUIWindow *window) {
                                                 window->component.position.x + window->component.size.width,
                                                 window->component.position.y + DEFAULT_WINDOW_HEADER_HEIGHT,
                                                 window->header.foreground.a << 24 | window->header.background.r << 16 |
-                                                        window->header.background.g << 8 | window->header.background.b);
+                                                window->header.background.g << 8 | window->header.background.b);
 
             uint16_t *bitmap = win_app_16_bits();
             for (uint32_t i = 0; i < 16; i++) {
                 for (uint32_t j = 0; j < 16; j++) {
                     if ((bitmap[i] & (0x1 << j)) > 0) {
-                        window->context.operations.drawPixeColor(&window->context,
-                                                                 window->component.position.x + j + DEFAULT_PADDING,
-                                                                 window->component.position.y + i + DEFAULT_PADDING + 4,
-                                                                 window->header.foreground.r << 16 |
-                                                                         window->header.foreground.g << 8 |
-                                                                         window->header.foreground.b);
+                        window->context.operations.drawPixelColor(&window->context,
+                                                                  window->component.position.x + j + DEFAULT_PADDING,
+                                                                  window->component.position.y + i + DEFAULT_PADDING +
+                                                                  4,
+                                                                  window->header.foreground.r << 16 |
+                                                                  window->header.foreground.g << 8 |
+                                                                  window->header.foreground.b);
                     }
                 }
             }
@@ -138,10 +138,10 @@ void gui_window_draw(GUIWindow *window) {
             while (*tmp) {
                 window->context.operations.drawAscii(&window->context,
                                                      window->component.position.x + xOffset * DEFAULT_FONT_SIZE +
-                                                             2 * DEFAULT_PADDING,
+                                                     2 * DEFAULT_PADDING,
                                                      window->component.position.y + 2 * DEFAULT_PADDING, *tmp,
                                                      window->header.foreground.r << 16 |
-                                                             window->header.foreground.g << 8 | window->header.foreground.b);
+                                                     window->header.foreground.g << 8 | window->header.foreground.b);
                 xOffset++;
                 tmp++;
             }
@@ -151,11 +151,14 @@ void gui_window_draw(GUIWindow *window) {
             for (uint32_t i = 0; i < 16; i++) {
                 for (uint32_t j = 0; j < 16; j++) {
                     if ((minBitmap[i] & (0x1 << j)) > 0) {
-                        window->context.operations.drawPixeColor(&window->context, window->component.position.x + j + window->component.size.width - 24 * 3,
-                                                                 window->component.position.y + i + DEFAULT_PADDING + 4,
-                                                                 window->header.foreground.r << 16 |
-                                                                         window->header.foreground.g << 8 |
-                                                                         window->header.foreground.b);
+                        window->context.operations.drawPixelColor(&window->context, window->component.position.x + j +
+                                                                                    window->component.size.width -
+                                                                                    24 * 3,
+                                                                  window->component.position.y + i + DEFAULT_PADDING +
+                                                                  4,
+                                                                  window->header.foreground.r << 16 |
+                                                                  window->header.foreground.g << 8 |
+                                                                  window->header.foreground.b);
                     }
                 }
             }
@@ -164,11 +167,14 @@ void gui_window_draw(GUIWindow *window) {
             for (uint32_t i = 0; i < 16; i++) {
                 for (uint32_t j = 0; j < 16; j++) {
                     if ((maxBitmap[i] & (0x1 << j)) > 0) {
-                        window->context.operations.drawPixeColor(&window->context, window->component.position.x + j + window->component.size.width - 24 * 2,
-                                                                 window->component.position.y + i + DEFAULT_PADDING + 4,
-                                                                 window->header.foreground.r << 16 |
-                                                                         window->header.foreground.g << 8 |
-                                                                         window->header.foreground.b);
+                        window->context.operations.drawPixelColor(&window->context, window->component.position.x + j +
+                                                                                    window->component.size.width -
+                                                                                    24 * 2,
+                                                                  window->component.position.y + i + DEFAULT_PADDING +
+                                                                  4,
+                                                                  window->header.foreground.r << 16 |
+                                                                  window->header.foreground.g << 8 |
+                                                                  window->header.foreground.b);
                     }
                 }
             }
@@ -177,11 +183,13 @@ void gui_window_draw(GUIWindow *window) {
             for (uint32_t i = 0; i < 16; i++) {
                 for (uint32_t j = 0; j < 16; j++) {
                     if ((closeBitmap[i] & (0x1 << j)) > 0) {
-                        window->context.operations.drawPixeColor(&window->context, window->component.position.x + j + window->component.size.width - 24,
-                                                                 window->component.position.y + i + DEFAULT_PADDING + 4,
-                                                                 window->header.foreground.r << 16 |
-                                                                         window->header.foreground.g << 8 |
-                                                                         window->header.foreground.b);
+                        window->context.operations.drawPixelColor(&window->context, window->component.position.x + j +
+                                                                                    window->component.size.width - 24,
+                                                                  window->component.position.y + i + DEFAULT_PADDING +
+                                                                  4,
+                                                                  window->header.foreground.r << 16 |
+                                                                  window->header.foreground.g << 8 |
+                                                                  window->header.foreground.b);
                     }
                 }
             }
@@ -200,10 +208,10 @@ void gui_window_draw(GUIWindow *window) {
                                                     window->component.position.y - i,
                                                     window->component.position.x - (i - 1),
                                                     window->component.position.y + window->component.size.height +
-                                                            DEFAULT_WINDOW_HEADER_HEIGHT + i,
+                                                    DEFAULT_WINDOW_HEADER_HEIGHT + i,
                                                     window->component.boxShadow.color.r << 16 |
-                                                            window->component.boxShadow.color.g << 8 |
-                                                            window->component.boxShadow.color.b | alpha << 24);
+                                                    window->component.boxShadow.color.g << 8 |
+                                                    window->component.boxShadow.color.b | alpha << 24);
             }
 
             // right
@@ -217,10 +225,10 @@ void gui_window_draw(GUIWindow *window) {
                                                     window->component.position.y - i,
                                                     window->component.position.x + window->component.size.width + i + 1,
                                                     window->component.position.y + window->component.size.height +
-                                                            DEFAULT_WINDOW_HEADER_HEIGHT + i,
+                                                    DEFAULT_WINDOW_HEADER_HEIGHT + i,
                                                     window->component.boxShadow.color.r << 16 |
-                                                            window->component.boxShadow.color.g << 8 |
-                                                            window->component.boxShadow.color.b | alpha << 24);
+                                                    window->component.boxShadow.color.g << 8 |
+                                                    window->component.boxShadow.color.b | alpha << 24);
             }
 
             // bottom
@@ -231,13 +239,13 @@ void gui_window_draw(GUIWindow *window) {
                 }
                 window->context.operations.fillRect(&window->context, window->component.position.x - i,
                                                     window->component.position.y + window->component.size.height +
-                                                            DEFAULT_WINDOW_HEADER_HEIGHT + i,
+                                                    DEFAULT_WINDOW_HEADER_HEIGHT + i,
                                                     window->component.position.x + window->component.size.width + i,
                                                     window->component.position.y + window->component.size.height +
-                                                            DEFAULT_WINDOW_HEADER_HEIGHT + i + 1,
+                                                    DEFAULT_WINDOW_HEADER_HEIGHT + i + 1,
                                                     window->component.boxShadow.color.r << 16 |
-                                                            window->component.boxShadow.color.g << 8 |
-                                                            window->component.boxShadow.color.b | alpha << 24);
+                                                    window->component.boxShadow.color.g << 8 |
+                                                    window->component.boxShadow.color.b | alpha << 24);
             }
 
             // top
@@ -251,8 +259,8 @@ void gui_window_draw(GUIWindow *window) {
                                                     window->component.position.x + window->component.size.width + i,
                                                     window->component.position.y - (i - 1),
                                                     window->component.boxShadow.color.r << 16 |
-                                                            window->component.boxShadow.color.g << 8 |
-                                                            window->component.boxShadow.color.b | alpha << 24);
+                                                    window->component.boxShadow.color.g << 8 |
+                                                    window->component.boxShadow.color.b | alpha << 24);
             }
             window->isShadowNeedUpdate = false;
         }
@@ -269,8 +277,8 @@ void gui_window_draw(GUIWindow *window) {
 void gui_window_draw_children(GUIWindow *window) {
     KernelVector *children = window->children;
     if (children != nullptr) {
-        for (uint32_t i = 0; i < children->index; i++) {
-            ListNode *listNode = kvector_get(children, i);
+        for (uint32_t i = 0; i < children->size; i++) {
+            ListNode *listNode = children->data[i];
             GUIComponent *component = getNode(listNode, GUIComponent, node);
             switch (component->type) {
                 case BUTTON: {

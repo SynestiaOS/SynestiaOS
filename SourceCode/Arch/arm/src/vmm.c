@@ -2,14 +2,14 @@
 // Created by XingfengYang on 2020/6/15.
 //
 
-#include "vmm.h"
-#include "kernel_vmm.h"
-#include "mmu.h"
-#include "page.h"
-#include <log.h>
-#include <sched.h>
-#include <stdlib.h>
-#include <type.h>
+#include "arm/vmm.h"
+#include "arm/kernel_vmm.h"
+#include "arm/mmu.h"
+#include "arm/page.h"
+#include "kernel/log.h"
+#include "kernel/sched.h"
+#include "kernel/type.h"
+#include "libc/stdlib.h"
 
 void virtual_memory_default_allocate_page(VirtualMemory *virtualMemory, uint32_t virtualAddress) {
     uint32_t l1Offset = (virtualAddress >> 30) & 0b11;
