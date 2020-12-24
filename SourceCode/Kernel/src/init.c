@@ -150,12 +150,10 @@ _Noreturn uint32_t *GPU_FLUSH(int args) {
     }
 }
 
-TimerHandler gpuHandler;
-//SpinLock bootSpinLock = SpinLockCreate();
-
+SpinLock bootSpinLock = SpinLockCreate();
 void kernel_main(void) {
     if (read_cpuid() == 0) {
-        //bootSpinLock.operations.acquire(&bootSpinLock);
+        bootSpinLock.operations.acquire(&bootSpinLock);
 	    led_init();
         init_bsp();
         print_splash();
@@ -213,7 +211,7 @@ void kernel_main(void) {
         schd_add_thread(windowFileSystemThread, 0);
 
 
-        //bootSpinLock.operations.release(&bootSpinLock);
+        bootSpinLock.operations.release(&bootSpinLock);
         schd_schedule();
     }
 

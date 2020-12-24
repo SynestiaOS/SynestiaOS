@@ -22,8 +22,7 @@ void gui_window_create(GUIWindow *window) {
     window->component.colorMode = RGB;
     window->component.node.next = nullptr;
     window->component.node.prev = nullptr;
-    window->children = nullptr;
-
+    kvector_allocate(&window->children);
     window->component.position.x = 0;
     window->component.position.y = 0;
 
@@ -72,8 +71,7 @@ void gui_window_create(GUIWindow *window) {
 
     window->title = "";
 
-    window->children = kvector_allocate();
-    if (window->children == nullptr) {
+    if (window->children.data == nullptr) {
         LogError("[GUI]: window create failed, unable to allocate children vector\n");
     }
 
@@ -88,8 +86,8 @@ void gui_window_init(GUIWindow *window, uint32_t x, uint32_t y, const char *titl
 }
 
 void gui_window_add_children(GUIWindow *window, GUIComponent *component) {
-    if (window->children != nullptr) {
-        window->children->operations.add(window->children, &component->node);
+    if (window->children.data != nullptr) {
+        window->children.operations.add(&window->children, &component->node);
     }
 }
 
@@ -275,10 +273,10 @@ void gui_window_draw(GUIWindow *window) {
 }
 
 void gui_window_draw_children(GUIWindow *window) {
-    KernelVector *children = window->children;
-    if (children != nullptr) {
-        for (uint32_t i = 0; i < children->size; i++) {
-            ListNode *listNode = children->data[i];
+    KernelVector children = window->children;
+    if (children.data != nullptr) {
+        for (uint32_t i = 0; i < children.size; i++) {
+            ListNode *listNode = children.data[i];
             GUIComponent *component = getNode(listNode, GUIComponent, node);
             switch (component->type) {
                 case BUTTON: {

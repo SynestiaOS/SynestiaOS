@@ -14,7 +14,7 @@
 
 typedef struct GUIPanel {
     GUIComponent component;
-    KernelVector *children;
+    KernelVector children;
     Gfx2DContext context;
 } GUIPanel;
 

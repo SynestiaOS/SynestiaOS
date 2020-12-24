@@ -9,7 +9,7 @@
 extern Heap kernelHeap;
 
 KernelStatus kvector_operation_default_resize(struct KernelVector *vector, uint32_t newSize) {
-    vector = kernelHeap.operations.realloc(&kernelHeap, vector, newSize);
+    vector->data = kernelHeap.operations.realloc(&kernelHeap, vector->data, newSize);
     if (vector == nullptr) {
         LogError("[KVector] kVector resize failed.\n");
         return ERROR;
@@ -29,13 +29,12 @@ KernelStatus kvector_operation_default_free(struct KernelVector *vector) {
 KernelStatus kvector_operation_default_add(struct KernelVector *vector, ListNode *node) {
     if (vector->size >= vector->capacity) {
         vector->capacity += DEFAULT_VECTOR_SIZE;
-        KernelStatus status = vector->operations.resize(vector, vector->capacity * sizeof(ListNode *) + sizeof(KernelVector));
+        KernelStatus status = vector->operations.resize(vector, vector->capacity * sizeof(ListNode *));
         if (status != OK) {
             LogError("[KVector] kVector resize failed.\n");
             return status;
         }
     }
-    vector->data = (ListNode **) (vector + sizeof(KernelVector));
     vector->data[vector->size] = node;
     vector->size++;
     return OK;
@@ -72,17 +71,16 @@ KernelStatus kvector_operation_default_clear(struct KernelVector *vector) {
     return OK;
 }
 
-KernelVector *kvector_allocate() {
+KernelVector *kvector_allocate(struct KernelVector *vector) {
     // 1. allocate vector memory block from virtual memory (heap), and align.
-    KernelVector *vector = (KernelVector *) kernelHeap.operations.alloc(
-            &kernelHeap, DEFAULT_VECTOR_SIZE * sizeof(ListNode *) + sizeof(KernelVector));
-    if (vector == nullptr) {
+    ListNode **data = (ListNode **) kernelHeap.operations.alloc(&kernelHeap, DEFAULT_VECTOR_SIZE * sizeof(ListNode *));
+    if (data == nullptr) {
         LogError("[KVector] kVector allocate failed.\n");
         return nullptr;
     }
     vector->capacity = DEFAULT_VECTOR_SIZE;
     vector->size = 0;
-    vector->data = (ListNode **) (vector + sizeof(KernelVector));
+    vector->data = (ListNode **) (data);
 
     vector->operations.resize = (KernelVectorOperationResize) kvector_operation_default_resize;
     vector->operations.free = (KernelVectorOperationFree) kvector_operation_default_free;

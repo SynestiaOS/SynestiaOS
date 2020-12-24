@@ -20,7 +20,7 @@ typedef enum Orientation {
 typedef struct GUIContainer {
     GUIComponent component;
     Orientation orientation;
-    KernelVector *children;
+    KernelVector children;
     Gfx2DContext context;
 } GUIContainer;
 

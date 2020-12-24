@@ -68,8 +68,8 @@ uint32_t vfs_default_close(struct VFS *vfs, uint32_t fd) {
     PerCpu *perCpu = percpu_get(read_cpuid());
     Thread *currThread = perCpu->currentThread;
 
-    ListNode *pNode = currThread->filesStruct.fileDescriptorTable->operations.get(
-            currThread->filesStruct.fileDescriptorTable, fd);
+    ListNode *pNode = currThread->filesStruct.fileDescriptorTable.operations.get(
+            &currThread->filesStruct.fileDescriptorTable, fd);
     FileDescriptor *pDescriptor = getNode(pNode, FileDescriptor, node);
     pDescriptor->directoryEntry->indexNode->state = INDEX_NODE_STATE_CLOSED;
 

@@ -93,7 +93,7 @@ typedef struct FilesStructOperations {
 } FilesStructOperations;
 
 typedef struct FilesStruct {
-    KernelVector *fileDescriptorTable;
+    KernelVector fileDescriptorTable;
     FilesStructOperations operations;
 } FilesStruct;
 

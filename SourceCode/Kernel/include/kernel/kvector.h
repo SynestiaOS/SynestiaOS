@@ -49,6 +49,6 @@ typedef struct KernelVector {
     ListNode **data;
 } KernelVector;
 
-KernelVector *kvector_allocate();
+KernelVector *kvector_allocate(struct KernelVector* vector);
 
 #endif//__KERNEL_VECTOR_H__

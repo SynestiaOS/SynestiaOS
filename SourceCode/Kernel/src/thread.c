@@ -82,7 +82,7 @@ KernelStatus thread_default_kill(struct Thread *thread) {
     // Free pid
     thread_free_pid(thread->pid);
     // Free FS
-    freeStatus = thread->filesStruct.fileDescriptorTable->operations.free(thread->filesStruct.fileDescriptorTable);
+    freeStatus = thread->filesStruct.fileDescriptorTable.operations.free(&thread->filesStruct.fileDescriptorTable);
     if (freeStatus != OK) {
         LogError("[kVector]: kVector free failed.\n");
         return freeStatus;
@@ -105,14 +105,14 @@ uint32_t filestruct_default_openfile(FilesStruct *filesStruct, DirectoryEntry *d
     fileDescriptor->node.next = nullptr;
     fileDescriptor->pos = 0;
 
-    KernelStatus status = filesStruct->fileDescriptorTable->operations.add(filesStruct->fileDescriptorTable,
+    KernelStatus status = filesStruct->fileDescriptorTable.operations.add(&filesStruct->fileDescriptorTable,
                                                                            &fileDescriptor->node);
     if (status != OK) {
         LogError("[Open]: file open failed, cause add fd table failed.\n");
         return 0;
     }
     // because 0,1,2 are std in, out, err use
-    return (filesStruct->fileDescriptorTable->size - 1) + 3;
+    return (filesStruct->fileDescriptorTable.size - 1) + 3;
 }
 
 Thread *thread_default_copy(Thread *thread, CloneFlags cloneFlags, uint32_t heapStart) {
@@ -150,9 +150,9 @@ Thread *thread_default_copy(Thread *thread, CloneFlags cloneFlags, uint32_t heap
     }
     if (cloneFlags & CLONE_FILES) {
         LogInfo("[Thread]: Clone FILES: '%s'.\n", p->name);
-        p->filesStruct.fileDescriptorTable->size = thread->filesStruct.fileDescriptorTable->size;
-        p->filesStruct.fileDescriptorTable->capacity = thread->filesStruct.fileDescriptorTable->capacity;
-        p->filesStruct.fileDescriptorTable->data = thread->filesStruct.fileDescriptorTable->data;
+        p->filesStruct.fileDescriptorTable.size = thread->filesStruct.fileDescriptorTable.size;
+        p->filesStruct.fileDescriptorTable.capacity = thread->filesStruct.fileDescriptorTable.capacity;
+        p->filesStruct.fileDescriptorTable.data = thread->filesStruct.fileDescriptorTable.data;
     }
     if (cloneFlags & CLONE_FS) {
         LogInfo("[Thread]: Clone FS: '%s'.\n", p->name);
@@ -228,7 +228,7 @@ Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uin
         thread->operations.copy = thread_default_copy;
 
         thread->filesStruct.operations.openFile = (FilesStructOperationOpenFile) filestruct_default_openfile;
-        thread->filesStruct.fileDescriptorTable = kvector_allocate();
+        kvector_allocate(&thread->filesStruct.fileDescriptorTable);
         thread->memoryStruct.sectionInfo.codeSectionAddr = 0;
         thread->memoryStruct.sectionInfo.roDataSectionAddr = 0;
         thread->memoryStruct.sectionInfo.dataSectionAddr = 0;

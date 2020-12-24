@@ -20,7 +20,7 @@ void gui_container_create(GUIContainer *container) {
     container->orientation = VERTICAL;
     container->component.node.next = nullptr;
     container->component.node.prev = nullptr;
-    container->children = nullptr;
+    kvector_allocate(&container->children);
 
     container->component.position.x = 0;
     container->component.position.y = 0;
@@ -48,8 +48,7 @@ void gui_container_create(GUIContainer *container) {
     container->component.foreground.g = 0x00;
     container->component.foreground.b = 0x00;
 
-    container->children = kvector_allocate();
-    if (container->children == nullptr) {
+    if (container->children.data == nullptr) {
         LogError("[GUI]: container create failed, unable to allocate children vector\n");
     }
 
@@ -63,18 +62,18 @@ void gui_container_init(GUIContainer *container, uint32_t x, uint32_t y, Orienta
 }
 
 void gui_container_add_children(GUIContainer *container, GUIComponent *component) {
-    if (container->children != nullptr) {
-        container->children->operations.add(container->children, &component->node);
+    if (container->children.data != nullptr) {
+        container->children.operations.add(&container->children, &component->node);
     }
 }
 
 void gui_container_draw_children(GUIContainer *container, Orientation orientation) {
-    KernelVector *children = container->children;
-    if (children != nullptr) {
+    KernelVector children = container->children;
+    if (children.data != nullptr) {
         if (container->orientation == VERTICAL) {
             uint32_t yOffset = 0;
-            for (uint32_t i = 0; i < children->size; i++) {
-                ListNode *listNode = children->data[i];
+            for (uint32_t i = 0; i < children.size; i++) {
+                ListNode *listNode = children.data[i];
                 GUIComponent *component = getNode(listNode, GUIComponent, node);
                 switch (component->type) {
                     case BUTTON: {
@@ -135,8 +134,8 @@ void gui_container_draw_children(GUIContainer *container, Orientation orientatio
             }
         } else {
             uint32_t xOffset = 0;
-            for (uint32_t i = 0; i < children->size; i++) {
-                ListNode *listNode = children->data[i];
+            for (uint32_t i = 0; i < children.size; i++) {
+                ListNode *listNode = children.data[i];
                 GUIComponent *component = getNode(listNode, GUIComponent, node);
                 switch (component->type) {
                     case BUTTON: {
@@ -208,8 +207,8 @@ void gui_container_draw(GUIContainer *container) {
                                                    container->component.position.x + container->component.size.width,
                                                    container->component.position.y + container->component.size.height,
                                                    container->component.background.r << 16 |
-                                                           container->component.background.g << 8 |
-                                                           container->component.background.b);
+                                                   container->component.background.g << 8 |
+                                                   container->component.background.b);
         }
 
         // 2. draw children
