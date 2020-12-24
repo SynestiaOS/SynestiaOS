@@ -56,5 +56,8 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 add_subdirectory(${SynestiaOS_SOURCE_DIR}/SourceCode)
 
+set_directory_properties(
+	PROPERTIES ADDITIONAL_CLEAN_FILES ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/kernel.img)
+
 dump_cmake_variables()
 

@@ -18,6 +18,7 @@
 #include "raspi2/gpu.h"
 #include "raspi2/synestia_os_hal.h"
 #include <libgfx/gfx2d.h>
+#include <raspi2/led.h>
 
 extern uint32_t __HEAP_BEGIN;
 extern char _binary_initrd_img_start[];
@@ -151,11 +152,12 @@ uint32_t *GPU_FLUSH(int args) {
 }
 
 TimerHandler gpuHandler;
-SpinLock bootSpinLock = SpinLockCreate();
+//SpinLock bootSpinLock = SpinLockCreate();
 
 void kernel_main(void) {
     if (read_cpuid() == 0) {
-        bootSpinLock.operations.acquire(&bootSpinLock);
+        //bootSpinLock.operations.acquire(&bootSpinLock);
+	    led_init();
         init_bsp();
         print_splash();
 
@@ -212,7 +214,7 @@ void kernel_main(void) {
         schd_add_thread(windowFileSystemThread, 0);
 
 
-        bootSpinLock.operations.release(&bootSpinLock);
+        //bootSpinLock.operations.release(&bootSpinLock);
         schd_schedule();
     }
 
