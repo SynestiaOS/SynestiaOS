@@ -20,7 +20,7 @@ static int skip_atoi(const char **s) {
 #define SMALL 64
 
 int32_t do_div(int *n, int base) {
-    int32_t res = 0;
+    int32_t res;
     res = *n % base;
     *n = *n / base;
     return res;

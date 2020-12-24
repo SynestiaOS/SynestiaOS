@@ -32,7 +32,7 @@
 _start:
     safe_svcmode_maskall r0
     mov	r0, #0
-    mcr p15, 0, r0, c12, c0, 0	
+    mcr p15, 0, r0, c12, c0, 0
 
     //b _goto_kernel_main // init cpu0
     //b _init_cpu0 // init cpu0
@@ -43,8 +43,8 @@ _start:
     cmp r0, #0 // check whether r0==0
     beq _init_cpu0 // init cpu0
 
-    cmp r0, #1 // check whether r0==1
-    beq _init_cpu1_new // init cpu1
+    //cmp r0, #1 // check whether r0==1
+    //beq _init_cpu1 // init cpu1
 
     //cmp r0, #2 // check whether r0==2
     //beq _init_cpu2 // init cpu2
@@ -104,31 +104,6 @@ _init_cpu1:
     msr cpsr_c, r0 // enter SVC (supervisor) mode
     wfe
     ldr pc, =_goto_kernel_main
-
-_init_cpu1_new:
-    safe_svcmode_maskall r0
-    mrc	p15, 0, r0, c0, c0, 5		/* read MPIDR */
-    and	r0, r0, #CORES-1		
-    mov	r1, #EXCEPTION_STACK_SIZE	/* calculate exception stack offset for core */
-    mul	r1, r0, r1
-    cps	#0x11				/* set fiq mode */
-    ldr	r2, =__fiq_stack
-    add	sp, r1, r2
-    cps	#0x12				/* set irq mode */
-    ldr	r2, =__irq_stack
-    add	sp, r1, r2
-    cps	#0x17				/* set abort mode */
-    ldr	r2, =__abort_stack
-    add	sp, r1, r2
-    cps	#0x1B				/* set "undefined" mode */
-    add	sp, r1, r2
-    
-    mov	r1, #KERNEL_STACK_SIZE		/* calculate kernel stack offset for core */
-    mul	r1, r0, r1
-    cps	#0x1F				/* set system mode */
-    ldr	r2, =__sys_stack
-    add	sp, r1, r2
-    b _goto_kernel_main
 
 _init_cpu2:
     ldr sp, =__sys_stack-0x8000-0x8000
