@@ -454,15 +454,15 @@ Gfx2DContext *gfx2d_create_context(Gfx2DContext *context, uint32_t width, uint32
     context->height = height;
     context->width = width;
 
-    context->operations.drawPixel = gfx2d_default_draw_pixel;
-    context->operations.drawPixelColor = gfx2d_default_write_pixel_color;
-    context->operations.drawRect = gfx2d_default_draw_rect;
-    context->operations.fillRect = gfx2d_default_fill_rect;
-    context->operations.drawLine = gfx2d_default_draw_line;
-    context->operations.drawTriangle = gfx2d_default_draw_triangle;
-    context->operations.fillTriangle = gfx2d_default_fill_triangle;
-    context->operations.drawCircle = gfx2d_default_draw_circle;
-    context->operations.fillCircle = gfx2d_default_fill_circle;
-    context->operations.drawAscii = gfx2d_default_draw_ascii;
-    context->operations.drawBitmap = gfx2d_default_draw_bitmap;
+    context->operations.drawPixel = (Gfx2DContextOperationDrawPixel) gfx2d_default_draw_pixel;
+    context->operations.drawPixelColor = (Gfx2DContextOperationDrawPixelColor) gfx2d_default_write_pixel_color;
+    context->operations.drawRect = (Gfx2DContextOperationDrawRect) gfx2d_default_draw_rect;
+    context->operations.fillRect = (Gfx2DContextOperationFillRect) gfx2d_default_fill_rect;
+    context->operations.drawLine = (Gfx2DContextOperationDrawLine) gfx2d_default_draw_line;
+    context->operations.drawTriangle = (Gfx2DContextOperationDrawTriangle) gfx2d_default_draw_triangle;
+    context->operations.fillTriangle = (Gfx2DContextOperationFillTriangle) gfx2d_default_fill_triangle;
+    context->operations.drawCircle = (Gfx2DContextOperationDrawCircle) gfx2d_default_draw_circle;
+    context->operations.fillCircle = (Gfx2DContextOperationFillCircle) gfx2d_default_fill_circle;
+    context->operations.drawAscii = (Gfx2DContextOperationDrawAscii) gfx2d_default_draw_ascii;
+    context->operations.drawBitmap = (Gfx2DContextOperationDrawBitmap) gfx2d_default_draw_bitmap;
 }
