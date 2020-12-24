@@ -60,10 +60,10 @@ KernelStatus percpu_create(uint32_t cpuNum) {
         return ERROR;
     }
     for (uint32_t cpuId = 0; cpuId < cpuNum; cpuId++) {
-        perCpu[cpuId].operations.init = percpu_default_init;
-        perCpu[cpuId].operations.insertThread = percpu_default_insert_thread;
-        perCpu[cpuId].operations.removeThread = percpu_default_remove_thread;
-        perCpu[cpuId].operations.getNextThread = percpu_default_get_next_thread;
+        perCpu[cpuId].operations.init = (PerCpuInit) percpu_default_init;
+        perCpu[cpuId].operations.insertThread = (PerCpuInsertThread) percpu_default_insert_thread;
+        perCpu[cpuId].operations.removeThread = (PerCpuRemoveThread) percpu_default_remove_thread;
+        perCpu[cpuId].operations.getNextThread = (PerCpuGetNextThread) percpu_default_get_next_thread;
         if (cpuId == 0) {
             perCpu[cpuId].node.prev = nullptr;
             perCpu[cpuId].node.next = &perCpu[cpuId + 1].node;

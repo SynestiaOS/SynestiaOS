@@ -88,8 +88,8 @@ RBNode *rbtree_default_remove(RBTree *tree, RBNode *node) {
 }
 
 RBTree *rb_tree_init(RBTree *tree) {
-    tree->operations.getMax = rbtree_default_get_max;
-    tree->operations.getMin = rbtree_default_get_min;
-    tree->operations.insert = rbtree_default_insert;
-    tree->operations.remove = rbtree_default_remove;
+    tree->operations.getMax = (RbTreeGetMaxNode) rbtree_default_get_max;
+    tree->operations.getMin = (RbTreeGetMinNode) rbtree_default_get_min;
+    tree->operations.insert = (RBTreeInsertNode) rbtree_default_insert;
+    tree->operations.remove = (RbTreeRemoveNode) rbtree_default_remove;
 }

@@ -170,8 +170,8 @@ Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uin
         // 1. init kernel stack
         kernelStack->operations.clear(kernelStack);
 
-        kernelStack->operations.push(kernelStack, entry);     // R15 PC
-        kernelStack->operations.push(kernelStack, entry);     // R14 LR
+        kernelStack->operations.push(kernelStack, (uint32_t) entry);     // R15 PC
+        kernelStack->operations.push(kernelStack, (uint32_t) entry);     // R14 LR
         kernelStack->operations.push(kernelStack, 0x12121212);// R12
         kernelStack->operations.push(kernelStack, 0x11111111);// R11
         kernelStack->operations.push(kernelStack, 0x10101010);// R10
@@ -184,7 +184,7 @@ Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uin
         kernelStack->operations.push(kernelStack, 0x03030303);// R03
         kernelStack->operations.push(kernelStack, 0x02020202);// R02
         kernelStack->operations.push(kernelStack, 0x01010101);// R01
-        kernelStack->operations.push(kernelStack, arg);       // R00
+        kernelStack->operations.push(kernelStack, (uint32_t) arg);       // R00
         kernelStack->operations.push(kernelStack, 0x600001d3);// cpsr
 
         Thread *thread = (Thread *) kernelHeap.operations.alloc(&kernelHeap, sizeof(Thread));
@@ -218,16 +218,16 @@ Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uin
         thread->rbNode.right = nullptr;
         thread->rbNode.color = NODE_RED;
 
-        thread->operations.suspend = thread_default_suspend;
-        thread->operations.resume = thread_default_resume;
-        thread->operations.sleep = thread_default_sleep;
-        thread->operations.detach = thread_default_detach;
-        thread->operations.join = thread_default_join;
-        thread->operations.exit = thread_default_exit;
-        thread->operations.kill = thread_default_kill;
+        thread->operations.suspend = (ThreadOperationSuspend) thread_default_suspend;
+        thread->operations.resume = (ThreadOperationResume) thread_default_resume;
+        thread->operations.sleep = (ThreadOperationSleep) thread_default_sleep;
+        thread->operations.detach = (ThreadOperationDetach) thread_default_detach;
+        thread->operations.join = (ThreadOperationJoin) thread_default_join;
+        thread->operations.exit = (ThreadOperationExit) thread_default_exit;
+        thread->operations.kill = (ThreadOperationKill) thread_default_kill;
         thread->operations.copy = thread_default_copy;
 
-        thread->filesStruct.operations.openFile = filestruct_default_openfile;
+        thread->filesStruct.operations.openFile = (FilesStructOperationOpenFile) filestruct_default_openfile;
         thread->filesStruct.fileDescriptorTable = kvector_allocate();
         thread->memoryStruct.sectionInfo.codeSectionAddr = 0;
         thread->memoryStruct.sectionInfo.roDataSectionAddr = 0;
@@ -249,7 +249,7 @@ Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uin
     return nullptr;
 }
 
-uint32_t *idle_thread_routine(int arg) {
+_Noreturn uint32_t *idle_thread_routine(int arg) {
     while (1) {
         LogInfo("[Thread]: IDLE: %d \n", arg);
         asm volatile("wfi");
@@ -257,13 +257,13 @@ uint32_t *idle_thread_routine(int arg) {
 }
 
 Thread *thread_create_idle_thread(uint32_t cpuNum) {
-    Thread *idleThread = thread_create("IDLE", idle_thread_routine, cpuNum, IDLE_PRIORITY);
+    Thread *idleThread = thread_create("IDLE", (ThreadStartRoutine) idle_thread_routine, (void *) cpuNum, IDLE_PRIORITY);
     idleThread->cpuAffinity = cpuNum;
     // 2. idle thread
     idleThread->pid = 0;
 
     char idleNameStr[10] = {'\0'};
-    strcpy(idleThread->name, itoa(cpuNum, &idleNameStr, 10));
+    strcpy(idleThread->name, itoa(cpuNum, (char *) &idleNameStr, 10));
     // TODO : other properties, like list
     LogInfo("[Thread]: Idle thread for CPU '%d' created.\n", cpuNum);
     return idleThread;

@@ -84,15 +84,15 @@ KernelVector *kvector_allocate() {
     vector->size = 0;
     vector->data = (ListNode **) (vector + sizeof(KernelVector));
 
-    vector->operations.resize = kvector_operation_default_resize;
-    vector->operations.free = kvector_operation_default_free;
-    vector->operations.add = kvector_operation_default_add;
-    vector->operations.get = kvector_operation_default_get;
-    vector->operations.size = kvector_operation_default_size;
-    vector->operations.capacity = kvector_operation_default_capacity;
-    vector->operations.isEmpty = kvector_operation_default_isEmpty;
-    vector->operations.isFull = kvector_operation_default_isFull;
-    vector->operations.clear = kvector_operation_default_clear;
+    vector->operations.resize = (KernelVectorOperationResize) kvector_operation_default_resize;
+    vector->operations.free = (KernelVectorOperationFree) kvector_operation_default_free;
+    vector->operations.add = (KernelVectorOperationAdd) kvector_operation_default_add;
+    vector->operations.get = (KernelVectorOperationGet) kvector_operation_default_get;
+    vector->operations.size = (KernelVectorOperationSize) kvector_operation_default_size;
+    vector->operations.capacity = (KernelVectorOperationCapacity) kvector_operation_default_capacity;
+    vector->operations.isEmpty = (KernelVectorOperationIsEmpty) kvector_operation_default_isEmpty;
+    vector->operations.isFull = (KernelVectorOperationIsFull) kvector_operation_default_isFull;
+    vector->operations.clear = (KernelVectorOperationClear) kvector_operation_default_clear;
 
     return vector;
 }

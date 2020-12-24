@@ -79,7 +79,7 @@ void *slab_default_alloc(struct Slab *slab, KernelObjectType type) {
                     kernelObject->status = USING;
                     return kernelObject->operations.getObject(&kernelObject);
                 }
-                kernelObject = kernelObject->list.next;
+                kernelObject = (KernelObject *) kernelObject->list.next;
             }
             // oops, not found free kernel object, so let's alloc from heap.
             void *ptr = slab_default_alloc_kernel_object(slab, type);
@@ -140,8 +140,8 @@ void slab_default_set_free_callback(struct Slab *slab, SlabFreeCallback callback
 }
 
 KernelStatus slab_create(Slab *slab, uint32_t addr, uint32_t size) {
-    slab->allocCallback = slab_default_alloc_callback;
-    slab->freeCallback = slab_default_free_callback;
+    slab->allocCallback = (SlabAllocCallback) slab_default_alloc_callback;
+    slab->freeCallback = (SlabFreeCallback) slab_default_free_callback;
 
     slab->address = addr;
     LogInfo("[KSlab] at: %d. \n", slab->address);
@@ -156,11 +156,11 @@ KernelStatus slab_create(Slab *slab, uint32_t addr, uint32_t size) {
     slab->address = KERNEL_PHYSICAL_START + slabPhysicalPage * PAGE_SIZE;
     LogInfo("[KHeap] kheap at: %d. \n", slab->address);
 
-    slab->operations.setFreeCallback = slab_default_set_free_callback;
-    slab->operations.setAllocCallback = slab_default_set_alloc_callback;
+    slab->operations.setFreeCallback = (SlabOperationSetFreeCallback) slab_default_set_free_callback;
+    slab->operations.setAllocCallback = (SlabOperationSetAllocCallback) slab_default_set_alloc_callback;
 
-    slab->operations.alloc = slab_default_alloc;
-    slab->operations.free = slab_default_free;
+    slab->operations.alloc = (SlabOperationAlloc) slab_default_alloc;
+    slab->operations.free = (SlabOperationFree) slab_default_free;
 
     LogInfo("[KSlab] kernel slab created. \n");
     return OK;

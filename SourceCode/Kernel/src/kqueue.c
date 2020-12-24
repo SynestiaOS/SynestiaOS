@@ -46,8 +46,8 @@ KernelQueue *kqueue_create(KernelQueue *queue) {
     queue->size = 0;
     queue->head = nullptr;
     queue->tail = nullptr;
-    queue->operations.enqueue = kqueue_default_operation_enqueue;
-    queue->operations.dequeue = kqueue_default_operation_dequeue;
-    queue->operations.size = kqueue_default_operation_size;
-    queue->operations.isEmpty = kqueue_default_operation_is_empty;
+    queue->operations.enqueue = (KernelQueueOperationEnQueue) kqueue_default_operation_enqueue;
+    queue->operations.dequeue = (KernelQueueOperationDnQueue) kqueue_default_operation_dequeue;
+    queue->operations.size = (KernelQueueOperationSize) kqueue_default_operation_size;
+    queue->operations.isEmpty = (KernelQueueOperationIsEmpty) kqueue_default_operation_is_empty;
 }

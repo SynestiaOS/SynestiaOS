@@ -66,16 +66,16 @@ KernelStack *kstack_allocate() {
     LogInfo("[KStack] kStack allocated.\n");
     stack->virtualMemoryAddress = (uint32_t *) (stack + sizeof(KernelStack) + DEFAULT_KERNEL_STACK_SIZE);
     stack->size = 0;
-    stack->base = stack->virtualMemoryAddress;
+    stack->base = (VirtualAddress) stack->virtualMemoryAddress;
     stack->top = stack->base;
 
-    stack->operations.free = stack_default_free;
-    stack->operations.push = stack_default_push;
-    stack->operations.pop = stack_default_pop;
-    stack->operations.peek = stack_default_peek;
-    stack->operations.isFull = stack_default_is_full;
-    stack->operations.isEmpty = stack_default_is_empty;
-    stack->operations.clear = stack_default_clear;
+    stack->operations.free = (StackOperationFree) stack_default_free;
+    stack->operations.push = (StackOperationPush) stack_default_push;
+    stack->operations.pop = (StackOperationPop) stack_default_pop;
+    stack->operations.peek = (StackOperationPeek) stack_default_peek;
+    stack->operations.isFull = (StackOperationIsFull) stack_default_is_full;
+    stack->operations.isEmpty = (StackOperationIsEmpty) stack_default_is_empty;
+    stack->operations.clear = (StackOperationClear) stack_default_clear;
 
     return stack;
 }

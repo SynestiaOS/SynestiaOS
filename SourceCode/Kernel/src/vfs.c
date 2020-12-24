@@ -278,14 +278,13 @@ DirectoryEntry *vfs_default_lookup(VFS *vfs, const char *name) {
     return currentDirectory;
 }
 
-VFS *vfs_create() {
-    VFS *vfs = (VFS *) kernelHeap.operations.alloc(&kernelHeap, sizeof(VFS));
+VFS *vfs_create(VFS *vfs) {
     vfs->fileSystems = nullptr;
-    vfs->operations.mount = vfs_default_mount;
-    vfs->operations.open = vfs_default_open;
-    vfs->operations.close = vfs_default_close;
-    vfs->operations.read = vfs_default_read;
-    vfs->operations.write = vfs_default_write;
-    vfs->operations.lookup = vfs_default_lookup;
+    vfs->operations.mount = (VFSOperationMount) vfs_default_mount;
+    vfs->operations.open = (VFSOperationOpen) vfs_default_open;
+    vfs->operations.close = (VFSOperationClose) vfs_default_close;
+    vfs->operations.read = (VFSOperationRead) vfs_default_read;
+    vfs->operations.write = (VFSOperationWrite) vfs_default_write;
+    vfs->operations.lookup = (VFSOperationLookUp) vfs_default_lookup;
     return vfs;
 }

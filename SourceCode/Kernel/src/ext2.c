@@ -50,7 +50,7 @@ void ext2_recursively_fill_superblock(Ext2FileSystem *ext2FileSystem, Ext2IndexN
 
                 uint32_t dEntryNameAlignment = dEntry->nameLength / 4;
                 dEntryNameAlignment = dEntryNameAlignment * 4 + (dEntry->nameLength % 4 > 0 ? 4 : 0);
-                uint32_t nextDEntryAddr = dEntry->nameCharacters + dEntryNameAlignment;
+                uint32_t nextDEntryAddr = (uint32_t) (dEntry->nameCharacters + dEntryNameAlignment);
                 dEntry = (Ext2DirectoryEntry *) (nextDEntryAddr);
                 continue;
             }
@@ -62,14 +62,13 @@ void ext2_recursively_fill_superblock(Ext2FileSystem *ext2FileSystem, Ext2IndexN
                                                           ext2FileSystem->ext2SuperBlock->eachBlockGroupIndexNodeNums) *
                                                                  EXT2_INDEX_NODE_STRUCTURE_SIZE);
             char name[0xFF] = {'\0'};
-            for (uint32_t i = 0; i < dEntry->nameLength; i++) {
-                name[i] = dEntry->nameCharacters[i];
-            }
+            memcpy(name,dEntry->nameCharacters,dEntry->nameLength);
+
             ext2_recursively_fill_superblock(ext2FileSystem, nextNode, directoryEntry, name);
 
             uint32_t dEntryNameAlignment = dEntry->nameLength / 4;
             dEntryNameAlignment = dEntryNameAlignment * 4 + (dEntry->nameLength % 4 > 0 ? 4 : 0);
-            uint32_t nextDEntryAddr = dEntry->nameCharacters + dEntryNameAlignment;
+            uint32_t nextDEntryAddr = (uint32_t) (dEntry->nameCharacters + dEntryNameAlignment);
 
             dEntry = (Ext2DirectoryEntry *) (nextDEntryAddr);
         }
@@ -180,8 +179,6 @@ KernelStatus ext2_fs_default_mount(Ext2FileSystem *ext2FileSystem, char *mountNa
 
     // assume that the root directory is in second inode, because the first inode is
     Ext2IndexNode *root = (Ext2IndexNode *) ((uint32_t) blockGroup->indexNode + EXT2_INDEX_NODE_STRUCTURE_SIZE);
-    Ext2DirectoryEntry *ext2RootDirectoryEntry = (Ext2DirectoryEntry *) ((uint32_t) data +
-                                                                         root->directBlockPointer0 * blockSize);
 
     // let's recursion
 
@@ -303,7 +300,7 @@ uint32_t ext2_fs_default_read(Ext2FileSystem *ext2FileSystem, Ext2IndexNode *ext
 Ext2FileSystem *ext2_create() {
     Ext2FileSystem *ext2FileSystem = (Ext2FileSystem *) kernelHeap.operations.alloc(&kernelHeap,
                                                                                     sizeof(Ext2FileSystem));
-    ext2FileSystem->operations.mount = ext2_fs_default_mount;
-    ext2FileSystem->operations.read = ext2_fs_default_read;
+    ext2FileSystem->operations.mount = (Ext2FileSystemMountOperation) ext2_fs_default_mount;
+    ext2FileSystem->operations.read = (Ext2FileSystemReadOperation) ext2_fs_default_read;
     return ext2FileSystem;
 }

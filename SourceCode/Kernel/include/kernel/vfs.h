@@ -38,7 +38,7 @@ typedef struct VFS {
     VFSOperations operations;
 } VFS;
 
-VFS *vfs_create();
+VFS *vfs_create(VFS *vfs);
 
 uint32_t vfs_kernel_read(VFS *vfs, const char *name, char *buf, uint32_t count);
 
