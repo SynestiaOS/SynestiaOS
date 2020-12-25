@@ -8,12 +8,13 @@
 #include "kernel/kstack.h"
 
 void should_kstack_create() {
-    KernelStack *stack = kstack_allocate();
+    struct KernelStack kernelStack;
+    KernelStack *stack = kstack_allocate(&kernelStack);
     ASSERT_NEQ(stack, nullptr);
 
     ASSERT_EQ(stack->size, 0);
 
-    VirtualAddress base = (VirtualAddress)(stack + sizeof(KernelStack) + DEFAULT_KERNEL_STACK_SIZE);
+    VirtualAddress base = (VirtualAddress) (stack + sizeof(KernelStack) + DEFAULT_KERNEL_STACK_SIZE);
     ASSERT_EQ(stack->base, base);
 
     VirtualAddress top = stack->base;
@@ -23,12 +24,13 @@ void should_kstack_create() {
 }
 
 void should_kstack_push_value() {
-    KernelStack *stack = kstack_allocate();
+    struct KernelStack kernelStack;
+    KernelStack *stack = kstack_allocate(&kernelStack);
     ASSERT_NEQ(stack, nullptr);
 
     ASSERT_EQ(stack->size, 0);
 
-    VirtualAddress base = (VirtualAddress)(stack + sizeof(KernelStack) + DEFAULT_KERNEL_STACK_SIZE);
+    VirtualAddress base = (VirtualAddress) (stack + sizeof(KernelStack) + DEFAULT_KERNEL_STACK_SIZE);
     ASSERT_EQ(stack->base, base);
 
     VirtualAddress top = stack->base;
@@ -44,12 +46,13 @@ void should_kstack_push_value() {
 }
 
 void should_kstack_pop_value() {
-    KernelStack *stack = kstack_allocate();
+    struct KernelStack kernelStack;
+    KernelStack *stack = kstack_allocate(&kernelStack);
     ASSERT_NEQ(stack, nullptr);
 
     ASSERT_EQ(stack->size, 0);
 
-    VirtualAddress base = (VirtualAddress)(stack + sizeof(KernelStack) + DEFAULT_KERNEL_STACK_SIZE);
+    VirtualAddress base = (VirtualAddress) (stack + sizeof(KernelStack) + DEFAULT_KERNEL_STACK_SIZE);
     ASSERT_EQ(stack->base, base);
 
     VirtualAddress top = stack->base;
@@ -69,12 +72,13 @@ void should_kstack_pop_value() {
 }
 
 void should_kstack_peek_value() {
-    KernelStack *stack = kstack_allocate();
+    struct KernelStack kernelStack;
+    KernelStack *stack = kstack_allocate(&kernelStack);
     ASSERT_NEQ(stack, nullptr);
 
     ASSERT_EQ(stack->size, 0);
 
-    VirtualAddress base = (VirtualAddress)(stack + sizeof(KernelStack) + DEFAULT_KERNEL_STACK_SIZE);
+    VirtualAddress base = (VirtualAddress) (stack + sizeof(KernelStack) + DEFAULT_KERNEL_STACK_SIZE);
     ASSERT_EQ(stack->base, base);
 
     VirtualAddress top = stack->base;
@@ -90,12 +94,13 @@ void should_kstack_peek_value() {
 }
 
 void should_kstack_return_true_when_empty() {
-    KernelStack *stack = kstack_allocate();
+    struct KernelStack kernelStack;
+    KernelStack *stack = kstack_allocate(&kernelStack);
     ASSERT_NEQ(stack, nullptr);
 
     ASSERT_EQ(stack->size, 0);
 
-    VirtualAddress base = (VirtualAddress)(stack + sizeof(KernelStack) + DEFAULT_KERNEL_STACK_SIZE);
+    VirtualAddress base = (VirtualAddress) (stack + sizeof(KernelStack) + DEFAULT_KERNEL_STACK_SIZE);
     ASSERT_EQ(stack->base, base);
 
     VirtualAddress top = stack->base;
@@ -107,12 +112,13 @@ void should_kstack_return_true_when_empty() {
 }
 
 void should_kstack_return_true_when_full() {
-    KernelStack *stack = kstack_allocate();
+    struct KernelStack kernelStack;
+    KernelStack *stack = kstack_allocate(&kernelStack);
     ASSERT_NEQ(stack, nullptr);
 
     ASSERT_EQ(stack->size, 0);
 
-    VirtualAddress base = (VirtualAddress)(stack + sizeof(KernelStack) + DEFAULT_KERNEL_STACK_SIZE);
+    VirtualAddress base = (VirtualAddress) (stack + sizeof(KernelStack) + DEFAULT_KERNEL_STACK_SIZE);
     ASSERT_EQ(stack->base, base);
 
     VirtualAddress top = stack->base;

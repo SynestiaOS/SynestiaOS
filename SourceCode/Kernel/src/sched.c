@@ -140,11 +140,11 @@ KernelStatus schd_schedule(void) {
 
 
 void schd_save_context(Thread* thread){
-    cpu_save_context(thread->stack->top);
+    cpu_save_context(thread->stack.top);
 }
 
 void schd_restore_context(Thread* thread){
-    cpu_restore_context(thread->stack->top);
+    cpu_restore_context(thread->stack.top);
 }
 
 void schd_switch_context(){
@@ -175,9 +175,9 @@ KernelStatus schd_switch_to(Thread *thread) {
         // restore r0~r12
     } else {
         switch_to_signal = 1;
-        current_thread_stack = (uint32_t) (&currentThread->stack->top);
+        current_thread_stack = (uint32_t) (&currentThread->stack.top);
     }
-    switch_thread_stack = (uint32_t) (&thread->stack->top);
+    switch_thread_stack = (uint32_t) (&thread->stack.top);
     prevThread = currentThread;
     currentThread = thread;
     percpu_get(read_cpuid())->currentThread = thread;

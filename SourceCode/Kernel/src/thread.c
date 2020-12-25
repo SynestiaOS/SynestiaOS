@@ -74,7 +74,7 @@ KernelStatus thread_default_exit(struct Thread *thread, uint32_t returnCode) {
 KernelStatus thread_default_kill(struct Thread *thread) {
     KernelStatus freeStatus = OK;
     // Free stack
-    freeStatus = thread->stack->operations.free(thread->stack);
+    freeStatus = thread->stack.operations.free(&thread->stack);
     if (freeStatus != OK) {
         LogError("[KStack]: kStack free failed.\n");
         return freeStatus;
@@ -164,33 +164,31 @@ Thread *thread_default_copy(Thread *thread, CloneFlags cloneFlags, uint32_t heap
 }
 
 Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uint32_t priority) {
-    // 1. allocate stack memory from kernel heap for idle task
-    KernelStack *kernelStack = kstack_allocate();
-    if (kernelStack != nullptr) {
-        // 1. init kernel stack
-        kernelStack->operations.clear(kernelStack);
+    Thread *thread = (Thread *) kernelHeap.operations.alloc(&kernelHeap, sizeof(Thread));
 
-        kernelStack->operations.push(kernelStack, (uint32_t) entry);     // R15 PC
-        kernelStack->operations.push(kernelStack, (uint32_t) entry);     // R14 LR
-        kernelStack->operations.push(kernelStack, 0x12121212);// R12
-        kernelStack->operations.push(kernelStack, 0x11111111);// R11
-        kernelStack->operations.push(kernelStack, 0x10101010);// R10
-        kernelStack->operations.push(kernelStack, 0x09090909);// R09
-        kernelStack->operations.push(kernelStack, 0x08080808);// R08
-        kernelStack->operations.push(kernelStack, 0x07070707);// R07
-        kernelStack->operations.push(kernelStack, 0x06060606);// R06
-        kernelStack->operations.push(kernelStack, 0x05050505);// R05
-        kernelStack->operations.push(kernelStack, 0x04040404);// R04
-        kernelStack->operations.push(kernelStack, 0x03030303);// R03
-        kernelStack->operations.push(kernelStack, 0x02020202);// R02
-        kernelStack->operations.push(kernelStack, 0x01010101);// R01
-        kernelStack->operations.push(kernelStack, (uint32_t) arg);       // R00
-        kernelStack->operations.push(kernelStack, 0x600001d3);// cpsr
-
-        Thread *thread = (Thread *) kernelHeap.operations.alloc(&kernelHeap, sizeof(Thread));
+    if (thread != nullptr) {
         thread->magic = THREAD_MAGIC;
         thread->threadStatus = THREAD_INITIAL;
-        thread->stack = kernelStack;
+        kstack_allocate(&thread->stack);
+
+        thread->stack.operations.clear(&thread->stack);
+        thread->stack.operations.push(&thread->stack, (uint32_t) entry);     // R15 PC
+        thread->stack.operations.push(&thread->stack, (uint32_t) entry);     // R14 LR
+        thread->stack.operations.push(&thread->stack, 0x12121212);// R12
+        thread->stack.operations.push(&thread->stack, 0x11111111);// R11
+        thread->stack.operations.push(&thread->stack, 0x10101010);// R10
+        thread->stack.operations.push(&thread->stack, 0x09090909);// R09
+        thread->stack.operations.push(&thread->stack, 0x08080808);// R08
+        thread->stack.operations.push(&thread->stack, 0x07070707);// R07
+        thread->stack.operations.push(&thread->stack, 0x06060606);// R06
+        thread->stack.operations.push(&thread->stack, 0x05050505);// R05
+        thread->stack.operations.push(&thread->stack, 0x04040404);// R04
+        thread->stack.operations.push(&thread->stack, 0x03030303);// R03
+        thread->stack.operations.push(&thread->stack, 0x02020202);// R02
+        thread->stack.operations.push(&thread->stack, 0x01010101);// R01
+        thread->stack.operations.push(&thread->stack, (uint32_t) arg);       // R00
+        thread->stack.operations.push(&thread->stack, 0x600001d3);// cpsr
+
         thread->priority = priority;
         thread->currCpu = INVALID_CPU;
         thread->lastCpu = INVALID_CPU;

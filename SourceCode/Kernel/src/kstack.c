@@ -12,7 +12,7 @@ KernelStatus stack_default_free(struct KernelStack *stack) {
     stack->size = 0;
     stack->base = 0;
     stack->top = 0;
-    KernelStatus freeStatus = kernelHeap.operations.free(&kernelHeap, stack);
+    KernelStatus freeStatus = kernelHeap.operations.free(&kernelHeap, stack->virtualMemoryAddress);
     if (freeStatus != OK) {
         LogError("[KStack] kStack free failed.\n");
         return freeStatus;
@@ -55,27 +55,26 @@ KernelStatus stack_default_clear(struct KernelStack *stack) {
     return OK;
 }
 
-KernelStack *kstack_allocate() {
+KernelStack *kstack_allocate(struct KernelStack *kernelStack) {
     // 1. allocate stack memory block from virtual memory (heap), and align.
-    KernelStack *stack = (KernelStack *) kernelHeap.operations.allocAligned(
-            &kernelHeap, DEFAULT_KERNEL_STACK_SIZE + sizeof(KernelStack), 16);
+    KernelStack *stack = (KernelStack *) kernelHeap.operations.allocAligned(&kernelHeap, DEFAULT_KERNEL_STACK_SIZE, 16);
     if (stack == nullptr) {
         LogError("[KStack] kStack allocate failed.\n");
         return nullptr;
     }
     LogInfo("[KStack] kStack allocated.\n");
-    stack->virtualMemoryAddress = (uint32_t *) (stack + sizeof(KernelStack) + DEFAULT_KERNEL_STACK_SIZE);
-    stack->size = 0;
-    stack->base = (VirtualAddress) stack->virtualMemoryAddress;
-    stack->top = stack->base;
+    kernelStack->virtualMemoryAddress = (VirtualAddress *) stack;
+    kernelStack->size = 0;
+    kernelStack->base = (VirtualAddress) (stack + DEFAULT_KERNEL_STACK_SIZE);
+    kernelStack->top = kernelStack->base;
 
-    stack->operations.free = (StackOperationFree) stack_default_free;
-    stack->operations.push = (StackOperationPush) stack_default_push;
-    stack->operations.pop = (StackOperationPop) stack_default_pop;
-    stack->operations.peek = (StackOperationPeek) stack_default_peek;
-    stack->operations.isFull = (StackOperationIsFull) stack_default_is_full;
-    stack->operations.isEmpty = (StackOperationIsEmpty) stack_default_is_empty;
-    stack->operations.clear = (StackOperationClear) stack_default_clear;
+    kernelStack->operations.free = (StackOperationFree) stack_default_free;
+    kernelStack->operations.push = (StackOperationPush) stack_default_push;
+    kernelStack->operations.pop = (StackOperationPop) stack_default_pop;
+    kernelStack->operations.peek = (StackOperationPeek) stack_default_peek;
+    kernelStack->operations.isFull = (StackOperationIsFull) stack_default_is_full;
+    kernelStack->operations.isEmpty = (StackOperationIsEmpty) stack_default_is_empty;
+    kernelStack->operations.clear = (StackOperationClear) stack_default_clear;
 
-    return stack;
+    return kernelStack;
 }

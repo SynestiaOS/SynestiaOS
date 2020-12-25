@@ -142,7 +142,7 @@ typedef struct Thread {
     struct Thread *parentThread;
     uint64_t pid;
     char name[THREAD_NAME_LENGTH];
-    KernelStack *stack;
+    KernelStack stack;
     ThreadStartRoutine entry;
 
     uint32_t flags;

@@ -45,6 +45,6 @@ typedef struct KernelStack {
     StackOperations operations;
 } KernelStack;
 
-KernelStack *kstack_allocate();
+KernelStack *kstack_allocate(struct KernelStack *kernelStack);
 
 #endif//__KERNEL_KSTACK_H__
