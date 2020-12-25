@@ -78,21 +78,18 @@ void gui_canvas_draw_rect(GUICanvas *canvas, int x1, int y1, int x2, int y2, uin
 }
 
 void gui_canvas_fill_rect(GUICanvas *canvas, int x1, int y1, int x2, int y2, uint32_t c) {
-
     canvas->context.operations.fillRect(&canvas->context, canvas->component.position.x + x1,
                                         canvas->component.position.y + y1,
                                         canvas->component.position.x + x2, canvas->component.position.y + y2, c);
 }
 
 void gui_canvas_draw_line(GUICanvas *canvas, int x1, int y1, int x2, int y2, uint32_t c) {
-
     canvas->context.operations.drawLine(&canvas->context, canvas->component.position.x + x1,
                                         canvas->component.position.y + y1,
                                         canvas->component.position.x + x2, canvas->component.position.y + y2, c);
 }
 
 void gui_canvas_draw_triangle(GUICanvas *canvas, int x1, int y1, int x2, int y2, int x3, int y3, uint32_t c) {
-
     canvas->context.operations.drawTriangle(&canvas->context, canvas->component.position.x + x1,
                                             canvas->component.position.y + y1,
                                             canvas->component.position.x + x2, canvas->component.position.y + y2,
@@ -100,7 +97,6 @@ void gui_canvas_draw_triangle(GUICanvas *canvas, int x1, int y1, int x2, int y2,
 }
 
 void gui_canvas_fill_triangle(GUICanvas *canvas, int x1, int y1, int x2, int y2, int x3, int y3, uint32_t c) {
-
     canvas->context.operations.fillTriangle(&canvas->context, canvas->component.position.x + x1,
                                             canvas->component.position.y + y1,
                                             canvas->component.position.x + x2, canvas->component.position.y + y2,
@@ -108,31 +104,26 @@ void gui_canvas_fill_triangle(GUICanvas *canvas, int x1, int y1, int x2, int y2,
 }
 
 void gui_canvas_draw_circle(GUICanvas *canvas, int xc, int yc, int r, uint32_t c) {
-
     canvas->context.operations.drawCircle(&canvas->context, canvas->component.position.x + xc,
                                           canvas->component.position.y + yc, r, c);
 }
 
 void gui_canvas_fill_circle(GUICanvas *canvas, int xc, int yc, int r, uint32_t c) {
-
     canvas->context.operations.fillCircle(&canvas->context, canvas->component.position.x + xc,
                                           canvas->component.position.y + yc, r, c);
 }
 
 void gui_canvas_draw_ascii(GUICanvas *canvas, int x, int y, uint8_t ch, uint32_t color) {
-
     canvas->context.operations.drawAscii(&canvas->context, canvas->component.position.x + x,
                                          canvas->component.position.y + y, ch, color);
 }
 
 void gui_canvas_draw_bitmap(GUICanvas *canvas, int x, int y, int width, int height, uint32_t *buffer) {
-
     canvas->context.operations.drawBitmap(&canvas->context, canvas->component.position.x + x,
                                           canvas->component.position.y + y, width, height, buffer);
 }
 
 void gui_canvas_clear(GUICanvas *canvas, uint32_t color) {
-
     canvas->context.operations.fillRect(&canvas->context, 0, 0, canvas->component.size.width,
                                         canvas->component.size.height, color);
 }
@@ -141,5 +132,5 @@ void gui_canvas_draw(GUICanvas *canvas) {
     Gfx2DContext context = {.width = 1024, .height = 768, .buffer = GFX2D_BUFFER};
     canvas->context.operations.drawBitmap(&context, canvas->component.position.x, canvas->component.position.y,
                                           canvas->component.size.width,
-                                          canvas->component.size.height, canvas->buffer);
+                                          canvas->component.size.height, canvas->context.buffer);
 }

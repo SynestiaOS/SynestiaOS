@@ -202,9 +202,9 @@ void kernel_main(void) {
         windowDialogThread->cpuAffinity = CPU_0_MASK;
         schd_add_thread(windowDialogThread, 0);
 
-        //        Thread *windowCanvas2DThread = thread_create("Canvas2D", &window_canvas2D, 0, 0);
-        //        windowCanvas2DThread->cpuAffinity = CPU_0_MASK;
-        //        schd_add_thread(windowCanvas2DThread, 0);
+//        Thread *windowCanvas2DThread = thread_create("Canvas2D", (ThreadStartRoutine) &window_canvas2D, 0, 0);
+//        windowCanvas2DThread->cpuAffinity = CPU_0_MASK;
+//        schd_add_thread(windowCanvas2DThread, 0);
 
         Thread *windowFileSystemThread = thread_create("FileManager", (ThreadStartRoutine) &window_filesystem, 0, 0);
         windowFileSystemThread->cpuAffinity = CPU_0_MASK;

@@ -12,7 +12,8 @@ extern uint32_t __HEAP_BEGIN;
 void should_kvector_create() {
     KernelStatus heapInitStatus = heap_create(&testHeap, __HEAP_BEGIN, 64 * MB);
 
-    KernelVector *kernelVector = kvector_allocate();
+    struct KernelVector vector;
+    KernelVector *kernelVector = kvector_allocate(&vector);
     ASSERT_NEQ(kernelVector, nullptr);
     ASSERT_EQ(kernelVector->size, 0);
     ASSERT_EQ(kernelVector->capacity, DEFAULT_VECTOR_SIZE);
@@ -21,7 +22,8 @@ void should_kvector_create() {
 void should_kvector_resize() {
     KernelStatus heapInitStatus = heap_create(&testHeap, __HEAP_BEGIN, 64 * MB);
 
-    KernelVector *kernelVector = kvector_allocate();
+    struct KernelVector vector;
+    KernelVector *kernelVector = kvector_allocate(&vector);
     ASSERT_NEQ(kernelVector, nullptr);
     ASSERT_EQ(kernelVector->size, 0);
     ASSERT_EQ(kernelVector->capacity, DEFAULT_VECTOR_SIZE);
@@ -35,7 +37,8 @@ void should_kvector_resize() {
 void should_kvector_free() {
     KernelStatus heapInitStatus = heap_create(&testHeap, __HEAP_BEGIN, 64 * MB);
 
-    KernelVector *kernelVector = kvector_allocate();
+    struct KernelVector vector;
+    KernelVector *kernelVector = kvector_allocate(&vector);
     ASSERT_NEQ(kernelVector, nullptr);
     ASSERT_EQ(kernelVector->size, 0);
     ASSERT_EQ(kernelVector->capacity, DEFAULT_VECTOR_SIZE);
@@ -46,7 +49,8 @@ void should_kvector_free() {
 void should_kvector_add() {
     KernelStatus heapInitStatus = heap_create(&testHeap, __HEAP_BEGIN, 64 * MB);
 
-    KernelVector *kernelVector = kvector_allocate();
+    struct KernelVector vector;
+    KernelVector *kernelVector = kvector_allocate(&vector);
     ASSERT_NEQ(kernelVector, nullptr);
     ASSERT_EQ(kernelVector->size, 0);
     ASSERT_EQ(kernelVector->capacity, DEFAULT_VECTOR_SIZE);
@@ -67,7 +71,8 @@ TestElement t2;
 void should_kvector_get() {
     KernelStatus heapInitStatus = heap_create(&testHeap, __HEAP_BEGIN, 64 * MB);
 
-    KernelVector *kernelVector = kvector_allocate();
+    struct KernelVector vector;
+    KernelVector *kernelVector = kvector_allocate(&vector);
     ASSERT_NEQ(kernelVector, nullptr);
     ASSERT_EQ(kernelVector->size, 0);
     ASSERT_EQ(kernelVector->capacity, DEFAULT_VECTOR_SIZE);
@@ -91,7 +96,8 @@ void should_kvector_get() {
 void should_kvector_remove_index() {
     KernelStatus heapInitStatus = heap_create(&testHeap, __HEAP_BEGIN, 64 * MB);
 
-    KernelVector *kernelVector = kvector_allocate();
+    struct KernelVector vector;
+    KernelVector *kernelVector = kvector_allocate(&vector);
     ASSERT_NEQ(kernelVector, nullptr);
     ASSERT_EQ(kernelVector->size, 0);
     ASSERT_EQ(kernelVector->capacity, DEFAULT_VECTOR_SIZE);
@@ -102,7 +108,8 @@ void should_kvector_remove_index() {
 void should_kvector_remove() {
     KernelStatus heapInitStatus = heap_create(&testHeap, __HEAP_BEGIN, 64 * MB);
 
-    KernelVector *kernelVector = kvector_allocate();
+    struct KernelVector vector;
+    KernelVector *kernelVector = kvector_allocate(&vector);
     ASSERT_NEQ(kernelVector, nullptr);
     ASSERT_EQ(kernelVector->size, 0);
     ASSERT_EQ(kernelVector->capacity, DEFAULT_VECTOR_SIZE);
@@ -113,7 +120,8 @@ void should_kvector_remove() {
 void should_kvector_is_empty() {
     KernelStatus heapInitStatus = heap_create(&testHeap, __HEAP_BEGIN, 64 * MB);
 
-    KernelVector *kernelVector = kvector_allocate();
+    struct KernelVector vector;
+    KernelVector *kernelVector = kvector_allocate(&vector);
     ASSERT_NEQ(kernelVector, nullptr);
     ASSERT_EQ(kernelVector->size, 0);
     ASSERT_EQ(kernelVector->capacity, DEFAULT_VECTOR_SIZE);
@@ -124,7 +132,8 @@ void should_kvector_is_empty() {
 void should_kvector_is_full() {
     KernelStatus heapInitStatus = heap_create(&testHeap, __HEAP_BEGIN, 64 * MB);
 
-    KernelVector *kernelVector = kvector_allocate();
+    struct KernelVector vector;
+    KernelVector *kernelVector = kvector_allocate(&vector);
     ASSERT_NEQ(kernelVector, nullptr);
     ASSERT_EQ(kernelVector->size, 0);
     ASSERT_EQ(kernelVector->capacity, DEFAULT_VECTOR_SIZE);
@@ -139,7 +148,8 @@ void should_kvector_is_full() {
 void should_kvector_clear() {
     KernelStatus heapInitStatus = heap_create(&testHeap, __HEAP_BEGIN, 64 * MB);
 
-    KernelVector *kernelVector = kvector_allocate();
+    struct KernelVector vector;
+    KernelVector *kernelVector = kvector_allocate(&vector);
     ASSERT_NEQ(kernelVector, nullptr);
     ASSERT_EQ(kernelVector->size, 0);
     ASSERT_EQ(kernelVector->capacity, DEFAULT_VECTOR_SIZE);

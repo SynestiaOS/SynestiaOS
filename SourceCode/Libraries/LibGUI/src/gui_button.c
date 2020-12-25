@@ -85,7 +85,7 @@ void gui_button_draw(GUIButton *button) {
                                                 button->component.position.x + button->component.size.width,
                                                 button->component.position.y + button->component.size.height,
                                                 button->component.background.r << 16 |
-                                                        button->component.background.g << 8 | button->component.background.b);
+                                                button->component.background.g << 8 | button->component.background.b);
         }
 
         // 2. draw_font
@@ -106,12 +106,12 @@ void gui_button_draw(GUIButton *button) {
         while (*tmp) {
             button->context.operations.drawAscii(&button->context,
                                                  button->component.position.x + xOffset * button->fontSize +
-                                                         button->component.padding.left,
+                                                 button->component.padding.left,
                                                  button->component.position.y + row * button->fontSize +
-                                                         button->component.padding.top,
+                                                 button->component.padding.top,
                                                  *tmp,
                                                  button->component.foreground.r << 16 |
-                                                         button->component.foreground.g << 8 | button->component.foreground.b);
+                                                 button->component.foreground.g << 8 | button->component.foreground.b);
             column++;
             if (column == lineFonts) {
                 row++;

@@ -44,7 +44,7 @@ void gui_view3d_create(GUIView3D *view) {
     view->component.foreground.b = 0x00;
 
     view->buffer = kernelHeap.operations.alloc(&kernelHeap, view->component.size.width * view->component.size.height *
-                                                                    sizeof(uint32_t));
+                                                            sizeof(uint32_t));
     if (view->buffer == nullptr) {
         LogError("[GUI]: canvas create failed, unable to allocate buffer memory\n");
     }

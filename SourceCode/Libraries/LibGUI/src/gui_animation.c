@@ -40,7 +40,8 @@ void gui_animation_update(GUIAnimation *animation) {
                 animation->component->position.y -= translation->posY;
                 translation->currentY = 0;
             }
-        } break;
+        }
+            break;
 
         default:
             break;

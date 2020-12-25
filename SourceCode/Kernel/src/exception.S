@@ -136,13 +136,21 @@ data_abort_isp:
     subs    pc,  lr, #0
     nop
 
+.global  cpu_save_context;
+cpu_save_context:
+    bl _cpu_save_context
+
+.global  cpu_restore_context;
+cpu_restore_context:
+    bl _cpu_restore_context
+
 interrupt_isp:
-    //cpsr
     stmfd   sp!, {r0-r12,lr}
 
     bl interrupt_handler
 
-    //R0: switch_to_signal Address
+    // bl schd_switch_context
+
     ldr r0, =switch_to_signal
     ldr r1, [r0]
 
@@ -150,65 +158,42 @@ interrupt_isp:
     str r2,[r0]
 
     cmp r2, r1
-    beq just_exit_interrupt
+    beq _just_exit_interrupt
 
     mov r2, #1
     cmp r2, r1
-    beq cpu_save_context
+    beq _cpu_save_context
 
     add sp, sp, #14*4
-    b cpu_restore_context
+    b _cpu_restore_context
 
-/////////////////////////////////////////////////////////////
-//////////  Save Previous Thread Status /////////////////////
-/////////////////////////////////////////////////////////////
-cpu_save_context:
-    //R1: Irq Stack, Save for Pop Previous Registers
+_cpu_save_context:
     mov r1, sp
-    //Save Irq SP to normal SP
-    //Restore Irq Stack, Leave Irq State
     add sp, sp, #13*4
 
-    //R0: Irq LR(Thread PC)
     ldmfd sp!, {r0}
-    //The LR Should sub 4, because the instruction interruptted has not been execute over
     sub r0, r0, #4
 
-    //R3: Save cpsr
-    //Change to Previous State, Disable Irq/Fiq
     mrs r3, spsr
     mov r2, r3
     orr r3,#(1 << 6) | (1 << 7)
     msr cpsr, r3
 
-    //Push r4-r12, lr, pc
     stmfd sp!, {r0}
     stmfd sp!, {r4-r12, lr}
 
-    //Restore r0-r3 to r9-r12
     ldr r9, [r1, #0]
     ldr r10, [r1, #4]
     ldr r11, [r1, #8]
     ldr r12, [r1, #0xc]
 
-    //Push cpsr, r0-r3
     stmfd sp!, {r2, r9-r12}
 
-    //Update Current Thread Stack
     ldr r0, =current_thread_stack   //Pointer **
     ldr r0, [r0]                    //Pointer *
     str sp, [r0]
 
-/////////////////////////////////////////////////////////////
-//////////  End of Save Previous Thread Status //////////////
-/////////////////////////////////////////////////////////////
-
-
-/////////////////////////////////////////////////////////////
-//////////  Restore Previous Thread Status //////////////////
-/////////////////////////////////////////////////////////////
-cpu_restore_context:
-    //Restore Sp to New Stack
+_cpu_restore_context:
     ldr r2, =switch_thread_stack    //Pointer **
     ldr r2, [r2]                    //Pointer *
     ldr r2, [r2]                    //Stack
@@ -218,16 +203,12 @@ cpu_restore_context:
 
     mov sp, r2
     ldmfd sp!, {r12}
-    //Enable Irq/Fiq
     bic r12, #(1 << 6) | (1 << 7)
     msr spsr, r12
     ldmfd sp!, {r0-r12, lr, pc}^
 
-/////////////////////////////////////////////////////////////
-//////////  End of Restore Previous Thread Status ///////////
-/////////////////////////////////////////////////////////////
-
-just_exit_interrupt:
+.global _just_exit_interrupt;
+_just_exit_interrupt:
     ldmfd   sp!, {r0-r12,lr}
     subs    pc,  lr, #4
     nop

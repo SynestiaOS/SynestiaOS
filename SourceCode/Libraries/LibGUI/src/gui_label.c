@@ -90,8 +90,8 @@ void gui_label_draw(GUILabel *label) {
                                                label->component.position.x + label->component.size.width,
                                                label->component.position.y + label->component.size.height,
                                                label->component.background.a << 24 |
-                                                       label->component.background.r << 16 |
-                                                       label->component.background.g << 8 | label->component.background.b);
+                                               label->component.background.r << 16 |
+                                               label->component.background.g << 8 | label->component.background.b);
         }
 
         // 2. draw_font
@@ -106,12 +106,12 @@ void gui_label_draw(GUILabel *label) {
         for (uint32_t i = 0; i < length; i++) {
             label->context.operations.drawAscii(&label->context,
                                                 label->component.position.x + xOffset * label->fontSize +
-                                                        label->component.padding.left,
+                                                label->component.padding.left,
                                                 label->component.position.y + row * label->fontSize +
-                                                        label->component.padding.top,
+                                                label->component.padding.top,
                                                 label->text[i],
                                                 label->component.foreground.r << 16 |
-                                                        label->component.foreground.g << 8 | label->component.foreground.b);
+                                                label->component.foreground.g << 8 | label->component.foreground.b);
             column++;
             if (column == lineFonts) {
                 row++;
