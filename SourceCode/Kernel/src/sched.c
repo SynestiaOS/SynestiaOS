@@ -60,6 +60,7 @@ extern uint64_t ktimer_sys_runtime_tick(uint64_t tickInterval);
 
 extern void cpu_save_context(uint32_t sp);
 extern void cpu_restore_context(uint32_t sp);
+extern void cpu_switch_mm(uint32_t pageTable);
 
 
 #define TIMER_TICK_MS 50
@@ -147,6 +148,10 @@ void schd_restore_context(Thread* thread){
     cpu_restore_context(thread->stack.top);
 }
 
+void schd_switch_mm(Thread* thread){
+    cpu_switch_mm((uint32_t) thread->memoryStruct.virtualMemory.pageTable);
+}
+
 void schd_switch_context(){
     int flag = switch_to_signal;
     switch_to_signal = 0;
@@ -155,8 +160,10 @@ void schd_switch_context(){
     }else if(flag==1){
         schd_save_context(prevThread);
         schd_restore_context(currentThread);
+        schd_switch_mm(currentThread);
     }else if(flag==2){
         schd_restore_context(currentThread);
+        schd_switch_mm(currentThread);
     }
 }
 

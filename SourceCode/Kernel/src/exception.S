@@ -144,6 +144,12 @@ cpu_save_context:
 cpu_restore_context:
     bl _cpu_restore_context
 
+.global  cpu_switch_mm;
+cpu_switch_mm:
+    bl _cpu_switch_mm
+
+_cpu_switch_mm:
+
 // push {r0-r3}
 interrupt_isp:
     stmfd   sp!, {r0-r12,lr}
