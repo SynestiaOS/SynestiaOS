@@ -144,6 +144,7 @@ cpu_save_context:
 cpu_restore_context:
     bl _cpu_restore_context
 
+// push {r0-r3}
 interrupt_isp:
     stmfd   sp!, {r0-r12,lr}
 
@@ -189,14 +190,14 @@ _cpu_save_context:
 
     stmfd sp!, {r2, r9-r12}
 
-    ldr r0, =current_thread_stack   //Pointer **
-    ldr r0, [r0]                    //Pointer *
+    ldr r0, =current_thread_stack
+    ldr r0, [r0]
     str sp, [r0]
 
 _cpu_restore_context:
-    ldr r2, =switch_thread_stack    //Pointer **
-    ldr r2, [r2]                    //Pointer *
-    ldr r2, [r2]                    //Stack
+    ldr r2, =switch_thread_stack
+    ldr r2, [r2]
+    ldr r2, [r2]
 
     mov r0,  #0xd3
     msr cpsr_c, r0
