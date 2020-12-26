@@ -186,15 +186,30 @@ _cpu_save_context:
     orr r3,#(1 << 6) | (1 << 7)
     msr cpsr, r3
 
-    stmfd sp!, {r0}
+    // ldr r3, =current_thread_stack
+    // ldr r3, [r3]
+    // ldr r3, [r3]
+    // mov r9, sp // 备份中断栈
+    // mov sp, r3 // 切换线程栈
+
+    stmfd sp!, {r0} // pc
     stmfd sp!, {r4-r12, lr}
 
-    ldr r9, [r1, #0]
-    ldr r10, [r1, #4]
-    ldr r11, [r1, #8]
     ldr r12, [r1, #0xc]
+    stmfd sp!, {r12} // r3
 
-    stmfd sp!, {r2, r9-r12}
+    ldr r12, [r1, #0x8]
+    stmfd sp!, {r12} // r2
+
+    ldr r12, [r1, #0x4]
+    stmfd sp!, {r12} // r1
+
+    ldr r12, [r1, #0x0]
+    stmfd sp!, {r12} // r0
+
+    stmfd sp!, {r2} // cpsr
+
+    // mov sp, r9 // 切回中断栈
 
     ldr r0, =current_thread_stack
     ldr r0, [r0]
