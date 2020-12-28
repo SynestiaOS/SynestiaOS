@@ -13,8 +13,7 @@ uint64_t vfs_directory_entry_default_hash(DirectoryEntry *directoryEntry) {
 }
 
 char *vfs_directory_entry_default_get_name(DirectoryEntry *directoryEntry) {
-    // TODO
-    return "";
+    return directoryEntry->fileName;
 }
 
 KernelStatus vfs_directory_entry_default_delete(DirectoryEntry *directory) {

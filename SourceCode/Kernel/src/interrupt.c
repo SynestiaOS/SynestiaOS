@@ -145,7 +145,7 @@ void interrupt_handler(void) {
     }
 }
 
-void __attribute__((interrupt("FIQ"))) fast_interrupt_handler(void) {
+void fast_interrupt_handler(void) {
     LogError("[Interrupt]: fast irq\n");
 }
 

@@ -172,6 +172,7 @@ void kernel_main(void) {
         page_allocator_create(&userspacePageAllocator, USER_PHYSICAL_START, USER_PHYSICAL_SIZE);
 
         init_interrupt();
+        disable_interrupt();
 
         vfs_create(&vfs);
 
@@ -196,11 +197,11 @@ void kernel_main(void) {
 
         Thread *gpuProcess = thread_create("gpu", (ThreadStartRoutine) &GPU_FLUSH, 0, 0);
         gpuProcess->cpuAffinity = CPU_0_MASK;
-        schd_add_thread(gpuProcess, 1);
+        // schd_add_thread(gpuProcess, 1);
 
         Thread *windowDialogThread = thread_create("Welcome", (ThreadStartRoutine) &window_dialog, 0, 0);
         windowDialogThread->cpuAffinity = CPU_0_MASK;
-        schd_add_thread(windowDialogThread, 0);
+        // schd_add_thread(windowDialogThread, 0);
 
 //        Thread *windowCanvas2DThread = thread_create("Canvas2D", (ThreadStartRoutine) &window_canvas2D, 0, 0);
 //        windowCanvas2DThread->cpuAffinity = CPU_0_MASK;
@@ -208,7 +209,7 @@ void kernel_main(void) {
 
         Thread *windowFileSystemThread = thread_create("FileManager", (ThreadStartRoutine) &window_filesystem, 0, 0);
         windowFileSystemThread->cpuAffinity = CPU_0_MASK;
-        schd_add_thread(windowFileSystemThread, 0);
+        // schd_add_thread(windowFileSystemThread, 0);
 
 
         bootSpinLock.operations.release(&bootSpinLock);

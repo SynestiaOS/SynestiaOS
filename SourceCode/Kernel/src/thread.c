@@ -262,7 +262,6 @@ Thread *thread_create_idle_thread(uint32_t cpuNum) {
 
     char idleNameStr[10] = {'\0'};
     strcpy(idleThread->name, itoa(cpuNum, (char *) &idleNameStr, 10));
-    // TODO : other properties, like list
     LogInfo("[Thread]: Idle thread for CPU '%d' created.\n", cpuNum);
     return idleThread;
 }
