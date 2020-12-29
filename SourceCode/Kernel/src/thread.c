@@ -251,6 +251,7 @@ _Noreturn uint32_t *idle_thread_routine(int arg) {
     while (1) {
         LogInfo("[Thread]: IDLE: %d \n", arg);
         asm volatile("wfi");
+        asm volatile("CPSIE I");
     }
 }
 

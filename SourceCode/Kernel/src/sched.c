@@ -61,8 +61,6 @@ extern void cpu_save_context(Thread *thread, uint32_t offsetOfStack);
 
 extern void cpu_restore_context(Thread *thread, uint32_t offsetOfStack);
 
-extern void _just_exit_interrupt();
-
 extern void cpu_switch_mm(uint32_t pageTable);
 
 
@@ -70,8 +68,6 @@ extern void cpu_switch_mm(uint32_t pageTable);
 
 TimerHandler tickHandler;
 
-uint32_t current_thread_stack = 0;
-uint32_t switch_thread_stack = 0;
 uint32_t switch_to_signal = 0;
 
 Thread *prevThread = nullptr;
@@ -194,13 +190,9 @@ KernelStatus schd_switch_to(Thread *thread) {
     // save current thread
     if (currentThread == nullptr) {
         switch_to_signal = 2;
-        current_thread_stack = 0;
-        // restore r0~r12
     } else {
         switch_to_signal = 1;
-        current_thread_stack = (uint32_t) (&currentThread->stack.top);
     }
-    switch_thread_stack = (uint32_t) (&thread->stack.top);
     prevThread = currentThread;
     currentThread = thread;
     percpu_get(read_cpuid())->currentThread = thread;
