@@ -137,19 +137,21 @@ data_abort_isp:
 .global  cpu_save_context;
 cpu_save_context: // Thread *thread, uint32_t offsetOfStack
     push	{fp, lr}
-    bl _cpu_save_context
+    bl      _cpu_save_context
+    pop	    {fp, pc}
 
 .global  cpu_restore_context;
 cpu_restore_context: // Thread *thread, uint32_t offsetOfStack
-    push	{fp, lr}
-    bl _cpu_restore_context
+    b      _cpu_restore_context
 
 .global  cpu_switch_mm;
 cpu_switch_mm:
     push	{fp, lr}
-    bl _cpu_switch_mm
+    bl      _cpu_switch_mm
+    pop	    {fp, pc}
 
 _cpu_switch_mm:
+    bx      lr
 
 interrupt_isp:
     stmfd   sp!, {r0-r12,lr}
@@ -159,25 +161,26 @@ interrupt_isp:
     subs    pc,  lr, #4
 
 _cpu_save_context: // Thread *thread, uint32_t offsetOfStack
+    mov     r3, sp
     add     r0, r0, r1
     sub     r1, sp, #16*4
     str     r1, [r0]
 
     mrs     r1, spsr
-    sub     r2, lr, #4
+    add     r2,  pc,  #0xc
     stmfd   sp!, {r2}
     stmfd   sp!, {r0-r12,lr}
     stmfd   sp!, {r1}
-    pop	{fp, pc}
+    mov     sp, r3
+    bx      lr
 
 _cpu_restore_context: // Thread *thread, uint32_t offsetOfStack
     add     r0, r0, r1
     ldr     r2, [r0]
     mov     sp, r2
-    add     r1, r0, #16*4
+    add     r1, sp, #16*4
     str     r1, [r0]
 
     ldmfd   sp!, {r12}
     msr     spsr, r12
     ldmfd   sp!, {r0-r12, lr, pc}^
-    pop	{fp, pc}

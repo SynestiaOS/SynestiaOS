@@ -248,9 +248,11 @@ Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uin
 }
 
 _Noreturn uint32_t *idle_thread_routine(int arg) {
+    uint32_t i = 0;
     while (1) {
-        LogInfo("[Thread]: IDLE: %d \n", arg);
-        asm volatile("wfi");
+        LogInfo("[Thread]: IDLE: %d \n", i);
+        // asm volatile("wfi");
+        i++;
         asm volatile("CPSIE I");
     }
 }
