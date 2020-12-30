@@ -172,7 +172,7 @@ cpu_restore_context: // Thread *thread, uint32_t offsetOfStack
     ldmfd   sp!, {r4-r12, lr}
     ldmfd   sp!, {r3}
     ldmfd   sp!, {r3}   // cpsr
-    // msr     cpsr, r3
+    msr     spsr, r3
     ldmfd   sp!, {r0-r3}
     bx      lr
 

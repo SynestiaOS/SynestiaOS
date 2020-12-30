@@ -5,6 +5,7 @@
 #ifndef __KERNEL_THREAD_H__
 #define __KERNEL_THREAD_H__
 
+#include "arm/cpu.h"
 #include "arm/vmm.h"
 #include "kernel/kheap.h"
 #include "kernel/kobject.h"
@@ -178,7 +179,7 @@ typedef struct Thread {
 
 } Thread;
 
-Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uint32_t priority);
+Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uint32_t priority, RegisterCPSR cpsr);
 
 KernelStatus thread_free(Thread *thread);
 

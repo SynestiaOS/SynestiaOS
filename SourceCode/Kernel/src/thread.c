@@ -13,6 +13,7 @@
 #include "kernel/vfs_dentry.h"
 #include "libc/stdlib.h"
 #include "libc/string.h"
+#include "arm/cpu.h"
 
 extern Heap kernelHeap;
 extern PhysicalPageAllocator kernelPageAllocator;
@@ -106,7 +107,7 @@ uint32_t filestruct_default_openfile(FilesStruct *filesStruct, DirectoryEntry *d
     fileDescriptor->pos = 0;
 
     KernelStatus status = filesStruct->fileDescriptorTable.operations.add(&filesStruct->fileDescriptorTable,
-                                                                           &fileDescriptor->node);
+                                                                          &fileDescriptor->node);
     if (status != OK) {
         LogError("[Open]: file open failed, cause add fd table failed.\n");
         return 0;
@@ -117,7 +118,7 @@ uint32_t filestruct_default_openfile(FilesStruct *filesStruct, DirectoryEntry *d
 
 Thread *thread_default_copy(Thread *thread, CloneFlags cloneFlags, uint32_t heapStart) {
     LogInfo("[Thread]: Copy Start.\n");
-    Thread *p = thread_create(thread->name, thread->entry, thread->arg, thread->priority);
+    Thread *p = thread_create(thread->name, thread->entry, thread->arg, thread->priority,svcModeCPSR());
     LogInfo("[Thread]: Clone VMM: '%s'.\n", p->name);
     if (p == nullptr) {
         LogError("[Thread]: copy failed: p == nullptr.\n");
@@ -163,7 +164,7 @@ Thread *thread_default_copy(Thread *thread, CloneFlags cloneFlags, uint32_t heap
     return p;
 }
 
-Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uint32_t priority) {
+Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uint32_t priority, RegisterCPSR cpsr) {
     Thread *thread = (Thread *) kernelHeap.operations.alloc(&kernelHeap, sizeof(Thread));
 
     if (thread != nullptr) {
@@ -177,7 +178,7 @@ Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uin
         thread->stack.operations.push(&thread->stack, 0x01010101);// R01
         thread->stack.operations.push(&thread->stack, (uint32_t) arg);       // R00
 
-        thread->stack.operations.push(&thread->stack, 0x600001d3);// cpsr
+        thread->stack.operations.push(&thread->stack, cpsr.val);// cpsr
         thread->stack.operations.push(&thread->stack, (uint32_t) entry);     // R15 PC
         thread->stack.operations.push(&thread->stack, (uint32_t) entry);     // R14 LR
         thread->stack.operations.push(&thread->stack, 0x12121212);// R12
@@ -252,7 +253,7 @@ Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uin
 _Noreturn uint32_t *idle_thread_routine(int arg) {
     uint32_t i = 0;
     while (1) {
-        if(i%1000==0){
+        if (i % 1000 == 0) {
             LogInfo("[Thread]: IDLE: %d \n", i);
         }
         // asm volatile("wfi");
@@ -262,7 +263,8 @@ _Noreturn uint32_t *idle_thread_routine(int arg) {
 }
 
 Thread *thread_create_idle_thread(uint32_t cpuNum) {
-    Thread *idleThread = thread_create("IDLE", (ThreadStartRoutine) idle_thread_routine, (void *) cpuNum, IDLE_PRIORITY);
+    Thread *idleThread = thread_create("IDLE", (ThreadStartRoutine) idle_thread_routine, (void *) cpuNum,
+                                       IDLE_PRIORITY,svcModeCPSR());
     idleThread->cpuAffinity = cpuNum;
     // 2. idle thread
     idleThread->pid = 0;
