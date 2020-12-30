@@ -13,6 +13,7 @@ void init_interrupt() {
     getIRQController()->Disable_IRQs_1 = 0xffffffff;
     getIRQController()->Disable_IRQs_2 = 0xffffffff;
     LogInfo("[Interrupt]: interrupt init\n");
+    disable_interrupt();
 }
 
 void swi(uint32_t num) {
@@ -145,7 +146,7 @@ void interrupt_handler(void) {
     }
 }
 
-void __attribute__((interrupt("FIQ"))) fast_interrupt_handler(void) {
+void fast_interrupt_handler(void) {
     LogError("[Interrupt]: fast irq\n");
 }
 

@@ -13,6 +13,8 @@ void memclean(uint8_t *start, const uint8_t *end);
 
 void bzero(void *s1, uint32_t n);
 
+int32_t sprintf(char *buffer, char *fmt, ...);
+
 int32_t vsprintf(char *buf, const char *fmt, va_list args);
 
 int32_t printf(const char *format, ...);
