@@ -139,6 +139,8 @@ data_abort_isp:
 .global  cpu_switch_mm;
 
 cpu_switch_mm:
+    mcr p15, 0, r0, c2, c0, 0
+    dsb
     bx      lr
 
 interrupt_isp:
