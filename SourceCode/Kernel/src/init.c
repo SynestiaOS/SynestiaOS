@@ -16,8 +16,9 @@
 #include "libgui/gui_window.h"
 #include "raspi2/gpu.h"
 #include "raspi2/synestia_os_hal.h"
-#include <libgfx/gfx2d.h>
-#include <raspi2/led.h>
+#include "libgfx/gfx2d.h"
+#include "raspi2/led.h"
+#include "libc/string.h"
 
 extern uint32_t __HEAP_BEGIN;
 extern char _binary_initrd_img_start[];
@@ -62,16 +63,30 @@ _Noreturn uint32_t *window_dialog(int args) {
     label.component.size.width = 300;
     label.component.colorMode = TRANSPARENT;
 
+
+    GUILabel label2;
+    gui_label_create(&label2);
+    label2.component.size.width = 300;
+    label2.component.colorMode = TRANSPARENT;
+
+
     GUIButton buttonYes, buttonNo;
     gui_button_create(&buttonYes);
     gui_button_create(&buttonNo);
 
     gui_window_add_children(&window, &(label.component));
+    gui_window_add_children(&window, &(label2.component));
     gui_window_add_children(&window, &(buttonYes.component));
     gui_window_add_children(&window, &(buttonNo.component));
+    uint32_t i = 0;
+
     while (1) {
         disable_interrupt();
         gui_label_init(&label, 0, 0, "hello, world! Is this cool?");
+        char buf[32];
+        memset(buf,0,32);
+        sprintf(buf, "%d", i++);
+        gui_label_init(&label2, 80, 120, buf);
         gui_button_init(&buttonYes, 20, 50, "YES");
         gui_button_init(&buttonNo, 150, 50, "NO");
         gui_window_draw(&window);
@@ -151,10 +166,11 @@ _Noreturn uint32_t *GPU_FLUSH(int args) {
 }
 
 SpinLock bootSpinLock = SpinLockCreate();
+
 void kernel_main(void) {
     if (read_cpuid() == 0) {
         bootSpinLock.operations.acquire(&bootSpinLock);
-	    led_init();
+        led_init();
         init_bsp();
         print_splash();
 
@@ -165,14 +181,13 @@ void kernel_main(void) {
         kernel_vmm_init();
 
         // create kernel heap
-        heap_create(&kernelHeap, (uint32_t) &__HEAP_BEGIN, KERNEL_PHYSICAL_SIZE - (uint32_t)(&__HEAP_BEGIN));
+        heap_create(&kernelHeap, (uint32_t) &__HEAP_BEGIN, KERNEL_PHYSICAL_SIZE - (uint32_t) (&__HEAP_BEGIN));
         slab_create(&kernelObjectSlab, 0, 0);
 
         // create userspace physical page allocator
         page_allocator_create(&userspacePageAllocator, USER_PHYSICAL_START, USER_PHYSICAL_SIZE);
 
         init_interrupt();
-        disable_interrupt();
 
         vfs_create(&vfs);
 
@@ -197,11 +212,11 @@ void kernel_main(void) {
 
         Thread *gpuProcess = thread_create("gpu", (ThreadStartRoutine) &GPU_FLUSH, 0, 0);
         gpuProcess->cpuAffinity = CPU_0_MASK;
-        //schd_add_thread(gpuProcess, 1);
+        schd_add_thread(gpuProcess, 1);
 
         Thread *windowDialogThread = thread_create("Welcome", (ThreadStartRoutine) &window_dialog, 0, 0);
         windowDialogThread->cpuAffinity = CPU_0_MASK;
-        //schd_add_thread(windowDialogThread, 0);
+        schd_add_thread(windowDialogThread, 0);
 
 //        Thread *windowCanvas2DThread = thread_create("Canvas2D", (ThreadStartRoutine) &window_canvas2D, 0, 0);
 //        windowCanvas2DThread->cpuAffinity = CPU_0_MASK;
@@ -209,7 +224,7 @@ void kernel_main(void) {
 
         Thread *windowFileSystemThread = thread_create("FileManager", (ThreadStartRoutine) &window_filesystem, 0, 0);
         windowFileSystemThread->cpuAffinity = CPU_0_MASK;
-        //schd_add_thread(windowFileSystemThread, 0);
+        schd_add_thread(windowFileSystemThread, 0);
 
 
         bootSpinLock.operations.release(&bootSpinLock);

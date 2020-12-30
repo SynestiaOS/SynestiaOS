@@ -172,6 +172,12 @@ Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uin
         kstack_allocate(&thread->stack);
 
         thread->stack.operations.clear(&thread->stack);
+        thread->stack.operations.push(&thread->stack, 0x03030303);// R03
+        thread->stack.operations.push(&thread->stack, 0x02020202);// R02
+        thread->stack.operations.push(&thread->stack, 0x01010101);// R01
+        thread->stack.operations.push(&thread->stack, (uint32_t) arg);       // R00
+
+        thread->stack.operations.push(&thread->stack, 0x600001d3);// cpsr
         thread->stack.operations.push(&thread->stack, (uint32_t) entry);     // R15 PC
         thread->stack.operations.push(&thread->stack, (uint32_t) entry);     // R14 LR
         thread->stack.operations.push(&thread->stack, 0x12121212);// R12
@@ -183,11 +189,7 @@ Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uin
         thread->stack.operations.push(&thread->stack, 0x06060606);// R06
         thread->stack.operations.push(&thread->stack, 0x05050505);// R05
         thread->stack.operations.push(&thread->stack, 0x04040404);// R04
-        thread->stack.operations.push(&thread->stack, 0x03030303);// R03
-        thread->stack.operations.push(&thread->stack, 0x02020202);// R02
-        thread->stack.operations.push(&thread->stack, 0x01010101);// R01
-        thread->stack.operations.push(&thread->stack, (uint32_t) arg);       // R00
-        thread->stack.operations.push(&thread->stack, 0x600001d3);// cpsr
+
 
         thread->priority = priority;
         thread->currCpu = INVALID_CPU;
@@ -250,7 +252,9 @@ Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uin
 _Noreturn uint32_t *idle_thread_routine(int arg) {
     uint32_t i = 0;
     while (1) {
-        LogInfo("[Thread]: IDLE: %d \n", i);
+        if(i%1000==0){
+            LogInfo("[Thread]: IDLE: %d \n", i);
+        }
         // asm volatile("wfi");
         i++;
         asm volatile("CPSIE I");

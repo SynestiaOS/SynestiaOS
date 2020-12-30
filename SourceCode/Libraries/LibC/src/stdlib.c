@@ -32,6 +32,14 @@ void reverse(char str[], int length) {
 }
 
 static char buf[1024] = {0};
+int32_t sprintf(char*buffer, char *fmt, ...) {
+    va_list args;
+    int32_t i;
+    va_start(args, fmt);
+    i = vsprintf(buffer, fmt, args);
+    va_end(args);
+    return i;
+}
 
 int32_t printf(const char *fmt, ...) {
     va_list args;

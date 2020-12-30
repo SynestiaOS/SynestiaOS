@@ -159,12 +159,6 @@ void schd_switch_mm(Thread *thread) {
 }
 
 void schd_switch_context() {
-//    if(prevThread!=nullptr) {
-//        LogWarn("XXX: %s \n", prevThread->name);
-//    }
-//    if(currentThread!=nullptr) {
-//        LogWarn("XXXNext: %s \n", currentThread->name);
-//    }
     int flag = switch_to_signal;
     switch_to_signal = 0;
     if (flag == 0) {
