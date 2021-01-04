@@ -10,8 +10,6 @@
 #include "kernel/thread.h"
 #include "kernel/cpu.h"
 
-#define CPU_EXISTS_NUM 4
-
 typedef enum CPU {
     CPU_0 = 0,
     CPU_1,
@@ -31,27 +29,6 @@ typedef enum CPU {
     CPU_15,
     INVALID_CPU = 255,
 } CPU;
-
-typedef enum CPUMask {
-    CPU_0_MASK = 0x1,
-    CPU_1_MASK = 0x1 << 1,
-    CPU_2_MASK = 0x1 << 2,
-    CPU_3_MASK = 0x1 << 3,
-    CPU_4_MASK = 0x1 << 4,
-    CPU_5_MASK = 0x1 << 5,
-    CPU_6_MASK = 0x1 << 6,
-    CPU_7_MASK = 0x1 << 7,
-    CPU_8_MASK = 0x1 << 8,
-    CPU_9_MASK = 0x1 << 9,
-    CPU_10_MASK = 0x1 << 10,
-    CPU_11_MASK = 0x1 << 11,
-    CPU_12_MASK = 0x1 << 12,
-    CPU_13_MASK = 0x1 << 13,
-    CPU_14_MASK = 0x1 << 14,
-    CPU_15_MASK = 0x1 << 15,
-} CPUMask;
-
-#define CPU_MASK_ALL CPU_0_MASK | CPU_1_MASK | CPU_2_MASK | CPU_3_MASK | CPU_4_MASK | CPU_5_MASK | CPU_6_MASK | CPU_7_MASK | CPU_8_MASK | CPU_9_MASK | CPU_10_MASK | CPU_11_MASK | CPU_12_MASK | CPU_13_MASK | CPU_14_MASK | CPU_15_MASK
 
 typedef struct CpuStatus {
     uint32_t idleTime;

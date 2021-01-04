@@ -212,11 +212,11 @@ void kernel_main(void) {
         schd_init();
 
         Thread *gpuProcess = thread_create("gpu", (ThreadStartRoutine) &GPU_FLUSH, 0, 0, svcModeCPSR());
-        gpuProcess->cpuAffinity = CPU_0_MASK;
+        gpuProcess->cpuAffinity = cpu_number_to_mask(0);
         schd_add_thread(gpuProcess, 1);
 
         Thread *windowDialogThread = thread_create("Welcome", (ThreadStartRoutine) &window_dialog, 0, 0, svcModeCPSR());
-        windowDialogThread->cpuAffinity = CPU_0_MASK;
+        windowDialogThread->cpuAffinity = cpu_number_to_mask(0);
         schd_add_thread(windowDialogThread, 0);
 
 //        Thread *windowCanvas2DThread = thread_create("Canvas2D", (ThreadStartRoutine) &window_canvas2D, 0, 0,
@@ -226,7 +226,7 @@ void kernel_main(void) {
 
         Thread *windowFileSystemThread = thread_create("FileManager", (ThreadStartRoutine) &window_filesystem, 0, 0,
                                                        svcModeCPSR());
-        windowFileSystemThread->cpuAffinity = CPU_0_MASK;
+        windowFileSystemThread->cpuAffinity = cpu_number_to_mask(0);
         schd_add_thread(windowFileSystemThread, 0);
 
 

@@ -11,6 +11,10 @@
 typedef uint32_t CpuNum;
 typedef uint32_t CpuMask;
 
+#define CPU_MASK_ALL 0xFFFFFFFF
+
+#define SMP_MAX_CPUS 4
+
 bool is_valid_cpu_number(CpuNum num);
 
 CpuMask cpu_number_to_mask(CpuNum num);

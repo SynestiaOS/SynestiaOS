@@ -103,8 +103,8 @@ KernelStatus schd_switch_next(void) {
 }
 
 KernelStatus schd_init() {
-    if (percpu_create(CPU_EXISTS_NUM) != ERROR) {
-        for (uint32_t cpuId = 0; cpuId < CPU_EXISTS_NUM; cpuId++) {
+    if (percpu_create(SMP_MAX_CPUS) != ERROR) {
+        for (CpuNum cpuId = 0; cpuId < SMP_MAX_CPUS; cpuId++) {
             Thread *idleThread = thread_create_idle_thread(cpuId);
             if (idleThread == nullptr) {
                 return ERROR;
@@ -174,7 +174,6 @@ void schd_switch_context() {
 }
 
 KernelStatus schd_switch_to(Thread *thread) {
-    // push r0~r3
     if (thread == nullptr) {
         LogWarn("[Schd]: cant switch to nullptr thread.\n");
         return ERROR;
@@ -190,7 +189,6 @@ KernelStatus schd_switch_to(Thread *thread) {
     prevThread = currentThread;
     currentThread = thread;
     percpu_get(read_cpuid())->currentThread = thread;
-    // pop r0~r3
     return OK;
 }
 

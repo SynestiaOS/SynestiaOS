@@ -72,14 +72,14 @@ PerCpu *percpu_get(CpuNum cpuNum) { return &perCpu[cpuNum]; }
 
 PerCpu *percpu_min_priority(CpuNum cpuMask) {
     CpuNum minMaskCPU = 0;
-    for (CpuNum i = 0; i < 32; i++) {
-        if (0x1 << i & cpuMask) {
+    for (CpuNum i = 0; i < SMP_MAX_CPUS; i++) {
+        if (cpu_number_to_mask(i) & cpuMask) {
             minMaskCPU = i;
             break;
         }
     }
     PerCpu *min = &perCpu[minMaskCPU];
-    for (CpuNum cpuId = minMaskCPU; cpuId < CPU_EXISTS_NUM; cpuId++) {
+    for (CpuNum cpuId = minMaskCPU; cpuId < SMP_MAX_CPUS; cpuId++) {
         if (perCpu[cpuId].priority < min->priority && (0x1 << cpuId & cpuMask)) {
             min = &perCpu[cpuId];
         }
