@@ -3,7 +3,7 @@
 //
 
 #include "kernel/mutex.h"
-#include "arm/cpu.h"
+#include "arm/register.h"
 #include "kernel/assert.h"
 #include "kernel/kqueue.h"
 #include "kernel/percpu.h"

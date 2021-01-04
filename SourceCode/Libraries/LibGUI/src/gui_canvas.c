@@ -59,11 +59,11 @@ void gui_canvas_init(GUICanvas *canvas, uint32_t x, uint32_t y) {
 }
 
 void gui_canvas_draw_pixel(GUICanvas *canvas, int x, int y, uint32_t c) {
-    if (x > canvas->component.size.width || x < 0) {
+    if (x >= canvas->component.size.width || x < 0) {
         return;
     }
 
-    if (y > canvas->component.size.height || y < 0) {
+    if (y >= canvas->component.size.height || y < 0) {
         return;
     }
 

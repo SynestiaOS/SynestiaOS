@@ -5,7 +5,7 @@
 #ifndef __KERNEL_THREAD_H__
 #define __KERNEL_THREAD_H__
 
-#include "arm/cpu.h"
+#include "arm/register.h"
 #include "arm/vmm.h"
 #include "kernel/kheap.h"
 #include "kernel/kobject.h"
@@ -15,9 +15,8 @@
 #include "kernel/rbtree.h"
 #include "kernel/vfs_dentry.h"
 #include "libc/stdint.h"
+#include "kernel/cpu.h"
 
-typedef uint32_t CpuNum;
-typedef uint32_t CpuMask;
 #define THREAD_NAME_LENGTH 32
 #define THREAD_MAGIC (0x74687264)
 

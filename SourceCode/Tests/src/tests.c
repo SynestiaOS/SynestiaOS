@@ -3,7 +3,7 @@
 //
 
 #include "kernel/kheap.h"
-#include "arm/cpu.h"
+#include "arm/register.h"
 
 #include "tests/tests_lib.h"
 

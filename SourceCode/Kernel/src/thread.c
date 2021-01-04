@@ -13,7 +13,7 @@
 #include "kernel/vfs_dentry.h"
 #include "libc/stdlib.h"
 #include "libc/string.h"
-#include "arm/cpu.h"
+#include "arm/register.h"
 
 extern Heap kernelHeap;
 extern PhysicalPageAllocator kernelPageAllocator;

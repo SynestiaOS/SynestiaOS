@@ -1,4 +1,4 @@
-#include "arm/cpu.h"
+#include "arm/register.h"
 #include "arm/kernel_vmm.h"
 #include "arm/page.h"
 #include "kernel/ext2.h"
@@ -84,7 +84,7 @@ _Noreturn uint32_t *window_dialog(int args) {
         disable_interrupt();
         gui_label_init(&label, 0, 0, "hello, world! Is this cool?");
         char buf[32];
-        memset(buf,0,32);
+        memset(buf, 0, 32);
         sprintf(buf, "%d", i++);
         gui_label_init(&label2, 80, 120, buf);
         gui_button_init(&buttonYes, 20, 50, "YES");
@@ -145,10 +145,11 @@ _Noreturn uint32_t *window_canvas2D(int args) {
     GUICanvas canvas;
     gui_canvas_create(&canvas);
     gui_canvas_init(&canvas, 0, 0);
-    gui_window_add_children(&window, &(canvas.component));
     gui_canvas_fill_circle(&canvas, 30, 30, 20, 0x00FF0000);
     gui_canvas_fill_rect(&canvas, 60, 60, 100, 100, 0x0000FF00);
     gui_canvas_fill_triangle(&canvas, 10, 60, 60, 60, 10, 100, 0x0000FF);
+
+    gui_window_add_children(&window, &(canvas.component));
     while (1) {
         disable_interrupt();
         gui_window_draw(&window);
@@ -218,11 +219,13 @@ void kernel_main(void) {
         windowDialogThread->cpuAffinity = CPU_0_MASK;
         schd_add_thread(windowDialogThread, 0);
 
-//        Thread *windowCanvas2DThread = thread_create("Canvas2D", (ThreadStartRoutine) &window_canvas2D, 0, 0);
+//        Thread *windowCanvas2DThread = thread_create("Canvas2D", (ThreadStartRoutine) &window_canvas2D, 0, 0,
+//                                                     svcModeCPSR());
 //        windowCanvas2DThread->cpuAffinity = CPU_0_MASK;
 //        schd_add_thread(windowCanvas2DThread, 0);
 
-        Thread *windowFileSystemThread = thread_create("FileManager", (ThreadStartRoutine) &window_filesystem, 0, 0, svcModeCPSR());
+        Thread *windowFileSystemThread = thread_create("FileManager", (ThreadStartRoutine) &window_filesystem, 0, 0,
+                                                       svcModeCPSR());
         windowFileSystemThread->cpuAffinity = CPU_0_MASK;
         schd_add_thread(windowFileSystemThread, 0);
 

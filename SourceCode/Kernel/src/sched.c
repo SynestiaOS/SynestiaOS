@@ -3,7 +3,7 @@
 //
 
 #include "kernel/sched.h"
-#include "arm/cpu.h"
+#include "arm/register.h"
 #include "kernel/interrupt.h"
 #include "kernel/log.h"
 #include "kernel/percpu.h"

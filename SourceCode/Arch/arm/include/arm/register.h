@@ -2,8 +2,8 @@
 // Created by XingfengYang on 2020/11/18.
 //
 
-#ifndef KERNEL_CPU_H
-#define KERNEL_CPU_H
+#ifndef KERNEL_REGISTER_H
+#define KERNEL_REGISTER_H
 
 #include "libc/stdint.h"
 
@@ -49,4 +49,4 @@ RegisterCPSR irqModeCPSR();
 RegisterCPSR sysModeCPSR();
 
 
-#endif//KERNEL_CPU_H
+#endif//KERNEL_REGISTER_H

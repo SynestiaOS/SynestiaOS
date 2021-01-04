@@ -2,7 +2,7 @@
 // Created by XingfengYang on 2020/12/30.
 //
 
-#include "arm/cpu.h"
+#include "arm/register.h"
 
 
 RegisterCPSR svcModeCPSR() {

@@ -3,7 +3,7 @@
 //
 
 #include "kernel/semaphore.h"
-#include "arm/cpu.h"
+#include "arm/register.h"
 #include "kernel/assert.h"
 #include "kernel/percpu.h"
 #include "kernel/sched.h"

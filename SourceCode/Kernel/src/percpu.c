@@ -40,7 +40,7 @@ Thread *percpu_default_get_next_thread(PerCpu *perCpu) {
     return thread;
 }
 
-KernelStatus percpu_default_init(PerCpu *perCpu, uint32_t num, Thread *idleThread) {
+KernelStatus percpu_default_init(PerCpu *perCpu, CpuNum num, Thread *idleThread) {
     perCpu->idleThread = idleThread;
     perCpu->cpuId = num;
     perCpu->priority = 0;
@@ -54,12 +54,12 @@ KernelStatus percpu_default_init(PerCpu *perCpu, uint32_t num, Thread *idleThrea
     return OK;
 }
 
-KernelStatus percpu_create(uint32_t cpuNum) {
+KernelStatus percpu_create(CpuNum cpuNum) {
     perCpu = (PerCpu *) kernelHeap.operations.calloc(&kernelHeap, cpuNum, sizeof(PerCpu));
     if (perCpu == nullptr) {
         return ERROR;
     }
-    for (uint32_t cpuId = 0; cpuId < cpuNum; cpuId++) {
+    for (CpuNum cpuId = 0; cpuId < cpuNum; cpuId++) {
         perCpu[cpuId].operations.init = (PerCpuInit) percpu_default_init;
         perCpu[cpuId].operations.insertThread = (PerCpuInsertThread) percpu_default_insert_thread;
         perCpu[cpuId].operations.removeThread = (PerCpuRemoveThread) percpu_default_remove_thread;
@@ -70,16 +70,16 @@ KernelStatus percpu_create(uint32_t cpuNum) {
 
 PerCpu *percpu_get(CpuNum cpuNum) { return &perCpu[cpuNum]; }
 
-PerCpu *percpu_min_priority(uint32_t cpuMask) {
-    int minMaskCPU = 0;
-    for (int i = 0; i < 32; i++) {
+PerCpu *percpu_min_priority(CpuNum cpuMask) {
+    CpuNum minMaskCPU = 0;
+    for (CpuNum i = 0; i < 32; i++) {
         if (0x1 << i & cpuMask) {
             minMaskCPU = i;
             break;
         }
     }
     PerCpu *min = &perCpu[minMaskCPU];
-    for (uint32_t cpuId = minMaskCPU; cpuId < CPU_EXISTS_NUM; cpuId++) {
+    for (CpuNum cpuId = minMaskCPU; cpuId < CPU_EXISTS_NUM; cpuId++) {
         if (perCpu[cpuId].priority < min->priority && (0x1 << cpuId & cpuMask)) {
             min = &perCpu[cpuId];
         }
