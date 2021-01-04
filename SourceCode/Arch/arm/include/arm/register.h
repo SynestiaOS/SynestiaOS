@@ -42,11 +42,61 @@ typedef struct RegisterCPSR {
 } __attribute__((packed)) RegisterCPSR;
 
 
-RegisterCPSR svcModeCPSR();
-RegisterCPSR userModeCPSR();
-RegisterCPSR fiqModeCPSR();
-RegisterCPSR irqModeCPSR();
-RegisterCPSR sysModeCPSR();
+static inline RegisterCPSR svcModeCPSR() {
+    RegisterCPSR cpsr = {0};
+    cpsr.Z = 1;
+    cpsr.C = 1;
+    cpsr.A = 1;
+    cpsr.I = 1;
+    cpsr.F = 1;
+    cpsr.M = 0b10011;
+    return cpsr;
+}
+
+static inline RegisterCPSR userModeCPSR() {
+    RegisterCPSR cpsr = {0};
+    cpsr.Z = 1;
+    cpsr.C = 1;
+    cpsr.A = 1;
+    cpsr.I = 1;
+    cpsr.F = 1;
+    cpsr.M = 0b10000;
+    return cpsr;
+}
+
+static inline RegisterCPSR fiqModeCPSR() {
+    RegisterCPSR cpsr = {0};
+    cpsr.Z = 1;
+    cpsr.C = 1;
+    cpsr.A = 1;
+    cpsr.I = 1;
+    cpsr.F = 1;
+    cpsr.M = 0b10001;
+    return cpsr;
+}
+
+static inline RegisterCPSR irqModeCPSR() {
+    RegisterCPSR cpsr = {0};
+    cpsr.Z = 1;
+    cpsr.C = 1;
+    cpsr.A = 1;
+    cpsr.I = 1;
+    cpsr.F = 1;
+    cpsr.M = 0b10010;
+    return cpsr;
+}
+
+static inline RegisterCPSR sysModeCPSR() {
+    RegisterCPSR cpsr = {0};
+    cpsr.Z = 1;
+    cpsr.C = 1;
+    cpsr.A = 1;
+    cpsr.I = 1;
+    cpsr.F = 1;
+    cpsr.M = 0b11111;
+    return cpsr;
+}
+
 
 
 #endif//KERNEL_REGISTER_H

@@ -22,6 +22,10 @@ function(target_include_libhtml_header_files Target)
     target_include_directories(${Target} PRIVATE ${SYNESTIAOS_SOURCE_CODE_DIR}/Libraries/LibHTML/include)
 endfunction()
 
+function(target_include_libbmp_header_files Target)
+    target_include_directories(${Target} PRIVATE ${SYNESTIAOS_SOURCE_CODE_DIR}/Libraries/LibBMP/include)
+endfunction()
+
 function(target_include_libcss_header_files Target)
     target_include_directories(${Target} PRIVATE ${SYNESTIAOS_SOURCE_CODE_DIR}/Libraries/LibCSS/include)
 endfunction()
