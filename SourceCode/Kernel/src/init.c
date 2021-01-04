@@ -172,8 +172,9 @@ void kernel_main(void) {
     if (read_cpuid() == 0) {
         bootSpinLock.operations.acquire(&bootSpinLock);
         led_init();
-        init_bsp();
         print_splash();
+        init_bsp();
+        init_timer();
 
         // create kernel physical page allocator
         page_allocator_create(&kernelPageAllocator, KERNEL_PHYSICAL_START, KERNEL_PHYSICAL_SIZE);

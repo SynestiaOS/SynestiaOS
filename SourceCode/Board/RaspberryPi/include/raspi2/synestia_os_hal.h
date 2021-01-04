@@ -9,4 +9,6 @@
 
 void init_bsp(void);
 
+void init_timer(void);
+
 #endif// __OS_HAL_H__

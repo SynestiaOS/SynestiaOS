@@ -5,11 +5,11 @@
 #include "raspi2/uart.h"
 
 void init_bsp(void) {
-    // logger is based on uart now
-    // LogInfo("[Device]: uart_init...\n");
     uart_init();
     LogInfo("[Device]: uart_init complete.\n");
+}
 
+void init_timer(void) {
     LogInfo("[Device]： timer_init...\n");
     system_timer_init();
     LogInfo("[Device]： timer_init complete.\n");
