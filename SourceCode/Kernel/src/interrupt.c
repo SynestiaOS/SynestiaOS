@@ -16,26 +16,11 @@ void init_interrupt() {
     disable_interrupt();
 }
 
-void swi(uint32_t num) {
-    __asm__ __volatile__("push {lr}\n\t"
-                         "mov r0, %0\n\t"
-                         "swi 0x0\n\t"
-                         "pop {pc}\n\t" ::"r"(num));
-}
-
-uint32_t cpsr_value() {
-    uint32_t cpsr;
-    __asm__ __volatile__("mrs %0, cpsr"
-                         : "=r"(cpsr)
-                         :);
-    return cpsr;
-}
-
 uint32_t is_interrupt_enabled() {
     uint32_t cpsr;
     __asm__ __volatile__("mrs %0, cpsr"
-                         : "=r"(cpsr)
-                         :);
+    : "=r"(cpsr)
+    :);
     return ((cpsr >> 7) & 1) == 0;
 }
 
@@ -65,9 +50,9 @@ int software_interrupt_handler() {
                      "mov %3,r5\n\t"
                      "mov %4,r6\n\t"
                      "mov %5,r7\n\t"
-                     : "=r"(r0), "=r"(r1), "=r"(r2), "=r"(r3), "=r"(r4), "=r"(sysCallNo)
-                     :
-                     : "r1", "r2", "r4", "r5", "r6", "r7");
+    : "=r"(r0), "=r"(r1), "=r"(r2), "=r"(r3), "=r"(r4), "=r"(sysCallNo)
+    :
+    : "r1", "r2", "r4", "r5", "r6", "r7");
 
     return sys_call_table[sysCallNo](r0, r1, r2, r3, r4);
 }
@@ -84,9 +69,9 @@ void data_abort_handler() {
                      "mov %3,r3\n\t"
                      "mov %4,r4\n\t"
                      "mov %5,r5\n\t"
-                     : "=r"(r0), "=r"(r1), "=r"(r2), "=r"(r3), "=r"(r4), "=r"(r5)
-                     :
-                     : "r0", "r1", "r2", "r3", "r4", "r5");
+    : "=r"(r0), "=r"(r1), "=r"(r2), "=r"(r3), "=r"(r4), "=r"(r5)
+    :
+    : "r0", "r1", "r2", "r3", "r4", "r5");
     // TODO: get page fault info from cp15
     LogError("[Interrupt]: data abort\n");
     do_page_fault(r3);
@@ -99,8 +84,6 @@ void unused_handler(void) {
 #define IRQ_IS_BASIC(x) ((x >= 64))
 #define IRQ_IS_GPU2(x) ((x >= 32 && x < 64))
 #define IRQ_IS_GPU1(x) ((x < 32))
-#define IRQ_IS_PENDING(regs, num) \
-    ((IRQ_IS_BASIC(num) && ((1 << (num - 64)) & regs->IRQ_basic_pending)) || (IRQ_IS_GPU2(num) && ((1 << (num - 32)) & regs->IRQ_pending_2)) || (IRQ_IS_GPU1(num) && ((1 << (num)) & regs->IRQ_pending_1)))
 
 typedef struct irq_handler {
     void (*interrupt_handler_func)(void);
@@ -161,3 +144,58 @@ void register_time_interrupt(TimerHandler *handler) {
 }
 
 TimerHandler *timer_get_handler(void) { return timerHandler; }
+
+
+void interrupt_manager_default_register(InterruptManager *manager, Interrupt interrupt) {
+    manager->interrupts[interrupt.interruptNumber].handler = interrupt.handler;
+    manager->interrupts[interrupt.interruptNumber].clearHandler = interrupt.clearHandler;
+    manager->registed[interrupt.interruptNumber] = 1;
+
+    uint32_t interrupt_no = interrupt.interruptNumber;
+    if (IRQ_IS_BASIC(interrupt_no)) {
+        getIRQController()->Enable_Basic_IRQs |= (1 << (interrupt_no - 64));
+    } else if (IRQ_IS_GPU2(interrupt_no)) {
+        getIRQController()->Enable_IRQs_2 |= (1 << (interrupt_no - 32));
+    } else if (IRQ_IS_GPU1(interrupt_no)) {
+        getIRQController()->Enable_IRQs_1 |= (1 << (interrupt_no));
+    }
+}
+
+void interrupt_manager_default_unregister(InterruptManager *manager, Interrupt interrupt) {
+    manager->interrupts[interrupt.interruptNumber].handler = nullptr;
+    manager->interrupts[interrupt.interruptNumber].clearHandler = nullptr;
+    manager->registed[interrupt.interruptNumber] = 0;
+}
+
+void interrupt_manager_default_enable(InterruptManager *manager) {
+    if (!is_interrupt_enabled()) {
+        __asm__ __volatile__("cpsie i");
+        LogInfo("[Interrupt]: enable\n");
+    }
+}
+
+void interrupt_manager_default_disable(InterruptManager *manager) {
+    if (is_interrupt_enabled()) {
+        __asm__ __volatile__("cpsid i");
+        LogInfo("[Interrupt]: disable\n");
+    }
+}
+
+void interrupt_manager_default_init(InterruptManager *manager) {
+    getIRQController()->Disable_Basic_IRQs = 0xffffffff;
+    getIRQController()->Disable_IRQs_1 = 0xffffffff;
+    getIRQController()->Disable_IRQs_2 = 0xffffffff;
+    LogInfo("[Interrupt]: interrupt init\n");
+    disable_interrupt();
+}
+
+InterruptManager *interrupt_manager_create(InterruptManager *manger) {
+    manger->operation.init = (InterruptManagerOperationInit) interrupt_manager_default_init;
+    manger->operation.registerInterrupt = (InterruptManagerOperationRegister) interrupt_manager_default_register;
+    manger->operation.unRegisterInterrupt = (InterruptManagerOperationUnRegister) interrupt_manager_default_register;
+    manger->operation.enableInterrupt = (InterruptManagerOperationEnableInterrupt) interrupt_manager_default_enable;
+    manger->operation.disableInterrupt = (InterruptManagerOperationDisableInterrupt) interrupt_manager_default_disable;
+
+
+    return manger;
+}

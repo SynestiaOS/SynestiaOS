@@ -2,6 +2,7 @@
 #define __KERNEL_INTERRUPT_H__
 
 #include "libc/stdint.h"
+#include "libc/stdbool.h"
 #include "list.h"
 
 #define ARM_INTERRUPT_REGISTER_BASE 0x3F00B000
@@ -71,5 +72,42 @@ typedef struct TimerHandler {
 void register_time_interrupt(TimerHandler *handler);
 
 TimerHandler *timer_get_handler(void);
+
+typedef void (*InterruptHandler)(void);
+
+typedef void (*InterruptClearHandler)(void);
+
+typedef struct Interrupt {
+    uint32_t interruptNumber;
+    InterruptHandler handler;
+    InterruptClearHandler clearHandler;
+} Interrupt;
+
+typedef void (*InterruptManagerOperationRegister)(struct InterruptManager *manager, Interrupt interrupt);
+
+typedef void (*InterruptManagerOperationUnRegister)(struct InterruptManager *manager, Interrupt interrupt);
+
+typedef void (*InterruptManagerOperationEnableInterrupt)(struct InterruptManager *manager);
+
+typedef void (*InterruptManagerOperationDisableInterrupt)(struct InterruptManager *manager);
+
+typedef void (*InterruptManagerOperationInit)(struct InterruptManager *manager);
+
+typedef struct InterruptManagerOperation {
+    InterruptManagerOperationInit init;
+    InterruptManagerOperationRegister registerInterrupt;
+    InterruptManagerOperationUnRegister unRegisterInterrupt;
+    InterruptManagerOperationEnableInterrupt enableInterrupt;
+    InterruptManagerOperationDisableInterrupt disableInterrupt;
+} InterruptManagerOperation;
+
+#define IRQ_NUMS 96
+typedef struct InterruptManager {
+    Interrupt interrupts[IRQ_NUMS];
+    bool registed[IRQ_NUMS];
+    InterruptManagerOperation operation;
+} InterruptManager;
+
+InterruptManager *interrupt_manager_create(InterruptManager *manger);
 
 #endif// __KERNEL_INTERRUPT_H__

@@ -148,7 +148,6 @@ interrupt_isp:
     bl      interrupt_handler
     bl      schd_switch_context
     ldmfd   sp!, {r0-r12,lr}
-    CPSIE   I
     subs    pc,  lr, #4
 
 cpu_save_context: // Thread *thread, uint32_t offsetOfStack
