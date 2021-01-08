@@ -49,18 +49,7 @@ void generic_timer_irq_handler(void) {
     LogInfo("[Timer]: generic timer interrupted\n");
     write_cntvtval(read_cntfrq() / 10);
 
-    if (genericInterruptManager.ticks == nullptr) {
-        LogError("[Timer]: no timer handler\n");
-        return;
-    }
-
-    Tick *tick = genericInterruptManager.ticks;
-    (*tick->handler)();
-    while (tick->node.next != nullptr) {
-        Tick *next = getNode(tick->node.next, Tick, node);
-        next->handler();
-        tick = next;
-    }
+    genericInterruptManager.operation.tick(&genericInterruptManager);
 }
 
 void generic_timer_init(void) {

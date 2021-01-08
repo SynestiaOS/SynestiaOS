@@ -2,6 +2,7 @@
 #include "raspi2/synestia_os_hal.h"
 #include "kernel/interrupt.h"
 #include "arm/vmm.h"
+#include "kernel/log.h"
 
 #define IRQ_NUMS 96
 
@@ -52,6 +53,20 @@ void interrupt_manager_default_init(InterruptManager *manager) {
     synestia_init_interrupt();
 }
 
+void interrupt_manager_default_tick(InterruptManager *manager) {
+    Tick *tick = manager->ticks;
+    if (tick != nullptr) {
+        (*tick->handler)();
+        while (tick->node.next != nullptr) {
+            Tick *next = getNode(tick->node.next, Tick, node);
+            next->handler();
+            tick = next;
+        }
+    } else {
+        LogError("[InterruptManager] no tick registered\n");
+    }
+}
+
 InterruptManager *interrupt_manager_create(InterruptManager *manger) {
     manger->operation.init = (InterruptManagerOperationInit) interrupt_manager_default_init;
     manger->operation.registerInterrupt = (InterruptManagerOperationRegister) interrupt_manager_default_register;
@@ -60,8 +75,12 @@ InterruptManager *interrupt_manager_create(InterruptManager *manger) {
     manger->operation.disableInterrupt = (InterruptManagerOperationDisableInterrupt) interrupt_manager_default_disable;
     manger->operation.registerTick = (InterruptManagerOperationRegisterTick) interrupt_manager_default_register_tick;
     manger->operation.unRegisterTick = (InterruptManagerOperationUnRegisterTick) interrupt_manager_default_un_register_tick;
+    manger->operation.tick = (InterruptManagerOperationTick) interrupt_manager_default_tick;
 
+    manger->ticks = nullptr;
     manger->operation.disableInterrupt(manger);
+
+    LogInfo("[InterruptManager] init\n")
 
     return manger;
 }

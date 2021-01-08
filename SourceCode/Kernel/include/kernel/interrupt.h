@@ -38,6 +38,8 @@ typedef void (*InterruptManagerOperationDisableInterrupt)(struct InterruptManage
 
 typedef void (*InterruptManagerOperationInit)(struct InterruptManager *manager);
 
+typedef void (*InterruptManagerOperationTick)(struct InterruptManager *manager);
+
 typedef struct InterruptManagerOperation {
     InterruptManagerOperationInit init;
     InterruptManagerOperationRegister registerInterrupt;
@@ -46,6 +48,7 @@ typedef struct InterruptManagerOperation {
     InterruptManagerOperationUnRegisterTick unRegisterTick;
     InterruptManagerOperationEnableInterrupt enableInterrupt;
     InterruptManagerOperationDisableInterrupt disableInterrupt;
+    InterruptManagerOperationTick tick;
 } InterruptManagerOperation;
 
 #define IRQ_NUMS 96
