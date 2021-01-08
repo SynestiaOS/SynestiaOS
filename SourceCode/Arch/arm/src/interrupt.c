@@ -5,6 +5,7 @@
 #include "arm/interrupt.h"
 #include "kernel/interrupt.h"
 #include "kernel/log.h"
+#include "arm/vmm.h"
 
 extern InterruptManager genericInterruptManager;
 
