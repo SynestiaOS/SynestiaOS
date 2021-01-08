@@ -7,10 +7,8 @@
 #include "libc/stdint.h"
 #include "libc/stdlib.h"
 
-char *strcpy(char *des, char *source) {
-    char *r = des;
-    while ((*r++ = *source++) != '\0')
-        ;
+char *strcpy(char *des, const char *source) {
+    memcpy(des, source, strlen(source));
     return des;
 }
 

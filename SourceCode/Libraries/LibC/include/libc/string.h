@@ -7,7 +7,7 @@
 #include "libc/macros.h"
 #include "libc/stdint.h"
 
-char *strcpy(char *des, char *source);
+char *strcpy(char *des, const char *source);
 
 _Bool strcmp(char *str1, char *str2);
 

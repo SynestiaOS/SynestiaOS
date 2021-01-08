@@ -166,11 +166,8 @@ _Noreturn uint32_t *GPU_FLUSH(int args) {
     }
 }
 
-SpinLock bootSpinLock = SpinLockCreate();
-
 void kernel_main(void) {
     if (read_cpuid() == 0) {
-        bootSpinLock.operations.acquire(&bootSpinLock);
         led_init();
         print_splash();
         init_bsp();
@@ -192,7 +189,6 @@ void kernel_main(void) {
         init_interrupt();
 
         vfs_create(&vfs);
-
         vfs.operations.mount(&vfs, "root", FILESYSTEM_EXT2, (void *) EXT2_ADDRESS);
 
         gpu_init();
@@ -220,18 +216,16 @@ void kernel_main(void) {
         windowDialogThread->cpuAffinity = cpu_number_to_mask(0);
         schd_add_thread(windowDialogThread, 0);
 
-//        Thread *windowCanvas2DThread = thread_create("Canvas2D", (ThreadStartRoutine) &window_canvas2D, 0, 0,
-//                                                     svcModeCPSR());
-//        windowCanvas2DThread->cpuAffinity = CPU_0_MASK;
-//        schd_add_thread(windowCanvas2DThread, 0);
+        Thread *windowCanvas2DThread = thread_create("Canvas2D", (ThreadStartRoutine) &window_canvas2D, 0, 0,
+                                                     svcModeCPSR());
+        windowCanvas2DThread->cpuAffinity = cpu_number_to_mask(0);
+        schd_add_thread(windowCanvas2DThread, 0);
 
         Thread *windowFileSystemThread = thread_create("FileManager", (ThreadStartRoutine) &window_filesystem, 0, 0,
                                                        svcModeCPSR());
         windowFileSystemThread->cpuAffinity = cpu_number_to_mask(0);
         schd_add_thread(windowFileSystemThread, 0);
 
-
-        bootSpinLock.operations.release(&bootSpinLock);
         schd_schedule();
     }
 

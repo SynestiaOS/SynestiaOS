@@ -12,8 +12,8 @@
 #include "kernel/percpu.h"
 #include "kernel/vfs_dentry.h"
 #include "libc/stdlib.h"
-#include "libc/string.h"
 #include "arm/register.h"
+#include "libc/string.h"
 
 extern Heap kernelHeap;
 extern PhysicalPageAllocator kernelPageAllocator;
@@ -190,6 +190,12 @@ enum KernelStatus thread_init_stack(Thread *thread, ThreadStartRoutine entry, vo
     return OK;
 }
 
+void thread_init_kobject(Thread *thread) {
+    kobject_create(&thread->object);
+    thread->object.type = KERNEL_OBJECT_THREAD;
+    thread->object.status = USING;
+}
+
 void thread_init_mm(Thread *thread) {
     thread->memoryStruct.sectionInfo.codeSectionAddr = 0;
     thread->memoryStruct.sectionInfo.roDataSectionAddr = 0;
@@ -201,6 +207,7 @@ void thread_init_mm(Thread *thread) {
     thread->memoryStruct.virtualMemory.physicalPageAllocator = &kernelPageAllocator;
     thread->memoryStruct.virtualMemory.pageTable = kernel_vmm_get_page_table();
     thread->memoryStruct.heap = kernelHeap;
+//    memcpy(&thread->memoryStruct.heap, &kernelHeap, sizeof(Heap));
 }
 
 enum KernelStatus thread_init_fds(Thread *thread) {
@@ -254,6 +261,7 @@ Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uin
 
         thread->parentThread = nullptr;
         thread->pid = thread_alloc_pid();
+        memset(thread->name, 0, THREAD_NAME_LENGTH);
         strcpy(thread->name, name);
         thread->arg = arg;
 
@@ -279,7 +287,7 @@ Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uin
 
         thread_init_mm(thread);
 
-        thread->object.operations.init(&thread->object, KERNEL_OBJECT_THREAD, USING);
+        thread_init_kobject(thread);
 
         LogInfo("[Thread]: thread '%s' created.\n", thread->name);
         return thread;

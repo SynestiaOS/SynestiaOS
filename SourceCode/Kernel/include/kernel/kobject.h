@@ -23,14 +23,10 @@ typedef enum KernelObjectStatus {
 
 typedef void *(*KernelObjectOperationGetObject)(struct KernelObject *object);
 
-typedef void (*KernelObjectOperationInit)(struct KernelObject *object, KernelObjectType type,
-                                          KernelObjectStatus status);
-
 typedef uint32_t (*KernelObjectOperationGetSize)(struct KernelObject *object);
 
 typedef struct KernelObjectOperations {
     KernelObjectOperationGetObject getObject;
-    KernelObjectOperationInit init;
     KernelObjectOperationGetSize size;
 } KernelObjectOperations;
 
@@ -40,5 +36,7 @@ typedef struct KernelObject {
     struct ListNode list;
     KernelObjectOperations operations;
 } KernelObject;
+
+KernelObject* kobject_create(KernelObject* kObject);
 
 #endif//__SYNESTIAOS_KOBJECT_H__

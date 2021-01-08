@@ -29,7 +29,7 @@ include(${SynestiaOS_SOURCE_DIR}/CMake/Utils.cmake)
 message(STATUS "PLATFORM is ${PLATFORM}")
 
 if (SynestiaArch STREQUAL arm)
-    set(CMAKE_C_FLAGS "-O0 -mfpu=neon-vfpv4 -mfloat-abi=hard -march=armv7-a -mtune=cortex-a7")
+    set(CMAKE_C_FLAGS "-O0 -mfpu=neon-vfpv4 -mfloat-abi=soft -march=armv7-a -mtune=cortex-a7")
 elseif (SynestiaArch STREQUAL arm64)
     # todo: refactor macro definition
     set(CMAKE_C_FLAGS "-march=armv8-a+crc -mcpu=cortex-a53 -DARM64")
