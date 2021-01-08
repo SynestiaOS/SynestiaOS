@@ -32,6 +32,7 @@ PhysicalPageAllocator kernelPageAllocator;
 PhysicalPageAllocator userspacePageAllocator;
 Slab kernelObjectSlab;
 Gfx2DContext gfx;
+InterruptManager genericInterruptManager;
 
 extern uint32_t *gpu_flush(int args);
 
@@ -81,7 +82,7 @@ _Noreturn uint32_t *window_dialog(int args) {
     uint32_t i = 0;
 
     while (1) {
-        disable_interrupt();
+        genericInterruptManager.operation.disableInterrupt(&genericInterruptManager);
         gui_label_init(&label, 0, 0, "hello, world! Is this cool?");
         char buf[32];
         memset(buf, 0, 32);
@@ -90,7 +91,7 @@ _Noreturn uint32_t *window_dialog(int args) {
         gui_button_init(&buttonYes, 20, 50, "YES");
         gui_button_init(&buttonNo, 150, 50, "NO");
         gui_window_draw(&window);
-        enable_interrupt();
+        genericInterruptManager.operation.enableInterrupt(&genericInterruptManager);
     }
 }
 
@@ -102,7 +103,7 @@ _Noreturn uint32_t *window_filesystem(int args) {
     DirectoryEntry *directoryEntry = vfs.operations.lookup(&vfs, "/initrd");
     struct GUILabel *labels;
     uint32_t size = 0;
-    disable_interrupt();
+    genericInterruptManager.operation.disableInterrupt(&genericInterruptManager);
     if (directoryEntry->children != nullptr) {
         size = klist_size(&directoryEntry->children->list);
         labels = kernelHeap.operations.alloc(&kernelHeap, size * sizeof(GUILabel));
@@ -119,10 +120,10 @@ _Noreturn uint32_t *window_filesystem(int args) {
             }
         }
     }
-    enable_interrupt();
+    genericInterruptManager.operation.enableInterrupt(&genericInterruptManager);
 
     while (1) {
-        disable_interrupt();
+        genericInterruptManager.operation.disableInterrupt(&genericInterruptManager);
         uint32_t y = 0;
         for (uint32_t i = 1; i < size; i++) {
             labels[i].component.position.x = (i % 4) * 80;
@@ -132,7 +133,7 @@ _Noreturn uint32_t *window_filesystem(int args) {
             }
         }
         gui_window_draw(&window);
-        enable_interrupt();
+        genericInterruptManager.operation.enableInterrupt(&genericInterruptManager);
     }
 }
 
@@ -151,18 +152,18 @@ _Noreturn uint32_t *window_canvas2D(int args) {
 
     gui_window_add_children(&window, &(canvas.component));
     while (1) {
-        disable_interrupt();
+        genericInterruptManager.operation.disableInterrupt(&genericInterruptManager);
         gui_window_draw(&window);
-        enable_interrupt();
+        genericInterruptManager.operation.enableInterrupt(&genericInterruptManager);
     }
 }
 
 
 _Noreturn uint32_t *GPU_FLUSH(int args) {
     while (1) {
-        disable_interrupt();
+        genericInterruptManager.operation.disableInterrupt(&genericInterruptManager);
         gpu_flush(0);
-        enable_interrupt();
+        genericInterruptManager.operation.enableInterrupt(&genericInterruptManager);
     }
 }
 
@@ -170,8 +171,12 @@ void kernel_main(void) {
     if (read_cpuid() == 0) {
         led_init();
         print_splash();
-        init_bsp();
-        init_timer();
+        synestia_init_bsp();
+
+        // create interrupt manager and init generic interrupt
+        interrupt_manager_create(&genericInterruptManager);
+
+        synestia_init_timer();
 
         // create kernel physical page allocator
         page_allocator_create(&kernelPageAllocator, KERNEL_PHYSICAL_START, KERNEL_PHYSICAL_SIZE);
@@ -186,7 +191,8 @@ void kernel_main(void) {
         // create userspace physical page allocator
         page_allocator_create(&userspacePageAllocator, USER_PHYSICAL_START, USER_PHYSICAL_SIZE);
 
-        init_interrupt();
+        genericInterruptManager.operation.init(&genericInterruptManager);
+        genericInterruptManager.operation.enableInterrupt(&genericInterruptManager);
 
         vfs_create(&vfs);
         vfs.operations.mount(&vfs, "root", FILESYSTEM_EXT2, (void *) EXT2_ADDRESS);

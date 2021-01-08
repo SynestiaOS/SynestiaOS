@@ -7,8 +7,12 @@
  * e.g. uart init
  **/
 
-void init_bsp(void);
+void synestia_init_bsp(void);
 
-void init_timer(void);
+void synestia_init_timer(void);
+
+void synestia_interrupt_register(uint32_t no);
+
+void synestia_init_interrupt(void);
 
 #endif// __OS_HAL_H__

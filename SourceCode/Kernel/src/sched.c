@@ -10,6 +10,8 @@
 #include "kernel/spinlock.h"
 #include "libc/stdlib.h"
 
+extern InterruptManager genericInterruptManager;
+
 uint32_t PRIORITY_2_WEIGHT[40] = {
         88761,
         71755,
@@ -66,12 +68,12 @@ extern void cpu_switch_mm(uint32_t pageTable);
 
 #define TIMER_TICK_MS 50
 
-TimerHandler tickHandler;
-
 uint32_t switch_to_signal = 0;
 
 Thread *prevThread = nullptr;
 Thread *currentThread = nullptr;
+
+Tick schedulerTick;
 
 void tick() {
     LogInfo("[Schd]: tick.\n");
@@ -130,12 +132,10 @@ KernelStatus schd_add_thread(Thread *thread, uint32_t priority) {
 }
 
 KernelStatus schd_schedule(void) {
-    tickHandler.node.next = nullptr;
-    tickHandler.node.prev = nullptr;
-    tickHandler.timer_interrupt_handler = &tick;
-    register_time_interrupt(&tickHandler);
+    tick_init(&schedulerTick,tick);
+    genericInterruptManager.operation.registerTick(&genericInterruptManager,&schedulerTick);
     LogInfo("[Schd]: Schd started.\n");
-    enable_interrupt();
+    genericInterruptManager.operation.enableInterrupt(&genericInterruptManager);
     return OK;
 }
 

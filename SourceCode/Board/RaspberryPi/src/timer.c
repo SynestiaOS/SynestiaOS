@@ -3,10 +3,10 @@
 #include "kernel/log.h"
 #include "libc/stdlib.h"
 
-static timer_registers_t *timer_regs = (timer_registers_t *) SYSTEM_TIMER_BASE;
 
-extern void register_interrupt_handler(uint32_t interrupt_no, void (*interrupt_handler_func)(void),
-                                       void (*interrupt_clear_func)(void));
+extern InterruptManager genericInterruptManager;
+
+static timer_registers_t *timer_regs = (timer_registers_t *) SYSTEM_TIMER_BASE;
 
 void system_timer_irq_handler(void) {
     LogInfo("[Timer]: system timer interrupt triggered\n");
@@ -15,16 +15,14 @@ void system_timer_irq_handler(void) {
 
 void system_timer_irq_clear(void) { timer_regs->control.timer1_matched = 1; }
 
-void system_timer_init(void) { register_interrupt_handler(1, system_timer_irq_handler, system_timer_irq_clear); }
-
 void timer_set(uint32_t usecs) { timer_regs->timer1 = timer_regs->counter_low + usecs; }
 
-__attribute__((optimize(0))) void block_delay(uint32_t usecs) {
-    volatile uint32_t curr = timer_regs->counter_low;
-    volatile uint32_t x = timer_regs->counter_low - curr;
-    while (x < usecs) {
-        x = timer_regs->counter_low - curr;
-    }
+void system_timer_init(void) {
+    Interrupt timerInterrupt;
+    timerInterrupt.interruptNumber = 1;
+    timerInterrupt.handler = system_timer_irq_handler;
+    timerInterrupt.clearHandler = system_timer_irq_clear;
+    genericInterruptManager.operation.registerInterrupt(&genericInterruptManager, timerInterrupt);
 }
 
 void enable_core0_irq(void) { io_writel(0x8, 0x40000040); }
@@ -50,18 +48,18 @@ void generic_timer_irq_clear(void) {
 void generic_timer_irq_handler(void) {
     LogInfo("[Timer]: generic timer interrupted\n");
     write_cntvtval(read_cntfrq() / 10);
-    TimerHandler *timerHandler = timer_get_handler();
-    if (timerHandler == nullptr) {
+
+    if (genericInterruptManager.ticks == nullptr) {
         LogError("[Timer]: no timer handler\n");
         return;
     }
 
-    void (*timer_interrupt_handler)(void) = timerHandler->timer_interrupt_handler;
-    (*timer_interrupt_handler)();
-    while (timerHandler->node.next != nullptr) {
-        TimerHandler *pHandler = getNode(timerHandler->node.next, TimerHandler, node);
-        pHandler->timer_interrupt_handler();
-        timerHandler = pHandler;
+    Tick *tick = genericInterruptManager.ticks;
+    (*tick->handler)();
+    while (tick->node.next != nullptr) {
+        Tick *next = getNode(tick->node.next, Tick, node);
+        next->handler();
+        tick = next;
     }
 }
 
@@ -69,5 +67,10 @@ void generic_timer_init(void) {
     write_cntvtval(read_cntfrq() / 10);
     enable_cntv();
     enable_core0_irq();
-    register_interrupt_handler(1, generic_timer_irq_handler, generic_timer_irq_clear);
+
+    Interrupt timerInterrupt;
+    timerInterrupt.interruptNumber = 1;
+    timerInterrupt.handler = generic_timer_irq_handler;
+    timerInterrupt.clearHandler = generic_timer_irq_clear;
+    genericInterruptManager.operation.registerInterrupt(&genericInterruptManager, timerInterrupt);
 }
