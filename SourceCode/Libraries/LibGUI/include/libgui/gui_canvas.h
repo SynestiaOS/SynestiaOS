@@ -14,7 +14,7 @@
 typedef struct GUICanvas {
     GUIComponent component;
     uint32_t *buffer;
-    Gfx2DContext context;
+    GfxSurface surface;
 } GUICanvas;
 
 void gui_canvas_create(GUICanvas *canvas);

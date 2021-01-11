@@ -50,7 +50,7 @@ void gui_panel_create(GUIPanel *panel) {
         LogError("[GUI]: panel create failed, unable to allocate children vector\n");
     }
 
-    gfx2d_create_context(&panel->context, 1024, 768, GFX2D_BUFFER);
+    gfx2d_create_surface(&panel->surface, 1024, 768, GFX2D_BUFFER);
 }
 
 void gui_panel_init(GUIPanel *panel, uint32_t x, uint32_t y) {
@@ -124,7 +124,7 @@ void gui_panel_draw(GUIPanel *panel) {
     if (panel->component.visable) {
         // 1. draw_background
         if (panel->component.colorMode == RGB) {
-            panel->context.operations.fillRect(&panel->context, panel->component.position.x,
+            panel->surface.operations.fillRect(&panel->surface, panel->component.position.x,
                                                panel->component.position.y,
                                                panel->component.position.x + panel->component.size.width,
                                                panel->component.position.y + panel->component.size.height,

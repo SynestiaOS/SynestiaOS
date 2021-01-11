@@ -31,7 +31,7 @@ Heap kernelHeap;
 PhysicalPageAllocator kernelPageAllocator;
 PhysicalPageAllocator userspacePageAllocator;
 Slab kernelObjectSlab;
-Gfx2DContext gfx;
+GfxSurface mainSurface;
 InterruptManager genericInterruptManager;
 
 extern uint32_t *gpu_flush(int args);
@@ -198,13 +198,13 @@ void kernel_main(void) {
         vfs.operations.mount(&vfs, "root", FILESYSTEM_EXT2, (void *) EXT2_ADDRESS);
 
         gpu_init();
-        gfx2d_create_context(&gfx, 1024, 768, GFX2D_BUFFER);
+        gfx2d_create_surface(&mainSurface, 1024, 768, GFX2D_BUFFER);
         uint32_t *background = (uint32_t *) kernelHeap.operations.alloc(&kernelHeap, 768 * 1024 * 4);
         vfs_kernel_read(&vfs, "/initrd/init/bg1024_768.dat", (char *) background, 768 * 1024 * 4);
-        gfx.operations.drawBitmap(&gfx, 0, 0, 1024, 768, background);
+        mainSurface.operations.drawBitmap(&mainSurface, 0, 0, 1024, 768, background);
         kernelHeap.operations.free(&kernelHeap, background);
 
-        gfx.operations.fillRect(&gfx, 0, 0, 1024, 64, FLUENT_PRIMARY_COLOR);
+        mainSurface.operations.fillRect(&mainSurface, 0, 0, 1024, 64, FLUENT_PRIMARY_COLOR);
         GUILabel logo;
         logo.component.foreground = ColorRGB(0xFF, 0xFF, 0xFF);
         logo.component.colorMode = TRANSPARENT;

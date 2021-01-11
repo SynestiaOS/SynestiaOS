@@ -20,7 +20,7 @@ typedef struct GUIView3D {
     Vec3D vLookDir;
     float fYaw;
     uint32_t *buffer;
-    Gfx2DContext context;
+    GfxSurface surface;
 } GUIView3D;
 
 void gui_view3d_create(GUIView3D *view);
