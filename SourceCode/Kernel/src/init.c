@@ -33,7 +33,7 @@ VFS vfs;
 GfxSurface mainSurface;
 
 
-extern test_threads_init(void);
+extern void test_threads_init(void);
 extern uint32_t *gpu_flush(int args);
 
 extern uint32_t GFX2D_BUFFER[1024 * 768];
