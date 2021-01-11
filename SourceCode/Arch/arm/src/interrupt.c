@@ -18,17 +18,11 @@ uint32_t arch_is_interrupt_enabled() {
 }
 
 void arch_enable_interrupt() {
-    if (!arch_is_interrupt_enabled()) {
-        __asm__ __volatile__("cpsie i");
-        LogInfo("[Interrupt]: enable\n");
-    }
+    __asm__ __volatile__("cpsie i");
 }
 
 void arch_disable_interrupt() {
-    if (arch_is_interrupt_enabled()) {
-        __asm__ __volatile__("cpsid i");
-        LogInfo("[Interrupt]: disable\n");
-    }
+    __asm__ __volatile__("cpsid i");
 }
 
 
@@ -80,13 +74,5 @@ void fast_interrupt_handler(void) {
 }
 
 void interrupt_handler(void) {
-    for (uint32_t interrupt_no = 0; interrupt_no < IRQ_NUMS; interrupt_no++) {
-        if (genericInterruptManager.registed[interrupt_no]) {
-            LogInfo("[Interrupt]: interrupt '%d' triggered.\n", interrupt_no);
-            if (genericInterruptManager.interrupts[interrupt_no].clearHandler) {
-                genericInterruptManager.interrupts[interrupt_no].clearHandler();
-            }
-            genericInterruptManager.interrupts[interrupt_no].handler();
-        }
-    }
+    genericInterruptManager.operation.interrupt(&genericInterruptManager);
 }

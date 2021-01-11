@@ -132,7 +132,7 @@ KernelStatus schd_add_thread(Thread *thread, uint32_t priority) {
 }
 
 KernelStatus schd_schedule(void) {
-    tick_init(&schedulerTick,tick);
+    tick_init(&schedulerTick,tick,"scheduler tick");
     genericInterruptManager.operation.registerTick(&genericInterruptManager,&schedulerTick);
     LogInfo("[Schd]: Schd started.\n");
     genericInterruptManager.operation.enableInterrupt(&genericInterruptManager);
