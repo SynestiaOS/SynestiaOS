@@ -35,13 +35,17 @@ void interrupt_manager_default_register(InterruptManager *manager, Interrupt int
 
     uint32_t interrupt_no = interrupt.interruptNumber;
 
-    synestia_interrupt_register(interrupt_no);
+    synestia_interrupt_enable(interrupt_no);
 }
 
 void interrupt_manager_default_unregister(InterruptManager *manager, Interrupt interrupt) {
     manager->interrupts[interrupt.interruptNumber].handler = nullptr;
     manager->interrupts[interrupt.interruptNumber].clearHandler = nullptr;
     manager->registed[interrupt.interruptNumber] = 0;
+
+    uint32_t interrupt_no = interrupt.interruptNumber;
+
+    synestia_interrupt_disable(interrupt_no);
 }
 
 void interrupt_manager_default_enable(InterruptManager *manager) {
@@ -66,7 +70,7 @@ void interrupt_manager_default_tick(InterruptManager *manager) {
     Tick *tick = manager->ticks;
     if (tick != nullptr) {
         LogInfo("[InterruptManager] tick '%s' triggered\n", tick->name);
-        (*tick->handler)();
+        tick->handler();
         while (tick->node.next != nullptr) {
             Tick *next = getNode(tick->node.next, Tick, node);
             LogInfo("[InterruptManager] tick '%s' triggered\n", tick->name);
@@ -81,12 +85,13 @@ void interrupt_manager_default_tick(InterruptManager *manager) {
 
 void interrupt_manager_default_interrupt(InterruptManager *manager) {
     for (uint32_t interrupt_no = 0; interrupt_no < IRQ_NUMS; interrupt_no++) {
-        if (manager->registed[interrupt_no]) {
-            LogInfo("[Interrupt]: interrupt '%d' triggered.\n", interrupt_no);
-            if (manager->interrupts[interrupt_no].clearHandler) {
+        if (manager->registed[interrupt_no] /* && synestia_interrupt_pending(interrupt_no)*/) {
+            LogInfo("[Interrupt]: interrupt '%s' triggered.\n", manager->interrupts[interrupt_no].name);
+            if (manager->interrupts[interrupt_no].clearHandler != nullptr) {
                 manager->interrupts[interrupt_no].clearHandler();
             }
             manager->interrupts[interrupt_no].handler();
+            synestia_interrupt_clear(interrupt_no);
         }
     }
 }

@@ -3,9 +3,6 @@
 #include "raspi2/gpio.h"
 #include "raspi2/raspi.h"
 
-#define UART0_BASE       (PERIPHERAL_BASE + UART0_OFFSET)
-#define UART0_DATA       (UART0_BASE + 0x00)
-#define UART0_STATUS     (UART0_BASE + 0x18)
 #define TX_FIFO_FULL     (1 << 5)
 #define RX_FIFO_FULL     (1 << 6)
 
@@ -17,11 +14,6 @@
   // RPI 1/2 has a 3MHz clock by default
   #define CLOCK_RATE 3000000
 #endif
-
-void register_interrupt_handler(uint32_t interrupt_no, void (*interrupt_handler_func)(void),
-                                void (*interrupt_clear_func)(void));
-
-void uart_interrupt_handler(void);
 
 void uart_init(void) {
     // disable UART0
@@ -124,5 +116,3 @@ void uart_print(const char *str) {
         str++;
     }
 }
-
-void uart_interrupt_handler(void) { uart_put_char(do_uart_get_char()); }
