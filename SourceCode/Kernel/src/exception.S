@@ -151,6 +151,7 @@ interrupt_isp:
     subs    pc,  lr, #4
 
 cpu_save_context: // Thread *thread, uint32_t offsetOfStack
+    // TODO: r0,r1 already modified.
     stmfd   sp!, {r0-r3}
 
     mov     r3, sp
