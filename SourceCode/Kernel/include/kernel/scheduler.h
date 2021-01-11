@@ -2,8 +2,8 @@
 // Created by XingfengYang on 2020/6/29.
 //
 
-#ifndef __KERNEL_SCHED_H__
-#define __KERNEL_SCHED_H__
+#ifndef __KERNEL_SCHEDULER_H__
+#define __KERNEL_SCHEDULER_H__
 
 #include "kernel/thread.h"
 #include "libc/stdint.h"
@@ -28,4 +28,4 @@ uint32_t schd_getpid();
 
 Thread *schd_get_current_thread(void);
 
-#endif//__KERNEL_SCHED_H__
+#endif//__KERNEL_SCHEDULER_H__

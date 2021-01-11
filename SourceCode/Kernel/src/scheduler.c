@@ -2,7 +2,7 @@
 // Created by XingfengYang on 2020/6/29.
 //
 
-#include "kernel/sched.h"
+#include "kernel/scheduler.h"
 #include "arm/register.h"
 #include "kernel/interrupt.h"
 #include "kernel/log.h"

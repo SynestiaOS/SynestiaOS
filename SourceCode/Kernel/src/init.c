@@ -5,7 +5,7 @@
 #include "kernel/interrupt.h"
 #include "kernel/kheap.h"
 #include "kernel/percpu.h"
-#include "kernel/sched.h"
+#include "kernel/scheduler.h"
 #include "kernel/slab.h"
 #include "kernel/vfs.h"
 #include "libc/stdlib.h"

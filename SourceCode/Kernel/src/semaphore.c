@@ -6,7 +6,7 @@
 #include "arm/register.h"
 #include "kernel/assert.h"
 #include "kernel/percpu.h"
-#include "kernel/sched.h"
+#include "kernel/scheduler.h"
 #include "kernel/thread.h"
 
 extern Thread *currentThread;

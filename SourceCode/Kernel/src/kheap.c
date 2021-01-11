@@ -5,7 +5,7 @@
 #include "kernel/kheap.h"
 #include "arm/page.h"
 #include "kernel/log.h"
-#include "kernel/sched.h"
+#include "kernel/scheduler.h"
 #include "libc/stdlib.h"
 #include "libc/string.h"
 

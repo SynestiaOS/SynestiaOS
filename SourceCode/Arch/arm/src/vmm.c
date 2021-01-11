@@ -7,7 +7,7 @@
 #include "arm/mmu.h"
 #include "arm/page.h"
 #include "kernel/log.h"
-#include "kernel/sched.h"
+#include "kernel/scheduler.h"
 #include "kernel/type.h"
 #include "libc/stdlib.h"
 

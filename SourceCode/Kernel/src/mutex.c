@@ -7,7 +7,7 @@
 #include "kernel/assert.h"
 #include "kernel/kqueue.h"
 #include "kernel/percpu.h"
-#include "kernel/sched.h"
+#include "kernel/scheduler.h"
 #include "kernel/thread.h"
 
 void mutex_default_acquire(Mutex *mutex) {
