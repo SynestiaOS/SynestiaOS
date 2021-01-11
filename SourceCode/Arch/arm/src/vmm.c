@@ -11,6 +11,8 @@
 #include "kernel/type.h"
 #include "libc/stdlib.h"
 
+extern Scheduler cfsScheduler;
+
 void virtual_memory_default_allocate_page(VirtualMemory *virtualMemory, uint32_t virtualAddress) {
     uint32_t l1Offset = (virtualAddress >> 30) & 0b11;
     uint32_t l2Offset = (virtualAddress >> 21) & 0b111111111;
@@ -215,7 +217,8 @@ void do_page_fault(uint32_t address) {
     LogError("[vmm]: page fault at: %d .\n", address);
     // check is there is a thread running, if it was, then map for thread's vmm:
     // TODO: it not good, may be make some mistake when thread is running and kernel triggered this.
-    Thread *currThread = schd_get_current_thread();
+
+    Thread *currThread = cfsScheduler.operation.getCurrentThread(&cfsScheduler);
     if (currThread != nullptr) {
         // may be user triggered this
         VirtualMemory virtualMemory = currThread->memoryStruct.virtualMemory;

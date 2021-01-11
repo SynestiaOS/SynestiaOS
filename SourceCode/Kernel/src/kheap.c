@@ -10,6 +10,7 @@
 #include "libc/string.h"
 
 extern PhysicalPageAllocator kernelPageAllocator;
+extern Scheduler cfsScheduler;
 
 void heap_default_alloc_callback(struct Heap *heap, void *ptr, uint32_t size) {
     heap->statistics.allocatedSize += size;
@@ -36,7 +37,7 @@ void *heap_default_alloc(struct Heap *heap, uint32_t size) {
         // then just use it, and split a new block
         if (currentFreeArea->size >= allocSize) {
             // 1. split a rest free HeapArea
-            uint32_t newFreeHeapAreaAddress = (uint32_t)(void *) currentFreeArea + sizeof(HeapArea) + size;
+            uint32_t newFreeHeapAreaAddress = (uint32_t) (void *) currentFreeArea + sizeof(HeapArea) + size;
             uint32_t restSize = currentFreeArea->size - allocSize;
 
             HeapArea *newFreeArea = (HeapArea *) newFreeHeapAreaAddress;
@@ -115,7 +116,7 @@ void *heap_default_realloc(struct Heap *heap, void *ptr, uint32_t size) {
 
 KernelStatus heap_default_free(struct Heap *heap, void *ptr) {
     // 1. get HeapArea address
-    uint32_t address = (uint32_t)(ptr - sizeof(HeapArea));
+    uint32_t address = (uint32_t) (ptr - sizeof(HeapArea));
     HeapArea *currentArea = (HeapArea *) address;
 
     // 2. unlink from using list
@@ -177,7 +178,7 @@ KernelStatus heap_create(Heap *heap, uint32_t addr, uint32_t size) {
     LogInfo("[KHeap] at: %d. \n", heap->address);
 
     PhysicalPageAllocator *physicalPageAllocator;
-    Thread *currThread = schd_get_current_thread();
+    Thread *currThread = cfsScheduler.operation.getCurrentThread(&cfsScheduler);
     if (currThread == nullptr) {
         physicalPageAllocator = &kernelPageAllocator;
     } else {
@@ -196,7 +197,7 @@ KernelStatus heap_create(Heap *heap, uint32_t addr, uint32_t size) {
     freeHead->list.prev = nullptr;
 
     HeapArea *freeArea = (HeapArea *) (heap->address + sizeof(HeapArea));
-    freeArea->size = (size - (uint32_t)(char *) heap->address -
+    freeArea->size = (size - (uint32_t) (char *) heap->address -
                       2 * sizeof(HeapArea));// all memory
     freeHead->list.next = &freeArea->list;
     freeArea->list.next = nullptr;

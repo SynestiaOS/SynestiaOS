@@ -7,6 +7,50 @@
 
 #include "kernel/thread.h"
 #include "libc/stdint.h"
+#include "interrupt.h"
+
+typedef KernelStatus (*SchedulerOperationInit)(struct Scheduler *scheduler);
+
+typedef KernelStatus (*SchedulerOperationAddThread)(struct Scheduler *scheduler,Thread *thread, uint32_t priority);
+
+typedef KernelStatus (*SchedulerOperationSchedule)(struct Scheduler *scheduler);
+
+typedef KernelStatus (*SchedulerOperationBlock)(struct Scheduler *scheduler);
+
+typedef KernelStatus (*SchedulerOperationYield)(struct Scheduler *scheduler);
+
+typedef KernelStatus (*SchedulerOperationPreempt)(struct Scheduler *scheduler);
+
+typedef KernelStatus (*SchedulerOperationSwitchTo)(struct Scheduler *scheduler,Thread *thread);
+
+typedef KernelStatus (*SchedulerOperationSwitchNext)(struct Scheduler *scheduler);
+
+typedef uint32_t (*SchedulerOperationGetCurrentPid)(struct Scheduler *scheduler);
+
+typedef Thread *(*SchedulerOperationGetCurrentThread)(struct Scheduler *scheduler);
+
+typedef struct SchedulerOperation {
+    SchedulerOperationInit init;
+    SchedulerOperationAddThread addThread;
+    SchedulerOperationSchedule schedule;
+    SchedulerOperationBlock block;
+    SchedulerOperationYield yield;
+    SchedulerOperationPreempt preempt;
+    SchedulerOperationSwitchTo switchTo;
+    SchedulerOperationSwitchNext switchNext;
+    SchedulerOperationGetCurrentPid getCurrentPid;
+    SchedulerOperationGetCurrentThread getCurrentThread;
+} SchedulerOperation;
+
+typedef struct Scheduler {
+    uint32_t switch_to_signal;
+    Thread *prevThread;
+    Thread *currentThread;
+    Tick schedulerTick;
+    SchedulerOperation operation;
+} Scheduler;
+
+Scheduler *scheduler_create(Scheduler *scheduler);
 
 KernelStatus schd_init(void);
 

@@ -10,6 +10,8 @@
 #include "kernel/scheduler.h"
 #include "kernel/thread.h"
 
+extern Scheduler cfsScheduler;
+
 void mutex_default_acquire(Mutex *mutex) {
     mutex->spinLock.operations.acquire(&mutex->spinLock);
 
@@ -28,7 +30,8 @@ void mutex_default_acquire(Mutex *mutex) {
         // remove from schd list
         perCpu->rbTree.operations.remove(&perCpu->rbTree, &currentThread->rbNode);
         // 2. switch to the next thread in scheduler
-        schd_switch_next();
+
+        cfsScheduler.operation.switchNext(&currentThread);
     }
 
     mutex->spinLock.operations.release(&mutex->spinLock);

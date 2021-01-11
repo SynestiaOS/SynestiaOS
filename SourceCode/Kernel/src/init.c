@@ -33,6 +33,7 @@ PhysicalPageAllocator userspacePageAllocator;
 Slab kernelObjectSlab;
 GfxSurface mainSurface;
 InterruptManager genericInterruptManager;
+Scheduler cfsScheduler;
 
 extern uint32_t *gpu_flush(int args);
 
@@ -184,6 +185,8 @@ void kernel_main(void) {
         // init kernel virtual memory mapping
         kernel_vmm_init();
 
+        scheduler_create(&cfsScheduler);
+
         // create kernel heap
         heap_create(&kernelHeap, (uint32_t) &__HEAP_BEGIN, KERNEL_PHYSICAL_SIZE - (uint32_t) (&__HEAP_BEGIN));
         slab_create(&kernelObjectSlab, 0, 0);
@@ -212,27 +215,29 @@ void kernel_main(void) {
         gui_label_init(&logo, 480, 28, "SynestiaOS (alpha 0.1.3)");
         gui_label_draw(&logo);
 
-        schd_init();
+        cfsScheduler.operation.init(&cfsScheduler);
 
         Thread *gpuProcess = thread_create("gpu", (ThreadStartRoutine) &GPU_FLUSH, 0, 0, svcModeCPSR());
         gpuProcess->cpuAffinity = cpu_number_to_mask(0);
-        schd_add_thread(gpuProcess, 1);
+        cfsScheduler.operation.addThread(&cfsScheduler, gpuProcess, 1);
 
         Thread *windowDialogThread = thread_create("Welcome", (ThreadStartRoutine) &window_dialog, 0, 0, svcModeCPSR());
         windowDialogThread->cpuAffinity = cpu_number_to_mask(0);
-        schd_add_thread(windowDialogThread, 0);
+        cfsScheduler.operation.addThread(&cfsScheduler, windowDialogThread, 1);
+
 
         Thread *windowCanvas2DThread = thread_create("Canvas2D", (ThreadStartRoutine) &window_canvas2D, 0, 0,
                                                      svcModeCPSR());
         windowCanvas2DThread->cpuAffinity = cpu_number_to_mask(0);
-        schd_add_thread(windowCanvas2DThread, 0);
+        cfsScheduler.operation.addThread(&cfsScheduler, windowCanvas2DThread, 1);
 
         Thread *windowFileSystemThread = thread_create("FileManager", (ThreadStartRoutine) &window_filesystem, 0, 0,
                                                        svcModeCPSR());
         windowFileSystemThread->cpuAffinity = cpu_number_to_mask(0);
-        schd_add_thread(windowFileSystemThread, 0);
+        cfsScheduler.operation.addThread(&cfsScheduler, windowFileSystemThread, 1);
 
-        schd_schedule();
+
+        cfsScheduler.operation.schedule(&cfsScheduler);
     }
 
     // schd_switch_next();

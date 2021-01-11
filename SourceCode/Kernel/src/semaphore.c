@@ -10,6 +10,7 @@
 #include "kernel/thread.h"
 
 extern Thread *currentThread;
+extern Scheduler cfsScheduler;
 
 void semaphore_default_post(Semaphore *semaphore) {
     semaphore->spinLock.operations.acquire(&semaphore->spinLock);
@@ -19,7 +20,8 @@ void semaphore_default_post(Semaphore *semaphore) {
     Thread *releasedThread = getNode(queueNode, Thread, threadReadyQueue);
 
 
-    KernelStatus addToScheduler = schd_add_thread(releasedThread, releasedThread->priority);
+    KernelStatus addToScheduler = cfsScheduler.operation.addThread(&cfsScheduler, releasedThread,
+                                                                   releasedThread->priority);
 
     DEBUG_ASSERT(addToScheduler == OK);
 
@@ -44,7 +46,7 @@ void semaphore_default_wait(Semaphore *semaphore) {
         // remove from schd list
         perCpu->rbTree.operations.remove(&perCpu->rbTree, &currentThread->rbNode);
         // 2. switch to the next thread in scheduler
-        schd_switch_next();
+        cfsScheduler.operation.switchNext(&cfsScheduler);
     }
     semaphore->spinLock.operations.release(&semaphore->spinLock);
 }
