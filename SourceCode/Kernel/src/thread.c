@@ -2,6 +2,7 @@
 // Created by XingfengYang on 2020/6/26.
 //
 
+#include "kernel/ktimer.h"
 #include "kernel/thread.h"
 #include "arm/kernel_vmm.h"
 #include "kernel/kheap.h"
@@ -18,6 +19,7 @@
 extern Heap kernelHeap;
 extern PhysicalPageAllocator kernelPageAllocator;
 extern PhysicalPageAllocator userspacePageAllocator;
+extern KernelTimerManager kernelTimerManager;
 
 extern uint64_t ktimer_sys_runtime();
 
@@ -255,7 +257,7 @@ Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uin
 
         thread->runtimeNs = 0;
         thread->runtimeVirtualNs = 0;
-        thread->startTime = ktimer_sys_runtime();
+        thread->startTime = kernelTimerManager.operation.getSysRuntimeMs(&kernelTimerManager);
 
         thread->cpuAffinity = CPU_MASK_ALL;
 

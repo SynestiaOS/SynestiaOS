@@ -2,6 +2,7 @@
 // Created by XingfengYang on 2020/6/29.
 //
 
+#include "kernel/ktimer.h"
 #include "kernel/scheduler.h"
 #include "arm/register.h"
 #include "kernel/interrupt.h"
@@ -11,6 +12,7 @@
 #include "libc/stdlib.h"
 
 extern InterruptManager genericInterruptManager;
+extern KernelTimerManager kernelTimerManager;
 extern Scheduler cfsScheduler;
 
 uint32_t PRIORITY_2_WEIGHT[40] = {
@@ -69,16 +71,8 @@ extern void cpu_switch_mm(uint32_t pageTable);
 
 #define TIMER_TICK_MS 50
 
-//uint32_t switch_to_signal = 0;
-//
-//Thread *prevThread = nullptr;
-//Thread *currentThread = nullptr;
-//
-//Tick schedulerTick;
-
 void tick() {
     LogInfo("[Schd]: tick.\n");
-    ktimer_sys_runtime_tick(TIMER_TICK_MS);
     cfsScheduler.operation.switchNext(&cfsScheduler);
 }
 

@@ -16,6 +16,7 @@
 #include "raspi2/synestia_os_hal.h"
 #include "libgfx/gfx2d.h"
 #include "raspi2/led.h"
+#include "kernel/ktimer.h"
 
 extern uint32_t __HEAP_BEGIN;
 extern char _binary_initrd_img_start[];
@@ -29,11 +30,13 @@ PhysicalPageAllocator userspacePageAllocator;
 Heap kernelHeap;
 Slab kernelObjectSlab;
 Scheduler cfsScheduler;
+KernelTimerManager kernelTimerManager;
 VFS vfs;
 GfxSurface mainSurface;
 
 
 extern void test_threads_init(void);
+
 extern uint32_t *gpu_flush(int args);
 
 extern uint32_t GFX2D_BUFFER[1024 * 768];
@@ -74,6 +77,9 @@ void kernel_main(void) {
         // init kernel virtual memory mapping
         kernel_vmm_init();
 
+        // init kernel timer manager
+        kernel_timer_manager_create(&kernelTimerManager);
+        kernelTimerManager.operation.init(&kernelTimerManager);
         scheduler_create(&cfsScheduler);
 
         // create kernel heap
