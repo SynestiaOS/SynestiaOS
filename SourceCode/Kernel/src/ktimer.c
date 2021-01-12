@@ -82,6 +82,7 @@ kernel_timer_manger_default_release_timer(KernelTimerManager *kernelTimerManager
 KernelStatus
 kernel_timer_manger_default_free_timer(KernelTimerManager *kernelTimerManager, KernelTimer *timer) {
     KernelStatus releaseStatus = kernelTimerManager->operation.releaseTimer(kernelTimerManager, timer);
+    DEBUG_ASSERT(releaseStatus != ERROR);
     if (releaseStatus != OK) {
         return ERROR;
     }
@@ -116,7 +117,7 @@ KernelTimerManager *kernel_timer_manager_create(KernelTimerManager *kernelTimerM
     kernelTimerManager->timerNodes = nullptr;
     kernelTimerManager->operation.init = (KernelTimerManagerOperationInit) kernel_timer_manger_default_init;
     kernelTimerManager->operation.getSysRuntimeMs = (KernelTimerManagerOperationGetSysRuntimeMs) kernel_timer_manger_default_get_sys_runtime_ms;
-    kernelTimerManager->operation.createTimer = (KernelTimerManagerOperationCreateTimer) kernel_timer_manager_create;
+    kernelTimerManager->operation.createTimer = (KernelTimerManagerOperationCreateTimer) kernel_timer_manger_default_create_timer;
     kernelTimerManager->operation.releaseTimer = (KernelTimerManagerOperationReleaseTimer) kernel_timer_manger_default_release_timer;
     kernelTimerManager->operation.freeTimer = (KernelTimerManagerOperationFreeTimer) kernel_timer_manger_default_free_timer;
     kernelTimerManager->operation.onTick = (KernelTimerManagerOperationOnTick) kernel_timer_manger_default_on_tick;
