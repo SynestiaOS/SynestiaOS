@@ -10,7 +10,7 @@ typedef ListNode KQueueNode;
 
 typedef KernelStatus (*KernelQueueOperationEnQueue)(struct KernelQueue *queue, KQueueNode *node);
 
-typedef KQueueNode *(*KernelQueueOperationDnQueue)(struct KernelQueue *queue);
+typedef KQueueNode *(*KernelQueueOperationDeQueue)(struct KernelQueue *queue);
 
 typedef uint32_t (*KernelQueueOperationSize)(struct KernelQueue *queue);
 
@@ -18,7 +18,7 @@ typedef bool (*KernelQueueOperationIsEmpty)(struct KernelQueue *queue);
 
 typedef struct KernelQueueOperations {
     KernelQueueOperationEnQueue enqueue;
-    KernelQueueOperationDnQueue dequeue;
+    KernelQueueOperationDeQueue dequeue;
     KernelQueueOperationSize size;
     KernelQueueOperationIsEmpty isEmpty;
 } KernelQueueOperations;

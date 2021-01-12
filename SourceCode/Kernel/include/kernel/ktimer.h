@@ -21,7 +21,7 @@ typedef struct KernelTimerOperation {
 
 typedef struct KernelTimer {
     uint32_t deadline;
-    uint32_t remainTime;
+    int32_t remainTime;
     ListNode list;
     KernelQueue waitQueue;
     KernelTimerOperation operation;
@@ -36,6 +36,9 @@ typedef KernelTimer *(*KernelTimerManagerOperationCreateTimer)(struct KernelTime
 typedef KernelStatus (*KernelTimerManagerOperationReleaseTimer)(struct KernelTimerManager *kernelTimerManager,
                                                                 KernelTimer *timer);
 
+typedef KernelStatus (*KernelTimerManagerOperationFreeTimer)(struct KernelTimerManager *kernelTimerManager,
+                                                             KernelTimer *timer);
+
 typedef KernelStatus (*KernelTimerManagerOperationGetSysRuntimeMs)(struct KernelTimerManager *kernelTimerManager);
 
 typedef void (*KernelTimerManagerOperationOnTick)();
@@ -46,6 +49,7 @@ typedef struct KernelTimerMangerOperation {
     KernelTimerManagerOperationGetSysRuntimeMs getSysRuntimeMs;
     KernelTimerManagerOperationCreateTimer createTimer;
     KernelTimerManagerOperationReleaseTimer releaseTimer;
+    KernelTimerManagerOperationFreeTimer freeTimer;
 } KernelTimerMangerOperation;
 
 typedef struct KernelTimerManager {
