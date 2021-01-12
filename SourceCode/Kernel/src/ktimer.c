@@ -11,6 +11,7 @@
 #include "kernel/assert.h"
 #include "kernel/thread.h"
 
+// TODO: this value should read from global config
 #define TICK_INTERVAL 50
 
 extern InterruptManager genericInterruptManager;
