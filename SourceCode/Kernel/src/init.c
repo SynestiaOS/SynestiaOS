@@ -17,6 +17,7 @@
 #include "libgfx/gfx2d.h"
 #include "raspi2/led.h"
 #include "kernel/ktimer.h"
+#include "libelf/elf.h"
 
 extern uint32_t __HEAP_BEGIN;
 extern char _binary_initrd_img_start[];
@@ -94,6 +95,12 @@ void kernel_main(void) {
 
         vfs_create(&vfs);
         vfs.operations.mount(&vfs, "root", FILESYSTEM_EXT2, (void *) EXT2_ADDRESS);
+
+//        Elf elf;
+//        uint32_t *data = (uint32_t *) kernelHeap.operations.alloc(&kernelHeap, 40 * KB);
+//        vfs_kernel_read(&vfs, "/initrd/bin/TestApp.elf", data, 40 * KB);
+//        elf_init(&elf, data);
+//        elf.operations.dump(&elf);
 
         gpu_init();
         gfx2d_create_surface(&mainSurface, 1024, 768, GFX2D_BUFFER);
