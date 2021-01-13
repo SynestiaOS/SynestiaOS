@@ -7,6 +7,7 @@
 
 #include "kernel/type.h"
 #include "libc/stdint.h"
+#include "libc/stdbool.h"
 
 typedef enum ObjectFileType {
     ET_NONE = 0x00,
@@ -160,15 +161,32 @@ typedef struct ElfSectionHeader {
     // Otherwise, this field contains zero.
 } ElfSectionHeader;
 
-typedef void (*ElfOperationParse)(struct Elf *elf);
+typedef struct Elf32Symbol {
+    uint32_t name;     // name - index into string table
+    uint32_t value;    // symbol value
+    uint32_t size;     // symbol size
+    uint8_t info;  // type and binding
+    uint8_t other; // 0 - no defined meaning
+    uint32_t shndx;    // section header index
+} Elf32Symbol;
+
+typedef KernelStatus (*ElfOperationParse)(struct Elf *elf);
+
+typedef void (*ElfOperationDump)(struct Elf *elf);
+
+typedef bool (*ElfOperationIsValid)(struct Elf *elf);
 
 typedef struct ElfOperations {
     ElfOperationParse parse;
+    ElfOperationDump dump;
+    ElfOperationIsValid isValid;
 } ElfOperations;
 
 typedef struct Elf {
     char *data;
     uint32_t size;
+    bool valid;
+    uint32_t symbolTableSectionIndex;
     ElfFileHeader fileHeader;
     ElfProgramHeader programHeader;
     ElfSectionHeader sectionHeader;

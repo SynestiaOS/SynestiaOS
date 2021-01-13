@@ -6,6 +6,31 @@
 #include "kernel/log.h"
 #include "libc/stdlib.h"
 
+const char *object_file_type_to_string(uint32_t type) {
+    switch (type) {
+        case ET_NONE:
+            return "None";
+        case ET_REL:
+            return "Relocatable";
+        case ET_EXEC:
+            return "Executable";
+        case ET_DYN:
+            return "Shared object";
+        case ET_CORE:
+            return "Core";
+        case ET_LOOS:
+            return "ET_LOOS";
+        case ET_HIOS:
+            return "ET_HIOS";
+        case ET_LOPROC:
+            return "ET_LOPROC";
+        case ET_HIPROC:
+            return "ET_HIPROC";
+        default:
+            return "UnKnown";
+    }
+}
+
 const char *elf_get_target_machine_name(InstructionSet instructionSet) {
     switch (instructionSet) {
         case ARCH_Unknown: {
@@ -90,12 +115,13 @@ KernelStatus elf_default_parse(Elf *elf) {
     elf->fileHeader = *(ElfFileHeader *) (elf->data);
     if (elf->fileHeader.magic[0] != 0x7F || elf->fileHeader.magic[1] != 0x45 || elf->fileHeader.magic[2] != 0x4c ||
         elf->fileHeader.magic[3] != 0x46) {
-        //        LogError("[Elf]: not an elf file.\n");
+        elf->valid = false;
+        LogError("[Elf]: not an elf file.\n");
         return ERROR;
     }
 
     if (elf->fileHeader.arch != 1) {
-        //        LogError("[Elf]: just support 32-bit.\n");
+        LogError("[Elf]: just support 32-bit.\n");
         return ERROR;
     }
 
@@ -106,8 +132,77 @@ KernelStatus elf_default_parse(Elf *elf) {
     }
 }
 
+void elf_default_dump(Elf *elf) {
+    LogInfo("ELF (%d) {{", elf);
+    LogInfo("    is_valid: %d}", elf->operations.isValid(elf));
+
+    if (!elf->operations.isValid(elf)) {
+        LogInfo("}}");
+        return;
+    }
+
+    LogInfo("    type:    %s", object_file_type_to_string(elf->fileHeader.type));
+    LogInfo("    machine: %s", elf_get_target_machine_name(elf->fileHeader.machine));
+    LogInfo("    entry:   %d", elf->fileHeader.entry);
+    LogInfo("    shoff:   %d", elf->fileHeader.sectionHeaderTableOffset);
+    LogInfo("    shnum:   %d", elf->fileHeader.entryNumsInProgramHeaderTable);
+    LogInfo("    phoff:   %d", elf->fileHeader.programHeaderTableOffset);
+    LogInfo("    phnum:   %d", elf->fileHeader.entryNumsInSectionHeaderTable);
+    LogInfo(" shstrndx:   %d", elf->fileHeader.indexOfSectionHeaderTable);
+
+    ElfProgramHeader *programHeader = (ElfProgramHeader *) (elf->data + elf->fileHeader.programHeaderTableOffset);
+    for (uint32_t i = 0; i < elf->fileHeader.entryNumsInProgramHeaderTable; i++) {
+        LogInfo("    Program Header %d: {{", i);
+        LogInfo("        type: %d", programHeader->type);
+        LogInfo("      offset: %d", programHeader->segmentOffset);
+        LogInfo("       flags: %d", programHeader->flags);
+        LogInfo("    }}\n");
+        programHeader += sizeof(struct ElfProgramHeader);
+    }
+
+
+    for (uint32_t i = 0; i < elf->fileHeader.entryNumsInSectionHeaderTable; i++) {
+        ElfSectionHeader *sectionHeader = (struct ElfSectionHeader *) (elf->data +
+                                                                       elf->fileHeader.sectionHeaderTableOffset +
+                                                                       i * sizeof(ElfSectionHeader));
+        LogInfo("    Section %d: {{", i);
+        LogInfo("        name: %d", sectionHeader->name);
+        LogInfo("        type: %d", sectionHeader->type);
+        LogInfo("      offset: %d", sectionHeader->offset);
+        LogInfo("        size: %d", sectionHeader->size);
+        LogInfo("        ");
+        LogInfo("    }}\n");
+
+        if (sectionHeader->type == SHT_SYMTAB) {
+            elf->symbolTableSectionIndex = i;
+        }
+    }
+
+    ElfSectionHeader *symbolSectionHeader = (ElfSectionHeader *) (elf->data + sizeof(ElfSectionHeader) *
+                                                                              elf->symbolTableSectionIndex);
+    LogInfo("Symbol count: %d (table is %d)", symbolSectionHeader->entrySize, elf->symbolTableSectionIndex);
+
+    for (uint32_t i = 0; i < symbolSectionHeader->entrySize; i++) {
+        Elf32Symbol *symbol = (Elf32Symbol *) (elf->data + symbolSectionHeader->offset + i * (sizeof(Elf32Symbol)));
+        LogInfo("Symbol %d:", i);
+        LogInfo("    Name: %s", symbol->name);
+        LogInfo("    In section: %d", elf->symbolTableSectionIndex);
+        LogInfo("    Value: %d", symbol->value);
+        LogInfo("    Size: %d", symbol->size);
+    }
+
+    LogInfo("}} \n");
+}
+
+bool elf_default_is_valid(Elf *elf) {
+    // TODO:
+}
+
 KernelStatus elf_init(Elf *elf, char *data) {
-    elf->operations.parse = elf_default_parse;
+    elf->operations.parse = (ElfOperationParse) elf_default_parse;
+    elf->operations.dump = (ElfOperationDump) elf_default_dump;
+    elf->operations.isValid = (ElfOperationIsValid) elf_default_is_valid;
+    elf->valid = true;
     if (data[0] == 0x7F && data[1] == 0x45 && data[2] == 0x4c && data[3] == 0x46) {
         elf->data = data;
         return OK;
