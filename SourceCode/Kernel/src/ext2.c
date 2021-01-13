@@ -43,8 +43,8 @@ void ext2_recursively_fill_superblock(Ext2FileSystem *ext2FileSystem, Ext2IndexN
                                                                      ext2FileSystem->blockSize);
 
         while (*(uint32_t *) ((uint32_t) dEntry) != 0) {
-            if (strcmp(dEntry->nameCharacters, "..") || strcmp(dEntry->nameCharacters, ".") ||
-                strcmp(dEntry->nameCharacters, "lost+found")) {
+            if (strcmp((char *)dEntry->nameCharacters, "..") || strcmp((char *)dEntry->nameCharacters, ".") ||
+                strcmp((char *)dEntry->nameCharacters, "lost+found")) {
                 // TODO: lost+found
                 // ignore
 
