@@ -9,7 +9,6 @@
 #include "kernel/scheduler.h"
 #include "kernel/thread.h"
 
-extern Thread *currentThread;
 extern Scheduler cfsScheduler;
 
 void semaphore_default_post(Semaphore *semaphore) {
