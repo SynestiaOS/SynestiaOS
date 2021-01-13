@@ -195,7 +195,7 @@ void elf_default_dump(Elf *elf) {
 }
 
 bool elf_default_is_valid(Elf *elf) {
-    // TODO:
+    return elf->valid;
 }
 
 KernelStatus elf_init(Elf *elf, char *data) {
@@ -207,5 +207,6 @@ KernelStatus elf_init(Elf *elf, char *data) {
         elf->data = data;
         return OK;
     }
+    elf->valid = false;
     return ERROR;
 }

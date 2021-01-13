@@ -31,7 +31,7 @@ void mutex_default_acquire(Mutex *mutex) {
         perCpu->rbTree.operations.remove(&perCpu->rbTree, &currentThread->rbNode);
         // 2. switch to the next thread in scheduler
 
-        cfsScheduler.operation.switchNext(&currentThread);
+        cfsScheduler.operation.switchNext(&cfsScheduler);
     }
 
     mutex->spinLock.operations.release(&mutex->spinLock);
