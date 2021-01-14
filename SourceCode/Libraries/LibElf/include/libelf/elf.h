@@ -58,7 +58,7 @@ typedef struct ElfFileHeader {
     uint8_t abiVersion;    // Further specifies the ABI version. Its interpretation depends on the target ABI. Linux kernel
     // (after at least 2.6) has no definition of it[5], so it is ignored for statically-linked
     // executables. In that case, offset and size of EI_PAD are 8.
-    uint8_t pad;             // currently unused, should be filled with zeros.
+    uint8_t pad[7];             // currently unused, should be filled with zeros.
     uint16_t type;           // Identifies object file type.
     uint16_t machine;        // Specifies target instruction set architecture.
     uint32_t originalVersion;// Set to 1 for the original version of ELF.
@@ -187,6 +187,7 @@ typedef struct Elf {
     uint32_t size;
     bool valid;
     uint32_t symbolTableSectionIndex;
+    uint32_t stringTableSectionIndex;
     ElfFileHeader fileHeader;
     ElfProgramHeader programHeader;
     ElfSectionHeader sectionHeader;

@@ -64,7 +64,7 @@ void generic_timer_init(void) {
     timerInterrupt.interruptNumber = 1;
     timerInterrupt.handler = generic_timer_irq_handler;
     timerInterrupt.clearHandler = generic_timer_irq_clear;
-    memset(timerInterrupt.name,0,sizeof(timerInterrupt.name));
-    strcpy(timerInterrupt.name,"generic timer");
+//    memset(timerInterrupt.name,0,sizeof(timerInterrupt.name));
+//    strcpy(timerInterrupt.name,"generic timer");
     genericInterruptManager.operation.registerInterrupt(&genericInterruptManager, timerInterrupt);
 }

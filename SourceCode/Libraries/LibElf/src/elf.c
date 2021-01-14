@@ -130,69 +130,99 @@ KernelStatus elf_default_parse(Elf *elf) {
                  elf_get_target_machine_name(elf->fileHeader.machine));
         return ERROR;
     }
-}
-
-void elf_default_dump(Elf *elf) {
-    elf->operations.parse(elf);
-    LogInfo("ELF (%d) {{\n", elf);
-    LogInfo("    is_valid: %d}\n", elf->operations.isValid(elf));
-
-    if (!elf->operations.isValid(elf)) {
-        LogInfo("}}\n");
-        return;
-    }
-
-    LogInfo("    type:    %s\n", object_file_type_to_string(elf->fileHeader.type));
-    LogInfo("    machine: %s\n", elf_get_target_machine_name(elf->fileHeader.machine));
-    LogInfo("    entry:   %d\n", elf->fileHeader.entry);
-    LogInfo("    shoff:   %d\n", elf->fileHeader.sectionHeaderTableOffset);
-    LogInfo("    shnum:   %d\n", elf->fileHeader.entryNumsInProgramHeaderTable);
-    LogInfo("    phoff:   %d\n", elf->fileHeader.programHeaderTableOffset);
-    LogInfo("    phnum:   %d\n", elf->fileHeader.entryNumsInSectionHeaderTable);
-    LogInfo(" shstrndx:   %d\n", elf->fileHeader.indexOfSectionHeaderTable);
-
-    ElfProgramHeader *programHeader = (ElfProgramHeader *) (elf->data + elf->fileHeader.programHeaderTableOffset);
-    for (uint32_t i = 0; i < elf->fileHeader.entryNumsInProgramHeaderTable; i++) {
-        LogInfo("    Program Header %d: {{\n", i);
-        LogInfo("        type: %d\n", programHeader->type);
-        LogInfo("      offset: %d\n", programHeader->segmentOffset);
-        LogInfo("       flags: %d\n", programHeader->flags);
-        LogInfo("    }}\n");
-        programHeader += sizeof(struct ElfProgramHeader);
-    }
-
 
     for (uint32_t i = 0; i < elf->fileHeader.entryNumsInSectionHeaderTable; i++) {
         ElfSectionHeader *sectionHeader = (struct ElfSectionHeader *) (elf->data +
                                                                        elf->fileHeader.sectionHeaderTableOffset +
                                                                        i * sizeof(ElfSectionHeader));
-        LogInfo("    Section %d: {{\n", i);
-        LogInfo("        name: %d\n", sectionHeader->name);
-        LogInfo("        type: %d\n", sectionHeader->type);
-        LogInfo("      offset: %d\n", sectionHeader->offset);
-        LogInfo("        size: %d\n", sectionHeader->size);
-        LogInfo("        ");
-        LogInfo("    }}\n");
+        if (sectionHeader->type == SHT_SYMTAB) {
+            elf->symbolTableSectionIndex = i;
+        }
+
+        if (sectionHeader->type == SHT_STRTAB) {
+            elf->stringTableSectionIndex = i;
+        }
+    }
+}
+
+void elf_default_dump(Elf *elf) {
+    elf->operations.parse(elf);
+    LogInfo("ELF (%d) {\n", elf);
+    LogInfo("    is_valid: %d\n", elf->operations.isValid(elf));
+
+    if (!elf->operations.isValid(elf)) {
+        LogInfo("}}\n");
+        return;
+    }
+    LogInfo("    arch:       %s\n", elf->fileHeader.arch == 1 ? "32" : "64");
+    LogInfo("    endian:     %s\n", elf->fileHeader.endian == 1 ? "little" : "big");
+    LogInfo("    type:       %s\n", object_file_type_to_string(elf->fileHeader.type));
+    LogInfo("    machine:    %s\n", elf_get_target_machine_name(elf->fileHeader.machine));
+    LogInfo("    entry:      %d\n", elf->fileHeader.entry);
+    LogInfo("    shoff:      %d\n", elf->fileHeader.sectionHeaderTableOffset);
+    LogInfo("    shnum:      %d\n", elf->fileHeader.entryNumsInProgramHeaderTable);
+    LogInfo("    phoff:      %d\n", elf->fileHeader.programHeaderTableOffset);
+    LogInfo("    phnum:      %d\n", elf->fileHeader.entryNumsInSectionHeaderTable);
+    LogInfo("    shstrndx:   %d\n", elf->fileHeader.indexOfSectionHeaderTable);
+
+    for (uint32_t i = 0; i < elf->fileHeader.entryNumsInProgramHeaderTable; i++) {
+        ElfProgramHeader *programHeader = (ElfProgramHeader *) (elf->data + elf->fileHeader.programHeaderTableOffset +
+                                                                i * sizeof(ElfProgramHeader));
+        LogInfo("    Program Header %d: {", i);
+        LogInfo(" type: %d", programHeader->type);
+        LogInfo(", offset: %d", programHeader->segmentOffset);
+        LogInfo(", flags: %d", programHeader->flags);
+        LogInfo(" }\n");
+    }
+
+
+    for (uint32_t i = 1; i < elf->fileHeader.entryNumsInSectionHeaderTable; i++) {
+        ElfSectionHeader *sectionHeader = (struct ElfSectionHeader *) (elf->data +
+                                                                       elf->fileHeader.sectionHeaderTableOffset +
+                                                                       i * sizeof(ElfSectionHeader));
+
+
+        ElfSectionHeader *strSection = (ElfSectionHeader *) (elf->data +
+                                                             elf->fileHeader.sectionHeaderTableOffset +
+                                                             elf->stringTableSectionIndex * sizeof(ElfSectionHeader));
+        char *strData = elf->data + strSection->offset;
+
+        LogInfo("    Section %d: {", i);
+        LogInfo(" name: %s", (char *) (strData + sectionHeader->name));
+        LogInfo(", type: %d", sectionHeader->type);
+        LogInfo(", offset: %d", sectionHeader->offset);
+        LogInfo(", size: %d", sectionHeader->size);
+        LogInfo(" }\n");
 
         if (sectionHeader->type == SHT_SYMTAB) {
             elf->symbolTableSectionIndex = i;
+        }
+
+        if (sectionHeader->type == SHT_STRTAB) {
+            elf->stringTableSectionIndex = i;
         }
     }
 
     ElfSectionHeader *symbolSectionHeader = (ElfSectionHeader *) (elf->data + sizeof(ElfSectionHeader) *
                                                                               elf->symbolTableSectionIndex);
-    LogInfo("Symbol count: %d (table is %d)\n", symbolSectionHeader->entrySize, elf->symbolTableSectionIndex);
+    LogInfo("    Symbol count: %d (table is %d)\n", symbolSectionHeader->entrySize, elf->symbolTableSectionIndex);
 
-//    for (uint32_t i = 0; i < symbolSectionHeader->entrySize; i++) {
-//        Elf32Symbol *symbol = (Elf32Symbol *) (elf->data + symbolSectionHeader->offset + i * (sizeof(Elf32Symbol)));
-//        LogInfo("Symbol %d:\n", i);
-//        LogInfo("    Name: %s\n", symbol->name);
-//        LogInfo("    In section: %d\n", elf->symbolTableSectionIndex);
-//        LogInfo("    Value: %d\n", symbol->value);
-//        LogInfo("    Size: %d\n", symbol->size);
-//    }
+    for (uint32_t i = 0; i < symbolSectionHeader->entrySize; i++) {
+        Elf32Symbol *symbol = (Elf32Symbol *) (elf->data + symbolSectionHeader->offset + i * (sizeof(Elf32Symbol)));
 
-    LogInfo("}} \n");
+        ElfSectionHeader *strSection = (ElfSectionHeader *) (elf->data +
+                                                             elf->fileHeader.sectionHeaderTableOffset +
+                                                             elf->stringTableSectionIndex * sizeof(ElfSectionHeader));
+        char *strData = elf->data + strSection->offset;
+        LogInfo("    Symbol %d: {", i);
+        LogInfo("  Name: %s", (char *) (strData + symbol->name));
+        LogInfo(", In section: %d", elf->symbolTableSectionIndex);
+        LogInfo(", Value: %d", symbol->value);
+        LogInfo(", Size: %d", symbol->size);
+        LogInfo(" }\n");
+    }
+
+    LogInfo("} \n");
 }
 
 bool elf_default_is_valid(Elf *elf) {
