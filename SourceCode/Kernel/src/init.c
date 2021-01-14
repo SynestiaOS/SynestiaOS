@@ -91,7 +91,6 @@ void kernel_main(void) {
         page_allocator_create(&userspacePageAllocator, USER_PHYSICAL_START, USER_PHYSICAL_SIZE);
 
         genericInterruptManager.operation.init(&genericInterruptManager);
-        genericInterruptManager.operation.enableInterrupt(&genericInterruptManager);
 
         vfs_create(&vfs);
         vfs.operations.mount(&vfs, "root", FILESYSTEM_EXT2, (void *) EXT2_ADDRESS);
