@@ -38,14 +38,15 @@ _start:
     cmp r0, #0 // check whether r0==0
     beq _init_cpu0 // init cpu0
 
-    //cmp r0, #1 // check whether r0==1
-    //beq _init_cpu1 // init cpu1
+    cmp r0, #1 // check whether r0==1
+    beq _init_cpu1 // init cpu1
 
-    //cmp r0, #2 // check whether r0==2
-    //beq _init_cpu2 // init cpu2
+    cmp r0, #2 // check whether r0==2
+    beq _init_cpu2 // init cpu2
 
-    //cmp r0, #3 // check whether r0==3
-    //beq _init_cpu3 // init cpu3
+    cmp r0, #3 // check whether r0==3
+    beq _init_cpu3 // init cpu3
+
     ldr pc, =_halt_smp // else, go to _halt_smp, it means only core with id 0,1,2,3 will execute the following code
 
 _init_cpu0:

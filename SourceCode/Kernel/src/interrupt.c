@@ -19,6 +19,7 @@ void interrupt_manager_default_register_tick(InterruptManager *manager, Tick *ti
     } else {
         klist_append(&manager->ticks->node, &tick->node);
     }
+    LogInfo("[Interrupt] tick registered.\n")
 }
 
 void interrupt_manager_default_un_register_tick(InterruptManager *manager, Tick *tick) {

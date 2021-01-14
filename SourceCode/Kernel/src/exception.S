@@ -47,9 +47,7 @@ _reset_cpu0:
     push    {r4, r5, r6, r7, r8, r9}
 
     ldr     r0, =exception_vector_table
-
-    // set vector address.
-    mcr P15, 0, r0, c12, c0, 0
+    mcr     P15, 0, r0, c12, c0, 0
 
     mov     r1, #0x0000
     ldmia   r0!,{r2, r3, r4, r5, r6, r7, r8, r9}
@@ -63,9 +61,7 @@ _reset_cpu1:
     push    {r4, r5, r6, r7, r8, r9}
 
     ldr     r0, =exception_vector_table
-
-    // set vector address.
-    mcr P15, 0, r0, c12, c0, 0
+    mcr     P15, 0, r0, c12, c0, 0
 
     mov     r1, #0x0000
     ldmia   r0!,{r2, r3, r4, r5, r6, r7, r8, r9}
@@ -79,9 +75,7 @@ _reset_cpu2:
     push    {r4, r5, r6, r7, r8, r9}
 
     ldr     r0, =exception_vector_table
-
-    // set vector address.
-    mcr P15, 0, r0, c12, c0, 0
+    mcr     P15, 0, r0, c12, c0, 0
 
     mov     r1, #0x0000
     ldmia   r0!,{r2, r3, r4, r5, r6, r7, r8, r9}
@@ -95,8 +89,6 @@ _reset_cpu3:
     push    {r4, r5, r6, r7, r8, r9}
 
     ldr     r0, =exception_vector_table
-
-    // set vector address.
     mcr P15, 0, r0, c12, c0, 0
 
     mov     r1, #0x0000
