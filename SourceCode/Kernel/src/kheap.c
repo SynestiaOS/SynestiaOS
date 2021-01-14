@@ -77,9 +77,13 @@ void *heap_default_alloc(struct Heap *heap, uint32_t size) {
     return nullptr;
 }
 
+void *heap_default_alloc_aligned_4(struct Heap *heap, uint32_t size) {
+    return heap->operations.allocAligned(heap, size, sizeof(void *));
+}
+
 void *heap_default_alloc_aligned(struct Heap *heap, uint32_t size, uint32_t alignment) {
     uint32_t offset = alignment - 1 + sizeof(void *);
-    void *p1 = heap->operations.alloc(heap, size + offset);
+    void *p1 = heap_default_alloc(heap, size + offset);
     if (p1 == nullptr) {
         return nullptr;
     }
@@ -114,6 +118,7 @@ void *heap_default_realloc(struct Heap *heap, void *ptr, uint32_t size) {
 }
 
 KernelStatus heap_default_free(struct Heap *heap, void *ptr) {
+    LogInfo("[KHeap] want free: %d. \n", ptr);
     // 1. get HeapArea address
     uint32_t address = (uint32_t)(ptr - sizeof(HeapArea));
     HeapArea *currentArea = (HeapArea *) address;
@@ -214,7 +219,7 @@ KernelStatus heap_create(Heap *heap, uint32_t addr, uint32_t size) {
     heap->allocCallback = (HeapAllocCallback) heap_default_alloc_callback;
     heap->freeCallback = (HeapFreeCallback) heap_default_free_callback;
 
-    heap->operations.alloc = (HeapOperationAlloc) heap_default_alloc;
+    heap->operations.alloc = (HeapOperationAlloc) heap_default_alloc_aligned_4;
     heap->operations.allocAligned = (HeapOperationAllocAligned) heap_default_alloc_aligned;
     heap->operations.calloc = (HeapOperationCountAlloc) heap_default_count_alloc;
     heap->operations.realloc = (HeapOperationReAlloc) heap_default_realloc;
