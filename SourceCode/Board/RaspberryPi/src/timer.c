@@ -4,7 +4,6 @@
 #include "kernel/log.h"
 #include "libc/stdlib.h"
 
-
 extern InterruptManager genericInterruptManager;
 
 static timer_registers_t *timer_regs = (timer_registers_t *) SYSTEM_TIMER_BASE;
@@ -23,8 +22,8 @@ void system_timer_init(void) {
     timerInterrupt.interruptNumber = 1;
     timerInterrupt.handler = system_timer_irq_handler;
     timerInterrupt.clearHandler = system_timer_irq_clear;
-    memset(timerInterrupt.name,0,sizeof(timerInterrupt.name));
-    strcpy(timerInterrupt.name,"system timer");
+    memset(timerInterrupt.name, 0, sizeof(timerInterrupt.name));
+    strcpy(timerInterrupt.name, "system timer");
     genericInterruptManager.operation.registerInterrupt(&genericInterruptManager, timerInterrupt);
 }
 
@@ -64,7 +63,7 @@ void generic_timer_init(void) {
     timerInterrupt.interruptNumber = 1;
     timerInterrupt.handler = generic_timer_irq_handler;
     timerInterrupt.clearHandler = generic_timer_irq_clear;
-    memset(timerInterrupt.name,0,sizeof(timerInterrupt.name));
-    strcpy(timerInterrupt.name,"generic timer");
+    memset(timerInterrupt.name, 0, sizeof(timerInterrupt.name));
+    strcpy(timerInterrupt.name, "generic timer");
     genericInterruptManager.operation.registerInterrupt(&genericInterruptManager, timerInterrupt);
 }
