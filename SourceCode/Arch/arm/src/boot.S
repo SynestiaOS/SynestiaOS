@@ -2,15 +2,8 @@
 .globl _start
 
 
-/*
- * Helper macro to enter SVC mode cleanly and mask interrupts. reg is
- * a scratch register for the macro to overwrite.
- *
- * This macro is intended for forcing the CPU into SVC mode at boot time.
- * you cannot return to the original mode.
- */
-	.macro safe_svcmode_maskall reg:req
 
+.macro safe_svcmode_maskall reg:req
 	mrs	\reg , cpsr
 	eor	\reg, \reg, #0x1A		/* test for HYP mode */
 	tst	\reg, #0x1F
@@ -24,8 +17,7 @@
 	.word	0xE160006E			/* eret */
 1:	msr	cpsr_c, \reg
 2:
-
-	.endm
+.endm
 
 _start:
     safe_svcmode_maskall r0

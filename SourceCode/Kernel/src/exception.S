@@ -43,24 +43,27 @@ reset_handler:
 
     ldr pc,=halt_cpu
 
-_reset_cpu0:
-    ldr     sp, =__sys_stack
-    ldr     r0, =__bss_start
-    ldr     r1, =__bss_end
-    bl      memclean // call memclean(r0, r1)
 
-    cps	    #0x13				/* set svc mode */
+.macro safe_svcmode_maskall reg:req
+	mrs	\reg , cpsr
+	eor	\reg, \reg, #0x1A		/* test for HYP mode */
+	tst	\reg, #0x1F
+	bic	\reg , \reg , #0x1F		/* clear mode bits */
+	orr	\reg , \reg , #0xC0 | 0x13	/* mask IRQ/FIQ bits and set SVC mode */
+	bne	1f				/* branch if not HYP mode */
+	orr	\reg, \reg, #0x100		/* mask Abort bit */
+	adr	lr, 2f
+	msr	spsr_cxsf, \reg
+	.word	0xE12EF30E			/* msr ELR_hyp, lr */
+	.word	0xE160006E			/* eret */
+1:	msr	cpsr_c, \reg
+2:
+
+.endm
+
+_reset_cpu0:
+    safe_svcmode_maskall r0
     ldr	    sp, =__svc_stack
-    cps	    #0x11				/* set fiq mode */
-    ldr	    sp, =__fiq_stack
-    cps	    #0x12				/* set irq mode */
-    ldr	    sp, =__irq_stack
-    cps	    #0x17				/* set abort mode */
-    ldr	    sp, =__abort_stack
-    cps	    #0x1B				/* set "undefined" mode */
-    ldr	    sp, =__abort_stack
-    cps	    #0x1F				/* set system mode */
-    ldr	    sp, =__sys_stack
 
     push    {r4, r5, r6, r7, r8, r9}
     ldr     r0, =exception_vector_table
@@ -75,6 +78,7 @@ _reset_cpu0:
     ldr     pc, =_start
 
 _reset_cpu1:
+
     push    {r4, r5, r6, r7, r8, r9}
 
     ldr     r0, =exception_vector_table
