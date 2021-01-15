@@ -15,6 +15,7 @@
 #include "libc/stdlib.h"
 #include "arm/register.h"
 #include "libc/string.h"
+#include "libelf/elf.h"
 
 extern Heap kernelHeap;
 extern PhysicalPageAllocator kernelPageAllocator;
@@ -209,7 +210,6 @@ void thread_init_mm(Thread *thread) {
     thread->memoryStruct.virtualMemory.physicalPageAllocator = &kernelPageAllocator;
     thread->memoryStruct.virtualMemory.pageTable = kernel_vmm_get_page_table();
     thread->memoryStruct.heap = kernelHeap;
-//    memcpy(&thread->memoryStruct.heap, &kernelHeap, sizeof(Heap));
 }
 
 enum KernelStatus thread_init_fds(Thread *thread) {
@@ -231,6 +231,10 @@ void thread_release(Thread *thread) {
     }
 
     kernelHeap.operations.free(&kernelHeap, thread);
+}
+
+KernelStatus thread_default_execute(struct Thread *thread, struct Elf *elf) {
+
 }
 
 Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uint32_t priority, RegisterCPSR cpsr) {
@@ -286,6 +290,7 @@ Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uin
         thread->operations.exit = (ThreadOperationExit) thread_default_exit;
         thread->operations.kill = (ThreadOperationKill) thread_default_kill;
         thread->operations.copy = thread_default_copy;
+        thread->operations.execute = (ThreadOperationExecute) thread_default_execute;
 
         thread_init_mm(thread);
 
@@ -315,9 +320,4 @@ Thread *thread_create_idle_thread(uint32_t cpuNum) {
     strcpy(idleThread->name, itoa(cpuNum, (char *) &idleNameStr, 10));
     LogInfo("[Thread]: Idle thread for CPU '%d' created.\n", cpuNum);
     return idleThread;
-}
-
-KernelStatus thread_reschedule() {
-    // TODO
-    return OK;
 }

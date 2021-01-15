@@ -189,9 +189,6 @@ typedef struct Elf {
     uint32_t symbolTableSectionIndex;
     uint32_t stringTableSectionIndex;
     ElfFileHeader fileHeader;
-    ElfProgramHeader programHeader;
-    ElfSectionHeader sectionHeader;
-
     ElfOperations operations;
 } Elf;
 
