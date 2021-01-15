@@ -6,6 +6,7 @@
 #include "kernel/interrupt.h"
 #include "kernel/log.h"
 #include "arm/vmm.h"
+#include "libc/string.h"
 
 extern InterruptManager genericInterruptManager;
 
@@ -75,4 +76,9 @@ void fast_interrupt_handler(void) {
 
 void interrupt_handler(void) {
     genericInterruptManager.operation.interrupt(&genericInterruptManager);
+}
+
+
+void arch_move_interrupt_table() {
+    memcpy(0, 0x8000, 32);
 }

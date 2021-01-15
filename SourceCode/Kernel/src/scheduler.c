@@ -2,6 +2,7 @@
 // Created by XingfengYang on 2020/6/29.
 //
 
+#include "arm/interrupt.h"
 #include "kernel/ktimer.h"
 #include "kernel/scheduler.h"
 #include "arm/register.h"
@@ -142,6 +143,7 @@ KernelStatus scheduler_default_operation_schedule(struct Scheduler *scheduler) {
     tick_init(&scheduler->schedulerTick, tick, "scheduler tick");
     genericInterruptManager.operation.registerTick(&genericInterruptManager, &scheduler->schedulerTick);
     LogInfo("[Scheduler]: Schd started.\n");
+    arch_move_interrupt_table();
     genericInterruptManager.operation.enableInterrupt(&genericInterruptManager);
     return OK;
 }

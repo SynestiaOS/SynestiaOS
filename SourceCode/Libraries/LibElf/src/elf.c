@@ -151,7 +151,7 @@ void elf_default_dump(Elf *elf) {
     LogInfo("    is_valid: %d\n", elf->operations.isValid(elf));
 
     if (!elf->operations.isValid(elf)) {
-        LogInfo("}}\n");
+        LogInfo("}\n");
         return;
     }
     LogInfo("    arch:       %s\n", elf->fileHeader.arch == 1 ? "32" : "64");
