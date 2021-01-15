@@ -23,7 +23,5 @@ void arch_enable_interrupt();
  */
 void arch_disable_interrupt();
 
-void arch_move_interrupt_table();
-
 
 #endif //SYNESTIAOS_INTERRUPT_H

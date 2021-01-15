@@ -44,8 +44,25 @@ reset_handler:
     ldr pc,=halt_cpu
 
 _reset_cpu0:
-    push    {r4, r5, r6, r7, r8, r9}
+    ldr     sp, =__sys_stack
+    ldr     r0, =__bss_start
+    ldr     r1, =__bss_end
+    bl      memclean // call memclean(r0, r1)
 
+    cps	    #0x13				/* set svc mode */
+    ldr	    sp, =__svc_stack
+    cps	    #0x11				/* set fiq mode */
+    ldr	    sp, =__fiq_stack
+    cps	    #0x12				/* set irq mode */
+    ldr	    sp, =__irq_stack
+    cps	    #0x17				/* set abort mode */
+    ldr	    sp, =__abort_stack
+    cps	    #0x1B				/* set "undefined" mode */
+    ldr	    sp, =__abort_stack
+    cps	    #0x1F				/* set system mode */
+    ldr	    sp, =__sys_stack
+
+    push    {r4, r5, r6, r7, r8, r9}
     ldr     r0, =exception_vector_table
     mcr     P15, 0, r0, c12, c0, 0
 

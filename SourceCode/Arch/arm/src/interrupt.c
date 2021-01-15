@@ -91,8 +91,3 @@ void interrupt_handler(void) {
         }
     }
 }
-
-
-void arch_move_interrupt_table() {
-    memcpy(0, 0x8000, 32);
-}
