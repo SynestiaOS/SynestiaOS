@@ -42,9 +42,6 @@ _start:
     ldr pc, =_halt_smp // else, go to _halt_smp, it means only core with id 0,1,2,3 will execute the following code
 
 _init_cpu0:
-    safe_svcmode_maskall r0
-    ldr sp, =__sys_stack
-
     ldr r0, =__bss_start
     ldr r1, =__bss_end
     bl  memclean // call memclean(r0, r1)
@@ -64,9 +61,6 @@ _init_cpu0:
     b _goto_kernel_main
 
 _init_cpu1:
-    safe_svcmode_maskall r0
-    ldr sp, =__sys_stack-0x8000
-
     mrs r0, cpsr // move coprocessor register cpsr to ARM register r0
 
     bic r0,     #0x1F // set r0[4:0] to bit 0
@@ -94,8 +88,6 @@ _init_cpu1:
     ldr pc, =_goto_kernel_main
 
 _init_cpu2:
-    ldr sp, =__sys_stack-0x8000-0x8000
-
     mrs r0, cpsr // move coprocessor register cpsr to ARM register r0
 
     bic r0,     #0x1F // set r0[4:0] to bit 0
@@ -123,8 +115,6 @@ _init_cpu2:
     ldr pc, =_goto_kernel_main
 
 _init_cpu3:
-    ldr sp, =__sys_stack-0x8000-0x8000-0x8000
-
     mrs r0, cpsr // move coprocessor register cpsr to ARM register r0
 
     bic r0,     #0x1F // set r0[4:0] to bit 0
