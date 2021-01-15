@@ -135,6 +135,7 @@ KernelStatus schd_schedule(void) {
     tick_init(&schedulerTick,tick);
     genericInterruptManager.operation.registerTick(&genericInterruptManager,&schedulerTick);
     LogInfo("[Schd]: Schd started.\n");
+    arch_move_interrupt_table();
     genericInterruptManager.operation.enableInterrupt(&genericInterruptManager);
     return OK;
 }
