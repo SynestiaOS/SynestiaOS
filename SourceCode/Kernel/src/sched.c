@@ -2,6 +2,7 @@
 // Created by XingfengYang on 2020/6/29.
 //
 
+#include "arm/interrupt.h"
 #include "kernel/sched.h"
 #include "arm/register.h"
 #include "kernel/interrupt.h"
