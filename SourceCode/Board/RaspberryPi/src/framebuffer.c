@@ -70,6 +70,9 @@ uint32_t framebuffer_init(void) {
     MailMessage setDepthMailMsg = {.channel = MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, .data = setDepthMail};
     LogInfo("[Framebuffer]: Ready to set depth\n");
     mailbox_call(setDepthMailMsg);
+    if (setDepthMail->property.bitsPerPixel == 0) {
+        LogWarn("[Framebuffer]: Unsupported depth\n");
+    }
     if (setDepthMail->code == CODE_RESPONSE_FAILURE || setDepthMail->property.code == CODE_RESPONSE_FAILURE) {
         LogError("[Framebuffer]: Unable to set depth\n");
     }
