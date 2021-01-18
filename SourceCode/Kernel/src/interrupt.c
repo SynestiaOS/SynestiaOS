@@ -111,7 +111,7 @@ InterruptManager *interrupt_manager_create(InterruptManager *manger) {
     manger->ticks = nullptr;
     manger->operation.disableInterrupt(manger);
 
-    LogInfo("[InterruptManager] init\n")
+    LogInfo("[InterruptMa   nager] init\n")
 
     return manger;
 }

@@ -2,15 +2,8 @@
 .globl _start
 
 
-/*
- * Helper macro to enter SVC mode cleanly and mask interrupts. reg is
- * a scratch register for the macro to overwrite.
- *
- * This macro is intended for forcing the CPU into SVC mode at boot time.
- * you cannot return to the original mode.
- */
-	.macro safe_svcmode_maskall reg:req
 
+.macro safe_svcmode_maskall reg:req
 	mrs	\reg , cpsr
 	eor	\reg, \reg, #0x1A		/* test for HYP mode */
 	tst	\reg, #0x1F
@@ -24,8 +17,7 @@
 	.word	0xE160006E			/* eret */
 1:	msr	cpsr_c, \reg
 2:
-
-	.endm
+.endm
 
 _start:
     safe_svcmode_maskall r0
@@ -50,9 +42,6 @@ _start:
     ldr pc, =_halt_smp // else, go to _halt_smp, it means only core with id 0,1,2,3 will execute the following code
 
 _init_cpu0:
-    safe_svcmode_maskall r0
-    ldr sp, =__sys_stack
-
     ldr r0, =__bss_start
     ldr r1, =__bss_end
     bl  memclean // call memclean(r0, r1)
@@ -72,9 +61,6 @@ _init_cpu0:
     b _goto_kernel_main
 
 _init_cpu1:
-    safe_svcmode_maskall r0
-    ldr sp, =__sys_stack-0x8000
-
     mrs r0, cpsr // move coprocessor register cpsr to ARM register r0
 
     bic r0,     #0x1F // set r0[4:0] to bit 0
@@ -102,8 +88,6 @@ _init_cpu1:
     ldr pc, =_goto_kernel_main
 
 _init_cpu2:
-    ldr sp, =__sys_stack-0x8000-0x8000
-
     mrs r0, cpsr // move coprocessor register cpsr to ARM register r0
 
     bic r0,     #0x1F // set r0[4:0] to bit 0
@@ -131,8 +115,6 @@ _init_cpu2:
     ldr pc, =_goto_kernel_main
 
 _init_cpu3:
-    ldr sp, =__sys_stack-0x8000-0x8000-0x8000
-
     mrs r0, cpsr // move coprocessor register cpsr to ARM register r0
 
     bic r0,     #0x1F // set r0[4:0] to bit 0

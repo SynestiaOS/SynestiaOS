@@ -43,9 +43,29 @@ reset_handler:
 
     ldr pc,=halt_cpu
 
-_reset_cpu0:
-    push    {r4, r5, r6, r7, r8, r9}
 
+.macro safe_svcmode_maskall reg:req
+	mrs	\reg , cpsr
+	eor	\reg, \reg, #0x1A		/* test for HYP mode */
+	tst	\reg, #0x1F
+	bic	\reg , \reg , #0x1F		/* clear mode bits */
+	orr	\reg , \reg , #0xC0 | 0x13	/* mask IRQ/FIQ bits and set SVC mode */
+	bne	1f				/* branch if not HYP mode */
+	orr	\reg, \reg, #0x100		/* mask Abort bit */
+	adr	lr, 2f
+	msr	spsr_cxsf, \reg
+	.word	0xE12EF30E			/* msr ELR_hyp, lr */
+	.word	0xE160006E			/* eret */
+1:	msr	cpsr_c, \reg
+2:
+
+.endm
+
+_reset_cpu0:
+    safe_svcmode_maskall r0
+    ldr	    sp, =__svc_stack
+
+    push    {r4, r5, r6, r7, r8, r9}
     ldr     r0, =exception_vector_table
     mcr     P15, 0, r0, c12, c0, 0
 
@@ -58,6 +78,8 @@ _reset_cpu0:
     ldr     pc, =_start
 
 _reset_cpu1:
+    safe_svcmode_maskall r0
+    ldr r1,=__svc_stack-0x8000
     push    {r4, r5, r6, r7, r8, r9}
 
     ldr     r0, =exception_vector_table
@@ -72,6 +94,8 @@ _reset_cpu1:
     ldr     pc, =_start
 
 _reset_cpu2:
+    safe_svcmode_maskall r0
+    ldr r1,=__svc_stack-0x8000-0x8000
     push    {r4, r5, r6, r7, r8, r9}
 
     ldr     r0, =exception_vector_table
@@ -86,6 +110,8 @@ _reset_cpu2:
     ldr     pc, =_start
 
 _reset_cpu3:
+    safe_svcmode_maskall r0
+    ldr r1,=__svc_stack-0x8000-0x8000-0x8000
     push    {r4, r5, r6, r7, r8, r9}
 
     ldr     r0, =exception_vector_table
