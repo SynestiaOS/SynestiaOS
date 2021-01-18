@@ -26,9 +26,9 @@ uint32_t framebuffer_init(void) {
     setPhysicalDisplayWHMail->property.bufferSize = 8;
     setPhysicalDisplayWHMail->property.code = 0x80000000 + 8;
     setPhysicalDisplayWHMail->property.width = 1024;
-    setPhysicalDisplayWHMail->property.height = 768;
+    setPhysicalDisplayWHMail->property.height = 600;
     MailMessage setPhysicalDisplayWHMailMsg = {.channel = MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC,
-                                               .data = setPhysicalDisplayWHMail};
+            .data = setPhysicalDisplayWHMail};
     mailbox_call(setPhysicalDisplayWHMailMsg);
     if (setPhysicalDisplayWHMail->code == CODE_RESPONSE_FAILURE ||
         setPhysicalDisplayWHMail->property.code == CODE_RESPONSE_FAILURE) {
@@ -45,9 +45,9 @@ uint32_t framebuffer_init(void) {
     setVirtualBufferWHMail->property.bufferSize = 8;
     setVirtualBufferWHMail->property.code = 0x80000000 + 8;
     setVirtualBufferWHMail->property.width = 1024;
-    setVirtualBufferWHMail->property.height = 768;
+    setVirtualBufferWHMail->property.height = 600;
     MailMessage setVirtualBufferWHMailMsg = {.channel = MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC,
-                                             .data = setVirtualBufferWHMail};
+            .data = setVirtualBufferWHMail};
     mailbox_call(setVirtualBufferWHMailMsg);
     if (setVirtualBufferWHMail->code == CODE_RESPONSE_FAILURE ||
         setVirtualBufferWHMail->property.code == CODE_RESPONSE_FAILURE) {
@@ -81,7 +81,7 @@ uint32_t framebuffer_init(void) {
     setVirtualOffsetMail->property.xOffset = 0;
     setVirtualOffsetMail->property.yOffset = 0;
     MailMessage setVirtualOffsetMailMsg = {.channel = MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC,
-                                           .data = setVirtualOffsetMail};
+            .data = setVirtualOffsetMail};
     mailbox_call(setVirtualOffsetMailMsg);
     if (setVirtualOffsetMail->code == CODE_RESPONSE_FAILURE ||
         setVirtualOffsetMail->property.code == CODE_RESPONSE_FAILURE) {
