@@ -30,8 +30,11 @@ void interrupt_manager_default_un_register_tick(InterruptManager *manager, Tick 
 }
 
 void interrupt_manager_default_register(InterruptManager *manager, Interrupt interrupt) {
+    manager->interrupts[interrupt.interruptNumber].interruptNumber = interrupt.interruptNumber;
     manager->interrupts[interrupt.interruptNumber].handler = interrupt.handler;
     manager->interrupts[interrupt.interruptNumber].clearHandler = interrupt.clearHandler;
+    memcpy(manager->interrupts[interrupt.interruptNumber].name, interrupt.name, sizeof(interrupt.name));
+
     manager->registed[interrupt.interruptNumber] = 1;
 
     uint32_t interrupt_no = interrupt.interruptNumber;
@@ -86,7 +89,7 @@ void interrupt_manager_default_tick(InterruptManager *manager) {
 
 void interrupt_manager_default_interrupt(InterruptManager *manager) {
     for (uint32_t interrupt_no = 0; interrupt_no < IRQ_NUMS; interrupt_no++) {
-        if (manager->registed[interrupt_no] /* && synestia_interrupt_pending(interrupt_no)*/) {
+        if (manager->registed[interrupt_no] == 1 /* && synestia_interrupt_pending(interrupt_no)*/) {
             LogInfo("[Interrupt]: interrupt '%s' triggered.\n", manager->interrupts[interrupt_no].name);
             if (manager->interrupts[interrupt_no].clearHandler != nullptr) {
                 manager->interrupts[interrupt_no].clearHandler();
@@ -109,9 +112,10 @@ InterruptManager *interrupt_manager_create(InterruptManager *manger) {
     manger->operation.tick = (InterruptManagerOperationTick) interrupt_manager_default_tick;
 
     manger->ticks = nullptr;
+    memset((char *) manger->registed, 0, IRQ_NUMS * sizeof(uint32_t));
     manger->operation.disableInterrupt(manger);
 
-    LogInfo("[InterruptMa   nager] init\n")
+    LogInfo("[InterruptManager] init\n")
 
     return manger;
 }

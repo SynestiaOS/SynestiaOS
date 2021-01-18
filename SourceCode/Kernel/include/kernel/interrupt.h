@@ -61,7 +61,7 @@ typedef struct InterruptManagerOperation {
 #define IRQ_NUMS 96
 typedef struct InterruptManager {
     Interrupt interrupts[IRQ_NUMS];
-    bool registed[IRQ_NUMS];
+    uint32_t registed[IRQ_NUMS];
     Tick *ticks;
     InterruptManagerOperation operation;
 } InterruptManager;

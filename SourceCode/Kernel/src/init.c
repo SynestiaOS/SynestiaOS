@@ -122,7 +122,7 @@ void kernel_main(void) {
         gpuProcess->cpuAffinity = cpu_number_to_mask(0);
         cfsScheduler.operation.addThread(&cfsScheduler, gpuProcess, 1);
 
-        test_threads_init();
+//        test_threads_init();
 
         cfsScheduler.operation.schedule(&cfsScheduler);
     }
