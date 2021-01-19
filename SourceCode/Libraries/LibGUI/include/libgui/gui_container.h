@@ -21,7 +21,7 @@ typedef struct GUIContainer {
     GUIComponent component;
     Orientation orientation;
     KernelVector children;
-    Gfx2DContext context;
+    GfxSurface surface;
 } GUIContainer;
 
 void gui_container_create(GUIContainer *container);

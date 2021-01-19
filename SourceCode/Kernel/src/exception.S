@@ -125,8 +125,6 @@ _reset_cpu3:
     pop     {r4, r5, r6, r7, r8, r9}
     ldr     pc, =_start
 
-.global  switch_to_signal;
-
 halt_cpu:
     wfi // wait for interrupt coming
     b halt_cpu
@@ -151,9 +149,6 @@ data_abort_isp:
     subs    pc,  lr, #0
     nop
 
-
-.global  cpu_save_context;
-.global  cpu_restore_context;
 .global  cpu_switch_mm;
 
 cpu_switch_mm:
@@ -162,37 +157,54 @@ cpu_switch_mm:
     bx      lr
 
 interrupt_isp:
-    stmfd   sp!, {r0-r12,lr}
+    // store pc (lr), spsr into irq stack
+    sub     lr, lr, #4
+    stmfd   sp!, {lr}
+    mrs     lr, spsr
+    stmfd   sp!, {lr}
+
+    // store common Register
+    msr     cpsr, #0b11011111
+    nop
+    stmfd   sp!, {r0-r12}
+
+    // store spsr, pc (lr), sp into task stack
+    msr     cpsr, #0b11010010
+    nop
+    ldmfd   sp!, {r0} // spsr
+    ldmfd   sp!, {r1} // pc (lr)
+    msr     cpsr, #0b11011111
+    nop
+    stmfd   sp!, {r0} // spsr
+    stmfd   sp!, {r1} // pc (lr)
+    stmfd   sp!, {lr} // lr
+    stmfd   sp!, {sp} // sp
+
+    // update stack pointer
+    mov     r0, sp
+    bl      set_curr_stack
+    // execute schedule
     bl      interrupt_handler
-    bl      schd_switch_context
-    ldmfd   sp!, {r0-r12,lr}
-    subs    pc,  lr, #4
+    // use new task pointer
+    mov     r0, sp
+    bl      get_curr_stack
 
-cpu_save_context: // Thread *thread, uint32_t offsetOfStack
-    // TODO: r0,r1 already modified.
-    stmfd   sp!, {r0-r3}
+    // load sp, spsr, lr from task stack
+    ldmfd   r0!, {sp}
+    add     sp, #64 // have to caculate manually
+    ldmfd   r0!, {lr} // lr
+    ldmfd   r0!, {r1} // pc (lr)
+    ldmfd   r0!, {r2} // spsr
 
-    mov     r3, sp
-    add     r0, r0, r1
+    msr     cpsr, #0b11010010
+    nop
 
-    mrs     r1, spsr
-    stmfd   sp!, {r1}
-    stmfd   sp!, {pc}
-    stmfd   sp!, {r4-r12,lr}
-
-    str     sp, [r0]
-    mov     sp, r3
-    bx      lr
-
-cpu_restore_context: // Thread *thread, uint32_t offsetOfStack
-    add     r0, r0, r1
-    ldr     r2, [r0]
-    mov     sp, r2
-
-    ldmfd   sp!, {r4-r12, lr}
-    ldmfd   sp!, {r3}
-    ldmfd   sp!, {r3}   // cpsr
-    msr     spsr, r3
-    ldmfd   sp!, {r0-r3}
-    bx      lr
-
+    // load spsr of task
+    msr     spsr, r2
+    // store lr into irq stack
+    stmfd   sp!, {r1} // pc (lr)
+    mov     lr, r0
+    ldmfd   lr!, {r0-r12}
+    ldmfd   sp!, {lr}
+    subs    pc,  lr, #0
+    nop

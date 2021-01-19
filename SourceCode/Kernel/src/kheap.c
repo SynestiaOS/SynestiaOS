@@ -5,11 +5,12 @@
 #include "kernel/kheap.h"
 #include "arm/page.h"
 #include "kernel/log.h"
-#include "kernel/sched.h"
+#include "kernel/scheduler.h"
 #include "libc/stdlib.h"
 #include "libc/string.h"
 
 extern PhysicalPageAllocator kernelPageAllocator;
+extern Scheduler cfsScheduler;
 
 void heap_default_alloc_callback(struct Heap *heap, void *ptr, uint32_t size) {
     heap->statistics.allocatedSize += size;
@@ -185,7 +186,7 @@ KernelStatus heap_create(Heap *heap, uint32_t addr, uint32_t size) {
     LogInfo("[KHeap] at: %d. \n", heap->address);
 
     PhysicalPageAllocator *physicalPageAllocator;
-    Thread *currThread = schd_get_current_thread();
+    Thread *currThread = cfsScheduler.operation.getCurrentThread(&cfsScheduler);
     if (currThread == nullptr) {
         physicalPageAllocator = &kernelPageAllocator;
     } else {

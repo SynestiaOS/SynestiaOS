@@ -40,7 +40,7 @@ void gui_button_create(GUIButton *button) {
     button->component.foreground.g = 0xFF;
     button->component.foreground.b = 0xFF;
 
-    gfx2d_create_context(&button->context, 1024, 768, GFX2D_BUFFER);
+    gfx2d_create_surface(&button->surface, 1024, 768, GFX2D_BUFFER);
 }
 
 void gui_button_init(GUIButton *button, uint32_t x, uint32_t y, const char *text) {
@@ -79,7 +79,7 @@ void gui_button_draw(GUIButton *button) {
     if (button->component.visable) {
         // 1. draw_background
         if (button->component.colorMode == RGB) {
-            button->context.operations.fillRect(&button->context,
+            button->surface.operations.fillRect(&button->surface,
                                                 button->component.position.x + button->component.margin.left,
                                                 button->component.position.y + button->component.margin.top,
                                                 button->component.position.x + button->component.size.width,
@@ -104,7 +104,7 @@ void gui_button_draw(GUIButton *button) {
         uint32_t column = 0;
         uint32_t row = 0;
         while (*tmp) {
-            button->context.operations.drawAscii(&button->context,
+            button->surface.operations.drawAscii(&button->surface,
                                                  button->component.position.x + xOffset * button->fontSize +
                                                  button->component.padding.left,
                                                  button->component.position.y + row * button->fontSize +

@@ -12,52 +12,52 @@
 #define FLUENT_PRIMARY_FORE_COLOR 0xFFFFFF
 
 
-typedef void (*Gfx2DContextOperationDrawPixelColor)(struct Gfx2DContext *context, uint32_t x, uint32_t y, uint32_t c);
+typedef void (*GfxSurfaceOperationDrawPixelColor)(struct GfxSurface *surface, uint32_t x, uint32_t y, uint32_t c);
 
-typedef void (*Gfx2DContextOperationDrawPixel)(struct Gfx2DContext *context, int x, int y, uint32_t c);
+typedef void (*GfxSurfaceOperationDrawPixel)(struct GfxSurface *surface, int x, int y, uint32_t c);
 
-typedef void (*Gfx2DContextOperationDrawRect)(struct Gfx2DContext *context, int x1, int y1, int x2, int y2, uint32_t c);
+typedef void (*GfxSurfaceOperationDrawRect)(struct GfxSurface *surface, int x1, int y1, int x2, int y2, uint32_t c);
 
-typedef void (*Gfx2DContextOperationFillRect)(struct Gfx2DContext *context, int x1, int y1, int x2, int y2, uint32_t c);
+typedef void (*GfxSurfaceOperationFillRect)(struct GfxSurface *surface, int x1, int y1, int x2, int y2, uint32_t c);
 
-typedef void (*Gfx2DContextOperationDrawLine)(struct Gfx2DContext *context, int x1, int y1, int x2, int y2, uint32_t c);
+typedef void (*GfxSurfaceOperationDrawLine)(struct GfxSurface *surface, int x1, int y1, int x2, int y2, uint32_t c);
 
-typedef void (*Gfx2DContextOperationDrawTriangle)(struct Gfx2DContext *context, int x1, int y1, int x2, int y2, int x3,
+typedef void (*GfxSurfaceOperationDrawTriangle)(struct GfxSurface *surface, int x1, int y1, int x2, int y2, int x3,
                                                   int y3, uint32_t c);
 
-typedef void (*Gfx2DContextOperationFillTriangle)(struct Gfx2DContext *context, int x1, int y1, int x2, int y2, int x3,
+typedef void (*GfxSurfaceOperationFillTriangle)(struct GfxSurface *surface, int x1, int y1, int x2, int y2, int x3,
                                                   int y3, uint32_t c);
 
-typedef void (*Gfx2DContextOperationDrawCircle)(struct Gfx2DContext *context, int xc, int yc, int r, uint32_t c);
+typedef void (*GfxSurfaceOperationDrawCircle)(struct GfxSurface *surface, int xc, int yc, int r, uint32_t c);
 
-typedef void (*Gfx2DContextOperationFillCircle)(struct Gfx2DContext *context, int xc, int yc, int r, uint32_t c);
+typedef void (*GfxSurfaceOperationFillCircle)(struct GfxSurface *surface, int xc, int yc, int r, uint32_t c);
 
-typedef void (*Gfx2DContextOperationDrawAscii)(struct Gfx2DContext *context, int x, int y, uint8_t ch, uint32_t color);
+typedef void (*GfxSurfaceOperationDrawAscii)(struct GfxSurface *surface, int x, int y, uint8_t ch, uint32_t color);
 
-typedef void (*Gfx2DContextOperationDrawBitmap)(struct Gfx2DContext *context, int x, int y, int width, int height,
+typedef void (*GfxSurfaceOperationDrawBitmap)(struct GfxSurface *surface, int x, int y, int width, int height,
                                                 uint32_t *bitmap);
 
-typedef struct Gfx2DContextOperations {
-    Gfx2DContextOperationDrawPixel drawPixel;
-    Gfx2DContextOperationDrawPixelColor drawPixelColor;
-    Gfx2DContextOperationDrawRect drawRect;
-    Gfx2DContextOperationFillRect fillRect;
-    Gfx2DContextOperationDrawLine drawLine;
-    Gfx2DContextOperationDrawTriangle drawTriangle;
-    Gfx2DContextOperationFillTriangle fillTriangle;
-    Gfx2DContextOperationDrawCircle drawCircle;
-    Gfx2DContextOperationFillCircle fillCircle;
-    Gfx2DContextOperationDrawAscii drawAscii;
-    Gfx2DContextOperationDrawBitmap drawBitmap;
-} Gfx2DContextOperations;
+typedef struct GfxSurfaceOperations {
+    GfxSurfaceOperationDrawPixel drawPixel;
+    GfxSurfaceOperationDrawPixelColor drawPixelColor;
+    GfxSurfaceOperationDrawRect drawRect;
+    GfxSurfaceOperationFillRect fillRect;
+    GfxSurfaceOperationDrawLine drawLine;
+    GfxSurfaceOperationDrawTriangle drawTriangle;
+    GfxSurfaceOperationFillTriangle fillTriangle;
+    GfxSurfaceOperationDrawCircle drawCircle;
+    GfxSurfaceOperationFillCircle fillCircle;
+    GfxSurfaceOperationDrawAscii drawAscii;
+    GfxSurfaceOperationDrawBitmap drawBitmap;
+} GfxSurfaceOperations;
 
-typedef struct Gfx2DContext {
+typedef struct GfxSurface {
     uint32_t width;
     uint32_t height;
-    Gfx2DContextOperations operations;
+    GfxSurfaceOperations operations;
     uint32_t *buffer;
-} Gfx2DContext;
+} GfxSurface;
 
-Gfx2DContext *gfx2d_create_context(Gfx2DContext *context, uint32_t width, uint32_t height, uint32_t *buffer);
+GfxSurface *gfx2d_create_surface(GfxSurface *surface, uint32_t width, uint32_t height, uint32_t *buffer);
 
 #endif//__LIBRARY_LIBGFX_GL2D_H__

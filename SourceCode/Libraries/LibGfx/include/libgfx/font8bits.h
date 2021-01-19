@@ -9,16 +9,6 @@
 
 uint8_t *font_8_bits(int c);
 
-uint32_t *logo_32_bits();
-
-uint32_t *bootLogo();
-
-uint8_t *logo_minize_8_bits();
-
-uint8_t *logo_max_8_bits();
-
-uint8_t *logo_close_8_bits();
-
 uint16_t *win_close_16_bits();
 
 uint16_t *win_min_16_bits();

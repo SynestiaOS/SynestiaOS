@@ -20,12 +20,42 @@ void interrupt_controller_init(void) {
     LogInfo("[Interrupt]: interrupt init\n");
 }
 
-void interrupt_controller_register(uint32_t interrupt_no){
+void interrupt_controller_enable(uint32_t interrupt_no) {
     if (IRQ_IS_BASIC(interrupt_no)) {
         getIRQController()->Enable_Basic_IRQs |= (1 << (interrupt_no - 64));
     } else if (IRQ_IS_GPU2(interrupt_no)) {
         getIRQController()->Enable_IRQs_2 |= (1 << (interrupt_no - 32));
     } else if (IRQ_IS_GPU1(interrupt_no)) {
         getIRQController()->Enable_IRQs_1 |= (1 << (interrupt_no));
+    }
+}
+
+void interrupt_controller_disable(uint32_t interrupt_no) {
+    if (IRQ_IS_BASIC(interrupt_no)) {
+        getIRQController()->Disable_Basic_IRQs |= (1 << (interrupt_no - 64));
+    } else if (IRQ_IS_GPU2(interrupt_no)) {
+        getIRQController()->Disable_IRQs_2 |= (1 << (interrupt_no - 32));
+    } else if (IRQ_IS_GPU1(interrupt_no)) {
+        getIRQController()->Disable_IRQs_1 |= (1 << (interrupt_no));
+    }
+}
+
+void interrupt_controller_clear(uint32_t interrupt_no) {
+    if (IRQ_IS_BASIC(interrupt_no)) {
+        getIRQController()->IRQ_basic_pending &= ~(1 << (interrupt_no - 64));
+    } else if (IRQ_IS_GPU2(interrupt_no)) {
+        getIRQController()->IRQ_pending_2 &= ~(1 << (interrupt_no - 32));
+    } else if (IRQ_IS_GPU1(interrupt_no)) {
+        getIRQController()->IRQ_pending_1 &= ~(1 << (interrupt_no));
+    }
+}
+
+bool interrupt_controller_pending(uint32_t interrupt_no) {
+    if (IRQ_IS_BASIC(interrupt_no)) {
+        return getIRQController()->IRQ_basic_pending & (1 << (interrupt_no - 64));
+    } else if (IRQ_IS_GPU2(interrupt_no)) {
+        return getIRQController()->IRQ_pending_2 & (1 << (interrupt_no - 32));
+    } else if (IRQ_IS_GPU1(interrupt_no)) {
+        return getIRQController()->IRQ_pending_1 & (1 << (interrupt_no));
     }
 }

@@ -26,4 +26,6 @@ ListNode *klist_get_head(ListNode *node);
 
 uint32_t klist_size(ListNode *node);
 
+void klist_iter(ListNode *list, void (*iterFunc)(ListNode *));
+
 #endif//__KERNEL_LIST_H__

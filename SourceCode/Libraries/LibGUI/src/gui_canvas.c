@@ -50,7 +50,7 @@ void gui_canvas_create(GUICanvas *canvas) {
         LogError("[GUI]: canvas create failed, unable to allocate buffer memory\n");
     }
 
-    gfx2d_create_context(&canvas->context, canvas->component.size.width, canvas->component.size.height, canvas->buffer);
+    gfx2d_create_surface(&canvas->surface, canvas->component.size.width, canvas->component.size.height, canvas->buffer);
 }
 
 void gui_canvas_init(GUICanvas *canvas, uint32_t x, uint32_t y) {
@@ -67,70 +67,70 @@ void gui_canvas_draw_pixel(GUICanvas *canvas, int x, int y, uint32_t c) {
         return;
     }
 
-    canvas->context.operations.drawPixel(&canvas->context, canvas->component.position.x + x,
+    canvas->surface.operations.drawPixel(&canvas->surface, canvas->component.position.x + x,
                                          canvas->component.position.y + y, c);
 }
 
 void gui_canvas_draw_rect(GUICanvas *canvas, int x1, int y1, int x2, int y2, uint32_t c) {
-    canvas->context.operations.drawRect(&canvas->context, canvas->component.position.x + x1,
+    canvas->surface.operations.drawRect(&canvas->surface, canvas->component.position.x + x1,
                                         canvas->component.position.y + y1,
                                         canvas->component.position.x + x2, canvas->component.position.y + y2, c);
 }
 
 void gui_canvas_fill_rect(GUICanvas *canvas, int x1, int y1, int x2, int y2, uint32_t c) {
-    canvas->context.operations.fillRect(&canvas->context, canvas->component.position.x + x1,
+    canvas->surface.operations.fillRect(&canvas->surface, canvas->component.position.x + x1,
                                         canvas->component.position.y + y1,
                                         canvas->component.position.x + x2, canvas->component.position.y + y2, c);
 }
 
 void gui_canvas_draw_line(GUICanvas *canvas, int x1, int y1, int x2, int y2, uint32_t c) {
-    canvas->context.operations.drawLine(&canvas->context, canvas->component.position.x + x1,
+    canvas->surface.operations.drawLine(&canvas->surface, canvas->component.position.x + x1,
                                         canvas->component.position.y + y1,
                                         canvas->component.position.x + x2, canvas->component.position.y + y2, c);
 }
 
 void gui_canvas_draw_triangle(GUICanvas *canvas, int x1, int y1, int x2, int y2, int x3, int y3, uint32_t c) {
-    canvas->context.operations.drawTriangle(&canvas->context, canvas->component.position.x + x1,
+    canvas->surface.operations.drawTriangle(&canvas->surface, canvas->component.position.x + x1,
                                             canvas->component.position.y + y1,
                                             canvas->component.position.x + x2, canvas->component.position.y + y2,
                                             canvas->component.position.x + x3, canvas->component.position.y + y3, c);
 }
 
 void gui_canvas_fill_triangle(GUICanvas *canvas, int x1, int y1, int x2, int y2, int x3, int y3, uint32_t c) {
-    canvas->context.operations.fillTriangle(&canvas->context, canvas->component.position.x + x1,
+    canvas->surface.operations.fillTriangle(&canvas->surface, canvas->component.position.x + x1,
                                             canvas->component.position.y + y1,
                                             canvas->component.position.x + x2, canvas->component.position.y + y2,
                                             canvas->component.position.x + x3, canvas->component.position.y + y3, c);
 }
 
 void gui_canvas_draw_circle(GUICanvas *canvas, int xc, int yc, int r, uint32_t c) {
-    canvas->context.operations.drawCircle(&canvas->context, canvas->component.position.x + xc,
+    canvas->surface.operations.drawCircle(&canvas->surface, canvas->component.position.x + xc,
                                           canvas->component.position.y + yc, r, c);
 }
 
 void gui_canvas_fill_circle(GUICanvas *canvas, int xc, int yc, int r, uint32_t c) {
-    canvas->context.operations.fillCircle(&canvas->context, canvas->component.position.x + xc,
+    canvas->surface.operations.fillCircle(&canvas->surface, canvas->component.position.x + xc,
                                           canvas->component.position.y + yc, r, c);
 }
 
 void gui_canvas_draw_ascii(GUICanvas *canvas, int x, int y, uint8_t ch, uint32_t color) {
-    canvas->context.operations.drawAscii(&canvas->context, canvas->component.position.x + x,
+    canvas->surface.operations.drawAscii(&canvas->surface, canvas->component.position.x + x,
                                          canvas->component.position.y + y, ch, color);
 }
 
 void gui_canvas_draw_bitmap(GUICanvas *canvas, int x, int y, int width, int height, uint32_t *buffer) {
-    canvas->context.operations.drawBitmap(&canvas->context, canvas->component.position.x + x,
+    canvas->surface.operations.drawBitmap(&canvas->surface, canvas->component.position.x + x,
                                           canvas->component.position.y + y, width, height, buffer);
 }
 
 void gui_canvas_clear(GUICanvas *canvas, uint32_t color) {
-    canvas->context.operations.fillRect(&canvas->context, 0, 0, canvas->component.size.width,
+    canvas->surface.operations.fillRect(&canvas->surface, 0, 0, canvas->component.size.width,
                                         canvas->component.size.height, color);
 }
 
 void gui_canvas_draw(GUICanvas *canvas) {
-    Gfx2DContext context = {.width = 1024, .height = 768, .buffer = GFX2D_BUFFER};
-    canvas->context.operations.drawBitmap(&context, canvas->component.position.x, canvas->component.position.y,
+    GfxSurface surface = {.width = 1024, .height = 768, .buffer = GFX2D_BUFFER};
+    canvas->surface.operations.drawBitmap(&surface, canvas->component.position.x, canvas->component.position.y,
                                           canvas->component.size.width,
-                                          canvas->component.size.height, canvas->context.buffer);
+                                          canvas->component.size.height, canvas->surface.buffer);
 }

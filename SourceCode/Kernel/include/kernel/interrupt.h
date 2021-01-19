@@ -5,14 +5,17 @@
 #include "libc/stdbool.h"
 #include "list.h"
 
+#define INTERRUPT_NAME_LENGTH 32
+
 typedef void (*TickHandler)(void);
 
 typedef struct Tick {
+    char name[INTERRUPT_NAME_LENGTH];
     TickHandler handler;
     ListNode node;
 } Tick;
 
-Tick *tick_init(Tick *tick, TickHandler handler);
+Tick *tick_init(Tick *tick, TickHandler handler, const char *name);
 
 typedef void (*InterruptHandler)(void);
 
@@ -22,6 +25,7 @@ typedef struct Interrupt {
     uint32_t interruptNumber;
     InterruptHandler handler;
     InterruptClearHandler clearHandler;
+    char name[INTERRUPT_NAME_LENGTH];
 } Interrupt;
 
 typedef void (*InterruptManagerOperationRegisterTick)(struct InterruptManager *manager, Tick *tick);
@@ -40,6 +44,8 @@ typedef void (*InterruptManagerOperationInit)(struct InterruptManager *manager);
 
 typedef void (*InterruptManagerOperationTick)(struct InterruptManager *manager);
 
+typedef void (*InterruptManagerOperationInterrupt)(struct InterruptManager *manager);
+
 typedef struct InterruptManagerOperation {
     InterruptManagerOperationInit init;
     InterruptManagerOperationRegister registerInterrupt;
@@ -49,12 +55,13 @@ typedef struct InterruptManagerOperation {
     InterruptManagerOperationEnableInterrupt enableInterrupt;
     InterruptManagerOperationDisableInterrupt disableInterrupt;
     InterruptManagerOperationTick tick;
+    InterruptManagerOperationInterrupt interrupt;
 } InterruptManagerOperation;
 
 #define IRQ_NUMS 96
 typedef struct InterruptManager {
     Interrupt interrupts[IRQ_NUMS];
-    bool registed[IRQ_NUMS];
+    uint32_t registed[IRQ_NUMS];
     Tick *ticks;
     InterruptManagerOperation operation;
 } InterruptManager;

@@ -12,7 +12,7 @@ typedef struct GUIButton {
     GUIComponent component;
     char *text;
     uint32_t fontSize;
-    Gfx2DContext context;
+    GfxSurface surface;
 } GUIButton;
 
 void gui_button_create(GUIButton *button);
