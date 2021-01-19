@@ -25,6 +25,7 @@ void heap_default_free_callback(struct Heap *heap, void *ptr) {
 
 void *heap_default_alloc(struct Heap *heap, uint32_t size) {
     uint32_t allocSize = size + sizeof(HeapArea);
+    uint32_t offset = sizeof(void *) - (size % sizeof(void *)); 
 
     if (heap->freeListHead == nullptr) {
         LogError("[KHeap]: failed to get freeListHead.\n");
@@ -35,10 +36,10 @@ void *heap_default_alloc(struct Heap *heap, uint32_t size) {
     while (currentFreeArea != nullptr) {
         // if the size of the free block can contain the request size and a rest HeapArea,
         // then just use it, and split a new block
-        if (currentFreeArea->size >= allocSize) {
+        if (currentFreeArea->size >= (allocSize + offset)) {
             // 1. split a rest free HeapArea
-            uint32_t newFreeHeapAreaAddress = (uint32_t) (void *) currentFreeArea + sizeof(HeapArea) + size;
-            uint32_t restSize = currentFreeArea->size - allocSize;
+            uint32_t newFreeHeapAreaAddress = (uint32_t) (void *) currentFreeArea + sizeof(HeapArea) + size + offset;
+            uint32_t restSize = currentFreeArea->size - allocSize - offset;
 
             HeapArea *newFreeArea = (HeapArea *) newFreeHeapAreaAddress;
             newFreeArea->size = restSize;
