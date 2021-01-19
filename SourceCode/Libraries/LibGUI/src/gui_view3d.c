@@ -49,7 +49,7 @@ void gui_view3d_create(GUIView3D *view) {
         LogError("[GUI]: canvas create failed, unable to allocate buffer memory\n");
     }
 
-    gfx2d_create_context(&view->context, 1024, 768, GFX2D_BUFFER);
+    gfx2d_create_surface(&view->surface, 1024, 768, GFX2D_BUFFER);
 }
 
 void gui_view3d_init(GUIView3D *view, uint32_t x, uint32_t y) {
@@ -64,7 +64,7 @@ void gui_view3d_init(GUIView3D *view, uint32_t x, uint32_t y) {
 }
 
 void gui_view3d_draw(GUIView3D *view) {
-    view->context.operations.drawBitmap(&view->context, view->component.position.x, view->component.position.y,
+    view->surface.operations.drawBitmap(&view->surface, view->component.position.x, view->component.position.y,
                                         view->component.size.width,
                                         view->component.size.height, view->buffer);
 }

@@ -52,7 +52,7 @@ void gui_container_create(GUIContainer *container) {
         LogError("[GUI]: container create failed, unable to allocate children vector\n");
     }
 
-    gfx2d_create_context(&container->context, 1024, 768, GFX2D_BUFFER);
+    gfx2d_create_surface(&container->surface, 1024, 768, GFX2D_BUFFER);
 }
 
 void gui_container_init(GUIContainer *container, uint32_t x, uint32_t y, Orientation orientation) {
@@ -202,7 +202,7 @@ void gui_container_draw(GUIContainer *container) {
     if (container->component.visable) {
         // 1. draw_background
         if (container->component.colorMode == RGB) {
-            container->context.operations.fillRect(&container->context, container->component.position.x,
+            container->surface.operations.fillRect(&container->surface, container->component.position.x,
                                                    container->component.position.y,
                                                    container->component.position.x + container->component.size.width,
                                                    container->component.position.y + container->component.size.height,

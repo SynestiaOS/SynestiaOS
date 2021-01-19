@@ -13,7 +13,7 @@ typedef struct GUILabel {
     GUIComponent component;
     char text[0xFF];
     uint32_t fontSize;
-    Gfx2DContext context;
+    GfxSurface surface;
 } GUILabel;
 
 void gui_label_create(GUILabel *label);

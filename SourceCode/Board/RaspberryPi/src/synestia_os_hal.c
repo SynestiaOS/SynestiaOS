@@ -20,8 +20,21 @@ void synestia_init_timer(void) {
     LogInfo("[Device]: generic_timer_init complete.\n");
 }
 
-void synestia_interrupt_register(uint32_t no){
-    interrupt_controller_register(no);
+
+void synestia_interrupt_enable(uint32_t no) {
+    interrupt_controller_enable(no);
+}
+
+bool synestia_interrupt_pending(uint32_t no) {
+    return interrupt_controller_pending(no);
+}
+
+bool synestia_interrupt_clear(uint32_t no) {
+    interrupt_controller_clear(no);
+}
+
+void synestia_interrupt_disable(uint32_t no) {
+    interrupt_controller_disable(no);
 }
 
 void synestia_init_interrupt(void) {

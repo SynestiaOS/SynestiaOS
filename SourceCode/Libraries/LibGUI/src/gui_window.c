@@ -75,7 +75,7 @@ void gui_window_create(GUIWindow *window) {
         LogError("[GUI]: window create failed, unable to allocate children vector\n");
     }
 
-    gfx2d_create_context(&window->context, 1024, 768, GFX2D_BUFFER);
+    gfx2d_create_surface(&window->surface, 1024, 768, GFX2D_BUFFER);
 }
 
 void gui_window_init(GUIWindow *window, uint32_t x, uint32_t y, const char *title) {
@@ -96,7 +96,7 @@ void gui_window_draw(GUIWindow *window) {
         if (window->isWindowNeedUpdate) {
             if (window->component.colorMode == RGB) {
                 // 1. draw_background
-                window->context.operations.fillRect(&window->context, window->component.position.x,
+                window->surface.operations.fillRect(&window->surface, window->component.position.x,
                                                     window->component.position.y,
                                                     window->component.position.x + window->component.size.width,
                                                     window->component.position.y + window->component.size.height +
@@ -108,7 +108,7 @@ void gui_window_draw(GUIWindow *window) {
             }
 
             // 2. draw header
-            window->context.operations.fillRect(&window->context, window->component.position.x,
+            window->surface.operations.fillRect(&window->surface, window->component.position.x,
                                                 window->component.position.y,
                                                 window->component.position.x + window->component.size.width,
                                                 window->component.position.y + DEFAULT_WINDOW_HEADER_HEIGHT,
@@ -119,7 +119,7 @@ void gui_window_draw(GUIWindow *window) {
             for (uint32_t i = 0; i < 16; i++) {
                 for (uint32_t j = 0; j < 16; j++) {
                     if ((bitmap[i] & (0x1 << j)) > 0) {
-                        window->context.operations.drawPixelColor(&window->context,
+                        window->surface.operations.drawPixelColor(&window->surface,
                                                                   window->component.position.x + j + DEFAULT_PADDING,
                                                                   window->component.position.y + i + DEFAULT_PADDING +
                                                                   4,
@@ -134,7 +134,7 @@ void gui_window_draw(GUIWindow *window) {
             char *tmp = window->title;
             uint32_t xOffset = 2;
             while (*tmp) {
-                window->context.operations.drawAscii(&window->context,
+                window->surface.operations.drawAscii(&window->surface,
                                                      window->component.position.x + xOffset * DEFAULT_FONT_SIZE +
                                                      2 * DEFAULT_PADDING,
                                                      window->component.position.y + 2 * DEFAULT_PADDING, *tmp,
@@ -149,7 +149,7 @@ void gui_window_draw(GUIWindow *window) {
             for (uint32_t i = 0; i < 16; i++) {
                 for (uint32_t j = 0; j < 16; j++) {
                     if ((minBitmap[i] & (0x1 << j)) > 0) {
-                        window->context.operations.drawPixelColor(&window->context, window->component.position.x + j +
+                        window->surface.operations.drawPixelColor(&window->surface, window->component.position.x + j +
                                                                                     window->component.size.width -
                                                                                     24 * 3,
                                                                   window->component.position.y + i + DEFAULT_PADDING +
@@ -165,7 +165,7 @@ void gui_window_draw(GUIWindow *window) {
             for (uint32_t i = 0; i < 16; i++) {
                 for (uint32_t j = 0; j < 16; j++) {
                     if ((maxBitmap[i] & (0x1 << j)) > 0) {
-                        window->context.operations.drawPixelColor(&window->context, window->component.position.x + j +
+                        window->surface.operations.drawPixelColor(&window->surface, window->component.position.x + j +
                                                                                     window->component.size.width -
                                                                                     24 * 2,
                                                                   window->component.position.y + i + DEFAULT_PADDING +
@@ -181,7 +181,7 @@ void gui_window_draw(GUIWindow *window) {
             for (uint32_t i = 0; i < 16; i++) {
                 for (uint32_t j = 0; j < 16; j++) {
                     if ((closeBitmap[i] & (0x1 << j)) > 0) {
-                        window->context.operations.drawPixelColor(&window->context, window->component.position.x + j +
+                        window->surface.operations.drawPixelColor(&window->surface, window->component.position.x + j +
                                                                                     window->component.size.width - 24,
                                                                   window->component.position.y + i + DEFAULT_PADDING +
                                                                   4,
@@ -202,7 +202,7 @@ void gui_window_draw(GUIWindow *window) {
                 if (alpha > 0xFF) {
                     alpha = 0xFF;
                 }
-                window->context.operations.fillRect(&window->context, window->component.position.x - i,
+                window->surface.operations.fillRect(&window->surface, window->component.position.x - i,
                                                     window->component.position.y - i,
                                                     window->component.position.x - (i - 1),
                                                     window->component.position.y + window->component.size.height +
@@ -218,7 +218,7 @@ void gui_window_draw(GUIWindow *window) {
                 if (alpha > 0xFF) {
                     alpha = 0xFF;
                 }
-                window->context.operations.fillRect(&window->context,
+                window->surface.operations.fillRect(&window->surface,
                                                     window->component.position.x + window->component.size.width + i,
                                                     window->component.position.y - i,
                                                     window->component.position.x + window->component.size.width + i + 1,
@@ -235,7 +235,7 @@ void gui_window_draw(GUIWindow *window) {
                 if (alpha > 0xFF) {
                     alpha = 0xFF;
                 }
-                window->context.operations.fillRect(&window->context, window->component.position.x - i,
+                window->surface.operations.fillRect(&window->surface, window->component.position.x - i,
                                                     window->component.position.y + window->component.size.height +
                                                     DEFAULT_WINDOW_HEADER_HEIGHT + i,
                                                     window->component.position.x + window->component.size.width + i,
@@ -252,7 +252,7 @@ void gui_window_draw(GUIWindow *window) {
                 if (alpha > 0xFF) {
                     alpha = 0xFF;
                 }
-                window->context.operations.fillRect(&window->context, window->component.position.x - i,
+                window->surface.operations.fillRect(&window->surface, window->component.position.x - i,
                                                     window->component.position.y - i,
                                                     window->component.position.x + window->component.size.width + i,
                                                     window->component.position.y - (i - 1),

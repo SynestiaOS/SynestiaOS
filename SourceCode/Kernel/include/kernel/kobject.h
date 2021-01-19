@@ -15,7 +15,6 @@ typedef enum KernelObjectType {
     KERNEL_OBJECT_FILE_DESCRIPTOR,
 } KernelObjectType;
 
-
 typedef enum KernelObjectStatus {
     USING,
     FREE,

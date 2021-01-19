@@ -2,6 +2,7 @@
 // Created by XingfengYang on 2020/6/26.
 //
 
+#include "kernel/ktimer.h"
 #include "kernel/thread.h"
 #include "arm/kernel_vmm.h"
 #include "kernel/kheap.h"
@@ -14,10 +15,12 @@
 #include "libc/stdlib.h"
 #include "arm/register.h"
 #include "libc/string.h"
+#include "libelf/elf.h"
 
 extern Heap kernelHeap;
 extern PhysicalPageAllocator kernelPageAllocator;
 extern PhysicalPageAllocator userspacePageAllocator;
+extern KernelTimerManager kernelTimerManager;
 
 extern uint64_t ktimer_sys_runtime();
 
@@ -118,7 +121,7 @@ uint32_t filestruct_default_openfile(FilesStruct *filesStruct, DirectoryEntry *d
 
 Thread *thread_default_copy(Thread *thread, CloneFlags cloneFlags, uint32_t heapStart) {
     LogInfo("[Thread]: Copy Start.\n");
-    Thread *p = thread_create(thread->name, thread->entry, thread->arg, thread->priority, svcModeCPSR());
+    Thread *p = thread_create(thread->name, thread->entry, thread->arg, thread->priority, sysModeCPSR());
     LogInfo("[Thread]: Clone VMM: '%s'.\n", p->name);
     if (p == nullptr) {
         LogError("[Thread]: copy failed: p == nullptr.\n");
@@ -170,23 +173,23 @@ enum KernelStatus thread_init_stack(Thread *thread, ThreadStartRoutine entry, vo
         return ERROR;
     }
     thread->stack.operations.clear(&thread->stack);
-    thread->stack.operations.push(&thread->stack, 0x03030303);// R03
-    thread->stack.operations.push(&thread->stack, 0x02020202);// R02
-    thread->stack.operations.push(&thread->stack, 0x01010101);// R01
-    thread->stack.operations.push(&thread->stack, (uint32_t) args);       // R00
-
-    thread->stack.operations.push(&thread->stack, cpsr.val);// cpsr
-    thread->stack.operations.push(&thread->stack, (uint32_t) entry);     // R15 PC
-    thread->stack.operations.push(&thread->stack, (uint32_t) entry);     // R14 LR
-    thread->stack.operations.push(&thread->stack, 0x12121212);// R12
-    thread->stack.operations.push(&thread->stack, 0x11111111);// R11
-    thread->stack.operations.push(&thread->stack, 0x10101010);// R10
-    thread->stack.operations.push(&thread->stack, 0x09090909);// R09
-    thread->stack.operations.push(&thread->stack, 0x08080808);// R08
-    thread->stack.operations.push(&thread->stack, 0x07070707);// R07
-    thread->stack.operations.push(&thread->stack, 0x06060606);// R06
-    thread->stack.operations.push(&thread->stack, 0x05050505);// R05
-    thread->stack.operations.push(&thread->stack, 0x04040404);// R04
+    thread->stack.operations.push(&thread->stack, 0x12121212); // R12
+    thread->stack.operations.push(&thread->stack, 0x11111111); // R11
+    thread->stack.operations.push(&thread->stack, 0x10101010); // R10
+    thread->stack.operations.push(&thread->stack, 0x09090909); // R09
+    thread->stack.operations.push(&thread->stack, 0x08080808); // R08
+    thread->stack.operations.push(&thread->stack, 0x07070707); // R07
+    thread->stack.operations.push(&thread->stack, 0x06060606); // R06
+    thread->stack.operations.push(&thread->stack, 0x05050505); // R05
+    thread->stack.operations.push(&thread->stack, 0x04040404); // R04
+    thread->stack.operations.push(&thread->stack, 0x03030303); // R03
+    thread->stack.operations.push(&thread->stack, 0x02020202); // R02
+    thread->stack.operations.push(&thread->stack, 0x01010101); // R01
+    thread->stack.operations.push(&thread->stack, (uint32_t) args); // R00
+    thread->stack.operations.push(&thread->stack, cpsr.val); // cpsr
+    thread->stack.operations.push(&thread->stack, (uint32_t) entry); // PC
+    thread->stack.operations.push(&thread->stack, (uint32_t) entry); // R14 LR
+    thread->stack.operations.push(&thread->stack, thread->stack.top); // R13 SP
     return OK;
 }
 
@@ -207,7 +210,6 @@ void thread_init_mm(Thread *thread) {
     thread->memoryStruct.virtualMemory.physicalPageAllocator = &kernelPageAllocator;
     thread->memoryStruct.virtualMemory.pageTable = kernel_vmm_get_page_table();
     thread->memoryStruct.heap = kernelHeap;
-//    memcpy(&thread->memoryStruct.heap, &kernelHeap, sizeof(Heap));
 }
 
 enum KernelStatus thread_init_fds(Thread *thread) {
@@ -229,6 +231,10 @@ void thread_release(Thread *thread) {
     }
 
     kernelHeap.operations.free(&kernelHeap, thread);
+}
+
+KernelStatus thread_default_execute(struct Thread *thread, struct Elf *elf) {
+
 }
 
 Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uint32_t priority, RegisterCPSR cpsr) {
@@ -255,7 +261,7 @@ Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uin
 
         thread->runtimeNs = 0;
         thread->runtimeVirtualNs = 0;
-        thread->startTime = ktimer_sys_runtime();
+        thread->startTime = kernelTimerManager.operation.getSysRuntimeMs(&kernelTimerManager);
 
         thread->cpuAffinity = CPU_MASK_ALL;
 
@@ -284,6 +290,7 @@ Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uin
         thread->operations.exit = (ThreadOperationExit) thread_default_exit;
         thread->operations.kill = (ThreadOperationKill) thread_default_kill;
         thread->operations.copy = thread_default_copy;
+        thread->operations.execute = (ThreadOperationExecute) thread_default_execute;
 
         thread_init_mm(thread);
 
@@ -313,9 +320,4 @@ Thread *thread_create_idle_thread(uint32_t cpuNum) {
     strcpy(idleThread->name, itoa(cpuNum, (char *) &idleNameStr, 10));
     LogInfo("[Thread]: Idle thread for CPU '%d' created.\n", cpuNum);
     return idleThread;
-}
-
-KernelStatus thread_reschedule() {
-    // TODO
-    return OK;
 }

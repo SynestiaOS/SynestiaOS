@@ -15,7 +15,7 @@
 typedef struct GUIPanel {
     GUIComponent component;
     KernelVector children;
-    Gfx2DContext context;
+    GfxSurface surface;
 } GUIPanel;
 
 void gui_panel_create(GUIPanel *panel);

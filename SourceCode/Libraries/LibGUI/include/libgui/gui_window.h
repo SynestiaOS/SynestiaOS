@@ -24,7 +24,7 @@ typedef struct GUIWindow {
     KernelVector children;
     bool isWindowNeedUpdate;
     bool isShadowNeedUpdate;
-    Gfx2DContext context;
+    GfxSurface surface;
 } GUIWindow;
 
 void gui_window_create(GUIWindow *window);

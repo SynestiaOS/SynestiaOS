@@ -1,3 +1,4 @@
+#include <__wctype.h>
 //
 // Created by XingfengYang on 2020/6/26.
 //
@@ -122,6 +123,8 @@ typedef KernelStatus (*ThreadOperationExit)(struct Thread *thread, uint32_t retu
 
 typedef KernelStatus (*ThreadOperationKill)(struct Thread *thread);
 
+typedef KernelStatus (*ThreadOperationExecute)(struct Thread *thread, struct Elf *elf);
+
 typedef struct Thread *(*ThreadOperationCopy)(struct Thread *thread, CloneFlags cloneFlags, uint32_t heapStart);
 
 typedef struct ThreadOperations {
@@ -133,6 +136,7 @@ typedef struct ThreadOperations {
     ThreadOperationExit exit;
     ThreadOperationKill kill;
     ThreadOperationCopy copy;
+    ThreadOperationExecute execute;
 } ThreadOperations;
 
 typedef struct Thread {
@@ -180,10 +184,6 @@ typedef struct Thread {
 
 Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uint32_t priority, RegisterCPSR cpsr);
 
-KernelStatus thread_free(Thread *thread);
-
 Thread *thread_create_idle_thread(uint32_t cpuNum);
-
-KernelStatus thread_reschedule();
 
 #endif//__KERNEL_THREAD_H__

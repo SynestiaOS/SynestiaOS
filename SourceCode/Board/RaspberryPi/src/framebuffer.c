@@ -26,7 +26,7 @@ uint32_t framebuffer_init(void) {
     setPhysicalDisplayWHMail->property.bufferSize = 8;
     setPhysicalDisplayWHMail->property.code = 0x80000000 + 8;
     setPhysicalDisplayWHMail->property.width = 1024;
-    setPhysicalDisplayWHMail->property.height = 768;
+    setPhysicalDisplayWHMail->property.height = 600;
     MailMessage setPhysicalDisplayWHMailMsg = {.channel = MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC,
             .data = setPhysicalDisplayWHMail};
     LogInfo("[Framebuffer]: Ready to set physical WH\n");
@@ -47,7 +47,7 @@ uint32_t framebuffer_init(void) {
     setVirtualBufferWHMail->property.bufferSize = 8;
     setVirtualBufferWHMail->property.code = 0x80000000 + 8;
     setVirtualBufferWHMail->property.width = 1024;
-    setVirtualBufferWHMail->property.height = 768;
+    setVirtualBufferWHMail->property.height = 600;
     MailMessage setVirtualBufferWHMailMsg = {.channel = MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC,
             .data = setVirtualBufferWHMail};
     LogInfo("[Framebuffer]: Ready to set virtual WH\n");
@@ -70,6 +70,9 @@ uint32_t framebuffer_init(void) {
     MailMessage setDepthMailMsg = {.channel = MAILBOX_CHANNEL_PROPERTY_TAGS_ARM_TO_VC, .data = setDepthMail};
     LogInfo("[Framebuffer]: Ready to set depth\n");
     mailbox_call(setDepthMailMsg);
+    if (setDepthMail->property.bitsPerPixel == 0) {
+        LogWarn("[Framebuffer]: Unsupported depth\n");
+    }
     if (setDepthMail->code == CODE_RESPONSE_FAILURE || setDepthMail->property.code == CODE_RESPONSE_FAILURE) {
         LogError("[Framebuffer]: Unable to set depth\n");
     }

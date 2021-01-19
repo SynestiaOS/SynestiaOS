@@ -5,11 +5,6 @@
 
 void atomic_create(Atomic *atomic) { atomic_set(atomic, 0); }
 
-/**
- * Because reading and writing directly to the memory address does not go through the register,
- * it is also atomic to directly manipulate the memory address.
- * So you can also use (((atoimc)->counter) = (i))
- */
 void atomic_set(Atomic *atomic, uint32_t val) {
     volatile uint32_t tmp;
     __asm__ __volatile__("@ atomic_set\n\t"
@@ -22,11 +17,6 @@ void atomic_set(Atomic *atomic, uint32_t val) {
                          : "cc");
 }
 
-/**
- * Because reading and writing directly to the memory address does not go through the register,
- * it is also atomic to directly manipulate the memory address.
- * So you can also use (*(volatile int *)&(atomic)->counter)
- */
 uint32_t atomic_get(Atomic *atomic) {
     volatile uint32_t result;
     __asm__ __volatile__("@ atomic_get\n\t"

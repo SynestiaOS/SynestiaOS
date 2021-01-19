@@ -46,7 +46,7 @@ void gui_label_create(GUILabel *label) {
     label->component.foreground.g = (FLUENT_PRIMARY_FORE_COLOR >> 8) & 0xFF;
     label->component.foreground.b = FLUENT_PRIMARY_FORE_COLOR & 0xFF;
 
-    gfx2d_create_context(&label->context, 1024, 768, GFX2D_BUFFER);
+    gfx2d_create_surface(&label->surface, 1024, 768, GFX2D_BUFFER);
 }
 
 void gui_label_init(GUILabel *label, uint32_t x, uint32_t y, const char *text) {
@@ -84,7 +84,7 @@ void gui_label_draw(GUILabel *label) {
     if (label->component.visable) {
         // 1. draw_background
         if (label->component.colorMode == RGB) {
-            label->context.operations.fillRect(&label->context,
+            label->surface.operations.fillRect(&label->surface,
                                                label->component.position.x + label->component.margin.left,
                                                label->component.position.y + label->component.margin.top,
                                                label->component.position.x + label->component.size.width,
@@ -104,7 +104,7 @@ void gui_label_draw(GUILabel *label) {
         uint32_t column = 0;
         uint32_t row = 0;
         for (uint32_t i = 0; i < length; i++) {
-            label->context.operations.drawAscii(&label->context,
+            label->surface.operations.drawAscii(&label->surface,
                                                 label->component.position.x + xOffset * label->fontSize +
                                                 label->component.padding.left,
                                                 label->component.position.y + row * label->fontSize +

@@ -11,12 +11,12 @@
 #include "libc/stdint.h"
 #include "libc/string.h"
 
-extern Heap kernelHeap;
-
 #define EXT2_SIGNATURE 0xef53
 #define EXT2_BLOCK_GROUP_DESCRIPTOR_SIZE 32
 #define EXT2_INDEX_NODE_STRUCTURE_SIZE 128
 #define EXT2_SUPER_BLOCK_OFFSET 1024
+
+extern Heap kernelHeap;
 
 void ext2_recursively_fill_superblock(Ext2FileSystem *ext2FileSystem, Ext2IndexNode *ext2IndexNode,
                                       DirectoryEntry *vfsDirectoryEntry, char *name) {
@@ -43,8 +43,8 @@ void ext2_recursively_fill_superblock(Ext2FileSystem *ext2FileSystem, Ext2IndexN
                                                                      ext2FileSystem->blockSize);
 
         while (*(uint32_t *) ((uint32_t) dEntry) != 0) {
-            if (strcmp(dEntry->nameCharacters, "..") || strcmp(dEntry->nameCharacters, ".") ||
-                strcmp(dEntry->nameCharacters, "lost+found")) {
+            if (strcmp((char *)dEntry->nameCharacters, "..") || strcmp((char *)dEntry->nameCharacters, ".") ||
+                strcmp((char *)dEntry->nameCharacters, "lost+found")) {
                 // TODO: lost+found
                 // ignore
 
@@ -261,7 +261,7 @@ void ext2_read_direct_data_block(Ext2FileSystem *ext2FileSystem, Ext2IndexNode *
 }
 
 uint32_t ext2_fs_default_read(Ext2FileSystem *ext2FileSystem, Ext2IndexNode *ext2IndexNode, char *buf, uint32_t count) {
-    uint32_t fileSize = ext2IndexNode->sizeUpper32Bits << 32 | ext2IndexNode->sizeLower32Bits;
+    uint32_t fileSize = (ext2IndexNode->sizeUpper32Bits << 32) | ext2IndexNode->sizeLower32Bits;
 
     uint32_t blockNeed = fileSize / ext2FileSystem->blockSize;
 
