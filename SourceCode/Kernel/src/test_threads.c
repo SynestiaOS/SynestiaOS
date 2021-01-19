@@ -139,18 +139,18 @@ _Noreturn uint32_t *window_canvas2D(int args) {
 }
 
 void test_threads_init(){
-    Thread *windowDialogThread = thread_create("Welcome", (ThreadStartRoutine) &window_dialog, 0, 0, svcModeCPSR());
+    Thread *windowDialogThread = thread_create("Welcome", (ThreadStartRoutine) &window_dialog, 0, 0, sysModeCPSR());
     windowDialogThread->cpuAffinity = cpu_number_to_mask(0);
     cfsScheduler.operation.addThread(&cfsScheduler, windowDialogThread, 1);
 
 
     Thread *windowCanvas2DThread = thread_create("Canvas2D", (ThreadStartRoutine) &window_canvas2D, 0, 0,
-                                                 svcModeCPSR());
+                                                 sysModeCPSR());
     windowCanvas2DThread->cpuAffinity = cpu_number_to_mask(0);
     cfsScheduler.operation.addThread(&cfsScheduler, windowCanvas2DThread, 1);
 
     Thread *windowFileSystemThread = thread_create("FileManager", (ThreadStartRoutine) &window_filesystem, 0, 0,
-                                                   svcModeCPSR());
+                                                   sysModeCPSR());
     windowFileSystemThread->cpuAffinity = cpu_number_to_mask(0);
     cfsScheduler.operation.addThread(&cfsScheduler, windowFileSystemThread, 1);
 }

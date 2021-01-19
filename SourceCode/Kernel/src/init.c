@@ -118,11 +118,11 @@ void kernel_main(void) {
 
         cfsScheduler.operation.init(&cfsScheduler);
 
-        Thread *gpuProcess = thread_create("gpu", (ThreadStartRoutine) &GPU_FLUSH, 0, 0, svcModeCPSR());
+        Thread *gpuProcess = thread_create("gpu", (ThreadStartRoutine) &GPU_FLUSH, 0, 0, sysModeCPSR());
         gpuProcess->cpuAffinity = cpu_number_to_mask(0);
         cfsScheduler.operation.addThread(&cfsScheduler, gpuProcess, 1);
 
-//        test_threads_init();
+        test_threads_init();
 
         cfsScheduler.operation.schedule(&cfsScheduler);
     }

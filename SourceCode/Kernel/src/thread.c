@@ -121,7 +121,7 @@ uint32_t filestruct_default_openfile(FilesStruct *filesStruct, DirectoryEntry *d
 
 Thread *thread_default_copy(Thread *thread, CloneFlags cloneFlags, uint32_t heapStart) {
     LogInfo("[Thread]: Copy Start.\n");
-    Thread *p = thread_create(thread->name, thread->entry, thread->arg, thread->priority, svcModeCPSR());
+    Thread *p = thread_create(thread->name, thread->entry, thread->arg, thread->priority, sysModeCPSR());
     LogInfo("[Thread]: Clone VMM: '%s'.\n", p->name);
     if (p == nullptr) {
         LogError("[Thread]: copy failed: p == nullptr.\n");
@@ -173,23 +173,23 @@ enum KernelStatus thread_init_stack(Thread *thread, ThreadStartRoutine entry, vo
         return ERROR;
     }
     thread->stack.operations.clear(&thread->stack);
-    thread->stack.operations.push(&thread->stack, 0x03030303);// R03
-    thread->stack.operations.push(&thread->stack, 0x02020202);// R02
-    thread->stack.operations.push(&thread->stack, 0x01010101);// R01
-    thread->stack.operations.push(&thread->stack, (uint32_t) args);       // R00
-
-    thread->stack.operations.push(&thread->stack, cpsr.val);// cpsr
-    thread->stack.operations.push(&thread->stack, (uint32_t) entry);     // R15 PC
-    thread->stack.operations.push(&thread->stack, (uint32_t) entry);     // R14 LR
-    thread->stack.operations.push(&thread->stack, 0x12121212);// R12
-    thread->stack.operations.push(&thread->stack, 0x11111111);// R11
-    thread->stack.operations.push(&thread->stack, 0x10101010);// R10
-    thread->stack.operations.push(&thread->stack, 0x09090909);// R09
-    thread->stack.operations.push(&thread->stack, 0x08080808);// R08
-    thread->stack.operations.push(&thread->stack, 0x07070707);// R07
-    thread->stack.operations.push(&thread->stack, 0x06060606);// R06
-    thread->stack.operations.push(&thread->stack, 0x05050505);// R05
-    thread->stack.operations.push(&thread->stack, 0x04040404);// R04
+    thread->stack.operations.push(&thread->stack, 0x12121212); // R12
+    thread->stack.operations.push(&thread->stack, 0x11111111); // R11
+    thread->stack.operations.push(&thread->stack, 0x10101010); // R10
+    thread->stack.operations.push(&thread->stack, 0x09090909); // R09
+    thread->stack.operations.push(&thread->stack, 0x08080808); // R08
+    thread->stack.operations.push(&thread->stack, 0x07070707); // R07
+    thread->stack.operations.push(&thread->stack, 0x06060606); // R06
+    thread->stack.operations.push(&thread->stack, 0x05050505); // R05
+    thread->stack.operations.push(&thread->stack, 0x04040404); // R04
+    thread->stack.operations.push(&thread->stack, 0x03030303); // R03
+    thread->stack.operations.push(&thread->stack, 0x02020202); // R02
+    thread->stack.operations.push(&thread->stack, 0x01010101); // R01
+    thread->stack.operations.push(&thread->stack, (uint32_t) args); // R00
+    thread->stack.operations.push(&thread->stack, cpsr.val); // cpsr
+    thread->stack.operations.push(&thread->stack, (uint32_t) entry); // PC
+    thread->stack.operations.push(&thread->stack, (uint32_t) entry); // R14 LR
+    thread->stack.operations.push(&thread->stack, thread->stack.top); // R13 SP
     return OK;
 }
 
