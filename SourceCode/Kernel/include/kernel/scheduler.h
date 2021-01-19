@@ -43,7 +43,6 @@ typedef struct SchedulerOperation {
 } SchedulerOperation;
 
 typedef struct Scheduler {
-    uint32_t switch_to_signal;
     Thread *prevThread;
     Thread *currentThread;
     Tick schedulerTick;
