@@ -25,7 +25,7 @@ void heap_default_free_callback(struct Heap *heap, void *ptr) {
 
 void *heap_default_alloc(struct Heap *heap, uint32_t size) {
     uint32_t allocSize = size + sizeof(HeapArea);
-    uint32_t offset = sizeof(void *) - (size % sizeof(void *)); 
+    uint32_t offset = sizeof(void *) - (size % sizeof(void *));
 
     if (heap->freeListHead == nullptr) {
         LogError("[KHeap]: failed to get freeListHead.\n");
@@ -77,10 +77,6 @@ void *heap_default_alloc(struct Heap *heap, uint32_t size) {
         // TODO: defragmentation
     }
     return nullptr;
-}
-
-void *heap_default_alloc_aligned_ptr(struct Heap *heap, uint32_t size) {
-    return heap->operations.allocAligned(heap, size, sizeof(void *));
 }
 
 void *heap_default_alloc_aligned(struct Heap *heap, uint32_t size, uint32_t alignment) {
@@ -224,7 +220,7 @@ KernelStatus heap_create(Heap *heap, uint32_t addr, uint32_t size) {
     heap->allocCallback = (HeapAllocCallback) heap_default_alloc_callback;
     heap->freeCallback = (HeapFreeCallback) heap_default_free_callback;
 
-    heap->operations.alloc = (HeapOperationAlloc) heap_default_alloc_aligned_ptr;
+    heap->operations.alloc = (HeapOperationAlloc) heap_default_alloc;
     heap->operations.allocAligned = (HeapOperationAllocAligned) heap_default_alloc_aligned;
     heap->operations.calloc = (HeapOperationCountAlloc) heap_default_count_alloc;
     heap->operations.realloc = (HeapOperationReAlloc) heap_default_realloc;
