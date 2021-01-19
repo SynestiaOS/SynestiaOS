@@ -1,3 +1,4 @@
+#include "kernel/bus.h"
 #include "arm/register.h"
 #include "arm/kernel_vmm.h"
 #include "arm/page.h"
@@ -34,6 +35,7 @@ Scheduler cfsScheduler;
 KernelTimerManager kernelTimerManager;
 VFS vfs;
 GfxSurface mainSurface;
+ServiceBus testBus;
 
 
 extern void test_threads_init(void);
@@ -94,6 +96,8 @@ void kernel_main(void) {
 
         vfs_create(&vfs);
         vfs.operations.mount(&vfs, "root", FILESYSTEM_EXT2, (void *) EXT2_ADDRESS);
+
+        service_bus_create(&testBus, "test BUS");
 
         Elf elf;
         uint32_t *data = (uint32_t *) kernelHeap.operations.alloc(&kernelHeap, 40 * KB);

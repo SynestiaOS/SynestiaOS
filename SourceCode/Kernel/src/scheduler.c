@@ -96,7 +96,7 @@ KernelStatus scheduler_default_operation_preempt(struct Scheduler *scheduler) {
 
 uint32_t get_curr_stack(uint32_t sp) {
     if (nullptr != cfsScheduler.currentThread) {
-        LogInfo("to %s\n", cfsScheduler.currentThread->name);
+        LogInfo("[Scheduler] switch to %s\n", cfsScheduler.currentThread->name);
         return cfsScheduler.currentThread->stack.top;
     }
     return sp;
@@ -104,10 +104,8 @@ uint32_t get_curr_stack(uint32_t sp) {
 
 void set_curr_stack(uint32_t sp) {
     if (nullptr != cfsScheduler.currentThread) {
-        LogInfo("from %s\n", cfsScheduler.currentThread->name);
+        LogInfo("[Scheduler] switch from %s\n", cfsScheduler.currentThread->name);
         cfsScheduler.currentThread->stack.top = sp;
-    } else {
-        LogInfo("from xxx\n");
     }
 }
 
