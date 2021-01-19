@@ -154,7 +154,7 @@ DirectoryEntry *vfs_default_lookup(VFS *vfs, const char *name) {
                     lookupState = PATH_LOOKUP_DOT;
                 } else if (currentChr == '/') {
                     lookupState = PATH_LOOKUP_SLASH;// /
-                    LogWarn("[LookUp]: root\n");
+                    LogWarn("[VFS]: lookup root\n");
                     currentDirectory = vfs->fileSystems->rootDirectoryEntry;
                 } else {
                     lookupState = PATH_LOOKUP_NAME;// name
@@ -165,12 +165,12 @@ DirectoryEntry *vfs_default_lookup(VFS *vfs, const char *name) {
             case PATH_LOOKUP_DOT: {
                 if (currentChr == '/') {
                     lookupState = PATH_LOOKUP_SLASH;// ./
-                    LogWarn("[LookUp]: current\n");
+                    LogWarn("[VFS]: lookup current\n");
                     currentDirectory = currentDirectory;
                 } else if (currentChr == '.') {
                     if (peek(name, index, 0) == '/') {
                         lookupState = PATH_LOOKUP_SLASH;// ../
-                        LogWarn("[LookUp]: up\n");
+                        LogWarn("[VFS]: lookup up\n");
                         if (currentDirectory->parent != nullptr) {
                             currentDirectory = currentDirectory->parent;
                         } else {
@@ -188,7 +188,7 @@ DirectoryEntry *vfs_default_lookup(VFS *vfs, const char *name) {
             case PATH_LOOKUP_SLASH: {
                 if (currentChr == '/') {
                     lookupState = PATH_LOOKUP_SLASH;// //
-                    LogWarn("[LookUp]: root\n");
+                    LogWarn("[VFS]: lookup root\n");
                     currentDirectory = vfs->fileSystems->rootDirectoryEntry;
                 } else if (currentChr == '.') {
                     lookupState = PATH_LOOKUP_DOT;
@@ -206,12 +206,12 @@ DirectoryEntry *vfs_default_lookup(VFS *vfs, const char *name) {
                         path[i] = name[bufStart + i];
                     }
                     path[index - bufStart - 1] = '\0';
-                    LogWarn("[LookUp]: %s \n", path);
+                    LogWarn("[VFS]: lookup %s \n", path);
                     ListNode *tmpNode = &(currentDirectory->children->list);
                     bool isFound = false;
                     while (tmpNode != nullptr) {
                         DirectoryEntry *tmpDirectoryEntry = getNode(tmpNode, DirectoryEntry, list);
-                        LogInfo("[LookUp]: %s \n", tmpDirectoryEntry->fileName);
+                        LogInfo("[VFS]: lookup %s \n", tmpDirectoryEntry->fileName);
                         if (strcmp(tmpDirectoryEntry->fileName, path)) {
                             currentDirectory = tmpDirectoryEntry;
                             isFound = true;
@@ -230,7 +230,7 @@ DirectoryEntry *vfs_default_lookup(VFS *vfs, const char *name) {
                             path[i] = name[i];
                         }
                         path[index] = '\0';
-                        LogError("[LookUp]: %s not found.\n", path);
+                        LogError("[VFS]: lookup %s not found.\n", path);
                         return nullptr;
                     }
                 } else if (index == length) {
@@ -240,12 +240,12 @@ DirectoryEntry *vfs_default_lookup(VFS *vfs, const char *name) {
                         path[i] = name[bufStart + i];
                     }
                     path[index - bufStart] = '\0';
-                    LogWarn("[LookUp]: %s \n", path);
+                    LogWarn("[VFS]: lookup %s \n", path);
                     ListNode *tmpNode = &(currentDirectory->children->list);
                     bool isFound = false;
                     while (tmpNode != nullptr) {
                         DirectoryEntry *tmpDirectoryEntry = getNode(tmpNode, DirectoryEntry, list);
-                        LogInfo("[LookUp]: %s \n", tmpDirectoryEntry->fileName);
+                        LogInfo("[VFS]: lookup %s \n", tmpDirectoryEntry->fileName);
                         if (strcmp(tmpDirectoryEntry->fileName, path)) {
                             currentDirectory = tmpDirectoryEntry;
                             isFound = true;
@@ -264,7 +264,7 @@ DirectoryEntry *vfs_default_lookup(VFS *vfs, const char *name) {
                             path[i] = name[i];
                         }
                         path[index] = '\0';
-                        LogError("[LookUp]: %s not found.\n", path);
+                        LogError("[VFS]: lookup %s not found.\n", path);
                         return nullptr;
                     }
                 } else {

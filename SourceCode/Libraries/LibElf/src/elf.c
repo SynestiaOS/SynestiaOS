@@ -31,6 +31,29 @@ const char *object_file_type_to_string(uint32_t type) {
     }
 }
 
+const char *elf_segment_type_to_string(SegmentType type) {
+    switch (type) {
+        case PT_NULL:
+            return "Program header table entry unused";
+        case PT_LOAD:
+            return "Loadable segment";
+        case PT_DYNAMIC:
+            return "Dynamic linking information";
+        case PT_INTERP:
+            return "Interpreter information";
+        case PT_NOTE:
+            return "Auxiliary information";
+        case PT_SHLIB:
+            return "reserved";
+        case PT_PHDR:
+            return "segment containing program header table itself";
+        case PT_TLS:
+            return "Thread-Local Storage template";
+        case PT_LOOS | PT_HIOS | PT_LOPROC | PT_HIPROC:
+            return "inclusive reserved ranges for operating system (processor) specific semantics";
+    }
+}
+
 const char *elf_get_target_machine_name(InstructionSet instructionSet) {
     switch (instructionSet) {
         case ARCH_Unknown: {
@@ -110,6 +133,49 @@ const char *elf_get_target_machine_name(InstructionSet instructionSet) {
     }
 }
 
+const char *elf_section_type_to_string(HeaderType type) {
+    switch (type) {
+        case SHT_NULL:
+            return "Section header table entry unused";
+        case SHT_PROGBITS:
+            return "Program data";
+        case SHT_SYMTAB:
+            return "Symbol table";
+        case SHT_STRTAB:
+            return "String table";
+        case SHT_RELA:
+            return "Relocation entries with addends";
+        case SHT_HASH:
+            return "Symbol hash table";
+        case SHT_DYNAMIC:
+            return "Dynamic linking information";
+        case SHT_NOTE:
+            return "Notes";
+        case SHT_NOBITS:
+            return "Program space with no data (bss)";
+        case SHT_REL:
+            return "Relocation entries, no addends";
+        case SHT_SHLIB:
+            return "Reserved";
+        case SHT_DYNSYM:
+            return "Dynamic linker symbol table";
+        case SHT_INIT_ARRAY:
+            return "Array of constructors";
+        case SHT_FINI_ARRAY:
+            return "Array of destructors";
+        case SHT_PREINIT_ARRAY:
+            return "Array of pre-constructors";
+        case SHT_GROUP:
+            return "Section group";
+        case SHT_SYMTAB_SHNDX:
+            return "Extended section indices";
+        case SHT_NUM:
+            return "Number of defined types.";
+        case SHT_LOOS:
+            return "Start OS-specific.";
+    }
+}
+
 KernelStatus elf_default_parse(Elf *elf) {
     // because we are in 32 bits mode, so the header is 54 byte
     elf->fileHeader = *(ElfFileHeader *) (elf->data);
@@ -169,7 +235,7 @@ void elf_default_dump(Elf *elf) {
         ElfProgramHeader *programHeader = (ElfProgramHeader *) (elf->data + elf->fileHeader.programHeaderTableOffset +
                                                                 i * sizeof(ElfProgramHeader));
         LogInfo("    Program Header %d: {", i);
-        LogInfo(" type: %d", programHeader->type);
+        LogInfo(" type: %s", elf_segment_type_to_string(programHeader->type));
         LogInfo(", offset: %d", programHeader->segmentOffset);
         LogInfo(", flags: %d", programHeader->flags);
         LogInfo(" }\n");
@@ -189,7 +255,7 @@ void elf_default_dump(Elf *elf) {
 
         LogInfo("    Section %d: {", i);
         LogInfo(" name: %s", (char *) (strData + sectionHeader->name));
-        LogInfo(", type: %d", sectionHeader->type);
+        LogInfo(", type: %s", elf_section_type_to_string(sectionHeader->type));
         LogInfo(", offset: %d", sectionHeader->offset);
         LogInfo(", size: %d", sectionHeader->size);
         LogInfo(" }\n");
