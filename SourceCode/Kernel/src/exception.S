@@ -164,6 +164,7 @@ cpu_switch_mm:
 interrupt_isp:
     stmfd   sp!, {r0-r12,lr}
     bl      interrupt_handler
+
     bl      schd_switch_context
     ldmfd   sp!, {r0-r12,lr}
     subs    pc,  lr, #4
