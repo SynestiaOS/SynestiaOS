@@ -22,8 +22,6 @@ extern PhysicalPageAllocator kernelPageAllocator;
 extern PhysicalPageAllocator userspacePageAllocator;
 extern KernelTimerManager kernelTimerManager;
 
-extern uint64_t ktimer_sys_runtime();
-
 uint32_t pidMap[2048] = {0};
 
 uint32_t thread_alloc_pid() {

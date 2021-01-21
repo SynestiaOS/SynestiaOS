@@ -52,7 +52,7 @@ void virtual_memory_default_allocate_page(VirtualMemory *virtualMemory, uint32_t
         pt[0].valid = 1;
         pt[0].table = 1;
         pt[0].af = 1;
-        pt[0].base = (uint64_t)(virtualMemory->physicalPageAllocator->operations.allocPage4K(
+        pt[0].base = (uint64_t) (virtualMemory->physicalPageAllocator->operations.allocPage4K(
                 virtualMemory->physicalPageAllocator, USAGE_NORMAL));
 
     } else {
@@ -73,7 +73,7 @@ void virtual_memory_default_allocate_page(VirtualMemory *virtualMemory, uint32_t
             pt[0].valid = 1;
             pt[0].table = 1;
             pt[0].af = 1;
-            pt[0].base = (uint64_t)(virtualMemory->physicalPageAllocator->operations.allocPage4K(
+            pt[0].base = (uint64_t) (virtualMemory->physicalPageAllocator->operations.allocPage4K(
                     virtualMemory->physicalPageAllocator, USAGE_NORMAL));
         } else {
             PageTableEntry *pageTable = (PageTableEntry *) (level2PageTable->base >> VA_OFFSET);
@@ -83,7 +83,7 @@ void virtual_memory_default_allocate_page(VirtualMemory *virtualMemory, uint32_t
                 pageTableEntry.valid = 1;
                 pageTableEntry.table = 1;
                 pageTableEntry.af = 1;
-                pageTableEntry.base = (uint64_t)(virtualMemory->physicalPageAllocator->operations.allocPage4K(
+                pageTableEntry.base = (uint64_t) (virtualMemory->physicalPageAllocator->operations.allocPage4K(
                         virtualMemory->physicalPageAllocator, USAGE_NORMAL));
 
             } else {
@@ -159,15 +159,15 @@ void *virtual_memory_default_copy_to_kernel(struct VirtualMemory *virtualMemory,
 }
 
 KernelStatus vmm_create(VirtualMemory *virtualMemory, PhysicalPageAllocator *physicalPageAllocator) {
-    virtualMemory->operations.mappingPage = virtual_memory_default_mapping_page;
-    virtualMemory->operations.contextSwitch = virtual_memory_default_context_switch;
-    virtualMemory->operations.allocatePage = virtual_memory_default_allocate_page;
-    virtualMemory->operations.release = virtual_memory_default_release;
-    virtualMemory->operations.enable = virtual_memory_default_enable;
-    virtualMemory->operations.disable = virtual_memory_default_disable;
-    virtualMemory->operations.copyToKernel = virtual_memory_default_copy_to_kernel;
-    virtualMemory->operations.translateToPhysical = virtual_memory_default_translate_to_physical;
-    virtualMemory->operations.getUserStrLen = virtual_memory_default_get_user_str_len;
+    virtualMemory->operations.mappingPage = (VirtualMemoryOperationMappingPage) virtual_memory_default_mapping_page;
+    virtualMemory->operations.contextSwitch = (VirtualMemoryOperationContextSwitch) virtual_memory_default_context_switch;
+    virtualMemory->operations.allocatePage = (VirtualMemoryOperationAllocatePage) virtual_memory_default_allocate_page;
+    virtualMemory->operations.release = (VirtualMemoryOperationRelease) virtual_memory_default_release;
+    virtualMemory->operations.enable = (VirtualMemoryOperationEnable) virtual_memory_default_enable;
+    virtualMemory->operations.disable = (VirtualMemoryOperationDisable) virtual_memory_default_disable;
+    virtualMemory->operations.copyToKernel = (VirtualMemoryOperationCopyToKernel) virtual_memory_default_copy_to_kernel;
+    virtualMemory->operations.translateToPhysical = (VirtualMemoryOperationTranslateToPhysical) virtual_memory_default_translate_to_physical;
+    virtualMemory->operations.getUserStrLen = (VirtualMemoryOperationGetUserStrLen) virtual_memory_default_get_user_str_len;
 
     virtualMemory->physicalPageAllocator = physicalPageAllocator;
 
@@ -194,7 +194,7 @@ KernelStatus vmm_create(VirtualMemory *virtualMemory, PhysicalPageAllocator *phy
     pt[0].valid = 1;
     pt[0].table = 1;
     pt[0].af = 1;
-    pt[0].base = (uint64_t)(
+    pt[0].base = (uint64_t) (
             virtualMemory->physicalPageAllocator->operations.allocPage4K(virtualMemory->physicalPageAllocator,
                                                                          USAGE_NORMAL));
 
