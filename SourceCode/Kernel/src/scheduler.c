@@ -25,12 +25,6 @@ uint32_t PRIORITY_2_WEIGHT[40] = {
 
 #define PRIORITY_DEFAULT_WEIGHT 1024
 
-extern uint64_t ktimer_sys_runtime_tick(uint64_t tickInterval);
-
-extern void cpu_save_context(Thread *thread, uint32_t offsetOfStack);
-
-extern void cpu_restore_context(Thread *thread, uint32_t offsetOfStack);
-
 extern void cpu_switch_mm(uint32_t pageTable);
 
 
