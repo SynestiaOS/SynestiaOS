@@ -66,7 +66,12 @@
  *  0-3:	channel	The mailbox channel number to which the data is to be sent
  *  4-31:	data	The 28 bits of data to be sent to the destination
  */
-#define MAIL0_WRITE ((volatile uint32_t *) (VIDEOCORE_MBOX + 0x20))
+#define MAIL1_WRITE  ((volatile uint32_t*)(VIDEOCORE_MBOX + 0x20))
+
+#define MAIL1_PEEK   ((volatile uint32_t*)(VIDEOCORE_MBOX + 0x30))
+#define MAIL1_SENDER ((volatile uint32_t*)(VIDEOCORE_MBOX + 0x34))
+#define MAIL1_STATUS ((volatile uint32_t*)(VIDEOCORE_MBOX + 0x38))
+#define MAIL1_CONFIG ((volatile uint32_t*)(VIDEOCORE_MBOX + 0x3C))
 
 #define CODE_REQUEST 0x00000000
 #define CODE_RESPONSE_SUCCESS 0x80000000
@@ -1212,7 +1217,7 @@ typedef struct MailStatus {
 
 MailMessage mailbox_call(MailMessage msg);
 
-MailMessage mailbox_read(uint8_t channel);
+MailMessage mailbox_read(MailMessage msg);
 
 void mailbox_send(MailMessage msg);
 
