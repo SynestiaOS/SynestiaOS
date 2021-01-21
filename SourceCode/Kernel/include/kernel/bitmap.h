@@ -7,6 +7,7 @@
 
 #include "kernel/type.h"
 #include "libc/stdint.h"
+#include "kernel/kheap.h"
 
 typedef void (*BitMapOperationSetTrue)(struct BitMap *bitMap, uint32_t pos);
 
@@ -27,10 +28,12 @@ typedef struct BitMapOperation {
 } BitMapOperation;
 
 typedef struct BitMap {
+    uint32_t size;
     uint32_t *data;
+    Heap *heap;
     BitMapOperation operation;
 } BitMap;
 
-BitMap *bitmap_create(struct BitMap *bitMap, uint32_t size);
+BitMap *bitmap_create(struct BitMap *bitMap, struct Heap *heap, uint32_t size);
 
 #endif //SYNESTIAOS_BITMAP_H
