@@ -2,7 +2,7 @@
 // Created by XingfengYang on 2020/6/26.
 //
 
-#include "kernel/ktimer.h"
+#include "kernel/kernel.h"
 #include "kernel/thread.h"
 #include "arm/kernel_vmm.h"
 #include "kernel/kheap.h"
@@ -17,10 +17,8 @@
 #include "libc/string.h"
 #include "libelf/elf.h"
 
-extern Heap kernelHeap;
-extern PhysicalPageAllocator kernelPageAllocator;
-extern PhysicalPageAllocator userspacePageAllocator;
-extern KernelTimerManager kernelTimerManager;
+
+extern DaVinciKernel kernel;
 
 uint32_t pidMap[2048] = {0};
 
@@ -90,7 +88,7 @@ KernelStatus thread_default_kill(struct Thread *thread) {
         return freeStatus;
     }
     // Free thread structure
-    freeStatus = kernelHeap.operations.free(&kernelHeap, thread);
+    freeStatus = kernel.kernelHeap.operations.free(&kernel.kernelHeap, thread);
     if (freeStatus != OK) {
         LogError("[KStack]: kStack free failed.\n");
         return freeStatus;
@@ -100,8 +98,8 @@ KernelStatus thread_default_kill(struct Thread *thread) {
 }
 
 uint32_t filestruct_default_openfile(FilesStruct *filesStruct, DirectoryEntry *directoryEntry) {
-    FileDescriptor *fileDescriptor = (FileDescriptor *) kernelHeap.operations.alloc(&kernelHeap,
-                                                                                    sizeof(FileDescriptor));
+    FileDescriptor *fileDescriptor = (FileDescriptor *) kernel.kernelHeap.operations.alloc(&kernel.kernelHeap,
+                                                                                           sizeof(FileDescriptor));
     fileDescriptor->directoryEntry = directoryEntry;
     fileDescriptor->node.prev = nullptr;
     fileDescriptor->node.next = nullptr;
@@ -132,7 +130,7 @@ Thread *thread_default_copy(Thread *thread, CloneFlags cloneFlags, uint32_t heap
         p->memoryStruct.heap = thread->memoryStruct.heap;
     } else {
         LogInfo("[Thread]: Create new vmm: '%s'.\n", p->name);
-        KernelStatus vmmCreateStatus = vmm_create(&p->memoryStruct.virtualMemory, &userspacePageAllocator);
+        KernelStatus vmmCreateStatus = vmm_create(&p->memoryStruct.virtualMemory, &kernel.userspacePageAllocator);
         if (vmmCreateStatus != OK) {
             LogError("[Thread]: vmm create failed for thread: '%s'.\n", p->name);
             p->memoryStruct.virtualMemory.operations.release(&p->memoryStruct.virtualMemory);
@@ -203,11 +201,11 @@ void thread_init_mm(Thread *thread) {
     thread->memoryStruct.sectionInfo.dataSectionAddr = 0;
     thread->memoryStruct.sectionInfo.bssSectionAddr = 0;
 
-    vmm_create(&thread->memoryStruct.virtualMemory, &kernelPageAllocator);
+    vmm_create(&thread->memoryStruct.virtualMemory, &kernel.kernelPageAllocator);
 
-    thread->memoryStruct.virtualMemory.physicalPageAllocator = &kernelPageAllocator;
+    thread->memoryStruct.virtualMemory.physicalPageAllocator = &kernel.kernelPageAllocator;
     thread->memoryStruct.virtualMemory.pageTable = kernel_vmm_get_page_table();
-    thread->memoryStruct.heap = kernelHeap;
+    thread->memoryStruct.heap = kernel.kernelHeap;
 }
 
 enum KernelStatus thread_init_fds(Thread *thread) {
@@ -221,14 +219,14 @@ enum KernelStatus thread_init_fds(Thread *thread) {
 
 void thread_release(Thread *thread) {
     if (thread->stack.virtualMemoryAddress != nullptr) {
-        kernelHeap.operations.free(&kernelHeap, thread->stack.virtualMemoryAddress);
+        kernel.kernelHeap.operations.free(&kernel.kernelHeap, thread->stack.virtualMemoryAddress);
     }
 
     if (thread->filesStruct.fileDescriptorTable.data != nullptr) {
-        kernelHeap.operations.free(&kernelHeap, thread->filesStruct.fileDescriptorTable.data);
+        kernel.kernelHeap.operations.free(&kernel.kernelHeap, thread->filesStruct.fileDescriptorTable.data);
     }
 
-    kernelHeap.operations.free(&kernelHeap, thread);
+    kernel.kernelHeap.operations.free(&kernel.kernelHeap, thread);
 }
 
 KernelStatus thread_default_execute(struct Thread *thread, struct Elf *elf) {
@@ -236,7 +234,7 @@ KernelStatus thread_default_execute(struct Thread *thread, struct Elf *elf) {
 }
 
 Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uint32_t priority, RegisterCPSR cpsr) {
-    Thread *thread = (Thread *) kernelHeap.operations.alloc(&kernelHeap, sizeof(Thread));
+    Thread *thread = (Thread *) kernel.kernelHeap.operations.alloc(&kernel.kernelHeap, sizeof(Thread));
 
     if (thread != nullptr) {
         thread->magic = THREAD_MAGIC;
@@ -259,7 +257,7 @@ Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uin
 
         thread->runtimeNs = 0;
         thread->runtimeVirtualNs = 0;
-        thread->startTime = kernelTimerManager.operation.getSysRuntimeMs(&kernelTimerManager);
+        thread->startTime = kernel.kernelTimerManager.operation.getSysRuntimeMs(&kernel.kernelTimerManager);
 
         thread->cpuAffinity = CPU_MASK_ALL;
 

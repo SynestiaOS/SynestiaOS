@@ -2,6 +2,7 @@
 // Created by XingfengYang on 2020/6/12.
 //
 
+#include "kernel/kernel.h"
 #include "kernel/kheap.h"
 #include "arm/page.h"
 #include "kernel/log.h"
@@ -9,8 +10,8 @@
 #include "libc/stdlib.h"
 #include "libc/string.h"
 
-extern PhysicalPageAllocator kernelPageAllocator;
-extern Scheduler cfsScheduler;
+
+extern DaVinciKernel kernel;
 
 void heap_default_alloc_callback(struct Heap *heap, void *ptr, uint32_t size) {
     heap->statistics.allocatedSize += size;
@@ -183,9 +184,9 @@ KernelStatus heap_create(Heap *heap, uint32_t addr, uint32_t size) {
     LogInfo("[KHeap] at: %d. \n", heap->address);
 
     PhysicalPageAllocator *physicalPageAllocator;
-    Thread *currThread = cfsScheduler.operation.getCurrentThread(&cfsScheduler);
+    Thread *currThread = kernel.cfsScheduler.operation.getCurrentThread(&kernel.cfsScheduler);
     if (currThread == nullptr) {
-        physicalPageAllocator = &kernelPageAllocator;
+        physicalPageAllocator = &kernel.kernelPageAllocator;
     } else {
         physicalPageAllocator = currThread->memoryStruct.virtualMemory.physicalPageAllocator;
     }

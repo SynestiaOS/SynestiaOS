@@ -2,6 +2,7 @@
 // Created by XingfengYang on 2020/6/15.
 //
 
+#include "kernel/kernel.h"
 #include "arm/vmm.h"
 #include "arm/kernel_vmm.h"
 #include "arm/mmu.h"
@@ -11,7 +12,8 @@
 #include "kernel/type.h"
 #include "libc/stdlib.h"
 
-extern Scheduler cfsScheduler;
+
+extern DaVinciKernel kernel;
 
 void virtual_memory_default_allocate_page(VirtualMemory *virtualMemory, uint32_t virtualAddress) {
     uint32_t l1Offset = (virtualAddress >> 30) & 0b11;
@@ -218,7 +220,7 @@ void do_page_fault(uint32_t address) {
     // check is there is a thread running, if it was, then map for thread's vmm:
     // TODO: it not good, may be make some mistake when thread is running and kernel triggered this.
 
-    Thread *currThread = cfsScheduler.operation.getCurrentThread(&cfsScheduler);
+    Thread *currThread = kernel.cfsScheduler.operation.getCurrentThread(&kernel.cfsScheduler);
     if (currThread != nullptr) {
         // may be user triggered this
         VirtualMemory virtualMemory = currThread->memoryStruct.virtualMemory;

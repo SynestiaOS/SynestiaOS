@@ -2,13 +2,16 @@
 // Created by XingfengYang on 2020/6/30.
 //
 
+#include "kernel/kernel.h"
 #include "kernel/percpu.h"
 #include "kernel/kheap.h"
 #include "kernel/log.h"
 #include "kernel/thread.h"
 
-extern Heap kernelHeap;
 PerCpu *perCpu = nullptr;
+
+
+extern DaVinciKernel kernel;
 
 KernelStatus percpu_default_insert_thread(PerCpu *perCpu, Thread *thread) {
     LogWarn("[PerCpu]: insert thread '%s' to cpu '%d'.\n", thread->name, perCpu->cpuId);
@@ -55,7 +58,7 @@ KernelStatus percpu_default_init(PerCpu *perCpu, CpuNum num, Thread *idleThread)
 }
 
 KernelStatus percpu_create(CpuNum cpuNum) {
-    perCpu = (PerCpu *) kernelHeap.operations.calloc(&kernelHeap, cpuNum, sizeof(PerCpu));
+    perCpu = (PerCpu *) kernel.kernelHeap.operations.calloc(&kernel.kernelHeap, cpuNum, sizeof(PerCpu));
     if (perCpu == nullptr) {
         return ERROR;
     }

@@ -2,26 +2,22 @@
 // Created by XingfengYang on 2020/7/20.
 //
 
+#include "kernel/kernel.h"
 #include "kernel/log.h"
-#include "kernel/scheduler.h"
 #include "kernel/interrupt.h"
 #include "kernel/ktimer.h"
 #include "kernel/list.h"
-#include "kernel/kheap.h"
 #include "kernel/assert.h"
 #include "kernel/thread.h"
 
 // TODO: this value should read from global config
 #define TICK_INTERVAL 50
 
-extern InterruptManager genericInterruptManager;
-extern Heap kernelHeap;
-extern Scheduler cfsScheduler;
-extern KernelTimerManager kernelTimerManager;
+extern DaVinciKernel kernel;
 
 KernelTimer kernel_timer_manger_default_init(struct KernelTimerManager *kernelTimerManager) {
     tick_init(&kernelTimerManager->timerManagerTick, kernelTimerManager->operation.onTick, "timer manager tick");
-    genericInterruptManager.operation.registerTick(&genericInterruptManager, &kernelTimerManager->timerManagerTick);
+    kernel.genericInterruptManager.operation.registerTick(&kernel.genericInterruptManager, &kernelTimerManager->timerManagerTick);
 }
 
 
@@ -37,7 +33,7 @@ KernelStatus kernel_timer_default_cancel(struct KernelTimer *timer) {
 
 
 KernelTimer *kernel_timer_manger_default_create_timer(KernelTimerManager *kernelTimerManager, uint32_t deadline) {
-    KernelTimer *timer = kernelHeap.operations.alloc(&kernelHeap, sizeof(struct KernelTimer));
+    KernelTimer *timer = kernel.kernelHeap.operations.alloc(&kernel.kernelHeap, sizeof(struct KernelTimer));
     DEBUG_ASSERT(timer != nullptr);
     if (timer == nullptr) {
         return nullptr;
@@ -52,7 +48,7 @@ KernelTimer *kernel_timer_manger_default_create_timer(KernelTimerManager *kernel
 
     KernelStatus addToManager = klist_append(kernelTimerManager->timerNodes, &timer->list);
     if (addToManager == ERROR) {
-        kernelHeap.operations.free(&kernelHeap, timer);
+        kernel.kernelHeap.operations.free(&kernel.kernelHeap, timer);
         return nullptr;
     }
     return timer;
@@ -66,7 +62,7 @@ kernel_timer_manger_default_release_timer(KernelTimerManager *kernelTimerManager
         while (timer->waitQueue.size != 0) {
             KQueueNode *node = timer->waitQueue.operations.dequeue(&timer->waitQueue);
             Thread *thread = getNode(node, Thread, threadReadyQueue);
-            KernelStatus status = cfsScheduler.operation.addThread(&cfsScheduler, thread, thread->priority);
+            KernelStatus status = kernel.cfsScheduler.operation.addThread(&kernel.cfsScheduler, thread, thread->priority);
             DEBUG_ASSERT(status == OK);
             if (status != OK) {
                 LogError("[KernelTimer] add thread to scheduler failed.\n");
@@ -86,7 +82,7 @@ kernel_timer_manger_default_free_timer(KernelTimerManager *kernelTimerManager, K
     if (releaseStatus != OK) {
         return ERROR;
     }
-    kernelHeap.operations.free(&kernelHeap, timer);
+    kernel.kernelHeap.operations.free(&kernel.kernelHeap, timer);
     return OK;
 }
 
@@ -101,7 +97,7 @@ void kernel_timer_manger_tick_on_each_timer(struct ListNode *node) {
         timer->remainTime -= TICK_INTERVAL;
     }
     if (timer->remainTime <= 0) {
-        kernelTimerManager.operation.releaseTimer(&kernelTimerManager, timer);
+        kernel.kernelTimerManager.operation.releaseTimer(&kernel.kernelTimerManager, timer);
     }
 }
 

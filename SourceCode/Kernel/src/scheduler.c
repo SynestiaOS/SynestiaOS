@@ -2,8 +2,7 @@
 // Created by XingfengYang on 2020/6/29.
 //
 
-#include "arm/interrupt.h"
-#include "kernel/ktimer.h"
+#include "kernel/kernel.h"
 #include "kernel/scheduler.h"
 #include "arm/register.h"
 #include "kernel/interrupt.h"
@@ -12,9 +11,7 @@
 #include "kernel/spinlock.h"
 #include "libc/stdlib.h"
 
-extern InterruptManager genericInterruptManager;
-extern KernelTimerManager kernelTimerManager;
-extern Scheduler cfsScheduler;
+extern DaVinciKernel kernel;
 
 uint32_t PRIORITY_2_WEIGHT[40] = {
         88761, 71755, 56483, 46273, 36291, 29154, 23254, 18705, 14949, 11916,
@@ -32,7 +29,7 @@ extern void cpu_switch_mm(uint32_t pageTable);
 
 void tick() {
     LogInfo("[Schd]: tick.\n");
-    cfsScheduler.operation.switchNext(&cfsScheduler);
+    kernel.cfsScheduler.operation.switchNext(&kernel.cfsScheduler);
 }
 
 SpinLock spinlock = SpinLockCreate();
@@ -70,9 +67,9 @@ KernelStatus scheduler_default_operation_add_thread(struct Scheduler *scheduler,
 
 KernelStatus scheduler_default_operation_schedule(struct Scheduler *scheduler) {
     tick_init(&scheduler->schedulerTick, tick, "scheduler tick");
-    genericInterruptManager.operation.registerTick(&genericInterruptManager, &scheduler->schedulerTick);
+    kernel.genericInterruptManager.operation.registerTick(&kernel.genericInterruptManager, &scheduler->schedulerTick);
     LogInfo("[Scheduler]: Schd started.\n");
-    genericInterruptManager.operation.enableInterrupt(&genericInterruptManager);
+    kernel.genericInterruptManager.operation.enableInterrupt(&kernel.genericInterruptManager);
     return OK;
 }
 
@@ -89,17 +86,17 @@ KernelStatus scheduler_default_operation_preempt(struct Scheduler *scheduler) {
 }
 
 uint32_t get_curr_stack(uint32_t sp) {
-    if (nullptr != cfsScheduler.currentThread) {
-        LogInfo("[Scheduler] switch to %s\n", cfsScheduler.currentThread->name);
-        return cfsScheduler.currentThread->stack.top;
+    if (nullptr != kernel.cfsScheduler.currentThread) {
+        LogInfo("[Scheduler] switch to %s\n", kernel.cfsScheduler.currentThread->name);
+        return kernel.cfsScheduler.currentThread->stack.top;
     }
     return sp;
 }
 
 void set_curr_stack(uint32_t sp) {
-    if (nullptr != cfsScheduler.currentThread) {
-        LogInfo("[Scheduler] switch from %s\n", cfsScheduler.currentThread->name);
-        cfsScheduler.currentThread->stack.top = sp;
+    if (nullptr != kernel.cfsScheduler.currentThread) {
+        LogInfo("[Scheduler] switch from %s\n", kernel.cfsScheduler.currentThread->name);
+        kernel.cfsScheduler.currentThread->stack.top = sp;
     }
 }
 

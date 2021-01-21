@@ -2,13 +2,12 @@
 // Created by XingfengYang on 2021/1/8.
 //
 
+#include "kernel/kernel.h"
 #include "arm/interrupt.h"
-#include "kernel/interrupt.h"
 #include "kernel/log.h"
 #include "arm/vmm.h"
-#include "libc/string.h"
 
-extern InterruptManager genericInterruptManager;
+extern DaVinciKernel kernel;
 
 uint32_t arch_is_interrupt_enabled() {
     uint32_t cpsr;
@@ -75,5 +74,5 @@ void fast_interrupt_handler(void) {
 }
 
 void interrupt_handler(void) {
-    genericInterruptManager.operation.interrupt(&genericInterruptManager);
+    kernel.genericInterruptManager.operation.interrupt(&kernel.genericInterruptManager);
 }

@@ -1,17 +1,14 @@
 //
 // Created by XingfengYang on 2021/1/11.
 //
+#include "kernel/kernel.h"
 #include "kernel/log.h"
 #include "kernel/bus.h"
 #include "arm/register.h"
 #include "arm/page.h"
 #include "kernel/ext2.h"
-#include "kernel/interrupt.h"
 #include "kernel/kheap.h"
 #include "kernel/percpu.h"
-#include "kernel/scheduler.h"
-#include "kernel/slab.h"
-#include "kernel/vfs.h"
 #include "libc/stdlib.h"
 #include "libgui/gui_animation.h"
 #include "libgui/gui_label.h"
@@ -21,15 +18,7 @@
 #include "libgui/gui_window.h"
 #include "libc/string.h"
 
-extern InterruptManager genericInterruptManager;
-extern PhysicalPageAllocator kernelPageAllocator;
-extern PhysicalPageAllocator userspacePageAllocator;
-extern Heap kernelHeap;
-extern Slab kernelObjectSlab;
-extern Scheduler cfsScheduler;
-extern VFS vfs;
-extern GfxSurface mainSurface;
-extern ServiceBus testBus;
+extern DaVinciKernel kernel;
 
 extern uint32_t open(const char *name, uint32_t flags, uint32_t mode);
 
@@ -64,7 +53,7 @@ _Noreturn uint32_t *window_dialog(int args) {
     uint32_t i = 0;
 
     while (1) {
-        genericInterruptManager.operation.disableInterrupt(&genericInterruptManager);
+        kernel.genericInterruptManager.operation.disableInterrupt(&kernel.genericInterruptManager);
         gui_label_init(&label, 0, 0, "hello, world! Is this cool?");
         char buf[32];
         memset(buf, 0, 32);
@@ -73,7 +62,7 @@ _Noreturn uint32_t *window_dialog(int args) {
         gui_button_init(&buttonYes, 20, 50, "YES");
         gui_button_init(&buttonNo, 150, 50, "NO");
         gui_window_draw(&window);
-        genericInterruptManager.operation.enableInterrupt(&genericInterruptManager);
+        kernel.genericInterruptManager.operation.enableInterrupt(&kernel.genericInterruptManager);
     }
 }
 
@@ -82,13 +71,13 @@ _Noreturn uint32_t *window_filesystem(int args) {
     gui_window_create(&window);
     window.component.size = SizeWH(340, 200);
     gui_window_init(&window, 380, 100, "FileManager");
-    DirectoryEntry *directoryEntry = vfs.operations.lookup(&vfs, "/initrd");
+    DirectoryEntry *directoryEntry = kernel.vfs.operations.lookup(&kernel.vfs, "/initrd");
     struct GUILabel *labels;
     uint32_t size = 0;
-    genericInterruptManager.operation.disableInterrupt(&genericInterruptManager);
+    kernel.genericInterruptManager.operation.disableInterrupt(&kernel.genericInterruptManager);
     if (directoryEntry->children != nullptr) {
         size = klist_size(&directoryEntry->children->list);
-        labels = kernelHeap.operations.alloc(&kernelHeap, size * sizeof(GUILabel));
+        labels = kernel.kernelHeap.operations.alloc(&kernel.kernelHeap, size * sizeof(GUILabel));
         struct DirectoryEntry *pEntry = directoryEntry->children;
         uint32_t y = 0;
         for (uint32_t i = 1; i < size; i++) {
@@ -102,10 +91,10 @@ _Noreturn uint32_t *window_filesystem(int args) {
             }
         }
     }
-    genericInterruptManager.operation.enableInterrupt(&genericInterruptManager);
+    kernel.genericInterruptManager.operation.enableInterrupt(&kernel.genericInterruptManager);
 
     while (1) {
-        genericInterruptManager.operation.disableInterrupt(&genericInterruptManager);
+        kernel.genericInterruptManager.operation.disableInterrupt(&kernel.genericInterruptManager);
         uint32_t y = 0;
         for (uint32_t i = 1; i < size; i++) {
             labels[i].component.position.x = (i % 4) * 80;
@@ -115,7 +104,7 @@ _Noreturn uint32_t *window_filesystem(int args) {
             }
         }
         gui_window_draw(&window);
-        genericInterruptManager.operation.enableInterrupt(&genericInterruptManager);
+        kernel.genericInterruptManager.operation.enableInterrupt(&kernel.genericInterruptManager);
     }
 }
 
@@ -134,9 +123,9 @@ _Noreturn uint32_t *window_canvas2D(int args) {
 
     gui_window_add_children(&window, &(canvas.component));
     while (1) {
-        genericInterruptManager.operation.disableInterrupt(&genericInterruptManager);
+        kernel.genericInterruptManager.operation.disableInterrupt(&kernel.genericInterruptManager);
         gui_window_draw(&window);
-        genericInterruptManager.operation.enableInterrupt(&genericInterruptManager);
+        kernel.genericInterruptManager.operation.enableInterrupt(&kernel.genericInterruptManager);
     }
 }
 
@@ -144,13 +133,13 @@ _Noreturn uint32_t *window_canvas2D(int args) {
 _Noreturn uint32_t *bus_send(int args) {
     Listener sender;
     listener_create(&sender, "sender");
-    testBus.operation.registe(&testBus, &sender);
+    kernel.testBus.operation.registe(&kernel.testBus, &sender);
     MessageHeader testMsg;
     message_create(&testMsg, 0x32, 7, "hahaha\0");
     while (1) {
-        genericInterruptManager.operation.disableInterrupt(&genericInterruptManager);
+        kernel.genericInterruptManager.operation.disableInterrupt(&kernel.genericInterruptManager);
         sender.operation.send(&sender, &testMsg);
-        genericInterruptManager.operation.enableInterrupt(&genericInterruptManager);
+        kernel.genericInterruptManager.operation.enableInterrupt(&kernel.genericInterruptManager);
     }
 }
 
@@ -158,42 +147,42 @@ _Noreturn uint32_t *bus_send(int args) {
 _Noreturn uint32_t *bus_receive(int args) {
     Listener receiver;
     listener_create(&receiver, "receiver");
-    testBus.operation.registe(&testBus, &receiver);
+    kernel.testBus.operation.registe(&kernel.testBus, &receiver);
     MessageHeader testMsg;
     message_create(&testMsg, 0x32, 7, "");
     while (1) {
-        genericInterruptManager.operation.disableInterrupt(&genericInterruptManager);
+        kernel.genericInterruptManager.operation.disableInterrupt(&kernel.genericInterruptManager);
         MessageHeader *hdr = receiver.operation.receive(&receiver, &testMsg);
         if (hdr != nullptr) {
             LogWarn("[Receiver]: receive '%s'.\n", hdr->data);
         }
-        genericInterruptManager.operation.enableInterrupt(&genericInterruptManager);
+        kernel.genericInterruptManager.operation.enableInterrupt(&kernel.genericInterruptManager);
     }
 }
 
 void test_threads_init() {
     Thread *windowDialogThread = thread_create("Welcome", (ThreadStartRoutine) &window_dialog, 0, 0, sysModeCPSR());
     windowDialogThread->cpuAffinity = cpu_number_to_mask(0);
-    cfsScheduler.operation.addThread(&cfsScheduler, windowDialogThread, 1);
+    kernel.cfsScheduler.operation.addThread(&kernel.cfsScheduler, windowDialogThread, 1);
 
 
     Thread *windowCanvas2DThread = thread_create("Canvas2D", (ThreadStartRoutine) &window_canvas2D, 0, 0,
                                                  sysModeCPSR());
     windowCanvas2DThread->cpuAffinity = cpu_number_to_mask(0);
-    cfsScheduler.operation.addThread(&cfsScheduler, windowCanvas2DThread, 1);
+    kernel.cfsScheduler.operation.addThread(&kernel.cfsScheduler, windowCanvas2DThread, 1);
 
     Thread *windowFileSystemThread = thread_create("FileManager", (ThreadStartRoutine) &window_filesystem, 0, 0,
                                                    sysModeCPSR());
     windowFileSystemThread->cpuAffinity = cpu_number_to_mask(0);
-    cfsScheduler.operation.addThread(&cfsScheduler, windowFileSystemThread, 1);
+    kernel.cfsScheduler.operation.addThread(&kernel.cfsScheduler, windowFileSystemThread, 1);
 
     Thread *busSendThread = thread_create("Send", (ThreadStartRoutine) &bus_send, 0, 0,
                                           sysModeCPSR());
     busSendThread->cpuAffinity = cpu_number_to_mask(0);
-    cfsScheduler.operation.addThread(&cfsScheduler, busSendThread, 1);
+    kernel.cfsScheduler.operation.addThread(&kernel.cfsScheduler, busSendThread, 1);
 
     Thread *busReceiveThread = thread_create("Receive", (ThreadStartRoutine) &bus_receive, 0, 0,
                                              sysModeCPSR());
     busReceiveThread->cpuAffinity = cpu_number_to_mask(0);
-    cfsScheduler.operation.addThread(&cfsScheduler, busReceiveThread, 1);
+    kernel.cfsScheduler.operation.addThread(&kernel.cfsScheduler, busReceiveThread, 1);
 }

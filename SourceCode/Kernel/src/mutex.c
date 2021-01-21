@@ -2,15 +2,16 @@
 // Created by XingfengYang on 2020/7/17.
 //
 
+#include "kernel/kernel.h"
 #include "kernel/mutex.h"
 #include "arm/register.h"
 #include "kernel/assert.h"
 #include "kernel/kqueue.h"
 #include "kernel/percpu.h"
-#include "kernel/scheduler.h"
 #include "kernel/thread.h"
 
-extern Scheduler cfsScheduler;
+
+extern DaVinciKernel kernel;
 
 void mutex_default_acquire(Mutex *mutex) {
     mutex->spinLock.operations.acquire(&mutex->spinLock);
@@ -31,7 +32,7 @@ void mutex_default_acquire(Mutex *mutex) {
         perCpu->rbTree.operations.remove(&perCpu->rbTree, &currentThread->rbNode);
         // 2. switch to the next thread in scheduler
 
-        cfsScheduler.operation.switchNext(&cfsScheduler);
+        kernel.cfsScheduler.operation.switchNext(&kernel.cfsScheduler);
     }
 
     mutex->spinLock.operations.release(&mutex->spinLock);

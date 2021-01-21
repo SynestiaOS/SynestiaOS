@@ -2,13 +2,14 @@
 // Created by XingfengYang on 2020/7/14.
 //
 
+#include "kernel/kernel.h"
 #include "libgui/gui_canvas.h"
 #include "kernel/kheap.h"
 #include "kernel/log.h"
 #include "libc/stdlib.h"
 #include "libgfx/gfx2d.h"
 
-extern Heap kernelHeap;
+extern DaVinciKernel kernel;
 
 extern uint32_t GFX2D_BUFFER[1024 * 768];
 
@@ -44,7 +45,7 @@ void gui_canvas_create(GUICanvas *canvas) {
     canvas->component.foreground.g = 0x00;
     canvas->component.foreground.b = 0x00;
 
-    canvas->buffer = (unsigned char *) kernelHeap.operations.alloc(&kernelHeap, canvas->component.size.width *
+    canvas->buffer = (unsigned char *) kernel.kernelHeap.operations.alloc(&kernel.kernelHeap, canvas->component.size.width *
                                                                                         canvas->component.size.height * 4);
     if (canvas->buffer == nullptr) {
         LogError("[GUI]: canvas create failed, unable to allocate buffer memory\n");

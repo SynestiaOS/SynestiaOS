@@ -1,18 +1,19 @@
 //
 // Created by XingfengYang on 2020/6/26.
 //
+#include "kernel/kernel.h"
 #include "kernel/kstack.h"
 #include "kernel/kheap.h"
 #include "kernel/log.h"
 #include "libc/stdlib.h"
 
-extern Heap kernelHeap;
+extern DaVinciKernel kernel;
 
 KernelStatus stack_default_free(struct KernelStack *stack) {
     stack->size = 0;
     stack->base = 0;
     stack->top = 0;
-    KernelStatus freeStatus = kernelHeap.operations.free(&kernelHeap, stack->virtualMemoryAddress);
+    KernelStatus freeStatus = kernel.kernelHeap.operations.free(&kernel.kernelHeap, stack->virtualMemoryAddress);
     if (freeStatus != OK) {
         LogError("[KStack] kStack free failed.\n");
         return freeStatus;
@@ -57,7 +58,7 @@ KernelStatus stack_default_clear(struct KernelStack *stack) {
 
 KernelStack *kstack_allocate(struct KernelStack *kernelStack) {
     // 1. allocate stack memory block from virtual memory (heap), and align.
-    KernelStack *stack = (KernelStack *) kernelHeap.operations.allocAligned(&kernelHeap, DEFAULT_KERNEL_STACK_SIZE, 16);
+    KernelStack *stack = (KernelStack *) kernel.kernelHeap.operations.allocAligned(&kernel.kernelHeap, DEFAULT_KERNEL_STACK_SIZE, 16);
     if (stack == nullptr) {
         LogError("[KStack] kStack allocate failed.\n");
         return nullptr;

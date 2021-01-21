@@ -2,8 +2,8 @@
 // Created by XingfengYang on 2020/8/7.
 //
 
+#include "kernel/kernel.h"
 #include "kernel/ext2.h"
-#include "kernel/kheap.h"
 #include "kernel/list.h"
 #include "kernel/log.h"
 #include "kernel/vfs_dentry.h"
@@ -16,7 +16,8 @@
 #define EXT2_INDEX_NODE_STRUCTURE_SIZE 128
 #define EXT2_SUPER_BLOCK_OFFSET 1024
 
-extern Heap kernelHeap;
+
+extern DaVinciKernel kernel;
 
 void ext2_recursively_fill_superblock(Ext2FileSystem *ext2FileSystem, Ext2IndexNode *ext2IndexNode,
                                       DirectoryEntry *vfsDirectoryEntry, char *name) {
@@ -148,7 +149,7 @@ KernelStatus ext2_fs_default_mount(Ext2FileSystem *ext2FileSystem, char *mountNa
     blockForIndexNodeTable += blockForIndexNodeTableMod;
     LogInfo("[Ext2]: index node table  blocks: %d .\n", blockForIndexNodeTable);
 
-    Ext2BlockGroup *blockGroup = (Ext2BlockGroup *) kernelHeap.operations.alloc(&kernelHeap, blockGroupNums *
+    Ext2BlockGroup *blockGroup = (Ext2BlockGroup *) kernel.kernelHeap.operations.alloc(&kernel.kernelHeap, blockGroupNums *
                                                                                                      sizeof(Ext2BlockGroup));
 
     for (uint32_t blockGroupDescriptorIndex = 0; blockGroupDescriptorIndex < blockGroupNums;
@@ -298,7 +299,7 @@ uint32_t ext2_fs_default_read(Ext2FileSystem *ext2FileSystem, Ext2IndexNode *ext
 }
 
 Ext2FileSystem *ext2_create() {
-    Ext2FileSystem *ext2FileSystem = (Ext2FileSystem *) kernelHeap.operations.alloc(&kernelHeap,
+    Ext2FileSystem *ext2FileSystem = (Ext2FileSystem *) kernel.kernelHeap.operations.alloc(&kernel.kernelHeap,
                                                                                     sizeof(Ext2FileSystem));
     ext2FileSystem->operations.mount = (Ext2FileSystemMountOperation) ext2_fs_default_mount;
     ext2FileSystem->operations.read = (Ext2FileSystemReadOperation) ext2_fs_default_read;

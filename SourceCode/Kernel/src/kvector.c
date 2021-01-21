@@ -1,15 +1,17 @@
 //
 // Created by XingfengYang on 2020/7/10.
 //
+#include "kernel/kernel.h"
 #include "kernel/kvector.h"
 #include "kernel/kheap.h"
 #include "kernel/log.h"
 #include "libc/stdlib.h"
 
-extern Heap kernelHeap;
+
+extern DaVinciKernel kernel;
 
 KernelStatus kvector_operation_default_resize(struct KernelVector *vector, uint32_t newSize) {
-    vector->data = kernelHeap.operations.realloc(&kernelHeap, vector->data, newSize);
+    vector->data = kernel.kernelHeap.operations.realloc(&kernel.kernelHeap, vector->data, newSize);
     if (vector == nullptr) {
         LogError("[KVector] kVector resize failed.\n");
         return ERROR;
@@ -18,7 +20,7 @@ KernelStatus kvector_operation_default_resize(struct KernelVector *vector, uint3
 }
 
 KernelStatus kvector_operation_default_free(struct KernelVector *vector) {
-    KernelStatus status = kernelHeap.operations.free(&kernelHeap, vector);
+    KernelStatus status = kernel.kernelHeap.operations.free(&kernel.kernelHeap, vector);
     if (status != OK) {
         LogError("[KVector] kVector free failed.\n");
         return status;
@@ -73,7 +75,7 @@ KernelStatus kvector_operation_default_clear(struct KernelVector *vector) {
 
 KernelVector *kvector_allocate(struct KernelVector *vector) {
     // 1. allocate vector memory block from virtual memory (heap), and align.
-    ListNode **data = (ListNode **) kernelHeap.operations.alloc(&kernelHeap, DEFAULT_VECTOR_SIZE * sizeof(ListNode *));
+    ListNode **data = (ListNode **) kernel.kernelHeap.operations.alloc(&kernel.kernelHeap, DEFAULT_VECTOR_SIZE * sizeof(ListNode *));
     if (data == nullptr) {
         LogError("[KVector] kVector allocate failed.\n");
         return nullptr;

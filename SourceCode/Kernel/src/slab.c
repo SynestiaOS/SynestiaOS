@@ -1,9 +1,9 @@
 //
 // Created by XingfengYang on 2020/11/23.
 //
+#include "kernel/kernel.h"
 #include "kernel/slab.h"
 #include "arm/page.h"
-#include "kernel/kheap.h"
 #include "kernel/kobject.h"
 #include "kernel/log.h"
 #include "kernel/mutex.h"
@@ -11,8 +11,7 @@
 #include "kernel/thread.h"
 #include "kernel/type.h"
 
-extern PhysicalPageAllocator kernelPageAllocator;
-extern Heap kernelHeap;
+extern DaVinciKernel kernel;
 
 void slab_default_alloc_callback(struct Slab *slab, KernelObjectType type, void *ptr, uint32_t reUse) {
     if (reUse) {
@@ -29,25 +28,25 @@ void slab_default_free_callback(struct Slab *slab, KernelObjectType type, void *
 void *slab_default_alloc_kernel_object(struct Slab *slab, KernelObjectType type) {
     switch (type) {
         case KERNEL_OBJECT_THREAD: {
-            Thread *thread = kernelHeap.operations.alloc(&kernelHeap, sizeof(Thread));
+            Thread *thread = kernel.kernelHeap.operations.alloc(&kernel.kernelHeap, sizeof(Thread));
             klist_append(slab->kernelObjects[type], &thread->object.list);
             thread->object.status = USING;
             return thread;
         }
         case KERNEL_OBJECT_MUTEX: {
-            Mutex *mutex = kernelHeap.operations.alloc(&kernelHeap, sizeof(Mutex));
+            Mutex *mutex = kernel.kernelHeap.operations.alloc(&kernel.kernelHeap, sizeof(Mutex));
             klist_append(slab->kernelObjects[type], &mutex->object.list);
             mutex->object.status = USING;
             return mutex;
         }
         case KERNEL_OBJECT_SEMAPHORE: {
-            Semaphore *semaphore = kernelHeap.operations.alloc(&kernelHeap, sizeof(Semaphore));
+            Semaphore *semaphore = kernel.kernelHeap.operations.alloc(&kernel.kernelHeap, sizeof(Semaphore));
             klist_append(slab->kernelObjects[type], &semaphore->object.list);
             semaphore->object.status = USING;
             return semaphore;
         }
         case KERNEL_OBJECT_FILE_DESCRIPTOR: {
-            FileDescriptor *fileDescriptor = kernelHeap.operations.alloc(&kernelHeap, sizeof(FileDescriptor));
+            FileDescriptor *fileDescriptor = kernel.kernelHeap.operations.alloc(&kernel.kernelHeap, sizeof(FileDescriptor));
             klist_append(slab->kernelObjects[type], &fileDescriptor->object.list);
             fileDescriptor->object.status = USING;
             return fileDescriptor;
@@ -93,7 +92,7 @@ KernelStatus slab_default_free(struct Slab *slab, KernelObjectType type, void *p
     // set kernel object free, then remove from kernel object list, at last insert the removed node to head of list.
     switch (type) {
         case KERNEL_OBJECT_THREAD: {
-            Thread *thread = kernelHeap.operations.alloc(&kernelHeap, sizeof(Thread));
+            Thread *thread = kernel.kernelHeap.operations.alloc(&kernel.kernelHeap, sizeof(Thread));
             klist_remove_node(&thread->object.list);
             thread->object.list.next = slab->kernelObjects[type];
             slab->kernelObjects[type] = &thread->object.list;
@@ -102,7 +101,7 @@ KernelStatus slab_default_free(struct Slab *slab, KernelObjectType type, void *p
             return OK;
         }
         case KERNEL_OBJECT_MUTEX: {
-            Mutex *mutex = kernelHeap.operations.alloc(&kernelHeap, sizeof(Mutex));
+            Mutex *mutex = kernel.kernelHeap.operations.alloc(&kernel.kernelHeap, sizeof(Mutex));
             klist_remove_node(&mutex->object.list);
             mutex->object.list.next = slab->kernelObjects[type];
             slab->kernelObjects[type] = &mutex->object.list;
@@ -111,7 +110,7 @@ KernelStatus slab_default_free(struct Slab *slab, KernelObjectType type, void *p
             return OK;
         }
         case KERNEL_OBJECT_SEMAPHORE: {
-            Semaphore *semaphore = kernelHeap.operations.alloc(&kernelHeap, sizeof(Semaphore));
+            Semaphore *semaphore = kernel.kernelHeap.operations.alloc(&kernel.kernelHeap, sizeof(Semaphore));
             klist_remove_node(&semaphore->object.list);
             semaphore->object.list.next = slab->kernelObjects[type];
             slab->kernelObjects[type] = &semaphore->object.list;
@@ -120,7 +119,7 @@ KernelStatus slab_default_free(struct Slab *slab, KernelObjectType type, void *p
             return OK;
         }
         case KERNEL_OBJECT_FILE_DESCRIPTOR: {
-            FileDescriptor *fileDescriptor = kernelHeap.operations.alloc(&kernelHeap, sizeof(FileDescriptor));
+            FileDescriptor *fileDescriptor = kernel.kernelHeap.operations.alloc(&kernel.kernelHeap, sizeof(FileDescriptor));
             klist_remove_node(&fileDescriptor->object.list);
             fileDescriptor->object.list.next = slab->kernelObjects[type];
             slab->kernelObjects[type] = &fileDescriptor->object.list;
@@ -146,7 +145,7 @@ KernelStatus slab_create(Slab *slab, uint32_t addr, uint32_t size) {
     slab->address = addr;
     LogInfo("[KSlab] at: %d. \n", slab->address);
 
-    PhysicalPageAllocator *physicalPageAllocator = &kernelPageAllocator;
+    PhysicalPageAllocator *physicalPageAllocator = &kernel.kernelPageAllocator;
 
     // allocate physical page for slab
     uint32_t slabPhysicalPage = (uint32_t) physicalPageAllocator->operations.allocHugeAt(

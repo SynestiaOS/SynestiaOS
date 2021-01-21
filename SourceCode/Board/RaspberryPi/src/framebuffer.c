@@ -2,8 +2,8 @@
 // Created by XingfengYang on 2020/7/7.
 //
 
+#include "kernel/kernel.h"
 #include "raspi2/framebuffer.h"
-#include "kernel/kheap.h"
 #include "kernel/log.h"
 #include "raspi2/mailbox.h"
 
@@ -13,10 +13,10 @@ uint8_t *lfb;
 uint32_t framebufferWidth;
 uint32_t framebufferHeight;
 
-extern Heap kernelHeap;
+extern DaVinciKernel kernel;
 
 uint32_t framebuffer_init(void) {
-    PropertySetPhysicalDisplayWHMail *setPhysicalDisplayWHMail = kernelHeap.operations.allocAligned(&kernelHeap,
+    PropertySetPhysicalDisplayWHMail *setPhysicalDisplayWHMail = kernel.kernelHeap.operations.allocAligned(&kernel.kernelHeap,
                                                                                                     sizeof(PropertySetPhysicalDisplayWHMail),
                                                                                                     16);
     setPhysicalDisplayWHMail->size = sizeof(PropertySetPhysicalDisplayWHMail);
@@ -37,7 +37,7 @@ uint32_t framebuffer_init(void) {
     }
     LogInfo("[Framebuffer]: Set physical WH done\n");
 
-    PropertySetVirtualBufferWHMail *setVirtualBufferWHMail = kernelHeap.operations.allocAligned(&kernelHeap,
+    PropertySetVirtualBufferWHMail *setVirtualBufferWHMail = kernel.kernelHeap.operations.allocAligned(&kernel.kernelHeap,
                                                                                                 sizeof(PropertySetVirtualBufferWHMail),
                                                                                                 16);
     setVirtualBufferWHMail->size = sizeof(PropertySetVirtualBufferWHMail);
@@ -58,7 +58,7 @@ uint32_t framebuffer_init(void) {
     }
     LogInfo("[Framebuffer]: Set virtual WH done\n");
 
-    PropertySetDepthMail *setDepthMail = kernelHeap.operations.allocAligned(&kernelHeap, sizeof(PropertySetDepthMail),
+    PropertySetDepthMail *setDepthMail = kernel.kernelHeap.operations.allocAligned(&kernel.kernelHeap, sizeof(PropertySetDepthMail),
                                                                             16);
     setDepthMail->size = sizeof(PropertySetDepthMail);
     setDepthMail->code = CODE_REQUEST;
@@ -78,7 +78,7 @@ uint32_t framebuffer_init(void) {
     }
     LogInfo("[Framebuffer]: Set depth done\n");
 
-    PropertySetVirtualOffsetMail *setVirtualOffsetMail = kernelHeap.operations.allocAligned(&kernelHeap,
+    PropertySetVirtualOffsetMail *setVirtualOffsetMail = kernel.kernelHeap.operations.allocAligned(&kernel.kernelHeap,
                                                                                             sizeof(PropertySetVirtualOffsetMail),
                                                                                             16);
     setVirtualOffsetMail->size = sizeof(PropertySetVirtualOffsetMail);
@@ -99,7 +99,7 @@ uint32_t framebuffer_init(void) {
     }
     LogInfo("[Framebuffer]: Set virtual offset done\n");
 
-    PropertyAllocateBufferMail *allocateBufferMail = kernelHeap.operations.allocAligned(&kernelHeap,
+    PropertyAllocateBufferMail *allocateBufferMail = kernel.kernelHeap.operations.allocAligned(&kernel.kernelHeap,
                                                                                         sizeof(PropertyAllocateBufferMail),
                                                                                         16);
     allocateBufferMail->size = sizeof(PropertyAllocateBufferMail);
@@ -122,7 +122,7 @@ uint32_t framebuffer_init(void) {
     }
     LogInfo("[Framebuffer]: Allocate video buffer done\n");
 
-    PropertyGetPitchMail *getPitchMail = kernelHeap.operations.allocAligned(&kernelHeap, sizeof(PropertyGetPitchMail),
+    PropertyGetPitchMail *getPitchMail = kernel.kernelHeap.operations.allocAligned(&kernel.kernelHeap, sizeof(PropertyGetPitchMail),
                                                                             16);
     getPitchMail->size = sizeof(PropertyGetPitchMail);
     getPitchMail->code = CODE_REQUEST;

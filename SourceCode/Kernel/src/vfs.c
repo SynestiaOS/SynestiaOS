@@ -2,6 +2,7 @@
 // Created by XingfengYang on 2020/7/30.
 //
 
+#include "kernel/kernel.h"
 #include "kernel/vfs.h"
 #include "arm/register.h"
 #include "kernel/ext2.h"
@@ -14,7 +15,8 @@
 #include "libc/string.h"
 #include "raspi2/uart.h"
 
-extern Heap kernelHeap;
+
+extern DaVinciKernel kernel;
 
 SuperBlock *vfs_default_mount(VFS *vfs, const char *name, FileSystemType type, void *data) {
     switch (type) {
@@ -45,7 +47,7 @@ uint32_t vfs_default_open(VFS *vfs, const char *name, uint32_t mode) {
     uint32_t len = currThread->memoryStruct.virtualMemory.operations.getUserStrLen(
             &currThread->memoryStruct.virtualMemory, name);
 
-    void *dest = kernelHeap.operations.alloc(&kernelHeap, len + 1);
+    void *dest = kernel.kernelHeap.operations.alloc(&kernel.kernelHeap, len + 1);
 
     char *bufferKernel = (char *) currThread->memoryStruct.virtualMemory.operations.copyToKernel(
             &currThread->memoryStruct.virtualMemory, name, dest, len + 1);
@@ -56,7 +58,7 @@ uint32_t vfs_default_open(VFS *vfs, const char *name, uint32_t mode) {
         return 0;
     }
 
-    kernelHeap.operations.free(&kernelHeap, dest);
+    kernel.kernelHeap.operations.free(&kernel.kernelHeap, dest);
     //    atomic_inc(&directoryEntry->indexNode->readCount);
 
     directoryEntry->indexNode->state = INDEX_NODE_STATE_OPENED;

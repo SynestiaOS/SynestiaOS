@@ -8,3 +8,5 @@ add_library(${PROJECT_NAME}
 target_include_libc_header_files(${PROJECT_NAME})
 target_include_raspberry_pi_header_files(${PROJECT_NAME})
 target_include_kernel_header_files(${PROJECT_NAME})
+target_include_libgfx_header_files(${PROJECT_NAME})
+target_include_arch_header_files(${PROJECT_NAME})

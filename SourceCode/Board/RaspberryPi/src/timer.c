@@ -1,10 +1,11 @@
-#include "libc/string.h"
 #include "raspi2/timer.h"
 #include "kernel/interrupt.h"
 #include "kernel/log.h"
 #include "libc/stdlib.h"
+#include "kernel/kernel.h"
+#include "libc/string.h"
 
-extern InterruptManager genericInterruptManager;
+extern DaVinciKernel kernel;
 
 static timer_registers_t *timer_regs = (timer_registers_t *) SYSTEM_TIMER_BASE;
 
@@ -24,7 +25,7 @@ void system_timer_init(void) {
     timerInterrupt.clearHandler = system_timer_irq_clear;
     memset(timerInterrupt.name, 0, sizeof(timerInterrupt.name));
     strcpy(timerInterrupt.name, "system timer");
-    genericInterruptManager.operation.registerInterrupt(&genericInterruptManager, timerInterrupt);
+    kernel.genericInterruptManager.operation.registerInterrupt(&kernel.genericInterruptManager, timerInterrupt);
 }
 
 void enable_core0_irq(void) { io_writel(0x8, 0x40000040); }
@@ -51,7 +52,7 @@ void generic_timer_irq_handler(void) {
     LogInfo("[Timer]: generic timer interrupted\n");
     write_cntvtval(read_cntfrq() / 10);
 
-    genericInterruptManager.operation.tick(&genericInterruptManager);
+    kernel.genericInterruptManager.operation.tick(&kernel.genericInterruptManager);
 }
 
 void generic_timer_init(void) {
@@ -65,5 +66,5 @@ void generic_timer_init(void) {
     timerInterrupt.clearHandler = generic_timer_irq_clear;
     memset(timerInterrupt.name, 0, sizeof(timerInterrupt.name));
     strcpy(timerInterrupt.name, "generic timer");
-    genericInterruptManager.operation.registerInterrupt(&genericInterruptManager, timerInterrupt);
+    kernel.genericInterruptManager.operation.registerInterrupt(&kernel.genericInterruptManager, timerInterrupt);
 }
