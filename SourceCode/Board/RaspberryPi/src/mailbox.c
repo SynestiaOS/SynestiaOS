@@ -6,34 +6,30 @@
 #include "libc/stdlib.h"
 
 MailMessage mailbox_call(MailMessage message) {
-    while (!((*(uint32_t *) (MAIL0_STATUS)) & MBOX_EMPTY)) {
-        *(uint32_t *) (MAIL0_READ);
-    }
     mailbox_send(message);
-    MailMessage data = mailbox_read(message.channel);
+    MailMessage data = mailbox_read(message);
     return data;
 }
 
-MailMessage mailbox_read(uint8_t channel) {
+MailMessage mailbox_read(MailMessage msg) {
     MailStatus stat;
     MailMessage res;
     do {
         do {
             stat.empty = *MAIL0_STATUS & MBOX_EMPTY;
-            stat.full = *MAIL0_STATUS & MBOX_FULL;
         } while (stat.empty);
-        res.channel = *MAIL0_READ & 0xF;
-        res.data = *MAIL0_READ & ~0xF;
-    } while (res.channel != channel);
+        if((msg.data | msg.channel) == *MAIL0_READ)
+            return msg;
+    } while (1);
     return res;
 }
 
 void mailbox_send(MailMessage msg) {
     MailStatus stat;
     do {
-        stat.empty = *MAIL0_STATUS & MBOX_EMPTY;
-        stat.full = *MAIL0_STATUS & MBOX_FULL;
+        //stat.empty = *MAIL1_STATUS & MBOX_EMPTY;
+        stat.full = *MAIL1_STATUS & MBOX_FULL;
     } while (stat.full);
 
-    *MAIL0_WRITE = (msg.data | msg.channel);
+    *MAIL1_WRITE = (msg.data | msg.channel);
 }
