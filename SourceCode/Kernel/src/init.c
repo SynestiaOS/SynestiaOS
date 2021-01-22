@@ -72,6 +72,10 @@ void kernel_main(void) {
         // create interrupt manager and init generic interrupt
         interrupt_manager_create(&genericInterruptManager);
 
+        // init kernel timer manager
+        kernel_timer_manager_create(&kernelTimerManager);
+        kernelTimerManager.operation.init(&kernelTimerManager);
+
         synestia_init_timer();
 
         // create kernel physical page allocator
@@ -80,9 +84,6 @@ void kernel_main(void) {
         // init kernel virtual memory mapping
         kernel_vmm_init();
 
-        // init kernel timer manager
-        kernel_timer_manager_create(&kernelTimerManager);
-        kernelTimerManager.operation.init(&kernelTimerManager);
         scheduler_create(&cfsScheduler);
 
         // create kernel heap
