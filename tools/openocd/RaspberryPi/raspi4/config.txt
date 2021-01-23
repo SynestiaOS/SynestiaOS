@@ -1,0 +1,22 @@
+kernel=infloop.bin
+
+enable_uart=1
+arm_64bit=0
+kernel=infloop.bin
+
+enable_jtag_gpio=1
+gpio=22-27=a4
+init_uart_clock=48000000
+init_uart_baud=115200
+
+uart_2ndstage=1
+
+max_usb_current=1
+hdmi_force_hotplug=1
+config_hdmi_boost=7
+hdmi_group=2
+hdmi_mode=1
+hdmi_mode=87
+hdmi_drive=1
+display_rotate=0
+hdmi_cvt 1024 600 60 6 0 0 0
