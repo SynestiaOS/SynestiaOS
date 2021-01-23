@@ -29,7 +29,7 @@ target_sources(${KernelName}
 
 target_link_options(${KernelName} PRIVATE -T ${KernelArch_SOURCE_DIR}/src/kernel.ld)
 
-#target_link_libraries(${KernelName} PRIVATE gcc)
+target_link_libraries(${KernelName} PRIVATE gcc)
 
 add_custom_command(OUTPUT kernel.img
         WORKING_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}

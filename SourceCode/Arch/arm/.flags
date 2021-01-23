@@ -4,8 +4,15 @@
 # "-key=value # comment" is also valid comment
 
 # arm specific compiler flags
---target=arm-unknown-linux-elf
+# clang required compiler flags
+#--target=armv7a-none-eabi
 # -mfpu=neon-vfpv4
--mfloat-abi=hard
+# -mfloat-abi=hard
+# -march=armv7-a
+# -mtune=cortex-a7
+
+# gcc required compiler flags
+-mfpu=neon-vfpv4
+-mfloat-abi=soft
 -march=armv7-a
 -mtune=cortex-a7

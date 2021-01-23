@@ -1,18 +1,19 @@
 message(STATUS "detected c compiler id: ${CMAKE_C_COMPILER_ID}, version: ${CMAKE_C_COMPILER_VERSION}")
 message(STATUS "detected c++ compiler id: ${CMAKE_CXX_COMPILER_ID}, version: ${CMAKE_CXX_COMPILER_VERSION}")
 
-if (CMAKE_C_COMPILER_ID AND NOT CMAKE_C_COMPILER_ID STREQUAL "Clang")
-    message(FATAL_ERROR "[compiler] only clang is supported")
-endif ()
-
-if (CMAKE_CXX_COMPILER_ID AND NOT CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-    message(FATAL_ERROR "[compiler] only clang++ is supported")
-endif ()
-
-set(CLANG_MIN_VERSION_REQUIRED 10.0.0)
-if (CMAKE_C_COMPILER_ID AND CMAKE_C_COMPILER_VERSION VERSION_LESS ${CLANG_MIN_VERSION_REQUIRED} AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS ${CLANG_MIN_VERSION_REQUIRED})
-    message(FATAL_ERROR "Clang version must be greater than ${CLANG_MIN_VERSION_REQUIRED}")
-endif ()
+# todo: add support for clang
+#if (CMAKE_C_COMPILER_ID AND NOT CMAKE_C_COMPILER_ID STREQUAL "Clang")
+#    message(FATAL_ERROR "[compiler] only clang is supported")
+#endif ()
+#
+#if (CMAKE_CXX_COMPILER_ID AND NOT CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+#    message(FATAL_ERROR "[compiler] only clang++ is supported")
+#endif ()
+#
+#set(CLANG_MIN_VERSION_REQUIRED 10.0.0)
+#if (CMAKE_C_COMPILER_ID AND CMAKE_C_COMPILER_VERSION VERSION_LESS ${CLANG_MIN_VERSION_REQUIRED} AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS ${CLANG_MIN_VERSION_REQUIRED})
+#    message(FATAL_ERROR "Clang version must be greater than ${CLANG_MIN_VERSION_REQUIRED}")
+#endif ()
 
 function(read_arch_compiler_flags_from_file IN_file OUT_flag)
     file(STRINGS ${IN_file} lines)
@@ -88,13 +89,13 @@ function(setup_compiler_flags IN_board IN_arch)
 #            "-Werror"
             ${ignore_specific_warnings}
             "-MD"
-            "-fuse-ld=lld"
+            # todo: clang required flag
+#            "-fuse-ld=lld"
             "-fpic"
             "-ffreestanding"
             "-fno-builtin"
             "-fno-exceptions"
             "-nostdinc"
-            "-nostdinc++"
             "-nostdlib"
             "-nostartfiles"
             "-Wl,--no-dynamic-linker"

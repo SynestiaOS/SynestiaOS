@@ -2,7 +2,7 @@
 // Created by Shifu Wu  on 2021/1/24.
 //
 
-#if ARCH_arm
+#if 0
 
 typedef union { unsigned int i; float f; } fu;
 unsigned int __umodsi3 (unsigned int a, unsigned int b);

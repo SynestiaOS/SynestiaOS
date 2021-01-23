@@ -2,7 +2,7 @@
 // Created by Shifu Wu  on 2021/1/24.
 //
 
-#if ARCH_arm
+#if 0
 
 #include "libmath/math.h"
 

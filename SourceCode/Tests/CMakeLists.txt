@@ -19,16 +19,6 @@ target_include_kernel_header_files(${KernelArchUnitTests})
 target_include_libc_header_files(${KernelArchUnitTests})
 target_include_libmath_header_files(${KernelArchUnitTests})
 
-if (SynestiaPlatform STREQUAL pi2)
-    set(boardObj BoardRaspberryPi)
-elseif (SynestiaPlatform STREQUAL pi3)
-    set(boardObj BoardRaspberryPi)
-elseif (SynestiaPlatform STREQUAL pi4)
-    set(boardObj BoardRaspberryPi)
-else ()
-    message(ERROR "unexpected PLATFORM ${PLATFORM}")
-endif ()
-
 set(KernelUnitTestsImg KernelUnitTests.elf)
 add_executable(${KernelUnitTestsImg}
         ${KernelUnitTestsSrc}
@@ -39,7 +29,7 @@ add_executable(${KernelUnitTestsImg}
         $<TARGET_OBJECTS:LibMath>
         $<TARGET_OBJECTS:LibGfx>
         $<TARGET_OBJECTS:LibGUI>
-        $<TARGET_OBJECTS:${boardObj}>)
+        $<TARGET_OBJECTS:BoardRaspberryPi>)
 
 target_sources(${KernelUnitTestsImg}
         PRIVATE
@@ -53,4 +43,4 @@ target_include_kernel_header_files(${KernelUnitTestsImg})
 target_include_libmath_header_files(${KernelUnitTestsImg})
 
 target_link_options(${KernelUnitTestsImg} PRIVATE -T ${KernelArchDir}/src/kernel.ld)
-#target_link_libraries(${KernelUnitTestsImg} PRIVATE gcc)
+target_link_libraries(${KernelUnitTestsImg} PRIVATE gcc)
