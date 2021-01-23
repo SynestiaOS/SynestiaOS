@@ -21,4 +21,6 @@ float powf(float x, float y);
 
 float q_rsqrt(float number);
 
+unsigned  int abs(int);
+
 #endif//__LIBRARY_LIBMATH_MATH_H__

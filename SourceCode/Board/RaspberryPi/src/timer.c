@@ -31,16 +31,16 @@ void enable_core0_irq(void) { io_writel(0x8, 0x40000040); }
 
 uint32_t read_cntfrq(void) {
     uint32_t value;
-    asm volatile("mrc p15, 0, %0, c14, c0, 0"
+    __asm__ __volatile__("mrc p15, 0, %0, c14, c0, 0"
     : "=r"(value));
     return value;
 }
 
-void write_cntvtval(uint32_t value) { asm volatile("mcr p15, 0, %0, c14, c3, 0"::"r"(value)); }
+void write_cntvtval(uint32_t value) { __asm__ __volatile__("mcr p15, 0, %0, c14, c3, 0"::"r"(value)); }
 
 void enable_cntv(void) {
     uint32_t value = 1;
-    asm volatile("mcr p15, 0, %0, c14, c3, 1"::"r"(value));
+    __asm__ __volatile__("mcr p15, 0, %0, c14, c3, 1"::"r"(value));
 }
 
 void generic_timer_irq_clear(void) {

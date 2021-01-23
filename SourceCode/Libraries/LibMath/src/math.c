@@ -36,3 +36,8 @@ float q_rsqrt(float number) {
     //    y  = y * ( threehalfs - ( x2 * y * y ) );   // 2nd iteration, this can be removed
     return y;
 }
+
+unsigned int abs(int number) {
+    return number < 0 ? -number : number;
+}
+

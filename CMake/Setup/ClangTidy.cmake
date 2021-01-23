@@ -1,0 +1,8 @@
+if (DISABLE_CLANG_TIDY)
+    message(STATUS "clang-tidy checks disabled")
+else ()
+    message(STATUS "clang-tidy checks enabled")
+    set(CLANG_TIDY_FIX_DIR ${CMAKE_BINARY_DIR}/fix)
+    file(MAKE_DIRECTORY ${CLANG_TIDY_FIX_DIR})
+    set(CMAKE_CXX_CLANG_TIDY "clang-tidy;--export-fixes=${CLANG_TIDY_FIX_DIR}/clang_tidy_fix.yml" CACHE INTERNAL "clang-tidy")
+endif ()

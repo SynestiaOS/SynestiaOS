@@ -1,6 +1,6 @@
 PROJECT(KernelUnitTests C ASM)
 
-set(KernelArchDir ${SynestiaOS_SOURCE_DIR}/SourceCode/Arch/${SynestiaArch})
+set(KernelArchDir ${SynestiaOS_SOURCE_DIR}/SourceCode/Arch/${ARCH})
 
 find_asm_source_files(ASM_SOURCE_FILES ${KernelArchDir}/src)
 aux_source_directory(${KernelUnitTests_SOURCE_DIR}/src KernelUnitTestsSrc)
@@ -53,4 +53,4 @@ target_include_kernel_header_files(${KernelUnitTestsImg})
 target_include_libmath_header_files(${KernelUnitTestsImg})
 
 target_link_options(${KernelUnitTestsImg} PRIVATE -T ${KernelArchDir}/src/kernel.ld)
-target_link_libraries(${KernelUnitTestsImg} PRIVATE gcc)
+#target_link_libraries(${KernelUnitTestsImg} PRIVATE gcc)

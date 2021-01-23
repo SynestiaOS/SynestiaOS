@@ -1,13 +1,14 @@
 #ifndef __BOARD_RASP_H__
 #define __BOARD_RASP_H__
 
-#if defined(RASPI2)
+// todo: change PERIPHERAL_BASE based on board
+//#if defined(RASPI2)
 #define PERIPHERAL_BASE 0x3F000000
-#elif defined(RASPI3)
-#define PERIPHERAL_BASE 0x3F000000
-#elif defined(RASPI4)
-#define PERIPHERAL_BASE 0xFE000000
-#endif
+//#elif defined(RASPI3)
+//#define PERIPHERAL_BASE 0x3F000000
+//#elif defined(RASPI4)
+//#define PERIPHERAL_BASE 0xFE000000
+//#endif
 
 #define PERIPHERAL_LENGTH 0x01000000
 

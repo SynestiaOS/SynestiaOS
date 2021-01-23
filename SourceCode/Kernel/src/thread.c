@@ -303,7 +303,7 @@ Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uin
 
 _Noreturn uint32_t *idle_thread_routine(int arg) {
     while (1) {
-        asm volatile("wfi");
+        __asm__ __volatile__("wfi");
     }
 }
 

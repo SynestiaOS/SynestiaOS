@@ -1,0 +1,11 @@
+# arm required compiler flags
+# compiler flags could be put in one line, or put it in separate line
+# "#" started line is comment
+# "-key=value # comment" is also valid comment
+
+# arm specific compiler flags
+--target=arm-unknown-linux-elf
+# -mfpu=neon-vfpv4
+-mfloat-abi=hard
+-march=armv7-a
+-mtune=cortex-a7

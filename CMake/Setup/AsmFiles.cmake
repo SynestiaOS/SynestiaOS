@@ -1,0 +1,5 @@
+function(find_asm_source_files OUT_asm_source_files IN_directory)
+    file(GLOB asm_source_files LIST_DIRECTORIES false ${IN_directory}/*.S)
+    set(${OUT_asm_source_files} ${asm_source_files} PARENT_SCOPE)
+    message(STATUS "found asm files: ${asm_source_files}")
+endfunction()

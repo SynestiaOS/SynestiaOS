@@ -1,0 +1,4 @@
+# this is the board to be build, RaspberryPi3 is default build board
+# change the following board to the board you want to build
+# "#" started line is comment
+RaspberryPi

@@ -7,7 +7,7 @@
 
 #include "libc/stdbool.h"
 #include "libc/stdint.h"
-#include "raspi.h"
+#include "raspi2/raspi.h"
 
 #define RPI_INTERRUPT_CONTROLLER_BASE (PERIPHERAL_BASE + INTERRUPTS_OFFSET + 0x200)
 
