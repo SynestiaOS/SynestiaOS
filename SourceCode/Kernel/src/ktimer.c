@@ -103,7 +103,7 @@ void kernel_timer_manger_tick_on_each_timer(struct ListNode *node) {
 
 KernelStatus kernel_timer_manger_default_on_tick(KernelTimerManager *kernelTimerManager) {
     kernelTimerManager->sysRuntimeMs += TICK_INTERVAL;
-    if (klist_size(kernelTimerManager->timerNodes) != 0) {
+    if (klist_size(kernelTimerManager->timerNodes) != 0 && kernelTimerManager->timerNodes != nullptr) {
         klist_iter(kernelTimerManager->timerNodes, kernel_timer_manger_tick_on_each_timer);
     }
 }

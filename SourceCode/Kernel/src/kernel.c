@@ -56,6 +56,9 @@ void daVinci_kernel_default_init(struct DaVinciKernel *kernel) {
     // create interrupt manager and init generic interrupt
     interrupt_manager_create(&kernel->genericInterruptManager);
 
+    // init kernel timer manager
+    kernel_timer_manager_create(&kernel->kernelTimerManager);
+    kernel->kernelTimerManager.operation.init(&kernel->kernelTimerManager);
     synestia_init_timer();
 
     // create kernel physical page allocator
@@ -64,9 +67,6 @@ void daVinci_kernel_default_init(struct DaVinciKernel *kernel) {
     // init kernel virtual memory mapping
     kernel_vmm_init();
 
-    // init kernel timer manager
-    kernel_timer_manager_create(&kernel->kernelTimerManager);
-    kernel->kernelTimerManager.operation.init(&kernel->kernelTimerManager);
     scheduler_create(&kernel->cfsScheduler);
 
     // create kernel heap
