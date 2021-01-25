@@ -128,6 +128,7 @@ KernelStatus heap_default_free(struct Heap *heap, void *ptr) {
         // if this block is the head of using list, then make using list point to next block.
         if (currentArea->list.next != nullptr) {
             heap->usingListHead = getNode(currentArea->list.next, HeapArea, list);
+            currentArea->list.next->prev = nullptr;
         }
     }
 
