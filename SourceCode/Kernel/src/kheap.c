@@ -129,6 +129,8 @@ KernelStatus heap_default_free(struct Heap *heap, void *ptr) {
         if (currentArea->list.next != nullptr) {
             heap->usingListHead = getNode(currentArea->list.next, HeapArea, list);
             currentArea->list.next->prev = nullptr;
+        } else {
+            heap->usingListHead = nullptr;
         }
     }
 
