@@ -21,7 +21,7 @@ extern KernelTimerManager kernelTimerManager;
 
 KernelTimer kernel_timer_manger_default_init(struct KernelTimerManager *kernelTimerManager) {
     tick_init(&kernelTimerManager->timerManagerTick, kernelTimerManager->operation.onTick, "timer manager tick");
-    genericInterruptManager.operation.registerTick(&genericInterruptManager, &kernelTimerManager->timerManagerTick);
+//    genericInterruptManager.operation.registerTick(&genericInterruptManager, &kernelTimerManager->timerManagerTick);
 }
 
 
@@ -64,6 +64,7 @@ KernelTimer *kernel_timer_manger_default_create_timer(KernelTimerManager *kernel
 
 KernelStatus
 kernel_timer_manger_default_release_timer(KernelTimerManager *kernelTimerManager, KernelTimer *timer) {
+    LogInfo("[TimerManager] release timer\n");
     if (timer->waitQueue.operations.size == 0) {
         klist_remove_node(&timer->list);
     } else {
@@ -101,6 +102,7 @@ KernelStatus kernel_timer_manger_default_get_sys_runtime_ms(KernelTimerManager *
 
 void kernel_timer_manger_tick_on_each_timer(struct ListNode *node) {
     struct KernelTimer *timer = getNode(node, struct KernelTimer, list);
+    LogInfo("[TimerManager] timer tick, remainTime: %d\n", timer->remainTime);
     if (timer->remainTime >= TICK_INTERVAL) {
         timer->remainTime -= TICK_INTERVAL;
     }
@@ -111,7 +113,8 @@ void kernel_timer_manger_tick_on_each_timer(struct ListNode *node) {
 
 KernelStatus kernel_timer_manger_default_on_tick() {
     kernelTimerManager.sysRuntimeMs += TICK_INTERVAL;
-    if (klist_size(kernelTimerManager.timerNodes) != 0 && kernelTimerManager.timerNodes != nullptr) {
+    LogInfo("[TimerManager] tick\n");
+    if (kernelTimerManager.timerNodes != nullptr && klist_size(kernelTimerManager.timerNodes) != 0) {
         klist_iter(kernelTimerManager.timerNodes, kernel_timer_manger_tick_on_each_timer);
     }
 }

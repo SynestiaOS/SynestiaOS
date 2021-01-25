@@ -118,23 +118,23 @@ KernelStatus scheduler_default_operation_switch_to(struct Scheduler *scheduler, 
 }
 
 KernelStatus scheduler_default_operation_switch_next(struct Scheduler *scheduler) {
+    spinlock.operations.acquire(&spinlock);
     uint32_t cpuid = read_cpuid();
     LogWarn("[Schd]: cpuId %d .\n", cpuid);
+
     PerCpu *perCpu = percpu_get(cpuid);
     Thread *thread = perCpu->operations.getNextThread(perCpu);
-
-    spinlock.operations.acquire(&spinlock);
 
     thread->runtimeNs += TIMER_TICK_MS;
     thread->runtimeVirtualNs += (PRIORITY_DEFAULT_WEIGHT / PRIORITY_2_WEIGHT[thread->priority]) * thread->runtimeNs;
     scheduler->operation.switchTo(scheduler, thread);
 
-    spinlock.operations.release(&spinlock);
-
     if (thread != perCpu->idleThread) {
         Thread *removedThread = perCpu->operations.removeThread(perCpu, thread);
         scheduler->operation.addThread(scheduler, removedThread, removedThread->priority);
     }
+
+    spinlock.operations.release(&spinlock);
     return OK;
 }
 
