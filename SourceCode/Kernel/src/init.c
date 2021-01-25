@@ -61,12 +61,21 @@ _Noreturn uint32_t *GPU_FLUSH(int args) {
     }
 }
 
+extern uint32_t __vector_table_start;
+
+void set_vector()
+{
+    uint8_t *vector = (uint8_t *)0;
+    memcpy(vector, &__vector_table_start, 64);
+}
+
 void kernel_main(void) {
     if (read_cpuid() == 0) {
         led_init();
         print_splash();
         synestia_init_bsp();
 
+        set_vector();
         // create interrupt manager and init generic interrupt
         interrupt_manager_create(&genericInterruptManager);
 
