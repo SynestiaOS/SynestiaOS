@@ -171,12 +171,6 @@ KernelStatus vmm_create(VirtualMemory *virtualMemory, PhysicalPageAllocator *phy
 
     virtualMemory->physicalPageAllocator = physicalPageAllocator;
 
-    /**
-   * if lpaeSupport = 5, means LPAE is supported
-   */
-    uint32_t lpaeSupport = (read_mmfr0() & 0xF);
-    LogWarn("[LPAE]: mmfr0: %d\n", lpaeSupport);
-
     uint64_t l1ptPage = virtualMemory->physicalPageAllocator->operations.allocPage4K(
             virtualMemory->physicalPageAllocator,
             USAGE_PAGE_TABLE);
