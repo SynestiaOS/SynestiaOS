@@ -1,3 +1,4 @@
+#include "libc/string.h"
 #include "kernel/bus.h"
 #include "arm/register.h"
 #include "arm/kernel_vmm.h"
