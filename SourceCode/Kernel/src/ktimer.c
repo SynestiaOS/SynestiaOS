@@ -45,15 +45,19 @@ KernelTimer *kernel_timer_manger_default_create_timer(KernelTimerManager *kernel
     kqueue_create(&timer->waitQueue);
     timer->list.prev = nullptr;
     timer->list.next = nullptr;
-    timer->deadline = 0;
+    timer->deadline = deadline;
     timer->remainTime = 0;
     timer->operation.set = (KernelTimerOperationSet) kernel_timer_default_set;
     timer->operation.cancel = (KernelTimerOperationCancel) kernel_timer_default_cancel;
 
-    KernelStatus addToManager = klist_append(kernelTimerManager->timerNodes, &timer->list);
-    if (addToManager == ERROR) {
-        kernelHeap.operations.free(&kernelHeap, timer);
-        return nullptr;
+    if (kernelTimerManager->timerNodes == nullptr) {
+        kernelTimerManager->timerNodes = &timer->list;
+    } else {
+        KernelStatus addToManager = klist_append(kernelTimerManager->timerNodes, &timer->list);
+        if (addToManager == ERROR) {
+            kernelHeap.operations.free(&kernelHeap, timer);
+            return nullptr;
+        }
     }
     return timer;
 }

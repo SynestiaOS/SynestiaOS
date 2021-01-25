@@ -14,9 +14,6 @@ KernelStatus klist_insert(ListNode *list, ListNode *node) {
 
 KernelStatus klist_append(ListNode *list, ListNode *node) {
     ListNode *tmp = list;
-    if (tmp == nullptr) {
-        list = node;
-    }
     while (tmp->next != nullptr) {
         tmp = tmp->next;
     }
