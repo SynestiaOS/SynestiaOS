@@ -159,23 +159,17 @@ void *virtual_memory_default_copy_to_kernel(struct VirtualMemory *virtualMemory,
 }
 
 KernelStatus vmm_create(VirtualMemory *virtualMemory, PhysicalPageAllocator *physicalPageAllocator) {
-    virtualMemory->operations.mappingPage = virtual_memory_default_mapping_page;
-    virtualMemory->operations.contextSwitch = virtual_memory_default_context_switch;
-    virtualMemory->operations.allocatePage = virtual_memory_default_allocate_page;
-    virtualMemory->operations.release = virtual_memory_default_release;
-    virtualMemory->operations.enable = virtual_memory_default_enable;
-    virtualMemory->operations.disable = virtual_memory_default_disable;
-    virtualMemory->operations.copyToKernel = virtual_memory_default_copy_to_kernel;
-    virtualMemory->operations.translateToPhysical = virtual_memory_default_translate_to_physical;
-    virtualMemory->operations.getUserStrLen = virtual_memory_default_get_user_str_len;
+    virtualMemory->operations.mappingPage = (VirtualMemoryOperationMappingPage) virtual_memory_default_mapping_page;
+    virtualMemory->operations.contextSwitch = (VirtualMemoryOperationContextSwitch) virtual_memory_default_context_switch;
+    virtualMemory->operations.allocatePage = (VirtualMemoryOperationAllocatePage) virtual_memory_default_allocate_page;
+    virtualMemory->operations.release = (VirtualMemoryOperationRelease) virtual_memory_default_release;
+    virtualMemory->operations.enable = (VirtualMemoryOperationEnable) virtual_memory_default_enable;
+    virtualMemory->operations.disable = (VirtualMemoryOperationDisable) virtual_memory_default_disable;
+    virtualMemory->operations.copyToKernel = (VirtualMemoryOperationCopyToKernel) virtual_memory_default_copy_to_kernel;
+    virtualMemory->operations.translateToPhysical = (VirtualMemoryOperationTranslateToPhysical) virtual_memory_default_translate_to_physical;
+    virtualMemory->operations.getUserStrLen = (VirtualMemoryOperationGetUserStrLen) virtual_memory_default_get_user_str_len;
 
     virtualMemory->physicalPageAllocator = physicalPageAllocator;
-
-    /**
-   * if lpaeSupport = 5, means LPAE is supported
-   */
-    uint32_t lpaeSupport = (read_mmfr0() & 0xF);
-    LogWarn("[LPAE]: mmfr0: %d\n", lpaeSupport);
 
     uint64_t l1ptPage = virtualMemory->physicalPageAllocator->operations.allocPage4K(
             virtualMemory->physicalPageAllocator,

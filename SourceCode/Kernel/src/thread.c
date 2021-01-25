@@ -234,7 +234,27 @@ void thread_release(Thread *thread) {
 }
 
 KernelStatus thread_default_execute(struct Thread *thread, struct Elf *elf) {
+    // 0. set page table to kernel page table
 
+    // 1. clear memstruct
+
+    // 2. allocate physical page
+
+    // 3. map virtual mem
+
+    // 4. copy elf section to mem
+
+    // 5. set up bss
+
+    // 6. set heap
+
+    // 7. allocate stack from heap
+
+    // 8. set up thread struct
+
+    // 9. replace thread's page table
+
+    // 10. reschedule
 }
 
 Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uint32_t priority, RegisterCPSR cpsr) {

@@ -108,16 +108,16 @@ KernelStatus page_allocator_create(PhysicalPageAllocator *pageAllocator, uint32_
     pageAllocator->size = size;
     pageAllocator->base = base;
 
-    pageAllocator->operations.allocPage4K = physical_page_allocator_default_alloc_page_4k;
-    pageAllocator->operations.allocPage2M = physical_page_allocator_default_alloc_page_2m;
-    pageAllocator->operations.freePage4K = physical_page_allocator_default_free_page_4k;
-    pageAllocator->operations.freePage2M = physical_page_allocator_default_free_page_2m;
-    pageAllocator->operations.allocPage4KAt = physical_page_allocator_default_alloc_page_4k_at;
-    pageAllocator->operations.allocPage2MAt = physical_page_allocator_default_alloc_page_2m_at;
-    pageAllocator->operations.page4KMarkAsFree = physical_page_allocator_default_alloc_page_4k_mark_as_free;
-    pageAllocator->operations.page4KMarkAsUsed = physical_page_allocator_default_alloc_page_4k_mark_as_used;
-    pageAllocator->operations.allocHugeAt = physical_page_allocator_default_alloc_huge_at;
-    pageAllocator->operations.freeHugeAt = physical_page_allocator_default_free_huge_at;
+    pageAllocator->operations.allocPage4K = (PhysicalPageAllocatorOperationAllocPage4K) physical_page_allocator_default_alloc_page_4k;
+    pageAllocator->operations.allocPage2M = (PhysicalPageAllocatorOperationAllocPage2M) physical_page_allocator_default_alloc_page_2m;
+    pageAllocator->operations.freePage4K = (PhysicalPageAllocatorOperationFreePage4K) physical_page_allocator_default_free_page_4k;
+    pageAllocator->operations.freePage2M = (PhysicalPageAllocatorOperationFreePage2M) physical_page_allocator_default_free_page_2m;
+    pageAllocator->operations.allocPage4KAt = (PhysicalPageAllocatorOperationAllocPage4KAt) physical_page_allocator_default_alloc_page_4k_at;
+    pageAllocator->operations.allocPage2MAt = (PhysicalPageAllocatorOperationAllocPage2MAt) physical_page_allocator_default_alloc_page_2m_at;
+    pageAllocator->operations.page4KMarkAsFree = (PhysicalPageAllocatorOperationPage4KMarkAsFree) physical_page_allocator_default_alloc_page_4k_mark_as_free;
+    pageAllocator->operations.page4KMarkAsUsed = (PhysicalPageAllocatorOperationPage4KMarkAsUsed) physical_page_allocator_default_alloc_page_4k_mark_as_used;
+    pageAllocator->operations.allocHugeAt = (PhysicalPageAllocatorOperationAllocHugeAt) physical_page_allocator_default_alloc_huge_at;
+    pageAllocator->operations.freeHugeAt = (PhysicalPageAllocatorOperationFreeHugeAt) physical_page_allocator_default_free_huge_at;
 
     memset(&pageAllocator->physicalPages, 0, PHYSICAL_PAGE_NUMBERS * sizeof(uint32_t));
     memset(&pageAllocator->physicalPagesUsedBitMap, 0, (PHYSICAL_PAGE_NUMBERS / BITS_IN_UINT32) * sizeof(uint32_t));
