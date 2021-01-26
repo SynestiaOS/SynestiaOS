@@ -1,6 +1,7 @@
 //
 // Created by XingfengYang on 2020/7/17.
 //
+#include <raspi2/uart.h>
 #include "kernel/sys_call.h"
 #include "kernel/scheduler.h"
 #include "kernel/vfs.h"
@@ -19,7 +20,15 @@ uint32_t sys_read(uint32_t fd, char *buf, uint32_t count) {
 }
 
 uint32_t sys_write(uint32_t fd, const char *buf, uint32_t count) {
-    return vfs.operations.write(&vfs, fd, buf, 0, count);
+    if (fd == FD_STDIN) {
+
+    } else if (fd == FD_STDOUT) {
+        uart_print(buf);
+    } else if (fd == FD_STDERR) {
+
+    } else {
+        return vfs.operations.write(&vfs, fd, buf, 0, count);
+    }
 }
 
 uint32_t sys_open(const char *filename, int flags, uint32_t mode) { return vfs.operations.open(&vfs, filename, mode); }

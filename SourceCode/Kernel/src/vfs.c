@@ -95,17 +95,8 @@ uint32_t vfs_default_read(VFS *vfs, uint32_t fd, char *buffer, uint32_t pos, uin
 }
 
 uint32_t vfs_default_write(VFS *vfs, uint32_t fd, char *buffer, uint32_t pos, uint32_t count) {
-    if (fd == FD_STDIN) {
-
-    } else if (fd == FD_STDOUT) {
-        uart_print(buffer);
-    } else if (fd == FD_STDERR) {
-
-    } else {
-
-        PerCpu *perCpu = percpu_get(read_cpuid());
-        Thread *currThread = perCpu->currentThread;
-    }
+    PerCpu *perCpu = percpu_get(read_cpuid());
+    Thread *currThread = perCpu->currentThread;
     return 0;
 }
 

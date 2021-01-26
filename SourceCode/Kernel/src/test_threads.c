@@ -1,8 +1,6 @@
 //
 // Created by XingfengYang on 2021/1/11.
 //
-#include "kernel/log.h"
-#include "kernel/bus.h"
 #include "arm/register.h"
 #include "arm/page.h"
 #include "kernel/ext2.h"
@@ -20,7 +18,6 @@
 #include "libgui/gui_canvas.h"
 #include "libgui/gui_window.h"
 #include "libc/string.h"
-#include "libelf/elf.h"
 
 extern InterruptManager genericInterruptManager;
 extern PhysicalPageAllocator kernelPageAllocator;
@@ -30,7 +27,6 @@ extern Slab kernelObjectSlab;
 extern Scheduler cfsScheduler;
 extern VFS vfs;
 extern GfxSurface mainSurface;
-extern ServiceBus testBus;
 
 extern uint32_t open(const char *name, uint32_t flags, uint32_t mode);
 
@@ -141,37 +137,6 @@ _Noreturn uint32_t *window_canvas2D(int args) {
     }
 }
 
-
-_Noreturn uint32_t *bus_send(int args) {
-    Listener sender;
-    listener_create(&sender, "sender");
-    testBus.operation.registe(&testBus, &sender);
-    MessageHeader testMsg;
-    message_create(&testMsg, 0x32, 7, "hahaha\0");
-    while (1) {
-        genericInterruptManager.operation.disableInterrupt(&genericInterruptManager);
-        sender.operation.send(&sender, &testMsg);
-        genericInterruptManager.operation.enableInterrupt(&genericInterruptManager);
-    }
-}
-
-
-_Noreturn uint32_t *bus_receive(int args) {
-    Listener receiver;
-    listener_create(&receiver, "receiver");
-    testBus.operation.registe(&testBus, &receiver);
-    MessageHeader testMsg;
-    message_create(&testMsg, 0x32, 7, "");
-    while (1) {
-        genericInterruptManager.operation.disableInterrupt(&genericInterruptManager);
-        MessageHeader *hdr = receiver.operation.receive(&receiver, &testMsg);
-        if (hdr != nullptr) {
-            LogWarn("[Receiver]: receive '%s'.\n", hdr->data);
-        }
-        genericInterruptManager.operation.enableInterrupt(&genericInterruptManager);
-    }
-}
-
 void test_threads_init() {
     Thread *windowDialogThread = thread_create("Welcome", (ThreadStartRoutine) &window_dialog, 0, 0, sysModeCPSR());
     windowDialogThread->cpuAffinity = cpu_number_to_mask(0);
@@ -187,17 +152,6 @@ void test_threads_init() {
                                                    sysModeCPSR());
     windowFileSystemThread->cpuAffinity = cpu_number_to_mask(0);
     cfsScheduler.operation.addThread(&cfsScheduler, windowFileSystemThread, 1);
-
-    Thread *busSendThread = thread_create("Send", (ThreadStartRoutine) &bus_send, 0, 0,
-                                          sysModeCPSR());
-    busSendThread->cpuAffinity = cpu_number_to_mask(0);
-    cfsScheduler.operation.addThread(&cfsScheduler, busSendThread, 1);
-
-    Thread *busReceiveThread = thread_create("Receive", (ThreadStartRoutine) &bus_receive, 0, 0,
-                                             sysModeCPSR());
-    busReceiveThread->cpuAffinity = cpu_number_to_mask(0);
-    cfsScheduler.operation.addThread(&cfsScheduler, busReceiveThread, 1);
-    
 
 //    Elf elf;
 //    uint32_t *data = (uint32_t *) kernelHeap.operations.alloc(&kernelHeap, 40 * KB);

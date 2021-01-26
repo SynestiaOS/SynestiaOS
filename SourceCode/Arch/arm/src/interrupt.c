@@ -6,7 +6,6 @@
 #include "kernel/interrupt.h"
 #include "kernel/log.h"
 #include "arm/vmm.h"
-#include "libc/string.h"
 
 extern InterruptManager genericInterruptManager;
 
@@ -80,7 +79,8 @@ int software_interrupt_handler() {
     :
     : "r1", "r2", "r4", "r5", "r6", "r7");
 
-    return sys_call_table[sysCallNo](r0, r1, r2, r3, r4);
+    SysCall sysCall = sys_call_table[sysCallNo];
+    return sysCall(r0, r1, r2, r3, r4);
 }
 
 void __attribute__((interrupt("ABORT"))) prefetch_abort_handler(void) {

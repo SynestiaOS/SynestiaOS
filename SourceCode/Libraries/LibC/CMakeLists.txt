@@ -6,4 +6,3 @@ add_library(${PROJECT_NAME}
         OBJECT
         ${LibCSrc})
 target_include_libc_header_files(${PROJECT_NAME})
-target_include_raspberry_pi_header_files(${PROJECT_NAME})
