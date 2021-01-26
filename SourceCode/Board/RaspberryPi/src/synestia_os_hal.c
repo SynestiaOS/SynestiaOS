@@ -12,8 +12,6 @@ void synestia_init_bsp(void) {
 
 void synestia_init_timer(void) {
     LogInfo("[Device]： timer_init...\n");
-    system_timer_init();
-    LogInfo("[Device]： timer_init complete.\n");
 
     LogInfo("[Device]: generic_timer_init...\n");
     generic_timer_init();
