@@ -3,14 +3,12 @@
 
 #include "libc/stdint.h"
 #include "libc/stdbool.h"
-#include "list.h"
-
-#define INTERRUPT_NAME_LENGTH 32
+#include "kernel/list.h"
 
 typedef void (*TickHandler)(void);
 
 typedef struct Tick {
-    char name[INTERRUPT_NAME_LENGTH];
+    char name[NAME_LENGTH];
     TickHandler handler;
     ListNode node;
 } Tick;
@@ -25,7 +23,7 @@ typedef struct Interrupt {
     uint32_t interruptNumber;
     InterruptHandler handler;
     InterruptClearHandler clearHandler;
-    char name[INTERRUPT_NAME_LENGTH];
+    char name[NAME_LENGTH];
 } Interrupt;
 
 typedef void (*InterruptManagerOperationRegisterTick)(struct InterruptManager *manager, Tick *tick);

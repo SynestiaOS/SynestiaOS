@@ -1,3 +1,5 @@
+#include "libc/string.h"
+#include "kernel/bus.h"
 #include "arm/register.h"
 #include "arm/kernel_vmm.h"
 #include "arm/page.h"
@@ -33,6 +35,7 @@ Scheduler cfsScheduler;
 KernelTimerManager kernelTimerManager;
 VFS vfs;
 GfxSurface mainSurface;
+ServiceBus testBus;
 
 
 extern void test_threads_init(void);
@@ -60,12 +63,21 @@ _Noreturn uint32_t *GPU_FLUSH(int args) {
     }
 }
 
+extern uint32_t __vector_table_start;
+
+void set_vector()
+{
+    uint8_t *vector = (uint8_t *)0;
+    memcpy(vector, &__vector_table_start, 64);
+}
+
 void kernel_main(void) {
     if (read_cpuid() == 0) {
         led_init();
         print_splash();
         synestia_init_bsp();
 
+        set_vector();
         // create interrupt manager and init generic interrupt
         interrupt_manager_create(&genericInterruptManager);
 
@@ -94,6 +106,8 @@ void kernel_main(void) {
 
         vfs_create(&vfs);
         vfs.operations.mount(&vfs, "root", FILESYSTEM_EXT2, (void *) EXT2_ADDRESS);
+
+        service_bus_create(&testBus, "test BUS");
 
         gpu_init();
         gfx2d_create_surface(&mainSurface, 1024, 768, GFX2D_BUFFER);

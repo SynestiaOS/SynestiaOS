@@ -25,12 +25,6 @@ uint32_t PRIORITY_2_WEIGHT[40] = {
 
 #define PRIORITY_DEFAULT_WEIGHT 1024
 
-extern uint64_t ktimer_sys_runtime_tick(uint64_t tickInterval);
-
-extern void cpu_save_context(Thread *thread, uint32_t offsetOfStack);
-
-extern void cpu_restore_context(Thread *thread, uint32_t offsetOfStack);
-
 extern void cpu_switch_mm(uint32_t pageTable);
 
 
@@ -96,7 +90,7 @@ KernelStatus scheduler_default_operation_preempt(struct Scheduler *scheduler) {
 
 uint32_t get_curr_stack(uint32_t sp) {
     if (nullptr != cfsScheduler.currentThread) {
-        LogInfo("to %s\n", cfsScheduler.currentThread->name);
+        LogInfo("[Scheduler] switch to %s\n", cfsScheduler.currentThread->name);
         return cfsScheduler.currentThread->stack.top;
     }
     return sp;
@@ -104,10 +98,8 @@ uint32_t get_curr_stack(uint32_t sp) {
 
 void set_curr_stack(uint32_t sp) {
     if (nullptr != cfsScheduler.currentThread) {
-        LogInfo("from %s\n", cfsScheduler.currentThread->name);
+        LogInfo("[Scheduler] switch from %s\n", cfsScheduler.currentThread->name);
         cfsScheduler.currentThread->stack.top = sp;
-    } else {
-        LogInfo("from xxx\n");
     }
 }
 
@@ -126,23 +118,23 @@ KernelStatus scheduler_default_operation_switch_to(struct Scheduler *scheduler, 
 }
 
 KernelStatus scheduler_default_operation_switch_next(struct Scheduler *scheduler) {
+    spinlock.operations.acquire(&spinlock);
     uint32_t cpuid = read_cpuid();
     LogWarn("[Schd]: cpuId %d .\n", cpuid);
+
     PerCpu *perCpu = percpu_get(cpuid);
     Thread *thread = perCpu->operations.getNextThread(perCpu);
-
-    spinlock.operations.acquire(&spinlock);
 
     thread->runtimeNs += TIMER_TICK_MS;
     thread->runtimeVirtualNs += (PRIORITY_DEFAULT_WEIGHT / PRIORITY_2_WEIGHT[thread->priority]) * thread->runtimeNs;
     scheduler->operation.switchTo(scheduler, thread);
 
-    spinlock.operations.release(&spinlock);
-
     if (thread != perCpu->idleThread) {
         Thread *removedThread = perCpu->operations.removeThread(perCpu, thread);
         scheduler->operation.addThread(scheduler, removedThread, removedThread->priority);
     }
+
+    spinlock.operations.release(&spinlock);
     return OK;
 }
 
