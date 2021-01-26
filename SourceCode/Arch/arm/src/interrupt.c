@@ -27,6 +27,43 @@ void arch_disable_interrupt() {
     __asm__ __volatile__("cpsid i");
 }
 
+static void find_func_header(unsigned int *instr)
+{
+    static const unsigned int prologue[2] = { 0xe92d4800, 0xe28db000 }; // todo: add more....
+    unsigned int i;
+
+#define MAX_FUNC_LEN 0x1000
+    for (i = 0; (i < MAX_FUNC_LEN) && (0 != instr); i++, instr--) {
+        if (((0xffff4800 & *(instr - 1)) == prologue[0]) // if only {r11, lr} are pushed
+         && ((0xffffff00 & *instr) == prologue[1])) {
+            LogError("func: %x\n", instr - 1);
+            return;
+        }
+    }
+    LogError("can not find function!!!\n");
+}
+
+void dump_callstack(void)
+{
+    unsigned int *lr, *fp;
+    unsigned int *func;
+
+    __asm__ __volatile__("push {r0, r2, r4, r6, r8, r12, r14}\n\t" : "=m"(lr));
+    __asm__ __volatile__("push {r0, r2, r4, r6, r8}\n\t" : "=m"(lr));
+    __asm__ __volatile__("push {r8}\n\t" : "=m"(lr));
+    __asm__ __volatile__("push {r8, r9, r10, r11, r12, r13, r14}\n\t" : "=m"(lr));
+
+    __asm__ __volatile__("str lr, %0\n\t" : "=m"(lr));
+    __asm__ __volatile__("str r11, %0\n\t" : "=m"(fp));
+
+    LogError("callstack info:\n");
+    while (fp) {
+        lr = (unsigned int *) fp[0];
+        fp = (unsigned int *) fp[-1];
+        find_func_header(lr);
+    }
+    LogError("callstack end\n");
+}
 
 extern SysCall sys_call_table[];
 extern const char* sys_call_name_table[];

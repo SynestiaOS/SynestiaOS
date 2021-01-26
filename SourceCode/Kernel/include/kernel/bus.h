@@ -6,52 +6,57 @@
 #define SYNESTIAOS_BUS_H
 
 #include "libc/stdint.h"
+#include "kernel/kqueue.h"
 
-
-typedef struct ServiceBusOperation {
-
-} ServiceBusOperation;
-
-typedef struct ServiceBus {
-
-} ServiceBus;
-
-
-typedef struct DriverMessageHeader {
+typedef struct MessageHeader {
+    KQueueNode node;
     uint32_t id;
     uint32_t length;
     char *data;
-} DriverMessageHeader;
+} MessageHeader;
 
-typedef void (*DriverOperationSend)(struct Driver *driver, DriverMessageHeader msgHdr);
+MessageHeader *message_create(struct MessageHeader *messageHeader, uint32_t id, uint32_t length, char *data);
 
-typedef void (*DriverOperationOnMessage)(struct Driver *driver, DriverMessageHeader msgHdr);
+typedef void (*ListenerOperationSend)(struct Listener *listener, MessageHeader *msgHdr);
 
-typedef struct DriverOperation {
-    DriverOperationSend send;
-    DriverOperationOnMessage onMessage;
-} DriverOperation;
+typedef MessageHeader *(*ListenerOperationReceive)(struct Listener *listener, MessageHeader *msgHdr);
 
-typedef struct Driver {
-    DriverOperation operation;
-} Driver;
+typedef void (*ListenerOperationFree)(struct Listener *listener);
 
-typedef void (*DriverServiceBusOperationUnRegisterDriver)(struct DriverServiceBus *bus, Driver driver);
 
-typedef void (*DriverServiceBusOperationRegisterDriver)(struct DriverServiceBus *bus, Driver driver);
+typedef struct ListenerOperation {
+    ListenerOperationSend send;
+    ListenerOperationReceive receive;
+    ListenerOperationFree free;
+} ListenerOperation;
 
-typedef void (*DriverServiceBusOperationSubscribeDriver)(struct DriverServiceBus *bus, Driver driver);
+typedef struct Listener {
+    struct ServiceBus *bus;
+    char name[NAME_LENGTH];
+    ListenerOperation operation;
+} Listener;
 
-typedef struct DriverBusOperation {
-    DriverServiceBusOperationRegisterDriver registerDriver;
-    DriverServiceBusOperationUnRegisterDriver unRegisterDriver;
-    DriverServiceBusOperationSubscribeDriver subscribeDriver;
-} DriverBusOperation;
+Listener *listener_create(struct Listener *listener, const char *name);
 
-typedef struct DriverServiceBus {
-    DriverBusOperation operation;
-} DriverServiceBus;
 
-DriverServiceBus *driver_service_bus_create(struct DriverServiceBus *driverServiceBus);
+typedef void (*ServiceBusOperationUnRegister)(struct ServiceBus *bus, struct Listener *listener);
+
+typedef void (*ServiceBusOperationRegister)(struct ServiceBus *bus, struct Listener *listener);
+
+typedef void (*ServiceBusOperationSubscribe)(struct ServiceBus *bus, struct Listener *listener);
+
+typedef struct BusOperation {
+    ServiceBusOperationRegister registe;
+    ServiceBusOperationUnRegister unRegister;
+    ServiceBusOperationSubscribe subscribe;
+} BusOperation;
+
+typedef struct ServiceBus {
+    char name[NAME_LENGTH];
+    BusOperation operation;
+    KernelQueue messageQueue;
+} ServiceBus;
+
+ServiceBus *service_bus_create(struct ServiceBus *serviceBus, const char *name);
 
 #endif //SYNESTIAOS_BUS_H

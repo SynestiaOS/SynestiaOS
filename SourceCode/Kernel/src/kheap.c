@@ -117,9 +117,6 @@ void *heap_default_realloc(struct Heap *heap, void *ptr, uint32_t size) {
 
 KernelStatus heap_default_free(struct Heap *heap, void *ptr) {
     LogInfo("[KHeap] want free: %d. \n", ptr);
-
-    void **p2 = ptr;
-    ptr = p2[-1];
     // 1. get HeapArea address
     uint32_t address = (uint32_t) (ptr - sizeof(HeapArea));
     HeapArea *currentArea = (HeapArea *) address;
@@ -127,6 +124,14 @@ KernelStatus heap_default_free(struct Heap *heap, void *ptr) {
     // 2. unlink from using list
     if (currentArea->list.prev != nullptr) {
         currentArea->list.prev->next = currentArea->list.next;
+    } else {
+        // if this block is the head of using list, then make using list point to next block.
+        if (currentArea->list.next != nullptr) {
+            heap->usingListHead = getNode(currentArea->list.next, HeapArea, list);
+            currentArea->list.next->prev = nullptr;
+        } else {
+            heap->usingListHead = nullptr;
+        }
     }
 
     if (currentArea->list.next != nullptr && currentArea->list.prev != nullptr) {
@@ -142,7 +147,7 @@ KernelStatus heap_default_free(struct Heap *heap, void *ptr) {
     currentArea->list.next = freeArea->list.next;
     freeArea->list.next = &currentArea->list;
 
-    // do some merge stuff, between two adjacent free heap area
+    // do some merge stuff between two adjacent free heap area
     HeapArea *firstFreeArea = heap->freeListHead;
     while (firstFreeArea->list.next != nullptr) {
         firstFreeArea = getNode(firstFreeArea->list.next, HeapArea, list);

@@ -60,6 +60,9 @@ ListNode *klist_remove_node(ListNode *node) {
 }
 
 uint32_t klist_size(ListNode *node) {
+    if (node == nullptr) {
+        return 0;
+    }
     ListNode *first = node;
     while (first->prev != nullptr) {
         first = first->prev;

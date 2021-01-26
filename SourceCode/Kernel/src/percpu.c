@@ -11,16 +11,16 @@ extern Heap kernelHeap;
 PerCpu *perCpu = nullptr;
 
 KernelStatus percpu_default_insert_thread(PerCpu *perCpu, Thread *thread) {
-    LogWarn("[PerCpu]: insert thread '%s' to cpu '%d'.\n", thread->name, perCpu->cpuId);
     perCpu->rbTree.operations.insert(&perCpu->rbTree, &thread->rbNode);
+    LogWarn("[PerCpu]: insert thread '%s' to cpu '%d'.\n", thread->name, perCpu->cpuId);
     perCpu->priority += thread->priority;
     thread->currCpu = perCpu->cpuId;
     return OK;
 }
 
 Thread *percpu_default_remove_thread(PerCpu *perCpu, Thread *thread) {
-    LogWarn("[PerCpu]: remove thread '%s' from cpu '%d'.\n", thread->name, perCpu->cpuId);
     RBNode *node = perCpu->rbTree.operations.remove(&perCpu->rbTree, &thread->rbNode);
+    LogWarn("[PerCpu]: remove thread '%s' from cpu '%d'.\n", thread->name, perCpu->cpuId);
     perCpu->priority -= thread->priority;
     thread->lastCpu = perCpu->cpuId;
     return getNode(node, Thread, rbNode);

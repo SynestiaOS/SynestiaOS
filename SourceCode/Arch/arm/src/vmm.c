@@ -52,7 +52,7 @@ void virtual_memory_default_allocate_page(VirtualMemory *virtualMemory, uint32_t
         pt[0].valid = 1;
         pt[0].table = 1;
         pt[0].af = 1;
-        pt[0].base = (uint64_t)(virtualMemory->physicalPageAllocator->operations.allocPage4K(
+        pt[0].base = (uint64_t) (virtualMemory->physicalPageAllocator->operations.allocPage4K(
                 virtualMemory->physicalPageAllocator, USAGE_NORMAL));
 
     } else {
@@ -73,7 +73,7 @@ void virtual_memory_default_allocate_page(VirtualMemory *virtualMemory, uint32_t
             pt[0].valid = 1;
             pt[0].table = 1;
             pt[0].af = 1;
-            pt[0].base = (uint64_t)(virtualMemory->physicalPageAllocator->operations.allocPage4K(
+            pt[0].base = (uint64_t) (virtualMemory->physicalPageAllocator->operations.allocPage4K(
                     virtualMemory->physicalPageAllocator, USAGE_NORMAL));
         } else {
             PageTableEntry *pageTable = (PageTableEntry *) (level2PageTable->base >> VA_OFFSET);
@@ -83,7 +83,7 @@ void virtual_memory_default_allocate_page(VirtualMemory *virtualMemory, uint32_t
                 pageTableEntry.valid = 1;
                 pageTableEntry.table = 1;
                 pageTableEntry.af = 1;
-                pageTableEntry.base = (uint64_t)(virtualMemory->physicalPageAllocator->operations.allocPage4K(
+                pageTableEntry.base = (uint64_t) (virtualMemory->physicalPageAllocator->operations.allocPage4K(
                         virtualMemory->physicalPageAllocator, USAGE_NORMAL));
 
             } else {
@@ -188,7 +188,7 @@ KernelStatus vmm_create(VirtualMemory *virtualMemory, PhysicalPageAllocator *phy
     pt[0].valid = 1;
     pt[0].table = 1;
     pt[0].af = 1;
-    pt[0].base = (uint64_t)(
+    pt[0].base = (uint64_t) (
             virtualMemory->physicalPageAllocator->operations.allocPage4K(virtualMemory->physicalPageAllocator,
                                                                          USAGE_NORMAL));
 
