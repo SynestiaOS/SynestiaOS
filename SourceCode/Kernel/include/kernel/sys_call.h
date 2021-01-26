@@ -61,4 +61,23 @@ SysCall sys_call_table[] = {
         sys_rmdir,
 };
 
+const char* sys_call_name_table[] = {
+        "sys_restart_syscall",
+        "sys_exit",
+        "sys_fork",
+        "sys_read",
+        "sys_write",
+        "sys_open",
+        "sys_close",
+        "sys_execve",
+        "sys_chdir",
+        "sys_time",
+        "sys_getpid",
+        "sys_mount",
+        "sys_umount",
+        "sys_kill",
+        "sys_rename",
+        "sys_mkdir",
+        "sys_rmdir",
+};
 #endif// __KERNEL_SYSCALL_H__

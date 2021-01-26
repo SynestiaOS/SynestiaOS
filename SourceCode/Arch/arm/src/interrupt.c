@@ -7,6 +7,7 @@
 #include "kernel/log.h"
 #include "arm/vmm.h"
 #include "libc/string.h"
+#include "../../../Board/RaspberryPi/include/raspi2/uart.h"
 
 extern InterruptManager genericInterruptManager;
 
@@ -28,6 +29,7 @@ void arch_disable_interrupt() {
 
 
 extern SysCall sys_call_table[];
+extern const char* sys_call_name_table[];
 
 void __attribute__((interrupt("UNDEF"))) undefined_instruction_handler(void) {}
 
@@ -43,7 +45,8 @@ int software_interrupt_handler() {
     :
     : "r1", "r2", "r4", "r5", "r6", "r7");
 
-    return sys_call_table[sysCallNo](r0, r1, r2, r3, r4);
+    SysCall sysCall = sys_call_table[sysCallNo];
+    return sysCall(r0, r1, r2, r3, r4);
 }
 
 void __attribute__((interrupt("ABORT"))) prefetch_abort_handler(void) {
