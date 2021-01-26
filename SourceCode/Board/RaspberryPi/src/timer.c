@@ -6,27 +6,6 @@
 
 extern InterruptManager genericInterruptManager;
 
-static timer_registers_t *timer_regs = (timer_registers_t *) SYSTEM_TIMER_BASE;
-
-void system_timer_irq_handler(void) {
-    LogInfo("[Timer]: system timer interrupt triggered\n");
-    timer_set(300);
-}
-
-void system_timer_irq_clear(void) { timer_regs->control.timer1_matched = 1; }
-
-void timer_set(uint32_t usecs) { timer_regs->timer1 = timer_regs->counter_low + usecs; }
-
-void system_timer_init(void) {
-    Interrupt timerInterrupt;
-    timerInterrupt.interruptNumber = 1;
-    timerInterrupt.handler = system_timer_irq_handler;
-    timerInterrupt.clearHandler = system_timer_irq_clear;
-    memset(timerInterrupt.name, 0, sizeof(timerInterrupt.name));
-    strcpy(timerInterrupt.name, "system timer");
-    genericInterruptManager.operation.registerInterrupt(&genericInterruptManager, timerInterrupt);
-}
-
 void enable_core0_irq(void) { io_writel(0x8, 0x40000040); }
 
 uint32_t read_cntfrq(void) {
