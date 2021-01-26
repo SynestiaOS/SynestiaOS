@@ -44,7 +44,7 @@ KernelStatus vfs_inode_default_delete_directory(IndexNode *indexNode, DirectoryE
 
 KernelStatus vfs_inode_default_rename(IndexNode *indexNode, char *newName) {
     memcpy(indexNode->dentry->fileName, newName, 0xFF);
-    indexNode->dentry->fileNameHash = indexNode->dentry->operations.hashOperation(indexNode->dentry);
+    indexNode->dentry->fileNameHash = indexNode->dentry->operations.hash(indexNode->dentry);
     // TODO : change last modify time
     return OK;
 }
@@ -59,7 +59,7 @@ KernelStatus vfs_inode_default_link(IndexNode *indexNode, DirectoryEntry *dentry
 KernelStatus vfs_inode_default_unlink(IndexNode *indexNode, DirectoryEntry *dentry) {
     if (atomic_get(&dentry->indexNode->linkCount) > 1) {
         atomic_dec(&dentry->indexNode->linkCount);
-        dentry->operations.deleteOperation(dentry);
+        dentry->operations.delete(dentry);
     }
     return OK;
 }

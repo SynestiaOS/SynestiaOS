@@ -20,6 +20,7 @@
 #include "libgui/gui_canvas.h"
 #include "libgui/gui_window.h"
 #include "libc/string.h"
+#include "libelf/elf.h"
 
 extern InterruptManager genericInterruptManager;
 extern PhysicalPageAllocator kernelPageAllocator;
@@ -196,4 +197,17 @@ void test_threads_init() {
                                              sysModeCPSR());
     busReceiveThread->cpuAffinity = cpu_number_to_mask(0);
     cfsScheduler.operation.addThread(&cfsScheduler, busReceiveThread, 1);
+    
+
+//    Elf elf;
+//    uint32_t *data = (uint32_t *) kernelHeap.operations.alloc(&kernelHeap, 40 * KB);
+//    vfs_kernel_read(&vfs, "/initrd/bin/TestApp.elf", data, 40 * KB);
+//    elf_init(&elf, data);
+//    elf.operations.dump(&elf);
+//    uint32_t entry = (uint32_t) (elf.data + elf.fileHeader.entry);
+//    Thread *elfThread = thread_create("PICElfTest", (ThreadStartRoutine) entry, 0, 0,
+//                                      sysModeCPSR());
+//    elfThread->cpuAffinity = cpu_number_to_mask(0);
+//    cfsScheduler.operation.addThread(&cfsScheduler, elfThread, 1);
+
 }

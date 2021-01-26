@@ -22,11 +22,11 @@ typedef KernelStatus (*DirectoryEntryInitOperation)(struct DirectoryEntry *direc
                                                     struct IndexNode *inode);
 
 typedef struct DirectoryEntryOperations {
-    DirectoryEntryInitOperation initOperation;
-    DirectoryEntryHashOperation hashOperation;
-    DirectoryEntryGetNameOperation getNameOperation;
-    DirectoryEntryDeleteOperation deleteOperation;
-    DirectoryEntryReleaseOperation releaseOperation;
+    DirectoryEntryInitOperation init;
+    DirectoryEntryHashOperation hash;
+    DirectoryEntryGetNameOperation getName;
+    DirectoryEntryDeleteOperation delete;
+    DirectoryEntryReleaseOperation release;
 } DirectoryEntryOperations;
 
 typedef struct DirectoryEntry {

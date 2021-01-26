@@ -32,6 +32,9 @@ KernelStatus vfs_directory_entry_default_release(DirectoryEntry *directory) {
 
 KernelStatus vfs_directory_entry_default_init(DirectoryEntry *directory, DirectoryEntry *parent, IndexNode *inode) {
     directory->parent = parent;
-    parent->children = directory;
+    directory->indexNode = inode;
+    if (parent != nullptr) {
+        parent->children = directory;
+    }
     return OK;
 }

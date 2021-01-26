@@ -32,10 +32,10 @@ void ext2_recursively_fill_superblock(Ext2FileSystem *ext2FileSystem, Ext2IndexN
             klist_append(&vfsDirectoryEntry->children->list, &directoryEntry->list);
         }
 
-        directoryEntry->operations.initOperation(directoryEntry, vfsDirectoryEntry, indexNode);
+        directoryEntry->operations.init(directoryEntry, vfsDirectoryEntry, indexNode);
 
         // atomic_set(&directoryEntry->refCount,1);
-        directoryEntry->operations.hashOperation(directoryEntry);
+        directoryEntry->operations.hash(directoryEntry);
         directoryEntry->indexNode->type = INDEX_NODE_DIRECTORY;
 
         Ext2DirectoryEntry *dEntry = (Ext2DirectoryEntry *) ((uint32_t) ext2FileSystem->data +
@@ -84,7 +84,7 @@ void ext2_recursively_fill_superblock(Ext2FileSystem *ext2FileSystem, Ext2IndexN
             klist_append(&vfsDirectoryEntry->children->list, &directoryEntry->list);
         }
 
-        directoryEntry->operations.initOperation(directoryEntry, vfsDirectoryEntry, indexNode);
+        directoryEntry->operations.init(directoryEntry, vfsDirectoryEntry, indexNode);
 
         indexNode->type = INDEX_NODE_FILE;
         indexNode->id =
@@ -114,7 +114,7 @@ KernelStatus ext2_fs_default_mount(Ext2FileSystem *ext2FileSystem, char *mountNa
             &ext2FileSystem->superblock, mountName);
     IndexNode *rootIndexNode = ext2FileSystem->superblock.operations.createIndexNode(&ext2FileSystem->superblock,
                                                                                      rootDirectoryEntry);
-    rootDirectoryEntry->operations.initOperation(rootDirectoryEntry, nullptr, rootIndexNode);
+    rootDirectoryEntry->operations.init(rootDirectoryEntry, nullptr, rootIndexNode);
     ext2FileSystem->superblock.rootDirectoryEntry = rootDirectoryEntry;
 
     ext2FileSystem->ext2SuperBlock = ext2SuperBlock;
