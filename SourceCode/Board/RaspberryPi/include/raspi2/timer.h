@@ -4,11 +4,6 @@
 #include "libc/stdint.h"
 #include "raspi2/raspi.h"
 
-/**
- * timer init
- */
-void system_timer_init(void);
-
 extern void io_writel(uint32_t val, void *addr);
 
 void generic_timer_init(void);
