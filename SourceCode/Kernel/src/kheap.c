@@ -14,13 +14,20 @@ extern Scheduler cfsScheduler;
 
 void heap_default_alloc_callback(struct Heap *heap, void *ptr, uint32_t size) {
     heap->statistics.allocatedSize += size;
-    LogInfo("[Heap]: alloc %d bytes at %d.\n", size, (uint32_t) ptr);
+    heap->statistics.allocatedBlockCount += 1;
+    LogInfo("[Heap]: alloc 0x%x bytes at 0x%x.\n", size, (uint32_t) ptr);
 }
 
 void heap_default_free_callback(struct Heap *heap, void *ptr) {
     HeapArea *heapArea = (HeapArea *) (ptr - sizeof(HeapArea));
-    heap->statistics.allocatedSize -= heapArea->size;
-    LogInfo("[Heap]: free %d bytes at %d.\n", heapArea->size, (uint32_t) ptr);
+    if (heap->statistics.allocatedSize >= heapArea->size) {
+        heap->statistics.allocatedSize -= heapArea->size;
+    }
+
+    if (heap->statistics.allocatedBlockCount > 0) {
+        heap->statistics.allocatedBlockCount -= 1;
+    }
+    LogInfo("[Heap]: free 0x%x bytes at 0x%x.\n", heapArea->size, (uint32_t) ptr);
 }
 
 void *heap_default_alloc(struct Heap *heap, uint32_t size) {
@@ -116,7 +123,8 @@ void *heap_default_realloc(struct Heap *heap, void *ptr, uint32_t size) {
 }
 
 KernelStatus heap_default_free(struct Heap *heap, void *ptr) {
-    LogInfo("[KHeap] want free: %d. \n", ptr);
+    LogInfo("[KHeap] want free: 0x%x. \n", ptr);
+
     // 1. get HeapArea address
     uint32_t address = (uint32_t) (ptr - sizeof(HeapArea));
     HeapArea *currentArea = (HeapArea *) address;
