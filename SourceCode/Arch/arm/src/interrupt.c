@@ -6,8 +6,6 @@
 #include "kernel/interrupt.h"
 #include "kernel/log.h"
 #include "arm/vmm.h"
-#include "libc/string.h"
-#include "../../../Board/RaspberryPi/include/raspi2/uart.h"
 
 extern InterruptManager genericInterruptManager;
 
@@ -66,7 +64,6 @@ void dump_callstack(void)
 }
 
 extern SysCall sys_call_table[];
-extern const char* sys_call_name_table[];
 
 void __attribute__((interrupt("UNDEF"))) undefined_instruction_handler(void) {}
 
