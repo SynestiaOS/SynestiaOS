@@ -234,6 +234,7 @@ void thread_release(Thread *thread) {
 }
 
 KernelStatus thread_default_execute(struct Thread *thread, struct Elf *elf) {
+
     // 0. set page table to kernel page table
 
     // 1. clear memstruct

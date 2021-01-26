@@ -18,6 +18,7 @@
 #include "libgui/gui_canvas.h"
 #include "libgui/gui_window.h"
 #include "libc/string.h"
+#include "libelf/elf.h"
 
 
 extern InterruptManager genericInterruptManager;
@@ -138,7 +139,7 @@ _Noreturn uint32_t *window_canvas2D(int args) {
     }
 }
 
-void test_threads_init(){
+void test_threads_init() {
     Thread *windowDialogThread = thread_create("Welcome", (ThreadStartRoutine) &window_dialog, 0, 0, sysModeCPSR());
     windowDialogThread->cpuAffinity = cpu_number_to_mask(0);
     cfsScheduler.operation.addThread(&cfsScheduler, windowDialogThread, 1);
@@ -153,4 +154,16 @@ void test_threads_init(){
                                                    sysModeCPSR());
     windowFileSystemThread->cpuAffinity = cpu_number_to_mask(0);
     cfsScheduler.operation.addThread(&cfsScheduler, windowFileSystemThread, 1);
+
+
+//    Elf elf;
+//    uint32_t *data = (uint32_t *) kernelHeap.operations.alloc(&kernelHeap, 40 * KB);
+//    vfs_kernel_read(&vfs, "/initrd/bin/TestApp.elf", data, 40 * KB);
+//    elf_init(&elf, data);
+//    elf.operations.dump(&elf);
+//    uint32_t entry = (uint32_t) (elf.data + elf.fileHeader.entry);
+//    Thread *elfThread = thread_create("PICElfTest", (ThreadStartRoutine) entry, 0, 0,
+//                                      sysModeCPSR());
+//    elfThread->cpuAffinity = cpu_number_to_mask(0);
+//    cfsScheduler.operation.addThread(&cfsScheduler, elfThread, 1);
 }

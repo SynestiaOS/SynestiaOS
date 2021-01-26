@@ -22,14 +22,14 @@ DirectoryEntry *vfs_super_block_default_create_directory_entry(struct SuperBlock
     }
     directoryEntry->superBlock = superBlock;
 
-    directoryEntry->operations.initOperation = vfs_directory_entry_default_init;
-    directoryEntry->operations.deleteOperation = vfs_directory_entry_default_delete;
-    directoryEntry->operations.getNameOperation = vfs_directory_entry_default_get_name;
-    directoryEntry->operations.releaseOperation = vfs_directory_entry_default_release;
-    directoryEntry->operations.hashOperation = vfs_directory_entry_default_hash;
+    directoryEntry->operations.init = (DirectoryEntryInitOperation) vfs_directory_entry_default_init;
+    directoryEntry->operations.delete = (DirectoryEntryDeleteOperation) vfs_directory_entry_default_delete;
+    directoryEntry->operations.getName = (DirectoryEntryGetNameOperation) vfs_directory_entry_default_get_name;
+    directoryEntry->operations.release = (DirectoryEntryReleaseOperation) vfs_directory_entry_default_release;
+    directoryEntry->operations.hash = (DirectoryEntryHashOperation) vfs_directory_entry_default_hash;
 
     memcpy(directoryEntry->fileName, fileName, 0xFF);
-    directoryEntry->fileNameHash = directoryEntry->operations.hashOperation(directoryEntry);
+    directoryEntry->fileNameHash = directoryEntry->operations.hash(directoryEntry);
     directoryEntry->indexNode = nullptr;
     directoryEntry->parent = nullptr;
     directoryEntry->children = nullptr;
