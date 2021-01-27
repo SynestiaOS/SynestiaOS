@@ -43,6 +43,7 @@ void interrupt_manager_default_register(InterruptManager *manager, Interrupt int
 }
 
 void interrupt_manager_default_unregister(InterruptManager *manager, Interrupt interrupt) {
+    manager->interrupts[interrupt.interruptNumber].interruptNumber = 0;
     manager->interrupts[interrupt.interruptNumber].handler = nullptr;
     manager->interrupts[interrupt.interruptNumber].clearHandler = nullptr;
     manager->registed[interrupt.interruptNumber] = 0;

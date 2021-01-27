@@ -78,7 +78,7 @@ void kernel_main(void) {
         synestia_init_timer();
 
         // create kernel physical page allocator
-        page_allocator_create(&kernelPageAllocator, KERNEL_PHYSICAL_START, KERNEL_PHYSICAL_SIZE);
+        page_allocator_create(&kernelPageAllocator, __HEAP_BEGIN, KERNEL_PHYSICAL_SIZE - __HEAP_BEGIN);
 
         // init kernel virtual memory mapping
         kernel_vmm_init();
@@ -86,7 +86,7 @@ void kernel_main(void) {
         scheduler_create(&cfsScheduler);
 
         // create kernel heap
-        heap_create(&kernelHeap, (uint32_t) &__HEAP_BEGIN, KERNEL_PHYSICAL_SIZE - (uint32_t) (&__HEAP_BEGIN));
+        heap_create(&kernelHeap, (uint32_t) &__HEAP_BEGIN, KERNEL_PHYSICAL_SIZE - __HEAP_BEGIN);
         slab_create(&kernelObjectSlab, 0, 0);
 
         // create userspace physical page allocator
