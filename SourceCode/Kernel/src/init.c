@@ -86,7 +86,7 @@ void kernel_main(void) {
         scheduler_create(&cfsScheduler);
 
         // create kernel heap
-        heap_create(&kernelHeap, (uint32_t) &__HEAP_BEGIN, KERNEL_PHYSICAL_SIZE - __HEAP_BEGIN);
+        heap_create(&kernelHeap, (uint32_t) &__HEAP_BEGIN, (KERNEL_PHYSICAL_SIZE/2) - __HEAP_BEGIN);
         slab_create(&kernelObjectSlab, 0, 0);
 
         // create userspace physical page allocator
