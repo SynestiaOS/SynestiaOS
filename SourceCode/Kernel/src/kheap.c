@@ -196,7 +196,7 @@ KernelStatus heap_create(Heap *heap, uint32_t addr, uint32_t size) {
     }
     // allocate physical page for kernel heap
     uint32_t heapPhysicalPage = (uint32_t) physicalPageAllocator->operations.allocHugeAt(
-            physicalPageAllocator, USAGE_KERNEL_HEAP, (heap->address | 4 * KB) >> VA_OFFSET, size - heap->address);
+            physicalPageAllocator, USAGE_KERNEL_HEAP, heap->address >> VA_OFFSET, size - heap->address);
     LogInfo("[KHeap] alloc heap page: %d. \n", (uint32_t) heapPhysicalPage);
 
     heap->address = KERNEL_PHYSICAL_START + heapPhysicalPage * PAGE_SIZE;
