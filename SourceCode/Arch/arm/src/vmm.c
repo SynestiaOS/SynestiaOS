@@ -2,6 +2,7 @@
 // Created by XingfengYang on 2020/6/15.
 //
 
+#include "kernel/assert.h"
 #include "arm/vmm.h"
 #include "arm/kernel_vmm.h"
 #include "arm/mmu.h"
@@ -171,19 +172,15 @@ KernelStatus vmm_create(VirtualMemory *virtualMemory, PhysicalPageAllocator *phy
 
     virtualMemory->physicalPageAllocator = physicalPageAllocator;
 
-    uint64_t l1ptPage = virtualMemory->physicalPageAllocator->operations.allocPage4K(
-            virtualMemory->physicalPageAllocator,
-            USAGE_PAGE_TABLE);
-    PageTableEntry *l1pt = (PageTableEntry *) virtualMemory->physicalPageAllocator->base + l1ptPage * PAGE_SIZE;
-
-    uint64_t l2ptPage = virtualMemory->physicalPageAllocator->operations.allocPage4K(
-            virtualMemory->physicalPageAllocator,
-            USAGE_PAGE_TABLE);
-    PageTableEntry *l2pt = (PageTableEntry *) virtualMemory->physicalPageAllocator->base + l2ptPage * PAGE_SIZE;
-
     uint64_t ptPage = virtualMemory->physicalPageAllocator->operations.allocPage4K(virtualMemory->physicalPageAllocator,
                                                                                    USAGE_PAGE_TABLE);
     PageTableEntry *pt = (PageTableEntry *) virtualMemory->physicalPageAllocator->base + ptPage * PAGE_SIZE;
+
+    DEBUG_ASSERT(pt != nullptr);
+    if (pt == nullptr) {
+        LogError("[VMM] pt is null.\n");
+        return ERROR;
+    }
 
     pt[0].valid = 1;
     pt[0].table = 1;
@@ -192,10 +189,35 @@ KernelStatus vmm_create(VirtualMemory *virtualMemory, PhysicalPageAllocator *phy
             virtualMemory->physicalPageAllocator->operations.allocPage4K(virtualMemory->physicalPageAllocator,
                                                                          USAGE_NORMAL));
 
+
+    uint64_t l2ptPage = virtualMemory->physicalPageAllocator->operations.allocPage4K(
+            virtualMemory->physicalPageAllocator,
+            USAGE_PAGE_TABLE);
+    PageTableEntry *l2pt = (PageTableEntry *) virtualMemory->physicalPageAllocator->base + l2ptPage * PAGE_SIZE;
+
+    DEBUG_ASSERT(l2pt != nullptr);
+    if (l2pt == nullptr) {
+        LogError("[VMM] l2pt is null.\n");
+        return ERROR;
+    }
+
     l2pt[0].valid = 1;
     l2pt[0].table = 1;
     l2pt[0].af = 1;
     l2pt[0].base = ptPage;
+
+
+    uint64_t l1ptPage = virtualMemory->physicalPageAllocator->operations.allocPage4K(
+            virtualMemory->physicalPageAllocator,
+            USAGE_PAGE_TABLE);
+    PageTableEntry *l1pt = (PageTableEntry *) virtualMemory->physicalPageAllocator->base + l1ptPage * PAGE_SIZE;
+
+    DEBUG_ASSERT(l1pt != nullptr);
+    if (l1pt == nullptr) {
+        LogError("[VMM] l1pt is null.\n");
+        return ERROR;
+    }
+
 
     l1pt[0].valid = 1;
     l1pt[0].table = 1;
