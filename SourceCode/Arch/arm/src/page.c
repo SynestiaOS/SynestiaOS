@@ -6,7 +6,7 @@
 #include "kernel/type.h"
 #include "libc/string.h"
 
-uint64_t physical_page_allocator_default_alloc_page_4k(PhysicalPageAllocator *pageAllocator, PhysicalPageUsage usage) {
+int64_t physical_page_allocator_default_alloc_page_4k(PhysicalPageAllocator *pageAllocator, PhysicalPageUsage usage) {
     for (uint32_t i = 0; i < PHYSICAL_PAGE_NUMBERS / BITS_IN_UINT32; i++) {
         if (pageAllocator->physicalPagesUsedBitMap[i] != MAX_UINT_32) {
             for (uint8_t j = 0; j < BITS_IN_UINT32; j++) {
@@ -20,6 +20,7 @@ uint64_t physical_page_allocator_default_alloc_page_4k(PhysicalPageAllocator *pa
             }
         }
     }
+    return -1;
 }
 
 uint64_t physical_page_allocator_default_free_page_4k(PhysicalPageAllocator *pageAllocator, uint64_t page) {
