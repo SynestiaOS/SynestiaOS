@@ -143,6 +143,7 @@ _init_cpu3:
 
 _goto_kernel_main:
     #ifndef ENV_KERNEL_UNIT_TESTS
+        mov r11, #0 // clear frame pointer to stop searching calltrace
         bl kernel_main
     #else
     #warning "building kernel for unit tests!!!"
