@@ -4,6 +4,7 @@
 #include "libc/stdlib.h"
 #include "raspi2/timer.h"
 #include "raspi2/uart.h"
+#include "raspi2/gic400.h"
 
 void synestia_init_bsp(void) {
     uart_init();
@@ -36,5 +37,9 @@ void synestia_interrupt_disable(uint32_t no) {
 }
 
 void synestia_init_interrupt(void) {
+#if defined(RASPI4)
+    gic400_init(0xFF840000);
+#else
     interrupt_controller_init();
+#endif
 }
