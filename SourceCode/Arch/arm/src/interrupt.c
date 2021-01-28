@@ -40,7 +40,7 @@ static void find_func_header(unsigned int *instr)
             return;
         }
     }
-    LogError("can not find function!!!\n");
+    LogError("func: can not find function!!!\n");
 }
 
 void dump_callstack(void)
@@ -76,8 +76,8 @@ void __attribute__((interrupt("UNDEF"))) undefined_instruction_handler(void) {
 
     /* first thing is to get exception address */
     __asm__ __volatile__("str lr, %0\n\t" : "=m"(epc));
-    printf("undefined instruction!!!\n");
-    printf("exception pc: %x\n", --epc);
+    LogError("undefined instruction!!!\n");
+    LogError("exception pc: 0x%x\n", --epc);
 
     /* last frame pointer is not in system mode stack */
     __asm__ __volatile__("str r11, %0\n\t" : "=m"(fp));
