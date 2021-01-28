@@ -203,9 +203,9 @@ void thread_init_mm(Thread *thread) {
     thread->memoryStruct.sectionInfo.dataSectionAddr = 0;
     thread->memoryStruct.sectionInfo.bssSectionAddr = 0;
 
-    vmm_create(&thread->memoryStruct.virtualMemory, &kernelPageAllocator);
+    vmm_create(&thread->memoryStruct.virtualMemory, &userspacePageAllocator);
 
-    thread->memoryStruct.virtualMemory.physicalPageAllocator = &kernelPageAllocator;
+    thread->memoryStruct.virtualMemory.physicalPageAllocator = &userspacePageAllocator;
     thread->memoryStruct.virtualMemory.pageTable = kernel_vmm_get_page_table();
     thread->memoryStruct.heap = kernelHeap;
 }

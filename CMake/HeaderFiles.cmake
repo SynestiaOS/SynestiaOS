@@ -54,6 +54,10 @@ function(target_include_tests_header_files Target)
     target_include_directories(${Target} PRIVATE ${SYNESTIAOS_SOURCE_CODE_DIR}/Tests/include)
 endfunction()
 
+function(target_include_system_x_header_files Target)
+    target_include_directories(${Target} PRIVATE ${SYNESTIAOS_SOURCE_CODE_DIR}/Systems/xd/include)
+endfunction()
+
 
 function(target_include_application_console_header_files Target)
     target_include_directories(${Target} PRIVATE ${SYNESTIAOS_SOURCE_CODE_DIR}/Applications/Console/include)
