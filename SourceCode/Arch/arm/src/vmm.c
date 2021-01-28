@@ -174,6 +174,11 @@ KernelStatus vmm_create(VirtualMemory *virtualMemory, PhysicalPageAllocator *phy
 
     uint64_t ptPage = virtualMemory->physicalPageAllocator->operations.allocPage4K(virtualMemory->physicalPageAllocator,
                                                                                    USAGE_PAGE_TABLE);
+
+    if (ptPage == -1) {
+        LogError("[VMM] physical page allocate pt, no free page.\n")
+    }
+
     PageTableEntry *pt = (PageTableEntry *) virtualMemory->physicalPageAllocator->base + ptPage * PAGE_SIZE;
 
     DEBUG_ASSERT(pt != nullptr);
@@ -193,6 +198,10 @@ KernelStatus vmm_create(VirtualMemory *virtualMemory, PhysicalPageAllocator *phy
     uint64_t l2ptPage = virtualMemory->physicalPageAllocator->operations.allocPage4K(
             virtualMemory->physicalPageAllocator,
             USAGE_PAGE_TABLE);
+
+    if (l2ptPage == -1) {
+        LogError("[VMM] physical page allocate l2pt, no free page.\n")
+    }
     PageTableEntry *l2pt = (PageTableEntry *) virtualMemory->physicalPageAllocator->base + l2ptPage * PAGE_SIZE;
 
     DEBUG_ASSERT(l2pt != nullptr);
@@ -210,6 +219,11 @@ KernelStatus vmm_create(VirtualMemory *virtualMemory, PhysicalPageAllocator *phy
     uint64_t l1ptPage = virtualMemory->physicalPageAllocator->operations.allocPage4K(
             virtualMemory->physicalPageAllocator,
             USAGE_PAGE_TABLE);
+
+    if (l1ptPage == -1) {
+        LogError("[VMM] physical page allocate l1pt, no free page.\n")
+    }
+
     PageTableEntry *l1pt = (PageTableEntry *) virtualMemory->physicalPageAllocator->base + l1ptPage * PAGE_SIZE;
 
     DEBUG_ASSERT(l1pt != nullptr);
