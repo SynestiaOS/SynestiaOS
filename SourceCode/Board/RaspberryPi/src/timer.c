@@ -6,7 +6,13 @@
 
 extern InterruptManager genericInterruptManager;
 
-void enable_core0_irq(void) { io_writel(0x8, 0x40000040); }
+
+#if defined(RASPI4)
+#define ARM_TIMER 0xff800040
+#else
+#define ARM_TIMER 0x40000040
+#endif
+void enable_core0_irq(void) { io_writel(0x8, ARM_TIMER); }
 
 uint32_t read_cntfrq(void) {
     uint32_t value;

@@ -21,7 +21,7 @@ extern KernelTimerManager kernelTimerManager;
 
 KernelTimer kernel_timer_manger_default_init(struct KernelTimerManager *kernelTimerManager) {
     tick_init(&kernelTimerManager->timerManagerTick, kernelTimerManager->operation.onTick, "timer manager tick");
-//    genericInterruptManager.operation.registerTick(&genericInterruptManager, &kernelTimerManager->timerManagerTick);
+    genericInterruptManager.operation.registerTick(&genericInterruptManager, &kernelTimerManager->timerManagerTick);
 }
 
 
