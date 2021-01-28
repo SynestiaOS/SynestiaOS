@@ -109,7 +109,7 @@ KernelStatus slab_default_free(struct Slab *slab, KernelObjectType type, void *p
     // set kernel object free, then remove from kernel object list, at last insert the removed node to head of list.
     switch (type) {
         case KERNEL_OBJECT_THREAD: {
-            Thread *thread = kernelHeap.operations.alloc(&kernelHeap, sizeof(Thread));
+            Thread *thread = (Thread *) ptr;
             klist_remove_node(&thread->object.list);
             thread->object.list.next = slab->kernelObjects[type];
             slab->kernelObjects[type] = &thread->object.list;
@@ -118,30 +118,30 @@ KernelStatus slab_default_free(struct Slab *slab, KernelObjectType type, void *p
             return OK;
         }
         case KERNEL_OBJECT_MUTEX: {
-            Mutex *mutex = kernelHeap.operations.alloc(&kernelHeap, sizeof(Mutex));
+            Mutex *mutex = (Mutex *) ptr;
             klist_remove_node(&mutex->object.list);
             mutex->object.list.next = slab->kernelObjects[type];
             slab->kernelObjects[type] = &mutex->object.list;
             mutex->object.status = USING;
-            slab->freeCallback(slab, KERNEL_OBJECT_THREAD, mutex);
+            slab->freeCallback(slab, KERNEL_OBJECT_MUTEX, mutex);
             return OK;
         }
         case KERNEL_OBJECT_SEMAPHORE: {
-            Semaphore *semaphore = kernelHeap.operations.alloc(&kernelHeap, sizeof(Semaphore));
+            Semaphore *semaphore = (Semaphore *) ptr;
             klist_remove_node(&semaphore->object.list);
             semaphore->object.list.next = slab->kernelObjects[type];
             slab->kernelObjects[type] = &semaphore->object.list;
             semaphore->object.status = USING;
-            slab->freeCallback(slab, KERNEL_OBJECT_THREAD, semaphore);
+            slab->freeCallback(slab, KERNEL_OBJECT_SEMAPHORE, semaphore);
             return OK;
         }
         case KERNEL_OBJECT_FILE_DESCRIPTOR: {
-            FileDescriptor *fileDescriptor = kernelHeap.operations.alloc(&kernelHeap, sizeof(FileDescriptor));
+            FileDescriptor *fileDescriptor = (FileDescriptor *) ptr;
             klist_remove_node(&fileDescriptor->object.list);
             fileDescriptor->object.list.next = slab->kernelObjects[type];
             slab->kernelObjects[type] = &fileDescriptor->object.list;
             fileDescriptor->object.status = USING;
-            slab->freeCallback(slab, KERNEL_OBJECT_THREAD, fileDescriptor);
+            slab->freeCallback(slab, KERNEL_OBJECT_FILE_DESCRIPTOR, fileDescriptor);
             return OK;
         }
     }
