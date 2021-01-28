@@ -8,15 +8,17 @@
 
 void synestia_init_bsp(void) {
     uart_init();
-    LogInfo("[Device]: uart_init complete.\n");
+    int mmioBase = PERIPHERAL_BASE;
+    LogInfo("[MMIO]: %d", mmioBase);
+    LogInfo("[HAL]: uart_init complete.\n");
+
 }
 
 void synestia_init_timer(void) {
-    LogInfo("[Device]： timer_init...\n");
-
-    LogInfo("[Device]: generic_timer_init...\n");
+    LogInfo("[HAL]： timer_init...\n");
+    LogInfo("[HAL]: generic_timer_init...\n");
     generic_timer_init();
-    LogInfo("[Device]: generic_timer_init complete.\n");
+    LogInfo("[HAL]: generic_timer_init complete.\n");
 }
 
 
@@ -37,6 +39,7 @@ void synestia_interrupt_disable(uint32_t no) {
 }
 
 void synestia_init_interrupt(void) {
+    LogInfo("[HAL] interrupt init\n")
 #if defined(RASPI4)
     gic400_init(0xFF840000);
 #else

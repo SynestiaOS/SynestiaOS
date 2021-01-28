@@ -68,6 +68,7 @@ void interrupt_manager_default_disable(InterruptManager *manager) {
 }
 
 void interrupt_manager_default_init(InterruptManager *manager) {
+    LogInfo("[InterruptManager] init\n")
     synestia_init_interrupt();
 }
 
@@ -116,7 +117,7 @@ InterruptManager *interrupt_manager_create(InterruptManager *manger) {
     memset((char *) manger->registed, 0, IRQ_NUMS * sizeof(uint32_t));
     manger->operation.disableInterrupt(manger);
 
-    LogInfo("[InterruptManager] init\n")
+    LogInfo("[InterruptManager] created\n")
 
     return manger;
 }

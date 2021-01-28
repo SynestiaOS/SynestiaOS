@@ -1,9 +1,11 @@
 //
 // Created by XingfengYang on 2021/1/28.
 //
-#include  "raspi2/gic400.h"
+#include "kernel/log.h"
+#include "raspi2/gic400.h"
 
 void gic400_init(void *interruptControllerBase) {
+    LogInfo("[GIC400] init.\n")
     GIC400 gic400;
 
     gic400.gic400Distributor = (GIC400Distributor *) (interruptControllerBase + 0x1000);
@@ -40,4 +42,6 @@ void gic400_init(void *interruptControllerBase) {
 
     gic400.gic400CpuInterface->pm = 0xF0;
     gic400.gic400CpuInterface->ctl = GIC400_CTL_ENABLE;
+
+    LogInfo("[GIC400] inited.\n")
 }
