@@ -32,19 +32,30 @@ add_executable(${KernelName}
         $<TARGET_OBJECTS:LibGUI>
         $<TARGET_OBJECTS:${boardObj}>)
 
-target_sources(${KernelName}
-        PRIVATE
-        ${SYNESTIAOS_FS_DIR}/initrd.o)
-
 target_link_options(${KernelName} PRIVATE -T ${KernelArch_SOURCE_DIR}/src/kernel.ld)
 
 target_link_libraries(${KernelName} PRIVATE gcc)
 
+#add_custom_target(OUTPUT initrd.o
+#        WORKING_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
+#        COMMAND dd if=/dev/zero of=initrd.img bs=1KB count=32768
+#        COMMAND mke2fs -m0 -F －v initrd.img
+#        COMMAND mount initrd.img FS/tmp
+#        COMMAND cp -r FS/initrd/* FS/tmp/
+#        COMMAND unmount FS/tmp
+#        COMMAND arm-none-eabi-objcopy -I binary -O elf32-littlearm -B arm initrd.img initrd.o
+#        COMMENT "generate ramfs initrd.o")
+
+target_sources(${KernelName}
+        PRIVATE
+        ${SYNESTIAOS_FS_DIR}/initrd.o)
+
 add_custom_command(OUTPUT kernel.img
-	WORKING_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
-	COMMAND ${CMAKE_OBJCOPY} -O binary ${KernelName} kernel.img
-	DEPENDS ${KernelName}
-	COMMENT "objcopying ${KernelName} to kernel.img")
-add_custom_target(kernelImage ALL 
-	DEPENDS kernel.img)
+        WORKING_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
+        COMMAND ${CMAKE_OBJCOPY} -O binary ${KernelName} kernel.img
+        DEPENDS ${KernelName}
+        COMMENT "objcopying ${KernelName} to kernel.img")
+
+add_custom_target(kernelImage ALL
+        DEPENDS kernel.img)
 
