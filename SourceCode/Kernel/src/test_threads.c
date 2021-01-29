@@ -1,6 +1,7 @@
 //
 // Created by XingfengYang on 2021/1/11.
 //
+#include "libelf/elf.h"
 #include "arm/register.h"
 #include "arm/page.h"
 #include "kernel/ext2.h"
@@ -153,11 +154,11 @@ void test_threads_init() {
     windowFileSystemThread->cpuAffinity = cpu_number_to_mask(0);
     cfsScheduler.operation.addThread(&cfsScheduler, windowFileSystemThread, 1);
 
-//    Elf elf;
-//    uint32_t *data = (uint32_t *) kernelHeap.operations.alloc(&kernelHeap, 40 * KB);
-//    vfs_kernel_read(&vfs, "/initrd/bin/TestApp.elf", data, 40 * KB);
-//    elf_init(&elf, data);
-//    elf.operations.dump(&elf);
+    Elf elf;
+    uint32_t *data = (uint32_t *) kernelHeap.operations.alloc(&kernelHeap, 40 * KB);
+    vfs_kernel_read(&vfs, "/initrd/bin/TestApp.elf", data, 40 * KB);
+    elf_init(&elf, data);
+    elf.operations.dump(&elf);
 //    uint32_t entry = (uint32_t) (elf.data + elf.fileHeader.entry);
 //    Thread *elfThread = thread_create("PICElfTest", (ThreadStartRoutine) entry, 0, 0,
 //                                      sysModeCPSR());
