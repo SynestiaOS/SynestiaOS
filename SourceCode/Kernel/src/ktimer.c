@@ -65,7 +65,7 @@ KernelTimer *kernel_timer_manger_default_create_timer(KernelTimerManager *kernel
 KernelStatus
 kernel_timer_manger_default_release_timer(KernelTimerManager *kernelTimerManager, KernelTimer *timer) {
     LogInfo("[TimerManager] release timer\n");
-    if (timer->waitQueue.operations.size == 0) {
+    if (timer->waitQueue.size == 0) {
         klist_remove_node(&timer->list);
     } else {
         while (timer->waitQueue.size != 0) {

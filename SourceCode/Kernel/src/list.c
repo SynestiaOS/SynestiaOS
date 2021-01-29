@@ -79,7 +79,7 @@ uint32_t klist_size(ListNode *node) {
 
 void klist_iter(ListNode *list, void (*iterFunc)(ListNode *)) {
     struct ListNode *head = klist_get_head(list);
-    if (head != nullptr) {
+    while (head != nullptr) {
         iterFunc(head);
         if (head->next != nullptr) {
             head = head->next;
