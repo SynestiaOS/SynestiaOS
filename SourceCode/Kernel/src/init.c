@@ -81,7 +81,7 @@ void kernel_main(void) {
         page_allocator_create(&kernelPageAllocator, __HEAP_BEGIN, KERNEL_PHYSICAL_SIZE - __HEAP_BEGIN);
 
         // init kernel virtual memory mapping
-//        kernel_vmm_init();
+        kernel_vmm_init();
 
         scheduler_create(&cfsScheduler);
 
