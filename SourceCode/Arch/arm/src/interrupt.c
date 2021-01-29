@@ -29,7 +29,7 @@ void arch_disable_interrupt() {
 
 static void find_func_header(unsigned int *instr)
 {
-    static const unsigned int prologue[2] = { 0xe92d4800, 0xe28db000 }; // todo: add more....
+    static const unsigned int prologue[2] = { 0xe92d4800, 0xe28db000 };
     unsigned int i;
 
 #define MAX_FUNC_LEN 0x1000
