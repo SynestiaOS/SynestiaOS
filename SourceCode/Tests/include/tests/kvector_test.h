@@ -7,10 +7,13 @@
 
 #include "kernel/kvector.h"
 
-extern uint32_t __HEAP_BEGIN;
+extern char _binary_initrd_img_start[];
+extern char _binary_initrd_img_end[];
+extern char _binary_initrd_img_size[];
+extern uint32_t __KERNEL_END;
 
 void should_kvector_create() {
-    KernelStatus heapInitStatus = heap_create(&testHeap, __HEAP_BEGIN, 64 * MB);
+    KernelStatus heapInitStatus = heap_create(&testHeap, _binary_initrd_img_end, 64 * MB);
 
     struct KernelVector vector;
     KernelVector *kernelVector = kvector_allocate(&vector);
@@ -20,7 +23,7 @@ void should_kvector_create() {
 }
 
 void should_kvector_resize() {
-    KernelStatus heapInitStatus = heap_create(&testHeap, __HEAP_BEGIN, 64 * MB);
+    KernelStatus heapInitStatus = heap_create(&testHeap, _binary_initrd_img_end, 64 * MB);
 
     struct KernelVector vector;
     KernelVector *kernelVector = kvector_allocate(&vector);
@@ -35,7 +38,7 @@ void should_kvector_resize() {
 }
 
 void should_kvector_free() {
-    KernelStatus heapInitStatus = heap_create(&testHeap, __HEAP_BEGIN, 64 * MB);
+    KernelStatus heapInitStatus = heap_create(&testHeap, _binary_initrd_img_end, 64 * MB);
 
     struct KernelVector vector;
     KernelVector *kernelVector = kvector_allocate(&vector);
@@ -47,7 +50,7 @@ void should_kvector_free() {
 }
 
 void should_kvector_add() {
-    KernelStatus heapInitStatus = heap_create(&testHeap, __HEAP_BEGIN, 64 * MB);
+    KernelStatus heapInitStatus = heap_create(&testHeap, _binary_initrd_img_end, 64 * MB);
 
     struct KernelVector vector;
     KernelVector *kernelVector = kvector_allocate(&vector);
@@ -69,7 +72,7 @@ TestElement t1;
 TestElement t2;
 
 void should_kvector_get() {
-    KernelStatus heapInitStatus = heap_create(&testHeap, __HEAP_BEGIN, 64 * MB);
+    KernelStatus heapInitStatus = heap_create(&testHeap, _binary_initrd_img_end, 64 * MB);
 
     struct KernelVector vector;
     KernelVector *kernelVector = kvector_allocate(&vector);
@@ -94,7 +97,7 @@ void should_kvector_get() {
 }
 
 void should_kvector_remove_index() {
-    KernelStatus heapInitStatus = heap_create(&testHeap, __HEAP_BEGIN, 64 * MB);
+    KernelStatus heapInitStatus = heap_create(&testHeap, _binary_initrd_img_end, 64 * MB);
 
     struct KernelVector vector;
     KernelVector *kernelVector = kvector_allocate(&vector);
@@ -106,7 +109,7 @@ void should_kvector_remove_index() {
 }
 
 void should_kvector_remove() {
-    KernelStatus heapInitStatus = heap_create(&testHeap, __HEAP_BEGIN, 64 * MB);
+    KernelStatus heapInitStatus = heap_create(&testHeap, _binary_initrd_img_end, 64 * MB);
 
     struct KernelVector vector;
     KernelVector *kernelVector = kvector_allocate(&vector);
@@ -118,7 +121,7 @@ void should_kvector_remove() {
 }
 
 void should_kvector_is_empty() {
-    KernelStatus heapInitStatus = heap_create(&testHeap, __HEAP_BEGIN, 64 * MB);
+    KernelStatus heapInitStatus = heap_create(&testHeap, _binary_initrd_img_end, 64 * MB);
 
     struct KernelVector vector;
     KernelVector *kernelVector = kvector_allocate(&vector);
@@ -130,7 +133,7 @@ void should_kvector_is_empty() {
 }
 
 void should_kvector_is_full() {
-    KernelStatus heapInitStatus = heap_create(&testHeap, __HEAP_BEGIN, 64 * MB);
+    KernelStatus heapInitStatus = heap_create(&testHeap, _binary_initrd_img_end, 64 * MB);
 
     struct KernelVector vector;
     KernelVector *kernelVector = kvector_allocate(&vector);
@@ -146,7 +149,7 @@ void should_kvector_is_full() {
 }
 
 void should_kvector_clear() {
-    KernelStatus heapInitStatus = heap_create(&testHeap, __HEAP_BEGIN, 64 * MB);
+    KernelStatus heapInitStatus = heap_create(&testHeap, _binary_initrd_img_end, 64 * MB);
 
     struct KernelVector vector;
     KernelVector *kernelVector = kvector_allocate(&vector);

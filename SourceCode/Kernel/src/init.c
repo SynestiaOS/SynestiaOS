@@ -1,5 +1,5 @@
-#include "libc/string.h"
-#include "kernel/bus.h"
+#include "kernel/assert.h"
+#include "kernel/log.h"
 #include "arm/register.h"
 #include "arm/kernel_vmm.h"
 #include "arm/page.h"
@@ -20,7 +20,7 @@
 #include "raspi2/led.h"
 #include "kernel/ktimer.h"
 
-extern uint32_t __HEAP_BEGIN;
+extern uint32_t __KERNEL_END;
 extern char _binary_initrd_img_start[];
 extern char _binary_initrd_img_end[];
 extern char _binary_initrd_img_size[];
@@ -78,15 +78,24 @@ void kernel_main(void) {
         synestia_init_timer();
 
         // create kernel physical page allocator
-        page_allocator_create(&kernelPageAllocator, __HEAP_BEGIN, KERNEL_PHYSICAL_SIZE - __HEAP_BEGIN);
+        page_allocator_create(&kernelPageAllocator, (uint32_t) &_binary_initrd_img_end,
+                              KERNEL_PHYSICAL_SIZE - (uint32_t) &_binary_initrd_img_end);
 
         // init kernel virtual memory mapping
         kernel_vmm_init();
 
         scheduler_create(&cfsScheduler);
 
+        DEBUG_ASSERT((uint32_t) &_binary_initrd_img_start + (uint32_t) &_binary_initrd_img_size ==
+                     (uint32_t) &_binary_initrd_img_end);
+        DEBUG_ASSERT((uint32_t) &_binary_initrd_img_end >= __KERNEL_END);
+
+        LogInfo("[RamFS] start at : %d \n", _binary_initrd_img_start);
+        LogInfo("[RamFS] end at : %d \n", _binary_initrd_img_end);
+
         // create kernel heap
-        heap_create(&kernelHeap, (uint32_t) &__HEAP_BEGIN, KERNEL_PHYSICAL_SIZE - __HEAP_BEGIN);
+        heap_create(&kernelHeap, (uint32_t) &_binary_initrd_img_end,
+                    KERNEL_PHYSICAL_SIZE - (uint32_t) &_binary_initrd_img_end);
         slab_create(&kernelObjectSlab, 0, 0);
 
         // create userspace physical page allocator
@@ -103,6 +112,22 @@ void kernel_main(void) {
         vfs_kernel_read(&vfs, "/initrd/init/bg1024_768.dat", (char *) background, 768 * 1024 * 4);
         mainSurface.operations.drawBitmap(&mainSurface, 0, 0, 1024, 768, background);
         kernelHeap.operations.free(&kernelHeap, background);
+
+
+        LogInfo("[Ext2Verify]: check start.");
+        uint32_t *ext2VerifyFile = (uint32_t *) kernelHeap.operations.alloc(&kernelHeap, 1024 * 32768);
+        vfs_kernel_read(&vfs, "/initrd/sbin/ext2verify.bin", (char *) ext2VerifyFile, 1024 * 32768);
+        for (uint32_t i = 0; i < 8 * MB; i++) {
+            if (*ext2VerifyFile != i) {
+                LogError("[Ext2Verify]: check failed at %d \n", i);
+                LogError("[Ext2Verify]: check failed with %d \n", *ext2VerifyFile);
+                goto halt;
+            }
+            ext2VerifyFile++;
+        }
+        LogInfo("[Ext2Verify]: check success. \n", *ext2VerifyFile);
+        kernelHeap.operations.free(&kernelHeap, ext2VerifyFile);
+
 
         mainSurface.operations.fillRect(&mainSurface, 0, 0, 1024, 64, FLUENT_PRIMARY_COLOR);
         GUILabel logo;
@@ -122,6 +147,9 @@ void kernel_main(void) {
 
         cfsScheduler.operation.schedule(&cfsScheduler);
     }
+    halt:
+    {};
+
 
     // schd_switch_next();
 }

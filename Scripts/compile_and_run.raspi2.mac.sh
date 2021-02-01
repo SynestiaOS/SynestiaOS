@@ -10,4 +10,4 @@ cmake -DCMAKE_TOOLCHAIN_FILE="${BASEDIR}"/../CMake/ToolchainMacArm.cmake -DARCH=
 VERBOSE=1 make
 
 echo ">>>>>>>>>>>>>>>> RUNNING KERNEL <<<<<<<<<<<<<<<<"
-qemu-system-arm -M raspi2 -kernel ./bin/Kernel.elf -serial mon:stdio
+qemu-system-arm -M raspi2 -kernel ./bin/Kernel.elf -serial mon:stdio -m 1024M
