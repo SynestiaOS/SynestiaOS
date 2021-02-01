@@ -178,7 +178,7 @@ KernelStatus slab_create(Slab *slab, uint32_t addr, uint32_t size) {
     LogInfo("[KSlab] alloc slab page: %d. \n", (uint32_t) slabPhysicalPage);
 
     slab->address = KERNEL_PHYSICAL_START + slabPhysicalPage * PAGE_SIZE;
-    LogInfo("[KHeap] kheap at: %d. \n", slab->address);
+    LogInfo("[KSlab] kheap at: %d. \n", slab->address);
 
     slab->operations.setFreeCallback = (SlabOperationSetFreeCallback) slab_default_set_free_callback;
     slab->operations.setAllocCallback = (SlabOperationSetAllocCallback) slab_default_set_alloc_callback;

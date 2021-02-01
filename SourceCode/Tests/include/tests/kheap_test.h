@@ -7,17 +7,20 @@
 
 #include "kernel/kheap.h"
 
-extern uint32_t __HEAP_BEGIN;
+extern char _binary_initrd_img_start[];
+extern char _binary_initrd_img_end[];
+extern char _binary_initrd_img_size[];
+extern uint32_t __KERNEL_END;
 Heap testHeap;
 
 void should_kheap_init() {
-    KernelStatus heapInitStatus = heap_create(&testHeap, __HEAP_BEGIN, 64 * MB);
+    KernelStatus heapInitStatus = heap_create(&testHeap, _binary_initrd_img_end, 64 * MB);
 
     ASSERT_EQ(heapInitStatus, OK);
 }
 
 void should_kheap_alloc() {
-    KernelStatus heapInitStatus = heap_create(&testHeap, __HEAP_BEGIN, 64 * MB);
+    KernelStatus heapInitStatus = heap_create(&testHeap, _binary_initrd_img_end, 64 * MB);
     ASSERT_EQ(heapInitStatus, OK);
 
     uint32_t *values1 = (uint32_t *) testHeap.operations.alloc(&testHeap, 5 * sizeof(uint32_t));
@@ -48,7 +51,7 @@ void should_kheap_alloc() {
 }
 
 void should_kheap_calloc() {
-    KernelStatus heapInitStatus = heap_create(&testHeap, __HEAP_BEGIN, 64 * MB);
+    KernelStatus heapInitStatus = heap_create(&testHeap, _binary_initrd_img_end, 64 * MB);
     ASSERT_EQ(heapInitStatus, OK);
 
     uint32_t *values1 = (uint32_t *) testHeap.operations.calloc(&testHeap, 5, sizeof(uint32_t));
@@ -79,7 +82,7 @@ void should_kheap_calloc() {
 }
 
 void should_kheap_realloc() {
-    KernelStatus heapInitStatus = heap_create(&testHeap, __HEAP_BEGIN, 64 * MB);
+    KernelStatus heapInitStatus = heap_create(&testHeap, _binary_initrd_img_end, 64 * MB);
     ASSERT_EQ(heapInitStatus, OK);
 
     uint32_t *values1 = (uint32_t *) testHeap.operations.calloc(&testHeap, 5, sizeof(uint32_t));
@@ -102,7 +105,7 @@ void should_kheap_realloc() {
 }
 
 void should_kheap_free() {
-    KernelStatus heapInitStatus = heap_create(&testHeap, __HEAP_BEGIN, 64 * MB);
+    KernelStatus heapInitStatus = heap_create(&testHeap, _binary_initrd_img_end, 64 * MB);
     ASSERT_EQ(heapInitStatus, OK);
 
     uint32_t *values1 = (uint32_t *) testHeap.operations.calloc(&testHeap, 1, sizeof(uint32_t));

@@ -15,12 +15,15 @@
 #include "tests/atomic_test.h"
 #include "tests/libmath_test.h"
 
-extern uint32_t __HEAP_BEGIN;
+extern char _binary_initrd_img_start[];
+extern char _binary_initrd_img_end[];
+extern char _binary_initrd_img_size[];
+extern uint32_t __KERNEL_END;
 extern Heap testHeap;
 
 void kernel_main_tests() {
     if (read_cpuid() == 0) {
-        heap_create(&testHeap, __HEAP_BEGIN, 64 * MB);
+        heap_create(&testHeap, _binary_initrd_img_end, 64 * MB);
 
         TEST_CASE("should_klist_insert", should_klist_insert);
         TEST_CASE("should_klist_append", should_klist_append);
