@@ -10,6 +10,7 @@ KernelStatus klist_insert(ListNode *list, ListNode *node) {
     }
     node->prev = list;
     list->next = node;
+    return OK;
 }
 
 KernelStatus klist_append(ListNode *list, ListNode *node) {

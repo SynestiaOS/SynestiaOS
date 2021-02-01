@@ -39,7 +39,7 @@ target_link_libraries(${KernelName} PRIVATE gcc)
 #add_custom_target(OUTPUT initrd.o
 #        WORKING_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
 #        COMMAND dd if=/dev/zero of=initrd.img bs=1KB count=32768
-#        COMMAND mke2fs -m0 -F －v initrd.img
+#        COMMAND mke2fs -m0 -F -v initrd.img
 #        COMMAND mount initrd.img FS/tmp
 #        COMMAND cp -r FS/initrd/* FS/tmp/
 #        COMMAND unmount FS/tmp
