@@ -2,6 +2,7 @@
 // Created by XingfengYang & ChengyuZhao on 2020/7/30.
 //
 
+#include "kernel/log.h"
 #include "kernel/vfs_dentry.h"
 #include "kernel/vfs_inode.h"
 #include "kernel/vfs_super_block.h"
@@ -36,5 +37,6 @@ KernelStatus vfs_directory_entry_default_init(DirectoryEntry *directory, Directo
     if (parent != nullptr) {
         parent->children = directory;
     }
+    LogInfo("[VFS] dentry '%s' init\n",directory->fileName);
     return OK;
 }
