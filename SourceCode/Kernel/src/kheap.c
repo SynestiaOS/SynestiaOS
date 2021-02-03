@@ -49,6 +49,7 @@ void *heap_default_alloc(struct Heap *heap, uint32_t size) {
             uint32_t restSize = currentFreeArea->size - allocSize - offset;
 
             HeapArea *newFreeArea = (HeapArea *) newFreeHeapAreaAddress;
+            newFreeArea->magic = HEAP_AREA_MAGIC;
             newFreeArea->size = restSize;
 
             // 2.link new free heap area to free list
@@ -127,6 +128,11 @@ KernelStatus heap_default_free(struct Heap *heap, void *ptr) {
     // 1. get HeapArea address
     uint32_t address = (uint32_t) (ptr - sizeof(HeapArea));
     HeapArea *currentArea = (HeapArea *) address;
+
+    if(currentArea->magic!= HEAP_AREA_MAGIC){
+        LogError("[KHeap] not a heap area: 0x%x. \n", ptr);
+        return ERROR;
+    }
 
     // 2. unlink from using list
     if (currentArea->list.prev != nullptr) {
@@ -210,6 +216,7 @@ KernelStatus heap_create(Heap *heap, uint32_t addr, uint32_t size) {
     LogInfo("[KHeap]: kheap at: %d. \n", heap->address);
 
     HeapArea *freeHead = (HeapArea *) heap->address;
+    freeHead->magic = HEAP_AREA_MAGIC;
     freeHead->size = 0;
     freeHead->list.prev = nullptr;
 
@@ -219,6 +226,7 @@ KernelStatus heap_create(Heap *heap, uint32_t addr, uint32_t size) {
     freeHead->list.next = &freeArea->list;
     freeArea->list.next = nullptr;
     freeArea->list.prev = &freeHead->list;
+    freeArea->magic = HEAP_AREA_MAGIC;
 
     HeapArea *usingHead = nullptr;
 

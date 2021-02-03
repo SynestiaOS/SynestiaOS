@@ -171,7 +171,6 @@ void kernel_main(void) {
         LogInfo("[Ext2Verify]: check success. \n", *ext2VerifyFile);
         kernelHeap.operations.free(&kernelHeap, ext2VerifyFile);
 
-
         mainSurface.operations.fillRect(&mainSurface, 0, 0, 1024, 64, FLUENT_PRIMARY_COLOR);
         GUILabel logo;
         logo.component.foreground = ColorRGB(0xFF, 0xFF, 0xFF);

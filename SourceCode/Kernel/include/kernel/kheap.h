@@ -9,6 +9,9 @@
 #include "kernel/type.h"
 #include "libc/stdint.h"
 
+
+#define HEAP_AREA_MAGIC 0x48454150
+
 typedef void (*HeapAllocCallback)(struct Heap *heap, void *ptr, uint32_t size);
 
 typedef void (*HeapFreeCallback)(struct Heap *heap, void *ptr);
@@ -38,6 +41,7 @@ typedef struct HeapOperations {
 } HeapOperations;
 
 typedef struct HeapArea {
+    uint32_t magic;
     uint32_t size;
     ListNode list;
 } HeapArea;
