@@ -9,7 +9,7 @@
 void synestia_init_bsp(void) {
     uart_init();
     int mmioBase = PERIPHERAL_BASE;
-    LogInfo("[MMIO]: %d", mmioBase);
+    LogInfo("[MMIO]: %d \n", mmioBase);
     LogInfo("[HAL]: uart_init complete.\n");
 
 }
