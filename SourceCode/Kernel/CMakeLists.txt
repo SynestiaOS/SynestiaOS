@@ -5,7 +5,7 @@ aux_source_directory(${Kernel_SOURCE_DIR}/src KernelSrc)
 add_library(${PROJECT_NAME}
         OBJECT
         ${KernelSrc}
-        ${Kernel_SOURCE_DIR}/src/exception.S)
+        ${Kernel_SOURCE_DIR}/src/exception.S src/debug/heap_debug.c)
 
 target_include_arch_header_files(${PROJECT_NAME})
 target_include_kernel_header_files(${PROJECT_NAME})

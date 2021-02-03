@@ -25,9 +25,11 @@ void arch_disable_interrupt() {
     __asm__ __volatile__("cpsid i");
 }
 
+#define undefined_instruction() do { asm volatile(".word 0xffffffff \n\t"); } while (0)
+
 static void find_func_header(unsigned int *instr)
 {
-    static const unsigned int prologue[2] = { 0xe92d4800, 0xe28db000 }; // todo: add more....
+    static const unsigned int prologue[2] = { 0xe92d4800, 0xe28db000 };
     unsigned int i;
 
 #define MAX_FUNC_LEN 0x1000
@@ -38,7 +40,7 @@ static void find_func_header(unsigned int *instr)
             return;
         }
     }
-    LogError("can not find function!!!\n");
+    LogError("func: can not find function!!!\n");
 }
 
 void dump_callstack(void)
@@ -46,26 +48,59 @@ void dump_callstack(void)
     unsigned int *lr, *fp;
     unsigned int *func;
 
-    __asm__ __volatile__("push {r0, r2, r4, r6, r8, r12, r14}\n\t" : "=m"(lr));
-    __asm__ __volatile__("push {r0, r2, r4, r6, r8}\n\t" : "=m"(lr));
-    __asm__ __volatile__("push {r8}\n\t" : "=m"(lr));
-    __asm__ __volatile__("push {r8, r9, r10, r11, r12, r13, r14}\n\t" : "=m"(lr));
-
     __asm__ __volatile__("str lr, %0\n\t" : "=m"(lr));
     __asm__ __volatile__("str r11, %0\n\t" : "=m"(fp));
 
     LogError("callstack info:\n");
-    while (fp) {
+    while (1) {
         lr = (unsigned int *) fp[0];
         fp = (unsigned int *) fp[-1];
+        if (0 == fp) {
+            break;
+        }
+        // printf("fp: %x, lr %x\n", fp, lr);
         find_func_header(lr);
     }
     LogError("callstack end\n");
 }
 
-extern SysCall sys_call_table[];
+#define dead() \
+    do { \
+        arch_disable_interrupt(); \
+        while (1) { __asm__ __volatile__("wfi\n\t"); } \
+    } while (0)
 
-void __attribute__((interrupt("UNDEF"))) undefined_instruction_handler(void) {}
+void __attribute__((interrupt("UNDEF"))) undefined_instruction_handler(void) {
+    unsigned int *epc;
+    unsigned int fp;
+
+    /* first thing is to get exception address */
+    __asm__ __volatile__("str lr, %0\n\t" : "=m"(epc));
+    LogError("undefined instruction!!!\n");
+    LogError("exception pc: 0x%x\n", --epc);
+
+    /* last frame pointer is not in system mode stack */
+    __asm__ __volatile__("str r11, %0\n\t" : "=m"(fp));
+    /* r12 is pushed because of __attribute__((interrupt("UNDEF"))),
+       so the offset is -2. */
+    fp = ((unsigned int *) fp)[-2];
+    /* recover r11 to system mode */
+    __asm__ __volatile__("ldr r0, %0\n\t" // r11 cannot be modified directly, local vars use r11
+                         "ldr r1, %1\n\t"
+                         "msr cpsr, #0b11011111\n\t"
+                         "nop\n\t"
+                         /* construct c function info on sys stack */
+                         "push {r1}\n\t" // lr
+                         "push {r0}\n\t" // r11
+                         "add r11, sp, #4\n\t" // only 2 registers, so it is 4
+                         :
+                         : "m"(fp), "m"(epc));
+
+    dump_callstack();
+    dead();
+}
+
+extern SysCall sys_call_table[];
 
 int software_interrupt_handler() {
     volatile int r0, r1, r2, r3, r4, sysCallNo;
