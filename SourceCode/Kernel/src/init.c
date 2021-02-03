@@ -20,6 +20,26 @@
 #include "raspi2/led.h"
 #include "kernel/ktimer.h"
 
+extern uint32_t __text_start;
+extern uint32_t __vector_table_start;
+extern uint32_t __vector_table_end;
+extern uint32_t __text_end;
+extern uint32_t __rodata_start;
+extern uint32_t __rodata_end;
+extern uint32_t __data_start;
+extern uint32_t __data_end;
+extern uint32_t __bss_start;
+extern uint32_t __bss_end;
+extern uint32_t __sys_stack;
+extern uint32_t __irq_stack;
+extern uint32_t __fiq_stack;
+extern uint32_t __svc_stack;
+extern uint32_t __abort_stack;
+extern uint32_t __undefined_stack;
+extern uint32_t __end_stack;
+extern uint32_t __PAGE_TABLE;
+extern uint32_t __KERNEL_END;
+
 extern uint32_t __KERNEL_END;
 extern char _binary_initrd_img_start[];
 extern char _binary_initrd_img_end[];
@@ -62,10 +82,38 @@ _Noreturn uint32_t *GPU_FLUSH(int args) {
     }
 }
 
+void print_memory_map() {
+    LogInfo("[MemMap] __text_start         = %d \n", (uint32_t) &__text_start);
+    LogInfo("[MemMap] __vector_table_start = %d \n", (uint32_t) &__vector_table_start);
+    LogInfo("[MemMap] __vector_table_end   = %d \n", (uint32_t) &__vector_table_end);
+    LogInfo("[MemMap] __text_end           = %d \n", (uint32_t) &__text_end);
+    LogInfo("[MemMap] __rodata_start       = %d \n", (uint32_t) &__rodata_start);
+    LogInfo("[MemMap] __rodata_end         = %d \n", (uint32_t) &__rodata_end);
+    LogInfo("[MemMap] __data_start         = %d \n", (uint32_t) &__data_start);
+    LogInfo("[MemMap] __data_end           = %d \n", (uint32_t) &__data_end);
+    LogInfo("[MemMap] __bss_start          = %d \n", (uint32_t) &__bss_start);
+    LogInfo("[MemMap] __bss_end            = %d \n", (uint32_t) &__bss_end);
+    LogInfo("[MemMap] __sys_stack          = %d \n", (uint32_t) &__sys_stack);
+    LogInfo("[MemMap] __irq_stack          = %d \n", (uint32_t) &__irq_stack);
+    LogInfo("[MemMap] __fiq_stack          = %d \n", (uint32_t) &__fiq_stack);
+    LogInfo("[MemMap] __svc_stack          = %d \n", (uint32_t) &__svc_stack);
+    LogInfo("[MemMap] __abort_stack        = %d \n", (uint32_t) &__abort_stack);
+    LogInfo("[MemMap] __undefined_stack    = %d \n", (uint32_t) &__undefined_stack);
+    LogInfo("[MemMap] __end_stack          = %d \n", (uint32_t) &__end_stack);
+    LogInfo("[MemMap] __PAGE_TABLE         = %d \n", (uint32_t) &__PAGE_TABLE);
+    LogInfo("[MemMap] __KERNEL_END         = %d \n", (uint32_t) &__KERNEL_END);
+
+    LogInfo("[RamFS] start at              : %d \n", &_binary_initrd_img_start);
+    LogInfo("[RamFS] end at                : %d \n", &_binary_initrd_img_end);
+}
+
 void kernel_main(void) {
     if (read_cpuid() == 0) {
         led_init();
         print_splash();
+
+        print_memory_map();
+
         synestia_init_bsp();
 
         // create interrupt manager and init generic interrupt
@@ -78,24 +126,18 @@ void kernel_main(void) {
         synestia_init_timer();
 
         // create kernel physical page allocator
-        page_allocator_create(&kernelPageAllocator, (uint32_t) &_binary_initrd_img_end,
-                              KERNEL_PHYSICAL_SIZE - (uint32_t) &_binary_initrd_img_end);
+        page_allocator_create(&kernelPageAllocator, (uint32_t) &__KERNEL_END + PAGE_SIZE,
+                              KERNEL_PHYSICAL_SIZE - (uint32_t) &__KERNEL_END);
 
         // init kernel virtual memory mapping
         kernel_vmm_init();
 
         scheduler_create(&cfsScheduler);
 
-        DEBUG_ASSERT((uint32_t) &_binary_initrd_img_start + (uint32_t) &_binary_initrd_img_size ==
-                     (uint32_t) &_binary_initrd_img_end);
-        DEBUG_ASSERT((uint32_t) &_binary_initrd_img_end >= __KERNEL_END);
-
-        LogInfo("[RamFS] start at : %d \n", _binary_initrd_img_start);
-        LogInfo("[RamFS] end at : %d \n", _binary_initrd_img_end);
-
         // create kernel heap
-        heap_create(&kernelHeap, (uint32_t) &_binary_initrd_img_end,
-                    KERNEL_PHYSICAL_SIZE - (uint32_t) &_binary_initrd_img_end);
+        heap_create(&kernelHeap, (uint32_t) &__KERNEL_END + PAGE_SIZE,
+                    KERNEL_PHYSICAL_SIZE - (uint32_t) &__KERNEL_END);
+        DEBUG_ASSERT((uint32_t) kernelHeap.address >= (uint32_t) &_binary_initrd_img_end);
         slab_create(&kernelObjectSlab, 0, 0);
 
         // create userspace physical page allocator
@@ -114,7 +156,7 @@ void kernel_main(void) {
         kernelHeap.operations.free(&kernelHeap, background);
 
 
-        LogInfo("[Ext2Verify]: check start.");
+        LogInfo("[Ext2Verify]: check start.\n");
         uint32_t *ext2VerifyFile = (uint32_t *) kernelHeap.operations.alloc(&kernelHeap, 1024 * 32768);
         vfs_kernel_read(&vfs, "/initrd/sbin/ext2verify.bin", (char *) ext2VerifyFile, 1024 * 32768);
         for (uint32_t i = 0; i < 8 * MB; i++) {
