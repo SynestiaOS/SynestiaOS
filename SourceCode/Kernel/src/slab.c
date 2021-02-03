@@ -115,7 +115,6 @@ KernelStatus slab_default_free(struct Slab *slab, KernelObjectType type, void *p
                 thread->object.list.next = slab->kernelObjects[type];
             } else {
                 klist_remove_node(&thread->object.list);
-                thread->object.list.next = nullptr;
             }
             slab->kernelObjects[type] = &thread->object.list;
             thread->object.status = FREE;
@@ -129,10 +128,9 @@ KernelStatus slab_default_free(struct Slab *slab, KernelObjectType type, void *p
                 mutex->object.list.next = slab->kernelObjects[type];
             } else {
                 klist_remove_node(&mutex->object.list);
-                mutex->object.list.next = nullptr;
             }
             slab->kernelObjects[type] = &mutex->object.list;
-            mutex->object.status = USING;
+            mutex->object.status = FREE;
             slab->freeCallback(slab, KERNEL_OBJECT_MUTEX, mutex);
             return OK;
         }
@@ -143,10 +141,9 @@ KernelStatus slab_default_free(struct Slab *slab, KernelObjectType type, void *p
                 semaphore->object.list.next = slab->kernelObjects[type];
             } else {
                 klist_remove_node(&semaphore->object.list);
-                semaphore->object.list.next = nullptr;
             }
             slab->kernelObjects[type] = &semaphore->object.list;
-            semaphore->object.status = USING;
+            semaphore->object.status = FREE;
             slab->freeCallback(slab, KERNEL_OBJECT_SEMAPHORE, semaphore);
             return OK;
         }
@@ -157,10 +154,9 @@ KernelStatus slab_default_free(struct Slab *slab, KernelObjectType type, void *p
                 fileDescriptor->object.list.next = slab->kernelObjects[type];
             } else {
                 klist_remove_node(&fileDescriptor->object.list);
-                fileDescriptor->object.list.next = nullptr;
             }
             slab->kernelObjects[type] = &fileDescriptor->object.list;
-            fileDescriptor->object.status = USING;
+            fileDescriptor->object.status = FREE;
             slab->freeCallback(slab, KERNEL_OBJECT_FILE_DESCRIPTOR, fileDescriptor);
             return OK;
         }
