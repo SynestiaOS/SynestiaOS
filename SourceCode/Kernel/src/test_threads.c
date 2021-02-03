@@ -159,10 +159,10 @@ void test_threads_init() {
     vfs_kernel_read(&vfs, "/initrd/bin/TestApp", data, 40 * KB);
     elf_init(&elf, data);
     elf.operations.dump(&elf);
-//    uint32_t entry = (uint32_t) (elf.data + 65536);
-//    Thread *elfThread = thread_create("PICElfTest", (ThreadStartRoutine) entry, 0, 0,
-//                                      sysModeCPSR());
-//    elfThread->cpuAffinity = cpu_number_to_mask(0);
-//    cfsScheduler.operation.addThread(&cfsScheduler, elfThread, 1);
+    uint32_t entry = (uint32_t) (elf.data + 32768);
+    Thread *elfThread = thread_create("PICElfTest", (ThreadStartRoutine) entry, 0, 0,
+                                      sysModeCPSR());
+    elfThread->cpuAffinity = cpu_number_to_mask(0);
+    cfsScheduler.operation.addThread(&cfsScheduler, elfThread, 1);
 
 }
