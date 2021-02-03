@@ -95,7 +95,7 @@ void *slab_default_alloc(struct Slab *slab, KernelObjectType type) {
                     kernelObject->status = USING;
                     return kernelObject->operations.getObject(&kernelObject);
                 }
-                kernelObject = (KernelObject *) kernelObject->list.next;
+                kernelObject = (KernelObject *) getNode(kernelObject->list.next, KernelObject, list);
             }
             // oops, not found free kernel object, so let's alloc from heap.
             void *ptr = slab_default_alloc_kernel_object(slab, type);
