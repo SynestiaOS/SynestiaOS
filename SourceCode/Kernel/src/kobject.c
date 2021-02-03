@@ -10,19 +10,19 @@
 void *kernel_object_default_get(struct KernelObject *object) {
     switch (object->type) {
         case KERNEL_OBJECT_THREAD: {
-            Thread *thread = getNode(&object, Thread, object);
+            Thread *thread = getNode(object, Thread, object);
             return thread;
         }
         case KERNEL_OBJECT_MUTEX: {
-            Mutex *mutex = getNode(&object, Mutex, object);
+            Mutex *mutex = getNode(object, Mutex, object);
             return mutex;
         }
         case KERNEL_OBJECT_SEMAPHORE: {
-            Semaphore *semaphore = getNode(&object, Semaphore, object);
+            Semaphore *semaphore = getNode(object, Semaphore, object);
             return semaphore;
         }
         case KERNEL_OBJECT_FILE_DESCRIPTOR: {
-            FileDescriptor *fileDescriptor = getNode(&object, FileDescriptor, object);
+            FileDescriptor *fileDescriptor = getNode(object, FileDescriptor, object);
             return fileDescriptor;
         }
     }
