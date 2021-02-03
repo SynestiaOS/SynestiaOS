@@ -22,7 +22,7 @@ void interrupt_manager_default_register_tick(InterruptManager *manager, Tick *ti
     } else {
         klist_append(&manager->ticks->node, &tick->node);
     }
-    LogInfo("[Interrupt] tick '%s' registered.\n", tick->name)
+    LogInfo("[Interrupt]: tick '%s' registered.\n", tick->name)
 }
 
 void interrupt_manager_default_un_register_tick(InterruptManager *manager, Tick *tick) {
@@ -68,23 +68,23 @@ void interrupt_manager_default_disable(InterruptManager *manager) {
 }
 
 void interrupt_manager_default_init(InterruptManager *manager) {
-    LogInfo("[InterruptManager] init\n")
+    LogInfo("[InterruptManager]: init\n")
     synestia_init_interrupt();
 }
 
 void interrupt_manager_default_tick(InterruptManager *manager) {
     Tick *tick = manager->ticks;
     if (tick != nullptr) {
-        LogInfo("[InterruptManager] tick '%s' triggered\n", tick->name);
+        LogInfo("[InterruptManager]: tick '%s' triggered\n", tick->name);
         tick->handler();
         while (tick->node.next != nullptr) {
             Tick *next = getNode(tick->node.next, Tick, node);
-            LogInfo("[InterruptManager] tick '%s' triggered\n", tick->name);
+            LogInfo("[InterruptManager]: tick '%s' triggered\n", tick->name);
             next->handler();
             tick = next;
         }
     } else {
-        LogError("[InterruptManager] no tick registered\n");
+        LogError("[InterruptManager]: no tick registered\n");
     }
 }
 
@@ -117,7 +117,7 @@ InterruptManager *interrupt_manager_create(InterruptManager *manger) {
     memset((char *) manger->registed, 0, IRQ_NUMS * sizeof(uint32_t));
     manger->operation.disableInterrupt(manger);
 
-    LogInfo("[InterruptManager] created\n")
+    LogInfo("[InterruptManager]: created\n")
 
     return manger;
 }
