@@ -13,6 +13,7 @@ typedef enum KernelObjectType {
     KERNEL_OBJECT_MUTEX,
     KERNEL_OBJECT_SEMAPHORE,
     KERNEL_OBJECT_FILE_DESCRIPTOR,
+    KERNEL_OBJECT_TYPE_BUTT
 } KernelObjectType;
 
 typedef enum KernelObjectStatus {
