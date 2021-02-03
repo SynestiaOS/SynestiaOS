@@ -30,42 +30,42 @@ void *slab_default_alloc_kernel_object(struct Slab *slab, KernelObjectType type)
     switch (type) {
         case KERNEL_OBJECT_THREAD: {
             Thread *thread = kernelHeap.operations.alloc(&kernelHeap, sizeof(Thread));
+            kobject_create(&thread->object, type, USING);
             if (slab->kernelObjects[type] == nullptr) {
                 slab->kernelObjects[type] = &thread->object.list;
             } else {
                 klist_append(slab->kernelObjects[type], &thread->object.list);
             }
-            thread->object.status = USING;
             return thread;
         }
         case KERNEL_OBJECT_MUTEX: {
             Mutex *mutex = kernelHeap.operations.alloc(&kernelHeap, sizeof(Mutex));
+            kobject_create(&mutex->object, type, USING);
             if (slab->kernelObjects[type] == nullptr) {
                 slab->kernelObjects[type] = &mutex->object.list;
             } else {
                 klist_append(slab->kernelObjects[type], &mutex->object.list);
             }
-            mutex->object.status = USING;
             return mutex;
         }
         case KERNEL_OBJECT_SEMAPHORE: {
             Semaphore *semaphore = kernelHeap.operations.alloc(&kernelHeap, sizeof(Semaphore));
+            kobject_create(&semaphore->object, type, USING);
             if (slab->kernelObjects[type] == nullptr) {
                 slab->kernelObjects[type] = &semaphore->object.list;
             } else {
                 klist_append(slab->kernelObjects[type], &semaphore->object.list);
             }
-            semaphore->object.status = USING;
             return semaphore;
         }
         case KERNEL_OBJECT_FILE_DESCRIPTOR: {
             FileDescriptor *fileDescriptor = kernelHeap.operations.alloc(&kernelHeap, sizeof(FileDescriptor));
+            kobject_create(&fileDescriptor->object, type, USING);
             if (slab->kernelObjects[type] == nullptr) {
                 slab->kernelObjects[type] = &fileDescriptor->object.list;
             } else {
                 klist_append(slab->kernelObjects[type], &fileDescriptor->object.list);
             }
-            fileDescriptor->object.status = USING;
             return fileDescriptor;
         }
     }
@@ -132,7 +132,7 @@ KernelStatus slab_default_free(struct Slab *slab, KernelObjectType type, void *p
                 mutex->object.list.next = nullptr;
             }
             slab->kernelObjects[type] = &mutex->object.list;
-            mutex->object.status = USING;
+            mutex->object.status = FREE;
             slab->freeCallback(slab, KERNEL_OBJECT_MUTEX, mutex);
             return OK;
         }
@@ -146,7 +146,7 @@ KernelStatus slab_default_free(struct Slab *slab, KernelObjectType type, void *p
                 semaphore->object.list.next = nullptr;
             }
             slab->kernelObjects[type] = &semaphore->object.list;
-            semaphore->object.status = USING;
+            semaphore->object.status = FREE;
             slab->freeCallback(slab, KERNEL_OBJECT_SEMAPHORE, semaphore);
             return OK;
         }
@@ -160,7 +160,7 @@ KernelStatus slab_default_free(struct Slab *slab, KernelObjectType type, void *p
                 fileDescriptor->object.list.next = nullptr;
             }
             slab->kernelObjects[type] = &fileDescriptor->object.list;
-            fileDescriptor->object.status = USING;
+            fileDescriptor->object.status = FREE;
             slab->freeCallback(slab, KERNEL_OBJECT_FILE_DESCRIPTOR, fileDescriptor);
             return OK;
         }
