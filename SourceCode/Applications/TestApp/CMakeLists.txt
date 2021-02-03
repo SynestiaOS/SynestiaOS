@@ -9,4 +9,3 @@ target_include_libc_header_files(${PROJECT_NAME})
 
 target_link_options(${PROJECT_NAME} PRIVATE -T ${TestApp_SOURCE_DIR}/SynestiaELF.ld)
 target_link_libraries(${PROJECT_NAME} PRIVATE gcc)
-
