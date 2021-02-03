@@ -115,6 +115,7 @@ KernelStatus slab_default_free(struct Slab *slab, KernelObjectType type, void *p
                 thread->object.list.next = slab->kernelObjects[type];
             } else {
                 klist_remove_node(&thread->object.list);
+                thread->object.list.next = nullptr;
             }
             slab->kernelObjects[type] = &thread->object.list;
             thread->object.status = FREE;
@@ -123,11 +124,12 @@ KernelStatus slab_default_free(struct Slab *slab, KernelObjectType type, void *p
         }
         case KERNEL_OBJECT_MUTEX: {
             Mutex *mutex = (Mutex *) ptr;
-            if (klist_size(slab->kernelObjects[type]) != 1) {
+            if (klist_size(slab->kernelObjects[type]) > 1) {
                 klist_remove_node(&mutex->object.list);
                 mutex->object.list.next = slab->kernelObjects[type];
             } else {
                 klist_remove_node(&mutex->object.list);
+                mutex->object.list.next = nullptr;
             }
             slab->kernelObjects[type] = &mutex->object.list;
             mutex->object.status = USING;
@@ -136,11 +138,12 @@ KernelStatus slab_default_free(struct Slab *slab, KernelObjectType type, void *p
         }
         case KERNEL_OBJECT_SEMAPHORE: {
             Semaphore *semaphore = (Semaphore *) ptr;
-            if (klist_size(slab->kernelObjects[type]) != 1) {
+            if (klist_size(slab->kernelObjects[type]) > 1) {
                 klist_remove_node(&semaphore->object.list);
                 semaphore->object.list.next = slab->kernelObjects[type];
             } else {
                 klist_remove_node(&semaphore->object.list);
+                semaphore->object.list.next = nullptr;
             }
             slab->kernelObjects[type] = &semaphore->object.list;
             semaphore->object.status = USING;
@@ -149,11 +152,12 @@ KernelStatus slab_default_free(struct Slab *slab, KernelObjectType type, void *p
         }
         case KERNEL_OBJECT_FILE_DESCRIPTOR: {
             FileDescriptor *fileDescriptor = (FileDescriptor *) ptr;
-            if (klist_size(slab->kernelObjects[type]) != 1) {
+            if (klist_size(slab->kernelObjects[type]) > 1) {
                 klist_remove_node(&fileDescriptor->object.list);
                 fileDescriptor->object.list.next = slab->kernelObjects[type];
             } else {
                 klist_remove_node(&fileDescriptor->object.list);
+                fileDescriptor->object.list.next = nullptr;
             }
             slab->kernelObjects[type] = &fileDescriptor->object.list;
             fileDescriptor->object.status = USING;
