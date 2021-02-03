@@ -43,7 +43,11 @@ uint32_t kernel_object_default_size(struct KernelObject *object) {
     }
 }
 
-KernelObject *kobject_create(KernelObject *kObject) {
+KernelObject *kobject_create(KernelObject *kObject, KernelObjectType type, KernelObjectStatus status) {
     kObject->operations.getObject = (KernelObjectOperationGetObject) kernel_object_default_get;
     kObject->operations.size = (KernelObjectOperationGetSize) kernel_object_default_size;
+    kObject->list.next = nullptr;
+    kObject->list.prev = nullptr;
+    kObject->type = type;
+    kObject->status = status;
 }

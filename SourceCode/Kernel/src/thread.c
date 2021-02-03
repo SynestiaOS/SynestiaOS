@@ -192,9 +192,7 @@ enum KernelStatus thread_init_stack(Thread *thread, ThreadStartRoutine entry, vo
 }
 
 void thread_init_kobject(Thread *thread) {
-    kobject_create(&thread->object);
-    thread->object.type = KERNEL_OBJECT_THREAD;
-    thread->object.status = USING;
+    kobject_create(&thread->object, KERNEL_OBJECT_THREAD, USING);
 }
 
 void thread_init_mm(Thread *thread) {

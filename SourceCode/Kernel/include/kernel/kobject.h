@@ -36,6 +36,6 @@ typedef struct KernelObject {
     KernelObjectOperations operations;
 } KernelObject;
 
-KernelObject* kobject_create(KernelObject* kObject);
+KernelObject* kobject_create(KernelObject *kObject, KernelObjectType type, KernelObjectStatus status);
 
 #endif//__SYNESTIAOS_KOBJECT_H__
