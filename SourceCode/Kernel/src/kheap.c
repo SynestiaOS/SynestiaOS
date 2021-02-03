@@ -14,13 +14,13 @@ extern Scheduler cfsScheduler;
 
 void heap_default_alloc_callback(struct Heap *heap, void *ptr, uint32_t size) {
     heap->statistics.allocatedSize += size;
-    LogInfo("[Heap]: alloc %d bytes at %d.\n", size, (uint32_t) ptr);
+    LogInfo("[KHeap]: alloc %d bytes at %d.\n", size, (uint32_t) ptr);
 }
 
 void heap_default_free_callback(struct Heap *heap, void *ptr) {
     HeapArea *heapArea = (HeapArea *) (ptr - sizeof(HeapArea));
     heap->statistics.allocatedSize -= heapArea->size;
-    LogInfo("[Heap]: free %d bytes at %d.\n", heapArea->size, (uint32_t) ptr);
+    LogInfo("[KHeap]: free %d bytes at %d.\n", heapArea->size, (uint32_t) ptr);
 }
 
 void *heap_default_alloc(struct Heap *heap, uint32_t size) {
@@ -98,7 +98,7 @@ void *heap_default_realloc(struct Heap *heap, void *ptr, uint32_t size) {
     // 1. alloc new heap area
     void *newHeapArea = heap->operations.alloc(heap, size);
     if (newHeapArea == nullptr) {
-        LogError("[heap] alloc mem failed when realloc.\n");
+        LogError("[KHeap]: alloc mem failed when realloc.\n");
         return nullptr;
     }
 
@@ -110,13 +110,13 @@ void *heap_default_realloc(struct Heap *heap, void *ptr, uint32_t size) {
     // 3. free old heap area
     KernelStatus freeStatus = heap->operations.free(heap, ptr);
     if (freeStatus != OK) {
-        LogError("[heap] free old mem failed when realloc.\n");
+        LogError("[KHeap]: free old mem failed when realloc.\n");
     }
     return newHeapArea;
 }
 
 KernelStatus heap_default_free(struct Heap *heap, void *ptr) {
-    LogInfo("[KHeap] want free: %d. \n", ptr);
+    LogInfo("[KHeap]: want free: %d. \n", ptr);
     // 1. get HeapArea address
     uint32_t address = (uint32_t) (ptr - sizeof(HeapArea));
     HeapArea *currentArea = (HeapArea *) address;
@@ -185,7 +185,7 @@ void heap_default_set_free_callback(struct Heap *heap, HeapFreeCallback callback
 
 KernelStatus heap_create(Heap *heap, uint32_t addr, uint32_t size) {
     heap->address = addr;
-    LogInfo("[KHeap] at: %d. \n", heap->address);
+    LogInfo("[KHeap]: at: %d. \n", heap->address);
 
     PhysicalPageAllocator *physicalPageAllocator;
     Thread *currThread = cfsScheduler.operation.getCurrentThread(&cfsScheduler);
@@ -197,10 +197,10 @@ KernelStatus heap_create(Heap *heap, uint32_t addr, uint32_t size) {
     // allocate physical page for kernel heap
     uint32_t heapPhysicalPage = (uint32_t) physicalPageAllocator->operations.allocHugeAt(
             physicalPageAllocator, USAGE_KERNEL_HEAP, heap->address >> VA_OFFSET, size - heap->address);
-    LogInfo("[KHeap] alloc heap page: %d. \n", (uint32_t) heapPhysicalPage);
+    LogInfo("[KHeap]: alloc heap page: %d. \n", (uint32_t) heapPhysicalPage);
 
     heap->address = KERNEL_PHYSICAL_START + heapPhysicalPage * PAGE_SIZE;
-    LogInfo("[KHeap] kheap at: %d. \n", heap->address);
+    LogInfo("[KHeap]: kheap at: %d. \n", heap->address);
 
     HeapArea *freeHead = (HeapArea *) heap->address;
     freeHead->size = 0;
@@ -235,6 +235,6 @@ KernelStatus heap_create(Heap *heap, uint32_t addr, uint32_t size) {
     heap->statistics.allocatedSize = 0;
     heap->statistics.mergeCounts = 0;
 
-    LogInfo("[KHeap] kheap created. \n");
+    LogInfo("[KHeap]: kheap created. \n");
     return OK;
 }

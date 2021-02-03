@@ -20,10 +20,10 @@ void virtual_memory_default_allocate_page(VirtualMemory *virtualMemory, uint32_t
     uint32_t l3Offset = (virtualAddress >> 12) & 0b111111111;
     uint32_t pageOffset = virtualAddress & 0xFFF;
 
-    LogError("[vmm]:usr l1Offset: %d .\n", l1Offset);
-    LogError("[vmm]:usr l2Offset: %d .\n", l2Offset);
-    LogError("[vmm]:usr l3Offset: %d .\n", l3Offset);
-    LogError("[vmm]:usr pageOffset: %d .\n", pageOffset);
+    LogError("[vmm]: usr l1Offset: %d .\n", l1Offset);
+    LogError("[vmm]: usr l2Offset: %d .\n", l2Offset);
+    LogError("[vmm]: usr l3Offset: %d .\n", l3Offset);
+    LogError("[vmm]: usr pageOffset: %d .\n", pageOffset);
 
     PageTableEntry *level1PageTable = virtualMemory->pageTable;
     PageTableEntry level1PageTableEntry = level1PageTable[l1Offset];
@@ -176,14 +176,14 @@ KernelStatus vmm_create(VirtualMemory *virtualMemory, PhysicalPageAllocator *phy
                                                                                    USAGE_PAGE_TABLE);
 
     if (ptPage == -1) {
-        LogError("[VMM] physical page allocate pt, no free page.\n")
+        LogError("[VMM]: physical page allocate pt, no free page.\n")
     }
 
     PageTableEntry *pt = (PageTableEntry *) virtualMemory->physicalPageAllocator->base + ptPage * PAGE_SIZE;
 
     DEBUG_ASSERT(pt != nullptr);
     if (pt == nullptr) {
-        LogError("[VMM] pt is null.\n");
+        LogError("[VMM]: pt is null.\n");
         return ERROR;
     }
 
@@ -200,13 +200,13 @@ KernelStatus vmm_create(VirtualMemory *virtualMemory, PhysicalPageAllocator *phy
             USAGE_PAGE_TABLE);
 
     if (l2ptPage == -1) {
-        LogError("[VMM] physical page allocate l2pt, no free page.\n")
+        LogError("[VMM]: physical page allocate l2pt, no free page.\n")
     }
     PageTableEntry *l2pt = (PageTableEntry *) virtualMemory->physicalPageAllocator->base + l2ptPage * PAGE_SIZE;
 
     DEBUG_ASSERT(l2pt != nullptr);
     if (l2pt == nullptr) {
-        LogError("[VMM] l2pt is null.\n");
+        LogError("[VMM]: l2pt is null.\n");
         return ERROR;
     }
 
@@ -221,14 +221,14 @@ KernelStatus vmm_create(VirtualMemory *virtualMemory, PhysicalPageAllocator *phy
             USAGE_PAGE_TABLE);
 
     if (l1ptPage == -1) {
-        LogError("[VMM] physical page allocate l1pt, no free page.\n")
+        LogError("[VMM]: physical page allocate l1pt, no free page.\n")
     }
 
     PageTableEntry *l1pt = (PageTableEntry *) virtualMemory->physicalPageAllocator->base + l1ptPage * PAGE_SIZE;
 
     DEBUG_ASSERT(l1pt != nullptr);
     if (l1pt == nullptr) {
-        LogError("[VMM] l1pt is null.\n");
+        LogError("[VMM]: l1pt is null.\n");
         return ERROR;
     }
 

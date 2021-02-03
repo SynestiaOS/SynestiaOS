@@ -180,17 +180,17 @@ KernelStatus slab_create(Slab *slab, uint32_t addr, uint32_t size) {
     slab->freeCallback = (SlabFreeCallback) slab_default_free_callback;
 
     slab->address = addr;
-    LogInfo("[KSlab] at: %d. \n", slab->address);
+    LogInfo("[KSlab]: at: %d. \n", slab->address);
 
     PhysicalPageAllocator *physicalPageAllocator = &kernelPageAllocator;
 
     // allocate physical page for slab
     uint32_t slabPhysicalPage = (uint32_t) physicalPageAllocator->operations.allocHugeAt(
             physicalPageAllocator, USAGE_KERNEL_HEAP, (slab->address | 4 * KB) >> VA_OFFSET, size - slab->address);
-    LogInfo("[KSlab] alloc slab page: %d. \n", (uint32_t) slabPhysicalPage);
+    LogInfo("[KSlab]: alloc slab page: %d. \n", (uint32_t) slabPhysicalPage);
 
     slab->address = KERNEL_PHYSICAL_START + slabPhysicalPage * PAGE_SIZE;
-    LogInfo("[KSlab] kheap at: %d. \n", slab->address);
+    LogInfo("[KSlab]: kheap at: %d. \n", slab->address);
 
     slab->operations.setFreeCallback = (SlabOperationSetFreeCallback) slab_default_set_free_callback;
     slab->operations.setAllocCallback = (SlabOperationSetAllocCallback) slab_default_set_alloc_callback;
@@ -198,6 +198,6 @@ KernelStatus slab_create(Slab *slab, uint32_t addr, uint32_t size) {
     slab->operations.alloc = (SlabOperationAlloc) slab_default_alloc;
     slab->operations.free = (SlabOperationFree) slab_default_free;
 
-    LogInfo("[KSlab] kernel slab created. \n");
+    LogInfo("[KSlab]: kernel slab created. \n");
     return OK;
 }
