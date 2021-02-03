@@ -159,16 +159,17 @@ void kernel_main(void) {
         LogInfo("[Ext2Verify]: check start.\n");
         uint32_t *ext2VerifyFile = (uint32_t *) kernelHeap.operations.alloc(&kernelHeap, 1024 * 32768);
         vfs_kernel_read(&vfs, "/initrd/sbin/ext2verify.bin", (char *) ext2VerifyFile, 1024 * 32768);
+        uint32_t *tmp = ext2VerifyFile;
         for (uint32_t i = 0; i < 8 * MB; i++) {
-            if (*ext2VerifyFile != i) {
+            if (*tmp != i) {
                 LogError("[Ext2Verify]: check failed at %d \n", i);
-                LogError("[Ext2Verify]: check failed with %d \n", *ext2VerifyFile);
+                LogError("[Ext2Verify]: check failed with %d \n", *tmp);
                 goto halt;
             }
-            ext2VerifyFile++;
+            tmp++;
         }
         LogInfo("[Ext2Verify]: check success. \n", *ext2VerifyFile);
-//        kernelHeap.operations.free(&kernelHeap, ext2VerifyFile);
+        kernelHeap.operations.free(&kernelHeap, ext2VerifyFile);
 
 
         mainSurface.operations.fillRect(&mainSurface, 0, 0, 1024, 64, FLUENT_PRIMARY_COLOR);
