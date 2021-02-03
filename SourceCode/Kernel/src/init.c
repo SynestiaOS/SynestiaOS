@@ -83,28 +83,28 @@ _Noreturn uint32_t *GPU_FLUSH(int args) {
 }
 
 void print_memory_map() {
-    LogInfo("[MemMap]: __text_start         = %d \n", (uint32_t) &__text_start);
-    LogInfo("[MemMap]: __vector_table_start = %d \n", (uint32_t) &__vector_table_start);
-    LogInfo("[MemMap]: __vector_table_end   = %d \n", (uint32_t) &__vector_table_end);
-    LogInfo("[MemMap]: __text_end           = %d \n", (uint32_t) &__text_end);
-    LogInfo("[MemMap]: __rodata_start       = %d \n", (uint32_t) &__rodata_start);
-    LogInfo("[MemMap]: __rodata_end         = %d \n", (uint32_t) &__rodata_end);
-    LogInfo("[MemMap]: __data_start         = %d \n", (uint32_t) &__data_start);
-    LogInfo("[MemMap]: __data_end           = %d \n", (uint32_t) &__data_end);
-    LogInfo("[MemMap]: __bss_start          = %d \n", (uint32_t) &__bss_start);
-    LogInfo("[MemMap]: __bss_end            = %d \n", (uint32_t) &__bss_end);
-    LogInfo("[MemMap]: __sys_stack          = %d \n", (uint32_t) &__sys_stack);
-    LogInfo("[MemMap]: __irq_stack          = %d \n", (uint32_t) &__irq_stack);
-    LogInfo("[MemMap]: __fiq_stack          = %d \n", (uint32_t) &__fiq_stack);
-    LogInfo("[MemMap]: __svc_stack          = %d \n", (uint32_t) &__svc_stack);
-    LogInfo("[MemMap]: __abort_stack        = %d \n", (uint32_t) &__abort_stack);
-    LogInfo("[MemMap]: __undefined_stack    = %d \n", (uint32_t) &__undefined_stack);
-    LogInfo("[MemMap]: __end_stack          = %d \n", (uint32_t) &__end_stack);
-    LogInfo("[MemMap]: __PAGE_TABLE         = %d \n", (uint32_t) &__PAGE_TABLE);
-    LogInfo("[MemMap]: __KERNEL_END         = %d \n", (uint32_t) &__KERNEL_END);
+    LogInfo("[MemMap]: __text_start         = 0x%x \n", (uint32_t) &__text_start);
+    LogInfo("[MemMap]: __vector_table_start = 0x%x \n", (uint32_t) &__vector_table_start);
+    LogInfo("[MemMap]: __vector_table_end   = 0x%x \n", (uint32_t) &__vector_table_end);
+    LogInfo("[MemMap]: __text_end           = 0x%x \n", (uint32_t) &__text_end);
+    LogInfo("[MemMap]: __rodata_start       = 0x%x \n", (uint32_t) &__rodata_start);
+    LogInfo("[MemMap]: __rodata_end         = 0x%x \n", (uint32_t) &__rodata_end);
+    LogInfo("[MemMap]: __data_start         = 0x%x \n", (uint32_t) &__data_start);
+    LogInfo("[MemMap]: __data_end           = 0x%x \n", (uint32_t) &__data_end);
+    LogInfo("[MemMap]: __bss_start          = 0x%x \n", (uint32_t) &__bss_start);
+    LogInfo("[MemMap]: __bss_end            = 0x%x \n", (uint32_t) &__bss_end);
+    LogInfo("[MemMap]: __sys_stack          = 0x%x \n", (uint32_t) &__sys_stack);
+    LogInfo("[MemMap]: __irq_stack          = 0x%x \n", (uint32_t) &__irq_stack);
+    LogInfo("[MemMap]: __fiq_stack          = 0x%x \n", (uint32_t) &__fiq_stack);
+    LogInfo("[MemMap]: __svc_stack          = 0x%x \n", (uint32_t) &__svc_stack);
+    LogInfo("[MemMap]: __abort_stack        = 0x%x \n", (uint32_t) &__abort_stack);
+    LogInfo("[MemMap]: __undefined_stack    = 0x%x \n", (uint32_t) &__undefined_stack);
+    LogInfo("[MemMap]: __end_stack          = 0x%x \n", (uint32_t) &__end_stack);
+    LogInfo("[MemMap]: __PAGE_TABLE         = 0x%x \n", (uint32_t) &__PAGE_TABLE);
+    LogInfo("[MemMap]: __KERNEL_END         = 0x%x \n", (uint32_t) &__KERNEL_END);
 
-    LogInfo("[RamFS]: start at              : %d \n", &_binary_initrd_img_start);
-    LogInfo("[RamFS]: end at                : %d \n", &_binary_initrd_img_end);
+    LogInfo("[RamFS]: start at              : 0x%x \n", &_binary_initrd_img_start);
+    LogInfo("[RamFS]: end at                : 0x%x \n", &_binary_initrd_img_end);
 }
 
 void kernel_main(void) {
