@@ -115,7 +115,6 @@ KernelStatus slab_default_free(struct Slab *slab, KernelObjectType type, void *p
                 thread->object.list.next = slab->kernelObjects[type];
             } else {
                 klist_remove_node(&thread->object.list);
-                thread->object.list.next = nullptr;
             }
             slab->kernelObjects[type] = &thread->object.list;
             thread->object.status = FREE;
@@ -129,7 +128,6 @@ KernelStatus slab_default_free(struct Slab *slab, KernelObjectType type, void *p
                 mutex->object.list.next = slab->kernelObjects[type];
             } else {
                 klist_remove_node(&mutex->object.list);
-                mutex->object.list.next = nullptr;
             }
             slab->kernelObjects[type] = &mutex->object.list;
             mutex->object.status = FREE;
@@ -143,7 +141,6 @@ KernelStatus slab_default_free(struct Slab *slab, KernelObjectType type, void *p
                 semaphore->object.list.next = slab->kernelObjects[type];
             } else {
                 klist_remove_node(&semaphore->object.list);
-                semaphore->object.list.next = nullptr;
             }
             slab->kernelObjects[type] = &semaphore->object.list;
             semaphore->object.status = FREE;
@@ -157,7 +154,6 @@ KernelStatus slab_default_free(struct Slab *slab, KernelObjectType type, void *p
                 fileDescriptor->object.list.next = slab->kernelObjects[type];
             } else {
                 klist_remove_node(&fileDescriptor->object.list);
-                fileDescriptor->object.list.next = nullptr;
             }
             slab->kernelObjects[type] = &fileDescriptor->object.list;
             fileDescriptor->object.status = FREE;
