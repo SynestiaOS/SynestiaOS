@@ -87,7 +87,6 @@ void *slab_default_alloc(struct Slab *slab, KernelObjectType type) {
             kernelObject->status = USING;
             void *ptr = kernelObject->operations.getObject(kernelObject);
             slab->allocCallback(slab, type, ptr, 1);
-            LogInfo("==first free \n")
             return ptr;
         } else {
             // let find the free kernel object from list
@@ -125,7 +124,7 @@ KernelStatus slab_default_free(struct Slab *slab, KernelObjectType type, void *p
         }
         case KERNEL_OBJECT_MUTEX: {
             Mutex *mutex = (Mutex *) ptr;
-            if (klist_size(slab->kernelObjects[type]) > 1)  {
+            if (klist_size(slab->kernelObjects[type]) > 1) {
                 klist_remove_node(&mutex->object.list);
                 mutex->object.list.next = slab->kernelObjects[type];
                 mutex->object.list.next->prev = &mutex->object.list;
