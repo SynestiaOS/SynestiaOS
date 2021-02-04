@@ -14,6 +14,10 @@ function(target_include_libmath_header_files Target)
     target_include_directories(${Target} PRIVATE ${SYNESTIAOS_SOURCE_CODE_DIR}/Libraries/LibMath/include)
 endfunction()
 
+function(target_include_libshell_header_files Target)
+    target_include_directories(${Target} PRIVATE ${SYNESTIAOS_SOURCE_CODE_DIR}/Libraries/LibShell/include)
+endfunction()
+
 function(target_include_libgfx_header_files Target)
     target_include_directories(${Target} PRIVATE ${SYNESTIAOS_SOURCE_CODE_DIR}/Libraries/LibGfx/include)
 endfunction()
