@@ -6,7 +6,7 @@
 #define SYNESTIAOS_ASSERT_H
 
 #include "arm/interrupt.h"
-void dump_callstack(void);
+#include "arm/call_trace.h"
 
 void __assert_fail(const char *file, int line, const char *failedExpr);
 
@@ -16,7 +16,7 @@ void __assert_fail_msg(const char *file, int line, const char *failedExpr, const
     do {                                           \
         if (!(x)) {                                \
             __assert_fail(__FILE__, __LINE__, #x); \
-            dump_callstack();                      \
+            dump_calltrace();                      \
             dead();                                \
         }                                          \
     } while (0)
@@ -25,7 +25,7 @@ void __assert_fail_msg(const char *file, int line, const char *failedExpr, const
     do {                                                    \
         if (!(x)) {                                         \
             __assert_fail_msg(__FILE__, __LINE__, #x, msg); \
-            dump_callstack();                               \
+            dump_calltrace();                               \
             dead();                                         \
         }                                                   \
     } while (0)
