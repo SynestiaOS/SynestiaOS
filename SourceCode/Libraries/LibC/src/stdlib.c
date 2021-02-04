@@ -48,7 +48,8 @@ int32_t printf(const char *fmt, ...) {
     va_start(args, fmt);
     int32_t i = vsprintf(buf, fmt, args);
     va_end(args);
-    write(1, buf, strlen(buf));
+    if( i > 0)
+        write(1, buf, strlen(buf));
     bzero(buf, 1024);
     return i;
 }

@@ -147,5 +147,6 @@ void fast_interrupt_handler(void) {
 }
 
 void interrupt_handler(void) {
+    //LogInfo("Enter interrupt");
     genericInterruptManager.operation.interrupt(&genericInterruptManager);
 }

@@ -22,7 +22,8 @@ _data_abort_addr:
 _unused_addr:
     .word unused_handler
 _interrupt_addr:
-    .word interrupt_isp
+    //    .word interrupt_isp
+    .word interrupt_vector
 _fast_interrupt_addr:
     .word fast_interrupt_handler
 

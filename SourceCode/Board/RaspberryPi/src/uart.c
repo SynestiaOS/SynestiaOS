@@ -99,6 +99,7 @@ void uart_put_char(uint8_t ch) {
     if (ch == '\n') {
         do_uart_put_char('\r');
     }
+
     do_uart_put_char(ch);
 }
 
@@ -112,7 +113,8 @@ uint8_t do_uart_get_char(void) {
 
 void uart_print(const char *str) {
     while (*str) {
-        uart_put_char(*str);
+        RPI_AuxMiniUartWrite(*str);
+        //uart_put_char(*str);
         str++;
     }
 }

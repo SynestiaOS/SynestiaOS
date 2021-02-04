@@ -108,13 +108,13 @@ void print_memory_map() {
 }
 
 void kernel_main(void) {
-    if (read_cpuid() == 0) {
-        led_init();
+    //if (read_cpuid() == 0) 
+    {
+        synestia_init_bsp();
+        //led_init();
         print_splash();
 
         print_memory_map();
-
-        synestia_init_bsp();
 
         // create interrupt manager and init generic interrupt
         interrupt_manager_create(&genericInterruptManager);

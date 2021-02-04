@@ -5,13 +5,30 @@
 #include "raspi2/timer.h"
 #include "raspi2/uart.h"
 #include "raspi2/gic400.h"
+#include "raspi2/armtimer.h"
+
+void __attribute__((interrupt("IRQ"))) interrupt_vector(void)
+{
+    static int lit = 0;
+    RPI_AuxMiniUartWrite('A');
+    if( RPI_GetArmTimer()->MaskedIRQ ) {
+        /* Clear the ARM Timer interrupt - it's the only interrupt we have
+           enabled, so we want don't have to work out which interrupt source
+           caused us to interrupt */
+        RPI_GetArmTimer()->IRQClear = 1;
+    }
+}
 
 void synestia_init_bsp(void) {
-    uart_init();
+    //uart_init();
+    RPI_AuxMiniUartInit( 115200, 8 );
     int mmioBase = PERIPHERAL_BASE;
     LogInfo("[MMIO]: %d \n", mmioBase);
     LogInfo("[HAL]: uart_init complete.\n");
-
+    RPI_ArmTimerInit();
+    RPI_EnableARMTimerInterrupt();
+    //arch_enable_interrupt();
+    //while(1);
 }
 
 void synestia_init_timer(void) {
