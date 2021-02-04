@@ -23,5 +23,10 @@ void arch_enable_interrupt();
  */
 void arch_disable_interrupt();
 
+#define dead() \
+    do { \
+        arch_disable_interrupt(); \
+        while (1) { __asm__ __volatile__("wfi\n\t"); } \
+    } while (0)
 
 #endif //SYNESTIAOS_INTERRUPT_H

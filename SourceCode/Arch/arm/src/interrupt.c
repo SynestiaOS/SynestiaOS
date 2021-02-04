@@ -36,7 +36,7 @@ static void find_func_header(unsigned int *instr)
     for (i = 0; (i < MAX_FUNC_LEN) && (0 != instr); i++, instr--) {
         if (((0xffff4800 & *(instr - 1)) == prologue[0]) // if only {r11, lr} are pushed
          && ((0xffffff00 & *instr) == prologue[1])) {
-            LogError("func: %x\n", instr - 1);
+            LogError("func: 0x%x\n", instr - 1);
             return;
         }
     }
@@ -58,17 +58,11 @@ void dump_callstack(void)
         if (0 == fp) {
             break;
         }
-        // printf("fp: %x, lr %x\n", fp, lr);
+        // printf("fp: 0x%x, lr 0x%x\n", fp, lr);
         find_func_header(lr);
     }
     LogError("callstack end\n");
 }
-
-#define dead() \
-    do { \
-        arch_disable_interrupt(); \
-        while (1) { __asm__ __volatile__("wfi\n\t"); } \
-    } while (0)
 
 void __attribute__((interrupt("UNDEF"))) undefined_instruction_handler(void) {
     unsigned int *epc;
