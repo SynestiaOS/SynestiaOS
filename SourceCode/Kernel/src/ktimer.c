@@ -117,6 +117,7 @@ KernelStatus kernel_timer_manger_default_on_tick() {
     if (kernelTimerManager.timerNodes != nullptr && klist_size(kernelTimerManager.timerNodes) != 0) {
         klist_iter(kernelTimerManager.timerNodes, kernel_timer_manger_tick_on_each_timer);
     }
+    return OK;
 }
 
 KernelTimerManager *kernel_timer_manager_create(KernelTimerManager *kernelTimerManager) {
