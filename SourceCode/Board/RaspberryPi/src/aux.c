@@ -81,9 +81,9 @@ void RPI_AuxMiniUartWrite( char c )
 
     /* Write the character to the FIFO for transmission */
 
-    auxillary->MU_IO = c;
     if(c == '\n')
         RPI_AuxMiniUartWrite('\r');
+    auxillary->MU_IO = c;
 }
 
 void RPI_AuxPuts(char * s, int len)

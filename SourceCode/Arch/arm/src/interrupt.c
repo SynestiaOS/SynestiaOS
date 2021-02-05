@@ -146,7 +146,13 @@ void fast_interrupt_handler(void) {
     LogError("[Interrupt]: fast irq\n");
 }
 
+
+
+extern void interrupt_vector(void);
+
 void interrupt_handler(void) {
-    //LogInfo("Enter interrupt");
+    static int irq_cnt;
+    LogInfo("Interrupt %d\n", irq_cnt++);
+    interrupt_vector();
     genericInterruptManager.operation.interrupt(&genericInterruptManager);
 }

@@ -27,7 +27,7 @@ void RPI_ArmTimerInit(void)
     NOTE: If the system decides to alter the clock, the frequency of these
              interrupts will also change. The system timer remains consistent.
     */
-    RPI_GetArmTimer()->Load = 0x4000;
+    RPI_GetArmTimer()->Load = 0x40000;
 
     /* Setup the ARM Timer */
     RPI_GetArmTimer()->Control =

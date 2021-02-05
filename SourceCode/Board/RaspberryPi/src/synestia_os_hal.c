@@ -7,14 +7,18 @@
 #include "raspi2/gic400.h"
 #include "raspi2/armtimer.h"
 
-void __attribute__((interrupt("IRQ"))) interrupt_vector(void)
+void __attribute__((interrupt("IRQ"))) interrupt_vector_isp(void)
 {
     static int lit = 0;
     RPI_AuxMiniUartWrite('A');
     if( RPI_GetArmTimer()->MaskedIRQ ) {
-        /* Clear the ARM Timer interrupt - it's the only interrupt we have
-           enabled, so we want don't have to work out which interrupt source
-           caused us to interrupt */
+        RPI_GetArmTimer()->IRQClear = 1;
+    }
+}
+void interrupt_vector(void)
+{
+    static int lit = 0;
+    if( RPI_GetArmTimer()->MaskedIRQ ) {
         RPI_GetArmTimer()->IRQClear = 1;
     }
 }

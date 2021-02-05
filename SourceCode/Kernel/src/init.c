@@ -108,8 +108,7 @@ void print_memory_map() {
 }
 
 void kernel_main(void) {
-    //if (read_cpuid() == 0) 
-    {
+    if (read_cpuid() == 0) {
         synestia_init_bsp();
         //led_init();
         print_splash();
@@ -123,14 +122,14 @@ void kernel_main(void) {
         kernel_timer_manager_create(&kernelTimerManager);
         kernelTimerManager.operation.init(&kernelTimerManager);
 
-        synestia_init_timer();
+        //synestia_init_timer();
 
         // create kernel physical page allocator
         page_allocator_create(&kernelPageAllocator, (uint32_t) &__KERNEL_END + PAGE_SIZE,
                               KERNEL_PHYSICAL_SIZE - (uint32_t) &__KERNEL_END);
 
         // init kernel virtual memory mapping
-        kernel_vmm_init();
+        //kernel_vmm_init();
 
         scheduler_create(&cfsScheduler);
 
@@ -145,7 +144,7 @@ void kernel_main(void) {
 
         genericInterruptManager.operation.init(&genericInterruptManager);
 
-        vfs_create(&vfs);
+        /*vfs_create(&vfs);
         vfs.operations.mount(&vfs, "root", FILESYSTEM_EXT2, (void *) EXT2_ADDRESS);
 
         gpu_init();
@@ -185,7 +184,7 @@ void kernel_main(void) {
         gpuProcess->cpuAffinity = cpu_number_to_mask(0);
         cfsScheduler.operation.addThread(&cfsScheduler, gpuProcess, 1);
 
-        test_threads_init();
+        test_threads_init();*/
 
         cfsScheduler.operation.schedule(&cfsScheduler);
     }
