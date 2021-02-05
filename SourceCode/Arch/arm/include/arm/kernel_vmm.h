@@ -24,6 +24,8 @@ void kernel_vmm_init();
 
 void kernel_vmm_enable();
 
+void kernel_mode();
+
 void kernel_vmm_map(uint32_t virtualAddress);
 
 PageTableEntry *kernel_vmm_get_page_table();
