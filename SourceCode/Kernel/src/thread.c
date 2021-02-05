@@ -261,23 +261,22 @@ KernelStatus thread_default_execute(struct Thread *thread, struct Elf *elf) {
         thread->memoryStruct.heap.operations.release(&thread->memoryStruct.heap);
 
         thread_init_mm(thread);
+        // 2. allocate physical page
+
+        // 3. map virtual mem
+
+        // 4. copy elf section to mem
+
+        // 5. set up bss
+
+        // 6. set heap
+
+        // 7. allocate stack from heap
+
+        // 8. set up thread struct
+
+        // 9. replace thread's page table
     }
-
-    // 2. allocate physical page
-
-    // 3. map virtual mem
-
-    // 4. copy elf section to mem
-
-    // 5. set up bss
-
-    // 6. set heap
-
-    // 7. allocate stack from heap
-
-    // 8. set up thread struct
-
-    // 9. replace thread's page table
 
     // 10. reschedule
 }
