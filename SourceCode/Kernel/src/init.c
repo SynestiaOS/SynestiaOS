@@ -76,9 +76,7 @@ void print_splash() {
 
 _Noreturn uint32_t *GPU_FLUSH(int args) {
     while (1) {
-        genericInterruptManager.operation.disableInterrupt(&genericInterruptManager);
         gpu_flush(0);
-        genericInterruptManager.operation.enableInterrupt(&genericInterruptManager);
     }
 }
 
