@@ -202,9 +202,13 @@ void thread_init_kobject(Thread *thread) {
 
 void thread_init_mm(Thread *thread) {
     thread->memoryStruct.sectionInfo.codeSectionAddr = 0;
+    thread->memoryStruct.sectionInfo.codeEndSectionAddr = 0;
     thread->memoryStruct.sectionInfo.roDataSectionAddr = 0;
+    thread->memoryStruct.sectionInfo.roDataEndSectionAddr = 0;
     thread->memoryStruct.sectionInfo.dataSectionAddr = 0;
+    thread->memoryStruct.sectionInfo.dataEndSectionAddr = 0;
     thread->memoryStruct.sectionInfo.bssSectionAddr = 0;
+    thread->memoryStruct.sectionInfo.bssEndSectionAddr = 0;
 
     if (thread->operations.isKernelThread(thread)) {
         thread->memoryStruct.virtualMemory.pageTable = kernel_vmm_get_page_table();
@@ -256,18 +260,7 @@ KernelStatus thread_default_execute(struct Thread *thread, struct Elf *elf) {
         thread->memoryStruct.virtualMemory.operations.release(&thread->memoryStruct.virtualMemory);
         thread->memoryStruct.heap.operations.release(&thread->memoryStruct.heap);
 
-        thread->memoryStruct.sectionInfo.codeSectionAddr = 0;
-        thread->memoryStruct.sectionInfo.codeEndSectionAddr = 0;
-        thread->memoryStruct.sectionInfo.roDataSectionAddr = 0;
-        thread->memoryStruct.sectionInfo.roDataEndSectionAddr = 0;
-        thread->memoryStruct.sectionInfo.dataSectionAddr = 0;
-        thread->memoryStruct.sectionInfo.dataEndSectionAddr = 0;
-        thread->memoryStruct.sectionInfo.bssSectionAddr = 0;
-        thread->memoryStruct.sectionInfo.bssEndSectionAddr = 0;
-
         thread_init_mm(thread);
-
-
     }
 
     // 2. allocate physical page
