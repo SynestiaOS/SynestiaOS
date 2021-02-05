@@ -1,18 +1,16 @@
 //
 // Created by XingfengYang on 2020/6/26.
 //
-#include "kernel/kstack.h"
+#include "kernel/stack.h"
 #include "kernel/kheap.h"
 #include "kernel/log.h"
 #include "libc/stdlib.h"
-
-extern Heap kernelHeap;
 
 KernelStatus stack_default_free(struct KernelStack *stack) {
     stack->size = 0;
     stack->base = 0;
     stack->top = 0;
-    KernelStatus freeStatus = kernelHeap.operations.free(&kernelHeap, stack->virtualMemoryAddress);
+    KernelStatus freeStatus = stack->heap->operations.free(&stack->heap, stack->virtualMemoryAddress);
     if (freeStatus != OK) {
         LogError("[KStack] kStack free failed.\n");
         return freeStatus;
@@ -55,9 +53,10 @@ KernelStatus stack_default_clear(struct KernelStack *stack) {
     return OK;
 }
 
-KernelStack *kstack_allocate(struct KernelStack *kernelStack) {
+KernelStack *stack_allocate(Heap *heap, struct KernelStack *kernelStack) {
+    kernelStack->heap = heap;
     // 1. allocate stack memory block from virtual memory (heap), and align.
-    KernelStack *stack = (KernelStack *) kernelHeap.operations.allocAligned(&kernelHeap, DEFAULT_KERNEL_STACK_SIZE, 16);
+    KernelStack *stack = (KernelStack *) heap->operations.allocAligned(heap, DEFAULT_KERNEL_STACK_SIZE, 16);
     if (stack == nullptr) {
         LogError("[KStack] kStack allocate failed.\n");
         return nullptr;

@@ -6,6 +6,7 @@
 #include "kernel/interrupt.h"
 #include "kernel/log.h"
 #include "arm/vmm.h"
+#include "arm/call_trace.h"
 
 extern InterruptManager genericInterruptManager;
 
@@ -24,8 +25,6 @@ void arch_enable_interrupt() {
 void arch_disable_interrupt() {
     __asm__ __volatile__("cpsid i");
 }
-
-#define undefined_instruction() do { asm volatile(".word 0xffffffff \n\t"); } while (0)
 
 void __attribute__((interrupt("UNDEF"))) undefined_instruction_handler(void) {
     unsigned int *epc;

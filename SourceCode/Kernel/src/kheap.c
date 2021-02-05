@@ -129,7 +129,7 @@ KernelStatus heap_default_free(struct Heap *heap, void *ptr) {
     uint32_t address = (uint32_t) (ptr - sizeof(HeapArea));
     HeapArea *currentArea = (HeapArea *) address;
 
-    if(currentArea->magic!= HEAP_AREA_MAGIC){
+    if (currentArea->magic != HEAP_AREA_MAGIC) {
         LogError("[KHeap] not a heap area: 0x%x. \n", ptr);
         return ERROR;
     }
@@ -192,6 +192,10 @@ KernelStatus heap_default_free(struct Heap *heap, void *ptr) {
     return OK;
 }
 
+void heap_default_release(struct Heap *heap) {
+    // TODO: release heap when threadd killed
+}
+
 void heap_default_set_alloc_callback(struct Heap *heap, HeapAllocCallback callback) { heap->allocCallback = callback; }
 
 void heap_default_set_free_callback(struct Heap *heap, HeapFreeCallback callback) { heap->freeCallback = callback; }
@@ -233,18 +237,22 @@ KernelStatus heap_create(Heap *heap, uint32_t addr, uint32_t size) {
     heap->freeListHead = freeHead;
     heap->usingListHead = usingHead;
 
-    heap->maxSizeLimit = size;
-    heap->operations.setFreeCallback = (HeapOperationSetFreeCallback) heap_default_set_free_callback;
-    heap->operations.setAllocCallback = (HeapOperationSetAllocCallback) heap_default_set_alloc_callback;
+    heap->size = size;
+
+    // FIXME: 256 M is not a good idea
+    heap->maxSizeLimit = 256 * MB;
 
     heap->allocCallback = (HeapAllocCallback) heap_default_alloc_callback;
     heap->freeCallback = (HeapFreeCallback) heap_default_free_callback;
 
+    heap->operations.setFreeCallback = (HeapOperationSetFreeCallback) heap_default_set_free_callback;
+    heap->operations.setAllocCallback = (HeapOperationSetAllocCallback) heap_default_set_alloc_callback;
     heap->operations.alloc = (HeapOperationAlloc) heap_default_alloc;
     heap->operations.allocAligned = (HeapOperationAllocAligned) heap_default_alloc_aligned;
     heap->operations.calloc = (HeapOperationCountAlloc) heap_default_count_alloc;
     heap->operations.realloc = (HeapOperationReAlloc) heap_default_realloc;
     heap->operations.free = (HeapOperationFree) heap_default_free;
+    heap->operations.release = (HeapOperationRelease) heap_default_release;
 
     heap->statistics.allocatedBlockCount = 0;
     heap->statistics.allocatedSize = 0;

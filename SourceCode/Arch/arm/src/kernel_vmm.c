@@ -57,6 +57,10 @@ void kernel_vmm_init() {
     kernel_vmm_enable();
 }
 
+void kernel_mode(){
+    write_ttbr0((uint32_t) kernelVMML1PT);
+}
+
 void kernel_vmm_enable() {
     write_ttbcr(CONFIG_ARM_LPAE << 31);
     LogInfo("[vmm]: ttbcr writed\n");
