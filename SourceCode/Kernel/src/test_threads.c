@@ -63,7 +63,6 @@ _Noreturn uint32_t *window_dialog(int args) {
     uint32_t i = 0;
 
     while (1) {
-        genericInterruptManager.operation.disableInterrupt(&genericInterruptManager);
         gui_label_init(&label, 0, 0, "hello, world! Is this cool?");
         char buf[32];
         memset(buf, 0, 32);
@@ -71,6 +70,7 @@ _Noreturn uint32_t *window_dialog(int args) {
         gui_label_init(&label2, 80, 120, buf);
         gui_button_init(&buttonYes, 20, 50, "YES");
         gui_button_init(&buttonNo, 150, 50, "NO");
+        genericInterruptManager.operation.disableInterrupt(&genericInterruptManager);
         gui_window_draw(&window);
         genericInterruptManager.operation.enableInterrupt(&genericInterruptManager);
     }
@@ -84,7 +84,6 @@ _Noreturn uint32_t *window_filesystem(int args) {
     DirectoryEntry *directoryEntry = vfs.operations.lookup(&vfs, "/initrd");
     struct GUILabel *labels;
     uint32_t size = 0;
-    genericInterruptManager.operation.disableInterrupt(&genericInterruptManager);
     if (directoryEntry->children != nullptr) {
         size = klist_size(&directoryEntry->children->list);
         labels = kernelHeap.operations.alloc(&kernelHeap, size * sizeof(GUILabel));
@@ -101,10 +100,8 @@ _Noreturn uint32_t *window_filesystem(int args) {
             }
         }
     }
-    genericInterruptManager.operation.enableInterrupt(&genericInterruptManager);
 
     while (1) {
-        genericInterruptManager.operation.disableInterrupt(&genericInterruptManager);
         uint32_t y = 0;
         for (uint32_t i = 1; i < size; i++) {
             labels[i].component.position.x = (i % 4) * 80;
@@ -113,6 +110,7 @@ _Noreturn uint32_t *window_filesystem(int args) {
                 y++;
             }
         }
+        genericInterruptManager.operation.disableInterrupt(&genericInterruptManager);
         gui_window_draw(&window);
         genericInterruptManager.operation.enableInterrupt(&genericInterruptManager);
     }
