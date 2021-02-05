@@ -1,6 +1,7 @@
 //
 // Created by XingfengYang on 2021/1/11.
 //
+#include "kernel/log.h"
 #include "libelf/elf.h"
 #include "arm/register.h"
 #include "arm/page.h"
@@ -155,10 +156,14 @@ void test_threads_init() {
     cfsScheduler.operation.addThread(&cfsScheduler, windowFileSystemThread, 1);
 
     Elf elf;
-    uint32_t *data = (uint32_t *) kernelHeap.operations.alloc(&kernelHeap, 40 * KB);
-    vfs_kernel_read(&vfs, "/initrd/bin/TestApp", data, 40 * KB);
+
+    DirectoryEntry *pEntry = vfs.operations.lookup(&vfs, "/initrd/bin/TestApp");
+    LogInfo("TestAppSize: %d \n",pEntry->indexNode->fileSize);
+    uint32_t *data = (uint32_t *) kernelHeap.operations.alloc(&kernelHeap, pEntry->indexNode->fileSize);
+    vfs_kernel_read(&vfs, "/initrd/bin/TestApp", data, pEntry->indexNode->fileSize);
     elf_init(&elf, data);
     elf.operations.dump(&elf);
+
     uint32_t entry = (uint32_t) (elf.data + 32768);
     Thread *elfThread = thread_create("PICElfTest", (ThreadStartRoutine) entry, 0, 0,
                                       sysModeCPSR());

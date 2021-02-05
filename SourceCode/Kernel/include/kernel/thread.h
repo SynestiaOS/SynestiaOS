@@ -1,4 +1,3 @@
-#include <__wctype.h>
 //
 // Created by XingfengYang on 2020/6/26.
 //
@@ -20,6 +19,8 @@
 
 #define THREAD_NAME_LENGTH 32
 #define THREAD_MAGIC (0x74687264)
+
+#define THREAD_FLAG_KERNEL_THREAD 0b1
 
 #define NUM_PRIORITIES (32)
 #define LOWEST_PRIORITY (0)
@@ -127,6 +128,8 @@ typedef KernelStatus (*ThreadOperationExecute)(struct Thread *thread, struct Elf
 
 typedef struct Thread *(*ThreadOperationCopy)(struct Thread *thread, CloneFlags cloneFlags, uint32_t heapStart);
 
+typedef uint32_t (*ThreadOperationIsKernelThread)(struct Thread *thread);
+
 typedef struct ThreadOperations {
     ThreadOperationSuspend suspend;
     ThreadOperationResume resume;
@@ -137,6 +140,7 @@ typedef struct ThreadOperations {
     ThreadOperationKill kill;
     ThreadOperationCopy copy;
     ThreadOperationExecute execute;
+    ThreadOperationIsKernelThread isKernelThread;
 } ThreadOperations;
 
 typedef struct Thread {

@@ -9,6 +9,8 @@
 #include "libc/stdint.h"
 #include "libc/stdbool.h"
 
+#define ELF_HEADER_SIZE 64
+
 typedef enum ObjectFileType {
     ET_NONE = 0x00,
     ET_REL = 0x01,

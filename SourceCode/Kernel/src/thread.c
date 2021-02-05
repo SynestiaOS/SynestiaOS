@@ -204,8 +204,10 @@ void thread_init_mm(Thread *thread) {
     vmm_create(&thread->memoryStruct.virtualMemory, &userspacePageAllocator);
 
     thread->memoryStruct.virtualMemory.physicalPageAllocator = &userspacePageAllocator;
-    thread->memoryStruct.virtualMemory.pageTable = kernel_vmm_get_page_table();
-    thread->memoryStruct.heap = kernelHeap;
+    if (thread->operations.isKernelThread(thread)) {
+        thread->memoryStruct.virtualMemory.pageTable = kernel_vmm_get_page_table();
+        thread->memoryStruct.heap = kernelHeap;
+    }
 }
 
 enum KernelStatus thread_init_fds(Thread *thread) {
@@ -229,11 +231,15 @@ void thread_release(Thread *thread) {
     kernelHeap.operations.free(&kernelHeap, thread);
 }
 
+
+uint32_t thread_default_is_kernel_thread(Thread *thread) {
+    return thread->flags & THREAD_FLAG_KERNEL_THREAD;
+}
+
 KernelStatus thread_default_execute(struct Thread *thread, struct Elf *elf) {
+    kernel_mode();
 
-    // 0. set page table to kernel page table
-
-    // 1. clear memstruct
+    thread_init_mm(thread);
 
     // 2. allocate physical page
 
@@ -260,7 +266,9 @@ Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uin
     if (thread != nullptr) {
         thread->magic = THREAD_MAGIC;
         thread->threadStatus = THREAD_INITIAL;
-
+        if (cpsr.M == svcModeCPSR().M) {
+            thread->flags |= THREAD_FLAG_KERNEL_THREAD;
+        }
         if (thread_init_stack(thread, entry, arg, cpsr) == ERROR) {
             thread_release(thread);
             return nullptr;
@@ -308,6 +316,7 @@ Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uin
         thread->operations.kill = (ThreadOperationKill) thread_default_kill;
         thread->operations.copy = thread_default_copy;
         thread->operations.execute = (ThreadOperationExecute) thread_default_execute;
+        thread->operations.isKernelThread = (ThreadOperationIsKernelThread) thread_default_is_kernel_thread;
 
         thread_init_mm(thread);
 
