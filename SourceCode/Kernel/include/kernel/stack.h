@@ -2,12 +2,13 @@
 // Created by XingfengYang on 2020/6/26.
 //
 
-#ifndef __KERNEL_KSTACK_H__
-#define __KERNEL_KSTACK_H__
+#ifndef __KERNEL_STACK_H__
+#define __KERNEL_STACK_H__
 
 #include "kernel/type.h"
 #include "libc/stdbool.h"
 #include "libc/stdint.h"
+#include "kernel/kheap.h"
 
 #define DEFAULT_KERNEL_STACK_SIZE 32 * KB
 
@@ -38,6 +39,7 @@ typedef struct StackOperations {
 } StackOperations;
 
 typedef struct KernelStack {
+    Heap *heap;
     uint32_t size;
     VirtualAddress base;
     VirtualAddress top;
@@ -45,6 +47,6 @@ typedef struct KernelStack {
     StackOperations operations;
 } KernelStack;
 
-KernelStack *kstack_allocate(struct KernelStack *kernelStack);
+KernelStack *stack_allocate(Heap *heap, struct KernelStack *kernelStack);
 
-#endif//__KERNEL_KSTACK_H__
+#endif//__KERNEL_STACK_H__

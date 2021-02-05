@@ -2,12 +2,14 @@
 // Created by XingfengYang on 2020/6/26.
 //
 
+#include "kernel/assert.h"
+#include "kernel/scheduler.h"
 #include "kernel/ktimer.h"
 #include "kernel/thread.h"
 #include "arm/kernel_vmm.h"
 #include "kernel/kheap.h"
 #include "kernel/kobject.h"
-#include "kernel/kstack.h"
+#include "kernel/stack.h"
 #include "kernel/kvector.h"
 #include "kernel/log.h"
 #include "kernel/percpu.h"
@@ -21,8 +23,11 @@ extern Heap kernelHeap;
 extern PhysicalPageAllocator kernelPageAllocator;
 extern PhysicalPageAllocator userspacePageAllocator;
 extern KernelTimerManager kernelTimerManager;
+extern Scheduler cfsScheduler;
 
 uint32_t pidMap[2048] = {0};
+
+void thread_set_ops(Thread *thread);
 
 uint32_t thread_alloc_pid() {
     for (uint32_t i = 0; i < 2048 / BITS_IN_UINT32; i++) {
@@ -166,7 +171,7 @@ Thread *thread_default_copy(Thread *thread, CloneFlags cloneFlags, uint32_t heap
 }
 
 enum KernelStatus thread_init_stack(Thread *thread, ThreadStartRoutine entry, void *args, struct RegisterCPSR cpsr) {
-    KernelStack *stack = kstack_allocate(&thread->stack);
+    KernelStack *stack = stack_allocate(&thread->memoryStruct.heap, &thread->stack);
     if (stack == nullptr) {
         return ERROR;
     }
@@ -201,12 +206,18 @@ void thread_init_mm(Thread *thread) {
     thread->memoryStruct.sectionInfo.dataSectionAddr = 0;
     thread->memoryStruct.sectionInfo.bssSectionAddr = 0;
 
-    vmm_create(&thread->memoryStruct.virtualMemory, &userspacePageAllocator);
-
-    thread->memoryStruct.virtualMemory.physicalPageAllocator = &userspacePageAllocator;
     if (thread->operations.isKernelThread(thread)) {
         thread->memoryStruct.virtualMemory.pageTable = kernel_vmm_get_page_table();
         thread->memoryStruct.heap = kernelHeap;
+    } else {
+        thread->memoryStruct.virtualMemory.physicalPageAllocator = &userspacePageAllocator;
+        vmm_create(&thread->memoryStruct.virtualMemory, &userspacePageAllocator);
+
+        uint64_t page = userspacePageAllocator.operations.allocPage4K(&userspacePageAllocator, USAGE_USER_HEAP);
+        DEBUG_ASSERT(page != -1);
+        uint32_t addr = userspacePageAllocator.base + 4 * KB * page;
+        KernelStatus status = heap_create(&thread->memoryStruct.heap, addr, 4 * KB);
+        DEBUG_ASSERT(status != ERROR);
     }
 }
 
@@ -240,6 +251,24 @@ KernelStatus thread_default_execute(struct Thread *thread, struct Elf *elf) {
     kernel_mode();
 
     thread_init_mm(thread);
+    if (thread->operations.isKernelThread(thread)) {
+    } else {
+        thread->memoryStruct.virtualMemory.operations.release(&thread->memoryStruct.virtualMemory);
+        thread->memoryStruct.heap.operations.release(&thread->memoryStruct.heap);
+
+        thread->memoryStruct.sectionInfo.codeSectionAddr = 0;
+        thread->memoryStruct.sectionInfo.codeEndSectionAddr = 0;
+        thread->memoryStruct.sectionInfo.roDataSectionAddr = 0;
+        thread->memoryStruct.sectionInfo.roDataEndSectionAddr = 0;
+        thread->memoryStruct.sectionInfo.dataSectionAddr = 0;
+        thread->memoryStruct.sectionInfo.dataEndSectionAddr = 0;
+        thread->memoryStruct.sectionInfo.bssSectionAddr = 0;
+        thread->memoryStruct.sectionInfo.bssEndSectionAddr = 0;
+
+        thread_init_mm(thread);
+
+
+    }
 
     // 2. allocate physical page
 
@@ -266,9 +295,14 @@ Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uin
     if (thread != nullptr) {
         thread->magic = THREAD_MAGIC;
         thread->threadStatus = THREAD_INITIAL;
+
         if (cpsr.M == svcModeCPSR().M) {
             thread->flags |= THREAD_FLAG_KERNEL_THREAD;
         }
+        thread_set_ops(thread);
+
+        thread_init_mm(thread);
+
         if (thread_init_stack(thread, entry, arg, cpsr) == ERROR) {
             thread_release(thread);
             return nullptr;
@@ -307,19 +341,6 @@ Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uin
         thread->rbNode.right = nullptr;
         thread->rbNode.color = NODE_RED;
 
-        thread->operations.suspend = (ThreadOperationSuspend) thread_default_suspend;
-        thread->operations.resume = (ThreadOperationResume) thread_default_resume;
-        thread->operations.sleep = (ThreadOperationSleep) thread_default_sleep;
-        thread->operations.detach = (ThreadOperationDetach) thread_default_detach;
-        thread->operations.join = (ThreadOperationJoin) thread_default_join;
-        thread->operations.exit = (ThreadOperationExit) thread_default_exit;
-        thread->operations.kill = (ThreadOperationKill) thread_default_kill;
-        thread->operations.copy = thread_default_copy;
-        thread->operations.execute = (ThreadOperationExecute) thread_default_execute;
-        thread->operations.isKernelThread = (ThreadOperationIsKernelThread) thread_default_is_kernel_thread;
-
-        thread_init_mm(thread);
-
         thread_init_kobject(thread);
 
         LogInfo("[Thread]: thread '%s' created.\n", thread->name);
@@ -327,6 +348,19 @@ Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uin
     }
     LogError("[Thread]: thread '%s' created failed.\n", name);
     return nullptr;
+}
+
+void thread_set_ops(Thread *thread) {
+    thread->operations.suspend = (ThreadOperationSuspend) thread_default_suspend;
+    thread->operations.resume = (ThreadOperationResume) thread_default_resume;
+    thread->operations.sleep = (ThreadOperationSleep) thread_default_sleep;
+    thread->operations.detach = (ThreadOperationDetach) thread_default_detach;
+    thread->operations.join = (ThreadOperationJoin) thread_default_join;
+    thread->operations.exit = (ThreadOperationExit) thread_default_exit;
+    thread->operations.kill = (ThreadOperationKill) thread_default_kill;
+    thread->operations.copy = thread_default_copy;
+    thread->operations.execute = (ThreadOperationExecute) thread_default_execute;
+    thread->operations.isKernelThread = (ThreadOperationIsKernelThread) thread_default_is_kernel_thread;
 }
 
 _Noreturn uint32_t *idle_thread_routine(int arg) {

@@ -30,14 +30,18 @@ typedef void (*HeapOperationSetAllocCallback)(struct Heap *heap, HeapAllocCallba
 
 typedef void (*HeapOperationSetFreeCallback)(struct Heap *heap, HeapFreeCallback callback);
 
+typedef void (*HeapOperationRelease)(struct Heap *heap);
+
 typedef struct HeapOperations {
     HeapOperationAlloc alloc;
     HeapOperationAllocAligned allocAligned;
     HeapOperationCountAlloc calloc;
     HeapOperationReAlloc realloc;
     HeapOperationFree free;
+    HeapOperationRelease release;
     HeapOperationSetAllocCallback setAllocCallback;
     HeapOperationSetFreeCallback setFreeCallback;
+
 } HeapOperations;
 
 typedef struct HeapArea {
@@ -54,6 +58,7 @@ typedef struct HeapStatistics {
 
 typedef struct Heap {
     uint32_t address;
+    uint32_t size;
     uint32_t maxSizeLimit;
     HeapArea *usingListHead;
     HeapArea *freeListHead;

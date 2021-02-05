@@ -5,11 +5,15 @@
 #ifndef __KERNEL_KSTACK_TEST_H__
 #define __KERNEL_KSTACK_TEST_H__
 
-#include "kernel/kstack.h"
+#include "kernel/stack.h"
+
+extern uint32_t __KERNEL_END;
 
 void should_kstack_create() {
+    Heap testHeap;
+    KernelStatus heapInitStatus = heap_create(&testHeap, &__KERNEL_END, 64 * MB);
     struct KernelStack kernelStack;
-    KernelStack *stack = kstack_allocate(&kernelStack);
+    KernelStack *stack = stack_allocate(&testHeap, &kernelStack);
     ASSERT_NEQ(stack, nullptr);
 
     ASSERT_EQ(stack->size, 0);
@@ -24,8 +28,10 @@ void should_kstack_create() {
 }
 
 void should_kstack_push_value() {
+    Heap testHeap;
+    KernelStatus heapInitStatus = heap_create(&testHeap, &__KERNEL_END, 64 * MB);
     struct KernelStack kernelStack;
-    KernelStack *stack = kstack_allocate(&kernelStack);
+    KernelStack *stack = stack_allocate(&testHeap, &kernelStack);
     ASSERT_NEQ(stack, nullptr);
 
     ASSERT_EQ(stack->size, 0);
@@ -46,8 +52,10 @@ void should_kstack_push_value() {
 }
 
 void should_kstack_pop_value() {
+    Heap testHeap;
+    KernelStatus heapInitStatus = heap_create(&testHeap, &__KERNEL_END, 64 * MB);
     struct KernelStack kernelStack;
-    KernelStack *stack = kstack_allocate(&kernelStack);
+    KernelStack *stack = stack_allocate(&testHeap, &kernelStack);
     ASSERT_NEQ(stack, nullptr);
 
     ASSERT_EQ(stack->size, 0);
@@ -72,8 +80,10 @@ void should_kstack_pop_value() {
 }
 
 void should_kstack_peek_value() {
+    Heap testHeap;
+    KernelStatus heapInitStatus = heap_create(&testHeap, &__KERNEL_END, 64 * MB);
     struct KernelStack kernelStack;
-    KernelStack *stack = kstack_allocate(&kernelStack);
+    KernelStack *stack = stack_allocate(&testHeap, &kernelStack);
     ASSERT_NEQ(stack, nullptr);
 
     ASSERT_EQ(stack->size, 0);
@@ -94,8 +104,10 @@ void should_kstack_peek_value() {
 }
 
 void should_kstack_return_true_when_empty() {
+    Heap testHeap;
+    KernelStatus heapInitStatus = heap_create(&testHeap, &__KERNEL_END, 64 * MB);
     struct KernelStack kernelStack;
-    KernelStack *stack = kstack_allocate(&kernelStack);
+    KernelStack *stack = stack_allocate(&testHeap, &kernelStack);
     ASSERT_NEQ(stack, nullptr);
 
     ASSERT_EQ(stack->size, 0);
@@ -112,8 +124,10 @@ void should_kstack_return_true_when_empty() {
 }
 
 void should_kstack_return_true_when_full() {
+    Heap testHeap;
+    KernelStatus heapInitStatus = heap_create(&testHeap, &__KERNEL_END, 64 * MB);
     struct KernelStack kernelStack;
-    KernelStack *stack = kstack_allocate(&kernelStack);
+    KernelStack *stack = stack_allocate(&testHeap, &kernelStack);
     ASSERT_NEQ(stack, nullptr);
 
     ASSERT_EQ(stack->size, 0);

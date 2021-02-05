@@ -10,7 +10,7 @@
 #include "kernel/kheap.h"
 #include "kernel/kobject.h"
 #include "kernel/kqueue.h"
-#include "kernel/kstack.h"
+#include "kernel/stack.h"
 #include "kernel/list.h"
 #include "kernel/rbtree.h"
 #include "kernel/vfs_dentry.h"
