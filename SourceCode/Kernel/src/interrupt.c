@@ -93,11 +93,12 @@ void interrupt_manager_default_interrupt(InterruptManager *manager) {
     for (uint32_t interrupt_no = 0; interrupt_no < IRQ_NUMS; interrupt_no++) {
         if (manager->registed[interrupt_no] == 1 /* && synestia_interrupt_pending(interrupt_no)*/) {
             LogInfo("[Interrupt]: interrupt '%s' triggered.\n", manager->interrupts[interrupt_no].name);
+            manager->interrupts[interrupt_no].handler();
             if (manager->interrupts[interrupt_no].clearHandler != nullptr) {
                 manager->interrupts[interrupt_no].clearHandler();
+                LogInfo("[Interrupt]: interrupt '%s' ClearHandler.\n", manager->interrupts[interrupt_no].name);
             }
-            manager->interrupts[interrupt_no].handler();
-            synestia_interrupt_clear(interrupt_no);
+            //synestia_interrupt_clear(interrupt_no);
         }
     }
 }

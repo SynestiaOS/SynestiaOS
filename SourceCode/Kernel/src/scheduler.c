@@ -32,7 +32,7 @@ extern void cpu_switch_mm(uint32_t pageTable);
 
 void tick() {
     LogInfo("[Schd]: tick.\n");
-    cfsScheduler.operation.switchNext(&cfsScheduler);
+    //cfsScheduler.operation.switchNext(&cfsScheduler);
 }
 
 SpinLock spinlock = SpinLockCreate();

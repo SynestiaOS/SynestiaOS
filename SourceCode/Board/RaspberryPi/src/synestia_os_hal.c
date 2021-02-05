@@ -7,21 +7,6 @@
 #include "raspi2/gic400.h"
 #include "raspi2/armtimer.h"
 
-void __attribute__((interrupt("IRQ"))) interrupt_vector_isp(void)
-{
-    static int lit = 0;
-    RPI_AuxMiniUartWrite('A');
-    if( RPI_GetArmTimer()->MaskedIRQ ) {
-        RPI_GetArmTimer()->IRQClear = 1;
-    }
-}
-void interrupt_vector(void)
-{
-    static int lit = 0;
-    if( RPI_GetArmTimer()->MaskedIRQ ) {
-        RPI_GetArmTimer()->IRQClear = 1;
-    }
-}
 
 void synestia_init_bsp(void) {
     //uart_init();
@@ -31,15 +16,20 @@ void synestia_init_bsp(void) {
     LogInfo("[HAL]: uart_init complete.\n");
     RPI_ArmTimerInit();
     RPI_EnableARMTimerInterrupt();
-    //arch_enable_interrupt();
-    //while(1);
 }
 
 void synestia_init_timer(void) {
+#ifndef RASPI4
     LogInfo("[HAL]： timer_init...\n");
     LogInfo("[HAL]: generic_timer_init...\n");
     generic_timer_init();
     LogInfo("[HAL]: generic_timer_init complete.\n");
+#else
+    LogInfo("[HAL]： timer_init...\n");
+    LogInfo("[HAL]: arm_timer_init...\n");
+    arm_timer_init();
+    LogInfo("[HAL]: armc_timer_init complete.\n");
+#endif
 }
 
 

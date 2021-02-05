@@ -122,7 +122,7 @@ void kernel_main(void) {
         kernel_timer_manager_create(&kernelTimerManager);
         kernelTimerManager.operation.init(&kernelTimerManager);
 
-        //synestia_init_timer();
+        synestia_init_timer();
 
         // create kernel physical page allocator
         page_allocator_create(&kernelPageAllocator, (uint32_t) &__KERNEL_END + PAGE_SIZE,
@@ -178,13 +178,14 @@ void kernel_main(void) {
         gui_label_init(&logo, 480, 28, "SynestiaOS (alpha 0.1.3)");
         gui_label_draw(&logo);
 
-        cfsScheduler.operation.init(&cfsScheduler);
 
         Thread *gpuProcess = thread_create("gpu", (ThreadStartRoutine) &GPU_FLUSH, 0, 0, sysModeCPSR());
         gpuProcess->cpuAffinity = cpu_number_to_mask(0);
         cfsScheduler.operation.addThread(&cfsScheduler, gpuProcess, 1);
 
         test_threads_init();*/
+
+        cfsScheduler.operation.init(&cfsScheduler);
 
         cfsScheduler.operation.schedule(&cfsScheduler);
     }
