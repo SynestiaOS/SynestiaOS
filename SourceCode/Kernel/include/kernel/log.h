@@ -9,8 +9,7 @@
 
 #define LogError(fmt, arg...) printf("\033[31m" fmt "\033[0m", ##arg);
 
-//#define LogInfo(fmt, arg...) printf("\033[32m" fmt "\033[0m", ##arg);
-#define LogInfo(fmt, arg...) printf(fmt, ##arg);
+#define LogInfo(fmt, arg...) printf("\033[32m" fmt "\033[0m", ##arg);
 
 #define LogWarn(fmt, arg...) printf("\033[33m" fmt "\033[0m", ##arg);
 

@@ -144,16 +144,17 @@ void kernel_main(void) {
 
         genericInterruptManager.operation.init(&genericInterruptManager);
 
-        /*vfs_create(&vfs);
+        vfs_create(&vfs);
         vfs.operations.mount(&vfs, "root", FILESYSTEM_EXT2, (void *) EXT2_ADDRESS);
 
+#ifndef RASPI4
         gpu_init();
         gfx2d_create_surface(&mainSurface, 1024, 768, GFX2D_BUFFER);
         uint32_t *background = (uint32_t *) kernelHeap.operations.alloc(&kernelHeap, 768 * 1024 * 4);
         vfs_kernel_read(&vfs, "/initrd/init/bg1024_768.dat", (char *) background, 768 * 1024 * 4);
         mainSurface.operations.drawBitmap(&mainSurface, 0, 0, 1024, 768, background);
         kernelHeap.operations.free(&kernelHeap, background);
-
+#endif
 
         LogInfo("[Ext2Verify]: check start.\n");
         uint32_t *ext2VerifyFile = (uint32_t *) kernelHeap.operations.alloc(&kernelHeap, 1024 * 32768);
@@ -170,6 +171,7 @@ void kernel_main(void) {
         LogInfo("[Ext2Verify]: check success. \n", *ext2VerifyFile);
         kernelHeap.operations.free(&kernelHeap, ext2VerifyFile);
 
+#ifndef RASPI4
         mainSurface.operations.fillRect(&mainSurface, 0, 0, 1024, 64, FLUENT_PRIMARY_COLOR);
         GUILabel logo;
         logo.component.foreground = ColorRGB(0xFF, 0xFF, 0xFF);
@@ -177,15 +179,16 @@ void kernel_main(void) {
         gui_label_create(&logo);
         gui_label_init(&logo, 480, 28, "SynestiaOS (alpha 0.1.3)");
         gui_label_draw(&logo);
+#endif
 
+        cfsScheduler.operation.init(&cfsScheduler);
 
+#ifndef RASPI4
         Thread *gpuProcess = thread_create("gpu", (ThreadStartRoutine) &GPU_FLUSH, 0, 0, sysModeCPSR());
         gpuProcess->cpuAffinity = cpu_number_to_mask(0);
         cfsScheduler.operation.addThread(&cfsScheduler, gpuProcess, 1);
-
-        test_threads_init();*/
-
-        cfsScheduler.operation.init(&cfsScheduler);
+#endif
+        test_threads_init();
 
         cfsScheduler.operation.schedule(&cfsScheduler);
     }

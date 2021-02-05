@@ -28,7 +28,7 @@ rpi_arm_timer_t* RPI_GetArmTimer(void)
 
 void RPI_ArmTimerInit(void)
 {
-    RPI_GetArmTimer()->Load = 0x40000;
+    RPI_GetArmTimer()->Load = 0x400000;
 
     RPI_GetArmTimer()->Control =
             RPI_ARMTIMER_CTRL_23BIT |

@@ -9,13 +9,17 @@
 
 
 void synestia_init_bsp(void) {
-    //uart_init();
-    RPI_AuxMiniUartInit( 115200, 8 );
+
     int mmioBase = PERIPHERAL_BASE;
-    LogInfo("[MMIO]: %d \n", mmioBase);
-    LogInfo("[HAL]: uart_init complete.\n");
+#ifndef RASPI4
+    uart_init();
+#else
+    RPI_AuxMiniUartInit( 115200, 8 );
     RPI_ArmTimerInit();
     RPI_EnableARMTimerInterrupt();
+#endif
+    LogInfo("[MMIO]: %d \n", mmioBase);
+    LogInfo("[HAL]: uart_init complete.\n");
 }
 
 void synestia_init_timer(void) {

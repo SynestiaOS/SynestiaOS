@@ -23,7 +23,11 @@ uint32_t sys_write(uint32_t fd, const char *buf, uint32_t count) {
     if (fd == FD_STDIN) {
 
     } else if (fd == FD_STDOUT) {
+#ifndef RASPI4
         uart_print(buf);
+#else
+        aux_uart_print(buf);
+#endif
     } else if (fd == FD_STDERR) {
 
     } else {

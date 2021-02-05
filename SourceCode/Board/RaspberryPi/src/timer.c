@@ -40,9 +40,9 @@ void generic_timer_irq_handler(void) {
 }
 
 void generic_timer_init(void) {
-    /*write_cntvtval(read_cntfrq() / 10);
+    write_cntvtval(read_cntfrq() / 10);
     enable_cntv();
-    enable_core0_irq();*/
+    enable_core0_irq();
 
     Interrupt timerInterrupt;
     timerInterrupt.interruptNumber = 1;

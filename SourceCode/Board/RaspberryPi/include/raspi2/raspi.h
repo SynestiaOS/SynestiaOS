@@ -9,7 +9,12 @@
 #define PERIPHERAL_BASE 0x3F000000
 #elif defined(RASPI4)
 #define PERIPHERAL_BASE 0xFE000000
+#endif
+
+#ifdef RASPI4
 #define SYSFREQ 200000000UL
+#else
+#define SYSFREQ 100000000UL
 #endif
 
 #define INTERRUPTS_OFFSET 0xB000

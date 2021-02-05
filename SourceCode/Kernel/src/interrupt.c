@@ -98,7 +98,9 @@ void interrupt_manager_default_interrupt(InterruptManager *manager) {
                 manager->interrupts[interrupt_no].clearHandler();
                 LogInfo("[Interrupt]: interrupt '%s' ClearHandler.\n", manager->interrupts[interrupt_no].name);
             }
-            //synestia_interrupt_clear(interrupt_no);
+#ifndef RASPI4
+            synestia_interrupt_clear(interrupt_no);
+#endif
         }
     }
 }

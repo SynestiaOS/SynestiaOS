@@ -92,3 +92,10 @@ void RPI_AuxPuts(char * s, int len)
     for (i = 0;i < len; i++)
        RPI_AuxMiniUartWrite(s[i]);
 }
+
+void aux_uart_print(const char *str) {
+    while (*str) {
+        RPI_AuxMiniUartWrite(*str);
+        str++;
+    }
+}
