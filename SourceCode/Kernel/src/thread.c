@@ -363,7 +363,7 @@ _Noreturn uint32_t *idle_thread_routine(int arg) {
 
 Thread *thread_create_idle_thread(uint32_t cpuNum) {
     Thread *idleThread = thread_create("IDLE", (ThreadStartRoutine) idle_thread_routine, (void *) cpuNum,
-                                       IDLE_PRIORITY, svcModeCPSR());
+                                       IDLE_PRIORITY, sysModeCPSR());
     idleThread->cpuAffinity = cpuNum;
     // 2. idle thread
     idleThread->pid = 0;
