@@ -152,7 +152,5 @@ extern void interrupt_vector(void);
 
 void interrupt_handler(void) {
     static int irq_cnt;
-    LogInfo("Interrupt %d\n", irq_cnt++);
-    //interrupt_vector();
     genericInterruptManager.operation.interrupt(&genericInterruptManager);
 }

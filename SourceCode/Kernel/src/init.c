@@ -181,6 +181,7 @@ void kernel_main(void) {
         gui_label_draw(&logo);
 #endif
 
+
         cfsScheduler.operation.init(&cfsScheduler);
 
 #ifndef RASPI4
@@ -189,6 +190,7 @@ void kernel_main(void) {
         cfsScheduler.operation.addThread(&cfsScheduler, gpuProcess, 1);
 #endif
         test_threads_init();
+        
 
         cfsScheduler.operation.schedule(&cfsScheduler);
     }

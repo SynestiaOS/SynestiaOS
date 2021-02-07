@@ -91,7 +91,7 @@ static inline RegisterCPSR sysModeCPSR() {
     cpsr.Z = 1;
     cpsr.C = 1;
     cpsr.A = 1;
-    cpsr.I = 1;
+    cpsr.I = 0;
     cpsr.F = 1;
     cpsr.M = 0b11111;
     return cpsr;

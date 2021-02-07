@@ -18,14 +18,11 @@ _software_interrupt_addr:
 _prefetch_abort_addr:
     .word prefetch_abort_handler
 _data_abort_addr:
-//    .word data_abort_isp
     .word prefetch_abort_handler
 _unused_addr:
     .word unused_handler
 _interrupt_addr:
-//    .word interrupt_handler
     .word interrupt_isp
-//    .word interrupt_vector_isp
 _fast_interrupt_addr:
     .word fast_interrupt_handler
 
