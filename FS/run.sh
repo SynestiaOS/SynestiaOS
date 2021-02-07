@@ -8,3 +8,5 @@ umount /mnt
 cp ~/initrd.img  .
 rm ~/initrd.img
 #Should Not Be a Mac-Ubuntu Share Directory
+#arm-none-eabi-objcopy -I binary -O elf32-littlearm -B arm initrd.img initrd.o
+
