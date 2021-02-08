@@ -19,8 +19,8 @@ static int skip_atoi(const char **s) {
 #define SPECIAL 32
 #define SMALL 64
 
-int32_t do_div(int *n, int base) {
-    int32_t res;
+uint32_t do_div(uint32_t *n, int base) {
+    uint32_t res;
     res = *n % base;
     *n = *n / base;
     return res;
@@ -56,7 +56,7 @@ static char *number(char *str, int num, int base, int size, int precision,
         tmp[i++] = '0';
     else
         while (num != 0)
-            tmp[i++] = digits[do_div(&num, base)];
+            tmp[i++] = digits[do_div((uint32_t *) &num, base)];
     if (i > precision)
         precision = i;
     size -= precision;
