@@ -256,6 +256,7 @@ KernelStatus thread_default_execute(struct Thread *thread, struct Elf *elf) {
 
     thread_init_mm(thread);
     if (thread->operations.isKernelThread(thread)) {
+
     } else {
         thread->memoryStruct.virtualMemory.operations.release(&thread->memoryStruct.virtualMemory);
         thread->memoryStruct.heap.operations.release(&thread->memoryStruct.heap);
