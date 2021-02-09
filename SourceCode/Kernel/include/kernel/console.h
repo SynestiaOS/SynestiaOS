@@ -9,10 +9,6 @@
 #define CONSOLE_MAX_PARAM_NUM 5     /* cmd max param num */
 #define CONSOLE_HISTORY_CMD_NUM 10  /* num of list history cmd */
 
-#ifndef NULL
-#define NULL 0
-#endif
-
 struct ConsoleDevice;
 struct ConsoleCmdManager;
 struct ConsoleCmdParam;
@@ -47,7 +43,7 @@ typedef struct CmdManagerOpr{
 typedef struct ConsoleCmdManager{
     int current;
     struct ConsoleCmd cmd[CONSOLE_CMD_NUM];
-    struct CmdManagerOpr opr;
+    struct CmdManagerOpr operation;
 }ConsoleCmdManager;
 
 typedef void (* ConsoleCmdHistoryIteratorStart) (struct ConsoleCmdHistory *);
@@ -156,7 +152,7 @@ typedef struct ConsoleDevice{
     uint8_t receiveBuf[CONSOLE_BUFFER_SIZE];
 
     struct ConsoleIO consoleIO;
-    struct consoleOpr opr;
+    struct consoleOpr operation;
     struct ConsoleCmd *currentCmd;
     struct ConsoleCmdParam cmdParam;
     struct ConsoleCmdManager cmdManager;
