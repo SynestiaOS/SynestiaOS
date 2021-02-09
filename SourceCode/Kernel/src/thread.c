@@ -177,7 +177,7 @@ enum KernelStatus thread_init_stack(Thread *thread, ThreadStartRoutine entry, vo
     }
     thread->stack.operations.clear(&thread->stack);
     thread->stack.operations.push(&thread->stack, 0x12121212); // R12
-    thread->stack.operations.push(&thread->stack, 0x11111111); // R11
+    thread->stack.operations.push(&thread->stack, 0x00000000); // R11, must be 0!!!
     thread->stack.operations.push(&thread->stack, 0x10101010); // R10
     thread->stack.operations.push(&thread->stack, 0x09090909); // R09
     thread->stack.operations.push(&thread->stack, 0x08080808); // R08
