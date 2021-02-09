@@ -54,7 +54,7 @@ typedef struct KernelTimerMangerOperation {
 
 typedef struct KernelTimerManager {
     uint32_t sysRuntimeMs;
-    ListNode *timerNodes;
+    KernelTimer *timerNodes;
     Tick timerManagerTick;
     KernelTimerMangerOperation operation;
 } KernelTimerManager;
