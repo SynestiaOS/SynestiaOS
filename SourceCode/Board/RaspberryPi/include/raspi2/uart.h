@@ -27,5 +27,6 @@ extern uint32_t io_readl(void *addr);
 void uart_init(void);
 void uart_put_char(uint8_t ch);
 void uart_print(const char *str);
+uint8_t do_uart_get_char(void);
 
 #endif// __BOARD_RASP_UART_H__

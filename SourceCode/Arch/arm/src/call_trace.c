@@ -1,16 +1,29 @@
 
 #include "kernel/log.h"
+#include "libc/stdbool.h"
+
+#define MAX_FUNC_LEN 0x1000
+
+/* non-leaf function prologue:
+ * push	{r?, r11, lr}
+ * add	r11, sp, #?
+ */
+static const unsigned int nonleaf_prologue[2] = { 0xe92d4800, 0xe28db000 };
+
+/* leaf function prologue:
+ * str	r11, [sp, #-?]!
+ */
+static const unsigned int leaf_prologue[] = { 0xe52db000 };
 
 static void find_func_header(unsigned int *instr)
 {
-    static const unsigned int prologue[2] = { 0xe92d4800, 0xe28db000 };
     unsigned int i;
 
-#define MAX_FUNC_LEN 0x1000
     for (i = 0; (i < MAX_FUNC_LEN) && (0 != instr); i++, instr--) {
-        if (((0xffff4800 & *(instr - 1)) == prologue[0]) // if only {r11, lr} are pushed
-         && ((0xffffff00 & *instr) == prologue[1])) {
-            LogError("func: 0x%x\n", instr - 1);
+        if (((0xffffff00 & *instr) == leaf_prologue[0])
+         || (((0xffff4800 & *instr) == nonleaf_prologue[0]) // if only {r11, lr} are pushed
+          && ((0xffffff00 & *(instr + 1)) == nonleaf_prologue[1]))) {
+            LogError("func: 0x%x\n", instr);
             return;
         }
     }
@@ -36,4 +49,16 @@ void dump_calltrace(void)
         find_func_header(lr);
     }
     LogError("callstack end\n");
+}
+
+bool func_is_leaf(unsigned int *instr)
+{
+    unsigned int i;
+
+    for (i = 0; (i < MAX_FUNC_LEN) && (0 != instr); i++, instr--) {
+        if ((0xffffff00 & *instr) == leaf_prologue[0]) {
+            return true;
+        }
+    }
+    return false;
 }
