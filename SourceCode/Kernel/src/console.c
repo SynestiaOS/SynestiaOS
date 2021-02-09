@@ -183,7 +183,7 @@ void console_receive_input_default(struct ConsoleDevice *console){
  }
 
 void console_show_version(struct ConsoleDevice *console) {
-   console->opr.resposeOutput(console, (uint8_t *)"Welcom to Syneista Console v1.0\n");
+   console->opr.resposeOutput(console, (uint8_t *)"Welcom to Synestia Console v1.0\n");
 }
 
 void console_show_prompt(struct ConsoleDevice *console) {
@@ -407,7 +407,7 @@ void HelpCmdHandle (struct ConsoleDevice *console) {
 }
 
 void VersionCmdHandle (struct ConsoleDevice *console) {
-    console->opr.resposeOutput(console, (uint8_t *)"Syneista Console v1.0\n"); 
+    console->opr.resposeOutput(console, (uint8_t *)"Synestia Console v1.0\n");
 }
 
 int console_atoi(char* pstr)
