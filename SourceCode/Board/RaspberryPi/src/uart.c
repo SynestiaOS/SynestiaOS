@@ -5,6 +5,8 @@
 
 #define TX_FIFO_FULL     (1 << 5)
 #define RX_FIFO_FULL     (1 << 6)
+#define RX_FIFO_EMPTY    (1 << 4)
+
 
 #define BAUD_RATE 115200
 #if defined(RASPI3) || defined(RASPI4)
@@ -104,10 +106,10 @@ void uart_put_char(uint8_t ch) {
 
 uint8_t do_uart_get_char(void) {
     // The UART_FR Register is the flag register. 1<<4 means Receive FIFO empty.
-  while (io_readl((void *)(PERIPHERAL_BASE + UART0_OFFSET + UART_FR_OFFSET)) & RX_FIFO_FULL) {
-    }
+  while (io_readl((void *)(PERIPHERAL_BASE + UART0_OFFSET + UART_FR_OFFSET)) & RX_FIFO_EMPTY) {
+  }
 
-    return ((uint8_t)(io_readl((void *) (PERIPHERAL_BASE + UART0_OFFSET + UART_DR_OFFSET)) & 0xff));
+  return (uint8_t)(io_readl((void *) (PERIPHERAL_BASE + UART0_OFFSET + UART_DR_OFFSET)) & 0xff);
 }
 
 void uart_print(const char *str) {
