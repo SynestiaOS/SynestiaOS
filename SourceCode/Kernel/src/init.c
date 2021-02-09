@@ -184,6 +184,7 @@ void kernel_main(void) {
         cfsScheduler.operation.addThread(&cfsScheduler, gpuProcess, 1);
 
         test_threads_init();
+        create_synestia_console();
 
         cfsScheduler.operation.schedule(&cfsScheduler);
     }
