@@ -2,10 +2,10 @@
 // Created by XingfengYang on 2021/1/8.
 //
 
-#include "libc/stdbool.h"
-
 #ifndef SYNESTIAOS_CALL_TRACE_H
 #define SYNESTIAOS_CALL_TRACE_H
+
+#include "libc/stdbool.h"
 
 /* dump call trace based on current stack (e.g., xxx thread). */
 void dump_calltrace(void);
