@@ -2,6 +2,7 @@
 // Created by XingfengYang on 2020/7/20.
 //
 
+#include <debug/timer_debug.h>
 #include "kernel/log.h"
 #include "kernel/scheduler.h"
 #include "kernel/interrupt.h"
@@ -46,14 +47,14 @@ KernelTimer *kernel_timer_manger_default_create_timer(KernelTimerManager *kernel
     timer->list.prev = nullptr;
     timer->list.next = nullptr;
     timer->deadline = deadline;
-    timer->remainTime = 0;
+    timer->remainTime = deadline;
     timer->operation.set = (KernelTimerOperationSet) kernel_timer_default_set;
     timer->operation.cancel = (KernelTimerOperationCancel) kernel_timer_default_cancel;
 
     if (kernelTimerManager->timerNodes == nullptr) {
-        kernelTimerManager->timerNodes = &timer->list;
+        kernelTimerManager->timerNodes = timer;
     } else {
-        KernelStatus addToManager = klist_append(kernelTimerManager->timerNodes, &timer->list);
+        KernelStatus addToManager = klist_append(&kernelTimerManager->timerNodes->list, &timer->list);
         if (addToManager == ERROR) {
             kernelHeap.operations.free(&kernelHeap, timer);
             return nullptr;
@@ -64,9 +65,18 @@ KernelTimer *kernel_timer_manger_default_create_timer(KernelTimerManager *kernel
 
 KernelStatus
 kernel_timer_manger_default_release_timer(KernelTimerManager *kernelTimerManager, KernelTimer *timer) {
-    LogInfo("[TimerManager] release timer\n");
+    LogInfo("[TimerManager] release timer 0x%x\n", timer->waitQueue.size);
     if (timer->waitQueue.size == 0) {
-        klist_remove_node(&timer->list);
+        if (timer == kernelTimerManager->timerNodes) {
+            if (timer->list.next != nullptr) {
+                kernelTimerManager->timerNodes = getNode(timer->list.next, KernelTimer, list);
+                klist_remove_node(&timer->list);
+            } else {
+                kernelTimerManager->timerNodes = nullptr;
+            }
+        } else {
+            klist_remove_node(&timer->list);
+        }
     } else {
         while (timer->waitQueue.size != 0) {
             KQueueNode *node = timer->waitQueue.operations.dequeue(&timer->waitQueue);
@@ -103,9 +113,7 @@ KernelStatus kernel_timer_manger_default_get_sys_runtime_ms(KernelTimerManager *
 void kernel_timer_manger_tick_on_each_timer(struct ListNode *node) {
     struct KernelTimer *timer = getNode(node, struct KernelTimer, list);
     LogInfo("[TimerManager] timer tick, remainTime: %d\n", timer->remainTime);
-    if (timer->remainTime >= TICK_INTERVAL) {
-        timer->remainTime -= TICK_INTERVAL;
-    }
+    timer->remainTime -= TICK_INTERVAL;
     if (timer->remainTime <= 0) {
         kernelTimerManager.operation.releaseTimer(&kernelTimerManager, timer);
     }
@@ -114,8 +122,8 @@ void kernel_timer_manger_tick_on_each_timer(struct ListNode *node) {
 KernelStatus kernel_timer_manger_default_on_tick() {
     kernelTimerManager.sysRuntimeMs += TICK_INTERVAL;
     LogInfo("[TimerManager] tick\n");
-    if (kernelTimerManager.timerNodes != nullptr && klist_size(kernelTimerManager.timerNodes) != 0) {
-        klist_iter(kernelTimerManager.timerNodes, kernel_timer_manger_tick_on_each_timer);
+    if (kernelTimerManager.timerNodes != nullptr && klist_size(&kernelTimerManager.timerNodes->list) != 0) {
+        klist_iter(&kernelTimerManager.timerNodes->list, kernel_timer_manger_tick_on_each_timer);
     }
     return OK;
 }
