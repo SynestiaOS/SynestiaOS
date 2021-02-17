@@ -164,16 +164,17 @@ interrupt_isp:
     stmfd   sp!, {lr}
 
     // store common Register
-    msr     cpsr, #0b11011111
+    orr     lr, lr, #0b10000000 // disable interrupt
+    msr     cpsr, lr
     nop
     stmfd   sp!, {r0-r12}
 
     // store spsr, pc (lr), sp into task stack
-    msr     cpsr, #0b11010010
+    msr     cpsr, #0b11010010 // condition codes are not used in isr
     nop
     ldmfd   sp!, {r0} // spsr
     ldmfd   sp!, {r1} // pc (lr)
-    msr     cpsr, #0b11011111
+    msr     cpsr, lr
     nop
     stmfd   sp!, {r0} // spsr
     stmfd   sp!, {r1} // pc (lr)
@@ -196,7 +197,7 @@ interrupt_isp:
     ldmfd   r0!, {r1} // pc (lr)
     ldmfd   r0!, {r2} // spsr
 
-    msr     cpsr, #0b11010010
+    msr     cpsr, #0b11010010 // condition codes are not used in isr
     nop
 
     // load spsr of task
