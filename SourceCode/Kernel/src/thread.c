@@ -8,6 +8,7 @@
 #include "kernel/thread.h"
 #include "arm/kernel_vmm.h"
 #include "kernel/kheap.h"
+#include "kernel/slab.h"
 #include "kernel/kobject.h"
 #include "kernel/stack.h"
 #include "kernel/kvector.h"
@@ -20,6 +21,7 @@
 #include "libelf/elf.h"
 
 extern Heap kernelHeap;
+extern Slab kernelObjectSlab;
 extern PhysicalPageAllocator kernelPageAllocator;
 extern PhysicalPageAllocator userspacePageAllocator;
 extern KernelTimerManager kernelTimerManager;
@@ -95,7 +97,7 @@ KernelStatus thread_default_kill(struct Thread *thread) {
         return freeStatus;
     }
     // Free thread structure
-    freeStatus = kernelHeap.operations.free(&kernelHeap, thread);
+    freeStatus = kernelObjectSlab.operations.free(&kernelObjectSlab, KERNEL_OBJECT_THREAD, thread);
     if (freeStatus != OK) {
         LogError("[KStack]: kStack free failed.\n");
         return freeStatus;
@@ -243,7 +245,7 @@ void thread_release(Thread *thread) {
         kernelHeap.operations.free(&kernelHeap, thread->filesStruct.fileDescriptorTable.data);
     }
 
-    kernelHeap.operations.free(&kernelHeap, thread);
+    kernelObjectSlab.operations.free(&kernelObjectSlab, KERNEL_OBJECT_THREAD, thread);
 }
 
 
@@ -283,8 +285,7 @@ KernelStatus thread_default_execute(struct Thread *thread, struct Elf *elf) {
 }
 
 Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uint32_t priority, RegisterCPSR cpsr) {
-    Thread *thread = (Thread *) kernelHeap.operations.alloc(&kernelHeap, sizeof(Thread));
-
+    Thread *thread = (Thread *)kernelObjectSlab.operations.alloc(&kernelObjectSlab, KERNEL_OBJECT_THREAD);
     if (thread != nullptr) {
         thread->magic = THREAD_MAGIC;
         thread->threadStatus = THREAD_INITIAL;
