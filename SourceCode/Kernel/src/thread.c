@@ -335,7 +335,7 @@ Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uin
         thread->rbNode.right = nullptr;
         thread->rbNode.color = NODE_RED;
 
-        thread_init_kobject(thread);
+//        thread_init_kobject(thread);
 
         LogInfo("[Thread]: thread '%s' created.\n", thread->name);
         return thread;

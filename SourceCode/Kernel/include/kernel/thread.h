@@ -187,7 +187,7 @@ typedef struct Thread {
 } Thread;
 
 Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uint32_t priority, RegisterCPSR cpsr);
-
+void thread_release(Thread *thread);
 Thread *thread_create_idle_thread(uint32_t cpuNum);
 
 #endif//__KERNEL_THREAD_H__
