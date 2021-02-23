@@ -210,13 +210,13 @@ void console_error_handle_default(struct ConsoleDevice *console) {
     switch (console->errorCode)
     {
     case CONSOLE_PARSED_ERROR :
-        errStr = (uint8_t *)"iput is invalid\n";
+        errStr = (uint8_t *)" input is invalid\n";
         break;
     case CONSOLE_HANDLE_ERROR :
-        errStr =  (uint8_t *)"cmd handle failed\n";
+        errStr =  (uint8_t *)" cmd handle failed\n";
         break;
     case CONSOLE_CMD_TOO_LONG :
-        errStr =  (uint8_t *)"cmd is too long\n";
+        errStr =  (uint8_t *)" cmd is too long\n";
         break;
     case CONSOLE_CMD_NOT_FIND:
         errStr =  (uint8_t *)" cmd not find\n";
