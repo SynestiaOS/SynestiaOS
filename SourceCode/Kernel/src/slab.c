@@ -92,6 +92,7 @@ void *slab_default_alloc(struct Slab *slab, KernelObjectType type) {
             // let find the free kernel object from list
             while (kernelObject->list.next != nullptr) {
                 if (getNode(kernelObject->list.next, KernelObject, list)->status == FREE) {
+                    kernelObject = (KernelObject *) getNode(kernelObject->list.next, KernelObject, list);
                     kernelObject->status = USING;
                     return kernelObject->operations.getObject(kernelObject);
                 }
@@ -111,9 +112,11 @@ KernelStatus slab_default_free(struct Slab *slab, KernelObjectType type, void *p
         case KERNEL_OBJECT_THREAD: {
             Thread *thread = (Thread *) ptr;
             if (klist_size(slab->kernelObjects[type]) > 1) {
-                klist_remove_node(&thread->object.list);
-                thread->object.list.next = slab->kernelObjects[type];
-                thread->object.list.next->prev = &thread->object.list;
+                if (&thread->object.list != slab->kernelObjects[type]) {
+                    klist_remove_node(&thread->object.list);
+                    thread->object.list.next = slab->kernelObjects[type];
+                    thread->object.list.next->prev = &thread->object.list;
+                }
             } else {
                 klist_remove_node(&thread->object.list);
             }
@@ -125,9 +128,11 @@ KernelStatus slab_default_free(struct Slab *slab, KernelObjectType type, void *p
         case KERNEL_OBJECT_MUTEX: {
             Mutex *mutex = (Mutex *) ptr;
             if (klist_size(slab->kernelObjects[type]) > 1) {
-                klist_remove_node(&mutex->object.list);
-                mutex->object.list.next = slab->kernelObjects[type];
-                mutex->object.list.next->prev = &mutex->object.list;
+                if (&mutex->object.list != slab->kernelObjects[type]) {
+                    klist_remove_node(&mutex->object.list);
+                    mutex->object.list.next = slab->kernelObjects[type];
+                    mutex->object.list.next->prev = &mutex->object.list;
+                }
             } else {
                 klist_remove_node(&mutex->object.list);
             }
@@ -139,9 +144,11 @@ KernelStatus slab_default_free(struct Slab *slab, KernelObjectType type, void *p
         case KERNEL_OBJECT_SEMAPHORE: {
             Semaphore *semaphore = (Semaphore *) ptr;
             if (klist_size(slab->kernelObjects[type]) > 1) {
-                klist_remove_node(&semaphore->object.list);
-                semaphore->object.list.next = slab->kernelObjects[type];
-                semaphore->object.list.next->prev = &semaphore->object.list;
+                if (&semaphore->object.list != slab->kernelObjects[type]) {
+                    klist_remove_node(&semaphore->object.list);
+                    semaphore->object.list.next = slab->kernelObjects[type];
+                    semaphore->object.list.next->prev = &semaphore->object.list;
+                }
             } else {
                 klist_remove_node(&semaphore->object.list);
             }
@@ -153,9 +160,11 @@ KernelStatus slab_default_free(struct Slab *slab, KernelObjectType type, void *p
         case KERNEL_OBJECT_FILE_DESCRIPTOR: {
             FileDescriptor *fileDescriptor = (FileDescriptor *) ptr;
             if (klist_size(slab->kernelObjects[type]) > 1) {
-                klist_remove_node(&fileDescriptor->object.list);
-                fileDescriptor->object.list.next = slab->kernelObjects[type];
-                fileDescriptor->object.list.next->prev = &fileDescriptor->object.list;
+                if (&fileDescriptor->object.list != slab->kernelObjects[type]) {
+                    klist_remove_node(&fileDescriptor->object.list);
+                    fileDescriptor->object.list.next = slab->kernelObjects[type];
+                    fileDescriptor->object.list.next->prev = &fileDescriptor->object.list;
+                }
             } else {
                 klist_remove_node(&fileDescriptor->object.list);
             }
