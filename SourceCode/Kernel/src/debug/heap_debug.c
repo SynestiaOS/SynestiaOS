@@ -39,6 +39,9 @@ static void dump_heap_using_list()
     HeapArea *using_ptr = kernelHeap.usingListHead;
     LogInfo("********** Heap Using List **********\n")
     LogInfo("using_ptr = 0x%x\n", using_ptr)
+//    for(uint32_t i = 0; i < 64; i++) {
+//        LogInfo("0x%x : 0x%x\n", (u32)using_ptr + i * 4, *(u32*)((u32)using_ptr + i * 4))
+//    }
     if (using_ptr) {
         uint32_t count = 0;
         ListNode node = using_ptr->list;
@@ -46,7 +49,8 @@ static void dump_heap_using_list()
         LogInfo("heap 0x%x: next : 0x%x  pre : 0x%x, size = 0x%x\n",
                 count++, area_ptr->list.next, area_ptr->list.prev, area_ptr->size);
         for (; node.next != nullptr; node = *(node.next) , count++) {
-            HeapArea *info = (HeapArea *)((uint32_t)node.next - sizeof(void *));
+            /* according to the structure of HeapArea, node->next should make a u32 of magic + u32 of size */
+            HeapArea *info = (HeapArea *)((uint32_t)node.next - 2 * sizeof(uint32_t));
             LogInfo("heap 0x%x: next : 0x%x  pre : 0x%x, size = 0x%x\n",
                     count, info->list.next, info->list.prev, info->size);
         }
@@ -59,6 +63,9 @@ static void dump_heap_free_list()
     HeapArea *free_ptr = kernelHeap.freeListHead;
     LogInfo("********** Heap Free List **********\n")
     LogInfo("free_ptr = 0x%x\n", free_ptr)
+//    for(uint32_t i = 0; i < 64; i++) {
+//        LogInfo("0x%x : 0x%x\n", (u32)free_ptr + i * 4, *(u32*)((u32)free_ptr + i * 4))
+//    }
     if (free_ptr) {
         uint32_t count = 0;
         ListNode node = free_ptr->list;
@@ -66,7 +73,8 @@ static void dump_heap_free_list()
         LogInfo("heap 0x%x: next : 0x%x  pre : 0x%x, size = 0x%x\n",
                 count++, area_ptr->list.next, area_ptr->list.prev, area_ptr->size);
         for (; node.next != nullptr; node = *(node.next) , count++) {
-            HeapArea *info = (HeapArea *)((uint32_t)node.next - sizeof(void *));
+            /* according to the structure of HeapArea, node->next should make a u32 of magic + u32 of size */
+            HeapArea *info = (HeapArea *)((uint32_t)node.next - 2 * sizeof(uint32_t));
             LogInfo("heap 0x%x: next : 0x%x  pre : 0x%x, size = 0x%x\n",
                     count, info->list.next, info->list.prev, info->size);
         }
