@@ -34,36 +34,28 @@ void dump_slab_statistics(const char *info)
     }
 }
 
-
-void test_slab1()
+void test_slab()
 {
-    dump_slab_statistics("---before alloc---");
     void *ptr1 = kernelObjectSlab.operations.alloc(&kernelObjectSlab, KERNEL_OBJECT_THREAD);
-    dump_slab_statistics("---after alloc---");
+    dump_slab_statistics("---after alloc1---");
+    void *ptr2 = kernelObjectSlab.operations.alloc(&kernelObjectSlab, KERNEL_OBJECT_THREAD);
+    dump_slab_statistics("---after alloc2---");
+    void *ptr3 = kernelObjectSlab.operations.alloc(&kernelObjectSlab, KERNEL_OBJECT_THREAD);
+    dump_slab_statistics("---after alloc3---");
 
     kernelObjectSlab.operations.free(&kernelObjectSlab, KERNEL_OBJECT_THREAD, ptr1);
     dump_slab_statistics("---after free1---");
-
-    void *ptr2 = kernelObjectSlab.operations.alloc(&kernelObjectSlab, KERNEL_OBJECT_THREAD);
-    dump_slab_statistics("---after alloc2---");
-
-    void *ptr3 = kernelObjectSlab.operations.alloc(&kernelObjectSlab, KERNEL_OBJECT_THREAD);
-    dump_slab_statistics("---after alloc3---");
 
     kernelObjectSlab.operations.free(&kernelObjectSlab, KERNEL_OBJECT_THREAD, ptr3);
     dump_slab_statistics("---after free3---");
     void *ptr4 = kernelObjectSlab.operations.alloc(&kernelObjectSlab, KERNEL_OBJECT_THREAD);
     dump_slab_statistics("---after alloc4---");
 
-    kernelObjectSlab.operations.free(&kernelObjectSlab, KERNEL_OBJECT_THREAD, ptr2);
-    dump_slab_statistics("---after free2---");
-
     kernelObjectSlab.operations.free(&kernelObjectSlab, KERNEL_OBJECT_THREAD, ptr4);
     dump_slab_statistics("---after free4---");
-
 }
 
-void test_slab()
+void test_slabx1()
 {
     dump_slab_statistics("---before alloc---");
     void *ptr1 = kernelObjectSlab.operations.alloc(&kernelObjectSlab, KERNEL_OBJECT_MUTEX);
