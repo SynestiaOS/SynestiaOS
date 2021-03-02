@@ -20,15 +20,19 @@ static inline uint32_t read_mmfr0(void) {
 }
 
 /**
+ * write Primary Remap Register
+ * @param val
+ */
+static inline void write_primapr(uint32_t val) {
+    asm("MCR P15, 0, %0, C10, C2, 0 " : : "r" (val));
+}
+
+/**
  * write translation table base register 0 (TTBR0)
  * @param val
  */
 static inline void write_ttbr0(uint32_t val) {
-    asm volatile("mcr p15, 0, %0, c2, c0, 0"
-                 :
-                 : "r"(val)
-                 : "memory");
-    asm volatile("dmb");
+    asm("MCRR P15, 0, %0, %1, C2" : : "r"(val), "r"(0));
 }
 
 /**
