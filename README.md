@@ -1,4 +1,4 @@
-# Project Synestia(赛亚OS)
+# Project Synestia (SynestiaOS)
 ## An Open Source, a standards-based software platform for IoT devices, including smartwatch, TVs, and automotive infotainment platforms.
 
 # Documents
