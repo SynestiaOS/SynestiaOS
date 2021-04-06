@@ -5,3 +5,5 @@ Build/
 SourceCode/Board/MaixGo/
 devlog/
 Scripts/build*
+/.config
+/.config.old

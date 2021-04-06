@@ -921,6 +921,7 @@ typedef struct PropertySetClockRateMail {
     PropertySetClockRate property;
     uint32_t end;
 } PropertySetClockRateMail;
+_Static_assert(sizeof(PropertySetClockRateMail)==36);
 typedef struct PropertyGetMaxClockRateMail {
     uint32_t size;
     uint32_t code;

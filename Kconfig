@@ -1,0 +1,21 @@
+choice
+    prompt "Select the Board"
+    default BOARD_USING_RaspberryPi3
+
+    config BOARD_USING_RaspberryPi2
+        bool "using board raspberry pi 2"
+
+    config BOARD_USING_RaspberryPi3
+        bool "using board raspberry pi 3"
+
+    config BOARD_USING_RaspberryPi4
+        bool "using board raspberry pi 4"
+endchoice
+
+config KERNEL_ENABLE_GUI
+    bool "enable GUI"
+    default y
+
+config KERNEL_ENABLE_SMP
+    bool "enable smp"
+    default n
