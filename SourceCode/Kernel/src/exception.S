@@ -79,7 +79,7 @@ _reset_cpu0:
 
 _reset_cpu1:
     safe_svcmode_maskall r0
-    ldr r1,=__svc_stack-0x8000
+    ldr sp,=__svc_stack-0x8000
     push    {r4, r5, r6, r7, r8, r9}
 
     ldr     r0, =exception_vector_table
@@ -95,7 +95,7 @@ _reset_cpu1:
 
 _reset_cpu2:
     safe_svcmode_maskall r0
-    ldr r1,=__svc_stack-0x8000-0x8000
+    ldr sp,=__svc_stack-0x8000-0x8000
     push    {r4, r5, r6, r7, r8, r9}
 
     ldr     r0, =exception_vector_table
@@ -111,7 +111,7 @@ _reset_cpu2:
 
 _reset_cpu3:
     safe_svcmode_maskall r0
-    ldr r1,=__svc_stack-0x8000-0x8000-0x8000
+    ldr sp,=__svc_stack-0x8000-0x8000-0x8000
     push    {r4, r5, r6, r7, r8, r9}
 
     ldr     r0, =exception_vector_table
