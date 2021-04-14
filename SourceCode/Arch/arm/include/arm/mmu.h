@@ -20,10 +20,10 @@ static inline uint32_t read_mmfr0(void) {
 }
 
 /**
- * write Primary Remap Register
+ * write Primary Remap Register(prrr)
  * @param val
  */
-static inline void write_primapr(uint32_t val) {
+static inline void write_prrr(uint32_t val) {
     asm("MCR P15, 0, %0, C10, C2, 0 " : : "r" (val));
 }
 

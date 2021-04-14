@@ -51,7 +51,7 @@ void kernel_vmm_init() {
 }
 
 void kernel_vmm_enable() {
-    write_primapr(0xff440400);
+    write_prrr(0xf0040000);
     LogInfo("[vmm]: Primary Remap Registe writed\n");
 
     write_ttbcr(0xb0003500);
