@@ -1,7 +1,7 @@
 #ifndef SYNESTIAOS_CAPABILITY_H
 #define SYNESTIAOS_CAPABILITY_H
 
-#include "kernel/stdint.h"
+#include "libc/stdint.h"
 
 typedef struct Capability{
     uint8_t rights;

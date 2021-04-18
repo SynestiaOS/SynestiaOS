@@ -1,7 +1,7 @@
 #ifndef SYNESTIAOS_CAPABILITY_NODE_H
 #define SYNESTIAOS_CAPABILITY_NODE_H
 
-#include "kernel/stdint.h"
+#include "libc/stdint.h"
 
 typedef uint32_t (*DirMapOperationInsert)(DirMap *dirmap, void *data);
 typedef void* (*DirMapOperationGet)(DirMap* dirmap, uint32_t ref);
