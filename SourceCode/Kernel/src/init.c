@@ -174,8 +174,6 @@ void kernel_main(void) {
         LogInfo("[Ext2Verify]: check success. \n", *ext2VerifyFile);
         kernelHeap.operations.free(&kernelHeap, ext2VerifyFile);
 
-        kernel_module_init();
-
         mainSurface.operations.fillRect(&mainSurface, 0, 0, 1024, 64, FLUENT_PRIMARY_COLOR);
         GUILabel logo;
         logo.component.foreground = ColorRGB(0xFF, 0xFF, 0xFF);
@@ -185,6 +183,8 @@ void kernel_main(void) {
         gui_label_draw(&logo);
 
         cfsScheduler.operation.init(&cfsScheduler);
+
+        kernel_module_init();
 
         Thread *gpuProcess = thread_create("gpu", (ThreadStartRoutine) &GPU_FLUSH, 0, 0, sysModeCPSR());
         gpuProcess->cpuAffinity = cpu_number_to_mask(0);
