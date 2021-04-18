@@ -2,6 +2,7 @@
 #include "kernel/console.h"
 #include "kernel/thread.h"
 #include "kernel/scheduler.h"
+#include "kernel/module.h"
 
 struct ConsoleCmd *cmd_manager_match_cmd(struct ConsoleCmdManager *manager, const uint8_t *name) {
     struct ConsoleCmd *nextCmd = nullptr;
@@ -492,3 +493,10 @@ void create_synestia_console()
     consoleThread->cpuAffinity = cpu_number_to_mask(0);
     cfsScheduler.operation.addThread(&cfsScheduler, consoleThread, 1);   
 }
+
+uint32_t module_console(void* data){
+    create_synestia_console();
+    return 1;
+}
+
+//__module_init(module_console);
