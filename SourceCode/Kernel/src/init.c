@@ -19,6 +19,7 @@
 #include "libgfx/gfx2d.h"
 #include "raspi2/led.h"
 #include "kernel/ktimer.h"
+#include "kernel/module.h"
 
 extern uint32_t __text_start;
 extern uint32_t __vector_table_start;
@@ -172,6 +173,8 @@ void kernel_main(void) {
         }
         LogInfo("[Ext2Verify]: check success. \n", *ext2VerifyFile);
         kernelHeap.operations.free(&kernelHeap, ext2VerifyFile);
+
+        kernel_module_init();
 
         mainSurface.operations.fillRect(&mainSurface, 0, 0, 1024, 64, FLUENT_PRIMARY_COLOR);
         GUILabel logo;
