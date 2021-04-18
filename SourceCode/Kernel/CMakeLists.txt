@@ -2,13 +2,11 @@ project(Kernel C ASM)
 
 aux_source_directory(${Kernel_SOURCE_DIR}/src KernelSrc)
 aux_source_directory(${Kernel_SOURCE_DIR}/src/debug KernelDebugSrc)
-aux_source_directory(${Kernel_SOURCE_DIR}/src/modules KernelModulesSrc)
 
 add_library(${PROJECT_NAME}
         OBJECT
         ${KernelSrc}
         ${KernelDebugSrc}
-        ${KernelModulesSrc}
         ${Kernel_SOURCE_DIR}/src/exception.S)
 
 target_include_arch_header_files(${PROJECT_NAME})

@@ -26,6 +26,7 @@ add_executable(${KernelName}
         $<TARGET_OBJECTS:KernelArch>
         $<TARGET_OBJECTS:Kernel>
         $<TARGET_OBJECTS:LibC>
+        $<TARGET_OBJECTS:HelloWorldModule>
         $<TARGET_OBJECTS:LibElf>
         $<TARGET_OBJECTS:LibMath>
         $<TARGET_OBJECTS:LibGfx>
