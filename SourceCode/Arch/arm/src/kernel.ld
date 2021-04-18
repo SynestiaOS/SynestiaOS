@@ -10,6 +10,9 @@ SECTIONS
         KEEP(*(.interrupt_vector_table))
         __vector_table_end = .;
         KEEP(*(.text.boot))
+        __module_init_start = .;
+        KEEP(*(.moduleinit))
+        __module_init_end  = .;
         *(.text)
     }
     . = ALIGN(4096);
