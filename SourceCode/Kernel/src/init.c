@@ -151,14 +151,6 @@ void kernel_main(void) {
         vfs_create(&vfs);
         vfs.operations.mount(&vfs, "root", FILESYSTEM_EXT2, (void *) EXT2_ADDRESS);
 
-        gpu_init();
-        gfx2d_create_surface(&mainSurface, 1024, 768, GFX2D_BUFFER);
-        uint32_t *background = (uint32_t *) kernelHeap.operations.alloc(&kernelHeap, 768 * 1024 * 4);
-        vfs_kernel_read(&vfs, "/initrd/init/bg1024_768.dat", (char *) background, 768 * 1024 * 4);
-        mainSurface.operations.drawBitmap(&mainSurface, 0, 0, 1024, 768, background);
-        kernelHeap.operations.free(&kernelHeap, background);
-
-
         LogInfo("[Ext2Verify]: check start.\n");
         uint32_t *ext2VerifyFile = (uint32_t *) kernelHeap.operations.alloc(&kernelHeap, 1024 * 32768);
         vfs_kernel_read(&vfs, "/initrd/sbin/ext2verify.bin", (char *) ext2VerifyFile, 1024 * 32768);
@@ -173,6 +165,13 @@ void kernel_main(void) {
         }
         LogInfo("[Ext2Verify]: check success. \n", *ext2VerifyFile);
         kernelHeap.operations.free(&kernelHeap, ext2VerifyFile);
+
+        gpu_init();
+        gfx2d_create_surface(&mainSurface, 1024, 768, GFX2D_BUFFER);
+        uint32_t *background = (uint32_t *) kernelHeap.operations.alloc(&kernelHeap, 768 * 1024 * 4);
+        vfs_kernel_read(&vfs, "/initrd/init/bg1024_768.dat", (char *) background, 768 * 1024 * 4);
+        mainSurface.operations.drawBitmap(&mainSurface, 0, 0, 1024, 768, background);
+        kernelHeap.operations.free(&kernelHeap, background);
 
         mainSurface.operations.fillRect(&mainSurface, 0, 0, 1024, 64, FLUENT_PRIMARY_COLOR);
         GUILabel logo;
