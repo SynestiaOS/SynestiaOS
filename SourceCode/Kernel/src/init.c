@@ -190,7 +190,6 @@ void kernel_main(void) {
         kernel_module_init();
 
         test_threads_init();
-        create_synestia_console();
 
         cfsScheduler.operation.schedule(&cfsScheduler);
     }
