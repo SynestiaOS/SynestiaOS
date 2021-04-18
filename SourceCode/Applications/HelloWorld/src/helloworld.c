@@ -1,8 +1,6 @@
 //
 // Created by XingfengYang on 2020/7/7.
 //
-
-//#include "testapp/testapp.h"
 #include "libc/stdlib.h"
 
 int main(int argc, char *argv[]) {
