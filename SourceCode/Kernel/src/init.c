@@ -184,11 +184,11 @@ void kernel_main(void) {
 
         cfsScheduler.operation.init(&cfsScheduler);
 
-        kernel_module_init();
-
         Thread *gpuProcess = thread_create("gpu", (ThreadStartRoutine) &GPU_FLUSH, 0, 0, sysModeCPSR());
         gpuProcess->cpuAffinity = cpu_number_to_mask(0);
         cfsScheduler.operation.addThread(&cfsScheduler, gpuProcess, 1);
+
+        kernel_module_init();
 
         test_threads_init();
         create_synestia_console();
