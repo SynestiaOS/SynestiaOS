@@ -11,4 +11,6 @@ typedef uint32_t (*ModuleInitFunction)(void *);
 
 #define __module_init(func) static ModuleInitFunction __module_init_##func __attribute__((section(".moduleinit"))) = func;
 
+void kernel_module_init();
+
 #endif // __KERNEL_MODULE_H__

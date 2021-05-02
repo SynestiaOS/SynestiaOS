@@ -57,14 +57,6 @@ Slab kernelObjectSlab;
 Scheduler cfsScheduler;
 KernelTimerManager kernelTimerManager;
 VFS vfs;
-GfxSurface mainSurface;
-
-
-extern void test_threads_init(void);
-
-extern uint32_t *gpu_flush(int args);
-
-extern uint32_t GFX2D_BUFFER[1024 * 768];
 
 void print_splash() {
     printf("   _____                       _   _       \n");
@@ -75,12 +67,6 @@ void print_splash() {
     printf(" |_____/ \\__, |_| |_|\\___||___/\\__|_|\\__,_|\n");
     printf("          __/ |                            \n");
     printf("         |___/                          \n");
-}
-
-_Noreturn uint32_t *GPU_FLUSH(int args) {
-    while (1) {
-        gpu_flush(0);
-    }
 }
 
 void print_memory_map() {
@@ -166,30 +152,7 @@ void kernel_main(void) {
         LogInfo("[Ext2Verify]: check success. \n", *ext2VerifyFile);
         kernelHeap.operations.free(&kernelHeap, ext2VerifyFile);
 
-        gpu_init();
-        gfx2d_create_surface(&mainSurface, 1024, 768, GFX2D_BUFFER);
-        uint32_t *background = (uint32_t *) kernelHeap.operations.alloc(&kernelHeap, 768 * 1024 * 4);
-        vfs_kernel_read(&vfs, "/initrd/init/bg1024_768.dat", (char *) background, 768 * 1024 * 4);
-        mainSurface.operations.drawBitmap(&mainSurface, 0, 0, 1024, 768, background);
-        kernelHeap.operations.free(&kernelHeap, background);
-
-        mainSurface.operations.fillRect(&mainSurface, 0, 0, 1024, 64, FLUENT_PRIMARY_COLOR);
-        GUILabel logo;
-        logo.component.foreground = ColorRGB(0xFF, 0xFF, 0xFF);
-        logo.component.colorMode = TRANSPARENT;
-        gui_label_create(&logo);
-        gui_label_init(&logo, 480, 28, "SynestiaOS (alpha 0.1.3)");
-        gui_label_draw(&logo);
-
-        cfsScheduler.operation.init(&cfsScheduler);
-
-        Thread *gpuProcess = thread_create("gpu", (ThreadStartRoutine) &GPU_FLUSH, 0, 0, sysModeCPSR());
-        gpuProcess->cpuAffinity = cpu_number_to_mask(0);
-        cfsScheduler.operation.addThread(&cfsScheduler, gpuProcess, 1);
-
         kernel_module_init();
-
-        test_threads_init();
 
         cfsScheduler.operation.schedule(&cfsScheduler);
     }
