@@ -9,6 +9,9 @@
 modules_init(0);
 modules_init(1);
 modules_init(2);
+modules_init(3);
+modules_init(4);
+modules_init(5);
 
 void kernel_module_init(){
     LogInfo("[Module]: init.\n");

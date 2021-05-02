@@ -20,6 +20,15 @@ SECTIONS
         __module_init_lv2_start = .;
         KEEP(*(.module_lv2.init))
         __module_init_lv2_end = .;
+        __module_init_lv3_start = .;
+        KEEP(*(.module_lv3.init))
+        __module_init_lv3_end = .;
+        __module_init_lv4_start = .;
+        KEEP(*(.module_lv4.init))
+        __module_init_lv4_end = .;
+        __module_init_lv5_start = .;
+        KEEP(*(.module_lv5.init))
+        __module_init_lv5_end = .;
         __module_init_end  = .;
         *(.text)
     }

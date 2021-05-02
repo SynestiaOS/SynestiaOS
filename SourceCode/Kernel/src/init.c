@@ -97,18 +97,23 @@ void kernel_main(void) {
         print_memory_map();
 
         synestia_init_bsp();
-
+        // early device init module, like bsp
         kernel_module_level_0_init();
 
         // create interrupt manager and init generic interrupt
         interrupt_manager_create(&genericInterruptManager);
 
+        // register physical interrupt manager module
+        // TODO 
+        kernel_module_level_1_init();
+
         // init kernel timer manager
         kernel_timer_manager_create(&kernelTimerManager);
         kernelTimerManager.operation.init(&kernelTimerManager);
 
+        // device which deps interrupt manager and timer init module, like timer.
         synestia_init_timer();
-        kernel_module_level_1_init();
+        kernel_module_level_2_init();
 
         // create kernel physical page allocator
         page_allocator_create(&kernelPageAllocator, (uint32_t) &__KERNEL_END + PAGE_SIZE,
@@ -148,7 +153,7 @@ void kernel_main(void) {
         LogInfo("[Ext2Verify]: check success. \n", *ext2VerifyFile);
         kernelHeap.operations.free(&kernelHeap, ext2VerifyFile);
 
-        kernel_module_level_2_init();
+        kernel_module_level_5_init();
 
         cfsScheduler.operation.schedule(&cfsScheduler);
     }

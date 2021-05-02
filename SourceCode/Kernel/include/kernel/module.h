@@ -11,7 +11,7 @@ typedef uint32_t (*ModuleInitFunction)(void *);
 
 #define module_init(func, level) static ModuleInitFunction __module_init_lv##lv##_##func __attribute__((section(".module_lv"#level ".init"))) = func;
 
-#define module_init(func) static ModuleInitFunction __module_init_lv2_##func __attribute__((section(".module_lv2.init"))) = func;
+#define module_init(func) static ModuleInitFunction __module_init_lv5_##func __attribute__((section(".module_lv5.init"))) = func;
 
 #define modules_init(level) \
 extern uint32_t __module_init_lv##level##_start;    \
@@ -35,6 +35,9 @@ void kernel_module_level_##level##_init(){  \
 void kernel_module_level_0_init();
 void kernel_module_level_1_init();
 void kernel_module_level_2_init();
+void kernel_module_level_3_init();
+void kernel_module_level_4_init();
+void kernel_module_level_5_init();
 void kernel_module_init();
 
 #endif // __KERNEL_MODULE_H__
