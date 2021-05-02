@@ -11,13 +11,8 @@
 #include "kernel/slab.h"
 #include "kernel/vfs.h"
 #include "libc/stdlib.h"
-#include "libgui/gui_animation.h"
-#include "libgui/gui_label.h"
-#include "libgui/gui_window.h"
-#include "raspi2/gpu.h"
 #include "raspi2/synestia_os_hal.h"
 #include "libgfx/gfx2d.h"
-#include "raspi2/led.h"
 #include "kernel/ktimer.h"
 #include "kernel/module.h"
 
@@ -98,7 +93,6 @@ void print_memory_map() {
 
 void kernel_main(void) {
     if (read_cpuid() == 0) {
-        led_init();
         print_splash();
 
         print_memory_map();
