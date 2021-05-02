@@ -16,5 +16,5 @@ uint32_t module_helloworld2(void* data){
     return 1;
 }
 
-__module_init(module_helloworld1);
-__module_init(module_helloworld2);
+module_init(module_helloworld1);
+module_init(module_helloworld2);

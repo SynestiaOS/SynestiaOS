@@ -11,7 +11,15 @@ SECTIONS
         __vector_table_end = .;
         KEEP(*(.text.boot))
         __module_init_start = .;
-        KEEP(*(.moduleinit))
+        __module_init_lv0_start = .;
+        KEEP(*(.module_lv0.init))
+        __module_init_lv0_end = .;
+        __module_init_lv1_start = .;
+        KEEP(*(.module_lv1.init))
+        __module_init_lv1_end = .;
+        __module_init_lv2_start = .;
+        KEEP(*(.module_lv2.init))
+        __module_init_lv2_end = .;
         __module_init_end  = .;
         *(.text)
     }

@@ -73,4 +73,4 @@ uint32_t module_desktop_init(void* data){
     LogInfo("[Module]: module desktop inited.\n");
     return 1;
 }
-__module_init(module_desktop_init);
+module_init(module_desktop_init);
