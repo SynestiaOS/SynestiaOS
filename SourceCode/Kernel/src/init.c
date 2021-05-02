@@ -12,7 +12,6 @@
 #include "kernel/vfs.h"
 #include "libc/stdlib.h"
 #include "raspi2/synestia_os_hal.h"
-#include "libgfx/gfx2d.h"
 #include "kernel/ktimer.h"
 #include "kernel/module.h"
 
