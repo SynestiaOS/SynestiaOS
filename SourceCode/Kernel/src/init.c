@@ -67,7 +67,7 @@ void print_memory_map() {
     LogInfo("[MemMap]: __vector_table_start = 0x%x \n", (uint32_t) &__vector_table_start);
     LogInfo("[MemMap]: __vector_table_end   = 0x%x \n", (uint32_t) &__vector_table_end);
     LogInfo("[MemMap]: __module_init_start  = 0x%x \n", (uint32_t) &__module_init_start);
-    LogInfo("[MemMap]: __module_init_end  = 0x%x \n", (uint32_t) &__module_init_end);
+    LogInfo("[MemMap]: __module_init_end    = 0x%x \n", (uint32_t) &__module_init_end);
     LogInfo("[MemMap]: __text_end           = 0x%x \n", (uint32_t) &__text_end);
     LogInfo("[MemMap]: __rodata_start       = 0x%x \n", (uint32_t) &__rodata_start);
     LogInfo("[MemMap]: __rodata_end         = 0x%x \n", (uint32_t) &__rodata_end);
