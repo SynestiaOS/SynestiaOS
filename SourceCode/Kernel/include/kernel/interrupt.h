@@ -19,10 +19,19 @@ typedef void (*InterruptHandler)(void);
 
 typedef void (*InterruptClearHandler)(void);
 
+typedef void (*InterruptEnableHandler)(void);
+
+typedef void (*InterruptDisableHandler)(void);
+
+typedef void (*InterruptPendingHandler)(void);
+
 typedef struct Interrupt {
     uint32_t interruptNumber;
     InterruptHandler handler;
+    InterruptPendingHandler pendingHandler;
     InterruptClearHandler clearHandler;
+    InterruptEnableHandler enableHandler;
+    InterruptDisableHandler disableHandler;
     char name[NAME_LENGTH];
 } Interrupt;
 
@@ -44,8 +53,13 @@ typedef void (*InterruptManagerOperationTick)(struct InterruptManager *manager);
 
 typedef void (*InterruptManagerOperationInterrupt)(struct InterruptManager *manager);
 
+typedef void (*InterruptManagerPhysicalInit)();
+
+typedef void (*InterruptManagerOperationRegisterPhysicalInit)(struct InterruptManager *manager, InterruptManagerPhysicalInit init);
+
 typedef struct InterruptManagerOperation {
     InterruptManagerOperationInit init;
+    InterruptManagerOperationRegisterPhysicalInit registerPhysicalInit;
     InterruptManagerOperationRegister registerInterrupt;
     InterruptManagerOperationUnRegister unRegisterInterrupt;
     InterruptManagerOperationRegisterTick registerTick;
@@ -62,6 +76,7 @@ typedef struct InterruptManager {
     uint32_t registed[IRQ_NUMS];
     Tick *ticks;
     InterruptManagerOperation operation;
+    InterruptManagerPhysicalInit physicalInit;
 } InterruptManager;
 
 InterruptManager *interrupt_manager_create(InterruptManager *manger);

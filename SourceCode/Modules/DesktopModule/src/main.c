@@ -23,7 +23,6 @@
 #include "libgui/gui_label.h"
 #include "libgui/gui_window.h"
 #include "raspi2/gpu.h"
-#include "raspi2/synestia_os_hal.h"
 #include "libgfx/gfx2d.h"
 #include "raspi2/led.h"
 #include "kernel/ktimer.h"

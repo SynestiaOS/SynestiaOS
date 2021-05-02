@@ -32,6 +32,14 @@ void generic_timer_irq_clear(void) {
     // DO Nothing
 }
 
+void generic_timer_irq_enable(void) {
+    // DO Nothing
+}
+
+void generic_timer_irq_pending(void) {
+    // DO Nothing
+}
+
 void generic_timer_irq_handler(void) {
     LogInfo("[Timer]: generic timer interrupted\n");
     write_cntvtval(read_cntfrq() / 10);
@@ -47,7 +55,9 @@ void generic_timer_init(void) {
     Interrupt timerInterrupt;
     timerInterrupt.interruptNumber = 1;
     timerInterrupt.handler = generic_timer_irq_handler;
+    timerInterrupt.pendingHandler = generic_timer_irq_pending;
     timerInterrupt.clearHandler = generic_timer_irq_clear;
+    timerInterrupt.enableHandler = generic_timer_irq_enable;
     memset(timerInterrupt.name, 0, sizeof(timerInterrupt.name));
     strcpy(timerInterrupt.name, "generic timer");
     genericInterruptManager.operation.registerInterrupt(&genericInterruptManager, timerInterrupt);

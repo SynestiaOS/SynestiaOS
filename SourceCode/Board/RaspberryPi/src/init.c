@@ -1,12 +1,13 @@
 #include "raspi2/interrupt_controller.h"
-#include "raspi2/synestia_os_hal.h"
 #include "kernel/log.h"
 #include "libc/stdlib.h"
 #include "raspi2/timer.h"
 #include "raspi2/uart.h"
 #include "raspi2/gic400.h"
+#include "kernel/module.h"
+#include "kernel/interrupt.h"
 
-void synestia_init_bsp(void) {
+void raspi2_init_bsp(void) {
     uart_init();
     int mmioBase = PERIPHERAL_BASE;
     LogInfo("[MMIO]: %d \n", mmioBase);
@@ -14,31 +15,18 @@ void synestia_init_bsp(void) {
 
 }
 
-void synestia_init_timer(void) {
+__module_init(raspi2_init_bsp, 0);
+
+void raspi2_init_timer(void) {
     LogInfo("[HAL]： timer_init...\n");
     LogInfo("[HAL]: generic_timer_init...\n");
     generic_timer_init();
     LogInfo("[HAL]: generic_timer_init complete.\n");
 }
 
+__module_init(raspi2_init_timer, 2);
 
-void synestia_interrupt_enable(uint32_t no) {
-    interrupt_controller_enable(no);
-}
-
-bool synestia_interrupt_pending(uint32_t no) {
-    return interrupt_controller_pending(no);
-}
-
-bool synestia_interrupt_clear(uint32_t no) {
-    interrupt_controller_clear(no);
-}
-
-void synestia_interrupt_disable(uint32_t no) {
-    interrupt_controller_disable(no);
-}
-
-void synestia_init_interrupt(void) {
+void raspi2_init_interrupt(void) {
     LogInfo("[HAL] interrupt init\n")
 #if defined(RASPI4)
     gic400_init(0xFF840000);
@@ -46,3 +34,11 @@ void synestia_init_interrupt(void) {
     interrupt_controller_init();
 #endif
 }
+
+
+extern InterruptManager genericInterruptManager;
+void raspi2_register_physical_init(){
+    genericInterruptManager.operation.registerPhysicalInit(&genericInterruptManager, raspi2_init_interrupt);
+}
+
+__module_init(raspi2_register_physical_init, 1);

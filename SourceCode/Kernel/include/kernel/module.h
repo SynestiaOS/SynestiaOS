@@ -9,7 +9,7 @@
 
 typedef uint32_t (*ModuleInitFunction)(void *);
 
-#define module_init(func, level) static ModuleInitFunction __module_init_lv##lv##_##func __attribute__((section(".module_lv"#level ".init"))) = func;
+#define __module_init(func, level) static ModuleInitFunction __module_init_lv##lv##_##func __attribute__((section(".module_lv"#level ".init"))) = func;
 
 #define module_init(func) static ModuleInitFunction __module_init_lv5_##func __attribute__((section(".module_lv5.init"))) = func;
 

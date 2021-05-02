@@ -1,5 +1,4 @@
 #include "arm/interrupt.h"
-#include "raspi2/synestia_os_hal.h"
 #include "kernel/interrupt.h"
 #include "arm/vmm.h"
 #include "libc/string.h"
@@ -33,24 +32,22 @@ void interrupt_manager_default_register(InterruptManager *manager, Interrupt int
     manager->interrupts[interrupt.interruptNumber].interruptNumber = interrupt.interruptNumber;
     manager->interrupts[interrupt.interruptNumber].handler = interrupt.handler;
     manager->interrupts[interrupt.interruptNumber].clearHandler = interrupt.clearHandler;
+    manager->interrupts[interrupt.interruptNumber].enableHandler = interrupt.enableHandler;
+    manager->interrupts[interrupt.interruptNumber].disableHandler = interrupt.disableHandler;
     memcpy(manager->interrupts[interrupt.interruptNumber].name, interrupt.name, sizeof(interrupt.name));
 
     manager->registed[interrupt.interruptNumber] = 1;
 
-    uint32_t interrupt_no = interrupt.interruptNumber;
-
-    synestia_interrupt_enable(interrupt_no);
+    manager->interrupts[interrupt.interruptNumber].enableHandler();
 }
 
 void interrupt_manager_default_unregister(InterruptManager *manager, Interrupt interrupt) {
+    manager->interrupts[interrupt.interruptNumber].disableHandler();
     manager->interrupts[interrupt.interruptNumber].interruptNumber = 0;
     manager->interrupts[interrupt.interruptNumber].handler = nullptr;
     manager->interrupts[interrupt.interruptNumber].clearHandler = nullptr;
+    manager->interrupts[interrupt.interruptNumber].disableHandler = nullptr;
     manager->registed[interrupt.interruptNumber] = 0;
-
-    uint32_t interrupt_no = interrupt.interruptNumber;
-
-    synestia_interrupt_disable(interrupt_no);
 }
 
 void interrupt_manager_default_enable(InterruptManager *manager) {
@@ -69,7 +66,9 @@ void interrupt_manager_default_disable(InterruptManager *manager) {
 
 void interrupt_manager_default_init(InterruptManager *manager) {
     LogInfo("[InterruptManager]: init\n")
-    synestia_init_interrupt();
+    if(manager->physicalInit != nullptr){
+        manager->physicalInit();
+    }
 }
 
 void interrupt_manager_default_tick(InterruptManager *manager) {
@@ -91,15 +90,18 @@ void interrupt_manager_default_tick(InterruptManager *manager) {
 
 void interrupt_manager_default_interrupt(InterruptManager *manager) {
     for (uint32_t interrupt_no = 0; interrupt_no < IRQ_NUMS; interrupt_no++) {
-        if (manager->registed[interrupt_no] == 1 /* && synestia_interrupt_pending(interrupt_no)*/) {
+        if (manager->registed[interrupt_no] == 1 /* &&  manager->interrupts[interrupt_no].pendingHandler()*/) {
             LogInfo("[Interrupt]: interrupt '%s' triggered.\n", manager->interrupts[interrupt_no].name);
             if (manager->interrupts[interrupt_no].clearHandler != nullptr) {
                 manager->interrupts[interrupt_no].clearHandler();
             }
             manager->interrupts[interrupt_no].handler();
-            synestia_interrupt_clear(interrupt_no);
         }
     }
+}
+
+void interrupt_manager_default_register_physical_init(struct InterruptManager *manager, InterruptManagerPhysicalInit init){
+    manager->physicalInit = init;
 }
 
 InterruptManager *interrupt_manager_create(InterruptManager *manger) {
@@ -112,6 +114,8 @@ InterruptManager *interrupt_manager_create(InterruptManager *manger) {
     manger->operation.unRegisterTick = (InterruptManagerOperationUnRegisterTick) interrupt_manager_default_un_register_tick;
     manger->operation.interrupt = (InterruptManagerOperationInterrupt) interrupt_manager_default_interrupt;
     manger->operation.tick = (InterruptManagerOperationTick) interrupt_manager_default_tick;
+    manger->operation.registerPhysicalInit = (InterruptManagerPhysicalInit) interrupt_manager_default_register_physical_init;
+    manger->physicalInit = nullptr;
 
     manger->ticks = nullptr;
     memset((char *) manger->registed, 0, IRQ_NUMS * sizeof(uint32_t));

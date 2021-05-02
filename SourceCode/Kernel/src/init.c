@@ -11,7 +11,6 @@
 #include "kernel/slab.h"
 #include "kernel/vfs.h"
 #include "libc/stdlib.h"
-#include "raspi2/synestia_os_hal.h"
 #include "kernel/ktimer.h"
 #include "kernel/module.h"
 
@@ -96,15 +95,13 @@ void kernel_main(void) {
 
         print_memory_map();
 
-        synestia_init_bsp();
         // early device init module, like bsp
         kernel_module_level_0_init();
 
         // create interrupt manager and init generic interrupt
         interrupt_manager_create(&genericInterruptManager);
 
-        // register physical interrupt manager module
-        // TODO 
+        // register physical interrupt manager module 
         kernel_module_level_1_init();
 
         // init kernel timer manager
@@ -112,7 +109,6 @@ void kernel_main(void) {
         kernelTimerManager.operation.init(&kernelTimerManager);
 
         // device which deps interrupt manager and timer init module, like timer.
-        synestia_init_timer();
         kernel_module_level_2_init();
 
         // create kernel physical page allocator
