@@ -20,10 +20,7 @@ void virtual_memory_default_mapping_page(VirtualMemory *virtualMemory, uint32_t 
     uint32_t l3Offset = (virtualAddress >> 12) & 0b111111111;
     uint32_t pageOffset = virtualAddress & 0xFFF;
 
-    LogError("[vmm]: usr l1Offset: %d .\n", l1Offset);
-    LogError("[vmm]: usr l2Offset: %d .\n", l2Offset);
-    LogError("[vmm]: usr l3Offset: %d .\n", l3Offset);
-    LogError("[vmm]: usr pageOffset: %d .\n", pageOffset);
+    LogWarn("[vmm]: map %x to %x.\n", physicalPage, virtualAddress);
 
     PageTableEntry *level1PageTable = virtualMemory->pageTable;
     PageTableEntry level1PageTableEntry = level1PageTable[l1Offset];
@@ -100,8 +97,8 @@ void virtual_memory_default_allocate_page(VirtualMemory *virtualMemory, uint32_t
 
 void virtual_memory_default_mapping_pages(VirtualMemory *virtualMemory, uint32_t virtualAddress,
                                          uint32_t physicalAddress, uint32_t size) {
-
     uint32_t pages = size / (4 * KB);
+    LogWarn("pages:%d \n",pages);
     for(uint32_t i = 0; i < pages; i++){
         virtual_memory_default_mapping_page(virtualMemory, virtualAddress + i * 4 * KB,  (physicalAddress + i * 4 * KB) << VA_OFFSET);
     }    

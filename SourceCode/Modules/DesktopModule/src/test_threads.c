@@ -167,7 +167,7 @@ void test_threads_init() {
                                       sysModeCPSR());
     elfThread->cpuAffinity = cpu_number_to_mask(0);
 
-    // elfThread->operations.execute(elfThread,&elf);
+    // elfThread->operations.execute(elfThread,"/initrd/bin/TestApp");
 
     cfsScheduler.operation.addThread(&cfsScheduler, elfThread, 1);
 

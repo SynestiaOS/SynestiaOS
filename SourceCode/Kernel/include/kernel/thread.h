@@ -124,7 +124,7 @@ typedef KernelStatus (*ThreadOperationExit)(struct Thread *thread, uint32_t retu
 
 typedef KernelStatus (*ThreadOperationKill)(struct Thread *thread);
 
-typedef KernelStatus (*ThreadOperationExecute)(struct Thread *thread, struct Elf *elf);
+typedef KernelStatus (*ThreadOperationExecute)(struct Thread *thread, const char* name);
 
 typedef struct Thread *(*ThreadOperationCopy)(struct Thread *thread, CloneFlags cloneFlags, uint32_t heapStart);
 

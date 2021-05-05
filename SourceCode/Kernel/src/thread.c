@@ -14,6 +14,7 @@
 #include "kernel/kvector.h"
 #include "kernel/log.h"
 #include "kernel/percpu.h"
+#include "kernel/vfs.h"
 #include "kernel/vfs_dentry.h"
 #include "libc/stdlib.h"
 #include "arm/register.h"
@@ -26,6 +27,7 @@ extern PhysicalPageAllocator kernelPageAllocator;
 extern PhysicalPageAllocator userspacePageAllocator;
 extern KernelTimerManager kernelTimerManager;
 extern Scheduler cfsScheduler;
+extern VFS vfs;
 
 uint32_t pidMap[2048] = {0};
 
@@ -253,16 +255,26 @@ uint32_t thread_default_is_kernel_thread(Thread *thread) {
     return thread->flags & THREAD_FLAG_KERNEL_THREAD;
 }
 
-KernelStatus thread_default_execute(struct Thread *thread, struct Elf *elf) {
+KernelStatus thread_default_execute(struct Thread *thread, const char* name) {
     kernel_mode();
 
-    uint32_t entry = (uint32_t) (elf->data + 32768);
+    Elf elf;
+
+    DirectoryEntry *pEntry = vfs.operations.lookup(&vfs, name);
+    LogInfo("ExecuteApp: %s \n",name);
+    LogInfo("AppSize: %d \n",pEntry->indexNode->fileSize);
+    uint32_t *data = (uint32_t *) kernelHeap.operations.alloc(&kernelHeap, pEntry->indexNode->fileSize);
+    vfs_kernel_read(&vfs, name, data, pEntry->indexNode->fileSize);
+    elf_init(&elf, data);
+    elf.operations.dump(&elf);
+
+    uint32_t entry = (uint32_t) (elf.data + 32768);
     Thread *elfThread = thread_create(thread->name, (ThreadStartRoutine) entry, 0, 0,
                                       userModeCPSR());
     elfThread->cpuAffinity = cpu_number_to_mask(0);
    
     elfThread->memoryStruct.virtualMemory.operations.mappingPages(&elfThread->memoryStruct.virtualMemory,
-        entry, entry, elf->size
+        entry, entry, pEntry->indexNode->fileSize
     );
     
     cfsScheduler.operation.addThread(&cfsScheduler, elfThread, 1);
