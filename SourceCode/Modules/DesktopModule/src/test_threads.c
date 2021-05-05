@@ -166,6 +166,9 @@ void test_threads_init() {
     Thread *elfThread = thread_create("PICElfTest", (ThreadStartRoutine) entry, 0, 0,
                                       sysModeCPSR());
     elfThread->cpuAffinity = cpu_number_to_mask(0);
+
+    // elfThread->operations.execute(elfThread,&elf);
+
     cfsScheduler.operation.addThread(&cfsScheduler, elfThread, 1);
 
 }

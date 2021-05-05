@@ -256,32 +256,16 @@ uint32_t thread_default_is_kernel_thread(Thread *thread) {
 KernelStatus thread_default_execute(struct Thread *thread, struct Elf *elf) {
     kernel_mode();
 
-    thread_init_mm(thread);
-    if (thread->operations.isKernelThread(thread)) {
-
-    } else {
-        thread->memoryStruct.virtualMemory.operations.release(&thread->memoryStruct.virtualMemory);
-        thread->memoryStruct.heap.operations.release(&thread->memoryStruct.heap);
-
-        thread_init_mm(thread);
-        // 2. allocate physical page
-
-        // 3. map virtual mem
-
-        // 4. copy elf section to mem
-
-        // 5. set up bss
-
-        // 6. set heap
-
-        // 7. allocate stack from heap
-
-        // 8. set up thread struct
-
-        // 9. replace thread's page table
-    }
-
-    // 10. reschedule
+    uint32_t entry = (uint32_t) (elf->data + 32768);
+    Thread *elfThread = thread_create(thread->name, (ThreadStartRoutine) entry, 0, 0,
+                                      userModeCPSR());
+    elfThread->cpuAffinity = cpu_number_to_mask(0);
+   
+    elfThread->memoryStruct.virtualMemory.operations.mappingPages(&elfThread->memoryStruct.virtualMemory,
+        entry, entry, elf->size
+    );
+    
+    cfsScheduler.operation.addThread(&cfsScheduler, elfThread, 1);
 }
 
 Thread *thread_create(const char *name, ThreadStartRoutine entry, void *arg, uint32_t priority, RegisterCPSR cpsr) {

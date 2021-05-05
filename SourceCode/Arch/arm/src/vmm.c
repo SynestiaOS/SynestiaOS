@@ -14,7 +14,7 @@
 
 extern Scheduler cfsScheduler;
 
-void virtual_memory_default_allocate_page(VirtualMemory *virtualMemory, uint32_t virtualAddress) {
+void virtual_memory_default_mapping_page(VirtualMemory *virtualMemory, uint32_t virtualAddress, uint32_t physicalPage){
     uint32_t l1Offset = (virtualAddress >> 30) & 0b11;
     uint32_t l2Offset = (virtualAddress >> 21) & 0b111111111;
     uint32_t l3Offset = (virtualAddress >> 12) & 0b111111111;
@@ -84,8 +84,7 @@ void virtual_memory_default_allocate_page(VirtualMemory *virtualMemory, uint32_t
                 pageTableEntry.valid = 1;
                 pageTableEntry.table = 1;
                 pageTableEntry.af = 1;
-                pageTableEntry.base = (uint64_t) (virtualMemory->physicalPageAllocator->operations.allocPage4K(
-                        virtualMemory->physicalPageAllocator, USAGE_NORMAL));
+                pageTableEntry.base = (uint64_t) (physicalPage);
 
             } else {
                 // should not be there, if goto there, means it not a page fault exception
@@ -94,9 +93,18 @@ void virtual_memory_default_allocate_page(VirtualMemory *virtualMemory, uint32_t
     }
 }
 
-void virtual_memory_default_mapping_page(VirtualMemory *virtualMemory, uint32_t virtualAddress,
-                                         uint32_t physicalAddress) {
-    // TODO:
+void virtual_memory_default_allocate_page(VirtualMemory *virtualMemory, uint32_t virtualAddress) {
+    virtual_memory_default_mapping_page(virtualMemory, virtualAddress, (uint64_t) (virtualMemory->physicalPageAllocator->operations.allocPage4K(
+                        virtualMemory->physicalPageAllocator, USAGE_NORMAL)));
+}
+
+void virtual_memory_default_mapping_pages(VirtualMemory *virtualMemory, uint32_t virtualAddress,
+                                         uint32_t physicalAddress, uint32_t size) {
+
+    uint32_t pages = size / (4 * KB);
+    for(uint32_t i = 0; i < pages; i++){
+        virtual_memory_default_mapping_page(virtualMemory, virtualAddress + i * 4 * KB,  (physicalAddress + i * 4 * KB) << VA_OFFSET);
+    }    
 }
 
 void virtual_memory_default_enable(VirtualMemory *virtualMemory) {
@@ -160,7 +168,7 @@ void *virtual_memory_default_copy_to_kernel(struct VirtualMemory *virtualMemory,
 }
 
 KernelStatus vmm_create(VirtualMemory *virtualMemory, PhysicalPageAllocator *physicalPageAllocator) {
-    virtualMemory->operations.mappingPage = (VirtualMemoryOperationMappingPage) virtual_memory_default_mapping_page;
+    virtualMemory->operations.mappingPages = (VirtualMemoryOperationMappingPages) virtual_memory_default_mapping_pages;
     virtualMemory->operations.contextSwitch = (VirtualMemoryOperationContextSwitch) virtual_memory_default_context_switch;
     virtualMemory->operations.allocatePage = (VirtualMemoryOperationAllocatePage) virtual_memory_default_allocate_page;
     virtualMemory->operations.release = (VirtualMemoryOperationRelease) virtual_memory_default_release;

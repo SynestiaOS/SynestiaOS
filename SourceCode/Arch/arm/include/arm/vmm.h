@@ -42,8 +42,8 @@ typedef void (*VirtualMemoryOperationContextSwitch)(struct VirtualMemory *old, s
 
 typedef void (*VirtualMemoryOperationAllocatePage)(struct VirtualMemory *virtualMemory, uint32_t virtualAddress);
 
-typedef void (*VirtualMemoryOperationMappingPage)(struct VirtualMemory *virtualMemory, uint32_t virtualAddress,
-                                                  uint32_t physicalAddress);
+typedef void (*VirtualMemoryOperationMappingPages)(struct VirtualMemory *virtualMemory, uint32_t virtualAddress,
+                                                  uint32_t physicalAddress, uint32_t size);
 
 typedef void (*VirtualMemoryOperationRelease)(struct VirtualMemory *virtualMemory);
 
@@ -61,7 +61,7 @@ typedef void *(*VirtualMemoryOperationCopyToKernel)(struct VirtualMemory *virtua
 typedef struct VirtualMemoryOperations {
     VirtualMemoryOperationContextSwitch contextSwitch;
     VirtualMemoryOperationAllocatePage allocatePage;
-    VirtualMemoryOperationMappingPage mappingPage;
+    VirtualMemoryOperationMappingPages mappingPages;
     VirtualMemoryOperationRelease release;
     VirtualMemoryOperationEnable enable;
     VirtualMemoryOperationDisable disable;
