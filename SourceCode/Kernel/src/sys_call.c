@@ -16,7 +16,15 @@ uint32_t sys_exit(int error_code) { return 0; }
 uint32_t sys_fork() { return 0; }
 
 uint32_t sys_read(uint32_t fd, char *buf, uint32_t count) {
-    return vfs.operations.read(&vfs, fd, buf, 0, count);
+    if (fd == FD_STDIN) {
+        do_uart_get_char();
+    } else if (fd == FD_STDOUT) {
+        
+    } else if (fd == FD_STDERR) {
+
+    } else {
+        return vfs.operations.read(&vfs, fd, buf, 0, count);
+    }
 }
 
 uint32_t sys_write(uint32_t fd, const char *buf, uint32_t count) {
