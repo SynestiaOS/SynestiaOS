@@ -5,10 +5,12 @@
 
 typedef uint32_t (*DirMapOperationInsert)(DirMap *dirmap, void *data);
 typedef void* (*DirMapOperationGet)(DirMap* dirmap, uint32_t ref);
+typedef void (*DirMapOperationDel)(DirMap* dirmap, uint32_t ref);
 
 typedef struct DirMapOperation{
     DirMapOperationInsert insert;
     DirMapOperationGet get;
+    DirMapOperationDel del;
 } DirMapOperation;
 
 // 2-8-8-12

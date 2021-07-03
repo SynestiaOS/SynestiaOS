@@ -2,6 +2,7 @@ project(Kernel C ASM)
 
 aux_source_directory(${Kernel_SOURCE_DIR}/src KernelSrc)
 aux_source_directory(${Kernel_SOURCE_DIR}/src/debug KernelDebugSrc)
+aux_source_directory(${Kernel_SOURCE_DIR}/src/debug KernelCapabilitySrc)
 
 add_library(${PROJECT_NAME}
         OBJECT
