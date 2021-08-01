@@ -3,7 +3,6 @@
 
 #include "libc/stdint.h"
 
-
 #define FDT_BEGIN_NODE  0x00000001
 #define FDT_END_NODE    0x00000002
 #define FDT_PROP        0x00000003
@@ -33,5 +32,19 @@ typedef struct FdtProprty {
     uint32_t len;
     uint32_t nameoff;
 } FdtProperty;
+
+typedef struct DeviceTreeNode {
+    // TODO: fill me 
+} DeviceTreeNode;
+
+
+typedef uint32_t (*DeviceTreeOperationGetNodeOffsetByCompatible)(const char* compatible);
+typedef struct DeviceTreeOperations{
+    DeviceTreeOperationGetNodeByCompatible getNodeOffsetByCompatible;
+} DeviceTreeOperations;
+typedef struct DeviceTree {
+    DeviceTreeNode *rootNode;
+    DeviceTreeOperations ops;
+} DeviceTree;
 
 #endif //SYNESTIAOS_DEVICE_TREE_DTB_H
