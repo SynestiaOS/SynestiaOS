@@ -2,8 +2,8 @@
 // Created by XingfengYang on 2021/1/7.
 //
 
-#ifndef SYNESTIAOS_BUS_H
-#define SYNESTIAOS_BUS_H
+#ifndef SYNESTIAOS_CHANNEL_H
+#define SYNESTIAOS_CHANNEL_H
 
 #include "libc/stdint.h"
 #include "kernel/kqueue.h"
@@ -31,32 +31,31 @@ typedef struct ListenerOperation {
 } ListenerOperation;
 
 typedef struct Listener {
-    struct ServiceBus *bus;
+    struct Channel *channel;
     char name[NAME_LENGTH];
     ListenerOperation operation;
 } Listener;
 
 Listener *listener_create(struct Listener *listener, const char *name);
 
+typedef void (*ChannelOperationUnRegister)(struct Channel *channel, struct Listener *listener);
 
-typedef void (*ServiceBusOperationUnRegister)(struct ServiceBus *bus, struct Listener *listener);
+typedef void (*ChannelOperationRegister)(struct Channel *channel, struct Listener *listener);
 
-typedef void (*ServiceBusOperationRegister)(struct ServiceBus *bus, struct Listener *listener);
+typedef void (*ChannelOperationSubscribe)(struct Channel *channel, struct Listener *listener);
 
-typedef void (*ServiceBusOperationSubscribe)(struct ServiceBus *bus, struct Listener *listener);
+typedef struct ChannelOperation {
+    ChannelOperationRegister registe;
+    ChannelOperationUnRegister unRegister;
+    ChannelOperationSubscribe subscribe;
+} ChannelOperation;
 
-typedef struct BusOperation {
-    ServiceBusOperationRegister registe;
-    ServiceBusOperationUnRegister unRegister;
-    ServiceBusOperationSubscribe subscribe;
-} BusOperation;
-
-typedef struct ServiceBus {
+typedef struct Channel {
     char name[NAME_LENGTH];
-    BusOperation operation;
+    ChannelOperation operation;
     KernelQueue messageQueue;
-} ServiceBus;
+} Channel;
 
-ServiceBus *service_bus_create(struct ServiceBus *serviceBus, const char *name);
+Channel *channel_create(struct Channel *channel, const char *name);
 
-#endif //SYNESTIAOS_BUS_H
+#endif //SYNESTIAOS_CHANNEL_H
