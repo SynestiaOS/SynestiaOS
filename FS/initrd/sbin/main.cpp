@@ -6,7 +6,7 @@
 #define MB  1024 * 1024
 
 int main() {
-    std::cout << "Will generate 8M increase file." << std::endl;
+    std::cout << "Will generate 32M increase file." << std::endl;
     FILE *fw = fopen("ext2_verify_file.bin", "wb");
     if (fw == nullptr) {
         return 0;
